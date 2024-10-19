@@ -28,11 +28,9 @@ option(MAKE_WARNINGS_AS_ERRORS "Enable / disable warnings as errors." ON)
 message(CMAKE_CXX_COMPILER_ID="${CMAKE_CXX_COMPILER_ID}")
 
 # Define target: lib common between client, server and editor programs
-# HEY TODO XXX: change the name to something that you like
 add_library(common STATIC)
 
 # add the source files that make the lib
-# HEY!! TODO XXX: add more subfolders here
 add_subdirectory(common/)
 
 
@@ -46,7 +44,6 @@ set_project_warnings(common ${MAKE_WARNINGS_AS_ERRORS} FALSE)
 target_include_directories(common PUBLIC .)
 
 # Install libSDL2pp (for client or editor)
-# HEY!! TODO XXX: add more dependendies (either for client, server or editor)
 if (CLIENT OR EDITOR)
     include(FetchContent)
     FetchContent_Declare(
@@ -60,14 +57,12 @@ endif ()
 # Program section
 # ---------------
 if (CLIENT)
-    # HEY!! TODO XXX: Change the name of the executable to the one you like!
     add_executable(DuckGame)
 
     # Make them depend on taller_common lib
     add_dependencies(DuckGame common SDL2pp::SDL2pp)
 
     # Add source files and enable warnings
-    # HEY!! TODO XXX: add more subfolders here
     add_subdirectory(client)
 
     set_project_warnings(DuckGame ${MAKE_WARNINGS_AS_ERRORS} FALSE)
@@ -80,14 +75,12 @@ if (CLIENT)
 endif ()
 
 if (SERVER)
-    # HEY!! TODO XXX: Change the name of the executable to the one you like!
     add_executable(DuckGameDedicatedServer)
 
     # Make them depend on taller_common lib
     add_dependencies(DuckGameDedicatedServer common)
 
     # Add source files and enable warnings
-    # HEY!! TODO XXX: add more subfolders here
     add_subdirectory(server)
 
     set_project_warnings(DuckGameDedicatedServer ${MAKE_WARNINGS_AS_ERRORS} FALSE)
@@ -97,14 +90,12 @@ if (SERVER)
 endif ()
 
 if (EDITOR)
-    # HEY!! TODO XXX: Change the name of the executable to the one you like!
     add_executable(DuckGameLevelEditor)
 
     # Make them depend on taller_common lib
     add_dependencies(DuckGameLevelEditor common SDL2pp::SDL2pp)
 
     # Add source files and enable warnings
-    # HEY!! TODO XXX: add more subfolders here
     add_subdirectory(editor)
 
     set_project_warnings(DuckGameLevelEditor ${MAKE_WARNINGS_AS_ERRORS} FALSE)
@@ -135,34 +126,29 @@ if (TESTS)
     include(GoogleTest)
 
     # target for testing
-    # HEY!! TODO XXX: Change the name of the executable to the one you like!
-    add_executable(tests)
+    add_executable(DuckGameTests)
 
-    # HEY!! TODO XXX: I'm assuming that the code under testing is in taller_common
     # Change this if you have to.
-    add_dependencies(tests common)
+    add_dependencies(DuckGameTests common)
 
     # Say where to find the xoz headers
-    # HEY!! TODO XXX: add more subfolders here
-    target_include_directories(tests PUBLIC .)
+    target_include_directories(DuckGameTests PUBLIC .)
 
     # Add the source files to the taller_tests target
-    # HEY!! TODO XXX: add more subfolders here
     add_subdirectory(tests/)
 
     # Set the compiler warnings to the tests target (but be a little lesser strict)
-    set_project_warnings(tests ${MAKE_WARNINGS_AS_ERRORS} TRUE)
+    set_project_warnings(DuckGameTests ${MAKE_WARNINGS_AS_ERRORS} TRUE)
 
     # Say where googletest headers can be found
-    target_include_directories(tests
+    target_include_directories(DuckGameTests
             PUBLIC
             ${gtest_SOURCE_DIR}/include
             ${gmock_SOURCE_DIR}/include
     )
 
-    # HEY!! TODO XXX: I'm assuming that the code under testing is in taller_common
     # Change this if you have to.
-    target_link_libraries(tests
+    target_link_libraries(DuckGameTests
             common
             GTest::gtest_main
     )
