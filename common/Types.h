@@ -9,5 +9,7 @@ typedef char* cstring;
 typedef void* Buffer;
 typedef const void* ReadonlyBuffer;
 
-template <typename Key, typename Value>
-using HashMap = std::unordered_map<Key, Value>;
+template <typename Key, typename Value, typename Hash = std::hash<Key>,
+          typename Pred = std::equal_to<Key>,
+          typename Alloc = std::allocator<std::pair<const Key, Value>>>
+using HashMap = std::unordered_map<Key, Value, Hash, Pred, Alloc>;
