@@ -1,7 +1,9 @@
 #pragma once
 
 #include <functional>
+#include <memory>
 #include <mutex>
+#include <utility>
 
 #include <bits/ranges_algo.h>
 
