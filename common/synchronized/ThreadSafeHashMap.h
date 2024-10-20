@@ -1,5 +1,8 @@
 #pragma once
+#include <functional>
 #include <mutex>
+
+#include <bits/ranges_algo.h>
 
 template <typename Key, typename Value, typename Hash = std::hash<Key>,
           typename Pred = std::equal_to<Key>,
@@ -7,7 +10,7 @@ template <typename Key, typename Value, typename Hash = std::hash<Key>,
 class ThreadSafeMap {
     static_assert(std::is_move_assignable_v<Value> && std::is_move_constructible_v<Value>);
 
-    HashMap<Key, Value, Hash, Pred> map;
+    HashMap<Key, Value, Hash, Pred, Alloc> map;
     std::mutex mtx;
 
 public:
@@ -60,6 +63,25 @@ public:
      * @return the size of the map
      */
     std::size_t size();
+
+    /**
+     * Apply a function to each element of the map.
+     * @param f the function to apply
+     */
+    void for_each(std::function<void(Value&)> f);
+
+    /**
+     * Remove elements from the map that satisfy a condition.
+     * @param predicate the condition to satisfy
+     */
+    void remove_if(std::function<bool(Value&)> predicate);
+
+    /**
+     * Apply a function to the value paired to a key.
+     * @param key the key
+     * @param f the function to apply
+     */
+    void apply_to(const Key& key, std::function<void(Value&)> f);
 };
 
 template <typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
@@ -145,4 +167,24 @@ template <typename Key, typename Value, typename Hash, typename Pred, typename A
 std::size_t ThreadSafeMap<Key, Value, Hash, Pred, Alloc>::size() {
     std::unique_lock lck(mtx);
     return map.size();
+}
+
+template <typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
+void ThreadSafeMap<Key, Value, Hash, Pred, Alloc>::for_each(std::function<void(Value&)> f) {
+    std::unique_lock lck(mtx);
+    std::ranges::for_each(map, f);
+}
+
+template <typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
+void ThreadSafeMap<Key, Value, Hash, Pred, Alloc>::remove_if(
+        std::function<bool(Value&)> predicate) {
+    std::unique_lock lck(mtx);
+    std::ranges::remove_if(map, predicate);
+}
+
+template <typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
+void ThreadSafeMap<Key, Value, Hash, Pred, Alloc>::apply_to(const Key& key,
+                                                            std::function<void(Value&)> f) {
+    std::unique_lock lck(mtx);
+    f(map.at(key));
 }
