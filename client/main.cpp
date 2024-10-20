@@ -4,7 +4,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-using namespace SDL2pp;
+// Here we should just declare the classes that are use in this file. But for now a NOLINT is fine.
+using namespace SDL2pp;  // NOLINT(build/namespaces)
 
 int main() try {
     // Initialize SDL library
