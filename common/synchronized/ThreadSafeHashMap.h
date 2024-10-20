@@ -1,8 +1,11 @@
 #pragma once
+
 #include <functional>
 #include <mutex>
 
 #include <bits/ranges_algo.h>
+
+#include "Types.h"
 
 template <typename Key, typename Value, typename Hash = std::hash<Key>,
           typename Pred = std::equal_to<Key>,
