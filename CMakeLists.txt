@@ -19,6 +19,9 @@ project(DuckGame
         LANGUAGES CXX
 )
 
+# Posix standard 2008
+add_definitions(-D_POSIX_C_SOURCE=200809L)
+
 option(TESTS "Enable / disable tests." ON)
 option(CLIENT "Enable / disable client program." ON)
 option(SERVER "Enable / disable server program." ON)
