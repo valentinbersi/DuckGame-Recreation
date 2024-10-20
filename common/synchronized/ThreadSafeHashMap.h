@@ -1,11 +1,13 @@
 #pragma once
 #include <mutex>
 
-template <typename Key, typename Value, class Hash = std::hash<Key>>
+template <typename Key, typename Value, typename Hash = std::hash<Key>,
+          typename Pred = std::equal_to<Key>,
+          typename Alloc = std::allocator<std::pair<const Key, Value>>>
 class ThreadSafeMap {
     static_assert(std::is_move_assignable_v<Value> && std::is_move_constructible_v<Value>);
 
-    HashMap<Key, Value, Hash> map;
+    HashMap<Key, Value, Hash, Pred> map;
     std::mutex mtx;
 
 public:
@@ -60,19 +62,19 @@ public:
     std::size_t size();
 };
 
-template <typename Key, typename Value, class Hash>
-ThreadSafeMap<Key, Value, Hash>::ThreadSafeMap() = default;
+template <typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
+ThreadSafeMap<Key, Value, Hash, Pred, Alloc>::ThreadSafeMap() = default;
 
-template <typename Key, typename Value, class Hash>
-ThreadSafeMap<Key, Value, Hash>::ThreadSafeMap(const ThreadSafeMap& other) {
+template <typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
+ThreadSafeMap<Key, Value, Hash, Pred, Alloc>::ThreadSafeMap(const ThreadSafeMap& other) {
     std::unique_lock lck(other.mtx);
     map = other.map;
     mtx = other.mtx;
 }
 
-template <typename Key, typename Value, class Hash>
-ThreadSafeMap<Key, Value, Hash>& ThreadSafeMap<Key, Value, Hash>::operator=(
-        const ThreadSafeMap& other) {
+template <typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
+ThreadSafeMap<Key, Value, Hash, Pred, Alloc>&
+        ThreadSafeMap<Key, Value, Hash, Pred, Alloc>::operator=(const ThreadSafeMap& other) {
     std::unique_lock lck(other.mtx);
 
     if (this == &other)
@@ -83,16 +85,16 @@ ThreadSafeMap<Key, Value, Hash>& ThreadSafeMap<Key, Value, Hash>::operator=(
     return *this;
 }
 
-template <typename Key, typename Value, class Hash>
-ThreadSafeMap<Key, Value, Hash>::ThreadSafeMap(ThreadSafeMap&& other) noexcept {
+template <typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
+ThreadSafeMap<Key, Value, Hash, Pred, Alloc>::ThreadSafeMap(ThreadSafeMap&& other) noexcept {
     std::unique_lock lck(other.mtx);
     map = std::move(other.map);
     mtx = std::move(other.mtx);
 }
 
-template <typename Key, typename Value, class Hash>
-ThreadSafeMap<Key, Value, Hash>& ThreadSafeMap<Key, Value, Hash>::operator=(
-        ThreadSafeMap&& other) noexcept {
+template <typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
+ThreadSafeMap<Key, Value, Hash, Pred, Alloc>&
+        ThreadSafeMap<Key, Value, Hash, Pred, Alloc>::operator=(ThreadSafeMap&& other) noexcept {
     std::unique_lock lck(other.mtx);
 
     if (this == &other)
@@ -103,44 +105,44 @@ ThreadSafeMap<Key, Value, Hash>& ThreadSafeMap<Key, Value, Hash>::operator=(
     return *this;
 }
 
-template <typename Key, typename Value, class Hash>
-void ThreadSafeMap<Key, Value, Hash>::clear() {
+template <typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
+void ThreadSafeMap<Key, Value, Hash, Pred, Alloc>::clear() {
     std::unique_lock lck(mtx);
     map.clear();
 }
 
-template <typename Key, typename Value, class Hash>
-bool ThreadSafeMap<Key, Value, Hash>::contains(const Key& key) {
+template <typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
+bool ThreadSafeMap<Key, Value, Hash, Pred, Alloc>::contains(const Key& key) {
     std::unique_lock lkc(mtx);
     return map.contains(key);
 }
 
-template <typename Key, typename Value, class Hash>
-bool ThreadSafeMap<Key, Value, Hash>::empty() {
+template <typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
+bool ThreadSafeMap<Key, Value, Hash, Pred, Alloc>::empty() {
     std::unique_lock lck(mtx);
     return map.empty();
 }
 
-template <typename Key, typename Value, class Hash>
-void ThreadSafeMap<Key, Value, Hash>::erase(const Key& key) {
+template <typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
+void ThreadSafeMap<Key, Value, Hash, Pred, Alloc>::erase(const Key& key) {
     std::unique_lock lck(mtx);
     return map.erase(key);
 }
 
-template <typename Key, typename Value, class Hash>
-Value ThreadSafeMap<Key, Value, Hash>::extract(const Key& key) {
+template <typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
+Value ThreadSafeMap<Key, Value, Hash, Pred, Alloc>::extract(const Key& key) {
     std::unique_lock lck(mtx);
     return std::move(map.extract(key).mapped());
 }
 
-template <typename Key, typename Value, class Hash>
-bool ThreadSafeMap<Key, Value, Hash>::insert(Key key, Value value) {
+template <typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
+bool ThreadSafeMap<Key, Value, Hash, Pred, Alloc>::insert(Key key, Value value) {
     std::unique_lock lck(mtx);
     return map.insert(std::make_pair(std::move(key), std::move(value))).second;
 }
 
-template <typename Key, typename Value, class Hash>
-std::size_t ThreadSafeMap<Key, Value, Hash>::size() {
+template <typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
+std::size_t ThreadSafeMap<Key, Value, Hash, Pred, Alloc>::size() {
     std::unique_lock lck(mtx);
     return map.size();
 }
