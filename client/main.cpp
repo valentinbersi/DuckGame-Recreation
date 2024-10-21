@@ -4,6 +4,8 @@
 
 int main() try {
     Game game;
+    //two players? lo debo mandar al game
+    //debo recibir la cantidad de patos que hay en la partida para pintar N patos distintos
     game.init();
 
     // Here all resources are automatically released and library deinitialized
