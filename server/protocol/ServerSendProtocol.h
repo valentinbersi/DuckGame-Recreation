@@ -1,13 +1,14 @@
 #pragma once
 
-#include "SendProtocol.h"
+#include <memory>
+
 #include "ActiveSocket.h"
 #include "GameStatus.hpp"
-#include <memory>
+#include "SendProtocol.h"
 
 class ServerSendProtocol: public SendProtocol {
 public:
-    ServerSendProtocol(ActiveSocket&);
+    explicit ServerSendProtocol(ActiveSocket&);
 
     void sendMessage(std::shared_ptr<GameStatus>& mensaje);
 

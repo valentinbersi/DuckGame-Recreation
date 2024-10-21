@@ -1,15 +1,17 @@
 #pragma once
 
-#include "ReceiveProtocol.h"
+#include <memory>
+
 #include "ActiveSocket.h"
 #include "GameStatus.hpp"
-#include <memory>
+#include "ReceiveProtocol.h"
 
 class ServerRecvProtocol: public ReceiveProtocol {
 public:
-    ServerRecvProtocol(ActiveSocket&);
+    explicit ServerRecvProtocol(ActiveSocket&);
 
-    //  receiveMessage(); nose que va a devolver aun, no creo que arme el comando aca dentro sino en el receiver.
+    //  receiveMessage(); nose que va a devolver aun, no creo que arme el comando aca dentro sino en
+    //  el receiver.
 
     ~ServerRecvProtocol() = default;
 };

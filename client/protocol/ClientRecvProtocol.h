@@ -1,15 +1,14 @@
 #pragma once
 
 #include "ActiveSocket.h"
-#include "ReceiveProtocol.h"
 #include "GameStatus.hpp"
+#include "ReceiveProtocol.h"
 
-class ClientRecvProtocol : public  ReceiveProtocol{
+class ClientRecvProtocol: public ReceiveProtocol {
 public:
-    ClientRecvProtocol(ActiveSocket&);
+    explicit ClientRecvProtocol(ActiveSocket&);
 
     // GameStatus receiveMessage();
 
     ~ClientRecvProtocol() = default;
-
 };

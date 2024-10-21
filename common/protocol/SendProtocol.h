@@ -1,15 +1,15 @@
 #pragma once
 #include <string>
 
-#include "SenderSocket.h"
 #include "ActiveSocket.h"
+#include "SenderSocket.h"
 
-class SendProtocol{
+class SendProtocol {
 private:
     SenderSocket& skt;
 
 protected:
-    SendProtocol(ActiveSocket& skt);
+    explicit SendProtocol(ActiveSocket& skt);
 
     void sendByte(unsigned char byte);
 

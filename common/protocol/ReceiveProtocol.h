@@ -1,7 +1,8 @@
 #pragma once
-#include "ReceiverSocket.h"
-#include "ActiveSocket.h"
 #include <string>
+
+#include "ActiveSocket.h"
+#include "ReceiverSocket.h"
 /**
  * Clase abstracta de uso para protocolo de recepcion de mensajes en servidor y cliente
  */
@@ -16,5 +17,5 @@ protected:
 
     std::string recv_string();
 
-    //Agregar los metodos virtuales para enviar y recibir mensajes.
+    // Agregar los metodos virtuales para enviar y recibir mensajes.
 };

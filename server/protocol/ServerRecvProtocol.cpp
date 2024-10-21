@@ -1,6 +1,4 @@
 
 #include "ServerRecvProtocol.h"
 
-ServerRecvProtocol::ServerRecvProtocol(ActiveSocket& socket) : ReceiveProtocol(socket) {}
-
-
+ServerRecvProtocol::ServerRecvProtocol(ActiveSocket& socket): ReceiveProtocol(socket) {}
