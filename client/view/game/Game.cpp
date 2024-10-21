@@ -21,8 +21,7 @@ void Game::init() {
 
     Texture backgroundTexture = startBackground();
 
-    //Player player1("../../assets/player/greyDuck.png", 42, 32, renderer, WINDOW_WIDTH, WINDOW_HEIGHT);
-    Player player1("../../assets/player/greyDuck.png", 3, 6, renderer, WINDOW_WIDTH, WINDOW_HEIGHT);
+    Player player1("../../assets/greyDuck.png", 3, 6, renderer, WINDOW_WIDTH, WINDOW_HEIGHT);
     player1.start();
 
     renderer.Present();
