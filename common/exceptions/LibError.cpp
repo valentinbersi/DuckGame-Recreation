@@ -1,5 +1,5 @@
-#undef _GNU_SOURCE
-#undef GNU_SOURCE
+// #undef _GNU_SOURCE
+// #undef GNU_SOURCE
 
 #define INTERROGATION_MARK '?'
 #define SPACE ' '
