@@ -1,5 +1,59 @@
-//
-// Created by valen on 19/10/2024.
-//
-
 #include "Game.hpp"
+
+#define WINDOW_WIDTH 640
+#define WINDOW_HEIGHT 480
+
+// Here we should just declare the classes that are use in this file. But for now a NOLINT is fine.
+using namespace SDL2pp;  // NOLINT(build/namespaces)
+
+Game::Game()
+    : running(false), window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE),
+      renderer(window, -1, SDL_RENDERER_ACCELERATED) {}
+
+void Game::init() {
+    SDL sdl(SDL_INIT_VIDEO);
+    IMG_Init(IMG_INIT_PNG);
+
+    while(running) {
+        // handle user input
+        //update all objects (positions, etc)
+        //render changes to the display
+
+        ///////////etc
+
+        // Show rendered frame
+        renderer.Present();
+
+        // 10 second delay
+        SDL_Delay(10000);
+    }
+
+    IMG_Quit();
+}
+
+void Game::showBackground() {
+    SDL_Surface* rawBackgroundSurface = IMG_Load("../../assets/background/background1.png");
+    Surface backgroundSurface(rawBackgroundSurface);
+
+    Texture backgroundTexture(renderer, backgroundSurface);
+    SDL_FreeSurface(rawBackgroundSurface);
+    SDL_Rect dstRect;
+    dstRect.x = 0;
+    dstRect.y = 0;
+    dstRect.w = WINDOW_WIDTH;
+    dstRect.h = WINDOW_HEIGHT;
+
+    renderer.Clear();
+
+    renderer.Copy(backgroundTexture, NullOpt, dstRect);
+}
+
+/*void Game::selectLevel() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(1, 8);
+
+    int randomLevel = dis(gen);
+
+    selectedLevel = levels[randomLevel];
+}*/
