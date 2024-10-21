@@ -8,10 +8,13 @@ class SendProtocol{
 private:
     SenderSocket& skt;
 
-public:
+protected:
     SendProtocol(ActiveSocket& skt);
 
-    void send_byte(unsigned char byte);
+    void sendByte(unsigned char byte);
 
-    void send_string(std::string string);
+    void sendString(std::string string);
+
+public:
+    virtual ~SendProtocol() {}
 };

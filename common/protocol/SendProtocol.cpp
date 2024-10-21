@@ -4,13 +4,13 @@
 
 SendProtocol::SendProtocol(ActiveSocket& socket): skt(socket){}
 
-void SendProtocol::send_byte(unsigned char byte){
+void SendProtocol::sendByte(unsigned char byte){
     if (!skt.send(&byte, sizeof(unsigned char))) {
         throw;
     }
 }
 
-void SendProtocol::send_string(std::string string){
+void SendProtocol::sendString(std::string string){
     uint16_t size = string.size();
     size = htons(size);
     if (!skt.send(&size, sizeof(uint16_t))) {
