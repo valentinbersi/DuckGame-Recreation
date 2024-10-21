@@ -2,12 +2,13 @@
 
 #include "ActiveSocket.h"
 #include "ReceiveProtocol.h"
+#include "GameStatus.hpp"
 
 class ClientRecvProtocol : public  ReceiveProtocol{
 public:
     ClientRecvProtocol(ActiveSocket&);
 
-    // Snapshot receiveMessage();
+    // GameStatus receiveMessage();
 
     ~ClientRecvProtocol() = default;
 
