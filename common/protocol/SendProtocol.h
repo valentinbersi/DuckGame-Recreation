@@ -13,7 +13,7 @@ protected:
 
     void sendByte(unsigned char byte);
 
-    void sendString(std::string string);
+    void sendString(std::string& string);
 
 public:
     virtual ~SendProtocol() {}

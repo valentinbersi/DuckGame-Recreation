@@ -4,7 +4,7 @@
 
 // Sketch muy basico para prueba del protocolo.
 struct ClientMessage {
-    ClientMessage(MessageType type, unsigned char action): type(type), action(action) {}
+    ClientMessage(MessageType type, InputAction action): type(type), action(action) {}
     MessageType type;  // deberia ser siempre INPUT= 0x0
-    unsigned char action;
+    InputAction action;
 };
