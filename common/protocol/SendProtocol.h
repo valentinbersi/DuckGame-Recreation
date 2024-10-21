@@ -1,17 +1,20 @@
 #pragma once
 #include <string>
 
-#include "SenderSocket.h"
 #include "ActiveSocket.h"
+#include "SenderSocket.h"
 
-class SendProtocol{
+class SendProtocol {
 private:
     SenderSocket& skt;
 
+protected:
+    explicit SendProtocol(ActiveSocket& skt);
+
+    void sendByte(unsigned char byte);
+
+    void sendString(std::string string);
+
 public:
-    SendProtocol(ActiveSocket& skt);
-
-    void send_byte(unsigned char byte);
-
-    void send_string(std::string string);
+    virtual ~SendProtocol() {}
 };

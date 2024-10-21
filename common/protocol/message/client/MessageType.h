@@ -1,10 +1,11 @@
 #pragma once
 
 
-enum MessageType: unsigned char{ INPUT = 0x0, NEWMATCH = 0x1, JOINMATCH = 0x2, STARTMATCH = 0x3 };
+enum MessageType : unsigned char { INPUT = 0x0, NEWMATCH = 0x1, JOINMATCH = 0x2, STARTMATCH = 0x3 };
 // class MessageType {
 // public:
-//     enum Value : unsigned char { Input = 0x0, NewMatch = 0x1, JoinMatch = 0x2, StartMatch = 0x3 };
+//     enum Value : unsigned char { Input = 0x0, NewMatch = 0x1, JoinMatch = 0x2, StartMatch = 0x3
+//     };
 
 //     MessageType(const MessageType& other);
 //     MessageType& operator=(const MessageType& other);
@@ -66,7 +67,8 @@ enum MessageType: unsigned char{ INPUT = 0x0, NEWMATCH = 0x1, JOINMATCH = 0x2, S
 //     /**
 //      * Checks if an unsigned char is a valid BoxID _value
 //      * @param value The value to check
-//      * @return @code true@endcode if @code value@endcode is a valid BoxID value, @code false@endcode
+//      * @return @code true@endcode if @code value@endcode is a valid BoxID value, @code
+//      false@endcode
 //      * otherwise
 //      */
 //     static bool validMessageType(unsigned char value);

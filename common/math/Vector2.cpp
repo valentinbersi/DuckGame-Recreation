@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <stdexcept>
+#include <utility>
 
 #include "Math.h"
 
@@ -69,10 +70,12 @@ float Vector2::angle(const Vector2& v) const {
     return std::acos(cross(v) / dot(v));
 }
 
-Vector2 Vector2::bounce(const Vector2& normal) const try {
-    return -reflect(normal);
-} catch ([[maybe_unused]] const std::logic_error& e) {
-    throw std::logic_error(BOUNCE UNDEFINED_FOR_ZERO);
+Vector2 Vector2::bounce(const Vector2& normal) const {
+    try {
+        return -reflect(normal);
+    } catch ([[maybe_unused]] const std::logic_error& e) {
+        throw std::logic_error(BOUNCE UNDEFINED_FOR_ZERO);
+    }
 }
 
 float Vector2::cross(const Vector2& v) const noexcept { return _x * v._y - _y * v._x; }
