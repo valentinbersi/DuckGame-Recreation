@@ -8,19 +8,30 @@ typedef std::string InputName;
  * Represents the input of a player
  */
 class Input {
-    ThreadSafeMap<InputName, bool> inputs;
+    HashMap<InputName, bool> inputs;
+
+    /**
+     * Set the given action to the given value
+     * @param action the action to set
+     * @param value the value to set
+     */
+    void setAction(const InputName& action, bool value);
 
 public:
     /**
      * Creates a new input
      */
     Input();
+    Input(const Input& other) = delete;
+    Input& operator=(const Input& other) = delete;
+    Input(Input&& other) = delete;
+    Input operator=(Input&& other) = delete;
 
     /**
      * Add a given action to the input
      *  @param action the action to add
      */
-    void addAction(const InputName& action);
+    void addAction(InputName action);
 
     /**
      * Remove a given action from the input
@@ -45,5 +56,5 @@ public:
      * @param action the action to check
      * @return true if the given action is pressed, false otherwise
      */
-    bool isActionPressed(const InputName& action);
+    bool isActionPressed(const InputName& action) const;
 };
