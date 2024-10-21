@@ -3,14 +3,15 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
 
-#define PREV_TICKS 0
-#define FRAME_TICKS 1
+#define INITIAL_TICKS 0
+
+#define MILI_TO_SECS 0.001
 
 double GameLoop::calculateDeltaTime() {
     const std::uint64_t frameTicks = SDL_GetTicks64();
     const std::uint64_t deltaTime = frameTicks - prevTicks;
     prevTicks = frameTicks;
-    return static_cast<double>(deltaTime) / 100;
+    return static_cast<double>(deltaTime) * MILI_TO_SECS;
 }
 
 void GameLoop::retrieveCurrentFrameCommands() {
@@ -32,7 +33,7 @@ void GameLoop::broadcastGameStatus() {
     });
 }
 
-GameLoop::GameLoop(): prevTicks(0) {}
+GameLoop::GameLoop(): prevTicks(INITIAL_TICKS) {}
 
 void GameLoop::run() {
     prevTicks = SDL_GetTicks64();
