@@ -26,11 +26,12 @@ private:
     //void selectLevel();
     SDL2pp::Texture startBackground();
     Keybinds handleEvents();
-    void update(Keybinds& m_key, Player& player1);
+    void update(Player& player1);
     //void render(Player player1);
     void showBackground(SDL2pp::Texture& backgroundTexture);
 
     bool running;
+    Keybinds m_key;
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
 

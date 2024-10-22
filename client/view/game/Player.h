@@ -22,11 +22,16 @@ public:
     ~Player();
 
     void start();
-    void update(double delta_time, Keybinds m_key);
+    void update(Keybinds m_key);
 
 private:
+    Keybinds last_m_key;
     float scale;
     bool flip;
+    bool is_jumping;
+    int jump_frame;
+    int jump_velocity;
+    int jump_start_y;
     double m_position_x;
     double m_position_y;
     int m_spritesheet_column;
@@ -36,5 +41,6 @@ private:
     Spritesheet spritesheet;
 
     SDL2pp::Rect getPosition();
+    double jumpLogic(double m_y);
 
 };

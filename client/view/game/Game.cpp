@@ -10,7 +10,7 @@
 using namespace SDL2pp;  // NOLINT(build/namespaces)
 
 Game::Game()
-    : running(true), window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE),
+    : running(true), m_key(Keybinds::NONE), window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE),
       renderer(window, -1, SDL_RENDERER_ACCELERATED) {}
 
 void Game::init() {
@@ -21,17 +21,16 @@ void Game::init() {
 
     Texture backgroundTexture = startBackground();
 
-    Player player1("../../assets/greyDuck.png", 3, 6, renderer, WINDOW_WIDTH, WINDOW_HEIGHT);
+    Player player1("../../assets/player/greyDuck.png", 3, 6, renderer, WINDOW_WIDTH, WINDOW_HEIGHT);
     player1.start();
 
     renderer.Present();
-    //SDL_Delay(5000);
 
     while(running) {
-        Keybinds m_key = handleEvents();       // handle user input
+        handleEvents();       // handle user input
         renderer.Clear();
         showBackground(backgroundTexture);
-        update(m_key, player1);             //update all objects (positions, etc)
+        update(player1);             //update all objects (positions, etc)
         //render();         render EVERYTHING again (outside players, that are being rendered in the player class)
         SDL_Delay(33);
 
@@ -45,7 +44,6 @@ void Game::init() {
 }
 
 Keybinds Game::handleEvents() {
-    Keybinds m_key;
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
@@ -54,28 +52,27 @@ Keybinds Game::handleEvents() {
             auto it = keyMapping.find(scancode);
             if (it != keyMapping.end()) {
                 m_key = it->second;
-            } else {
-                m_key = Keybinds::NONE;
             }
 
         } else if (event.type == SDL_KEYUP) {
-            m_key = Keybinds::NONE;
+            SDL_Scancode scancode = event.key.keysym.scancode;
+            auto it = keyMapping.find(scancode);
+            if (it != keyMapping.end() && m_key == it->second) {
+                m_key = Keybinds::NONE;
+            }
 
-
-            // MOUSE EVENTS
-
+            //MOUSE EVENTS ETC...? MULTIPLES TECLAS?
 
         } else if (event.type == SDL_QUIT) {
             running = false;
-
         }
     }
 
     return m_key;
 }
 
-void Game::update(Keybinds& m_key, Player& player1) {
-    player1.update(DELTA_TIME, m_key);
+void Game::update(Player& player1) {
+    player1.update(m_key);
     renderer.Present();
 
     // ETC...
