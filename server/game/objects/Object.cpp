@@ -1,5 +1,7 @@
 #include "Object.h"
 
+#include <bits/ranges_algo.h>
+
 #define CHILD_ADDED_NAME "ChildAdded"
 #define CHILD_REMOVED_NAME "ChildRemoved"
 #define INVALID_EVENT_TYPE "Invalid Event Type"
@@ -47,11 +49,10 @@ Object& Object::operator=(Object&& other) noexcept {
 }
 
 void Object::updateInternal(float delta) {
-    std::for_each(children.begin(), children.end(),
-                  [delta](const std::pair<std::string, std::unique_ptr<Object>>& child) {
-                      child.second->updateInternal(delta);
-                      child.second->update(delta);
-                  });
+    std::ranges::for_each(children, [delta](const std::pair<std::string, Object*>& child) {
+        child.second->updateInternal(delta);
+        child.second->update(delta);
+    });
 }
 
 void Object::addChild(std::string name, std::unique_ptr<Object> newChild) {

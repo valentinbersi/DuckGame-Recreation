@@ -8,6 +8,9 @@
 #include "Types.h"
 #include "Updatable.h"
 
+/**
+ * An object in the game
+ */
 class Object: public Subject, public Updatable, public Startable {
     Object* _parent;
     HashMap<std::string, Object*> children;
