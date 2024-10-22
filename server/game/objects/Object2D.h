@@ -9,17 +9,15 @@
 class Object2D: public Object {
     Vector2 _globalPosition;
     float _globalRotation;
-    Vector2 _globalScale;
 
     Vector2 _position;
     float _rotation;
-    Vector2 _scale;
 
     /**
      * Initialize an Object2D with a parent
      * @param parent The parent of the object
      */
-    explicit Object2D(Object2D* parent);
+    explicit Object2D(Object* parent);
 
     /**
      * Initialize an Object2D with a parent, a position a rotation and a scale
@@ -28,7 +26,7 @@ class Object2D: public Object {
      * @param rotation The rotation
      * @param scale The scale
      */
-    Object2D(Object* parent, Vector2 position, float rotation, Vector2 scale);
+    Object2D(Object* parent, Vector2 position, float rotation);
 
 public:
     /**
@@ -46,7 +44,7 @@ public:
      * @param rotation The rotation
      * @param scale The scale
      */
-    Object2D(Vector2 position, float rotation, Vector2 scale);
+    Object2D(Vector2 position, float rotation);
 
     /**
      * Set the global position of the object
@@ -75,19 +73,6 @@ public:
     [[nodiscard]] float globalRotation() const noexcept;
 
     /**
-     * Set the global scale of the object
-     * @param globalScale The new global scale
-     * @return A reference to this object, to allow builder pattern.
-     */
-    Object2D& globalScale(Vector2 globalScale) noexcept;
-
-    /**
-     * Get the global scale of the object
-     * @return The global scale
-     */
-    [[nodiscard]] const Vector2& globalScale() const noexcept;
-
-    /**
      * Set the local position of the object
      * @param position The new local position
      * @return A reference to this object, to allow builder pattern.
@@ -112,17 +97,4 @@ public:
      * @return The local rotation
      */
     [[nodiscard]] float rotation() const noexcept;
-
-    /**
-     * Set the local scale of the object
-     * @param scale The new local scale
-     * @return A reference to this object, to allow builder pattern.
-     */
-    Object2D& scale(Vector2 scale) noexcept;
-
-    /**
-     * Get the local scale of the object
-     * @return The local scale
-     */
-    [[nodiscard]] const Vector2& scale() const noexcept;
 };
