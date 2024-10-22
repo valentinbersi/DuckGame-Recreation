@@ -7,6 +7,10 @@ public:
     // cppcheck-suppress noExplicitConstructor
     MessageType(Value value) : _value(value) {} // Implicit on purpose so it can be used as a common enum
 
+    // cppcheck-suppress noExplicitConstructor
+    MessageType(unsigned char value) : _value(static_cast<Value>(value)) {} // Implicit on purpose so it can be used as a common enum
+
+
     [[nodiscard]] operator Value() const {return _value;}
 
     MessageType() = delete;
@@ -25,6 +29,9 @@ public:
 
     // cppcheck-suppress noExplicitConstructor
     InputAction(Value value) : _value(value) {} // Implicit on purpose so it can be used as a common enum
+
+    // cppcheck-suppress noExplicitConstructor
+    InputAction(unsigned char value) : _value(static_cast<Value>(value)) {}
 
     [[nodiscard]] operator Value() const {return _value;}
 
