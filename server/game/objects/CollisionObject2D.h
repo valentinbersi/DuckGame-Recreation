@@ -21,8 +21,6 @@ protected:
                       u32 collisionMask /*, Shape2D shape*/);
 
 public:
-
-
     /**
      * Get the collision layers of the Object
      * @return the collision layers of the Object
