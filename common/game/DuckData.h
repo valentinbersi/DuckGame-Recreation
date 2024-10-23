@@ -2,8 +2,8 @@
 
 #include <bitset>
 
+#include "EquippedGunData.h"
 #include "GameObject2DData.h"
-#include "GunData.h"
 
 enum class DuckID {
     // enummerate duck colors
@@ -19,7 +19,7 @@ class DuckData final: public GameObject2DData {
 
     DuckID _id;
     u8 _life;
-    GunData* _gun;
+    EquippedGunData* _gun;
     std::bitset<NFLAGS> _actions;
 
 public:
@@ -47,7 +47,7 @@ public:
      * @param actions the actions the duck is performing
      */
     DuckData(GameObjectID objectID, Vector2 position, f32 rotation, DuckID duckID, u8 life,
-             std::unique_ptr<GunData> gun, DuckActions actions);
+             std::unique_ptr<EquippedGunData> gun, DuckActions actions);
 
     /**
      * Get the duckID of the duck
@@ -67,7 +67,7 @@ public:
      * will be invalid.
      * @return the gun of the duck
      */
-    [[nodiscard]] const GunData& gun() const;
+    [[nodiscard]] const EquippedGunData& gun() const;
 
     /**
      * Check if the duck has armor

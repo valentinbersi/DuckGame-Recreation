@@ -18,14 +18,14 @@ enum class GunID : u8 {
 /**
  * Relevant data for rendering a gun in the game
  */
-class GunData {
+class EquippedGunData {
     GunID _id;
 
 public:
     /**
      * Construct a GunData with the given GunID
      */
-    explicit GunData(GunID id);
+    explicit EquippedGunData(GunID gunID);
 
     /**
      * Get the GunID of the gun
