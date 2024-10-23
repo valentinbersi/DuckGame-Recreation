@@ -98,4 +98,10 @@ public:
      * @return true if the duck is flapping, false otherwise
      */
     [[nodiscard]] bool isFlapping() const;
+
+    /**
+     * Get the data of the DuckData object
+     * @return the data of the DuckData object
+     */
+    [[nodiscard]] std::string data() override;
 };

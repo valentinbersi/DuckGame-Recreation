@@ -1,5 +1,7 @@
 #include "DuckData.h"
 
+#include <sstream>
+
 #define HAS_ARMOR_INDEX 0
 #define IS_PLAYING_DEAD_INDEX 1
 #define IS_CROUCHING_INDEX 2
@@ -73,3 +75,10 @@ bool DuckData::isCrouching() const { return _actions.test(IS_CROUCHING_INDEX); }
 bool DuckData::isInAir() const { return _actions.test(IS_IN_AIR_INDEX); }
 
 bool DuckData::isFlapping() const { return _actions.test(IS_FLAPPING_INDEX); }
+
+std::string DuckData::data() {
+    std::stringstream ss;
+    ss << GameObject2DData::data() << static_cast<u8>(_id) << _life << _gun->data()
+       << static_cast<u8>(_actions.to_ulong());
+    return GameObject2DData::data();
+}

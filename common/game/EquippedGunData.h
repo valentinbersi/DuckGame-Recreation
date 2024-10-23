@@ -32,4 +32,9 @@ public:
      * @return the GunID of the gun
      */
     [[nodiscard]] GunID id() const;
+
+    /**
+     * Get the data of the gun
+     */
+    [[nodiscard]] std::string data() const;
 };
