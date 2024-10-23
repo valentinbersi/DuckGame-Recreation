@@ -26,6 +26,7 @@ private:
     //void selectLevel();
     SDL2pp::Texture startBackground();
     Keybinds handleEvents();
+    void getSnapshot();
     void update(Player& player1);
     //void render(Player player1);
     void showBackground(SDL2pp::Texture& backgroundTexture);

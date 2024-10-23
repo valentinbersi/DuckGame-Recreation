@@ -27,21 +27,80 @@ void Game::init() {
     renderer.Present();
 
     while(running) {
+        /*
+        struct GameStatus snapshot = getSnapshot();           //handle everything sended by the gameloop
+
+        renderer.Clear();
+
+        //corroboro que ningún duck se haya ido de la pantalla. si es así, debo quitar zoom de la pantalla
+        //en otro caso, si todos los patos están a más de X pixeles de lejanía los bordes, hago un zoom de Y pixeles
+        //esto lo puedo guardar en alguna variable y luego DIBUJAR EL BACKGROUND acorde
+        //para esto poner una funcion a vector2 que haga un promedio de los vectores
+
+        showBackground(backgroundTexture);
+        updatePlayers(snapshot);                    //acá adentro hago uso de diversos update(playerX) según el estado de cada uno
+        updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
+        render();
+
+        handleEvents();           //y según lo que pase acá... lo envío al protocolo (o gameloop, no recuerdo XD)
+
+        SDL_Delay(33);                              //33ms = 30fps
+
+
+
+        //poner en algún lado una struct de players (ducks) y asociarles una ID
+
+
+
+
+
+        */
+
+        /*
         handleEvents();       // handle user input
         renderer.Clear();
         showBackground(backgroundTexture);
-        update(player1);             //update all objects (positions, etc)
+        update(player1);             //update ducks
         //render();         render EVERYTHING again (outside players, that are being rendered in the player class)
         SDL_Delay(33);
 
 
-        ///////////etc
+        ///////////etc*/
 
     }
 
 
     IMG_Quit();
 }
+
+/*struct GameStatus Game::getSnapshot() {
+    struct GameStatus snapshot = callToTheProtocol;
+
+    Time timeToFinish = snapshot.timeToFinish;
+    (if snapshot.timeToFinish == 0) {
+        running = false;
+        return;
+
+    List<DuckData> ducks = snapshot.ducks;         //lista de diversas DuckDatas (dependiendo de la cantidad de ducks conectados)
+    List<ObjectData*> objects = snapshot.objects;
+
+    return snapshot;
+}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Keybinds Game::handleEvents() {
     SDL_Event event;
