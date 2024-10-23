@@ -53,6 +53,30 @@ public:
     explicit Vector2(float angle) noexcept;
 
     /**
+     * Get the x coordinate of the vector
+     * @return The x coordinate
+     */
+    [[nodiscard]] float x() const;
+
+    /**
+     * Get the y coordinate of the vector
+     * @return The y coordinate
+     */
+    [[nodiscard]] float y() const;
+
+    /**
+     * Set the x coordinate of the vector
+     * @param x The new x coordinate
+     */
+    void x(float x);
+
+    /**
+     * Set the y coordinate of the vector
+     * @param y The new y coordinate
+     */
+    void y(float y);
+
+    /**
      * Get this vector's angle with respect to the positive X axis, or RIGHT (1, 0)
      * vector, in radians
      * @return The angle in radians

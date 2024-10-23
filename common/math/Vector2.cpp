@@ -53,6 +53,14 @@ Vector2::Vector2(const float x, const float y) noexcept: _x(x), _y(y) {}
 
 Vector2::Vector2(const float angle) noexcept: Vector2(std::cos(angle), std::sin(angle)) {}
 
+float Vector2::x() const { return _x; }
+
+float Vector2::y() const { return _y; }
+
+void Vector2::x(const float x) { _x = x; }
+
+void Vector2::y(const float y) { _y = y; }
+
 float Vector2::angle() const {
     if (isZero())
         throw std::logic_error(ANGLE UNDEFINED_FOR_ZERO);
