@@ -8,6 +8,16 @@
 #define IS_IN_AIR_INDEX 3
 #define IS_FLAPPING_INDEX 4
 
+std::string DuckData::_data() {
+    const u8 actions = static_cast<u8>(_actions.to_ulong());
+
+    return std::move(std::string(std::move(GameObject2DData::_data()))
+                             .append(reinterpret_cast<cstring>(&_id), sizeof(u8))
+                             .append(reinterpret_cast<cstring>(&_life), sizeof(u8))
+                             .append(_gun->data())
+                             .append(reinterpret_cast<cstring>(actions), sizeof(u8)));
+}
+
 DuckData::DuckData(const DuckData& other):
         GameObject2DData(other),
         _id(other._id),
@@ -51,10 +61,9 @@ DuckData& DuckData::operator=(DuckData&& other) noexcept {
 
 DuckData::~DuckData() { delete _gun; }
 
-DuckData::DuckData(const GameObjectID objectID, Vector2 position, const f32 rotation,
-                   const DuckID duckID, const u8 life, std::unique_ptr<EquippedGunData> gun,
-                   const DuckActions actions):
-        GameObject2DData(objectID, std::move(position), rotation),
+DuckData::DuckData(Vector2 position, const f32 rotation, const DuckID duckID, const u8 life,
+                   std::unique_ptr<EquippedGunData> gun, const DuckActions actions):
+        GameObject2DData(GameObject2DID::DUCK, std::move(position), rotation),
         _id(duckID),
         _life(life),
         _gun(gun.release()),
@@ -75,10 +84,3 @@ bool DuckData::isCrouching() const { return _actions.test(IS_CROUCHING_INDEX); }
 bool DuckData::isInAir() const { return _actions.test(IS_IN_AIR_INDEX); }
 
 bool DuckData::isFlapping() const { return _actions.test(IS_FLAPPING_INDEX); }
-
-std::string DuckData::data() {
-    std::stringstream ss;
-    ss << GameObject2DData::data() << static_cast<u8>(_id) << _life << _gun->data()
-       << static_cast<u8>(_actions.to_ulong());
-    return GameObject2DData::data();
-}
