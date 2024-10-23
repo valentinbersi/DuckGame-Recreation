@@ -1,12 +1,24 @@
 file(GLOB GAME_SRC game/*.cpp)
+file(GLOB GAME_OBJECTS_SRC game/objects/*.cpp)
+file(GLOB GAME_PLAYER_SRC game/player/*.cpp)
+file(GLOB GAME_INPUT_SRC game/input/*.cpp)
+file(GLOB GAME_EVENT_SRC game/event/*.cpp)
+file(GLOB GAME_RECORDS_SRC game/records/*.cpp)
 file(GLOB PROTOCOL_SRC protocol/*.cpp)
 file(GLOB SERVER_SRC Server.cpp)
 
 file(GLOB GAME_INC game/*.h)
+file(GLOB GAME_OBJECTS_INC game/objects/*.h)
+file(GLOB GAME_PLAYER_INC game/player/*.h)
+file(GLOB GAME_INPUT_INC game/player/*.h)
+file(GLOB GAME_EVENT_INC game/event/*.h)
+file(GLOB GAME_RECORDS_INC game/records/*.h)
 file(GLOB PROTOCOL_INC protocol/*.h)
 file(GLOB SERVER_INC Server.h)
 
+target_include_directories(DuckGameDedicatedServer PUBLIC "game" "game/objects" "game/player" "game/input" "protocol" "game/event" "game/records")
+
 target_sources(DuckGameDedicatedServer
-        PRIVATE ${GAME_SRC} ${PROTOCOL_SRC} ${SERVER_SRC} main.cpp
-        PUBLIC ${GAME_INC} ${PROTOCOL_INC} ${SERVER_INC}
+        PRIVATE ${GAME_SRC} ${GAME_OBJECTS_SRC} ${GAME_PLAYER_SRC} ${GAME_INPUT_SRC} ${GAME_EVENT_SRC} ${GAME_RECORDS_SRC} ${PROTOCOL_SRC} ${SERVER_SRC} main.cpp
+        PUBLIC ${GAME_INC} ${GAME_OBJECTS_INC} ${GAME_PLAYER_INC} ${GAME_INPUT_INC} ${GAME_EVENT_INC} ${GAME_RECORDS_INC} ${PROTOCOL_INC} ${SERVER_INC}
 )
