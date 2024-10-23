@@ -2,8 +2,8 @@
 
 #include <bitset>
 
+#include "GameObject2DData.h"
 #include "GunData.h"
-#include "Object2DData.h"
 
 enum class DuckID {
     // enummerate duck colors
@@ -11,7 +11,7 @@ enum class DuckID {
 
 typedef u8 DuckFlags;
 
-class DuckData final: public Object2DData {
+class DuckData final: public GameObject2DData {
     constexpr static u8 NFLAGS = 6;
 
     DuckID _id;
