@@ -78,7 +78,7 @@ Vector2 Vector2::bounce(const Vector2& normal) const try {
 float Vector2::cross(const Vector2& v) const noexcept { return _x * v._y - _y * v._x; }
 
 Vector2 Vector2::directionTo(const Vector2& v) const {
-    const Vector2 result = std::move(v - *this);
+    const Vector2 result = v - *this;
 
     try {
         return result.normalized();
