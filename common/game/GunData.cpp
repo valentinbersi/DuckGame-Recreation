@@ -1,5 +1,5 @@
-//
-// Created by valen on 22/10/2024.
-//
-
 #include "GunData.h"
+
+GunData::GunData(GunID id): _id(id) {}
+
+GunID GunData::id() const { return _id; }
