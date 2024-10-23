@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ObjectData.h"
+#include "GameObjectData.h"
 #include "Vector2.h"
 
-class Object2DData: public ObjectData {
+class Object2DData: public GameObjectData {
     Vector2 _position;
     f32 _rotation;
 

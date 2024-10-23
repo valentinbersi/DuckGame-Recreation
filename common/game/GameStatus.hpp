@@ -1,17 +1,17 @@
 #pragma once
-#include "ObjectData.h"
+#include "GameObjectData.h"
 
 /**
  * A struct with the current game status.
  */
 class GameStatus {
-    std::vector<std::unique_ptr<ObjectData>> _gameObjects;
+    std::vector<std::unique_ptr<GameObjectData>> _gameObjects;
     // Time matchTime
 
 public:
-    GameStatus(std::initializer_list<std::unique_ptr<ObjectData>> objects /*, Time matchTime*/);
+    GameStatus(std::initializer_list<std::unique_ptr<GameObjectData>> objects /*, Time matchTime*/);
 
-    [[nodiscard]] const std::vector<std::unique_ptr<ObjectData>>& gameObjects() const;
+    [[nodiscard]] const std::vector<std::unique_ptr<GameObjectData>>& gameObjects() const;
 
     // [[nodiscard]] Time matchTime() const;
 };

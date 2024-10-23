@@ -5,12 +5,12 @@ Object2DData::Object2DData(const Object2DData& other) = default;
 Object2DData& Object2DData::operator=(const Object2DData& other) = default;
 
 Object2DData::Object2DData(Object2DData&& other) noexcept:
-        ObjectData(std::move(other)),
+        GameObjectData(std::move(other)),
         _position(std::move(other._position)),
         _rotation(other._rotation) {}
 
 Object2DData& Object2DData::operator=(Object2DData&& other) noexcept {
-    ObjectData::operator=(other);
+    GameObjectData::operator=(other);
     _position = std::move(other._position);
     _rotation = other._rotation;
     return *this;
@@ -19,7 +19,7 @@ Object2DData& Object2DData::operator=(Object2DData&& other) noexcept {
 Object2DData::~Object2DData() = default;
 
 Object2DData::Object2DData(const u32 id, Vector2 position, const f32 rotation):
-        ObjectData(id), _position(std::move(position)), _rotation(rotation) {}
+        GameObjectData(id), _position(std::move(position)), _rotation(rotation) {}
 
 const Vector2& Object2DData::position() const { return _position; }
 
