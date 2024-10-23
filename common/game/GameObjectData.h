@@ -18,7 +18,15 @@ public:
     GameObjectData& operator=(GameObjectData&& other) noexcept;
     virtual ~GameObjectData();
 
+    /**
+     * Construct a GameObjectData with the given ObjectID
+     * @param id The ID of the object
+     */
     explicit GameObjectData(GameObjectID id);
 
+    /**
+     * Get the id of the object
+     * @return The id of the object
+     */
     [[nodiscard]] GameObjectID id() const;
 };

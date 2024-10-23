@@ -13,6 +13,6 @@ GameObjectData& GameObjectData::operator=(GameObjectData&& other) noexcept {
 
 GameObjectData::~GameObjectData() = default;
 
-GameObjectData::GameObjectData(GameObjectID id): _id(id) {}
+GameObjectData::GameObjectData(const GameObjectID id): _id(id) {}
 
 GameObjectID GameObjectData::id() const { return _id; }
