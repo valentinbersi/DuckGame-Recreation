@@ -29,4 +29,10 @@ public:
      * @return The id of the object
      */
     [[nodiscard]] GameObjectID id() const;
+
+    /**
+     * Get the data of the object formatted to be sent to the client
+     * @return The data of the object formatted to be sent to the client
+     */
+    [[nodiscard]] virtual std::string data();
 };
