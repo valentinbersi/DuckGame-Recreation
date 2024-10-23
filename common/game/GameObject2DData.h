@@ -37,4 +37,10 @@ public:
      * @return The rotation of the 2D object
      */
     [[nodiscard]] f32 rotation() const;
+
+    /**
+     * Get the data of the GameObject2DData
+     * @return The data of the GameObject2DData
+     */
+    [[nodiscard]] std::string data() override;
 };

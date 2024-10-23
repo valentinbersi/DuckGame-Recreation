@@ -1,5 +1,7 @@
 #include "GameObject2DData.h"
 
+#include <sstream>
+
 GameObject2DData::GameObject2DData(const GameObject2DData& other) = default;
 
 GameObject2DData& GameObject2DData::operator=(const GameObject2DData& other) = default;
@@ -24,3 +26,9 @@ GameObject2DData::GameObject2DData(const GameObjectID id, Vector2 position, cons
 const Vector2& GameObject2DData::position() const { return _position; }
 
 f32 GameObject2DData::rotation() const { return _rotation; }
+
+std::string GameObject2DData::data() {
+    std::stringstream ss;
+    ss << GameObjectData::data() << _position.x() << _position.y() << _rotation;
+    return ss.str();
+}
