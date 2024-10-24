@@ -8,13 +8,13 @@
 
 #define INITIAL_TICKS 0
 
-#define MILI_TO_SECS 0.001
+#define MILI_TO_SECS 0.001f
 
-double GameLoop::calculateDeltaTime() {
-    const std::uint64_t frameTicks = SDL_GetTicks64();
-    const std::uint64_t deltaTime = frameTicks - prevTicks;
+float GameLoop::calculateDeltaTime() {
+    const u64 frameTicks = SDL_GetTicks64();
+    const u64 deltaTime = frameTicks - prevTicks;
     prevTicks = frameTicks;
-    return static_cast<double>(deltaTime) * MILI_TO_SECS;
+    return static_cast<f32>(deltaTime) * MILI_TO_SECS;
 }
 
 void GameLoop::retrieveCurrentFrameCommands() {
@@ -30,9 +30,13 @@ void GameLoop::processCurrentFrameCommands() {
 }
 
 void GameLoop::broadcastGameStatus() {
-    // GameStatus gameStatus = game.status();
-    std::ranges::for_each(clientQueues, [/*&gameStatus*/](const auto& clientQueue) {
-        clientQueue.lock()->try_push(/*gameStatus*/);
+    std::shared_ptr<GameStatus> gameStatus = std::make_shared(std::move(game.status()));
+    std::ranges::remove_if(clientQueues, [&gameStatus](const auto& clientQueue) {
+        if (clientQueue.expired())
+            return true;
+
+        clientQueue.lock()->try_push(gameStatus);
+        return false;
     });
 }
 
@@ -40,17 +44,20 @@ GameLoop::GameLoop(): prevTicks(INITIAL_TICKS) {}
 
 void GameLoop::run() {
     prevTicks = SDL_GetTicks64();
+    game.start();
 
     while (_keep_running) {
-        double deltaTime = calculateDeltaTime();
+        const float deltaTime = calculateDeltaTime();
         retrieveCurrentFrameCommands();
         processCurrentFrameCommands();
-        // game.update(deltaTime);
+        game.update(deltaTime);
+        broadcastGameStatus();
+        SDL_Delay(1);
     }
 }
 
-void GameLoop::addClient(std::uint16_t clientID,
-                         std::weak_ptr<BlockingQueue<GameStatus>> clientQueue) {
+void GameLoop::addClient(const u16 clientID,
+                         std::weak_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> clientQueue) {
     clientQueues.push_back(std::move(clientQueue));
-    // game.addPlayer(clientID);
+    game.addPlayer(clientID);
 }
