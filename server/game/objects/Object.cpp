@@ -56,13 +56,7 @@ void Object::updateInternal(float delta) {
 }
 
 void Object::addChild(std::string name, std::unique_ptr<Object> newChild) {
-    if (children.contains(name))
-        throw AlreadyAddedChild(name);
-
-    Object* newChildPtr = newChild.release();
-    newChildPtr->_parent = this;
-    children.emplace(std::move(name), newChildPtr);
-    emit<Object&>(getEventName(EventTypes::CHILD_ADDED), *newChildPtr);
+    addChild(std::move(name), newChild.release());
 }
 
 std::unique_ptr<Object> Object::removeChild(const std::string& name) {
@@ -77,6 +71,15 @@ Object* Object::getChild(const std::string& name) const {
         throw ChildNotInTree(name);
 
     return children.at(name);
+}
+
+void Object::addChild(std::string name, Object* newChild) {
+    if (children.contains(name))
+        throw AlreadyAddedChild(name);
+
+    newChild->_parent = this;
+    children.emplace(std::move(name), newChild);
+    emit<Object&>(getEventName(EventTypes::CHILD_ADDED), *newChild);
 }
 
 Object* Object::parent() const { return _parent; }
