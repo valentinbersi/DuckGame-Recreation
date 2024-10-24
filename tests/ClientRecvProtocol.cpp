@@ -30,7 +30,7 @@ GameStatus ClientRecvProtocol::receiveMessage(){
     u16 size = recvShort();
     GameStatus status;
     while(size){
-        std::unique_ptr<GameObjectData> objData = recvData();
+        std::unique_ptr<GameObjectData> objData = std::move(recvData());
         status.addObject(std::move(objData));
         size--;
     }

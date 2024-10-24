@@ -19,7 +19,7 @@
 #include <memory>
 
 TEST(ProtocolTest, ClientToServerSend) {
-
+    ListenerSocket skt("8080");
     ClientMessage clientMsg (MessageType::Input, InputAction::LEFT);
 
     std::thread client ([](){
@@ -29,7 +29,6 @@ TEST(ProtocolTest, ClientToServerSend) {
         sendProt.sendMessage(clientMsg);
     });
 
-    ListenerSocket skt("8080");
     ActiveSocket peer = skt.accept();
     ServerRecvProtocol recvProt (peer);
 
@@ -41,6 +40,7 @@ TEST(ProtocolTest, ClientToServerSend) {
     }
 
 TEST(ProtocolTest, ClientToServerMultipleSends) {
+    ListenerSocket skt("8080");
     std::list<ClientMessage> list;
     for(int i=0; i<50; i++){
         list.push_back(ClientMessage(MessageType::Input, InputAction::LEFT));
@@ -55,7 +55,6 @@ TEST(ProtocolTest, ClientToServerMultipleSends) {
         }
     });
 
-    ListenerSocket skt("8080");
     ActiveSocket peer = skt.accept();
     ServerRecvProtocol recvProt (peer);
 
@@ -69,6 +68,7 @@ TEST(ProtocolTest, ClientToServerMultipleSends) {
 }
 
 TEST(ProtocolTest, MultiClientSend) {
+    ListenerSocket skt("8080");
     ClientMessage msg1 (MessageType::Input, InputAction::LEFT);
     ClientMessage msg2 (MessageType::Input, InputAction::RIGHT);
 
@@ -83,8 +83,6 @@ TEST(ProtocolTest, MultiClientSend) {
         ClientSendProtocol sendProt (sktClient);
         sendProt.sendMessage(msg2);
     });
-
-    ListenerSocket skt("8080");
 
     ActiveSocket peer1 = skt.accept();
     ServerRecvProtocol recvProt1 (peer1);
@@ -104,8 +102,8 @@ TEST(ProtocolTest, MultiClientSend) {
 }
 
 std::unique_ptr<GameObjectData> creatDuckData(){
-    Vector2 vecdef;
-    float rotation;
+    Vector2 vecdef(1,2);
+    float rotation = 0;
     DuckID duckID = DuckID::RED;
     u8 life = 100;
     GunID gunID = GunID::Ak47; 
@@ -123,8 +121,8 @@ TEST(ProtocolTest, ServerToClientSend){
     std::thread client ([](){
         ActiveSocket clientSkt("localhost", "8080");
         ClientRecvProtocol recvProtocol(clientSkt);
-        // GameStatus recvStatus = recvProtocol.receiveMessage();
-        // ASSERT_TRUE(recvStatus.gameObjects().size() == 1);
+        GameStatus recvStatus = recvProtocol.receiveMessage();
+        ASSERT_TRUE(recvStatus.gameObjects().size() == 1);
 
     });
     
