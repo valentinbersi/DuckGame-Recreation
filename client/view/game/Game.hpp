@@ -4,8 +4,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <string>
-#include "Player.h"
-
+#include <list>
 // #include <random>
 
 #include <SDL2/SDL.h>
@@ -13,6 +12,12 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2pp/SDL2pp.hh>
+
+#include "Player.h"
+#include "../../../common/game/GameStatus.hpp"
+#include "../../../common/game/GameObjectData.h"
+#include "../../../common/game/GameObject2DData.h"
+#include "../../../common/game/DuckData.h"
 
 class Game {
 
@@ -35,6 +40,9 @@ private:
     Keybinds m_key;
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
+
+    std::list<std::unique_ptr<DuckData>> ducks;
+    std::list<std::unique_ptr<GameObjectData>> objects;
 
     std::unordered_map<SDL_Scancode, Keybinds> keyMapping = {
         {SDL_SCANCODE_W, Keybinds::UP},

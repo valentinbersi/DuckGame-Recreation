@@ -28,7 +28,8 @@ void Game::init() {
 
     while(running) {
         /*
-        struct GameStatus snapshot = getSnapshot();           //handle everything sended by the gameloop
+        getSnapshot();           //handle everything sended by the gameloop
+        int mid = centerOfDucks();
 
         renderer.Clear();
 
@@ -41,6 +42,7 @@ void Game::init() {
         updatePlayers(snapshot);                    //acá adentro hago uso de diversos update(playerX) según el estado de cada uno
         updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
         render();
+        clearLists();                             //limpio las listas de patos, objetos, armas, etc
 
         handleEvents();           //y según lo que pase acá... lo envío al protocolo (o gameloop, no recuerdo XD)
 
@@ -56,7 +58,7 @@ void Game::init() {
 
         */
 
-        /*
+
         handleEvents();       // handle user input
         renderer.Clear();
         showBackground(backgroundTexture);
@@ -73,19 +75,56 @@ void Game::init() {
     IMG_Quit();
 }
 
-/*struct GameStatus Game::getSnapshot() {
-    struct GameStatus snapshot = callToTheProtocol;
+/*void Game::getSnapshot() {
+    GameStatus snapshot = callToTheProtocol();
 
-    Time timeToFinish = snapshot.timeToFinish;
-    (if snapshot.timeToFinish == 0) {
-        running = false;
-        return;
+    // aca deberia conseguir los diversos duck data hasta que en el casteo dinamico me de nullptr
+    // en ese caso no habrán más ducks y ya entraré a los objetos
 
-    List<DuckData> ducks = snapshot.ducks;         //lista de diversas DuckDatas (dependiendo de la cantidad de ducks conectados)
-    List<ObjectData*> objects = snapshot.objects;
+    // acomodarme cosas en sublistas. sublistas de patos, de armas, de bloques, objetos... etc
+    // al final hago clear a cada sublista y vuelvo a obtener una nueva snapshot
+    // para esto puedo mover punteros para lo que necesito
 
-    return snapshot;
+    GameStatus snapshot = callToTheProtocol();
+    for (auto& gameObject : snapshot.gameObjects()) {
+
+        switch (gameObject->id()) {
+            case GameObjectID::OBJECT2D: {
+                GameObject2DData* object2D = static_cast<GameObject2DData*>(gameObject.get());
+                if (object2D->id2D() == GameObject2DID::DUCK) {
+                    ducks.push_back(std::unique_ptr<DuckData>(static_cast<DuckData*>(gameObject.release())));
+                } else {
+                    typeOfObject2D(std::unique_ptr<GameObject2DData>(static_cast<GameObject2DData*>(gameObject.release())));
+                }
+                break;
+            }
+
+    snapshot.gameObjects().clear();
+}
+
+
+void typeOfObject2D(std::unique_ptr<GameObject2DData> gameObject2D) {
+    switch (gameObject2D->id2D()) {
+        case GameObject2DID::GUN:
+            weapons.push_back(?);
+            break;
+        case GameObject2DID::BULLET:
+            bullets.push_back(?);
+            break;
+        case GameObject2DID::WALL:
+            blocks.push_back(?);
+            break;
+        case GameObject2DID::TIMER:
+            if (gameObject2D.timeToFinish == 0) {
+                running = false;
+                break;
+        default:
+            break;
+    }
 }*/
+
+
+
 
 
 
@@ -139,9 +178,7 @@ void Game::update(Player& player1) {
 
 }
 
-/*void Game::render(Player player1) {
 
-}*/
 
 Texture Game::startBackground() {
     SDL_Surface* rawBackgroundSurface = IMG_Load("../../assets/background/background1.png");
