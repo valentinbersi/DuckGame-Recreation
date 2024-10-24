@@ -2,13 +2,20 @@
 
 #include "Types.h"
 
-enum class GameObjectID : u8 { PLAYER = 0, ENEMY = 1, BULLET = 2, BLOCK = 3 };
+enum class GameObjectID : u8 { OBJECT2D = 0 };
 
 /**
  * Relevant data of an object in the game.
  */
 class GameObjectData {
     GameObjectID _id;
+
+protected:
+    /**
+     * Get the data of the object
+     * @return The data of the object
+     */
+    virtual std::string _data();
 
 public:
     GameObjectData() = delete;
@@ -34,5 +41,5 @@ public:
      * Get the data of the object formatted to be sent to the client
      * @return The data of the object formatted to be sent to the client
      */
-    [[nodiscard]] virtual std::string data();
+    [[nodiscard]] std::vector<char> data();
 };

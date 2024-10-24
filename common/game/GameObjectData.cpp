@@ -1,5 +1,7 @@
 #include "GameObjectData.h"
 
+std::string GameObjectData::_data() { return reinterpret_cast<char*>(&_id); }
+
 GameObjectData::GameObjectData(const GameObjectData& other) = default;
 
 GameObjectData& GameObjectData::operator=(const GameObjectData& other) = default;
@@ -17,4 +19,7 @@ GameObjectData::GameObjectData(const GameObjectID id): _id(id) {}
 
 GameObjectID GameObjectData::id() const { return _id; }
 
-std::string GameObjectData::data() { return std::to_string(static_cast<u8>(_id)); }
+std::vector<char> GameObjectData::data() {
+    std::string data = _data();
+    return {data.begin(), data.end()};
+}

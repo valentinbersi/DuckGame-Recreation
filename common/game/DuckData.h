@@ -5,7 +5,7 @@
 #include "EquippedGunData.h"
 #include "GameObject2DData.h"
 
-enum class DuckID {
+enum class DuckID : u8 {
     // enummerate duck colors
 };
 
@@ -21,6 +21,9 @@ class DuckData final: public GameObject2DData {
     u8 _life;
     EquippedGunData* _gun;
     std::bitset<NFLAGS> _actions;
+
+protected:
+    std::string _data() override;
 
 public:
     DuckData() = delete;
@@ -38,7 +41,6 @@ public:
 
     /**
      * Construct a DuckData object
-     * @param objectID the object's ID
      * @param position the object's position
      * @param rotation the object's rotation
      * @param duckID the duck's ID
@@ -46,7 +48,7 @@ public:
      * @param gun the gun of the duck
      * @param actions the actions the duck is performing
      */
-    DuckData(GameObjectID objectID, Vector2 position, f32 rotation, DuckID duckID, u8 life,
+    DuckData(Vector2 position, f32 rotation, DuckID duckID, u8 life,
              std::unique_ptr<EquippedGunData> gun, DuckActions actions);
 
     /**
@@ -98,10 +100,4 @@ public:
      * @return true if the duck is flapping, false otherwise
      */
     [[nodiscard]] bool isFlapping() const;
-
-    /**
-     * Get the data of the DuckData object
-     * @return the data of the DuckData object
-     */
-    [[nodiscard]] std::string data() override;
 };
