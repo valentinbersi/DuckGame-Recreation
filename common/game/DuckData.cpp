@@ -32,6 +32,7 @@ DuckData& DuckData::operator=(const DuckData& other) {
     GameObject2DData::operator=(other);
     _id = other._id;
     _life = other._life;
+    delete _gun;
     _gun = new EquippedGunData(*other._gun);
     _actions = other._actions;
     return *this;
@@ -53,6 +54,7 @@ DuckData& DuckData::operator=(DuckData&& other) noexcept {
     GameObject2DData::operator=(std::move(other));
     _id = other._id;
     _life = other._life;
+    delete _gun;
     _gun = other._gun;
     other._gun = nullptr;
     _actions = other._actions;

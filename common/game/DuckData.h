@@ -34,10 +34,10 @@ public:
     ~DuckData() override;
 
     constexpr static DuckActions HAS_ARMOR = 0b1;
-    constexpr static DuckActions IS_PLAYING_DEAD = 0b01;
-    constexpr static DuckActions IS_CROUCHING = 0b001;
-    constexpr static DuckActions IS_IN_AIR = 0b0001;
-    constexpr static DuckActions IS_FLAPPING = 0b00001;
+    constexpr static DuckActions IS_PLAYING_DEAD = 0b10;
+    constexpr static DuckActions IS_CROUCHING = 0b100;
+    constexpr static DuckActions IS_IN_AIR = 0b1000;
+    constexpr static DuckActions IS_FLAPPING = 0b10000;
 
     /**
      * Construct a DuckData object

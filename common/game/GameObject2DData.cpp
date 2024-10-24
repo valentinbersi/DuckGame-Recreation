@@ -7,7 +7,7 @@ std::string GameObject2DData::_data() {
     auto y = _position.y();
 
     return std::move(std::string(std::move(GameObjectData::_data()))
-                             .append(reinterpret_cast<char*>(_id), sizeof(u8))
+                             .append(reinterpret_cast<cstring>(&_id), sizeof(u8))
                              .append(reinterpret_cast<cstring>(&x), sizeof(f32))
                              .append(reinterpret_cast<cstring>(&y), sizeof(f32))
                              .append(reinterpret_cast<cstring>(&_rotation), sizeof(f32)));
