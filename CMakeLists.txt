@@ -115,6 +115,7 @@ endif ()
 # ---------------
 
 if (TESTS)
+    set(CMAKE_BUILD_TYPE Debug) 
     # Let's use google test
     include(FetchContent)
     FetchContent_Declare(

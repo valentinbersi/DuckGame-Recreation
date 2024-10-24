@@ -6,7 +6,7 @@
 #include "GameObject2DData.h"
 
 enum class DuckID : u8 {
-    // enummerate duck colors
+    RED = 0x1
 };
 
 typedef u8 DuckActions;
