@@ -15,7 +15,7 @@ std::string DuckData::_data() {
                              .append(reinterpret_cast<cstring>(&_id), sizeof(u8))
                              .append(reinterpret_cast<cstring>(&_life), sizeof(u8))
                              .append(_gun->data())
-                             .append(reinterpret_cast<cstring>(actions), sizeof(u8)));
+                             .append(reinterpret_cast<cppstring>(&actions), sizeof(u8)));
 }
 
 DuckData::DuckData(const DuckData& other):
