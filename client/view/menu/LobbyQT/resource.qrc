@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/backgrounds">
+        <file>duck-game.png</file>
+        <file>partida-run.png</file>
+    </qresource>
+</RCC>
