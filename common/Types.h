@@ -29,6 +29,3 @@ typedef std::int8_t i8;
 typedef std::int16_t i16;
 typedef std::int32_t i32;
 typedef std::int64_t i64;
-
-typedef float f32;
-typedef double f64;

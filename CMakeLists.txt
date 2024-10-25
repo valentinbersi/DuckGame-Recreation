@@ -55,6 +55,16 @@ if (CLIENT OR EDITOR)
     )
 
     FetchContent_MakeAvailable(libSDL2pp)
+
+    include(GNUInstallDirs)
+
+    set(CMAKE_AUTOUIC ON)
+    set(CMAKE_AUTOMOC ON)
+    set(CMAKE_AUTORCC ON)
+
+    find_package(Qt5 COMPONENTS Core Gui Widgets)
+
+    target_include_directories(common PUBLIC ${Qt5_SOURCE_DIR})
 endif ()
 
 # Program section
@@ -63,7 +73,7 @@ if (CLIENT)
     add_executable(DuckGame)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGame common SDL2pp::SDL2pp)
+    add_dependencies(DuckGame common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(client)
@@ -74,7 +84,13 @@ if (CLIENT)
     target_include_directories(DuckGame PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(DuckGame common SDL2pp::SDL2pp)
+    target_link_libraries(DuckGame common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+
+    install(TARGETS DuckGame
+            BUNDLE DESTINATION .
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
 endif ()
 
 if (SERVER)
@@ -96,7 +112,7 @@ if (EDITOR)
     add_executable(DuckGameLevelEditor)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGameLevelEditor common SDL2pp::SDL2pp)
+    add_dependencies(DuckGameLevelEditor common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(editor)
@@ -107,7 +123,13 @@ if (EDITOR)
     target_include_directories(DuckGameLevelEditor PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(DuckGameLevelEditor common SDL2pp::SDL2pp)
+    target_link_libraries(DuckGameLevelEditor common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+
+    install(TARGETS DuckGameLevelEditor
+            BUNDLE DESTINATION .
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
 endif ()
 
 
