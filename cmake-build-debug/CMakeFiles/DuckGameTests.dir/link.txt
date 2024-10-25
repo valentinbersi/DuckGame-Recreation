@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/DuckGameTests.dir/tests/ClientRecvProtocol.cpp.o CMakeFiles/DuckGameTests.dir/tests/ClientSendProtocol.cpp.o CMakeFiles/DuckGameTests.dir/tests/ServerRecvProtocol.cpp.o CMakeFiles/DuckGameTests.dir/tests/ServerSendProtocol.cpp.o CMakeFiles/DuckGameTests.dir/tests/test.cpp.o -o DuckGameTests  libcommon.a lib/libgtest_main.a lib/libgtest.a 

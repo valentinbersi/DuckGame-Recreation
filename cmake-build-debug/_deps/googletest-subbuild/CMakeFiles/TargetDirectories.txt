@@ -1,0 +1,3 @@
+/home/andres/Documents/Taller de Programacion/TP_DuckGame_Grupo08/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/googletest-populate.dir
+/home/andres/Documents/Taller de Programacion/TP_DuckGame_Grupo08/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/edit_cache.dir
+/home/andres/Documents/Taller de Programacion/TP_DuckGame_Grupo08/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/rebuild_cache.dir
