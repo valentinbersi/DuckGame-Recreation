@@ -1,8 +1,9 @@
 
 #include "ActiveSocket.h"
-#include "ClientMessage.h"
+//#include "ClientMessage.h"
 #include "SendProtocol.h"
 
+/*
 class ClientSendProtocol: public SendProtocol {
 public:
     explicit ClientSendProtocol(ActiveSocket&);
@@ -11,3 +12,4 @@ public:
 
     ~ClientSendProtocol() = default;
 };
+*/

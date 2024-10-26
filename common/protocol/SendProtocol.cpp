@@ -11,7 +11,7 @@ void SendProtocol::sendByte(unsigned char byte) {
     }
 }
 
-void SendProtocol::sendString(std::string& string) {
+/*void SendProtocol::sendString(std::string& string) {
     uint16_t size = string.size();
     size = htons(size);
     if (!skt.send(&size, sizeof(uint16_t))) {
@@ -21,4 +21,4 @@ void SendProtocol::sendString(std::string& string) {
     if (!skt.send(string.c_str(), string.size())) {
         // throw;
     }
-}
+}*/

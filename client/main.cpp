@@ -6,7 +6,7 @@
 
 // Here we should just declare the classes that are use in this file. But for now a NOLINT is fine.
 using namespace SDL2pp;  // NOLINT(build/namespaces)
-
+/*
 int main() try {
     // Initialize SDL library
     SDL sdl(SDL_INIT_VIDEO);
@@ -33,4 +33,4 @@ int main() try {
     // If case of error, print it and exit with error
     std::cerr << e.what() << std::endl;
     return 1;
-}
+}*/
