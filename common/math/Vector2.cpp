@@ -100,6 +100,8 @@ Vector2 Vector2::directionTo(const Vector2& v) const {
 
 float Vector2::distance(const Vector2& v) const { return (*this - v).length(); }
 
+float Vector2::distanceSquared(const Vector2& v) const { return (*this - v).lengthSquared(); }
+
 float Vector2::dot(const Vector2& v) const noexcept { return _x * v._x + _y * v._y; }
 
 bool Vector2::operator==(const Vector2& v) const noexcept {
