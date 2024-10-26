@@ -24,7 +24,7 @@ DuckData& DuckData::operator=(DuckData&& other) noexcept {
 DuckData::~DuckData() = default;
 
 DuckData::DuckData(Vector2 position, const float rotation, const DuckID duckID, const u8 life,
-                   std::unique_ptr<EquippedGunData> gun, const u8 extraData):
+                   std::unique_ptr<EquippedGunData> gun, const DuckFlag extraData):
         GameObject2DData(GameObject2DID::Duck, std::move(position), rotation),
         id(duckID),
         life(life),
