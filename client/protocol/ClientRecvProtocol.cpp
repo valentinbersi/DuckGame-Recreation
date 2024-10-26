@@ -2,9 +2,12 @@
 #include "ClientRecvProtocol.h"
 #include "DuckData.h"
 
-ClientRecvProtocol::ClientRecvProtocol(ActiveSocket& socket): ReceiveProtocol(socket) {}
+ClientRecvProtocol::ClientRecvProtocol(ActiveSocket& socket): ReceiveProtocol(socket) {
+    idsMap[GameObjectID::Object2D] = [this]() -> std::unique_ptr<GameObjectData> 
+                                     { recvDuckData(); };
+}
 
-std::unique_ptr<GameObjectData> ClientRecvProtocol::recvPlayerData(){
+std::unique_ptr<GameObjectData> ClientRecvProtocol::recvDuckData(){
     float posX = recvInt();
     float posY = recvInt();
     float rotation = recvInt();
@@ -17,20 +20,18 @@ std::unique_ptr<GameObjectData> ClientRecvProtocol::recvPlayerData(){
 }
 
 std::unique_ptr<GameObjectData> ClientRecvProtocol::recvData(){
-    //por ahora solo puede ser objeto tipo DuckData, despues iria algun diccionario
-    recv_byte();
-    recv_byte();
-    //Pueden ser headers utiles para identificar el tipo de obj y obj 2d, no hacen falta en la contrusccion
-
-    return recvPlayerData(); //por ahora simplemente devolvemos el unico tipo que tenemos.
+    //Nota: Por ahora solo se envia desde el servidor el id de Game Object
+    //Lo mas probable es que esto cambie luego, por ahora no necesito ninguno
+    //de lo dos para armar las cosas.
+    GameObjectID id = static_cast<GameObjectID>(recv_byte());
+    return idsMap[id]();
 }
 
 GameStatus ClientRecvProtocol::receiveMessage(){
     u16 size = recvShort();
     GameStatus status;
     while(size){
-        std::unique_ptr<GameObjectData> objData = recvData();
-        status.addObject(std::move(objData));
+        status.gameObjects.emplace_back(recvData());
         size--;
     }
     return status;
