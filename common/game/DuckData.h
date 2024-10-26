@@ -25,16 +25,18 @@ struct DuckData final: GameObject2DData {
     DuckData& operator=(DuckData&& other) noexcept;
     ~DuckData() override;
 
-    constexpr static u8 ARMOR = 0b1;
-    constexpr static u8 HELMET = 0b10;
-    constexpr static u8 PLAYING_DEAD = 0b100;
-    constexpr static u8 CROUCHING = 0b1000;
-    constexpr static u8 IN_AIR = 0b10000;
-    constexpr static u8 FLAPPING = 0b100000;
-    constexpr static u8 BEING_DAMAGED = 0b1000000;
-    constexpr static u8 MOVING_RIGHT = 0b10000000;
-    constexpr static u8 MOVING_LEFT = 0b100000000;
-    constexpr static u8 LOOKING_UP = 0b1000000000;
+    using DuckFlag = u16;
+
+    constexpr static DuckFlag ARMOR = 0b1;
+    constexpr static DuckFlag HELMET = 0b10;
+    constexpr static DuckFlag PLAYING_DEAD = 0b100;
+    constexpr static DuckFlag CROUCHING = 0b1000;
+    constexpr static DuckFlag IN_AIR = 0b10000;
+    constexpr static DuckFlag FLAPPING = 0b100000;
+    constexpr static DuckFlag BEING_DAMAGED = 0b1000000;
+    constexpr static DuckFlag MOVING_RIGHT = 0b10000000;
+    constexpr static DuckFlag MOVING_LEFT = 0b100000000;
+    constexpr static DuckFlag LOOKING_UP = 0b1000000000;
 
     constexpr static u8 ARMOR_INDEX = 0;
     constexpr static u8 HELMET_INDEX = 1;
