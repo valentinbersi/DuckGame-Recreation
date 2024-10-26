@@ -13,7 +13,7 @@ enum class DuckID : u8 { White = 0x0, Orange = 0x1, Yellow = 0x2, Grey = 0x3 };
 struct DuckData final: GameObject2DData {
     constexpr static u8 NFLAGS = 10;
 
-    DuckID id;
+    DuckID duckID;
     u8 life;
     std::unique_ptr<EquippedGunData> gun;
     std::bitset<NFLAGS> extraData;

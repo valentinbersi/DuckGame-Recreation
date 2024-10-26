@@ -9,7 +9,7 @@ enum class GameObject2DID : u8 { Duck = 0x0 };
  * Relevant data for rendering a 2D object in the game
  */
 struct GameObject2DData: GameObjectData {
-    GameObject2DID id;
+    GameObject2DID object2DID;
     Vector2 position;
     float rotation;
 
@@ -22,9 +22,9 @@ struct GameObject2DData: GameObjectData {
 
     /**
      * Construct a GameObject2DData with the given id, position and rotation
-     * @param id The id of the GameObject2D
+     * @param object2DID The id of the GameObject2D
      * @param position The position of the GameObject2D
      * @param rotation The rotation of the GameObject2D
      */
-    GameObject2DData(GameObject2DID id, Vector2 position, float rotation);
+    GameObject2DData(GameObject2DID object2DID, Vector2 position, float rotation);
 };

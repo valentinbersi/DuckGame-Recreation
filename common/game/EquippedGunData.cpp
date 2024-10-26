@@ -1,7 +1,11 @@
 #include "EquippedGunData.h"
 
-EquippedGunData::EquippedGunData(const GunID gunID): _id(gunID) {}
+EquippedGunData::EquippedGunData(const EquippedGunData& other) = default;
 
-GunID EquippedGunData::id() const { return _id; }
+EquippedGunData& EquippedGunData::operator=(const EquippedGunData& other) = default;
 
-std::string EquippedGunData::data() const { return std::to_string(static_cast<u8>(_id)); }
+EquippedGunData::EquippedGunData(EquippedGunData&& other) noexcept = default;
+
+EquippedGunData& EquippedGunData::operator=(EquippedGunData&& other) noexcept = default;
+
+EquippedGunData::EquippedGunData(const GunID gunID): gunID(gunID) {}
