@@ -59,5 +59,5 @@ struct DuckData final: GameObject2DData {
      * @param extraData actions the duck is performing and armor data
      */
     DuckData(Vector2 position, float rotation, DuckID duckID, u8 life,
-             std::unique_ptr<EquippedGunData> gun, u8 extraData);
+             std::unique_ptr<EquippedGunData> gun, DuckFlag extraData);
 };
