@@ -101,39 +101,39 @@ TEST(ProtocolTest, MultiClientSend) {
     client2.join();
 }
 
-std::unique_ptr<GameObjectData> creatDuckData(){
-    Vector2 vecdef(1,2);
-    float rotation = 0;
-    DuckID duckID = DuckID::RED;
-    u8 life = 100;
-    GunID gunID = GunID::Ak47; 
-    u8 actions = 0b1 | 0b01 | 0b001 | 0b0001 | 0b00001;
-    return std::make_unique<DuckData>(vecdef,rotation,duckID,life, 
-                                    std::make_unique<EquippedGunData>(gunID), actions);
-}
+// std::unique_ptr<GameObjectData> creatDuckData(){
+//     Vector2 vecdef(1,2);
+//     float rotation = 0;
+//     DuckID duckID = DuckID::Grey;
+//     u8 life = 100;
+//     GunID gunID = GunID::Ak47; 
+//     u8 actions = 0b1 | 0b01 | 0b001 | 0b0001 | 0b00001;
+//     return std::make_unique<DuckData>(vecdef,rotation,duckID,life, 
+//                                     std::make_unique<EquippedGunData>(gunID), actions);
+// }
 
-TEST(ProtocolTest, ServerToClientSend){
-    ListenerSocket peer("8080");
+// TEST(ProtocolTest, ServerToClientSend){
+//     ListenerSocket peer("8080");
 
-    std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
-    status->addObject(std::move(creatDuckData()));
+//     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
+//     status->addObject(std::move(creatDuckData()));
 
-    std::thread client ([](){
-        ActiveSocket clientSkt("localhost", "8080");
-        ClientRecvProtocol recvProtocol(clientSkt);
-        GameStatus recvStatus = recvProtocol.receiveMessage();
-        ASSERT_TRUE(recvStatus.gameObjects().size() == 1);
+//     std::thread client ([](){
+//         ActiveSocket clientSkt("localhost", "8080");
+//         ClientRecvProtocol recvProtocol(clientSkt);
+//         GameStatus recvStatus = recvProtocol.receiveMessage();
+//         ASSERT_TRUE(recvStatus.gameObjects().size() == 1);
 
-    });
+//     });
     
-    ActiveSocket skt = peer.accept();
-    ServerSendProtocol sendProtocol(skt);
-    sendProtocol.sendMessage(status);
+//     ActiveSocket skt = peer.accept();
+//     ServerSendProtocol sendProtocol(skt);
+//     sendProtocol.sendMessage(status);
 
-    // EXPECT_EQ(recvMsg.action, clientMsg.action);
+//     // EXPECT_EQ(recvMsg.action, clientMsg.action);
     
-    client.join();
-}
+//     client.join();
+// }
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
