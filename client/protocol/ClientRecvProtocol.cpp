@@ -1,6 +1,7 @@
 
 #include "ClientRecvProtocol.h"
 #include "DuckData.h"
+#include "Math.h"
 
 ClientRecvProtocol::ClientRecvProtocol(ActiveSocket& socket): ReceiveProtocol(socket) {
     idsMap[GameObjectID::Object2D] = [this]() -> std::unique_ptr<GameObjectData> 
@@ -8,13 +9,13 @@ ClientRecvProtocol::ClientRecvProtocol(ActiveSocket& socket): ReceiveProtocol(so
 }
 
 std::unique_ptr<GameObjectData> ClientRecvProtocol::recvDuckData(){
-    float posX = recvInt();
-    float posY = recvInt();
-    float rotation = recvInt();
+    float posX = Math::integerToFloat(recvInt());
+    float posY = Math::integerToFloat(recvInt());
+    float rotation = Math::integerToFloat(recvInt());
     u8 duckID = recv_byte();
     u8 life = recv_byte();
     u8 gunID = recv_byte(); 
-    u8 actions = recv_byte();
+    u16 actions = recvShort();
     return std::make_unique<DuckData>(Vector2(posX,posY), rotation, static_cast<DuckID>(duckID), life,
                                         EquippedGunData(static_cast<GunID>(gunID)), actions);
 }
