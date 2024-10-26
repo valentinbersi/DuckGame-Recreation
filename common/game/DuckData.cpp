@@ -4,7 +4,7 @@
 
 DuckData::DuckData(DuckData&& other) noexcept:
         GameObject2DData(std::move(other)),
-        id(other.id),
+        duckID(other.duckID),
         life(other.life),
         gun(std::move(other.gun)),
         extraData(other.extraData) {}
@@ -14,7 +14,7 @@ DuckData& DuckData::operator=(DuckData&& other) noexcept {
         return *this;
 
     GameObject2DData::operator=(std::move(other));
-    id = other.id;
+    duckID = other.duckID;
     life = other.life;
     gun = std::move(other.gun);
     extraData = other.extraData;
@@ -26,7 +26,7 @@ DuckData::~DuckData() = default;
 DuckData::DuckData(Vector2 position, const float rotation, const DuckID duckID, const u8 life,
                    std::unique_ptr<EquippedGunData> gun, const DuckFlag extraData):
         GameObject2DData(GameObject2DID::Duck, std::move(position), rotation),
-        id(duckID),
+        duckID(duckID),
         life(life),
         gun(std::move(gun)),
         extraData(extraData) {}
