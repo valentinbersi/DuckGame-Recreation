@@ -6,6 +6,8 @@
 #include "GameStatus.hpp"
 #include "GameObjectData.h"
 #include "SendProtocol.h"
+#include "DuckData.h"
+#include "GameObject2DData.h"
 #include "Types.h"
 
 class ServerSendProtocol: public SendProtocol {
