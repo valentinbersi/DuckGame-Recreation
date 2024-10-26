@@ -8,7 +8,7 @@ enum class GameObjectID : u8 { Object2D = 0x0 };
  * Relevant data of an object in the game.
  */
 struct GameObjectData {
-    GameObjectID id;
+    GameObjectID objectID;
 
     GameObjectData() = delete;
     GameObjectData(const GameObjectData& other);
@@ -19,7 +19,7 @@ struct GameObjectData {
 
     /**
      * Construct a GameObjectData with the given ObjectID
-     * @param id The ID of the object
+     * @param objectID The ID of the object
      */
-    explicit GameObjectData(GameObjectID id);
+    explicit GameObjectData(GameObjectID objectID);
 };
