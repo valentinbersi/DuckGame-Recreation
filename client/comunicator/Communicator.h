@@ -1,5 +1,5 @@
 #include "Thread.h"
-class Comunicator{
+class Communicator{
 
 
 };
