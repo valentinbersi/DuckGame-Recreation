@@ -24,7 +24,7 @@ u16 ReceiveProtocol::recvShort(){
 }
 
 u32 ReceiveProtocol::recvInt(){
-    u16 num;
+    u32 num;
     if(!skt.receive(&num,sizeof(u32))){
         //throw
     }

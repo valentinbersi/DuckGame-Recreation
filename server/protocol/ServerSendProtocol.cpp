@@ -17,14 +17,14 @@ void ServerSendProtocol::sendGameObject2DData(const GameObject2DData* obj2Data){
     sendInt(Math::floatToInteger(obj2Data->rotation));
 }
 void ServerSendProtocol::sendDuckData(const DuckData* duckData){
-    sendByte(static_cast<unsigned char>(duckData->id));
+    sendByte(static_cast<unsigned char>(duckData->duckID));
     sendByte(duckData->life);
-    sendByte(static_cast<unsigned char>(duckData->gun->id()));
-    sendByte(static_cast<u16>(duckData->extraData.to_ulong()));
+    sendByte(static_cast<unsigned char>(duckData->gun->gunID));
+    sendShort(static_cast<u16>(duckData->extraData.to_ulong()));
 }
 
 void ServerSendProtocol::sendDuck(const GameObjectData& objData){
-    sendByte(static_cast<unsigned char>(objData.id));
+    sendByte(static_cast<unsigned char>(objData.objectID));
     sendGameObject2DData(dynamic_cast<const GameObject2DData*>(&objData));
     sendDuckData(dynamic_cast<const DuckData*>(&objData));
 }
@@ -33,7 +33,7 @@ void ServerSendProtocol::sendMessage(std::shared_ptr<GameStatus>& status) {
     const auto& gameObjects = status->gameObjects;
     sendShort(gameObjects.size());
     for (const auto& ptr : gameObjects){
-        GameObjectID id = ptr->id;
+        GameObjectID id = ptr->objectID;
         idsMap[id](*ptr);
     }
 }
