@@ -1,3 +1,4 @@
+#pragma once
 #include "Thread.h"
 #include "BlockingQueue.h"
 #include "ClientSendProtocol.h"
