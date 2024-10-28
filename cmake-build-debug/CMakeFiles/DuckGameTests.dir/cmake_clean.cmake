@@ -1,4 +1,12 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.o"
+  "CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.o.d"
+  "CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.o"
+  "CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.o.d"
+  "CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.o"
+  "CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.o.d"
+  "CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.o"
+  "CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.o.d"
   "CMakeFiles/DuckGameTests.dir/tests/test.cpp.o"
   "CMakeFiles/DuckGameTests.dir/tests/test.cpp.o.d"
   "DuckGameTests"

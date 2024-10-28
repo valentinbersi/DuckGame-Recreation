@@ -10,6 +10,10 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/exceptions/ClosedSocket.cpp" "CMakeFiles/common.dir/common/exceptions/ClosedSocket.cpp.o" "gcc" "CMakeFiles/common.dir/common/exceptions/ClosedSocket.cpp.o.d"
   "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/exceptions/LibError.cpp" "CMakeFiles/common.dir/common/exceptions/LibError.cpp.o" "gcc" "CMakeFiles/common.dir/common/exceptions/LibError.cpp.o.d"
+  "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/DuckData.cpp" "CMakeFiles/common.dir/common/game/DuckData.cpp.o" "gcc" "CMakeFiles/common.dir/common/game/DuckData.cpp.o.d"
+  "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/EquippedGunData.cpp" "CMakeFiles/common.dir/common/game/EquippedGunData.cpp.o" "gcc" "CMakeFiles/common.dir/common/game/EquippedGunData.cpp.o.d"
+  "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/GameObject2DData.cpp" "CMakeFiles/common.dir/common/game/GameObject2DData.cpp.o" "gcc" "CMakeFiles/common.dir/common/game/GameObject2DData.cpp.o.d"
+  "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/GameObjectData.cpp" "CMakeFiles/common.dir/common/game/GameObjectData.cpp.o" "gcc" "CMakeFiles/common.dir/common/game/GameObjectData.cpp.o.d"
   "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/GameStatus.cpp" "CMakeFiles/common.dir/common/game/GameStatus.cpp.o" "gcc" "CMakeFiles/common.dir/common/game/GameStatus.cpp.o.d"
   "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/math/Math.cpp" "CMakeFiles/common.dir/common/math/Math.cpp.o" "gcc" "CMakeFiles/common.dir/common/math/Math.cpp.o.d"
   "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/math/Matrix2.cpp" "CMakeFiles/common.dir/common/math/Matrix2.cpp.o" "gcc" "CMakeFiles/common.dir/common/math/Matrix2.cpp.o.d"

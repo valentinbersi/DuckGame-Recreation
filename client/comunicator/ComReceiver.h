@@ -1,8 +1,12 @@
 #pragma once
-#include "Thread.h"
-#include "ClientRecvProtocol.h"
-#include "BlockingQueue.h"
-#include "GameStatus.hpp"
+#include "../../common/thread/Thread.h"
+#include "../../common/synchronized/BlockingQueue.h"
+#include "../../common/game/GameStatus.hpp"
+#include "../../common/socket/ActiveSocket.h"
+#include "../protocol/ClientRecvProtocol.h"
+#include "../../common/exceptions/LibError.h"
+#include "ComSender.h"
+#include "syslog.h"
 
 class CommunicatorReceiver: public Thread{
 private:

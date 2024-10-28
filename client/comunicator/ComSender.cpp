@@ -1,6 +1,4 @@
 #include "ComSender.h"
-#include "LibError.h"
-#include "syslog.h"
 
 #define ERROR_MSG "UNOWN ERROR DURING RUNTIME."
 

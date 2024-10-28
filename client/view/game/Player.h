@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Spritesheets.h"
+#include "Spritesheet.h"
 
 // offsets in rows
 

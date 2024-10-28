@@ -1,14 +1,3 @@
-file(GLOB PROTOCOL_SRC protocol/*.cpp)
-file(GLOB COMUNICATOR_SRC comunicator/*.cpp)
-file(GLOB GAME_SRC view/game/*.cpp)
-file(GLOB MENU_SRC view/menu/*.cpp)
-
-file(GLOB MENU_UI view/menu/*.ui)
-
-file(GLOB MENU_QRSRC view/menu/*.qrc)
-
-file(GLOB PROTOCOL_INC protocol/*.h)
-file(GLOB COMUNICATOR_INC comunicator/*.h)
 cmake_minimum_required(VERSION 3.13)
 
 set(SDL2PP_WITH_IMAGE ON CACHE BOOL "" FORCE)
@@ -27,11 +16,6 @@ include_directories(${SDL2_INCLUDE_DIRS} ${SDL2PP_INCLUDE_DIRS} ${SDL2_IMAGE_INC
 file(GLOB GAME_SRC view/game/*.cpp)
 file(GLOB GAME_INC view/game/*.h)
 
-target_include_directories(common PUBLIC "../common" "protocol" "view" "comunicator")
-
-target_sources(DuckGame
-        PRIVATE ${PROTOCOL_SRC} ${GAME_SRC} ${MENU_SRC} ${MENU_UI} ${MENU_QRSRC} ${COMUNICATOR_SRC} main.cpp
-        PUBLIC ${PROTOCOL_INC} ${GAME_INC} ${MENU_INC} ${COMUNICATOR_INC}
 add_executable(DuckGameSDL2pp main.cpp ${GAME_SRC})
 
 target_link_libraries(DuckGameSDL2pp ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} SDL2pp::SDL2pp)

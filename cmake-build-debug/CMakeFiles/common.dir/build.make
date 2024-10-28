@@ -97,10 +97,66 @@ CMakeFiles/common.dir/common/exceptions/LibError.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/common.dir/common/exceptions/LibError.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/exceptions/LibError.cpp -o CMakeFiles/common.dir/common/exceptions/LibError.cpp.s
 
+CMakeFiles/common.dir/common/game/DuckData.cpp.o: CMakeFiles/common.dir/flags.make
+CMakeFiles/common.dir/common/game/DuckData.cpp.o: ../common/game/DuckData.cpp
+CMakeFiles/common.dir/common/game/DuckData.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/common.dir/common/game/DuckData.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/game/DuckData.cpp.o -MF CMakeFiles/common.dir/common/game/DuckData.cpp.o.d -o CMakeFiles/common.dir/common/game/DuckData.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/DuckData.cpp
+
+CMakeFiles/common.dir/common/game/DuckData.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/common.dir/common/game/DuckData.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/DuckData.cpp > CMakeFiles/common.dir/common/game/DuckData.cpp.i
+
+CMakeFiles/common.dir/common/game/DuckData.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/common.dir/common/game/DuckData.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/DuckData.cpp -o CMakeFiles/common.dir/common/game/DuckData.cpp.s
+
+CMakeFiles/common.dir/common/game/EquippedGunData.cpp.o: CMakeFiles/common.dir/flags.make
+CMakeFiles/common.dir/common/game/EquippedGunData.cpp.o: ../common/game/EquippedGunData.cpp
+CMakeFiles/common.dir/common/game/EquippedGunData.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/common.dir/common/game/EquippedGunData.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/game/EquippedGunData.cpp.o -MF CMakeFiles/common.dir/common/game/EquippedGunData.cpp.o.d -o CMakeFiles/common.dir/common/game/EquippedGunData.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/EquippedGunData.cpp
+
+CMakeFiles/common.dir/common/game/EquippedGunData.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/common.dir/common/game/EquippedGunData.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/EquippedGunData.cpp > CMakeFiles/common.dir/common/game/EquippedGunData.cpp.i
+
+CMakeFiles/common.dir/common/game/EquippedGunData.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/common.dir/common/game/EquippedGunData.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/EquippedGunData.cpp -o CMakeFiles/common.dir/common/game/EquippedGunData.cpp.s
+
+CMakeFiles/common.dir/common/game/GameObject2DData.cpp.o: CMakeFiles/common.dir/flags.make
+CMakeFiles/common.dir/common/game/GameObject2DData.cpp.o: ../common/game/GameObject2DData.cpp
+CMakeFiles/common.dir/common/game/GameObject2DData.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/common.dir/common/game/GameObject2DData.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/game/GameObject2DData.cpp.o -MF CMakeFiles/common.dir/common/game/GameObject2DData.cpp.o.d -o CMakeFiles/common.dir/common/game/GameObject2DData.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/GameObject2DData.cpp
+
+CMakeFiles/common.dir/common/game/GameObject2DData.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/common.dir/common/game/GameObject2DData.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/GameObject2DData.cpp > CMakeFiles/common.dir/common/game/GameObject2DData.cpp.i
+
+CMakeFiles/common.dir/common/game/GameObject2DData.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/common.dir/common/game/GameObject2DData.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/GameObject2DData.cpp -o CMakeFiles/common.dir/common/game/GameObject2DData.cpp.s
+
+CMakeFiles/common.dir/common/game/GameObjectData.cpp.o: CMakeFiles/common.dir/flags.make
+CMakeFiles/common.dir/common/game/GameObjectData.cpp.o: ../common/game/GameObjectData.cpp
+CMakeFiles/common.dir/common/game/GameObjectData.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/common.dir/common/game/GameObjectData.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/game/GameObjectData.cpp.o -MF CMakeFiles/common.dir/common/game/GameObjectData.cpp.o.d -o CMakeFiles/common.dir/common/game/GameObjectData.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/GameObjectData.cpp
+
+CMakeFiles/common.dir/common/game/GameObjectData.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/common.dir/common/game/GameObjectData.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/GameObjectData.cpp > CMakeFiles/common.dir/common/game/GameObjectData.cpp.i
+
+CMakeFiles/common.dir/common/game/GameObjectData.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/common.dir/common/game/GameObjectData.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/GameObjectData.cpp -o CMakeFiles/common.dir/common/game/GameObjectData.cpp.s
+
 CMakeFiles/common.dir/common/game/GameStatus.cpp.o: CMakeFiles/common.dir/flags.make
 CMakeFiles/common.dir/common/game/GameStatus.cpp.o: ../common/game/GameStatus.cpp
 CMakeFiles/common.dir/common/game/GameStatus.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/common.dir/common/game/GameStatus.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/common.dir/common/game/GameStatus.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/game/GameStatus.cpp.o -MF CMakeFiles/common.dir/common/game/GameStatus.cpp.o.d -o CMakeFiles/common.dir/common/game/GameStatus.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/game/GameStatus.cpp
 
 CMakeFiles/common.dir/common/game/GameStatus.cpp.i: cmake_force
@@ -114,7 +170,7 @@ CMakeFiles/common.dir/common/game/GameStatus.cpp.s: cmake_force
 CMakeFiles/common.dir/common/math/Math.cpp.o: CMakeFiles/common.dir/flags.make
 CMakeFiles/common.dir/common/math/Math.cpp.o: ../common/math/Math.cpp
 CMakeFiles/common.dir/common/math/Math.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/common.dir/common/math/Math.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/common.dir/common/math/Math.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/math/Math.cpp.o -MF CMakeFiles/common.dir/common/math/Math.cpp.o.d -o CMakeFiles/common.dir/common/math/Math.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/math/Math.cpp
 
 CMakeFiles/common.dir/common/math/Math.cpp.i: cmake_force
@@ -128,7 +184,7 @@ CMakeFiles/common.dir/common/math/Math.cpp.s: cmake_force
 CMakeFiles/common.dir/common/math/Matrix2.cpp.o: CMakeFiles/common.dir/flags.make
 CMakeFiles/common.dir/common/math/Matrix2.cpp.o: ../common/math/Matrix2.cpp
 CMakeFiles/common.dir/common/math/Matrix2.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/common.dir/common/math/Matrix2.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/common.dir/common/math/Matrix2.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/math/Matrix2.cpp.o -MF CMakeFiles/common.dir/common/math/Matrix2.cpp.o.d -o CMakeFiles/common.dir/common/math/Matrix2.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/math/Matrix2.cpp
 
 CMakeFiles/common.dir/common/math/Matrix2.cpp.i: cmake_force
@@ -142,7 +198,7 @@ CMakeFiles/common.dir/common/math/Matrix2.cpp.s: cmake_force
 CMakeFiles/common.dir/common/math/Vector2.cpp.o: CMakeFiles/common.dir/flags.make
 CMakeFiles/common.dir/common/math/Vector2.cpp.o: ../common/math/Vector2.cpp
 CMakeFiles/common.dir/common/math/Vector2.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/common.dir/common/math/Vector2.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/common.dir/common/math/Vector2.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/math/Vector2.cpp.o -MF CMakeFiles/common.dir/common/math/Vector2.cpp.o.d -o CMakeFiles/common.dir/common/math/Vector2.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/math/Vector2.cpp
 
 CMakeFiles/common.dir/common/math/Vector2.cpp.i: cmake_force
@@ -156,7 +212,7 @@ CMakeFiles/common.dir/common/math/Vector2.cpp.s: cmake_force
 CMakeFiles/common.dir/common/protocol/ReceiveProtocol.cpp.o: CMakeFiles/common.dir/flags.make
 CMakeFiles/common.dir/common/protocol/ReceiveProtocol.cpp.o: ../common/protocol/ReceiveProtocol.cpp
 CMakeFiles/common.dir/common/protocol/ReceiveProtocol.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/common.dir/common/protocol/ReceiveProtocol.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/common.dir/common/protocol/ReceiveProtocol.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/protocol/ReceiveProtocol.cpp.o -MF CMakeFiles/common.dir/common/protocol/ReceiveProtocol.cpp.o.d -o CMakeFiles/common.dir/common/protocol/ReceiveProtocol.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/protocol/ReceiveProtocol.cpp
 
 CMakeFiles/common.dir/common/protocol/ReceiveProtocol.cpp.i: cmake_force
@@ -170,7 +226,7 @@ CMakeFiles/common.dir/common/protocol/ReceiveProtocol.cpp.s: cmake_force
 CMakeFiles/common.dir/common/protocol/SendProtocol.cpp.o: CMakeFiles/common.dir/flags.make
 CMakeFiles/common.dir/common/protocol/SendProtocol.cpp.o: ../common/protocol/SendProtocol.cpp
 CMakeFiles/common.dir/common/protocol/SendProtocol.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/common.dir/common/protocol/SendProtocol.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/common.dir/common/protocol/SendProtocol.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/protocol/SendProtocol.cpp.o -MF CMakeFiles/common.dir/common/protocol/SendProtocol.cpp.o.d -o CMakeFiles/common.dir/common/protocol/SendProtocol.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/protocol/SendProtocol.cpp
 
 CMakeFiles/common.dir/common/protocol/SendProtocol.cpp.i: cmake_force
@@ -184,7 +240,7 @@ CMakeFiles/common.dir/common/protocol/SendProtocol.cpp.s: cmake_force
 CMakeFiles/common.dir/common/socket/ActiveSocket.cpp.o: CMakeFiles/common.dir/flags.make
 CMakeFiles/common.dir/common/socket/ActiveSocket.cpp.o: ../common/socket/ActiveSocket.cpp
 CMakeFiles/common.dir/common/socket/ActiveSocket.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/common.dir/common/socket/ActiveSocket.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/common.dir/common/socket/ActiveSocket.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/socket/ActiveSocket.cpp.o -MF CMakeFiles/common.dir/common/socket/ActiveSocket.cpp.o.d -o CMakeFiles/common.dir/common/socket/ActiveSocket.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/socket/ActiveSocket.cpp
 
 CMakeFiles/common.dir/common/socket/ActiveSocket.cpp.i: cmake_force
@@ -198,7 +254,7 @@ CMakeFiles/common.dir/common/socket/ActiveSocket.cpp.s: cmake_force
 CMakeFiles/common.dir/common/socket/ListenerSocket.cpp.o: CMakeFiles/common.dir/flags.make
 CMakeFiles/common.dir/common/socket/ListenerSocket.cpp.o: ../common/socket/ListenerSocket.cpp
 CMakeFiles/common.dir/common/socket/ListenerSocket.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/common.dir/common/socket/ListenerSocket.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/common.dir/common/socket/ListenerSocket.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/socket/ListenerSocket.cpp.o -MF CMakeFiles/common.dir/common/socket/ListenerSocket.cpp.o.d -o CMakeFiles/common.dir/common/socket/ListenerSocket.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/socket/ListenerSocket.cpp
 
 CMakeFiles/common.dir/common/socket/ListenerSocket.cpp.i: cmake_force
@@ -212,7 +268,7 @@ CMakeFiles/common.dir/common/socket/ListenerSocket.cpp.s: cmake_force
 CMakeFiles/common.dir/common/socket/Resolver.cpp.o: CMakeFiles/common.dir/flags.make
 CMakeFiles/common.dir/common/socket/Resolver.cpp.o: ../common/socket/Resolver.cpp
 CMakeFiles/common.dir/common/socket/Resolver.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/common.dir/common/socket/Resolver.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/common.dir/common/socket/Resolver.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/socket/Resolver.cpp.o -MF CMakeFiles/common.dir/common/socket/Resolver.cpp.o.d -o CMakeFiles/common.dir/common/socket/Resolver.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/socket/Resolver.cpp
 
 CMakeFiles/common.dir/common/socket/Resolver.cpp.i: cmake_force
@@ -226,7 +282,7 @@ CMakeFiles/common.dir/common/socket/Resolver.cpp.s: cmake_force
 CMakeFiles/common.dir/common/socket/ResolverError.cpp.o: CMakeFiles/common.dir/flags.make
 CMakeFiles/common.dir/common/socket/ResolverError.cpp.o: ../common/socket/ResolverError.cpp
 CMakeFiles/common.dir/common/socket/ResolverError.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/common.dir/common/socket/ResolverError.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/common.dir/common/socket/ResolverError.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/socket/ResolverError.cpp.o -MF CMakeFiles/common.dir/common/socket/ResolverError.cpp.o.d -o CMakeFiles/common.dir/common/socket/ResolverError.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/socket/ResolverError.cpp
 
 CMakeFiles/common.dir/common/socket/ResolverError.cpp.i: cmake_force
@@ -240,7 +296,7 @@ CMakeFiles/common.dir/common/socket/ResolverError.cpp.s: cmake_force
 CMakeFiles/common.dir/common/thread/Thread.cpp.o: CMakeFiles/common.dir/flags.make
 CMakeFiles/common.dir/common/thread/Thread.cpp.o: ../common/thread/Thread.cpp
 CMakeFiles/common.dir/common/thread/Thread.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/common.dir/common/thread/Thread.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/common.dir/common/thread/Thread.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/thread/Thread.cpp.o -MF CMakeFiles/common.dir/common/thread/Thread.cpp.o.d -o CMakeFiles/common.dir/common/thread/Thread.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/thread/Thread.cpp
 
 CMakeFiles/common.dir/common/thread/Thread.cpp.i: cmake_force
@@ -254,7 +310,7 @@ CMakeFiles/common.dir/common/thread/Thread.cpp.s: cmake_force
 CMakeFiles/common.dir/common/utils/ByteUtils.cpp.o: CMakeFiles/common.dir/flags.make
 CMakeFiles/common.dir/common/utils/ByteUtils.cpp.o: ../common/utils/ByteUtils.cpp
 CMakeFiles/common.dir/common/utils/ByteUtils.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/common.dir/common/utils/ByteUtils.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/common.dir/common/utils/ByteUtils.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/utils/ByteUtils.cpp.o -MF CMakeFiles/common.dir/common/utils/ByteUtils.cpp.o.d -o CMakeFiles/common.dir/common/utils/ByteUtils.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/utils/ByteUtils.cpp
 
 CMakeFiles/common.dir/common/utils/ByteUtils.cpp.i: cmake_force
@@ -268,7 +324,7 @@ CMakeFiles/common.dir/common/utils/ByteUtils.cpp.s: cmake_force
 CMakeFiles/common.dir/common/utils/StringUtils.cpp.o: CMakeFiles/common.dir/flags.make
 CMakeFiles/common.dir/common/utils/StringUtils.cpp.o: ../common/utils/StringUtils.cpp
 CMakeFiles/common.dir/common/utils/StringUtils.cpp.o: CMakeFiles/common.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/common.dir/common/utils/StringUtils.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/common.dir/common/utils/StringUtils.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/common.dir/common/utils/StringUtils.cpp.o -MF CMakeFiles/common.dir/common/utils/StringUtils.cpp.o.d -o CMakeFiles/common.dir/common/utils/StringUtils.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/utils/StringUtils.cpp
 
 CMakeFiles/common.dir/common/utils/StringUtils.cpp.i: cmake_force
@@ -283,6 +339,10 @@ CMakeFiles/common.dir/common/utils/StringUtils.cpp.s: cmake_force
 common_OBJECTS = \
 "CMakeFiles/common.dir/common/exceptions/ClosedSocket.cpp.o" \
 "CMakeFiles/common.dir/common/exceptions/LibError.cpp.o" \
+"CMakeFiles/common.dir/common/game/DuckData.cpp.o" \
+"CMakeFiles/common.dir/common/game/EquippedGunData.cpp.o" \
+"CMakeFiles/common.dir/common/game/GameObject2DData.cpp.o" \
+"CMakeFiles/common.dir/common/game/GameObjectData.cpp.o" \
 "CMakeFiles/common.dir/common/game/GameStatus.cpp.o" \
 "CMakeFiles/common.dir/common/math/Math.cpp.o" \
 "CMakeFiles/common.dir/common/math/Matrix2.cpp.o" \
@@ -302,6 +362,10 @@ common_EXTERNAL_OBJECTS =
 
 libcommon.a: CMakeFiles/common.dir/common/exceptions/ClosedSocket.cpp.o
 libcommon.a: CMakeFiles/common.dir/common/exceptions/LibError.cpp.o
+libcommon.a: CMakeFiles/common.dir/common/game/DuckData.cpp.o
+libcommon.a: CMakeFiles/common.dir/common/game/EquippedGunData.cpp.o
+libcommon.a: CMakeFiles/common.dir/common/game/GameObject2DData.cpp.o
+libcommon.a: CMakeFiles/common.dir/common/game/GameObjectData.cpp.o
 libcommon.a: CMakeFiles/common.dir/common/game/GameStatus.cpp.o
 libcommon.a: CMakeFiles/common.dir/common/math/Math.cpp.o
 libcommon.a: CMakeFiles/common.dir/common/math/Matrix2.cpp.o
@@ -317,7 +381,7 @@ libcommon.a: CMakeFiles/common.dir/common/utils/ByteUtils.cpp.o
 libcommon.a: CMakeFiles/common.dir/common/utils/StringUtils.cpp.o
 libcommon.a: CMakeFiles/common.dir/build.make
 libcommon.a: CMakeFiles/common.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Linking CXX static library libcommon.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Linking CXX static library libcommon.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/common.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/common.dir/link.txt --verbose=$(VERBOSE)
 

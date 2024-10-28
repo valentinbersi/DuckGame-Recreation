@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Player.h -I/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Renderer.h -I/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/SpriteManager.h -I/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Spritesheets.h -isystem /usr/local/include/SDL2
+CXX_INCLUDES = -I/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Player.h -I/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Renderer.h -I/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/SpriteManager.h -I/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Spritesheet.h -isystem /usr/local/include/SDL2
 
 CXX_FLAGS = -g
 

@@ -97,10 +97,52 @@ client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Game.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameSDL2pp.dir/view/game/Game.cpp.s"
 	cd /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/client && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Game.cpp -o CMakeFiles/DuckGameSDL2pp.dir/view/game/Game.cpp.s
 
+client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.o: client/CMakeFiles/DuckGameSDL2pp.dir/flags.make
+client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.o: ../client/view/game/Player.cpp
+client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.o: client/CMakeFiles/DuckGameSDL2pp.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.o"
+	cd /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/client && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.o -MF CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.o.d -o CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Player.cpp
+
+client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.i"
+	cd /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/client && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Player.cpp > CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.i
+
+client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.s"
+	cd /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/client && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Player.cpp -o CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.s
+
+client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.o: client/CMakeFiles/DuckGameSDL2pp.dir/flags.make
+client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.o: ../client/view/game/Renderer.cpp
+client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.o: client/CMakeFiles/DuckGameSDL2pp.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.o"
+	cd /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/client && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.o -MF CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.o.d -o CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Renderer.cpp
+
+client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.i"
+	cd /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/client && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Renderer.cpp > CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.i
+
+client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.s"
+	cd /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/client && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Renderer.cpp -o CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.s
+
+client/CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o: client/CMakeFiles/DuckGameSDL2pp.dir/flags.make
+client/CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o: ../client/view/game/SpriteManager.cpp
+client/CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o: client/CMakeFiles/DuckGameSDL2pp.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object client/CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o"
+	cd /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/client && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT client/CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o -MF CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o.d -o CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/SpriteManager.cpp
+
+client/CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.i"
+	cd /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/client && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/SpriteManager.cpp > CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.i
+
+client/CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.s"
+	cd /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/client && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/SpriteManager.cpp -o CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.s
+
 client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o: client/CMakeFiles/DuckGameSDL2pp.dir/flags.make
 client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o: ../client/view/game/Spritesheet.cpp
 client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o: client/CMakeFiles/DuckGameSDL2pp.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o"
 	cd /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/client && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o -MF CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o.d -o CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Spritesheet.cpp
 
 client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.i: cmake_force
@@ -115,6 +157,9 @@ client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.s: cmake_force
 DuckGameSDL2pp_OBJECTS = \
 "CMakeFiles/DuckGameSDL2pp.dir/main.cpp.o" \
 "CMakeFiles/DuckGameSDL2pp.dir/view/game/Game.cpp.o" \
+"CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.o" \
+"CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.o" \
+"CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o" \
 "CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o"
 
 # External object files for target DuckGameSDL2pp
@@ -122,6 +167,9 @@ DuckGameSDL2pp_EXTERNAL_OBJECTS =
 
 client/DuckGameSDL2pp: client/CMakeFiles/DuckGameSDL2pp.dir/main.cpp.o
 client/DuckGameSDL2pp: client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Game.cpp.o
+client/DuckGameSDL2pp: client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.o
+client/DuckGameSDL2pp: client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.o
+client/DuckGameSDL2pp: client/CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o
 client/DuckGameSDL2pp: client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o
 client/DuckGameSDL2pp: client/CMakeFiles/DuckGameSDL2pp.dir/build.make
 client/DuckGameSDL2pp: /usr/local/lib/libSDL2main.a
@@ -133,7 +181,7 @@ client/DuckGameSDL2pp: /usr/local/lib/libSDL2_ttf-2.0.so.0.2200.0
 client/DuckGameSDL2pp: /usr/local/lib/libSDL2_mixer-2.0.so.0.800.0
 client/DuckGameSDL2pp: /usr/local/lib/libSDL2-2.0.so.0.3000.8
 client/DuckGameSDL2pp: client/CMakeFiles/DuckGameSDL2pp.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable DuckGameSDL2pp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable DuckGameSDL2pp"
 	cd /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/client && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/DuckGameSDL2pp.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
-#include "Types.h"
+#include "../Types.h"
 
 struct Math {
     constexpr static u32 EPSILON = 10000;

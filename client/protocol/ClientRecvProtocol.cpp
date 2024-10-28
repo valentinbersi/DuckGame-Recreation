@@ -1,7 +1,4 @@
-
 #include "ClientRecvProtocol.h"
-#include "DuckData.h"
-#include "Math.h"
 
 ClientRecvProtocol::ClientRecvProtocol(ActiveSocket& socket): ReceiveProtocol(socket) {
     idsMap[GameObjectID::Object2D] = [this]() -> std::unique_ptr<GameObjectData> 

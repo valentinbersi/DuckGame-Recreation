@@ -13,6 +13,8 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "SpriteManager.h"
+#include "../../comunicator/Communicator.h"
+#include "../../protocol/ClientMessage.h"
 #include "../../../common/game/GameStatus.hpp"
 #include "../../../common/game/GameObjectData.h"
 #include "../../../common/game/GameObject2DData.h"

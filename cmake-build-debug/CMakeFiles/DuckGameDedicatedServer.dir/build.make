@@ -69,10 +69,24 @@ include CMakeFiles/DuckGameDedicatedServer.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/DuckGameDedicatedServer.dir/flags.make
 
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameController.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/flags.make
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameController.cpp.o: ../server/game/GameController.cpp
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameController.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameController.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameController.cpp.o -MF CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameController.cpp.o.d -o CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameController.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/GameController.cpp
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameController.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameController.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/GameController.cpp > CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameController.cpp.i
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameController.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameController.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/GameController.cpp -o CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameController.cpp.s
+
 CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameLoop.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/flags.make
 CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameLoop.cpp.o: ../server/game/GameLoop.cpp
 CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameLoop.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameLoop.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameLoop.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameLoop.cpp.o -MF CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameLoop.cpp.o.d -o CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameLoop.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/GameLoop.cpp
 
 CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameLoop.cpp.i: cmake_force
@@ -83,24 +97,122 @@ CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameLoop.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameLoop.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/GameLoop.cpp -o CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameLoop.cpp.s
 
-CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/Protocol.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/flags.make
-CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/Protocol.cpp.o: ../server/protocol/Protocol.cpp
-CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/Protocol.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/Protocol.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/Protocol.cpp.o -MF CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/Protocol.cpp.o.d -o CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/Protocol.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/protocol/Protocol.cpp
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/CollisionObject2D.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/flags.make
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/CollisionObject2D.cpp.o: ../server/game/objects/CollisionObject2D.cpp
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/CollisionObject2D.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/CollisionObject2D.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/CollisionObject2D.cpp.o -MF CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/CollisionObject2D.cpp.o.d -o CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/CollisionObject2D.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/objects/CollisionObject2D.cpp
 
-CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/Protocol.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/Protocol.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/protocol/Protocol.cpp > CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/Protocol.cpp.i
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/CollisionObject2D.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/CollisionObject2D.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/objects/CollisionObject2D.cpp > CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/CollisionObject2D.cpp.i
 
-CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/Protocol.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/Protocol.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/protocol/Protocol.cpp -o CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/Protocol.cpp.s
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/CollisionObject2D.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/CollisionObject2D.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/objects/CollisionObject2D.cpp -o CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/CollisionObject2D.cpp.s
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/flags.make
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object.cpp.o: ../server/game/objects/Object.cpp
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object.cpp.o -MF CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object.cpp.o.d -o CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/objects/Object.cpp
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/objects/Object.cpp > CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object.cpp.i
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/objects/Object.cpp -o CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object.cpp.s
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object2D.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/flags.make
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object2D.cpp.o: ../server/game/objects/Object2D.cpp
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object2D.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object2D.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object2D.cpp.o -MF CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object2D.cpp.o.d -o CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object2D.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/objects/Object2D.cpp
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object2D.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object2D.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/objects/Object2D.cpp > CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object2D.cpp.i
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object2D.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object2D.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/objects/Object2D.cpp -o CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object2D.cpp.s
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/player/Player.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/flags.make
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/player/Player.cpp.o: ../server/game/player/Player.cpp
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/player/Player.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/DuckGameDedicatedServer.dir/server/game/player/Player.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameDedicatedServer.dir/server/game/player/Player.cpp.o -MF CMakeFiles/DuckGameDedicatedServer.dir/server/game/player/Player.cpp.o.d -o CMakeFiles/DuckGameDedicatedServer.dir/server/game/player/Player.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/player/Player.cpp
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/player/Player.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameDedicatedServer.dir/server/game/player/Player.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/player/Player.cpp > CMakeFiles/DuckGameDedicatedServer.dir/server/game/player/Player.cpp.i
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/player/Player.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameDedicatedServer.dir/server/game/player/Player.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/player/Player.cpp -o CMakeFiles/DuckGameDedicatedServer.dir/server/game/player/Player.cpp.s
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/input/Input.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/flags.make
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/input/Input.cpp.o: ../server/game/input/Input.cpp
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/input/Input.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/DuckGameDedicatedServer.dir/server/game/input/Input.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameDedicatedServer.dir/server/game/input/Input.cpp.o -MF CMakeFiles/DuckGameDedicatedServer.dir/server/game/input/Input.cpp.o.d -o CMakeFiles/DuckGameDedicatedServer.dir/server/game/input/Input.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/input/Input.cpp
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/input/Input.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameDedicatedServer.dir/server/game/input/Input.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/input/Input.cpp > CMakeFiles/DuckGameDedicatedServer.dir/server/game/input/Input.cpp.i
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/input/Input.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameDedicatedServer.dir/server/game/input/Input.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/input/Input.cpp -o CMakeFiles/DuckGameDedicatedServer.dir/server/game/input/Input.cpp.s
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/event/Subject.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/flags.make
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/event/Subject.cpp.o: ../server/game/event/Subject.cpp
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/event/Subject.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/DuckGameDedicatedServer.dir/server/game/event/Subject.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameDedicatedServer.dir/server/game/event/Subject.cpp.o -MF CMakeFiles/DuckGameDedicatedServer.dir/server/game/event/Subject.cpp.o.d -o CMakeFiles/DuckGameDedicatedServer.dir/server/game/event/Subject.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/event/Subject.cpp
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/event/Subject.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameDedicatedServer.dir/server/game/event/Subject.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/event/Subject.cpp > CMakeFiles/DuckGameDedicatedServer.dir/server/game/event/Subject.cpp.i
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/game/event/Subject.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameDedicatedServer.dir/server/game/event/Subject.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/game/event/Subject.cpp -o CMakeFiles/DuckGameDedicatedServer.dir/server/game/event/Subject.cpp.s
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerRecvProtocol.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/flags.make
+CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerRecvProtocol.cpp.o: ../server/protocol/ServerRecvProtocol.cpp
+CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerRecvProtocol.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerRecvProtocol.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerRecvProtocol.cpp.o -MF CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerRecvProtocol.cpp.o.d -o CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerRecvProtocol.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/protocol/ServerRecvProtocol.cpp
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerRecvProtocol.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerRecvProtocol.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/protocol/ServerRecvProtocol.cpp > CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerRecvProtocol.cpp.i
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerRecvProtocol.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerRecvProtocol.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/protocol/ServerRecvProtocol.cpp -o CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerRecvProtocol.cpp.s
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerSendProtocol.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/flags.make
+CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerSendProtocol.cpp.o: ../server/protocol/ServerSendProtocol.cpp
+CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerSendProtocol.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerSendProtocol.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerSendProtocol.cpp.o -MF CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerSendProtocol.cpp.o.d -o CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerSendProtocol.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/protocol/ServerSendProtocol.cpp
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerSendProtocol.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerSendProtocol.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/protocol/ServerSendProtocol.cpp > CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerSendProtocol.cpp.i
+
+CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerSendProtocol.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerSendProtocol.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/protocol/ServerSendProtocol.cpp -o CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerSendProtocol.cpp.s
 
 CMakeFiles/DuckGameDedicatedServer.dir/server/Server.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/flags.make
 CMakeFiles/DuckGameDedicatedServer.dir/server/Server.cpp.o: ../server/Server.cpp
 CMakeFiles/DuckGameDedicatedServer.dir/server/Server.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/DuckGameDedicatedServer.dir/server/Server.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/DuckGameDedicatedServer.dir/server/Server.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameDedicatedServer.dir/server/Server.cpp.o -MF CMakeFiles/DuckGameDedicatedServer.dir/server/Server.cpp.o.d -o CMakeFiles/DuckGameDedicatedServer.dir/server/Server.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/Server.cpp
 
 CMakeFiles/DuckGameDedicatedServer.dir/server/Server.cpp.i: cmake_force
@@ -114,7 +226,7 @@ CMakeFiles/DuckGameDedicatedServer.dir/server/Server.cpp.s: cmake_force
 CMakeFiles/DuckGameDedicatedServer.dir/server/main.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/flags.make
 CMakeFiles/DuckGameDedicatedServer.dir/server/main.cpp.o: ../server/main.cpp
 CMakeFiles/DuckGameDedicatedServer.dir/server/main.cpp.o: CMakeFiles/DuckGameDedicatedServer.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/DuckGameDedicatedServer.dir/server/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/DuckGameDedicatedServer.dir/server/main.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameDedicatedServer.dir/server/main.cpp.o -MF CMakeFiles/DuckGameDedicatedServer.dir/server/main.cpp.o.d -o CMakeFiles/DuckGameDedicatedServer.dir/server/main.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/server/main.cpp
 
 CMakeFiles/DuckGameDedicatedServer.dir/server/main.cpp.i: cmake_force
@@ -127,22 +239,38 @@ CMakeFiles/DuckGameDedicatedServer.dir/server/main.cpp.s: cmake_force
 
 # Object files for target DuckGameDedicatedServer
 DuckGameDedicatedServer_OBJECTS = \
+"CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameController.cpp.o" \
 "CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameLoop.cpp.o" \
-"CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/Protocol.cpp.o" \
+"CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/CollisionObject2D.cpp.o" \
+"CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object.cpp.o" \
+"CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object2D.cpp.o" \
+"CMakeFiles/DuckGameDedicatedServer.dir/server/game/player/Player.cpp.o" \
+"CMakeFiles/DuckGameDedicatedServer.dir/server/game/input/Input.cpp.o" \
+"CMakeFiles/DuckGameDedicatedServer.dir/server/game/event/Subject.cpp.o" \
+"CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerRecvProtocol.cpp.o" \
+"CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerSendProtocol.cpp.o" \
 "CMakeFiles/DuckGameDedicatedServer.dir/server/Server.cpp.o" \
 "CMakeFiles/DuckGameDedicatedServer.dir/server/main.cpp.o"
 
 # External object files for target DuckGameDedicatedServer
 DuckGameDedicatedServer_EXTERNAL_OBJECTS =
 
+DuckGameDedicatedServer: CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameController.cpp.o
 DuckGameDedicatedServer: CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameLoop.cpp.o
-DuckGameDedicatedServer: CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/Protocol.cpp.o
+DuckGameDedicatedServer: CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/CollisionObject2D.cpp.o
+DuckGameDedicatedServer: CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object.cpp.o
+DuckGameDedicatedServer: CMakeFiles/DuckGameDedicatedServer.dir/server/game/objects/Object2D.cpp.o
+DuckGameDedicatedServer: CMakeFiles/DuckGameDedicatedServer.dir/server/game/player/Player.cpp.o
+DuckGameDedicatedServer: CMakeFiles/DuckGameDedicatedServer.dir/server/game/input/Input.cpp.o
+DuckGameDedicatedServer: CMakeFiles/DuckGameDedicatedServer.dir/server/game/event/Subject.cpp.o
+DuckGameDedicatedServer: CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerRecvProtocol.cpp.o
+DuckGameDedicatedServer: CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/ServerSendProtocol.cpp.o
 DuckGameDedicatedServer: CMakeFiles/DuckGameDedicatedServer.dir/server/Server.cpp.o
 DuckGameDedicatedServer: CMakeFiles/DuckGameDedicatedServer.dir/server/main.cpp.o
 DuckGameDedicatedServer: CMakeFiles/DuckGameDedicatedServer.dir/build.make
 DuckGameDedicatedServer: libcommon.a
 DuckGameDedicatedServer: CMakeFiles/DuckGameDedicatedServer.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable DuckGameDedicatedServer"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Linking CXX executable DuckGameDedicatedServer"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/DuckGameDedicatedServer.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

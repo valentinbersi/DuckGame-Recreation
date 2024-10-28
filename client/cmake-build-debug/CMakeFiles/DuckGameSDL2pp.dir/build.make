@@ -139,19 +139,19 @@ CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/SpriteManager.cpp -o CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.s
 
-CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.o: CMakeFiles/DuckGameSDL2pp.dir/flags.make
-CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.o: ../view/game/Spritesheets.cpp
-CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.o: CMakeFiles/DuckGameSDL2pp.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.o -MF CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.o.d -o CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Spritesheets.cpp
+CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o: CMakeFiles/DuckGameSDL2pp.dir/flags.make
+CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o: ../view/game/Spritesheet.cpp
+CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o: CMakeFiles/DuckGameSDL2pp.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o -MF CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o.d -o CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Spritesheet.cpp
 
-CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Spritesheets.cpp > CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.i
+CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Spritesheet.cpp > CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.i
 
-CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Spritesheets.cpp -o CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.s
+CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Spritesheet.cpp -o CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.s
 
 # Object files for target DuckGameSDL2pp
 DuckGameSDL2pp_OBJECTS = \
@@ -160,7 +160,7 @@ DuckGameSDL2pp_OBJECTS = \
 "CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.o" \
 "CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.o" \
 "CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o" \
-"CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.o"
+"CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o"
 
 # External object files for target DuckGameSDL2pp
 DuckGameSDL2pp_EXTERNAL_OBJECTS =
@@ -170,7 +170,7 @@ DuckGameSDL2pp: CMakeFiles/DuckGameSDL2pp.dir/view/game/Game.cpp.o
 DuckGameSDL2pp: CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.o
 DuckGameSDL2pp: CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.o
 DuckGameSDL2pp: CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o
-DuckGameSDL2pp: CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.o
+DuckGameSDL2pp: CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o
 DuckGameSDL2pp: CMakeFiles/DuckGameSDL2pp.dir/build.make
 DuckGameSDL2pp: /usr/local/lib/libSDL2main.a
 DuckGameSDL2pp: /usr/local/lib/libSDL2pp.so.8.3.0

@@ -10,6 +10,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/main.cpp" "client/CMakeFiles/DuckGameSDL2pp.dir/main.cpp.o" "gcc" "client/CMakeFiles/DuckGameSDL2pp.dir/main.cpp.o.d"
   "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Game.cpp" "client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Game.cpp.o" "gcc" "client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Game.cpp.o.d"
+  "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Player.cpp" "client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.o" "gcc" "client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.o.d"
+  "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Renderer.cpp" "client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.o" "gcc" "client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.o.d"
+  "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/SpriteManager.cpp" "client/CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o" "gcc" "client/CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o.d"
   "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Spritesheet.cpp" "client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o" "gcc" "client/CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o.d"
   )
 

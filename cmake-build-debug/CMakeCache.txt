@@ -196,10 +196,10 @@ CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
 CMAKE_PROJECT_DESCRIPTION:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_HOMEPAGE_URL:STATIC=https://github.com/valentinbersi/TP_DuckGame_Grupo08
+CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=DuckGame
+CMAKE_PROJECT_NAME:STATIC=Project
 
 //Value Computed by CMake
 CMAKE_PROJECT_VERSION:STATIC=1.0
@@ -346,6 +346,18 @@ PNG_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/libpng.so
 //Path to a file.
 PNG_PNG_INCLUDE_DIR:PATH=/usr/include
 
+//Value Computed by CMake
+Project_BINARY_DIR:STATIC=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug
+
+//Value Computed by CMake
+Project_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+Project_SOURCE_DIR:STATIC=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08
+
+//The directory containing a CMake configuration file for Qt5.
+Qt5_DIR:PATH=Qt5_DIR-NOTFOUND
+
 SDL2PP_WITH_IMAGE:BOOL=ON
 
 SDL2PP_WITH_MIXER:BOOL=ON
@@ -369,21 +381,6 @@ SDL2pp_DIR:PATH=/usr/local/lib/cmake/SDL2pp
 
 //Enable / disable server program.
 SERVER:BOOL=ON
-
-//Enable / disable client program.
-TALLER_CLIENT:BOOL=ON
-
-//Enable / disable editor program.
-TALLER_EDITOR:BOOL=ON
-
-//Enable / disable warnings as errors.
-TALLER_MAKE_WARNINGS_AS_ERRORS:BOOL=ON
-
-//Enable / disable server program.
-TALLER_SERVER:BOOL=ON
-
-//Enable / disable tests.
-TALLER_TESTS:BOOL=ON
 
 //Enable / disable tests.
 TESTS:BOOL=ON
@@ -460,15 +457,6 @@ libSDL2pp_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
 libSDL2pp_SOURCE_DIR:STATIC=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/_deps/libsdl2pp-src
-
-//Value Computed by CMake
-taller_tp_BINARY_DIR:STATIC=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug
-
-//Value Computed by CMake
-taller_tp_IS_TOP_LEVEL:STATIC=ON
-
-//Value Computed by CMake
-taller_tp_SOURCE_DIR:STATIC=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08
 
 
 ########################
@@ -611,7 +599,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=10
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

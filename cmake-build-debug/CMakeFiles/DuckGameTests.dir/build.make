@@ -83,20 +83,84 @@ CMakeFiles/DuckGameTests.dir/tests/test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameTests.dir/tests/test.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/tests/test.cpp -o CMakeFiles/DuckGameTests.dir/tests/test.cpp.s
 
+CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.o: CMakeFiles/DuckGameTests.dir/flags.make
+CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.o: ../tests/ClientProtocol/ClientRecvProtocol.cpp
+CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.o: CMakeFiles/DuckGameTests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.o -MF CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.o.d -o CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/tests/ClientProtocol/ClientRecvProtocol.cpp
+
+CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/tests/ClientProtocol/ClientRecvProtocol.cpp > CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.i
+
+CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/tests/ClientProtocol/ClientRecvProtocol.cpp -o CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.s
+
+CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.o: CMakeFiles/DuckGameTests.dir/flags.make
+CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.o: ../tests/ClientProtocol/ClientSendProtocol.cpp
+CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.o: CMakeFiles/DuckGameTests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.o -MF CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.o.d -o CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/tests/ClientProtocol/ClientSendProtocol.cpp
+
+CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/tests/ClientProtocol/ClientSendProtocol.cpp > CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.i
+
+CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/tests/ClientProtocol/ClientSendProtocol.cpp -o CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.s
+
+CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.o: CMakeFiles/DuckGameTests.dir/flags.make
+CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.o: ../tests/ServerProtocol/ServerRecvProtocol.cpp
+CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.o: CMakeFiles/DuckGameTests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.o -MF CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.o.d -o CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/tests/ServerProtocol/ServerRecvProtocol.cpp
+
+CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/tests/ServerProtocol/ServerRecvProtocol.cpp > CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.i
+
+CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/tests/ServerProtocol/ServerRecvProtocol.cpp -o CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.s
+
+CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.o: CMakeFiles/DuckGameTests.dir/flags.make
+CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.o: ../tests/ServerProtocol/ServerSendProtocol.cpp
+CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.o: CMakeFiles/DuckGameTests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.o -MF CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.o.d -o CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.o -c /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/tests/ServerProtocol/ServerSendProtocol.cpp
+
+CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/tests/ServerProtocol/ServerSendProtocol.cpp > CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.i
+
+CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/tests/ServerProtocol/ServerSendProtocol.cpp -o CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.s
+
 # Object files for target DuckGameTests
 DuckGameTests_OBJECTS = \
-"CMakeFiles/DuckGameTests.dir/tests/test.cpp.o"
+"CMakeFiles/DuckGameTests.dir/tests/test.cpp.o" \
+"CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.o" \
+"CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.o" \
+"CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.o" \
+"CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.o"
 
 # External object files for target DuckGameTests
 DuckGameTests_EXTERNAL_OBJECTS =
 
 DuckGameTests: CMakeFiles/DuckGameTests.dir/tests/test.cpp.o
+DuckGameTests: CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientRecvProtocol.cpp.o
+DuckGameTests: CMakeFiles/DuckGameTests.dir/tests/ClientProtocol/ClientSendProtocol.cpp.o
+DuckGameTests: CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerRecvProtocol.cpp.o
+DuckGameTests: CMakeFiles/DuckGameTests.dir/tests/ServerProtocol/ServerSendProtocol.cpp.o
 DuckGameTests: CMakeFiles/DuckGameTests.dir/build.make
 DuckGameTests: libcommon.a
 DuckGameTests: lib/libgtest_main.a
 DuckGameTests: lib/libgtest.a
 DuckGameTests: CMakeFiles/DuckGameTests.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable DuckGameTests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable DuckGameTests"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/DuckGameTests.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

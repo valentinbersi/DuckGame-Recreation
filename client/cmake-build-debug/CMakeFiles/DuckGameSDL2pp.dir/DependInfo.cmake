@@ -13,7 +13,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Player.cpp" "CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.o" "gcc" "CMakeFiles/DuckGameSDL2pp.dir/view/game/Player.cpp.o.d"
   "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Renderer.cpp" "CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.o" "gcc" "CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.o.d"
   "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/SpriteManager.cpp" "CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o" "gcc" "CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o.d"
-  "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Spritesheets.cpp" "CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.o" "gcc" "CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.o.d"
+  "/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/view/game/Spritesheet.cpp" "CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o" "gcc" "CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o.d"
   )
 
 # Targets to which this target links.

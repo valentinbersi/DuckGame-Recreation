@@ -9,8 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/DuckGameSDL2pp.dir/view/game/Renderer.cpp.o.d"
   "CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o"
   "CMakeFiles/DuckGameSDL2pp.dir/view/game/SpriteManager.cpp.o.d"
-  "CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.o"
-  "CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheets.cpp.o.d"
+  "CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o"
+  "CMakeFiles/DuckGameSDL2pp.dir/view/game/Spritesheet.cpp.o.d"
   "DuckGameSDL2pp"
   "DuckGameSDL2pp.pdb"
 )

@@ -1,9 +1,13 @@
 #pragma once
-#include "Thread.h"
-#include "BlockingQueue.h"
-#include "ActiveSocket.h"
+#include "../../common/thread/Thread.h"
+#include "../../common/synchronized/BlockingQueue.h"
+#include "../../common/socket/ActiveSocket.h"
 #include "ComReceiver.h"
 #include "ComSender.h"
+#include "../../../common/game/GameStatus.hpp"
+#include "../protocol/ClientMessage.h"
+
+#include <iostream>
 
 class Communicator{
 private:

@@ -29,10 +29,6 @@ void Game::init() {
     SDL sdl(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG);
 
-    // handlear posiciones iniciales de los patos?
-    //la primera snapshot va a tener a todo default. los patos en idle... etc
-    // posiciones();      que esto (dependiendo el nivel) asigne posiciones iniciales a los patos
-
     Texture backgroundTexture = startBackground();
     renderer.Present();
 
