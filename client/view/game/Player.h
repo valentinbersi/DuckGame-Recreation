@@ -1,19 +1,9 @@
 #pragma once
 
-#include "Spritesheet.h"
+#include "Spritesheets.h"
 
 // offsets in rows
 
-enum class Keybinds
-{
-    NONE,
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    ACTION,
-    JUMP
-};
 
 class Player {
 

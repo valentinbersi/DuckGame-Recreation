@@ -1,35 +1,44 @@
 #include "Game.hpp"
 
-#define WINDOW_WIDTH 1040
-#define WINDOW_HEIGHT 680
-
 #define DELTA_TIME (1.0/30.0)
 #define SCALE 2.5f
+
+#define DEF_WINDOW_WIDTH 1040
+#define DEF_WINDOW_HEIGHT 680
+
+#define greySheet "../../assets/sprites/duck/greyDuck.png"
+#define orangeSheet "../../assets/sprites/duck/orangeDuck.png"
+#define whiteSheet "../../assets/sprites/duck/whiteDuck.png"
+#define yellowSheet "../../assets/sprites/duck/yellowDuck.png"
+
+#define greyFeathers "../../assets/sprites/duck/greyDuckFeathers.png"
+#define orangeFeathers "../../assets/sprites/duck/orangeDuckFeathers.png"
+#define whiteFeathers "../../assets/sprites/duck/whiteDuckFeathers.png"
+#define yellowFeathers "../../assets/sprites/duck/yellowDuckFeathers.png"
 
 // Here we should just declare the classes that are use in this file. But for now a NOLINT is fine.
 using namespace SDL2pp;  // NOLINT(build/namespaces)
 
-Game::Game()
-    : running(true), m_key(Keybinds::NONE), window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE),
+Game::Game() : running(true), window_width(DEF_WINDOW_WIDTH), window_height(DEF_WINDOW_HEIGHT),
+      m_key(Keybinds::NONE), window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width, window_height, SDL_WINDOW_RESIZABLE),
       renderer(window, -1, SDL_RENDERER_ACCELERATED) {}
 
 void Game::init() {
+    //crear client communicator
+    std::unordered_map<DuckID, SpriteManager> spritesMapping = createSpritesMapping(renderer);
     SDL sdl(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG);
 
-    //handlear cantidad de patos para pintar etc...
+    // handlear posiciones iniciales de los patos?
+    //la primera snapshot va a tener a todo default. los patos en idle... etc
+    // posiciones();      que esto (dependiendo el nivel) asigne posiciones iniciales a los patos
 
     Texture backgroundTexture = startBackground();
-
-    Player player1("../../assets/player/greyDuck.png", 3, 6, renderer, WINDOW_WIDTH, WINDOW_HEIGHT);
-    player1.start();
-
     renderer.Present();
 
     while(running) {
-        /*
         getSnapshot();           //handle everything sended by the gameloop
-        int mid = centerOfDucks();
+        //float mid = centerOfDucks();
 
         renderer.Clear();
 
@@ -39,12 +48,12 @@ void Game::init() {
         //para esto poner una funcion a vector2 que haga un promedio de los vectores
 
         showBackground(backgroundTexture);
-        updatePlayers(snapshot);                    //acá adentro hago uso de diversos update(playerX) según el estado de cada uno
-        updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
-        render();
-        clearLists();                             //limpio las listas de patos, objetos, armas, etc
+        updatePlayers(spritesMapping);                    //acá adentro hago uso de diversos update(playerX) según el estado de cada uno
+        //updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
+        renderer.Present();
+        clearObjects();
 
-        handleEvents();           //y según lo que pase acá... lo envío al protocolo (o gameloop, no recuerdo XD)
+        handleEvents();           //y según lo que pase acá... lo envío
 
         SDL_Delay(33);                              //33ms = 30fps
 
@@ -53,30 +62,22 @@ void Game::init() {
         //poner en algún lado una struct de players (ducks) y asociarles una ID
 
 
-
-
-
-        */
-
-
+        /*
         handleEvents();       // handle user input
         renderer.Clear();
         showBackground(backgroundTexture);
         update(player1);             //update ducks
         //render();         render EVERYTHING again (outside players, that are being rendered in the player class)
         SDL_Delay(33);
-
-
-        ///////////etc*/
-
+        */
     }
 
 
     IMG_Quit();
 }
 
-/*void Game::getSnapshot() {
-    GameStatus snapshot = callToTheProtocol();
+void Game::getSnapshot() {
+    GameStatus snapshot = callToTheProtocol();           // ES UN OPTIONAL. Debo chequear que el optional me de gamestatus usando .value. Sino si es null ya está
 
     // aca deberia conseguir los diversos duck data hasta que en el casteo dinamico me de nullptr
     // en ese caso no habrán más ducks y ya entraré a los objetos
@@ -85,47 +86,128 @@ void Game::init() {
     // al final hago clear a cada sublista y vuelvo a obtener una nueva snapshot
     // para esto puedo mover punteros para lo que necesito
 
-    GameStatus snapshot = callToTheProtocol();
-    for (auto& gameObject : snapshot.gameObjects()) {
-
+    //clear todas las listas anteriores
+    clearObjects();
+    for (auto& gameObject : snapshot.gameObjects) {
         switch (gameObject->id()) {
-            case GameObjectID::OBJECT2D: {
+            case GameObjectID::Object2D: {
                 GameObject2DData* object2D = static_cast<GameObject2DData*>(gameObject.get());
-                if (object2D->id2D() == GameObject2DID::DUCK) {
+                if (object2D->id() == GameObject2DID::Duck) {
                     ducks.push_back(std::unique_ptr<DuckData>(static_cast<DuckData*>(gameObject.release())));
+
+                    //if (timer) {
+                    //}
+
                 } else {
-                    typeOfObject2D(std::unique_ptr<GameObject2DData>(static_cast<GameObject2DData*>(gameObject.release())));
+                    //typeOfObject2D(std::unique_ptr<GameObject2DData>(static_cast<GameObject2DData*>(gameObject.release())));
                 }
                 break;
             }
 
-    snapshot.gameObjects().clear();
+            snapshot.gameObjects.clear();
+        }
+    }
+}
+
+void Game::updatePlayers(std::unordered_map<DuckID, SpriteManager>& spritesMapping) {
+    for (auto& duck : ducks) {
+        DuckID duckID = duck->id;
+        Vector2 coords = duck->position;
+        spritesMapping[duckID].updatePosition(coords.x, coords.y);
+        spritesMapping[duckID].update(duck->extraData[DuckData::PLAYING_DEAD_INDEX], duck->extraData[DuckData::CROUCHING_INDEX],
+                                      duck->extraData[DuckData::IN_AIR_INDEX], duck->extraData[DuckData::FLAPPING_INDEX],
+                                      duck->extraData[DuckData::BEING_DAMAGED_INDEX], duck->extraData[DuckData::MOVING_RIGHT_INDEX],
+                                      duck->extraData[DuckData::MOVING_LEFT_INDEX]);
+    }
 }
 
 
-void typeOfObject2D(std::unique_ptr<GameObject2DData> gameObject2D) {
-    switch (gameObject2D->id2D()) {
+/*void Game::typeOfObject2D(std::unique_ptr<GameObject2DData> gameObject2D) {
+    switch (gameObject2D->id()) {
         case GameObject2DID::GUN:
             weapons.push_back(?);
-            break;
+        break;
         case GameObject2DID::BULLET:
             bullets.push_back(?);
-            break;
+        break;
         case GameObject2DID::WALL:
             blocks.push_back(?);
-            break;
+        break;
         case GameObject2DID::TIMER:
             if (gameObject2D.timeToFinish == 0) {
                 running = false;
                 break;
-        default:
-            break;
+                default:
+                    break;
+            }
     }
 }*/
 
 
+/*float Game::centerOfDucks() {
+    Vector2i coords;
+    for (auto& duck : ducks) {
+        coords += duck->position();
+    }
+    // tengo un vector2 con vectores2i (posiciones que laburan con floats). debo calcular el punto medio
 
 
+
+    // dividirlo por el numero por el que se multiplicó (dicho por valen etc (preguntar numero exacto))
+
+}*/
+
+void Game::clearObjects() {
+    ducks.clear();
+}
+
+std::unordered_map<DuckID, SpriteManager>& Game::createSpritesMapping(SDL2pp::Renderer& renderer) {
+    std::unordered_map<DuckID, SpriteManager> spritesMapping;
+
+    // Create textures and add to the map
+    Texture whiteTexture(renderer, whiteSheet);
+    Texture whiteFeathersTexture(renderer, whiteFeathers);
+    spritesMapping.emplace(DuckID::White, SpriteManager(whiteSheet, whiteFeathers, renderer, whiteTexture, whiteFeathersTexture,
+                            window_width, window_height));
+
+    Texture orangeTexture(renderer, orangeSheet);
+    Texture orangeFeathersTexture(renderer, orangeFeathers);
+    spritesMapping.emplace(DuckID::Orange, SpriteManager(orangeSheet, orangeFeathers, renderer, orangeTexture, orangeFeathersTexture,
+                            window_width, window_height));
+
+    Texture yellowTexture(renderer, yellowSheet);
+    Texture yellowFeathersTexture(renderer, yellowFeathers);
+    spritesMapping.emplace(DuckID::Yellow, SpriteManager(yellowSheet, yellowFeathers, renderer, yellowTexture, yellowFeathersTexture,
+                            window_width, window_height));
+
+    Texture greyTexture(renderer, greySheet);
+    Texture greyFeathersTexture(renderer, greyFeathers);
+    spritesMapping.emplace(DuckID::Grey, SpriteManager(greySheet, greyFeathers, renderer, greyTexture, greyFeathersTexture,
+                            window_width, window_height));
+
+    return spritesMapping;
+}
+
+//ANOTHER FORM... (I think this is better, but i'm not sure)
+
+/*std::unordered_map<DuckID, SpriteManager>& createSpritesMapping(SDL2pp::Renderer& renderer) {
+    static std::unordered_map<DuckID, SpriteManager> spritesMapping;
+
+    const std::vector<std::pair<DuckID, std::pair<const char*, const char*>>> duckData = {
+        {DuckID::White, {whiteSheet, whiteFeathers}},
+        {DuckID::Orange, {orangeSheet, orangeFeathers}},
+        {DuckID::Yellow, {yellowSheet, yellowFeathers}},
+        {DuckID::Grey, {greySheet, greyFeathers}}
+    };
+
+    for (const auto& data : duckData) {
+        SDL2pp::Texture textureImage(renderer, data.second.first);
+        SDL2pp::Texture textureFeathers(renderer, data.second.second);
+        spritesMapping.emplace(data.first, SpriteManager(data.second.first, data.second.second, renderer, textureImage, textureFeathers));
+    }
+
+    return spritesMapping;
+}*/
 
 
 
@@ -169,14 +251,6 @@ Keybinds Game::handleEvents() {
     return m_key;
 }
 
-void Game::update(Player& player1) {
-    player1.update(m_key);
-    renderer.Present();
-
-    // ETC...
-
-
-}
 
 
 
@@ -193,8 +267,8 @@ void Game::showBackground(Texture& backgroundTexture) {
     SDL_Rect dstRect;
     dstRect.x = 0;
     dstRect.y = -1000;
-    dstRect.w = WINDOW_WIDTH * SCALE;
-    dstRect.h = WINDOW_HEIGHT * SCALE;
+    dstRect.w = window_width * SCALE;
+    dstRect.h = window_height * SCALE;
 
     //renderer.Clear();
 
