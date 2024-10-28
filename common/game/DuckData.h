@@ -1,9 +1,13 @@
 #pragma once
 
 #include <bitset>
+#include <memory>
+#include <cstdint>
 
 #include "EquippedGunData.h"
 #include "GameObject2DData.h"
+
+using u8 = std::uint8_t;
 
 enum class DuckID : u8 { White = 0x0, Orange = 0x1, Yellow = 0x2, Grey = 0x3 };
 

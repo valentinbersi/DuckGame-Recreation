@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Types.h"
+#include "../Types.h"
 
 enum class GameObjectID : u8 { Object2D = 0x0 };
 

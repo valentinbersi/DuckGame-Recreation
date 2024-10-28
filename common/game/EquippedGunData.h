@@ -1,6 +1,10 @@
 #pragma once
 
-#include "Types.h"
+#include "../Types.h"
+#include <cstdint>
+#include <string>
+
+using u8 = std::uint8_t;
 
 enum class GunID : u8 {
     Granade = 0x0,
