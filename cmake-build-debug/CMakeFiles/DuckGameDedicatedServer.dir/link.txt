@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/DuckGameDedicatedServer.dir/server/game/GameLoop.cpp.o CMakeFiles/DuckGameDedicatedServer.dir/server/protocol/Protocol.cpp.o CMakeFiles/DuckGameDedicatedServer.dir/server/Server.cpp.o CMakeFiles/DuckGameDedicatedServer.dir/server/main.cpp.o -o DuckGameDedicatedServer  libcommon.a 

@@ -1,0 +1,3 @@
+/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/cmake-build-debug/CMakeFiles/DuckGameSDL2pp.dir
+/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/cmake-build-debug/CMakeFiles/edit_cache.dir
+/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/client/cmake-build-debug/CMakeFiles/rebuild_cache.dir

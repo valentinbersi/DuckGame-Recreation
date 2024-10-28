@@ -1,0 +1,3 @@
+/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/googletest-populate.dir
+/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/edit_cache.dir
+/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/rebuild_cache.dir

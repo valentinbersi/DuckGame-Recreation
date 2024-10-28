@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/DuckGameTests.dir/tests/test.cpp.o -o DuckGameTests  libcommon.a lib/libgtest_main.a lib/libgtest.a 

@@ -1,0 +1,11 @@
+# Hashes of file build rules.
+fd317078bc6e513adce476601fc8250f CMakeFiles/libsdl2pp-populate
+ac99ec815a329067d10d5f7987c1cd57 CMakeFiles/libsdl2pp-populate-complete
+e247b3c514cbdf956a1a19e30a19da4b libsdl2pp-populate-prefix/src/libsdl2pp-populate-stamp/libsdl2pp-populate-build
+c9bb122a5eef7acc80b0dd1172c43db0 libsdl2pp-populate-prefix/src/libsdl2pp-populate-stamp/libsdl2pp-populate-configure
+9b81ce9bbc5fbe0dd92a2df286e0872c libsdl2pp-populate-prefix/src/libsdl2pp-populate-stamp/libsdl2pp-populate-download
+c0e36c9b48c451019da8b309bd7c3c9d libsdl2pp-populate-prefix/src/libsdl2pp-populate-stamp/libsdl2pp-populate-install
+958cd7c2cd2e5ca6e16ec0e84e6d6fb1 libsdl2pp-populate-prefix/src/libsdl2pp-populate-stamp/libsdl2pp-populate-mkdir
+a5a5783b9f66dabc90a39b7d5f61868e libsdl2pp-populate-prefix/src/libsdl2pp-populate-stamp/libsdl2pp-populate-patch
+d757c509d96245e0a425664d62bc7153 libsdl2pp-populate-prefix/src/libsdl2pp-populate-stamp/libsdl2pp-populate-test
+a51cf72dee9a1b891ecb377386261110 libsdl2pp-populate-prefix/src/libsdl2pp-populate-stamp/libsdl2pp-populate-update

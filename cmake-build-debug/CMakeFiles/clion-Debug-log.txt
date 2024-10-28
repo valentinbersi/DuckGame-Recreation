@@ -1,0 +1,5 @@
+/usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" -S /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08 -B /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug
+CMAKE_CXX_COMPILER_ID="GNU"
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/cmake-build-debug
