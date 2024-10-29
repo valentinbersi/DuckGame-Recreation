@@ -1,10 +1,10 @@
 #pragma once
-#include "../../common/thread/Thread.h"
-#include "../../common/synchronized/BlockingQueue.h"
-#include "../../common/game/GameStatus.hpp"
-#include "../../common/socket/ActiveSocket.h"
-#include "../protocol/ClientRecvProtocol.h"
-#include "../../common/exceptions/LibError.h"
+#include "Thread.h"
+#include "BlockingQueue.h"
+#include "GameStatus.hpp"
+#include "ActiveSocket.h"
+#include "ClientRecvProtocol.h"
+#include "LibError.h"
 #include "ComSender.h"
 #include "syslog.h"
 

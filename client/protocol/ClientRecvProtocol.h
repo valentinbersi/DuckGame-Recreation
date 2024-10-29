@@ -1,10 +1,10 @@
 #pragma once
-#include "../../common/protocol/ReceiveProtocol.h"
-#include "../../common/socket/ActiveSocket.h"
-#include "../../common/Types.h"
-#include "../../common/game/GameStatus.hpp"
-#include "../../common/game/DuckData.h"
-#include "../../common/math/Math.h"
+#include "ReceiveProtocol.h"
+#include "ActiveSocket.h"
+#include "Types.h"
+#include "GameStatus.hpp"
+#include "DuckData.h"
+#include "Math.h"
 
 class ClientRecvProtocol: public ReceiveProtocol {
 private: 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GameObjectData.h"
-#include "../math/Vector2.h"
+#include "Vector2.h"
 #include <cstdint>
 #include <memory>
 

@@ -1,11 +1,11 @@
 #pragma once
-#include "../protocol/ClientSendProtocol.h"
-#include "../../common/thread/Thread.h"
-#include "../../common/synchronized/BlockingQueue.h"
-#include "../../common/socket/ActiveSocket.h"
+
+#include "ClientSendProtocol.h"
+#include "Thread.h"
+#include "BlockingQueue.h"
+#include "ActiveSocket.h"
 #include "ComReceiver.h"
-#include "../../common/game/GameStatus.hpp"
-#include "../protocol/ClientMessage.h"
+#include "GameStatus.hpp"
 
 class CommunicatorSender: public Thread{
 private:

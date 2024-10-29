@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
 
-#include "../socket/ActiveSocket.h"
-#include "../socket/ReceiverSocket.h"
-#include "../Types.h"
+#include "ActiveSocket.h"
+#include "ReceiverSocket.h"
+#include "Types.h"
 /**
  * Clase abstracta de uso para protocolo de recepcion de mensajes en servidor y cliente
  */

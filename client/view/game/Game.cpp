@@ -20,14 +20,14 @@
 using namespace SDL2pp;  // NOLINT(build/namespaces)
 
 Game::Game() : running(true), window_width(DEF_WINDOW_WIDTH), window_height(DEF_WINDOW_HEIGHT), communicator(),
-      m_key(Keybinds::NONE), window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width, window_height, SDL_WINDOW_RESIZABLE),
+      m_key(InputAction::NONE), window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width, window_height, SDL_WINDOW_RESIZABLE),
       renderer(window, -1, SDL_RENDERER_ACCELERATED) {}
 
 void Game::init() {
     //getSocket
     //Communicator communicator(//activeSocket);
 
-    std::unordered_map<DuckID, SpriteManager> spritesMapping = createSpritesMapping(renderer);
+    std::unordered_map<DuckID, SpriteManager> spritesMapping = createSpritesMapping();
     SDL sdl(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG);
 
@@ -78,7 +78,7 @@ void Game::getSnapshot() {
     GameStatus snapshot;
     std::optional<GameStatus> status = communicator.tryrecv();           // ES UN OPTIONAL. Debo chequear que el optional me de gamestatus usando .value. Sino si es null ya está
     if (status.has_value()) {
-        GameStatus snapshot = std::move(status.value());
+        snapshot = std::move(status.value());
     } else return;
 
     // aca deberia conseguir los diversos duck data hasta que en el casteo dinamico me de nullptr
@@ -90,10 +90,10 @@ void Game::getSnapshot() {
 
     clearObjects();
     for (auto& gameObject : snapshot.gameObjects) {
-        switch (gameObject->objectID()) {
+        switch (gameObject->objectID) {
             case GameObjectID::Object2D: {
                 auto* object2D = dynamic_cast<GameObject2DData*>(gameObject.get());
-                if (object2D->object2DID() == GameObject2DID::Duck) {
+                if (object2D->object2DID == GameObject2DID::Duck) {
                     ducks.push_back(std::unique_ptr<DuckData>(dynamic_cast<DuckData*>(gameObject.release())));
                 }
 
@@ -115,8 +115,8 @@ void Game::updatePlayers(std::unordered_map<DuckID, SpriteManager>& spritesMappi
     for (auto& duck : ducks) {
         DuckID duckID = duck->duckID;
         Vector2 coords = duck->position;
-        spritesMapping[duckID].updatePosition(coords.x, coords.y);
-        spritesMapping[duckID].update(duck->extraData[DuckData::PLAYING_DEAD_INDEX], duck->extraData[DuckData::CROUCHING_INDEX],
+        spritesMapping.at(duckID).updatePosition(coords.x(), coords.y());
+        spritesMapping.at(duckID).update(duck->extraData[DuckData::PLAYING_DEAD_INDEX], duck->extraData[DuckData::CROUCHING_INDEX],
                                       duck->extraData[DuckData::IN_AIR_INDEX], duck->extraData[DuckData::FLAPPING_INDEX],
                                       duck->extraData[DuckData::BEING_DAMAGED_INDEX], duck->extraData[DuckData::MOVING_RIGHT_INDEX],
                                       duck->extraData[DuckData::MOVING_LEFT_INDEX]);
@@ -163,7 +163,7 @@ void Game::clearObjects() {
     ducks.clear();
 }
 
-std::unordered_map<DuckID, SpriteManager>& Game::createSpritesMapping(SDL2pp::Renderer& renderer) {
+std::unordered_map<DuckID, SpriteManager>& Game::createSpritesMapping() {
     std::unordered_map<DuckID, SpriteManager> spritesMapping;
 
     // Create textures and add to the map
@@ -218,29 +218,23 @@ std::unordered_map<DuckID, SpriteManager>& Game::createSpritesMapping(SDL2pp::Re
 
 
 
-
-
-
-
-
-
-
-Keybinds Game::handleEvents() {
+InputAction Game::handleEvents() {
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_KEYDOWN) {
             SDL_Scancode scancode = event.key.keysym.scancode;
-            auto it = keyMapping.find(scancode);
-            if (it != keyMapping.end()) {
+            auto it = keyMappingPressed.find(scancode);
+            if (it != keyMappingPressed.end()) {
                 m_key = it->second;
             }
+            //GameMessage(m_key, );
 
         } else if (event.type == SDL_KEYUP) {
             SDL_Scancode scancode = event.key.keysym.scancode;
-            auto it = keyMapping.find(scancode);
-            if (it != keyMapping.end() && m_key == it->second) {
-                m_key = Keybinds::NONE;
+            auto it = keyMappingReleased.find(scancode);
+            if (it != keyMappingReleased.end() && m_key == it->second) {
+                //m_key = InputAction::NONE;
             }
 
             //MOUSE EVENTS ETC...? MULTIPLES TECLAS?
@@ -249,12 +243,8 @@ Keybinds Game::handleEvents() {
             running = false;
         }
     }
-
     return m_key;
 }
-
-
-
 
 Texture Game::startBackground() {
     SDL_Surface* rawBackgroundSurface = IMG_Load("../../assets/background/background1.png");

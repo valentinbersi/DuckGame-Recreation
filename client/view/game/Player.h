@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Spritesheet.h"
+//#include "Spritesheets.h"
 
 // offsets in rows
 
 
-class Player {
+/*class Player {
 
 public:
     Player(const char* path, int row, int column, SDL2pp::Renderer& renderer, int window_width, int window_height);
@@ -33,4 +33,4 @@ private:
     SDL2pp::Rect getPosition();
     double jumpLogic(double m_y);
 
-};
+};*/

@@ -3,7 +3,7 @@
 #include <cstddef>
 
 #include "Socket.h"
-#include "../Types.h"
+#include "Types.h"
 
 /**
  * Interface for a receiver socket (a socket that only receives data)

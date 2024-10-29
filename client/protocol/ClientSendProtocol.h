@@ -1,8 +1,8 @@
 #pragma once
 #include "ActiveSocket.h"
 #include "ClientMessage.h"
-#include "../../common/protocol/SendProtocol.h"
-#include "../../common/socket/ActiveSocket.h"
+#include "SendProtocol.h"
+#include "ActiveSocket.h"
 
 class ClientSendProtocol: public SendProtocol {
 public:

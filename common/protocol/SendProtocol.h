@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
 
-#include "../socket/ActiveSocket.h"
-#include "../socket/SenderSocket.h"
-#include "../Types.h"
+#include "ActiveSocket.h"
+#include "SenderSocket.h"
+#include "Types.h"
 
 
 class SendProtocol {

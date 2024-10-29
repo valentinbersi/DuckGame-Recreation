@@ -1,6 +1,5 @@
 #pragma once
-
-#include "../Types.h"
+#include "Types.h"
 #include <cstdint>
 #include <string>
 

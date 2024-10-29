@@ -1,6 +1,6 @@
 #include "Player.h"
 
-#define DEFAULT_SCALE 2.5f
+/*#define DEFAULT_SCALE 2.5f
 #define DEFAULT_OFFSET_Y 200
 #define SPRITESHEET_UP 0
 #define SPRITESHEET_DOWN 1
@@ -112,4 +112,4 @@ SDL2pp::Rect Player::getPosition() {
     int playerHeight = spritesheet.getClipHeight();
     SDL2pp::Rect position(m_position_x, m_position_y, playerWidth * scale, playerHeight * scale);
     return position;
-}
+}*/

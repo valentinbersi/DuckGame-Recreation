@@ -19,6 +19,8 @@
 #include "../../../common/game/GameObjectData.h"
 #include "../../../common/game/GameObject2DData.h"
 #include "../../../common/game/DuckData.h"
+#include "../../../common/messages/MessageType.h"
+#include "../../../common/messages/GameMessage.h"
 
 #define greySheet "../../assets/sprites/duck/greyDuck.png"
 #define orangeSheet "../../assets/sprites/duck/orangeDuck.png"
@@ -29,17 +31,6 @@
 #define orangeFeathers "../../assets/sprites/duck/orangeDuckFeathers.png"
 #define whiteFeathers "../../assets/sprites/duck/whiteDuckFeathers.png"
 #define yellowFeathers "../../assets/sprites/duck/yellowDuckFeathers.png"
-
-enum class Keybinds
-{
-    NONE,
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    ACTION,
-    JUMP
-};
 
 class Game {
 
@@ -52,8 +43,8 @@ public:
 private:
     //void selectLevel();
     SDL2pp::Texture startBackground();
-    Keybinds handleEvents();
-    std::unordered_map<DuckID, SpriteManager>& createSpritesMapping(SDL2pp::Renderer& renderer);
+    InputAction handleEvents();
+    std::unordered_map<DuckID, SpriteManager>& createSpritesMapping();
     void updatePlayers(std::unordered_map<DuckID, SpriteManager>& spritesMapping);
     void getSnapshot();
     void showBackground(SDL2pp::Texture& backgroundTexture);
@@ -65,20 +56,29 @@ private:
     int window_width;
     int window_height;
     Communicator communicator;
-    Keybinds m_key;
+    InputAction m_key;
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
 
     std::list<std::unique_ptr<DuckData>> ducks;
     //std::list<std::unique_ptr<GameObjectData>> objects;
 
-    std::unordered_map<SDL_Scancode, Keybinds> keyMapping = {
-        {SDL_SCANCODE_W, Keybinds::UP},
-        {SDL_SCANCODE_S, Keybinds::DOWN},
-        {SDL_SCANCODE_A, Keybinds::LEFT},
-        {SDL_SCANCODE_D, Keybinds::RIGHT},
-        {SDL_SCANCODE_E, Keybinds::ACTION},
-        {SDL_SCANCODE_SPACE, Keybinds::JUMP}
+    std::unordered_map<SDL_Scancode, InputAction> keyMappingPressed = {
+        {SDL_SCANCODE_W, InputAction::UP_PRESSED},
+        {SDL_SCANCODE_S, InputAction::DOWN_PRESSED},
+        {SDL_SCANCODE_A, InputAction::LEFT_PRESSED},
+        {SDL_SCANCODE_D, InputAction::RIGHT_PRESSED},
+        {SDL_SCANCODE_E, InputAction::ACTION_PRESSED},
+        {SDL_SCANCODE_SPACE, InputAction::JUMP_PRESSED}
+    };
+
+    std::unordered_map<SDL_Scancode, InputAction> keyMappingReleased = {
+            {SDL_SCANCODE_W, InputAction::UP_RELEASED},
+            {SDL_SCANCODE_S, InputAction::DOWN_RELEASED},
+            {SDL_SCANCODE_A, InputAction::LEFT_RELEASED},
+            {SDL_SCANCODE_D, InputAction::RIGHT_RELEASED},
+            {SDL_SCANCODE_E, InputAction::ACTION_RELEASED},
+            {SDL_SCANCODE_SPACE, InputAction::JUMP_RELEASED}
     };
 
     /*std::unordered_map<int, std::string> levels {
