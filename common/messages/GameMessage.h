@@ -3,6 +3,6 @@
 struct GameMessage : public ClientMessage
 {
     InputAction action;
-    GameMessage(InputAction action) : action(action), ClientMessage(MessageType::Game) {}
+    GameMessage(InputAction action) : ClientMessage(MessageType::Game), action(action) {}
     ~GameMessage() = default;
 };
