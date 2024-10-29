@@ -20,7 +20,7 @@
 using namespace SDL2pp;  // NOLINT(build/namespaces)
 
 Game::Game() : running(true), window_width(DEF_WINDOW_WIDTH), window_height(DEF_WINDOW_HEIGHT), communicator(),
-      m_key(InputAction::NONE), window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width, window_height, SDL_WINDOW_RESIZABLE),
+      m_key(), window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width, window_height, SDL_WINDOW_RESIZABLE),
       renderer(window, -1, SDL_RENDERER_ACCELERATED) {}
 
 void Game::init() {
