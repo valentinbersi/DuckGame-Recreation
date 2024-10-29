@@ -4,6 +4,6 @@
 struct LobbyMessage : public ClientMessage
 {
     LobbyRequest request;
-    LobbyMessage(LobbyRequest request) : request(request), ClientMessage(MessageType::Lobby) {}
+    LobbyMessage(LobbyRequest request) : ClientMessage(MessageType::Lobby), request(request) {}
     ~LobbyMessage() = default;
 };
