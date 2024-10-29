@@ -1,8 +1,8 @@
 #include "LobbyQT.h"
 #include "mainwindow.h"
 
-LobbyQT::LobbyQT(int argc, char** argv)
-    : app(argc, argv) {
+LobbyQT::LobbyQT(int argc, char** argv/*, ActiveSocket& socket*/)
+    : app(argc, argv), mainWindow(nullptr){
     mainWindow.show();
 
     connect(&mainWindow, &MainWindow::initMatch, this, &LobbyQT::initMatch);

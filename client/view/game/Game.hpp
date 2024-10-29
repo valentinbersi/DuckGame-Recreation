@@ -35,7 +35,7 @@
 class Game {
 
 public:
-    Game();
+    Game(ActiveSocket&& skt);
     ~Game();
 
     void init();
@@ -43,8 +43,8 @@ public:
 private:
     //void selectLevel();
     SDL2pp::Texture startBackground();
-    InputAction handleEvents();
-    std::unordered_map<DuckID, SpriteManager>& createSpritesMapping();
+    void handleEvents();
+    std::unordered_map<DuckID, SpriteManager> createSpritesMapping();
     void updatePlayers(std::unordered_map<DuckID, SpriteManager>& spritesMapping);
     void getSnapshot();
     void showBackground(SDL2pp::Texture& backgroundTexture);
@@ -56,7 +56,6 @@ private:
     int window_width;
     int window_height;
     Communicator communicator;
-    InputAction m_key;
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
 

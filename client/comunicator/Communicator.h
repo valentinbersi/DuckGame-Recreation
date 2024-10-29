@@ -18,7 +18,7 @@ private:
     CommunicatorReceiver receiver;
 
 public:
-    Communicator(ActiveSocket&& socket);
+    explicit Communicator(ActiveSocket&& socket);
 
     bool trysend(const ClientMessage& Message);
 

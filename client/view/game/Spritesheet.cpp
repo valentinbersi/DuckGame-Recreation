@@ -11,9 +11,6 @@ Spritesheet::Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer&
     }
 }
 
-Spritesheet::~Spritesheet() {
-}
-
 void Spritesheet::selectSprite(int x, int y, bool feathers) {
     if (feathers) {
         m_clip.w = m_spritesheet_feathers->w / N_COL_F;

@@ -1,6 +1,5 @@
 #include "Game.hpp"
 
-#define DELTA_TIME (1.0/30.0)
 #define SCALE 2.5f
 
 #define DEF_WINDOW_WIDTH 1040
@@ -19,8 +18,8 @@
 // Here we should just declare the classes that are use in this file. But for now a NOLINT is fine.
 using namespace SDL2pp;  // NOLINT(build/namespaces)
 
-Game::Game() : running(true), window_width(DEF_WINDOW_WIDTH), window_height(DEF_WINDOW_HEIGHT), communicator(),
-      m_key(), window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width, window_height, SDL_WINDOW_RESIZABLE),
+Game::Game(ActiveSocket&& skt) : running(true), window_width(DEF_WINDOW_WIDTH), window_height(DEF_WINDOW_HEIGHT), communicator(std::move(skt)),
+      window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width, window_height, SDL_WINDOW_RESIZABLE),
       renderer(window, -1, SDL_RENDERER_ACCELERATED) {}
 
 void Game::init() {
@@ -104,11 +103,10 @@ void Game::getSnapshot() {
                 }
                 break;
             }
-
-            snapshot.gameObjects.clear();
         default: break;
         }
     }
+    snapshot.gameObjects.clear();
 }
 
 void Game::updatePlayers(std::unordered_map<DuckID, SpriteManager>& spritesMapping) {
@@ -163,7 +161,7 @@ void Game::clearObjects() {
     ducks.clear();
 }
 
-std::unordered_map<DuckID, SpriteManager>& Game::createSpritesMapping() {
+std::unordered_map<DuckID, SpriteManager> Game::createSpritesMapping() {
     std::unordered_map<DuckID, SpriteManager> spritesMapping;
 
     // Create textures and add to the map
@@ -218,7 +216,7 @@ std::unordered_map<DuckID, SpriteManager>& Game::createSpritesMapping() {
 
 
 
-InputAction Game::handleEvents() {
+void Game::handleEvents() {
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
@@ -226,15 +224,18 @@ InputAction Game::handleEvents() {
             SDL_Scancode scancode = event.key.keysym.scancode;
             auto it = keyMappingPressed.find(scancode);
             if (it != keyMappingPressed.end()) {
-                m_key = it->second;
+                InputAction m_key = it->second;
+                GameMessage message(m_key);
+                communicator.trysend(message);
             }
-            //GameMessage(m_key, );
 
         } else if (event.type == SDL_KEYUP) {
             SDL_Scancode scancode = event.key.keysym.scancode;
             auto it = keyMappingReleased.find(scancode);
-            if (it != keyMappingReleased.end() && m_key == it->second) {
-                //m_key = InputAction::NONE;
+            if (it != keyMappingReleased.end()) {
+                InputAction m_key = it->second;
+                GameMessage message(m_key);
+                communicator.trysend(message);
             }
 
             //MOUSE EVENTS ETC...? MULTIPLES TECLAS?
@@ -243,7 +244,6 @@ InputAction Game::handleEvents() {
             running = false;
         }
     }
-    return m_key;
 }
 
 Texture Game::startBackground() {

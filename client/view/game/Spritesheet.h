@@ -14,7 +14,7 @@ class Spritesheet {
 
 public:
     Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer& renderer, SDL2pp::Texture& m_texture_image, SDL2pp::Texture& m_texture_feathers);
-    ~Spritesheet();
+    ~Spritesheet() = default;
 
     void selectSprite(int x, int y, bool feathers);
     void drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool feathers, bool isRightFeather);

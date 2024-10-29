@@ -39,15 +39,15 @@ void SpriteManager::updatePosition(float new_x, float new_y) {
 void SpriteManager::update(bool playing_dead, bool crouching, bool air, bool flap, bool being_damaged, bool right, bool left) {
     if (being_damaged || playing_dead || crouching) {                           // no animation; only one sprite for each 'event'
         if (being_damaged) {
-            draw(SPRITESHEET_DEAD_COL, SPRITESHEET_DEAD_ROW, flip);
+            draw(SPRITESHEET_DEAD_COL, SPRITESHEET_DEAD_ROW);
             //do something...? how the game is gonna change for this duck and the others?
 
         } else if (playing_dead) {
-            draw(SPRITESHEET_PLAYING_DEAD_COL, SPRITESHEET_DEAD_ROW, flip);
+            draw(SPRITESHEET_PLAYING_DEAD_COL, SPRITESHEET_DEAD_ROW);
             //draw
 
         } else {
-            draw(SPRITESHEET_CROUCH_COL, SPRITESHEET_CROUCH_ROW, flip);
+            draw(SPRITESHEET_CROUCH_COL, SPRITESHEET_CROUCH_ROW);
             //draw
         }
         return;
@@ -56,14 +56,14 @@ void SpriteManager::update(bool playing_dead, bool crouching, bool air, bool fla
     setFlags(air, flap, right, left);         // sets flags for animations only
     flip = left;
     if (air) {
-        draw(frame, SPRITESHEET_JUMP_ROW, flip);
+        draw(frame, SPRITESHEET_JUMP_ROW);
 
     } else {
-        draw(frame, SPRITESHEET_RIGHT_LEFT_ROW, flip);
+        draw(frame, SPRITESHEET_RIGHT_LEFT_ROW);
     }
 }
 
-void SpriteManager::draw(int col, int row, bool flip) {
+void SpriteManager::draw(int col, int row) {
     // Sprite
     spritesheet.selectSprite(col, row, NO_FEATHER);
     SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER);

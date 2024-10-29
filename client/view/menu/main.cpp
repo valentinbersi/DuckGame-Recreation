@@ -1,9 +1,11 @@
 #include <exception>
 #include <iostream>
-#include "view/game/Game.hpp"
 
-#include "view/menu/LobbyQT.h"
+#include "game/Game.hpp"
 
+#include "LobbyQT.h"
+
+/*
 int main(int argc, char* argv[]) {
     bool startSDL = false;
 
@@ -30,5 +32,18 @@ int main(int argc, char* argv[]) {
             return 1;
         }
     }
+    return 0;
+}
+*/
+
+#include "GameLauncher.h"
+
+int main(int argc, char* argv[]) {
+    cppstring hostname = argv[1];
+    cppstring servname = argv[2];
+
+    GameLauncher launcher(argc, argv, hostname, servname);
+    launcher.exec();
+
     return 0;
 }

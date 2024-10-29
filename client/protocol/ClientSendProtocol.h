@@ -13,5 +13,5 @@ public:
 
     void sendMessage(const ClientMessage& message);
 
-    ~ClientSendProtocol() = default;
+    ~ClientSendProtocol() override = default;
 };

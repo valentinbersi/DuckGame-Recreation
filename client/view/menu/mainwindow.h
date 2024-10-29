@@ -20,14 +20,15 @@ QT_END_NAMESPACE
 class MainWindow: public QMainWindow {
     Q_OBJECT
 
+
 private:
     Ui::MainWindow* ui;
 
-    mainMenu *menu;
-    configurationPage *config;
-    joinGame *join_game;
-    newGame *new_game;
-    matchStarted *match_started;
+    mainMenu menu;
+    configurationPage config;
+    joinGame join_game;
+    newGame new_game;
+    matchStarted match_started;
 
     void setPagesAndConnections();
     void irASeleccionJugadores();
@@ -42,7 +43,7 @@ signals:
 
 
 public:
-    explicit MainWindow(QWidget* parent = nullptr);
+    MainWindow(QWidget* parent);
     ~MainWindow() override;
 };
 
