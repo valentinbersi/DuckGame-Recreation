@@ -182,7 +182,7 @@ std::optional<T> BlockingQueue<T, C>::try_pop() {
     if (q.size() == this->max_size)
         is_not_full.notify_all();
 
-    T val(q.front());
+    T val(std::move(q.front()));
     q.pop();
     return val;
 }

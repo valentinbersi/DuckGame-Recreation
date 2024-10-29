@@ -4,7 +4,7 @@
 #include "../../common/synchronized/BlockingQueue.h"
 #include "../../common/socket/ActiveSocket.h"
 #include "ComReceiver.h"
-#include "../../../common/game/GameStatus.hpp"
+#include "../../common/game/GameStatus.hpp"
 #include "../protocol/ClientMessage.h"
 
 class CommunicatorSender: public Thread{

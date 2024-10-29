@@ -4,7 +4,7 @@
 
 #include "ReceiverSocket.h"
 #include "SenderSocket.h"
-#include "Types.h"
+#include "../Types.h"
 
 /**
  * A class representing an ActiveSocket (sends and receives data).\n

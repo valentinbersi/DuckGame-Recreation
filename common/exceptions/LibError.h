@@ -2,7 +2,7 @@
 
 #include <exception>
 
-#include "Types.h"
+#include "../Types.h"
 
 /**
  * An exception that represents a c-stdlib error.\n

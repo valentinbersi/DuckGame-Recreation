@@ -1,5 +1,5 @@
 #pragma once
-#include "MessageType.h"
+#include "../../common/protocol/MessageType.h"
 
 
 // Sketch muy basico para prueba del protocolo.
