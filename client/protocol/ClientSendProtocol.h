@@ -1,4 +1,4 @@
-
+#pragma once
 #include "ActiveSocket.h"
 #include "ClientMessage.h"
 #include "SendProtocol.h"

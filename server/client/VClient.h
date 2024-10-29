@@ -12,7 +12,7 @@ private:
     //mapa de gameloops va aqui, referencia
     BlockingQueue<std::unique_ptr<Command>>* gameQueue; //No tengo de otra porque aun no se cual es
     BlockingQueue<std::shared_ptr<GameStatus>> sendQueue; 
-    Receiver receiver; //necesario?
+    Receiver receiver; 
     Sender sender;
 
 public:

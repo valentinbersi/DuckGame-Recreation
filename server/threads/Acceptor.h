@@ -1,8 +1,9 @@
-
+#pragma once
 #include "Thread.h"
 #include "ListenerSocket.h"
 #include "VClient.h"
 #include <list>
+#include <string>
 
 
 class Acceptor: public Thread{
