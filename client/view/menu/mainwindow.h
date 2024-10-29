@@ -1,9 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QButtonGroup>
 #include <QMainWindow>
 #include <QMessageBox>
-#include <QButtonGroup>
+
+#include "pages/configurationpage.h"
+#include "pages/joingame.h"
+#include "pages/mainmenu.h"
+#include "pages/matchstarted.h"
+#include "pages/newgame.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -16,18 +22,27 @@ class MainWindow: public QMainWindow {
 
 private:
     Ui::MainWindow* ui;
-    QButtonGroup* grupoJugadores;
+
+    mainMenu *menu;
+    configurationPage *config;
+    joinGame *join_game;
+    newGame *new_game;
+    matchStarted *match_started;
 
     void irASeleccionJugadores();
     void salirDelJuego();
-    void crearPartida();
-    void unirseAPartida();
-    void menuAnterior();
-    void iniciarPartida();
+    void createAMatch();
+    void joinAMatch();
+    void previousMenu();
+    void startGame();
+
+signals:
+    void initSDL();
+
 
 public:
     explicit MainWindow(QWidget* parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() override;
 };
 
 #endif  // MAINWINDOW_H

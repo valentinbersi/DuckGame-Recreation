@@ -1,46 +1,43 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
+
 #include <QDebug>
+#include <QDir>
+#include "common_init.h"
+
+#include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow) {
     ui->setupUi(this);
-    ui->stackedWidget->setCurrentIndex(0);
+    common_init(this, ":/backgrounds/duck-game.png"); // ver si va o no
 
+    menu = new mainMenu();
+    config= new configurationPage();
+    join_game = new joinGame();
+    new_game = new newGame();
+    match_started = new matchStarted();
 
-    QPixmap pixmap(":/backgrounds/duck-game.png");
-    if (pixmap.isNull()) {
-        qWarning() << "Failed to load background image.";
-        return; // Salir si la imagen no se carga
-    }
-    QSize windowSize = this->size();
-    QPixmap scaledPixmap = pixmap.scaled(windowSize, Qt::KeepAspectRatioByExpanding);
-    QPalette palette;
-    palette.setBrush(QPalette::Window, scaledPixmap);
-    this->setPalette(palette);
+    ui->stackedWidget->addWidget(menu);
+    ui->stackedWidget->addWidget(config);
+    ui->stackedWidget->addWidget(join_game);
+    ui->stackedWidget->addWidget(new_game);
+    ui->stackedWidget->addWidget(match_started);
 
+    ui->stackedWidget->setCurrentWidget(menu);
 
-    // conecto los botones con las funciones que deben realizar
-    connect(ui->btnJugar, &QPushButton::clicked, this, &MainWindow::irASeleccionJugadores);
-    connect(ui->btnExit, &QPushButton::clicked, this, &MainWindow::salirDelJuego);
+    connect(menu, &mainMenu::play, this, &MainWindow::irASeleccionJugadores);
+    connect(menu, &mainMenu::exit, this, &MainWindow::salirDelJuego);
 
-    grupoJugadores = new QButtonGroup(this);
-    grupoJugadores->addButton(ui->radio1Jugador, 1);
-    grupoJugadores->addButton(ui->radio2Jugador, 2);
+    connect(config, &configurationPage::joinGameClicked, this, &MainWindow::joinAMatch);
+    connect(config, &configurationPage::newGameClicked, this, &MainWindow::createAMatch);
+    connect(config, &configurationPage::backClicked, this, &MainWindow::previousMenu);
 
-    connect(ui->btnUnirse, &QPushButton::clicked, this, &MainWindow::unirseAPartida);
-    connect(ui->btnCrear, &QPushButton::clicked, this, &MainWindow::crearPartida);
-    connect(ui->btnVolver, &QPushButton::clicked, this, &MainWindow::menuAnterior);
+    connect(new_game, &newGame::playMatchClicked, this, &MainWindow::startGame);
+    connect(new_game, &newGame::backClicked, this, &MainWindow::previousMenu);
 
-    connect(ui->btnJugar_2, &QPushButton::clicked, this, &MainWindow::iniciarPartida);
-    connect(ui->btnVolver_2, &QPushButton::clicked, this, &MainWindow::menuAnterior);
-    //connect(ui->mapsList, &QPushButton::clicked, this, &MainWindow::menuAnterior);
-
-
-    connect(ui->btnJugar_3, &QPushButton::clicked, this, &MainWindow::iniciarPartida);
-    connect(ui->btnVolver_3, &QPushButton::clicked, this, &MainWindow::menuAnterior);
-    //connect(ui->partidasList, &QPushButton::clicked, this, &MainWindow::menuAnterior);
+    connect(join_game, &joinGame::playMatchClicked, this, &MainWindow::startGame);
+    connect(join_game, &joinGame::backClicked, this, &MainWindow::previousMenu);
 }
 
 MainWindow::~MainWindow() {
@@ -60,10 +57,9 @@ void MainWindow::salirDelJuego() {
     }
 }
 
-void MainWindow::crearPartida() {
-    // Aca va la lógica para crear a una partida
-    int cantJugadores = grupoJugadores->checkedId(); // 1 o 2
-    if (cantJugadores == -1) {
+void MainWindow::createAMatch() {
+    int playersNumbers = config->getSelectedPlayers();
+    if (playersNumbers == -1) { // esto creo que aca no deberia estar, sino en config
         QMessageBox::warning(this, "Error", "Seleccioná si vas a jugar con 1 o 2 jugadores antes de continuar");
     } else {
         //QMessageBox::information(this, "Crear Partida", QString("Partida creada para %1 jugador(es)").arg(cantJugadores));
@@ -71,19 +67,18 @@ void MainWindow::crearPartida() {
     }
 }
 
+// PODRIA UNIR ESTAS DOS FUNCIONES Y LLAMARLAS CON EL INDEX DE PARAMETRO
 
-void MainWindow::unirseAPartida() {
-    // Aca va la lógica para unirse a una partida
-    int cantJugadores = grupoJugadores->checkedId(); // 1 o 2
-    if (cantJugadores == -1) {
+void MainWindow::joinAMatch() {
+    int playersNumbers = config->getSelectedPlayers();
+    if (playersNumbers == -1) { // esto creo que aca no deberia estar, sino en config
         QMessageBox::warning(this, "Error", "Seleccioná si vas a jugar con 1 o 2 jugadores antes de continuar");
     }else {
-        //QMessageBox::information(this, "Unirse a Partida", QString("Partida iniciada para %1 jugador(es)").arg(cantJugadores));
         ui->stackedWidget->setCurrentIndex(2);
     }
 }
 
-void MainWindow::menuAnterior() {
+void MainWindow::previousMenu() {
     int menuActual = ui->stackedWidget->currentIndex();
     if (menuActual == 1)
         ui->stackedWidget->setCurrentIndex(0);
@@ -91,10 +86,8 @@ void MainWindow::menuAnterior() {
         ui->stackedWidget->setCurrentIndex(1);
 }
 
-void MainWindow::iniciarPartida() {
-    QWidget *widget = ui->stackedWidget->widget(4);
-    widget->setObjectName("page4");
-    widget->setStyleSheet("#page4 { background-image: url(:/backgrounds/partida-run.png); background-position: center; background-repeat: no-repeat; }");
-    ui->stackedWidget->setCurrentIndex(4);
+void MainWindow::startGame() {
+    //ui->stackedWidget->setCurrentIndex(4);
+    emit initSDL();
+    close();
 }
-

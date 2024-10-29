@@ -1,9 +1,10 @@
 #pragma once
 #include "ActiveSocket.h"
-#include "ClientMessage.h"
+//#include "ClientMessage.h"
 #include "SendProtocol.h"
 #include "ActiveSocket.h"
 
+/*
 class ClientSendProtocol: public SendProtocol {
 public:
     explicit ClientSendProtocol(ActiveSocket& socket);
@@ -12,3 +13,4 @@ public:
 
     ~ClientSendProtocol() = default;
 };
+*/
