@@ -12,7 +12,7 @@ file(GLOB GAME_INC view/game/*.h)
 file(GLOB MENU_INC view/menu/*.h view/menu/pages/*.h)
 
 target_sources(DuckGame
-        PRIVATE ${PROTOCOL_SRC} ${GAME_SRC} ${MENU_SRC} ${MENU_UI} ${MENU_QRSRC} main.cpp
+        PRIVATE ${PROTOCOL_SRC} ${GAME_SRC} ${MENU_SRC} ${MENU_UI} ${MENU_QRSRC} view/main.cpp
         PUBLIC ${PROTOCOL_INC} ${GAME_INC} ${MENU_INC}
 )
 

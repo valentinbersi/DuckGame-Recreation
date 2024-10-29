@@ -22,7 +22,6 @@ class MainWindow: public QMainWindow {
 
 private:
     Ui::MainWindow* ui;
-    QButtonGroup* grupoJugadores;
 
     mainMenu *menu;
     configurationPage *config;
@@ -37,9 +36,13 @@ private:
     void previousMenu();
     void startGame();
 
+signals:
+    void initSDL();
+
+
 public:
     explicit MainWindow(QWidget* parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() override;
 };
 
 #endif  // MAINWINDOW_H

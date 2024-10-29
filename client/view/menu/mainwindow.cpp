@@ -38,32 +38,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(join_game, &joinGame::playMatchClicked, this, &MainWindow::startGame);
     connect(join_game, &joinGame::backClicked, this, &MainWindow::previousMenu);
-
-    // conecto los botones con las funciones que deben realizar
-/*
-    // mainmenu.cpp
-    connect(ui->btnJugar, &QPushButton::clicked, this, &MainWindow::irASeleccionJugadores); // va a configurationPage
-    connect(ui->btnExit, &QPushButton::clicked, this, &MainWindow::salirDelJuego);
-
-    // configurationpage.cpp
-    grupoJugadores = new QButtonGroup(this);
-    grupoJugadores->addButton(ui->radio1Jugador, 1);
-    grupoJugadores->addButton(ui->radio2Jugador, 2);
-
-    connect(ui->btnUnirse, &QPushButton::clicked, this, &MainWindow::unirseAPartida); // va a joinGame
-    connect(ui->btnCrear, &QPushButton::clicked, this, &MainWindow::crearPartida); // va a newGame
-    connect(ui->btnVolver, &QPushButton::clicked, this, &MainWindow::menuAnterior); // vuelve a mainMenu
-
-    // newgame.cpp
-    connect(ui->btnJugar_2, &QPushButton::clicked, this, &MainWindow::iniciarPartida); // va a matchStarted
-    connect(ui->btnVolver_2, &QPushButton::clicked, this, &MainWindow::menuAnterior); // vuelve a configurationMenu
-    //connect(ui->mapsList, &QPushButton::clicked, this, &MainWindow::menuAnterior);
-
-    // joingame.cpp
-    connect(ui->btnJugar_3, &QPushButton::clicked, this, &MainWindow::iniciarPartida); // va a matchStarted
-    connect(ui->btnVolver_3, &QPushButton::clicked, this, &MainWindow::menuAnterior); // vuelve a configurationMenu
-    //connect(ui->partidasList, &QPushButton::clicked, this, &MainWindow::menuAnterior);
-    */
 }
 
 MainWindow::~MainWindow() {
@@ -113,5 +87,7 @@ void MainWindow::previousMenu() {
 }
 
 void MainWindow::startGame() {
-    ui->stackedWidget->setCurrentIndex(4);
+    //ui->stackedWidget->setCurrentIndex(4);
+    emit initSDL();
+    close();
 }
