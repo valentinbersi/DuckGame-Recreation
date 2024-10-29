@@ -17,7 +17,7 @@ std::unique_ptr<GameObjectData> ClientRecvProtocol::recvDuckData(){
     u8 gunID = recv_byte(); 
     u16 actions = recvShort();
     return std::make_unique<DuckData>(Vector2(posX,posY), rotation, static_cast<DuckID>(duckID), life,
-                                        EquippedGunData(static_cast<GunID>(gunID)), actions);
+                                        std::make_unique<EquippedGunData>(static_cast<GunID>(gunID)), actions);
 }
 
 std::unique_ptr<GameObjectData> ClientRecvProtocol::recvData(){
