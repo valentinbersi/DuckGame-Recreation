@@ -16,7 +16,7 @@ void Acceptor::run() {
     try{
         while(_keep_running){
             ActiveSocket peer = acceptorSocket.accept();
-            clientes.emplace_back(std::move(peer));
+            clientes.emplace_back(std::move(peer) /*, gameMap*/);
             reapDead();
         }
     }catch(const LibError& err){

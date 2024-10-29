@@ -2,7 +2,7 @@
 
 class MessageType {
 public:
-    enum Value : unsigned char { Input = 0x0, NewMatch = 0x1, JoinMatch = 0x2, StartMatch = 0x3};
+    enum Value : unsigned char { Lobby = 0x0, Game = 0x1 };
 
     // cppcheck-suppress noExplicitConstructor
     MessageType(Value value) : _value(value) {} // Implicit on purpose so it can be used as a common enum
@@ -15,7 +15,7 @@ public:
 
     MessageType() = delete;
 
-    // bool operator==(MessageType boxId) const;
+    bool operator==(MessageType message) const {return message._value == _value;}
 
     // bool operator!=(MessageType boxId) const;
 
@@ -37,9 +37,31 @@ public:
 
     InputAction() = delete;
 
-    // bool operator==(InputAction boxId) const;
+    // bool operator==(InputAction boxId) const {return boxId._value == _value;}
 
     // bool operator!=(InputAction boxId) const;
+
+private:
+    Value _value;
+};
+
+class LobbyRequest {
+public:
+    enum Value : unsigned char { NEWMATCH = 0x0, JOINMATCH = 0x1, STARTMATCH = 0X2};
+
+    // cppcheck-suppress noExplicitConstructor
+    LobbyRequest(Value value) : _value(value) {} // Implicit on purpose so it can be used as a common enum
+
+    // cppcheck-suppress noExplicitConstructor
+    LobbyRequest(unsigned char value) : _value(static_cast<Value>(value)) {}
+
+    [[nodiscard]] operator Value() const {return _value;}
+
+    LobbyRequest() = delete;
+
+    // bool operator==(LobbyRequest boxId) const {return boxId._value == _value;}
+
+    // bool operator!=(LobbyRequest boxId) const;
 
 private:
     Value _value;
