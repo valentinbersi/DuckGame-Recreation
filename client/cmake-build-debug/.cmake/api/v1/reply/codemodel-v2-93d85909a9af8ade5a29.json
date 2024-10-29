@@ -15,7 +15,8 @@
 					"source" : ".",
 					"targetIndexes" : 
 					[
-						0
+						0,
+						1
 					]
 				}
 			],
@@ -30,7 +31,8 @@
 					"name" : "Project",
 					"targetIndexes" : 
 					[
-						0
+						0,
+						1
 					]
 				}
 			],
@@ -39,8 +41,15 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "DuckGameSDL2pp::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-DuckGameSDL2pp-Debug-1e63e9a1eab4173c95e6.json",
+					"jsonFile" : "target-DuckGameSDL2pp-Debug-8bf44d6660f9bd32926e.json",
 					"name" : "DuckGameSDL2pp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "common::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-common-Debug-445cccde2bcaeecee187.json",
+					"name" : "common",
 					"projectIndex" : 0
 				}
 			]

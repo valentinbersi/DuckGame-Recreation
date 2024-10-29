@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcommon.a CMakeFiles/common.dir/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/protocol/ReceiveProtocol.cpp.o CMakeFiles/common.dir/mnt/e/Vity/Programacion/Talleres/Taller1/TP_DuckGame_Grupo08/common/protocol/SendProtocol.cpp.o
+/usr/bin/ranlib libcommon.a
