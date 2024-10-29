@@ -15,7 +15,7 @@ public:
 
     MessageType() = delete;
 
-    bool operator==(MessageType message) const {return message._value == _value;}
+    // bool operator==(MessageType message) const {return message._value == _value;}
 
     // bool operator!=(MessageType boxId) const;
 
