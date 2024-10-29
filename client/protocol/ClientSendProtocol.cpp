@@ -1,3 +1,4 @@
+
 #include "ClientSendProtocol.h"
 
 ClientSendProtocol::ClientSendProtocol(ActiveSocket& socket): SendProtocol(socket) {}
