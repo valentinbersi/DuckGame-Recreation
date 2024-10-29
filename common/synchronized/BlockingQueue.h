@@ -164,7 +164,7 @@ bool BlockingQueue<T, C>::try_push(T&& val) {
     if (q.empty())
         is_not_empty.notify_all();
 
-    q.push(val);
+    q.push(std::move(val));
     return true;
 }
 
@@ -214,7 +214,7 @@ void BlockingQueue<T, C>::push(T&& val) {
     if (q.empty())
         is_not_empty.notify_all();
 
-    q.push(val);
+    q.push(std::move(val));
 }
 
 template <typename T, class C>
