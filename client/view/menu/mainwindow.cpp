@@ -6,12 +6,7 @@
 
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow) {
-    ui->setupUi(this);
-    common_init(this, ":/backgrounds/duck-game.png"); // ver si va o no
-
+void MainWindow::setPagesAndConnections() {
     menu = new mainMenu();
     config= new configurationPage();
     join_game = new joinGame();
@@ -38,6 +33,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(join_game, &joinGame::playMatchClicked, this, &MainWindow::startGame);
     connect(join_game, &joinGame::backClicked, this, &MainWindow::previousMenu);
+}
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow) {
+    ui->setupUi(this);
+    common_init(this, ":/backgrounds/duck-game.png"); // ver si va o no
+
+    setPagesAndConnections();
 }
 
 MainWindow::~MainWindow() {
@@ -88,6 +92,6 @@ void MainWindow::previousMenu() {
 
 void MainWindow::startGame() {
     //ui->stackedWidget->setCurrentIndex(4);
-    emit initSDL();
+    emit initMatch();
     close();
 }

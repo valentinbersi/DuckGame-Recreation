@@ -13,14 +13,14 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "SpriteManager.h"
-#include "../../comunicator/Communicator.h"
-#include "../../protocol/ClientMessage.h"
-#include "../../../common/game/GameStatus.hpp"
-#include "../../../common/game/GameObjectData.h"
-#include "../../../common/game/GameObject2DData.h"
-#include "../../../common/game/DuckData.h"
-#include "../../../common/messages/MessageType.h"
-#include "../../../common/messages/GameMessage.h"
+#include "Communicator.h"
+#include "ClientMessage.h"
+#include "GameStatus.hpp"
+#include "GameObjectData.h"
+#include "GameObject2DData.h"
+#include "DuckData.h"
+#include "MessageType.h"
+#include "GameMessage.h"
 
 #define greySheet "../../assets/sprites/duck/greyDuck.png"
 #define orangeSheet "../../assets/sprites/duck/orangeDuck.png"

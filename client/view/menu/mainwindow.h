@@ -29,6 +29,7 @@ private:
     newGame *new_game;
     matchStarted *match_started;
 
+    void setPagesAndConnections();
     void irASeleccionJugadores();
     void salirDelJuego();
     void createAMatch();
@@ -37,7 +38,7 @@ private:
     void startGame();
 
 signals:
-    void initSDL();
+    void initMatch();
 
 
 public:
