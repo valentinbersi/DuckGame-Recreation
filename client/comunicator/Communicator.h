@@ -20,7 +20,7 @@ private:
 public:
     Communicator(ActiveSocket&& socket);
 
-    bool trysend(ClientMessage& Message);
+    bool trysend(const ClientMessage& Message);
 
     std::optional<GameStatus> tryrecv();
 
