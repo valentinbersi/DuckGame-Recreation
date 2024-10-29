@@ -1,13 +1,12 @@
 #include "SendProtocol.h"
 
 #include <arpa/inet.h>
-#include "Types.h"
 
 
 SendProtocol::SendProtocol(ActiveSocket& socket): skt(socket) {}
 
 void SendProtocol::sendByte(unsigned char byte) {
-    if (!skt.send(&byte, sizeof(char))) {
+    if (!skt.send(&byte, sizeof(unsigned char))) {
         // throw;
     }
 }
@@ -37,5 +36,3 @@ void SendProtocol::sendString(const std::string& string) {
         // throw;
     }
 }
-
-

@@ -5,6 +5,7 @@
 #include "ActiveSocket.h"
 #include "GameStatus.hpp"
 #include "GameObjectData.h"
+#include "DuckData.h"
 #include "SendProtocol.h"
 #include "Types.h"
 

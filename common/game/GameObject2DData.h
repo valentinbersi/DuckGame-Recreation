@@ -2,6 +2,10 @@
 
 #include "GameObjectData.h"
 #include "Vector2.h"
+#include <cstdint>
+#include <memory>
+
+using u8 = std::uint8_t;
 
 enum class GameObject2DID : u8 { Duck = 0x0 };
 

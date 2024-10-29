@@ -164,7 +164,7 @@ bool BlockingQueue<T, C>::try_push(T&& val) {
     if (q.empty())
         is_not_empty.notify_all();
 
-    q.push(val);
+    q.push(std::move(val));
     return true;
 }
 
@@ -182,7 +182,7 @@ std::optional<T> BlockingQueue<T, C>::try_pop() {
     if (q.size() == this->max_size)
         is_not_full.notify_all();
 
-    T val(q.front());
+    T val(std::move(q.front()));
     q.pop();
     return val;
 }
@@ -214,7 +214,7 @@ void BlockingQueue<T, C>::push(T&& val) {
     if (q.empty())
         is_not_empty.notify_all();
 
-    q.push(val);
+    q.push(std::move(val));
 }
 
 template <typename T, class C>
