@@ -26,8 +26,13 @@ void SendProtocol::sendInt(u32 num){
     }
 }
 
-void SendProtocol::sendString(std::string& string) {
-    sendShort(string.size());
+void SendProtocol::sendString(const std::string& string) {
+    uint16_t size = string.size();
+    size = htons(size);
+    if (!skt.send(&size, sizeof(uint16_t))) {
+        // throw;
+    }
+
     if (!skt.send(string.c_str(), string.size())) {
         // throw;
     }

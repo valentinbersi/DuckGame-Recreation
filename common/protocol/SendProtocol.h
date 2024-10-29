@@ -19,7 +19,7 @@ protected:
 
     void sendShort(u16 num);
     
-    void sendString(std::string& string);
+    void sendString(const std::string& string);
 
 public:
     virtual ~SendProtocol() {}
