@@ -80,8 +80,14 @@ void SpriteManager::draw(int col, int row, bool flip) {
 }
 
 void SpriteManager::setFlags(bool air, bool flap, bool right, bool left) {
-    if (in_air || moving_right || moving_left) frame++;
-    if (flapping) flappingFrame++;
+    if (in_air || moving_right || moving_left) {
+        if (!(in_air && frame == 4)) frame++;
+        if (frame > 5 && !in_air) frame = 0;
+    }
+    if (flapping) {
+        flappingFrame++;
+        //if (flappingFrame)
+    }
 
     if (in_air != air) {
         in_air = !in_air;
@@ -101,6 +107,13 @@ void SpriteManager::setFlags(bool air, bool flap, bool right, bool left) {
         flappingFrame = 0;
     }
 }
+
+/*void SpriteManager::negateFlag(bool flag, bool& flagToNegate) {
+    if (flagToNegate != flag) {
+        flagToNegate = !flagToNegate;
+        frame = 0;
+    }
+}*/
 
 void SpriteManager::start() {
     spritesheet.selectSprite(SPRITE_IDLE, SPRITE_IDLE, NO_FEATHER);

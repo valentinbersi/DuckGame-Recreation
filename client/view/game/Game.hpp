@@ -64,6 +64,7 @@ private:
     bool running;
     int window_width;
     int window_height;
+    Communicator communicator;
     Keybinds m_key;
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;

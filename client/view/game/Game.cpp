@@ -19,12 +19,14 @@
 // Here we should just declare the classes that are use in this file. But for now a NOLINT is fine.
 using namespace SDL2pp;  // NOLINT(build/namespaces)
 
-Game::Game() : running(true), window_width(DEF_WINDOW_WIDTH), window_height(DEF_WINDOW_HEIGHT),
+Game::Game() : running(true), window_width(DEF_WINDOW_WIDTH), window_height(DEF_WINDOW_HEIGHT), communicator(),
       m_key(Keybinds::NONE), window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width, window_height, SDL_WINDOW_RESIZABLE),
       renderer(window, -1, SDL_RENDERER_ACCELERATED) {}
 
 void Game::init() {
-    //crear client communicator
+    //getSocket
+    //Communicator communicator(//activeSocket);
+
     std::unordered_map<DuckID, SpriteManager> spritesMapping = createSpritesMapping(renderer);
     SDL sdl(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG);
@@ -44,7 +46,7 @@ void Game::init() {
         //para esto poner una funcion a vector2 que haga un promedio de los vectores
 
         showBackground(backgroundTexture);
-        updatePlayers(spritesMapping);                    //acá adentro hago uso de diversos update(playerX) según el estado de cada uno
+        updatePlayers(spritesMapping);
         //updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
         renderer.Present();
         clearObjects();
@@ -73,7 +75,11 @@ void Game::init() {
 }
 
 void Game::getSnapshot() {
-    GameStatus snapshot = callToTheProtocol();           // ES UN OPTIONAL. Debo chequear que el optional me de gamestatus usando .value. Sino si es null ya está
+    GameStatus snapshot;
+    std::optional<GameStatus> status = communicator.tryrecv();           // ES UN OPTIONAL. Debo chequear que el optional me de gamestatus usando .value. Sino si es null ya está
+    if (status.has_value()) {
+        GameStatus snapshot = std::move(status.value());
+    } else return;
 
     // aca deberia conseguir los diversos duck data hasta que en el casteo dinamico me de nullptr
     // en ese caso no habrán más ducks y ya entraré a los objetos
@@ -82,32 +88,32 @@ void Game::getSnapshot() {
     // al final hago clear a cada sublista y vuelvo a obtener una nueva snapshot
     // para esto puedo mover punteros para lo que necesito
 
-    //clear todas las listas anteriores
     clearObjects();
     for (auto& gameObject : snapshot.gameObjects) {
-        switch (gameObject->id()) {
+        switch (gameObject->objectID()) {
             case GameObjectID::Object2D: {
-                GameObject2DData* object2D = static_cast<GameObject2DData*>(gameObject.get());
-                if (object2D->id() == GameObject2DID::Duck) {
-                    ducks.push_back(std::unique_ptr<DuckData>(static_cast<DuckData*>(gameObject.release())));
+                auto* object2D = dynamic_cast<GameObject2DData*>(gameObject.get());
+                if (object2D->object2DID() == GameObject2DID::Duck) {
+                    ducks.push_back(std::unique_ptr<DuckData>(dynamic_cast<DuckData*>(gameObject.release())));
+                }
 
-                    //if (timer) {
-                    //}
+                //if (timer)
 
-                } else {
+                else {
                     //typeOfObject2D(std::unique_ptr<GameObject2DData>(static_cast<GameObject2DData*>(gameObject.release())));
                 }
                 break;
             }
 
             snapshot.gameObjects.clear();
+        default: break;
         }
     }
 }
 
 void Game::updatePlayers(std::unordered_map<DuckID, SpriteManager>& spritesMapping) {
     for (auto& duck : ducks) {
-        DuckID duckID = duck->id;
+        DuckID duckID = duck->duckID;
         Vector2 coords = duck->position;
         spritesMapping[duckID].updatePosition(coords.x, coords.y);
         spritesMapping[duckID].update(duck->extraData[DuckData::PLAYING_DEAD_INDEX], duck->extraData[DuckData::CROUCHING_INDEX],
