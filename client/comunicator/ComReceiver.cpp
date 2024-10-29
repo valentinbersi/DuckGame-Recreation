@@ -11,7 +11,7 @@ CommunicatorReceiver::CommunicatorReceiver(ActiveSocket& socket, BlockingQueue<G
 void CommunicatorReceiver::run(){
     try{
         while(_keep_running){
-            recvQueue.push(recvProtocol.receiveMessage());
+            recvQueue.push(std::move(recvProtocol.receiveMessage()));
         }
 
     }catch(const ClosedQueue& error){

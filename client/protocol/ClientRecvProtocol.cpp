@@ -5,7 +5,7 @@
 
 ClientRecvProtocol::ClientRecvProtocol(ActiveSocket& socket): ReceiveProtocol(socket) {
     idsMap[GameObjectID::Object2D] = [this]() -> std::unique_ptr<GameObjectData> 
-                                     { recvDuckData(); };
+                                     { return recvDuckData(); };
 }
 
 std::unique_ptr<GameObjectData> ClientRecvProtocol::recvDuckData(){
