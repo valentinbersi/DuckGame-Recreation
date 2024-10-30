@@ -1,11 +1,11 @@
 #include "VClient.h"
 
-VirtualClient::VirtualClient(ActiveSocket&& socket) : skt(std::move(socket)), 
-                                                      gameQueue(nullptr),
-                                                      sendQueue(),
-                                                      /*inicializar mapa aqui*/ 
-                                                      receiver(skt, gameQueue /*,Mandar mapa*/),
-                                                      sender(skt, sendQueue)
+VirtualClient::VirtualClient(ActiveSocket&& socket, GameMapMonitor& monitor) : 
+    skt(std::move(socket)),
+    gameQueue(nullptr),
+    sendQueue(),                              
+    receiver(skt, gameQueue, sendQueue, monitor),
+    sender(skt, sendQueue)
                                                 
 {
     receiver.start();
@@ -22,7 +22,7 @@ VirtualClient::~VirtualClient(){
     skt.shutdown(Socket::ShutdownOptions::READ_WRITE);
     skt.close();
     //Despues ver si poner referenia nula y catch el error en el recevier.
-    sendQueue.close();
+    sendQueue->close();
     receiver.join();
     sender.join();
 }
