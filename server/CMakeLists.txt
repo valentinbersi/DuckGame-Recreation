@@ -11,19 +11,17 @@ file(GLOB COMMANDS_SRC commands/*.cpp)
 file(GLOB VCLIENT_SRC client/*.cpp)
 
 
-
 file(GLOB GAME_INC game/*.h)
 file(GLOB GAME_OBJECTS_INC game/objects/*.h)
 file(GLOB GAME_PLAYER_INC game/player/*.h)
 file(GLOB GAME_INPUT_INC game/player/*.h)
 file(GLOB GAME_EVENT_INC game/event/*.h)
 file(GLOB GAME_RECORDS_INC game/records/*.h)
-file(GLOB THREADS_INC threads/*.cpp)
+file(GLOB THREADS_INC threads/*.h)
 file(GLOB PROTOCOL_INC protocol/*.h)
 file(GLOB SERVER_INC Server.h)
 file(GLOB COMMANDS_INC commands/*.h)
 file(GLOB VCLIENT_INC client/*.h)
-
 
 
 target_include_directories(DuckGameDedicatedServer PUBLIC "game" "game/objects" "game/player" "game/input" "protocol" "game/event" "game/records" "commands" "client" "threads")
