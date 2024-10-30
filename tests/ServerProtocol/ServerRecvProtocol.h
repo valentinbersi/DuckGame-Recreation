@@ -3,7 +3,7 @@
 #include <memory>
 #include "ClientMessage.h"
 #include "ActiveSocket.h"
-#include "GameStatus.hpp"
+#include "GameStatus.h"
 #include "ReceiveProtocol.h"
 #include <unordered_map>
 

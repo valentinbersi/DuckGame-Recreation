@@ -5,7 +5,7 @@
 #include "BlockingQueue.h"
 #include "ActiveSocket.h"
 #include "ComReceiver.h"
-#include "GameStatus.hpp"
+#include "GameStatus.h"
 
 class CommunicatorSender: public Thread{
 private:
