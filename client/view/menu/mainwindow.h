@@ -4,6 +4,7 @@
 #include <QButtonGroup>
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QPointer>
 
 #include "pages/configurationpage.h"
 #include "pages/joingame.h"
@@ -24,11 +25,11 @@ class MainWindow: public QMainWindow {
 private:
     Ui::MainWindow* ui;
 
-    mainMenu menu;
-    configurationPage config;
-    joinGame join_game;
-    newGame new_game;
-    matchStarted match_started;
+    QPointer<mainMenu> menu;
+    QPointer<configurationPage> config;
+    QPointer<joinGame> join_game;
+    QPointer<newGame> new_game;
+    QPointer<matchStarted> match_started;
 
     void setPagesAndConnections();
     void irASeleccionJugadores();

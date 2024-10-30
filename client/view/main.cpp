@@ -3,10 +3,12 @@
 
 #include "game/Game.hpp"
 #include "menu/LobbyQT.h"
+#include "ActiveSocket.h"
 
-/*
 int main(int argc, char* argv[]) {
     bool startSDL = false;
+
+    ActiveSocket socket(argv[1], argv[2]);
 
     LobbyQT lobby(argc, argv);
 
@@ -18,7 +20,7 @@ int main(int argc, char* argv[]) {
 
     if (startSDL) {
         try {
-            Game game;
+            Game game(std::move(socket));
             //two players? lo debo mandar al game
             //debo recibir la cantidad de patos que hay en la partida para pintar N patos distintos
             game.init();
@@ -33,8 +35,8 @@ int main(int argc, char* argv[]) {
     }
     return 0;
 }
-*/
 
+/*
 #include "GameLauncher.h"
 
 int main(int argc, char* argv[]) {
@@ -45,4 +47,4 @@ int main(int argc, char* argv[]) {
     launcher.exec();
 
     return 0;
-}
+}*/

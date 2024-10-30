@@ -1,6 +1,9 @@
 #include "common_init.h"
-#include <QFontDatabase>
+
 #include <QApplication>
+#include <QFontDatabase>
+#include <QDebug>
+
 
 QString common_init(QWidget* widget, const QString& backgroundPath){
     QPixmap pixmap(backgroundPath);
@@ -16,7 +19,7 @@ QString common_init(QWidget* widget, const QString& backgroundPath){
         return "";
     } else {
         QString fontFamily = QFontDatabase::applicationFontFamilies(fontId).at(0);
-        QFont font(fontFamily, 20);
+        QFont font(fontFamily, 25);
         QApplication::setFont(font);
         return fontFamily;
     }
