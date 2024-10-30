@@ -17,8 +17,9 @@ file(GLOB SOCKET_INC socket/*.h)
 file(GLOB SYNCHRONIZED_INC synchronized/*.h)
 file(GLOB THREAD_INC thread/*.h)
 file(GLOB UTILS_INC utils/*.h)
+file(GLOB WRAPPERS_INC wrappers/*.h)
 
-target_include_directories(common PUBLIC "../common" "exceptions" "math" "messages" "protocol" "game" "socket" "utils" "thread" "synchronized")
+target_include_directories(common PUBLIC "../common" "exceptions" "math" "messages" "protocol" "game" "socket" "utils" "thread" "synchronized" "wrappers")
 
 target_sources(common
         PRIVATE ${EXCEPTIONS_SRC} ${GAME_SRC} ${MATH_SRC} ${MESSAGES_SRC} ${PROTOCOL_SRC} ${SOCKET_SRC} ${SYNCHRONIZED_SRC} ${THREAD_SRC} ${UTILS_SRC}
