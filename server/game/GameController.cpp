@@ -1,6 +1,8 @@
 #include "GameController.h"
 
 #include <iostream>
+#include <memory>
+#include <string>
 
 GameController::~GameController() = default;
 
