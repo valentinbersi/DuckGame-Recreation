@@ -18,6 +18,12 @@ struct EventBase {
     EventBase(EventBase&& other) noexcept = default;
     EventBase& operator=(EventBase&& other) noexcept = default;
     virtual ~EventBase() = default;
+
+    /**
+     * Disconnect a callable from the event
+     * @param id The id of the callable
+     */
+    virtual void disconnect(const std::string& id) = 0;
 };
 
 /**
@@ -26,21 +32,35 @@ struct EventBase {
  */
 template <typename... Args>
 class Event final: public EventBase {
-    std::forward_list<Callable<Args...>> callables;
+    HashMap<std::string, Callable<Args...>> callables;
 
 public:
+    /**
+     * Thrown when trying to connect a callable with an id that is already connected
+     */
+    struct AlreadyConnectedCallable final: std::runtime_error {
+        explicit AlreadyConnectedCallable(const std::string& id);
+    };
+
     Event() noexcept;
     Event(const Event& other) noexcept;
     Event& operator=(const Event& other) noexcept;
     Event(Event&& other) noexcept;
     Event& operator=(Event&& other) noexcept;
-    ~Event() override;
+    ~Event() override = default;
 
     /**
      * Connect a callable to the event
+     * @param name The id of the callable
      * @param callable The callable to connect
      */
-    void connect(Callable<Args...> callable);
+    void connect(std::string name, Callable<Args...> callable);
+
+    /**
+     * Disconnect a callable from the event
+     * @param id The id of the callable
+     */
+    void disconnect(const std::string& id) override;
 
     /**
      * Fire the event. This will call all connected callables with the given arguments
@@ -48,6 +68,10 @@ public:
      */
     void fire(Args... args);
 };
+
+template <typename... Args>
+Event<Args...>::AlreadyConnectedCallable::AlreadyConnectedCallable(const std::string& id):
+        std::runtime_error("Callable with id " + id + " already connected") {}
 
 template <typename... Args>
 Event<Args...>::Event() noexcept = default;
@@ -77,15 +101,22 @@ Event<Args...>& Event<Args...>::operator=(Event&& other) noexcept {
 }
 
 template <typename... Args>
-Event<Args...>::~Event() = default;
+void Event<Args...>::connect(std::string name, Callable<Args...> callable) {
+    if (callables.contains(name))
+        throw AlreadyConnectedCallable(name);
+
+    callables.insert({std::move(name), std::move(callable)});
+}
 
 template <typename... Args>
-void Event<Args...>::connect(Callable<Args...> callable) {
-    callables.push_front(callable);
+void Event<Args...>::disconnect(const std::string& id) {
+    callables.erase(id);
 }
 
 template <typename... Args>
 void Event<Args...>::fire(Args... args) {
     std::ranges::for_each(callables,
-                          [&args...](Callable<Args...>& callable) { callable(args...); });
+                          [&args...](std::pair<std::string, Callable<Args...>> callable) {
+                              callable.second(args...);
+                          });
 }
