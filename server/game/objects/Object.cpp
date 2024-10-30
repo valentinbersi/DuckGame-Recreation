@@ -79,7 +79,7 @@ void Object::addChild(std::string name, Object* newChild) {
 
     newChild->_parent = this;
     children.emplace(std::move(name), newChild);
-    emit<Object&>(getEventName(EventTypes::CHILD_ADDED), *newChild);
+    fire<Object&>(getEventName(EventTypes::CHILD_ADDED), *newChild);
 }
 
 Object* Object::parent() const { return _parent; }
