@@ -12,7 +12,6 @@ void MainWindow::setPagesAndConnections() {
     ui->stackedWidget->addWidget(config);
     ui->stackedWidget->addWidget(join_game);
     ui->stackedWidget->addWidget(new_game);
-    ui->stackedWidget->addWidget(match_started);
 
     ui->stackedWidget->setCurrentWidget(menu);
 
@@ -41,7 +40,6 @@ MainWindow::MainWindow(QWidget* parent)
     config = new configurationPage(this);
     join_game = new joinGame(this);
     new_game = new newGame(this);
-    match_started = new matchStarted(this);
 
     setPagesAndConnections();
 }

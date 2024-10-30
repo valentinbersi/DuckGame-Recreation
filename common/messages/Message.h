@@ -4,6 +4,6 @@
 // Sketch muy basico para prueba del protocolo.
 struct Message {
     MessageType type;
-    Message(MessageType type): type(type) {}
+    explicit Message(MessageType type): type(type) {}
     virtual ~Message() = default;
 };
