@@ -2,8 +2,7 @@
 #include <iostream>
 
 #include "game/Game.hpp"
-
-#include "LobbyQT.h"
+#include "menu/LobbyQT.h"
 
 /*
 int main(int argc, char* argv[]) {

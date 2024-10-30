@@ -19,6 +19,6 @@ file(GLOB MENU_INC view/menu/*.h view/menu/pages/*.h)
 target_include_directories(DuckGame PUBLIC "protocol" "view" "comunicator")
 
 target_sources(DuckGame
-        PRIVATE ${PROTOCOL_SRC} ${VIEW_SRC} ${GAME_SRC} ${MENU_SRC} ${MENU_UI} ${MENU_QRSRC} ${COMUNICATOR_SRC} view/menu/main.cpp
+        PRIVATE ${PROTOCOL_SRC} ${VIEW_SRC} ${GAME_SRC} ${MENU_SRC} ${MENU_UI} ${MENU_QRSRC} ${COMUNICATOR_SRC} view/main.cpp
         PUBLIC ${PROTOCOL_INC} ${VIEW_INC} ${GAME_INC} ${MENU_INC} ${COMUNICATOR_INC}
 )
