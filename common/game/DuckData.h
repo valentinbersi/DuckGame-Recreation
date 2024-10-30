@@ -1,8 +1,8 @@
 #pragma once
 
 #include <bitset>
-#include <memory>
 #include <cstdint>
+#include <memory>
 
 #include "EquippedGunData.h"
 #include "GameObject2DData.h"
