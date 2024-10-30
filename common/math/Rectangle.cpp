@@ -23,13 +23,13 @@ bool Rectangle::overlapOnAxis(const std::array<Vector2, VertexAmount>& rect2Vert
         return std::make_pair(min, max);
     };
 
-    auto [min1, max1] = project(this->getCorners(), axis);
+    auto [min1, max1] = project(this->vertices(), axis);
     auto [min2, max2] = project(rect2Vertices, axis);
 
     return max1 >= min2 && max2 >= min1;
 }
 
-std::array<Vector2, Rectangle::VertexAmount> Rectangle::getCorners() const {
+std::array<Vector2, Rectangle::VertexAmount> Rectangle::vertices() const {
     std::array<Vector2, VertexAmount> corners;
     const float cosAngle = std::cos(rotation());
     const float sinAngle = std::sin(rotation());
@@ -89,7 +89,7 @@ Rectangle::Rectangle(Rectangle&& other) noexcept:
     other._height = 0;
 }
 
-Rectangle& Rectangle::operator=(Rectangle&& other) {
+Rectangle& Rectangle::operator=(Rectangle&& other) noexcept {
     if (this == &other)
         return *this;
 
@@ -137,8 +137,8 @@ bool Rectangle::intersects(const Circle& circle) const {
 }
 
 bool Rectangle::intersects(const Rectangle& rectangle) const {
-    const std::array thisVertices(std::move(getCorners()));
-    const std::array rectVertices(std::move(rectangle.getCorners()));
+    const std::array thisVertices(vertices());
+    const std::array rectVertices(rectangle.vertices());
 
     const std::array axes = {
             Vector2{thisVertices[Vertex::TopRight].x() - thisVertices[Vertex::TopLeft].x(),
