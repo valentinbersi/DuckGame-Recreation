@@ -1,5 +1,7 @@
 #include "GameStatus.hpp"
 
+#include <utility>
+
 GameStatus::GameStatus() = default;
 
 GameStatus::GameStatus(GameStatus&& other) noexcept: gameObjects(std::move(other.gameObjects)) {}
