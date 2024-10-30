@@ -1,11 +1,11 @@
 #ifndef DUCKGAME_GAMELAUNCHER_H
 #define DUCKGAME_GAMELAUNCHER_H
 
-#include "menu/LobbyQT.h"
-#include "game/Game.hpp"
 #include "../../common/socket/ActiveSocket.h"
+#include "game/Game.hpp"
+#include "menu/LobbyQT.h"
 
-class GameLauncher : public QObject {
+class GameLauncher: public QObject {
     Q_OBJECT
 
 public:

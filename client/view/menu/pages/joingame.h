@@ -1,9 +1,9 @@
 #ifndef DUCKGAME_JOINGAME_H
 #define DUCKGAME_JOINGAME_H
 
-#include "ui_joinGame.h"
-
 #include <QWidget>
+
+#include "ui_joinGame.h"
 
 
 QT_BEGIN_NAMESPACE

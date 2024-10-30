@@ -30,19 +30,18 @@ private:
     QPointer<newGame> new_game;
 
     void setPagesAndConnections();
-    void irASeleccionJugadores();
-    void salirDelJuego();
+    void exitTheGame();
     void createAMatch();
     void joinAMatch();
-    void previousMenu();
     void startGame();
+    void changePage(QWidget* page);
 
 signals:
     void initMatch();
 
 
 public:
-    MainWindow(QWidget* parent);
+    explicit MainWindow(QWidget* parent);
     ~MainWindow() override;
 };
 

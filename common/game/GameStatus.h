@@ -4,12 +4,12 @@
 #include <memory>
 
 #include "GameObjectData.h"
-#include "Message.h" 
+#include "Message.h"
 
 /**
  * A struct with the current game status.
  */
-struct GameStatus: public Message{
+struct GameStatus: public Message {
     GameStatus();
     GameStatus(const GameStatus& other) = delete;
     GameStatus& operator=(const GameStatus& other) = delete;

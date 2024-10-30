@@ -18,7 +18,7 @@ protected:
     void sendInt(u32 num);
 
     void sendShort(u16 num);
-    
+
     void sendString(const std::string& string);
 
 public:

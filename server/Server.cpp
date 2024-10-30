@@ -1,18 +1,19 @@
 
 #include "Server.h"
+
 #include <iostream>
 
 #define CLOSE_SERVER "q"
 
-Server::Server(const std::string& hostname) : gameMap(), acceptor(hostname, gameMap) {}
+Server::Server(const std::string& hostname): gameMap(), acceptor(hostname, gameMap) {}
 
-std::string Server::readInput(){
+std::string Server::readInput() {
     std::string input;
     std::cin >> input;
     return input;
 }
 
-int Server::run(){
+int Server::run() {
     acceptor.start();
     while (readInput() != CLOSE_SERVER) {
         continue;
@@ -23,5 +24,5 @@ int Server::run(){
 Server::~Server() {
     acceptor.stop();
     acceptor.join();
-    //gameMap.joinAllValues();
+    // gameMap.joinAllValues();
 }

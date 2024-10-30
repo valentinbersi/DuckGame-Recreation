@@ -1,10 +1,11 @@
 #pragma once
-#include <unordered_map>
 #include <mutex>
+#include <unordered_map>
+
 #include "GameLoop.h"
 #include "Types.h"
 
-class GameMapMonitor{
+class GameMapMonitor {
 private:
     std::mutex mutex;
     std::unordered_map<u16, std::unique_ptr<GameLoop>> gameMap;
@@ -12,13 +13,13 @@ private:
 public:
     GameMapMonitor();
 
-    BlockingQueue<std::unique_ptr<Command>>* joinGameIfCreated(u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> senderQueue,
-                        u16 clientId);
+    BlockingQueue<std::unique_ptr<Command>>* joinGameIfCreated(
+            u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> senderQueue,
+            u16 clientId);
 
     void startGameIfCreated(u16 matchID);
 
     u16 creatGameSafe();
 
     ~GameMapMonitor();
-
 };

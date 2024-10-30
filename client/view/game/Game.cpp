@@ -18,9 +18,14 @@
 // Here we should just declare the classes that are use in this file. But for now a NOLINT is fine.
 using namespace SDL2pp;  // NOLINT(build/namespaces)
 
-Game::Game(ActiveSocket&& skt) : running(true), window_width(DEF_WINDOW_WIDTH), window_height(DEF_WINDOW_HEIGHT), communicator(std::move(skt)),
-      window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width, window_height, SDL_WINDOW_RESIZABLE),
-      renderer(window, -1, SDL_RENDERER_ACCELERATED) {}
+Game::Game(ActiveSocket&& skt):
+        running(true),
+        window_width(DEF_WINDOW_WIDTH),
+        window_height(DEF_WINDOW_HEIGHT),
+        communicator(std::move(skt)),
+        window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width,
+               window_height, SDL_WINDOW_RESIZABLE),
+        renderer(window, -1, SDL_RENDERER_ACCELERATED) {}
 
 void Game::init() {
     std::unordered_map<DuckID, SpriteManager> spritesMapping = createSpritesMapping();
@@ -36,24 +41,24 @@ void Game::init() {
 
         renderer.Clear();
 
-        //corroboro que ningún duck se haya ido de la pantalla. si es así, debo quitar zoom de la pantalla
-        //en otro caso, si todos los patos están a más de X pixeles de lejanía los bordes, hago un zoom de Y pixeles
-        //esto lo puedo guardar en alguna variable y luego DIBUJAR EL BACKGROUND acorde
-        //para esto poner una funcion a vector2 que haga un promedio de los vectores
+        // corroboro que ningún duck se haya ido de la pantalla. si es así, debo quitar zoom de la
+        // pantalla en otro caso, si todos los patos están a más de X pixeles de lejanía los bordes,
+        // hago un zoom de Y pixeles esto lo puedo guardar en alguna variable y luego DIBUJAR EL
+        // BACKGROUND acorde para esto poner una funcion a vector2 que haga un promedio de los
+        // vectores
 
         showBackground(backgroundTexture);
         updatePlayers(spritesMapping);
-        //updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
+        // updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
         renderer.Present();
         clearObjects();
 
-        handleEvents();           //y según lo que pase acá... lo envío
+        handleEvents();  // y según lo que pase acá... lo envío
 
-        SDL_Delay(33);                              //33ms = 30fps
+        SDL_Delay(33);  // 33ms = 30fps
 
 
-
-        //poner en algún lado una struct de players (ducks) y asociarles una ID
+        // poner en algún lado una struct de players (ducks) y asociarles una ID
 
 
         /*
@@ -61,8 +66,8 @@ void Game::init() {
         renderer.Clear();
         showBackground(backgroundTexture);
         update(player1);             //update ducks
-        //render();         render EVERYTHING again (outside players, that are being rendered in the player class)
-        SDL_Delay(33);
+        //render();         render EVERYTHING again (outside players, that are being rendered in the
+        player class) SDL_Delay(33);
         */
     }
 
@@ -72,10 +77,13 @@ void Game::init() {
 
 void Game::getSnapshot() {
     GameStatus snapshot;
-    std::optional<GameStatus> status = communicator.tryrecv();           // ES UN OPTIONAL. Debo chequear que el optional me de gamestatus usando .value. Sino si es null ya está
+    std::optional<GameStatus> status =
+            communicator.tryrecv();  // ES UN OPTIONAL. Debo chequear que el optional me de
+                                     // gamestatus usando .value. Sino si es null ya está
     if (status.has_value()) {
         snapshot = std::move(status.value());
-    } else return;
+    } else
+        return;
 
     // aca deberia conseguir los diversos duck data hasta que en el casteo dinamico me de nullptr
     // en ese caso no habrán más ducks y ya entraré a los objetos
@@ -85,36 +93,41 @@ void Game::getSnapshot() {
     // para esto puedo mover punteros para lo que necesito
 
     clearObjects();
-    for (auto& gameObject : snapshot.gameObjects) {
+    for (auto& gameObject: snapshot.gameObjects) {
         switch (gameObject->objectID) {
             case GameObjectID::Object2D: {
                 auto* object2D = dynamic_cast<GameObject2DData*>(gameObject.get());
                 if (object2D->object2DID == GameObject2DID::Duck) {
-                    ducks.push_back(std::unique_ptr<DuckData>(dynamic_cast<DuckData*>(gameObject.release())));
+                    ducks.push_back(std::unique_ptr<DuckData>(
+                            dynamic_cast<DuckData*>(gameObject.release())));
                 }
 
-                //if (timer)
+                // if (timer)
 
                 else {
-                    //typeOfObject2D(std::unique_ptr<GameObject2DData>(static_cast<GameObject2DData*>(gameObject.release())));
+                    // typeOfObject2D(std::unique_ptr<GameObject2DData>(static_cast<GameObject2DData*>(gameObject.release())));
                 }
                 break;
             }
-        default: break;
+            default:
+                break;
         }
     }
     snapshot.gameObjects.clear();
 }
 
 void Game::updatePlayers(std::unordered_map<DuckID, SpriteManager>& spritesMapping) {
-    for (auto& duck : ducks) {
+    for (auto& duck: ducks) {
         DuckID duckID = duck->duckID;
         Vector2 coords = duck->position;
         spritesMapping.at(duckID).updatePosition(coords.x(), coords.y());
-        spritesMapping.at(duckID).update(duck->extraData[DuckData::PLAYING_DEAD_INDEX], duck->extraData[DuckData::CROUCHING_INDEX],
-                                      duck->extraData[DuckData::IN_AIR_INDEX], duck->extraData[DuckData::FLAPPING_INDEX],
-                                      duck->extraData[DuckData::BEING_DAMAGED_INDEX], duck->extraData[DuckData::MOVING_RIGHT_INDEX],
-                                      duck->extraData[DuckData::MOVING_LEFT_INDEX]);
+        spritesMapping.at(duckID).update(duck->extraData[DuckData::PLAYING_DEAD_INDEX],
+                                         duck->extraData[DuckData::CROUCHING_INDEX],
+                                         duck->extraData[DuckData::IN_AIR_INDEX],
+                                         duck->extraData[DuckData::FLAPPING_INDEX],
+                                         duck->extraData[DuckData::BEING_DAMAGED_INDEX],
+                                         duck->extraData[DuckData::MOVING_RIGHT_INDEX],
+                                         duck->extraData[DuckData::MOVING_LEFT_INDEX]);
     }
 }
 
@@ -162,9 +175,7 @@ Vector2 Game::centerOfDucks() {
     // dividirlo por el numero por el que se multiplicó (dicho por valen etc (preguntar numero exacto))
 }
 
-void Game::clearObjects() {
-    ducks.clear();
-}
+void Game::clearObjects() { ducks.clear(); }
 
 std::unordered_map<DuckID, SpriteManager> Game::createSpritesMapping() {
     std::unordered_map<DuckID, SpriteManager> spritesMapping;
@@ -172,28 +183,32 @@ std::unordered_map<DuckID, SpriteManager> Game::createSpritesMapping() {
     // Create textures and add to the map
     Texture whiteTexture(renderer, whiteSheet);
     Texture whiteFeathersTexture(renderer, whiteFeathers);
-    spritesMapping.emplace(DuckID::White, SpriteManager(whiteSheet, whiteFeathers, renderer, whiteTexture, whiteFeathersTexture,
-                            window_width, window_height));
+    spritesMapping.emplace(DuckID::White,
+                           SpriteManager(whiteSheet, whiteFeathers, renderer, whiteTexture,
+                                         whiteFeathersTexture, window_width, window_height));
 
     Texture orangeTexture(renderer, orangeSheet);
     Texture orangeFeathersTexture(renderer, orangeFeathers);
-    spritesMapping.emplace(DuckID::Orange, SpriteManager(orangeSheet, orangeFeathers, renderer, orangeTexture, orangeFeathersTexture,
-                            window_width, window_height));
+    spritesMapping.emplace(DuckID::Orange,
+                           SpriteManager(orangeSheet, orangeFeathers, renderer, orangeTexture,
+                                         orangeFeathersTexture, window_width, window_height));
 
     Texture yellowTexture(renderer, yellowSheet);
     Texture yellowFeathersTexture(renderer, yellowFeathers);
-    spritesMapping.emplace(DuckID::Yellow, SpriteManager(yellowSheet, yellowFeathers, renderer, yellowTexture, yellowFeathersTexture,
-                            window_width, window_height));
+    spritesMapping.emplace(DuckID::Yellow,
+                           SpriteManager(yellowSheet, yellowFeathers, renderer, yellowTexture,
+                                         yellowFeathersTexture, window_width, window_height));
 
     Texture greyTexture(renderer, greySheet);
     Texture greyFeathersTexture(renderer, greyFeathers);
-    spritesMapping.emplace(DuckID::Grey, SpriteManager(greySheet, greyFeathers, renderer, greyTexture, greyFeathersTexture,
-                            window_width, window_height));
+    spritesMapping.emplace(DuckID::Grey,
+                           SpriteManager(greySheet, greyFeathers, renderer, greyTexture,
+                                         greyFeathersTexture, window_width, window_height));
 
     return spritesMapping;
 }
 
-//ANOTHER FORM... (I think this is better, but i'm not sure)
+// ANOTHER FORM... (I think this is better, but i'm not sure)
 
 /*std::unordered_map<DuckID, SpriteManager>& createSpritesMapping(SDL2pp::Renderer& renderer) {
     static std::unordered_map<DuckID, SpriteManager> spritesMapping;
@@ -208,17 +223,12 @@ std::unordered_map<DuckID, SpriteManager> Game::createSpritesMapping() {
     for (const auto& data : duckData) {
         SDL2pp::Texture textureImage(renderer, data.second.first);
         SDL2pp::Texture textureFeathers(renderer, data.second.second);
-        spritesMapping.emplace(data.first, SpriteManager(data.second.first, data.second.second, renderer, textureImage, textureFeathers));
+        spritesMapping.emplace(data.first, SpriteManager(data.second.first, data.second.second,
+renderer, textureImage, textureFeathers));
     }
 
     return spritesMapping;
 }*/
-
-
-
-
-
-
 
 
 void Game::handleEvents() {
@@ -243,7 +253,7 @@ void Game::handleEvents() {
                 communicator.trysend(message);
             }
 
-            //MOUSE EVENTS ETC...? MULTIPLES TECLAS?
+            // MOUSE EVENTS ETC...? MULTIPLES TECLAS?
 
         } else if (event.type == SDL_QUIT) {
             running = false;
@@ -267,7 +277,7 @@ void Game::showBackground(Texture& backgroundTexture) {
     dstRect.w = window_width * SCALE;
     dstRect.h = window_height * SCALE;
 
-    //renderer.Clear();
+    // renderer.Clear();
 
     renderer.Copy(backgroundTexture, NullOpt, dstRect);
 }
@@ -283,7 +293,7 @@ void Game::showBackground(Texture& backgroundTexture) {
 }*/
 
 Game::~Game() {
-    //SDL_DestroyRenderer(renderer.Get());
-    //SDL_DestroyWindow(window.Get());
+    // SDL_DestroyRenderer(renderer.Get());
+    // SDL_DestroyWindow(window.Get());
     SDL_Quit();
 }

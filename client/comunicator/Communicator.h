@@ -1,15 +1,15 @@
 #pragma once
-#include "Thread.h"
-#include "BlockingQueue.h"
+#include <iostream>
+
 #include "ActiveSocket.h"
+#include "BlockingQueue.h"
 #include "ComReceiver.h"
 #include "ComSender.h"
 #include "GameStatus.h"
 #include "Message.h"
+#include "Thread.h"
 
-#include <iostream>
-
-class Communicator{
+class Communicator {
 private:
     ActiveSocket skt;
     BlockingQueue<Message> sendQueue;

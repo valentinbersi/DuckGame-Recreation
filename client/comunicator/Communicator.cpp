@@ -1,24 +1,20 @@
 #include "Communicator.h"
 
-Communicator::Communicator(ActiveSocket&& socket) : skt(std::move(socket)), 
-                                                    sendQueue(), 
-                                                    recvQueue(),
-                                                    sender(skt,sendQueue),
-                                                    receiver(skt,recvQueue)
-{
+Communicator::Communicator(ActiveSocket&& socket):
+        skt(std::move(socket)),
+        sendQueue(),
+        recvQueue(),
+        sender(skt, sendQueue),
+        receiver(skt, recvQueue) {
     sender.start();
-    receiver.start();     
+    receiver.start();
 }
 
-bool Communicator::trysend(const Message& message){
-    return sendQueue.try_push(message);
-}
+bool Communicator::trysend(const Message& message) { return sendQueue.try_push(message); }
 
-std::optional<GameStatus> Communicator::tryrecv(){
-    return recvQueue.try_pop();
-}
+std::optional<GameStatus> Communicator::tryrecv() { return recvQueue.try_pop(); }
 
-Communicator::~Communicator(){
+Communicator::~Communicator() {
     sender.stop();
     receiver.stop();
     skt.close();
@@ -27,4 +23,3 @@ Communicator::~Communicator(){
     sender.join();
     receiver.join();
 }
-                                                

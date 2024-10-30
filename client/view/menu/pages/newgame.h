@@ -5,9 +5,9 @@
 #ifndef DUCKGAME_NEWGAME_H
 #define DUCKGAME_NEWGAME_H
 
-#include "ui_newGame.h"
-
 #include <QWidget>
+
+#include "ui_newGame.h"
 
 
 QT_BEGIN_NAMESPACE
