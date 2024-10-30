@@ -39,7 +39,7 @@ public:
          * @param value The value of the vertex
          */
         // cppcheck-suppress noExplicitConstructor
-        Vertex(Value value);
+        Vertex(Value value);  // NOLINT(runtime/explicit)
 
         /**
          * Compare two vertices
