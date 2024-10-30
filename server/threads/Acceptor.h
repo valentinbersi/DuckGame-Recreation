@@ -4,7 +4,7 @@
 #include "VClient.h"
 #include "GameMapMonitor.h"
 #include "ThreadSafeHashMap.h"
-#include "GameLoop.hpp"
+#include "GameLoop.h"
 #include <list>
 #include <string>
 
@@ -17,7 +17,7 @@ private:
     bool removeIfNotConnected(VirtualClient& client);
     void reapDead();
 public:
-    Acceptor(std::string& hostname,  GameMapMonitor& monitor);
+    Acceptor(const std::string& hostname,  GameMapMonitor& monitor);
 
     virtual void run() override;
 

@@ -10,10 +10,12 @@ LobbyResolver::LobbyResolver(GameMapMonitor& gameMap,
 
 void LobbyResolver::resolveRequest(const LobbyMessage& message){
     if (message.request == LobbyRequest::NEWMATCH) {
-        gameMap.insertSafe();
+        u16 matchID = gameMap.creatGameSafe();
+        recvQueue = gameMap.joinGameIfCreated(matchID, senderQueue, 0); //el ultimo es client id.
+        // senderQueue->push(matchID) aca hay que hacer la parte de herencia.
     }else if(message.request == LobbyRequest::JOINMATCH){
-        gameMap.accessIfPresent();
+        gameMap.joinGameIfCreated(message.matchId, senderQueue, 0);//idem antes
     }else{ // start game
-        gameMap.startIfPresent();
+        gameMap.startGameIfCreated(message.matchId);
     }
 }

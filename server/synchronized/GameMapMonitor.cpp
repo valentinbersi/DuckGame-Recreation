@@ -5,24 +5,25 @@
 GameMapMonitor::GameMapMonitor(){}
 
 
-void GameMapMonitor::accessIfPresent(u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> senderQueue,
-                        u16 clientId){
+BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGameIfCreated(u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> senderQueue,
+                                        u16 clientId){
     std::lock_guard lock(mutex);
     if (gameMap.find(matchID) != gameMap.end()){
-        // gameMap[matchID]->addClient(clienId,matchId);
-    }  
+        // gameMap[matchID]->addClient(clienId,senderQueue);
+        return gameMap[matchID]->getQueue();
+    }
+    return nullptr;  
 
 }
 
-void GameMapMonitor::startIfPresent(u16 matchID){
+void GameMapMonitor::startGameIfCreated(u16 matchID){
     std::lock_guard lock(mutex);
     if (gameMap.find(matchID) != gameMap.end()){
         gameMap[matchID]->start();
     }  
 }
 
-u16 GameMapMonitor::insertSafe(std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> senderQueue,
-                        u16 clientId){
+u16 GameMapMonitor::creatGameSafe(){
     std::lock_guard lock(mutex);
     u16 random_number;
     do{
@@ -34,7 +35,6 @@ u16 GameMapMonitor::insertSafe(std::shared_ptr<BlockingQueue<std::shared_ptr<Gam
 
     } while(gameMap.contains(random_number));
     std::unique_ptr<GameLoop> gameloop = std::make_unique<GameLoop>();
-    // gameloop->addClient(clientId, senderQueue);
     gameMap[random_number] = std::move(gameloop);
     return random_number;
 }
