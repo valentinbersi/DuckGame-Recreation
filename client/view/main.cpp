@@ -3,7 +3,6 @@
 
 #include "game/Game.hpp"
 #include "menu/LobbyQT.h"
-
 #include "ActiveSocket.h"
 
 int main(int argc, char* argv[]) {
@@ -13,15 +12,17 @@ int main(int argc, char* argv[]) {
 
     LobbyQT lobby(argc, argv);
 
-    QObject::connect(&lobby, &LobbyQT::initMatch, [&]() { startSDL = true; });
+    QObject::connect(&lobby, &LobbyQT::initMatch, [&]() {
+        startSDL = true;
+    });
 
     lobby.exec();
 
     if (startSDL) {
         try {
             Game game(std::move(socket));
-            // two players? lo debo mandar al game
-            // debo recibir la cantidad de patos que hay en la partida para pintar N patos distintos
+            //two players? lo debo mandar al game
+            //debo recibir la cantidad de patos que hay en la partida para pintar N patos distintos
             game.init();
 
             // Here all resources are automatically released and library deinitialized
