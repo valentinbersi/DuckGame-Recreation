@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <mutex>
-#include "GameLoop.hpp"
+#include "GameLoop.h"
 #include "Types.h"
 
 class GameMapMonitor{
