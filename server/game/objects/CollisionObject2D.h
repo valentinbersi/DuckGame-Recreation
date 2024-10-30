@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Object2D.h"
 #include "Shape2D.h"
 
