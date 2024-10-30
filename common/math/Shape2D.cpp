@@ -1,5 +1,7 @@
 #include "Shape2D.h"
 
+#include <utility>
+
 #include "Capsule.h"
 #include "Circle.h"
 #include "Rectangle.h"
