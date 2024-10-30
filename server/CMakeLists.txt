@@ -9,6 +9,8 @@ file(GLOB THREADS_SRC threads/*.cpp)
 file(GLOB SERVER_SRC Server.cpp)
 file(GLOB COMMANDS_SRC commands/*.cpp)
 file(GLOB VCLIENT_SRC client/*.cpp)
+file(GLOB SYNC_SRC synchronized/*.cpp)
+
 
 
 
@@ -23,6 +25,8 @@ file(GLOB PROTOCOL_INC protocol/*.h)
 file(GLOB SERVER_INC Server.h)
 file(GLOB COMMANDS_INC commands/*.h)
 file(GLOB VCLIENT_INC client/*.h)
+file(GLOB SYNC_SRC synchronized/*.h)
+
 
 
 
