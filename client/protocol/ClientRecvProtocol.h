@@ -1,14 +1,23 @@
 #pragma once
-
-#include "ActiveSocket.h"
-#include "GameStatus.hpp"
 #include "ReceiveProtocol.h"
+#include "ActiveSocket.h"
+#include "Types.h"
+#include "GameStatus.hpp"
+#include "DuckData.h"
+#include "Math.h"
 
 class ClientRecvProtocol: public ReceiveProtocol {
-public:
-    explicit ClientRecvProtocol(ActiveSocket&);
+private: 
+    HashMap<GameObjectID, std::function<std::unique_ptr<GameObjectData>()>> idsMap;
 
-    // GameStatus receiveMessage();
+    std::unique_ptr<GameObjectData> recvData();
+
+    std::unique_ptr<GameObjectData> recvDuckData();
+    
+public:
+    explicit ClientRecvProtocol(ActiveSocket& socket);
+
+    GameStatus receiveMessage();
 
     ~ClientRecvProtocol() = default;
 };

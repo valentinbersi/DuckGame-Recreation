@@ -1,0 +1,30 @@
+#pragma once
+
+#include <memory>
+
+#include "ActiveSocket.h"
+#include "GameStatus.hpp"
+#include "GameObjectData.h"
+#include "SendProtocol.h"
+#include "DuckData.h"
+#include "GameObject2DData.h"
+#include "Types.h"
+
+class ServerSendProtocol: public SendProtocol {
+private:    
+    
+    HashMap<GameObjectID, std::function<void(const GameObjectData&)>> idsMap;
+
+    void sendGameObject2DData (const GameObject2DData* obj2Data);
+
+    void sendDuck(const GameObjectData& objData);
+
+    void sendDuckData(const DuckData* objData);
+
+public:
+    explicit ServerSendProtocol(ActiveSocket& socket);
+
+    void sendMessage(std::shared_ptr<GameStatus>& mensaje);
+
+    ~ServerSendProtocol() = default;
+};

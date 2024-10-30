@@ -3,6 +3,8 @@
 
 #include "ActiveSocket.h"
 #include "SenderSocket.h"
+#include "Types.h"
+
 
 class SendProtocol {
 private:
@@ -13,7 +15,11 @@ protected:
 
     void sendByte(unsigned char byte);
 
-    void sendString(std::string string);
+    void sendInt(u32 num);
+
+    void sendShort(u16 num);
+    
+    void sendString(std::string& string);
 
 public:
     virtual ~SendProtocol() {}

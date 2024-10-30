@@ -1,6 +1,9 @@
 #pragma once
-
 #include "Types.h"
+#include <cstdint>
+#include <string>
+
+using u8 = std::uint8_t;
 
 enum class GunID : u8 {
     Granade = 0x0,
@@ -18,23 +21,17 @@ enum class GunID : u8 {
 /**
  * Relevant data for rendering a gun in the game
  */
-class EquippedGunData {
-    GunID _id;
+struct EquippedGunData {
+    GunID gunID;
 
-public:
+    EquippedGunData() = delete;
+    EquippedGunData(const EquippedGunData& other);
+    EquippedGunData& operator=(const EquippedGunData& other);
+    EquippedGunData(EquippedGunData&& other) noexcept;
+    EquippedGunData& operator=(EquippedGunData&& other) noexcept;
+
     /**
      * Construct a GunData with the given GunID
      */
     explicit EquippedGunData(GunID gunID);
-
-    /**
-     * Get the GunID of the gun
-     * @return the GunID of the gun
-     */
-    [[nodiscard]] GunID id() const;
-
-    /**
-     * Get the data of the gun
-     */
-    [[nodiscard]] std::string data() const;
 };

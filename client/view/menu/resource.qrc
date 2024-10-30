@@ -3,4 +3,7 @@
         <file>duck-game.png</file>
         <file>partida-run.png</file>
     </qresource>
+    <qresource prefix="/fonts">
+        <file>Jersey10-Regular.ttf</file>
+    </qresource>
 </RCC>
