@@ -1,5 +1,7 @@
 #include "Subject.h"
 
+#include <utility>
+
 #include <bits/ranges_algo.h>
 
 #define INVALID_EVENT                                                                    \
