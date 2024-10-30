@@ -5,15 +5,15 @@
 #define DEF_WINDOW_WIDTH 1040
 #define DEF_WINDOW_HEIGHT 680
 
-#define greySheet "../../assets/sprites/duck/greyDuck.png"
-#define orangeSheet "../../assets/sprites/duck/orangeDuck.png"
-#define whiteSheet "../../assets/sprites/duck/whiteDuck.png"
-#define yellowSheet "../../assets/sprites/duck/yellowDuck.png"
+#define greySheet "../assets/player/greyDuck.png"
+#define orangeSheet "../assets/player/orangeDuck.png"
+#define whiteSheet "../assets/player/whiteDuck.png"
+#define yellowSheet "../assets/player/yellowDuck.png"
 
-#define greyFeathers "../../assets/sprites/duck/greyDuckFeathers.png"
-#define orangeFeathers "../../assets/sprites/duck/orangeDuckFeathers.png"
-#define whiteFeathers "../../assets/sprites/duck/whiteDuckFeathers.png"
-#define yellowFeathers "../../assets/sprites/duck/yellowDuckFeathers.png"
+#define greyFeathers "../assets/player/greyDuckFeathers.png"
+#define orangeFeathers "../assets/player/orangeDuckFeathers.png"
+#define whiteFeathers "../assets/player/whiteDuckFeathers.png"
+#define yellowFeathers "../assets/player/yellowDuckFeathers.png"
 
 // Here we should just declare the classes that are use in this file. But for now a NOLINT is fine.
 using namespace SDL2pp;  // NOLINT(build/namespaces)
@@ -34,6 +34,8 @@ void Game::init() {
 
     Texture backgroundTexture = startBackground();
     renderer.Present();
+    SDL_Delay(5000);
+    return;
 
     while(running) {
         getSnapshot();           //handle everything sended by the gameloop
@@ -182,10 +184,10 @@ std::unordered_map<DuckID, SpriteManager> Game::createSpritesMapping() {
 
     // Create textures and add to the map
     Texture whiteTexture(renderer, whiteSheet);
-    Texture whiteFeathersTexture(renderer, whiteFeathers);
-    spritesMapping.emplace(DuckID::White,
-                           SpriteManager(whiteSheet, whiteFeathers, renderer, whiteTexture,
-                                         whiteFeathersTexture, window_width, window_height));
+    //Texture whiteFeathersTexture(renderer, whiteFeathers);
+    //spritesMapping.emplace(DuckID::White,
+                           //SpriteManager(whiteSheet, whiteFeathers, renderer, whiteTexture,
+                                         //whiteFeathersTexture, window_width, window_height));
 
     Texture orangeTexture(renderer, orangeSheet);
     Texture orangeFeathersTexture(renderer, orangeFeathers);
@@ -262,7 +264,7 @@ void Game::handleEvents() {
 }
 
 Texture Game::startBackground() {
-    SDL_Surface* rawBackgroundSurface = IMG_Load("../../assets/background/background1.png");
+    SDL_Surface* rawBackgroundSurface = IMG_Load("../assets/background/background1.png");
     Surface backgroundSurface(rawBackgroundSurface);
     Texture backgroundTexture(renderer, backgroundSurface);
 

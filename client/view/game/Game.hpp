@@ -22,16 +22,6 @@
 #include "MessageType.h"
 #include "GameMessage.h"
 
-#define greySheet "../../assets/sprites/duck/greyDuck.png"
-#define orangeSheet "../../assets/sprites/duck/orangeDuck.png"
-#define whiteSheet "../../assets/sprites/duck/whiteDuck.png"
-#define yellowSheet "../../assets/sprites/duck/yellowDuck.png"
-
-#define greyFeathers "../../assets/sprites/duck/greyDuckFeathers.png"
-#define orangeFeathers "../../assets/sprites/duck/orangeDuckFeathers.png"
-#define whiteFeathers "../../assets/sprites/duck/whiteDuckFeathers.png"
-#define yellowFeathers "../../assets/sprites/duck/yellowDuckFeathers.png"
-
 class Game {
 
 public:
