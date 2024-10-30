@@ -1,11 +1,12 @@
 #pragma once
 
 #include "Object2D.h"
+#include "Shape2D.h"
 
 class CollisionObject2D: public Object2D {
     u32 _collisionLayer;
     u32 _collisionMask;
-    // Shape2D _shape;
+    Shape2D* _shape;
 
 protected:
     /**
@@ -17,8 +18,8 @@ protected:
     /**
      * Construct a CollisionObject2D with collision Layer and Mask = 0
      */
-    CollisionObject2D(Object* parent, Vector2 position, f32 rotation, u32 collisionLayer,
-                      u32 collisionMask /*, Shape2D shape*/);
+    CollisionObject2D(Object* parent, Vector2 position, float rotation, u32 collisionLayer,
+                      u32 collisionMask, std::unique_ptr<Shape2D> shape);
 
 public:
     /**

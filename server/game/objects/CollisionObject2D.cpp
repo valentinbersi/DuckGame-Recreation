@@ -6,17 +6,17 @@
 
 CollisionObject2D::CollisionObject2D(Object* parent):
         CollisionObject2D(parent, Vector2::ZERO, DEFAULT_ROTATION, DEFAULT_COLLISION_LAYER,
-                          DEFAULT_COLLISION_MASK) {
+                          DEFAULT_COLLISION_MASK, nullptr) {}
 
-    registerEvent<CollisionObject2D&>("bodyEntered");
-}
-
-CollisionObject2D::CollisionObject2D(Object* parent, Vector2 position, const f32 rotation,
-                                     const u32 collisionLayer,
-                                     const u32 collisionMask /*, Shape2D shape*/):
+CollisionObject2D::CollisionObject2D(Object* parent, Vector2 position, const float rotation,
+                                     const u32 collisionLayer, const u32 collisionMask,
+                                     std::unique_ptr<Shape2D> shape):
         Object2D(parent, std::move(position), rotation),
         _collisionLayer(collisionLayer),
-        _collisionMask(collisionMask) /*, _shape(std::move(shape))*/ {}
+        _collisionMask(collisionMask),
+        _shape(shape.release()) {
+    registerEvent<CollisionObject2D&>("bodyEntered");
+}
 
 u32 CollisionObject2D::collisionLayer() const { return _collisionLayer; }
 
@@ -35,9 +35,6 @@ void CollisionObject2D::deactivateCollisionMask(const u8 layer) {
 }
 
 void CollisionObject2D::collideWith(CollisionObject2D& other) {
-    bool isInScannedMask = _collisionMask & other.collisionLayer() != 0 ? true : false;
-
-    // return _shape.contains(other._shape);
-
-    emit<CollisionObject2D&>("bodyEntered", other);
+    if ((_collisionMask & other.collisionLayer()) != 0 && _shape->intersects(*other._shape))
+        fire<CollisionObject2D&>("bodyEntered", other);
 }
