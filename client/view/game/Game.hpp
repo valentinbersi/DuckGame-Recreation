@@ -46,6 +46,7 @@ private:
     void handleEvents();
     std::unordered_map<DuckID, SpriteManager> createSpritesMapping();
     void updatePlayers(std::unordered_map<DuckID, SpriteManager>& spritesMapping);
+    Vector2 centerOfDucks();
     void getSnapshot();
     void showBackground(SDL2pp::Texture& backgroundTexture);
 

@@ -23,9 +23,6 @@ Game::Game(ActiveSocket&& skt) : running(true), window_width(DEF_WINDOW_WIDTH), 
       renderer(window, -1, SDL_RENDERER_ACCELERATED) {}
 
 void Game::init() {
-    //getSocket
-    //Communicator communicator(//activeSocket);
-
     std::unordered_map<DuckID, SpriteManager> spritesMapping = createSpritesMapping();
     SDL sdl(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG);
@@ -35,7 +32,7 @@ void Game::init() {
 
     while(running) {
         getSnapshot();           //handle everything sended by the gameloop
-        //float mid = centerOfDucks();
+        //Vector2 center = centerOfDucks();
 
         renderer.Clear();
 
@@ -144,18 +141,26 @@ void Game::updatePlayers(std::unordered_map<DuckID, SpriteManager>& spritesMappi
 }*/
 
 
-/*float Game::centerOfDucks() {
-    Vector2i coords;
+Vector2 Game::centerOfDucks() {
+    float coordsX = 0.0f;
+    float coordsY = 0.0f;
+    size_t duckCount = ducks.size();
+
     for (auto& duck : ducks) {
-        coords += duck->position();
+        coordsX += duck->position.x();
+        coordsY += duck->position.y();
     }
-    // tengo un vector2 con vectores2i (posiciones que laburan con floats). debo calcular el punto medio
 
+    if (duckCount > 0) {
+        coordsX /= static_cast<float>(duckCount);
+        coordsY /= static_cast<float>(duckCount);
+    }
 
+    Vector2 result(coordsX, coordsY);
+    return result;
 
     // dividirlo por el numero por el que se multiplicó (dicho por valen etc (preguntar numero exacto))
-
-}*/
+}
 
 void Game::clearObjects() {
     ducks.clear();
