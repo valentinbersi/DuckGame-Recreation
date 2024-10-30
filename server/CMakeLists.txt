@@ -9,6 +9,7 @@ file(GLOB THREADS_SRC threads/*.cpp)
 file(GLOB SERVER_SRC Server.cpp)
 file(GLOB COMMANDS_SRC commands/*.cpp)
 file(GLOB VCLIENT_SRC client/*.cpp)
+file(GLOB SYNC_SRC synchronized/*.cpp)
 
 
 file(GLOB GAME_INC game/*.h)
@@ -22,11 +23,11 @@ file(GLOB PROTOCOL_INC protocol/*.h)
 file(GLOB SERVER_INC Server.h)
 file(GLOB COMMANDS_INC commands/*.h)
 file(GLOB VCLIENT_INC client/*.h)
+file(GLOB SYNC_INC synchronized/*.h)
 
-
-target_include_directories(DuckGameDedicatedServer PUBLIC "game" "game/objects" "game/player" "game/input" "protocol" "game/event" "game/records" "commands" "client" "threads")
+target_include_directories(DuckGameDedicatedServer PUBLIC "game" "game/objects" "game/player" "game/input" "protocol" "game/event" "game/records" "commands" "client" "threads" "synchronized")
 
 target_sources(DuckGameDedicatedServer
-        PRIVATE ${GAME_SRC} ${GAME_OBJECTS_SRC} ${GAME_PLAYER_SRC} ${GAME_INPUT_SRC} ${GAME_EVENT_SRC} ${GAME_RECORDS_SRC} ${PROTOCOL_SRC} ${SERVER_SRC} ${COMMANDS_SRC} ${VCLIENT_SRC} ${THREADS_SRC} main.cpp
-        PUBLIC ${GAME_INC} ${GAME_OBJECTS_INC} ${GAME_PLAYER_INC} ${GAME_INPUT_INC} ${GAME_EVENT_INC} ${GAME_RECORDS_INC} ${PROTOCOL_INC} ${SERVER_INC} ${COMMANDS_INC} ${VCLIENT_INC} ${THREADS_INC}
+        PRIVATE ${GAME_SRC} ${GAME_OBJECTS_SRC} ${GAME_PLAYER_SRC} ${GAME_INPUT_SRC} ${GAME_EVENT_SRC} ${GAME_RECORDS_SRC} ${PROTOCOL_SRC} ${SERVER_SRC} ${COMMANDS_SRC} ${VCLIENT_SRC} ${THREADS_SRC} ${SYNC_SRC} main.cpp
+        PUBLIC ${GAME_INC} ${GAME_OBJECTS_INC} ${GAME_PLAYER_INC} ${GAME_INPUT_INC} ${GAME_EVENT_INC} ${GAME_RECORDS_INC} ${PROTOCOL_INC} ${SERVER_INC} ${COMMANDS_INC} ${VCLIENT_INC} ${THREADS_INC} ${SYNC_INC}
 )

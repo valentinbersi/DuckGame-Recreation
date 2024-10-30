@@ -15,18 +15,18 @@ unsigned char ReceiveProtocol::recv_byte() {
     return byte;
 }
 
-u16 ReceiveProtocol::recvShort(){
+u16 ReceiveProtocol::recvShort() {
     u16 num;
-    if(!skt.receive(&num,sizeof(u16))){
-        //throw
+    if (!skt.receive(&num, sizeof(u16))) {
+        // throw
     }
     return ntohs(num);
 }
 
-u32 ReceiveProtocol::recvInt(){
+u32 ReceiveProtocol::recvInt() {
     u32 num;
-    if(!skt.receive(&num,sizeof(u32))){
-        //throw
+    if (!skt.receive(&num, sizeof(u32))) {
+        // throw
     }
     return ntohl(num);
 }

@@ -8,8 +8,8 @@
 /*class Player {
 
 public:
-    Player(const char* path, int row, int column, SDL2pp::Renderer& renderer, int window_width, int window_height);
-    ~Player();
+    Player(const char* path, int row, int column, SDL2pp::Renderer& renderer, int window_width, int
+window_height); ~Player();
 
     void start();
     void update(Keybinds m_key);

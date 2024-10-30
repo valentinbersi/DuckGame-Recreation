@@ -23,7 +23,7 @@ void GameLoop::retrieveCurrentFrameCommands() {
 
 void GameLoop::processCurrentFrameCommands() {
     while (!currentFrameCommands.empty()) {
-        Command* currentCommand = currentFrameCommands.front();
+        std::unique_ptr<Command> currentCommand = std::move(currentFrameCommands.front());
         currentFrameCommands.pop();
         // currentCommand->execute(game);
     }
@@ -61,3 +61,5 @@ void GameLoop::addClient(const u16 clientID,
     clientQueues.push_back(std::move(clientQueue));
     game.addPlayer(clientID);
 }
+
+BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCommands; }

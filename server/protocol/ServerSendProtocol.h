@@ -3,18 +3,17 @@
 #include <memory>
 
 #include "ActiveSocket.h"
-#include "GameStatus.h"
-#include "GameObjectData.h"
 #include "DuckData.h"
+#include "GameObjectData.h"
+#include "GameStatus.h"
 #include "SendProtocol.h"
 #include "Types.h"
 
 class ServerSendProtocol: public SendProtocol {
-private:    
-    
+private:
     HashMap<GameObjectID, std::function<void(const GameObjectData&)>> idsMap;
 
-    void sendGameObject2DData (const GameObject2DData* obj2Data);
+    void sendGameObject2DData(const GameObject2DData* obj2Data);
 
     void sendDuck(const GameObjectData& objData);
 

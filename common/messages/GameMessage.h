@@ -1,8 +1,8 @@
 #pragma once
-#include "ClientMessage.h"
-struct GameMessage : public ClientMessage
-{
+#include "Message.h"
+
+struct GameMessage: public Message {
     InputAction action;
-    GameMessage(InputAction action) : ClientMessage(MessageType::Game), action(action) {}
+    GameMessage(InputAction action): Message(MessageType::Game), action(action) {}
     ~GameMessage() = default;
 };

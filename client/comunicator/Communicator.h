@@ -1,26 +1,26 @@
 #pragma once
-#include "Thread.h"
-#include "BlockingQueue.h"
+#include <iostream>
+
 #include "ActiveSocket.h"
+#include "BlockingQueue.h"
 #include "ComReceiver.h"
 #include "ComSender.h"
 #include "GameStatus.h"
-#include "ClientMessage.h"
+#include "Message.h"
+#include "Thread.h"
 
-#include <iostream>
-
-class Communicator{
+class Communicator {
 private:
     ActiveSocket skt;
-    BlockingQueue<ClientMessage> sendQueue;
+    BlockingQueue<Message> sendQueue;
     BlockingQueue<GameStatus> recvQueue;
     CommunicatorSender sender;
     CommunicatorReceiver receiver;
 
 public:
-    Communicator(ActiveSocket&& socket);
+    explicit Communicator(ActiveSocket&& socket);
 
-    bool trysend(const ClientMessage& Message);
+    bool trysend(const Message& Message);
 
     std::optional<GameStatus> tryrecv();
 

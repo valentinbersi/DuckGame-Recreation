@@ -1,9 +1,3 @@
 #pragma once
 
-class Renderer {
-
-};
-
-
-
-
+class Renderer {};

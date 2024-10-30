@@ -2,22 +2,12 @@
 
 #include <QDebug>
 #include <QDir>
-#include "common_init.h"
 
+#include "LobbyQT.h"
+#include "common_init.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow) {
-    ui->setupUi(this);
-    common_init(this, ":/backgrounds/duck-game.png"); // ver si va o no
-
-    menu = new mainMenu();
-    config= new configurationPage();
-    join_game = new joinGame();
-    new_game = new newGame();
-    match_started = new matchStarted();
-
+void MainWindow::setPagesAndConnections() {
     ui->stackedWidget->addWidget(menu);
     ui->stackedWidget->addWidget(config);
     ui->stackedWidget->addWidget(join_game);
@@ -40,17 +30,31 @@ MainWindow::MainWindow(QWidget *parent)
     connect(join_game, &joinGame::backClicked, this, &MainWindow::previousMenu);
 }
 
-MainWindow::~MainWindow() {
-    delete ui;
+MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWindow) {
+    ui->setupUi(this);
+
+    common_init(this, ":/backgrounds/duck-game.png");  // ver si va o no
+
+    menu = new mainMenu(this);
+    config = new configurationPage(this);
+    join_game = new joinGame(this);
+    new_game = new newGame(this);
+    match_started = new matchStarted(this);
+
+    setPagesAndConnections();
 }
 
+MainWindow::~MainWindow() { delete ui; }
+
 void MainWindow::irASeleccionJugadores() {
-    ui->stackedWidget->setCurrentIndex(1); // esto es para ir a la pagina 1 del menu (estaria en la 0)
+    ui->stackedWidget->setCurrentIndex(
+            1);  // esto es para ir a la pagina 1 del menu (estaria en la 0)
 }
 
 void MainWindow::salirDelJuego() {
     QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this, "Salir", "¿Seguro que querés salir?", QMessageBox::Yes | QMessageBox::No);
+    reply = QMessageBox::question(this, "Salir", "¿Seguro que querés salir?",
+                                  QMessageBox::Yes | QMessageBox::No);
 
     if (reply == QMessageBox::Yes) {
         QApplication::quit();
@@ -59,10 +63,12 @@ void MainWindow::salirDelJuego() {
 
 void MainWindow::createAMatch() {
     int playersNumbers = config->getSelectedPlayers();
-    if (playersNumbers == -1) { // esto creo que aca no deberia estar, sino en config
-        QMessageBox::warning(this, "Error", "Seleccioná si vas a jugar con 1 o 2 jugadores antes de continuar");
+    if (playersNumbers == -1) {  // esto creo que aca no deberia estar, sino en config
+        QMessageBox::warning(this, "Error",
+                             "Seleccioná si vas a jugar con 1 o 2 jugadores antes de continuar");
     } else {
-        //QMessageBox::information(this, "Crear Partida", QString("Partida creada para %1 jugador(es)").arg(cantJugadores));
+        // QMessageBox::information(this, "Crear Partida", QString("Partida creada para %1
+        // jugador(es)").arg(cantJugadores));
         ui->stackedWidget->setCurrentIndex(3);
     }
 }
@@ -71,9 +77,10 @@ void MainWindow::createAMatch() {
 
 void MainWindow::joinAMatch() {
     int playersNumbers = config->getSelectedPlayers();
-    if (playersNumbers == -1) { // esto creo que aca no deberia estar, sino en config
-        QMessageBox::warning(this, "Error", "Seleccioná si vas a jugar con 1 o 2 jugadores antes de continuar");
-    }else {
+    if (playersNumbers == -1) {  // esto creo que aca no deberia estar, sino en config
+        QMessageBox::warning(this, "Error",
+                             "Seleccioná si vas a jugar con 1 o 2 jugadores antes de continuar");
+    } else {
         ui->stackedWidget->setCurrentIndex(2);
     }
 }
@@ -87,7 +94,8 @@ void MainWindow::previousMenu() {
 }
 
 void MainWindow::startGame() {
-    //ui->stackedWidget->setCurrentIndex(4);
-    emit initSDL();
+    // ui->stackedWidget->setCurrentIndex(4);
+    emit initMatch();
     close();
+    QCoreApplication::exit(0);
 }

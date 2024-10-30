@@ -18,9 +18,19 @@
 #define NO_FEATHER false
 #define NO_RIGHT_FEATHER false
 
-SpriteManager::SpriteManager(const char* path1, const char* path2, SDL2pp::Renderer& renderer, SDL2pp::Texture& m_texture_image, SDL2pp::Texture& m_texture_feathers,
-                int& window_width, int& window_height) : path1(path1), path2(path2), scale(DEFAULT_SCALE), flapping(false), flip(false),
-                spritesheet(path1, path2, renderer, m_texture_image, m_texture_feathers), frame(0), flappingFrame(0), m_position_x(0), m_position_y(0){
+SpriteManager::SpriteManager(const char* path1, const char* path2, SDL2pp::Renderer& renderer,
+                             SDL2pp::Texture& m_texture_image, SDL2pp::Texture& m_texture_feathers,
+                             int& window_width, int& window_height):
+        path1(path1),
+        path2(path2),
+        scale(DEFAULT_SCALE),
+        flapping(false),
+        flip(false),
+        spritesheet(path1, path2, renderer, m_texture_image, m_texture_feathers),
+        frame(0),
+        flappingFrame(0),
+        m_position_x(0),
+        m_position_y(0) {
 
     // Really needed? Idk
     spritesheet.selectSprite(SPRITE_IDLE, SPRITE_IDLE, NO_FEATHER);
@@ -36,34 +46,36 @@ void SpriteManager::updatePosition(float new_x, float new_y) {
 }
 
 // un bool 'started' para inicializar el playerWidth etc?
-void SpriteManager::update(bool playing_dead, bool crouching, bool air, bool flap, bool being_damaged, bool right, bool left) {
-    if (being_damaged || playing_dead || crouching) {                           // no animation; only one sprite for each 'event'
+void SpriteManager::update(bool playing_dead, bool crouching, bool air, bool flap,
+                           bool being_damaged, bool right, bool left) {
+    if (being_damaged || playing_dead ||
+        crouching) {  // no animation; only one sprite for each 'event'
         if (being_damaged) {
-            draw(SPRITESHEET_DEAD_COL, SPRITESHEET_DEAD_ROW, flip);
-            //do something...? how the game is gonna change for this duck and the others?
+            draw(SPRITESHEET_DEAD_COL, SPRITESHEET_DEAD_ROW);
+            // do something...? how the game is gonna change for this duck and the others?
 
         } else if (playing_dead) {
-            draw(SPRITESHEET_PLAYING_DEAD_COL, SPRITESHEET_DEAD_ROW, flip);
-            //draw
+            draw(SPRITESHEET_PLAYING_DEAD_COL, SPRITESHEET_DEAD_ROW);
+            // draw
 
         } else {
-            draw(SPRITESHEET_CROUCH_COL, SPRITESHEET_CROUCH_ROW, flip);
-            //draw
+            draw(SPRITESHEET_CROUCH_COL, SPRITESHEET_CROUCH_ROW);
+            // draw
         }
         return;
     }
 
-    setFlags(air, flap, right, left);         // sets flags for animations only
+    setFlags(air, flap, right, left);  // sets flags for animations only
     flip = left;
     if (air) {
-        draw(frame, SPRITESHEET_JUMP_ROW, flip);
+        draw(frame, SPRITESHEET_JUMP_ROW);
 
     } else {
-        draw(frame, SPRITESHEET_RIGHT_LEFT_ROW, flip);
+        draw(frame, SPRITESHEET_RIGHT_LEFT_ROW);
     }
 }
 
-void SpriteManager::draw(int col, int row, bool flip) {
+void SpriteManager::draw(int col, int row) {
     // Sprite
     spritesheet.selectSprite(col, row, NO_FEATHER);
     SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER);
@@ -81,12 +93,14 @@ void SpriteManager::draw(int col, int row, bool flip) {
 
 void SpriteManager::setFlags(bool air, bool flap, bool right, bool left) {
     if (in_air || moving_right || moving_left) {
-        if (!(in_air && frame == 4)) frame++;
-        if (frame > 5 && !in_air) frame = 0;
+        if (!(in_air && frame == 4))
+            frame++;
+        if (frame > 5 && !in_air)
+            frame = 0;
     }
     if (flapping) {
         flappingFrame++;
-        //if (flappingFrame)
+        // if (flappingFrame)
     }
 
     if (in_air != air) {
@@ -137,11 +151,11 @@ SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather) {
     if (isFeather) {
         // Adjust the position for feathers
         if (isRightFeather) {
-            position.x += playerWidth; // Example adjustment for right feather
+            position.x += playerWidth;  // Example adjustment for right feather
         } else {
-            position.x -= playerWidth; // Example adjustment for left feather
+            position.x -= playerWidth;  // Example adjustment for left feather
         }
-        position.y -= 10; // Example adjustment for feathers, change as needed
+        position.y -= 10;  // Example adjustment for feathers, change as needed
     }
 
     return position;
@@ -149,22 +163,14 @@ SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather) {
 
 void SpriteManager::incFrame() {
     frame += 1;
-    //if frame... ? (caminar y saltar tienen el mismo número de sprites)
-    // pero si empieza a usar las feathers, se quedará en el sprite n = 3 (4)
+    // if frame... ? (caminar y saltar tienen el mismo número de sprites)
+    //  pero si empieza a usar las feathers, se quedará en el sprite n = 3 (4)
 }
 
-void SpriteManager::incFlappingFrame() {
-    flappingFrame += 1;
-}
+void SpriteManager::incFlappingFrame() { flappingFrame += 1; }
 
-void SpriteManager::resetFrame() {
-    frame = 0;
-}
+void SpriteManager::resetFrame() { frame = 0; }
 
-void SpriteManager::resetFlappingFrame() {
-    flappingFrame = 0;
-}
+void SpriteManager::resetFlappingFrame() { flappingFrame = 0; }
 
-void SpriteManager::changeFlapping() {
-    flapping = !flapping;
-}
+void SpriteManager::changeFlapping() { flapping = !flapping; }

@@ -1,9 +1,9 @@
 #ifndef DUCKGAME_MAINMENU_H
 #define DUCKGAME_MAINMENU_H
 
-#include "ui_mainMenu.h"
-
 #include <QWidget>
+
+#include "ui_mainMenu.h"
 
 
 QT_BEGIN_NAMESPACE

@@ -15,11 +15,10 @@ configurationPage::configurationPage(QWidget* parent):
     connect(ui->btnUnirse, &QPushButton::clicked, this, &configurationPage::joinGameClicked);
     connect(ui->btnCrear, &QPushButton::clicked, this, &configurationPage::newGameClicked);
     connect(ui->btnVolver, &QPushButton::clicked, this, &configurationPage::backClicked);
-
 }
 
 int configurationPage::getSelectedPlayers() const {
-    return CantidadPlayersGroup->checkedId(); // Devuelve el ID del botón seleccionado
+    return CantidadPlayersGroup->checkedId();  // Devuelve el ID del botón seleccionado
 }
 
 configurationPage::~configurationPage() { delete ui; }

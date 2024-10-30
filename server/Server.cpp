@@ -1,5 +1,28 @@
-//
-// Created by valen on 19/10/2024.
-//
 
 #include "Server.h"
+
+#include <iostream>
+
+#define CLOSE_SERVER "q"
+
+Server::Server(const std::string& hostname): gameMap(), acceptor(hostname, gameMap) {}
+
+std::string Server::readInput() {
+    std::string input;
+    std::cin >> input;
+    return input;
+}
+
+int Server::run() {
+    acceptor.start();
+    while (readInput() != CLOSE_SERVER) {
+        continue;
+    }
+    return EXIT_SUCCESS;
+}
+
+Server::~Server() {
+    acceptor.stop();
+    acceptor.join();
+    // gameMap.joinAllValues();
+}

@@ -1,8 +1,11 @@
 #include "common_init.h"
-#include <QFontDatabase>
-#include <QApplication>
 
-QString common_init(QWidget* widget, const QString& backgroundPath){
+#include <QApplication>
+#include <QDebug>
+#include <QFontDatabase>
+
+
+QString common_init(QWidget* widget, const QString& backgroundPath) {
     QPixmap pixmap(backgroundPath);
     QSize windowSize = widget->size();
     QPixmap scaledPixmap = pixmap.scaled(windowSize, Qt::KeepAspectRatioByExpanding);
@@ -16,7 +19,7 @@ QString common_init(QWidget* widget, const QString& backgroundPath){
         return "";
     } else {
         QString fontFamily = QFontDatabase::applicationFontFamilies(fontId).at(0);
-        QFont font(fontFamily, 20);
+        QFont font(fontFamily, 25);
         QApplication::setFont(font);
         return fontFamily;
     }
