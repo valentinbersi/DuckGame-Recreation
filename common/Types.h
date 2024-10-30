@@ -1,11 +1,11 @@
 #pragma once
 
+#include <cstdint>
 #include <functional>
 #include <memory>
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <cstdint>
 
 typedef const char* cppstring;
 typedef char* cstring;
