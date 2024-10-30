@@ -2,7 +2,7 @@
 
 #include <utility>
 
-GameStatus::GameStatus() = default;
+GameStatus::GameStatus() : Message(MessageType::Game); //Luego chequeamos.
 
 GameStatus::GameStatus(GameStatus&& other) noexcept: gameObjects(std::move(other.gameObjects)) {}
 

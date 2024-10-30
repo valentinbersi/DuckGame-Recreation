@@ -5,14 +5,14 @@
 #include "ComReceiver.h"
 #include "ComSender.h"
 #include "GameStatus.h"
-#include "ClientMessage.h"
+#include "Message.h"
 
 #include <iostream>
 
 class Communicator{
 private:
     ActiveSocket skt;
-    BlockingQueue<ClientMessage> sendQueue;
+    BlockingQueue<Message> sendQueue;
     BlockingQueue<GameStatus> recvQueue;
     CommunicatorSender sender;
     CommunicatorReceiver receiver;
@@ -20,7 +20,7 @@ private:
 public:
     explicit Communicator(ActiveSocket&& socket);
 
-    bool trysend(const ClientMessage& Message);
+    bool trysend(const Message& Message);
 
     std::optional<GameStatus> tryrecv();
 

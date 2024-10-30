@@ -11,10 +11,10 @@ class CommunicatorSender: public Thread{
 private:
     ClientSendProtocol sendProtocol;
 
-    BlockingQueue<ClientMessage>& sendQueue;
+    BlockingQueue<Message>& sendQueue;
     
 public:
-    explicit CommunicatorSender(ActiveSocket& socket, BlockingQueue<ClientMessage>& queue);
+    explicit CommunicatorSender(ActiveSocket& socket, BlockingQueue<Message>& queue);
 
     virtual void run() override;
 

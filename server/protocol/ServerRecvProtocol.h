@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "ClientMessage.h"
+#include "Message.h"
 #include "ActiveSocket.h"
 #include "GameStatus.h"
 #include "ReceiveProtocol.h"
@@ -12,7 +12,7 @@ private:
 public:
     explicit ServerRecvProtocol(ActiveSocket& socket);
 
-    ClientMessage receiveMessage();
+    Message receiveMessage();
 
     ~ServerRecvProtocol() = default;
 };

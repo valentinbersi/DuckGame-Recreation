@@ -2,8 +2,8 @@
 
 ServerRecvProtocol::ServerRecvProtocol(ActiveSocket& socket): ReceiveProtocol(socket) {}
 
-ClientMessage ServerRecvProtocol::receiveMessage(){
+Message ServerRecvProtocol::receiveMessage(){
     unsigned char type = recv_byte();
     unsigned char action = recv_byte();
-    return ClientMessage(type, action);
+    return Message(type, action);
 }

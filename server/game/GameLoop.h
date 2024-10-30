@@ -13,8 +13,8 @@ class GameLoop final: public Thread {
     constexpr static std::uint8_t FRAME_TIMES_AMOUNT = 2;
 
     std::list<std::weak_ptr<BlockingQueue<std::shared_ptr<GameStatus>>>> clientQueues{};
-    BlockingQueue<Command*> clientCommands;
-    std::queue<Command*> currentFrameCommands;
+    BlockingQueue<std::unique_ptr<Command>> clientCommands;
+    std::queue<std::unique_ptr<Command>> currentFrameCommands;
     GameController game;
     std::uint64_t prevTicks;
 
@@ -57,4 +57,9 @@ public:
      */
     void addClient(u16 clientID,
                    std::weak_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> clientQueue);
+
+    /**
+     * @return the pointer to the gameloop Queue.
+     */
+    BlockingQueue<std::unique_ptr<Command>>* getQueue();
 };

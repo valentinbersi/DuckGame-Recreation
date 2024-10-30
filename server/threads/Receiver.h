@@ -2,7 +2,7 @@
 #include "Thread.h"
 #include "ServerRecvProtocol.h"
 #include "BlockingQueue.h"
-#include "ClientMessage.h"
+#include "Message.h"
 #include "LobbyResolver.h"
 #include "Command.h"
 #include <memory>

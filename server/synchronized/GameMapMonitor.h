@@ -12,13 +12,12 @@ private:
 public:
     GameMapMonitor();
 
-    void accessIfPresent(u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> senderQueue,
+    BlockingQueue<std::unique_ptr<Command>>* joinGameIfCreated(u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> senderQueue,
                         u16 clientId);
 
-    void startIfPresent(u16 matchID);
+    void startGameIfCreated(u16 matchID);
 
-    u16 insertSafe(std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> senderQueue,
-                    u16 clientId);
+    u16 creatGameSafe();
 
     ~GameMapMonitor();
 
