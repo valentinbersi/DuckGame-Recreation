@@ -1,5 +1,8 @@
 #include "CollisionObject2D.h"
 
+#include <memory>
+#include <utility>
+
 #define DEFAULT_ROTATION 0
 #define DEFAULT_COLLISION_LAYER 0
 #define DEFAULT_COLLISION_MASK 0
