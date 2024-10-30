@@ -1,7 +1,8 @@
 #pragma once
-#include "GameMapMonitor.h"
-#include "Acceptor.h"
 #include <string>
+
+#include "Acceptor.h"
+#include "GameMapMonitor.h"
 
 class Server {
 private:
@@ -15,5 +16,4 @@ public:
     int run() noexcept;
 
     ~Server();
-
 };

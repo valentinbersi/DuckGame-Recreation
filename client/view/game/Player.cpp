@@ -16,9 +16,11 @@
 #define JUMP_VELOCITY 500.0
 #define DELTA_TIME (1.0/30.0)
 
-Player::Player(const char* path, int row, int column, SDL2pp::Renderer& renderer, int window_width, int window_height)
-    : last_m_key(Keybinds::NONE), scale(DEFAULT_SCALE), flip(false), is_jumping(false), jump_frame(0), jump_velocity(0), jump_start_y(0),
-    m_spritesheet_column(SPRITE_IDLE), window_width(window_width), window_height(window_height), renderer(renderer), spritesheet(path, row, column, renderer) {
+Player::Player(const char* path, int row, int column, SDL2pp::Renderer& renderer, int window_width,
+int window_height) : last_m_key(Keybinds::NONE), scale(DEFAULT_SCALE), flip(false),
+is_jumping(false), jump_frame(0), jump_velocity(0), jump_start_y(0),
+    m_spritesheet_column(SPRITE_IDLE), window_width(window_width), window_height(window_height),
+renderer(renderer), spritesheet(path, row, column, renderer) {
 
     int playerWidth = spritesheet.getClipWidth();
     int playerHeight = spritesheet.getClipHeight();

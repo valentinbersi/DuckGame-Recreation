@@ -4,7 +4,7 @@
 ClientSendProtocol::ClientSendProtocol(ActiveSocket& socket): SendProtocol(socket) {}
 
 void ClientSendProtocol::sendMessage(const Message& message) {
-    if(message.type == MessageType::Game){
+    if (message.type == MessageType::Game) {
         const GameMessage* msg = dynamic_cast<const GameMessage*>(&message);
         sendByte(msg->action);
     } else {
@@ -13,5 +13,4 @@ void ClientSendProtocol::sendMessage(const Message& message) {
         sendString(msg->usrName);
         sendShort(msg->matchId);
     }
-    
 }

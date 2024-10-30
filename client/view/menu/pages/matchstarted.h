@@ -5,9 +5,9 @@
 #ifndef DUCKGAME_MATCHSTARTED_H
 #define DUCKGAME_MATCHSTARTED_H
 
-#include "ui_matchStarted.h"
-
 #include <QWidget>
+
+#include "ui_matchStarted.h"
 
 
 QT_BEGIN_NAMESPACE

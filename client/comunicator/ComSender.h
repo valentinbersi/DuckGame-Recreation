@@ -1,18 +1,18 @@
 #pragma once
 
-#include "ClientSendProtocol.h"
-#include "Thread.h"
-#include "BlockingQueue.h"
 #include "ActiveSocket.h"
+#include "BlockingQueue.h"
+#include "ClientSendProtocol.h"
 #include "ComReceiver.h"
 #include "GameStatus.h"
+#include "Thread.h"
 
-class CommunicatorSender: public Thread{
+class CommunicatorSender: public Thread {
 private:
     ClientSendProtocol sendProtocol;
 
     BlockingQueue<Message>& sendQueue;
-    
+
 public:
     explicit CommunicatorSender(ActiveSocket& socket, BlockingQueue<Message>& queue);
 

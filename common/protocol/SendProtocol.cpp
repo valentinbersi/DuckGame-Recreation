@@ -11,17 +11,17 @@ void SendProtocol::sendByte(unsigned char byte) {
     }
 }
 
-void SendProtocol::sendShort(u16 num){
+void SendProtocol::sendShort(u16 num) {
     u16 bigEndNum = htons(num);
-    if(!skt.send(&bigEndNum, sizeof(uint16_t))){
-        //throw
+    if (!skt.send(&bigEndNum, sizeof(uint16_t))) {
+        // throw
     }
 }
 
-void SendProtocol::sendInt(u32 num){
+void SendProtocol::sendInt(u32 num) {
     u32 bigEndNum = htonl(num);
-    if(!skt.send(&bigEndNum, sizeof(uint32_t))){
-        //throw
+    if (!skt.send(&bigEndNum, sizeof(uint32_t))) {
+        // throw
     }
 }
 

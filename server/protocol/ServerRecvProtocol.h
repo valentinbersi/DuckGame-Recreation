@@ -1,11 +1,12 @@
 #pragma once
 
 #include <memory>
-#include "Message.h"
+#include <unordered_map>
+
 #include "ActiveSocket.h"
 #include "GameStatus.h"
+#include "Message.h"
 #include "ReceiveProtocol.h"
-#include <unordered_map>
 
 class ServerRecvProtocol: public ReceiveProtocol {
 private:

@@ -1,8 +1,8 @@
 #pragma once
-#include "ServerSendProtocol.h"
-#include "BlockingQueue.h"
 #include "ActiveSocket.h"
+#include "BlockingQueue.h"
 #include "GameStatus.h"
+#include "ServerSendProtocol.h"
 #include "Thread.h"
 
 class Sender: public Thread {
@@ -11,7 +11,8 @@ private:
     std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>>& sendQueue;
 
 public:
-    Sender(ActiveSocket& socket, std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>>& queue);
+    Sender(ActiveSocket& socket,
+           std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>>& queue);
 
     virtual void run() override;
 

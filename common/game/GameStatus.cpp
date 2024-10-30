@@ -2,9 +2,9 @@
 
 #include <utility>
 
-GameStatus::GameStatus() : Message(MessageType::Game); //Luego chequeamos.
+GameStatus::GameStatus(): Message(MessageType::Game) {}  // Luego chequeamos.
 
-GameStatus::GameStatus(GameStatus&& other) noexcept: gameObjects(std::move(other.gameObjects)) {}
+GameStatus::GameStatus(GameStatus&& other) noexcept: Message(MessageType::Game), gameObjects(std::move(other.gameObjects)) {}
 
 GameStatus& GameStatus::operator=(GameStatus&& other) noexcept {
     if (this == &other)

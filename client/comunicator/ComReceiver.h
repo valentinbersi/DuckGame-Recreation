@@ -1,19 +1,19 @@
 #pragma once
-#include "Thread.h"
-#include "BlockingQueue.h"
-#include "GameStatus.h"
 #include "ActiveSocket.h"
+#include "BlockingQueue.h"
 #include "ClientRecvProtocol.h"
-#include "LibError.h"
 #include "ComSender.h"
+#include "GameStatus.h"
+#include "LibError.h"
+#include "Thread.h"
 #include "syslog.h"
 
-class CommunicatorReceiver: public Thread{
+class CommunicatorReceiver: public Thread {
 private:
     ClientRecvProtocol recvProtocol;
 
     BlockingQueue<GameStatus>& recvQueue;
-    
+
 public:
     explicit CommunicatorReceiver(ActiveSocket& socket, BlockingQueue<GameStatus>& queue);
 

@@ -1,19 +1,21 @@
 #pragma once
-#include "Receiver.h"
-#include "Sender.h"
+#include <memory>
+
+#include "ActiveSocket.h"
 #include "BlockingQueue.h"
 #include "Command.h"
-#include <memory>
-#include "ActiveSocket.h"
 #include "GameMapMonitor.h"
+#include "Receiver.h"
+#include "Sender.h"
 
-class VirtualClient{
+class VirtualClient {
 private:
     ActiveSocket skt;
-    //mapa de gameloops va aqui, referencia
-    BlockingQueue<std::unique_ptr<Command>>* gameQueue; //No tengo de otra porque aun no se cual es
-    std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> sendQueue; 
-    Receiver receiver; 
+    // mapa de gameloops va aqui, referencia
+    BlockingQueue<std::unique_ptr<Command>>* gameQueue;  // No tengo de otra porque aun no se cual
+                                                         // es
+    std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> sendQueue;
+    Receiver receiver;
     Sender sender;
 
 public:
@@ -22,5 +24,4 @@ public:
     bool isConnected();
 
     ~VirtualClient();
-
 };

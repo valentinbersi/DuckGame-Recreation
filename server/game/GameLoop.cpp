@@ -62,6 +62,4 @@ void GameLoop::addClient(const u16 clientID,
     game.addPlayer(clientID);
 }
 
-BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue(){
-    return &clientCommands;
-}
+BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCommands; }

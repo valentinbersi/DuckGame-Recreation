@@ -27,7 +27,7 @@ signals:
 
 private:
     Ui::configurationPage* ui;
-    QButtonGroup *CantidadPlayersGroup;
+    QButtonGroup* CantidadPlayersGroup;
 };
 
 #endif  // DUCKGAME_CONFIGURATIONPAGE_H

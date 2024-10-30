@@ -1,8 +1,12 @@
 #include "Spritesheet.h"
 
-Spritesheet::Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer& renderer, SDL2pp::Texture& m_texture_image, SDL2pp::Texture& m_texture_feathers)
-                        : m_texture_image(m_texture_image), m_texture_feathers(m_texture_feathers), renderer(renderer), path1(path1), path2(path2)
-{
+Spritesheet::Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer& renderer,
+                         SDL2pp::Texture& m_texture_image, SDL2pp::Texture& m_texture_feathers):
+        m_texture_image(m_texture_image),
+        m_texture_feathers(m_texture_feathers),
+        renderer(renderer),
+        path1(path1),
+        path2(path2) {
 
     m_spritesheet_image = IMG_Load(path1);
     m_spritesheet_feathers = IMG_Load(path2);
@@ -23,7 +27,8 @@ void Spritesheet::selectSprite(int x, int y, bool feathers) {
     m_clip.y = y * m_clip.h;
 }
 
-void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool feathers, bool isRightFeather) {
+void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool feathers,
+                                     bool isRightFeather) {
     SDL2pp::Texture m_texture_image(renderer, path1);
     SDL2pp::Texture m_texture_feathers(renderer, path2);
 
@@ -31,21 +36,19 @@ void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool fea
     if (feathers) {
         if (isRightFeather) {
             // Adjust position for the right feather
-            position.x += m_clip.w; // Example adjustment, change as needed
+            position.x += m_clip.w;  // Example adjustment, change as needed
         } else {
             // Adjust position for the left feather
-            position.x -= m_clip.w; // Example adjustment, change as needed
+            position.x -= m_clip.w;  // Example adjustment, change as needed
         }
-        SDL_RenderCopyEx(renderer.Get(), m_texture_feathers.Get(), &m_clip, &position, 0.0, nullptr, flipType);
+        SDL_RenderCopyEx(renderer.Get(), m_texture_feathers.Get(), &m_clip, &position, 0.0, nullptr,
+                         flipType);
     } else {
-        SDL_RenderCopyEx(renderer.Get(), m_texture_image.Get(), &m_clip, &position, 0.0, nullptr, flipType);
+        SDL_RenderCopyEx(renderer.Get(), m_texture_image.Get(), &m_clip, &position, 0.0, nullptr,
+                         flipType);
     }
 }
 
-int Spritesheet::getClipWidth() const {
-    return m_clip.w;
-}
+int Spritesheet::getClipWidth() const { return m_clip.w; }
 
-int Spritesheet::getClipHeight() const {
-    return m_clip.h;
-}
+int Spritesheet::getClipHeight() const { return m_clip.h; }
