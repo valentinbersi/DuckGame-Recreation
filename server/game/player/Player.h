@@ -1,8 +1,9 @@
 #pragma once
 
+#include "CollisionObject2D.h"
 #include "Input.h"
 
-class Player /*: public ¿Object2D? */ {
+class Player: public CollisionObject2D {
     Input input;
 
 public:
@@ -29,4 +30,9 @@ public:
      * does nothing
      */
     void stopMoveLeft();
+
+    void start() override;
+    void update(float delta) override;
+    void updateInternal(float delta) override;
+    ~Player() override;
 };
