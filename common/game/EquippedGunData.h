@@ -1,7 +1,8 @@
 #pragma once
-#include "Types.h"
 #include <cstdint>
 #include <string>
+
+#include "Types.h"
 
 using u8 = std::uint8_t;
 
