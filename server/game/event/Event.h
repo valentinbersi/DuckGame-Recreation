@@ -3,23 +3,19 @@
 #include <forward_list>
 #include <functional>
 
+#include <bits/ranges_algo.h>
+
 #include "Types.h"
 
 /**
- * A class for referencing different template instantiation of events
+ * A struct for referencing different template instantiation of events
  */
-class EventBase {
+struct EventBase {
     EventBase() = default;
     EventBase(const EventBase& other) = default;
     EventBase& operator=(const EventBase& other) = default;
-    EventBase(EventBase&& other) = default;
-    EventBase& operator=(EventBase&& other) = default;
-
-    // This class is only meant to be inherited by Event
-    template <typename... Args>
-    friend class Event;
-
-public:
+    EventBase(EventBase&& other) noexcept = default;
+    EventBase& operator=(EventBase&& other) noexcept = default;
     virtual ~EventBase() = default;
 };
 
@@ -29,6 +25,8 @@ public:
  */
 template <typename... Args>
 class Event final: public EventBase {
+    std::forward_list<Callable<Args...>> callables;
+
 public:
     Event() noexcept;
     Event(const Event& other) noexcept;
@@ -48,9 +46,6 @@ public:
      * @param args The arguments to pass to the callables
      */
     void fire(Args... args);
-
-private:
-    std::forward_list<Callable<Args...>> callables;
 };
 
 template <typename... Args>
@@ -90,6 +85,6 @@ void Event<Args...>::connect(Callable<Args...> callable) {
 
 template <typename... Args>
 void Event<Args...>::fire(Args... args) {
-    std::for_each(callables.begin(), callables.end(),
-                  [&args...](Callable<Args...>& callable) { callable(args...); });
+    std::ranges::for_each(callables,
+                          [&args...](Callable<Args...>& callable) { callable(args...); });
 }
