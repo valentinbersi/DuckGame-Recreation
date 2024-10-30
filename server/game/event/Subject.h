@@ -1,8 +1,8 @@
 #pragma once
 
-#include <memory>
 #include <stdexcept>
 #include <string>
+#include <utility>
 
 #include "Event.h"
 #include "Types.h"
