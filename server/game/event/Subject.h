@@ -79,12 +79,21 @@ public:
     /**
      * Connect a callable to the event with the given name
      * @param to The name of the event
+     * @param callableID The id of the callable
      * @param callable The callable to connect
      * @tparam Args The types of the arguments to pass to the callable
      * @throws UnregisteredEvent If the event is not registered
      */
     template <typename... Args>
-    void connect(const std::string& to, Callable<Args...> callable);
+    void connect(const std::string& to, std::string callableID, Callable<Args...> callable);
+
+    /**
+     * Disconnect the given callable from the event with the given name
+     * @param from The name of the event
+     * @param callableID The id of the callable
+     * @throws UnregisteredEvent If the event is not registered
+     */
+    void disconnect(const std::string& from, const std::string& callableID);
 };
 
 template <typename... Args>
@@ -93,19 +102,6 @@ void Subject::registerEvent(std::string name) {
         throw AlreadyRegisteredEvent(name);
 
     events.insert(std::make_pair<std::string, EventBase*>(std::move(name), new Event<Args...>()));
-}
-
-template <typename... Args>
-void Subject::connect(const std::string& to, Callable<Args...> callable) {
-    if (const auto it = events.find(to); it != events.end()) {
-        if (auto event = dynamic_cast<Event<Args...>*>(it->second))
-            event->connect(callable);
-        else
-            throw InvalidEvent();
-
-    } else {
-        throw UnregisteredEvent(to);
-    }
 }
 
 template <typename... Args>
@@ -118,5 +114,18 @@ void Subject::fire(const std::string& name, Args... args) {
 
     } else {
         throw UnregisteredEvent(name);
+    }
+}
+
+template <typename... Args>
+void Subject::connect(const std::string& to, std::string callableID, Callable<Args...> callable) {
+    if (const auto it = events.find(to); it != events.end()) {
+        if (auto event = dynamic_cast<Event<Args...>*>(it->second))
+            event->connect(std::move(callableID), std::move(callable));
+        else
+            throw InvalidEvent();
+
+    } else {
+        throw UnregisteredEvent(to);
     }
 }
