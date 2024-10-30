@@ -14,7 +14,7 @@ float GameLoop::calculateDeltaTime() {
     const u64 frameTicks = SDL_GetTicks64();
     const u64 deltaTime = frameTicks - prevTicks;
     prevTicks = frameTicks;
-    return static_cast<f32>(deltaTime) * MILI_TO_SECS;
+    return static_cast<float>(deltaTime) * MILI_TO_SECS;
 }
 
 void GameLoop::retrieveCurrentFrameCommands() {
