@@ -1,7 +1,7 @@
 #pragma once
 #include "GameLoop.h"
 #include "GameStatus.h"
-#include "ClientMessage.h"
+#include "Message.h"
 #include "LobbyMessage.h"
 #include "GameMessage.h" 
 #include "GameMapMonitor.h"

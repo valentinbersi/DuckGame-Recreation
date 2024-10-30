@@ -2,7 +2,7 @@
 
 #define ERROR_MSG "UNOWN ERROR DURING RUNTIME."
 
-CommunicatorSender::CommunicatorSender(ActiveSocket& socket, BlockingQueue<ClientMessage>& queue) : 
+CommunicatorSender::CommunicatorSender(ActiveSocket& socket, BlockingQueue<Message>& queue) : 
                                         sendProtocol(socket),
                                         sendQueue(queue) {}
 

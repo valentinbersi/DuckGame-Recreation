@@ -3,7 +3,7 @@
 
 ClientSendProtocol::ClientSendProtocol(ActiveSocket& socket): SendProtocol(socket) {}
 
-void ClientSendProtocol::sendMessage(const ClientMessage& message) {
+void ClientSendProtocol::sendMessage(const Message& message) {
     if(message.type == MessageType::Game){
         const GameMessage* msg = dynamic_cast<const GameMessage*>(&message);
         sendByte(msg->action);

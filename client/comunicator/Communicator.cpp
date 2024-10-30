@@ -10,7 +10,7 @@ Communicator::Communicator(ActiveSocket&& socket) : skt(std::move(socket)),
     receiver.start();     
 }
 
-bool Communicator::trysend(const ClientMessage& message){
+bool Communicator::trysend(const Message& message){
     return sendQueue.try_push(message);
 }
 
