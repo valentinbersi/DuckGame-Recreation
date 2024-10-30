@@ -1,5 +1,8 @@
 #include "Object.h"
 
+#include <memory>
+#include <utility>
+
 #include <bits/ranges_algo.h>
 
 #define CHILD_ADDED_NAME "ChildAdded"
