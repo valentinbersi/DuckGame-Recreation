@@ -1,4 +1,4 @@
-#include "GameStatus.hpp"
+#include "GameStatus.h"
 
 #include <utility>
 

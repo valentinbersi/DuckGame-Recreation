@@ -2,10 +2,9 @@
 
 #include <list>
 
-#include <GameStatus.hpp>
-
 #include "BlockingQueue.h"
 #include "GameController.h"
+#include "GameStatus.h"
 #include "Thread.h"
 
 class Command;

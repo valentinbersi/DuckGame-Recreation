@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "ActiveSocket.h"
-#include "GameStatus.hpp"
+#include "GameStatus.h"
 #include "GameObjectData.h"
 #include "DuckData.h"
 #include "SendProtocol.h"

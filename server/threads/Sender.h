@@ -2,7 +2,7 @@
 #include "ServerSendProtocol.h"
 #include "BlockingQueue.h"
 #include "ActiveSocket.h"
-#include "GameStatus.hpp"
+#include "GameStatus.h"
 #include "Thread.h"
 
 class Sender: public Thread {
