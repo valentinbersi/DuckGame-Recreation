@@ -4,15 +4,15 @@
 #include "ClientMessage.h"
 #include "LobbyMessage.h"
 #include "GameMessage.h" 
-#include "ThreadSafeHashMap.h"
+#include "GameMapMonitor.h"
 #include "BlockingQueue.h"
 #include <memory>
 #include "Types.h"
 
 class LobbyResolver{
 private:
-    ThreadSafeMap<u16, std::unique_ptr<GameLoop>>& gameMap;
-    std::weak_ptr<BlockingQueue<GameStatus>> senderQueue;
+    GameMapMonitor& gameMap;
+    std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> senderQueue;
     BlockingQueue<std::unique_ptr<Command>>* recvQueue; //empieza en nullptr
 
     void resolveNewMatch();
@@ -22,8 +22,8 @@ private:
     void resolverStartMatch();
 
 public:
-    LobbyResolver(ThreadSafeMap<u16, std::unique_ptr<GameLoop>>& gameMap,
-                  std::weak_ptr<BlockingQueue<GameStatus>> senderQueue,
+    LobbyResolver(GameMapMonitor& gameMap,
+                  std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> senderQueue,
                   BlockingQueue<std::unique_ptr<Command>>* recvQueue);
 
     void resolveRequest(const LobbyMessage& request);

@@ -10,6 +10,8 @@ void ClientSendProtocol::sendMessage(const ClientMessage& message) {
     } else {
         const LobbyMessage* msg = dynamic_cast<const LobbyMessage*>(&message);
         sendByte(msg->request);
+        sendString(msg->usrName);
+        sendShort(msg->matchId);
     }
     
 }

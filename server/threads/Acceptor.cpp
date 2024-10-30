@@ -2,7 +2,7 @@
 #include "Acceptor.h"
 #include "LibError.h"
 
-Acceptor::Acceptor(std::string& hostname): acceptorSocket(hostname.c_str()), clientes() {}
+Acceptor::Acceptor(std::string& hostname, GameMapMonitor& monitor): acceptorSocket(hostname.c_str()), gamesMonitor(monitor), clientes() {}
 
 bool Acceptor::removeIfNotConnected(VirtualClient& client){
     return !client.isConnected();
@@ -16,7 +16,7 @@ void Acceptor::run() {
     try{
         while(_keep_running){
             ActiveSocket peer = acceptorSocket.accept();
-            clientes.emplace_back(std::move(peer) /*, gameMap*/);
+            clientes.emplace_back(std::move(peer), gamesMonitor);
             reapDead();
         }
     }catch(const LibError& err){

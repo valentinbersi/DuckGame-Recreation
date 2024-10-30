@@ -1,7 +1,7 @@
 #include "LobbyResolver.h"
 
-LobbyResolver::LobbyResolver(ThreadSafeMap<u16, std::unique_ptr<GameLoop>>& gameMap,
-                            std::weak_ptr<BlockingQueue<GameStatus>> senderQueue,
+LobbyResolver::LobbyResolver(GameMapMonitor& gameMap,
+                            std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> senderQueue,
                             BlockingQueue<std::unique_ptr<Command>>* recvQueue):
                             
                             gameMap(gameMap),
@@ -10,10 +10,10 @@ LobbyResolver::LobbyResolver(ThreadSafeMap<u16, std::unique_ptr<GameLoop>>& game
 
 void LobbyResolver::resolveRequest(const LobbyMessage& message){
     if (message.request == LobbyRequest::NEWMATCH) {
-
+        gameMap.insertSafe();
     }else if(message.request == LobbyRequest::JOINMATCH){
-
+        gameMap.accessIfPresent();
     }else{ // start game
-        
+        gameMap.startIfPresent();
     }
 }
