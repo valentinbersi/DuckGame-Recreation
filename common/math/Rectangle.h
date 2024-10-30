@@ -22,7 +22,7 @@ class Rectangle final: public Shape2D {
      * Get the corners of the rectangle
      * @return The corners of the rectangle
      */
-    [[nodiscard]] std::array<Vector2, VertexAmount> getCorners() const;
+    [[nodiscard]] std::array<Vector2, VertexAmount> vertices() const;
 
 public:
     struct Vertex {
