@@ -8,10 +8,10 @@
 class Sender: public Thread {
 private:
     ServerSendProtocol sendProtocol;
-    BlockingQueue<std::shared_ptr<GameStatus>>& sendQueue;
+    std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>>& sendQueue;
 
 public:
-    Sender(ActiveSocket& socket, BlockingQueue<std::shared_ptr<GameStatus>>& queue);
+    Sender(ActiveSocket& socket, std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>>& queue);
 
     virtual void run() override;
 

@@ -2,6 +2,7 @@
 #include "Thread.h"
 #include "ListenerSocket.h"
 #include "VClient.h"
+#include "GameMapMonitor.h"
 #include "ThreadSafeHashMap.h"
 #include "GameLoop.hpp"
 #include <list>
@@ -10,13 +11,13 @@
 
 class Acceptor: public Thread{
 private:
-    // ThreadSafeHashMap<>
     ListenerSocket acceptorSocket;
+    GameMapMonitor& gamesMonitor;
     std::list<VirtualClient> clientes;
     bool removeIfNotConnected(VirtualClient& client);
     void reapDead();
 public:
-    Acceptor(std::string& hostname);
+    Acceptor(std::string& hostname,  GameMapMonitor& monitor);
 
     virtual void run() override;
 

@@ -2,10 +2,10 @@
 #include "Receiver.h"
 
 Receiver::Receiver(ActiveSocket& socket, BlockingQueue<std::unique_ptr<Command>>* queue_ptr,
-                   BlockingQueue<std::unique_ptr<GameStatus>> queueSender /*mapa de partidas.*/): 
+                   std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> queueSender, GameMapMonitor& monitor): 
     recvProtocol(socket),
     gameQueue(queue_ptr),
-    lobby(/*queue del sender y el mapa.*/) {}
+    lobbyResolver(monitor, queueSender, queue_ptr) {}
 
 void Receiver::run(){
     try{

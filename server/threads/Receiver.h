@@ -3,19 +3,20 @@
 #include "ServerRecvProtocol.h"
 #include "BlockingQueue.h"
 #include "ClientMessage.h"
-#include "LobbyManager.h"
+#include "LobbyResolver.h"
 #include "Command.h"
 #include <memory>
+#include "GameMapMonitor.h"
 
 class Receiver: public Thread{
 private:
     ServerRecvProtocol recvProtocol;
     BlockingQueue<std::unique_ptr<Command>>* gameQueue;
-    Lobby lobby; 
+    LobbyResolver lobbyResolver; 
     // CommnadFactory factory;
 public:
     Receiver(ActiveSocket& socket, BlockingQueue<std::unique_ptr<Command>>* queueRecv,
-             BlockingQueue<std::unique_ptr<GameStatus>> queueSender /*mapa de partidas.*/);
+             std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> queueSender, GameMapMonitor& monitor);
 
     virtual void run() override;
 
