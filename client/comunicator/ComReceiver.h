@@ -1,7 +1,7 @@
 #pragma once
 #include "Thread.h"
 #include "BlockingQueue.h"
-#include "GameStatus.hpp"
+#include "GameStatus.h"
 #include "ActiveSocket.h"
 #include "ClientRecvProtocol.h"
 #include "LibError.h"

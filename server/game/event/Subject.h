@@ -1,8 +1,8 @@
 #pragma once
 
-#include <memory>
 #include <stdexcept>
 #include <string>
+#include <utility>
 
 #include "Event.h"
 #include "Types.h"
@@ -12,7 +12,7 @@
  * register observers, but callables.
  */
 class Subject {
-    HashMap<std::string, std::unique_ptr<EventBase>> events;
+    HashMap<std::string, EventBase*> events;
 
 protected:
     /**
@@ -26,9 +26,9 @@ protected:
     /**
      * Thrown when trying to connect or emit a signal with a different signature
      */
-    class InvalidSignal final: public std::runtime_error {
+    class InvalidEvent final: public std::runtime_error {
     public:
-        explicit InvalidSignal();
+        explicit InvalidEvent();
     };
 
     /**
@@ -38,7 +38,7 @@ protected:
      * @throws AlreadyRegisteredEvent if there's already an event with this name
      */
     template <typename... Args>
-    void registerEvent(const std::string& name);
+    void registerEvent(std::string name);
 
     /**
      * Unregister an event with the given name
@@ -55,10 +55,10 @@ protected:
      * specify these because the compiler can infer them, but sometimes types like const char*
      * and std::string are confused.
      * @throws UnregisteredEvent If the event is not registered
-     * @throws InvalidSignal If the event has different arguments
+     * @throws InvalidEvent If the event has different arguments
      * */
     template <typename... Args>
-    void emit(const std::string& name, Args... args);
+    void fire(const std::string& name, Args... args);
 
 public:
     /**
@@ -74,6 +74,7 @@ public:
     Subject& operator=(const Subject& other);
     Subject(Subject&& other) noexcept;
     Subject& operator=(Subject&& other) noexcept;
+    ~Subject();
 
     /**
      * Connect a callable to the event with the given name
@@ -87,20 +88,20 @@ public:
 };
 
 template <typename... Args>
-void Subject::registerEvent(const std::string& name) {
-    if (events.find(name) == events.cend())
+void Subject::registerEvent(std::string name) {
+    if (!events.contains(name))
         throw AlreadyRegisteredEvent(name);
 
-    events[name] = std::make_unique<Event<Args...>>();
+    events.insert(std::make_pair<std::string, EventBase*>(std::move(name), new Event<Args...>()));
 }
 
 template <typename... Args>
 void Subject::connect(const std::string& to, Callable<Args...> callable) {
     if (const auto it = events.find(to); it != events.end()) {
-        if (auto signal = dynamic_cast<Event<Args...>*>(it->second.get()))
-            signal->connect(callable);
+        if (auto event = dynamic_cast<Event<Args...>*>(it->second))
+            event->connect(callable);
         else
-            throw InvalidSignal();
+            throw InvalidEvent();
 
     } else {
         throw UnregisteredEvent(to);
@@ -108,12 +109,12 @@ void Subject::connect(const std::string& to, Callable<Args...> callable) {
 }
 
 template <typename... Args>
-void Subject::emit(const std::string& name, Args... args) {
+void Subject::fire(const std::string& name, Args... args) {
     if (const auto it = events.find(name); it != events.end()) {
-        if (auto signal = dynamic_cast<Event<Args...>*>(it->second.get()))
-            signal->emit(args...);
+        if (auto event = dynamic_cast<Event<Args...>*>(it->second))
+            event->fire(args...);
         else
-            throw InvalidSignal();
+            throw InvalidEvent();
 
     } else {
         throw UnregisteredEvent(name);

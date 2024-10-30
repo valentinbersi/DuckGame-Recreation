@@ -1,5 +1,7 @@
 #include "Input.h"
 
+#include <utility>
+
 void Input::setAction(const InputName& action, const bool value) {
     const auto input = inputs.find(action);
 

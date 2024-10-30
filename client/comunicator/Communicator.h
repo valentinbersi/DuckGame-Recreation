@@ -4,7 +4,7 @@
 #include "ActiveSocket.h"
 #include "ComReceiver.h"
 #include "ComSender.h"
-#include "GameStatus.hpp"
+#include "GameStatus.h"
 #include "ClientMessage.h"
 
 #include <iostream>

@@ -1,6 +1,6 @@
 #include "DuckData.h"
 
-#include <sstream>
+#include <utility>
 
 DuckData::DuckData(DuckData&& other) noexcept:
         GameObject2DData(std::move(other)),

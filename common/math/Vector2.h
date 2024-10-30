@@ -123,6 +123,13 @@ public:
     [[nodiscard]] float distance(const Vector2& v) const;
 
     /**
+     * Get the squared distance between this vector and v. Faster than distance() for comparisons.
+     * @param v The other vector
+     * @return The squared distance between this vector and v
+     */
+    [[nodiscard]] float distanceSquared(const Vector2& v) const;
+
+    /**
      * Get the dot product of this vector and v
      * @param v The other vector
      * @return The dot product of this vector and v

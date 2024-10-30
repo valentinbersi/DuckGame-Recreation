@@ -13,6 +13,7 @@ class Object2D: public Object {
     Vector2 _position;
     float _rotation;
 
+protected:
     /**
      * Initialize an Object2D with a parent
      * @param parent The parent of the object

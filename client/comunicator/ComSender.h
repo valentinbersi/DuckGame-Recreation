@@ -5,8 +5,7 @@
 #include "BlockingQueue.h"
 #include "ActiveSocket.h"
 #include "ComReceiver.h"
-#include "GameStatus.hpp"
-#include "ClientSendProtocol.h"
+#include "GameStatus.h"
 
 class CommunicatorSender: public Thread{
 private:
@@ -15,9 +14,9 @@ private:
     BlockingQueue<ClientMessage>& sendQueue;
     
 public:
-    CommunicatorSender(ActiveSocket& socket, BlockingQueue<ClientMessage>& queue);
+    explicit CommunicatorSender(ActiveSocket& socket, BlockingQueue<ClientMessage>& queue);
 
-    void run() override;
+    virtual void run() override;
 
     void stop() override;
 

@@ -1,4 +1,6 @@
-#include "GameStatus.hpp"
+#include "GameStatus.h"
+
+#include <utility>
 
 GameStatus::GameStatus() = default;
 

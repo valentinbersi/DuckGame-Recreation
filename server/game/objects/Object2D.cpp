@@ -1,5 +1,7 @@
 #include "Object2D.h"
 
+#include <utility>
+
 Object2D::Object2D(Object* parent): Object2D(parent, {0, 0}, 0) {}
 
 Object2D::Object2D(Object* parent, Vector2 position, const float rotation): Object(parent) {

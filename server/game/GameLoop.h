@@ -3,17 +3,16 @@
 #include <list>
 
 #include "BlockingQueue.h"
+#include "GameController.h"
+#include "GameStatus.h"
 #include "Thread.h"
 
-// Place holder for commands
 class Command;
-class GameController {};
-class GameStatus;
 
 class GameLoop final: public Thread {
     constexpr static std::uint8_t FRAME_TIMES_AMOUNT = 2;
 
-    std::list<std::weak_ptr<BlockingQueue<GameStatus>>> clientQueues{};
+    std::list<std::weak_ptr<BlockingQueue<std::shared_ptr<GameStatus>>>> clientQueues{};
     BlockingQueue<Command*> clientCommands;
     std::queue<Command*> currentFrameCommands;
     GameController game;
@@ -23,7 +22,7 @@ class GameLoop final: public Thread {
      * Calculate the time between the previous frame and the current frame
      * @return the time between the previous frame and the current frame in seconds
      */
-    double calculateDeltaTime();
+    float calculateDeltaTime();
 
     /**
      * Retrieve all the commands the clients send between the previous frame and the current frame
@@ -53,8 +52,9 @@ public:
 
     /**
      * Add a client queue to the list of client queues
-     * @param clientID the client ID to add
-     * @param clientQueue the client queue to add
+     * @param clientID the id of the client to add
+     * @param clientQueue the queue of the client to add
      */
-    void addClient(std::uint16_t clientID, std::weak_ptr<BlockingQueue<GameStatus>> clientQueue);
+    void addClient(u16 clientID,
+                   std::weak_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> clientQueue);
 };

@@ -1,5 +1,9 @@
 #include "Subject.h"
 
+#include <utility>
+
+#include <bits/ranges_algo.h>
+
 #define INVALID_EVENT                                                                    \
     "The signal you are trying to connect/call has a different signature.\n"             \
     "If you are sending the arguments correctly to connect()/emit(), either explicitly " \
@@ -33,10 +37,14 @@ Subject& Subject::operator=(Subject&& other) noexcept {
     return *this;
 }
 
+Subject::~Subject() {
+    std::ranges::for_each(events, [](const auto& pair) { delete pair.second; });
+}
+
 Subject::AlreadyRegisteredEvent::AlreadyRegisteredEvent(const std::string& eventName):
         std::invalid_argument("Event " + eventName + " is already registered for this subject") {}
 
-Subject::InvalidSignal::InvalidSignal(): std::runtime_error(INVALID_EVENT) {}
+Subject::InvalidEvent::InvalidEvent(): std::runtime_error(INVALID_EVENT) {}
 
 void Subject::unregisterEvent(const std::string& name) {
     if (const size_t deleted = events.erase(name); deleted == 0)

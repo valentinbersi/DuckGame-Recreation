@@ -2,7 +2,7 @@
 #include "ReceiveProtocol.h"
 #include "ActiveSocket.h"
 #include "Types.h"
-#include "GameStatus.hpp"
+#include "GameStatus.h"
 #include "DuckData.h"
 #include "Math.h"
 

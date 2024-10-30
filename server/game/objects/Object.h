@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <unordered_map>
 
@@ -28,6 +29,13 @@ protected:
      * @return A ptr to the child
      */
     Object* getChild(const std::string& name) const;
+
+    /**
+     * Add a child to the object
+     * @param name The name of the child. If the name is already taken, an exception is thrown.
+     * @param newChild The child to add.
+     */
+    void addChild(std::string name, Object* newChild);
 
     /**
      * Get the parent of the object.

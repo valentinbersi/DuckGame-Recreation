@@ -1,21 +1,35 @@
 #pragma once
 
+#include "Object.h"
 #include "Player.h"
-#include "Startable.h"
-#include "ThreadSafeHashMap.h"
-#include "Updatable.h"
 
 typedef std::uint16_t PlayerID;
 
-class GameController final: public Startable, public Updatable {
-    HashMap<PlayerID, Player> players;
+class GameController final: public Object {
+    HashMap<PlayerID, Player*> players;
 
 public:
+    GameController();
+    GameController(const GameController&) = delete;
+    GameController& operator=(const GameController&) = delete;
+    GameController(GameController&&) noexcept = delete;
+    GameController& operator=(GameController&&) noexcept = delete;
     ~GameController() override;
 
+    /**
+     * Start the match
+     */
     void start() override;
 
+    /**
+     * Update the match
+     * @param delta Time since the last update
+     */
     void update(float delta) override;
 
-    void updateInternal(float delta) override;
+    /**
+     * Add a player to the match
+     * @param playerID the id of the player to add
+     */
+    void addPlayer(PlayerID playerID);
 };

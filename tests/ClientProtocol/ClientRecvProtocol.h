@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ActiveSocket.h"
-#include "GameStatus.hpp"
+#include "GameStatus.h"
 #include "ReceiveProtocol.h"
 #include "Types.h"
 

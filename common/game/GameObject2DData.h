@@ -1,9 +1,10 @@
 #pragma once
 
-#include "GameObjectData.h"
-#include "Vector2.h"
 #include <cstdint>
 #include <memory>
+
+#include "GameObjectData.h"
+#include "Vector2.h"
 
 using u8 = std::uint8_t;
 
