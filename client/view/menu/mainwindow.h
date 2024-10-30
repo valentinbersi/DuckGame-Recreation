@@ -9,7 +9,6 @@
 #include "pages/configurationpage.h"
 #include "pages/joingame.h"
 #include "pages/mainmenu.h"
-#include "pages/matchstarted.h"
 #include "pages/newgame.h"
 
 QT_BEGIN_NAMESPACE
@@ -29,22 +28,20 @@ private:
     QPointer<configurationPage> config;
     QPointer<joinGame> join_game;
     QPointer<newGame> new_game;
-    QPointer<matchStarted> match_started;
 
     void setPagesAndConnections();
-    void irASeleccionJugadores();
-    void salirDelJuego();
+    void exitTheGame();
     void createAMatch();
     void joinAMatch();
-    void previousMenu();
     void startGame();
+    void changePage(QWidget* page);
 
 signals:
     void initMatch();
 
 
 public:
-    MainWindow(QWidget* parent);
+    explicit MainWindow(QWidget* parent);
     ~MainWindow() override;
 };
 

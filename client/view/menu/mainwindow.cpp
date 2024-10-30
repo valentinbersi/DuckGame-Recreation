@@ -3,7 +3,6 @@
 #include <QDebug>
 #include <QDir>
 
-#include "LobbyQT.h"
 #include "common_init.h"
 #include "ui_mainwindow.h"
 
@@ -12,22 +11,21 @@ void MainWindow::setPagesAndConnections() {
     ui->stackedWidget->addWidget(config);
     ui->stackedWidget->addWidget(join_game);
     ui->stackedWidget->addWidget(new_game);
-    ui->stackedWidget->addWidget(match_started);
 
     ui->stackedWidget->setCurrentWidget(menu);
 
-    connect(menu, &mainMenu::play, this, &MainWindow::irASeleccionJugadores);
-    connect(menu, &mainMenu::exit, this, &MainWindow::salirDelJuego);
+    connect(menu, &mainMenu::play, this, [this]() { changePage(config); });
+    connect(menu, &mainMenu::exit, this, &MainWindow::exitTheGame);
 
     connect(config, &configurationPage::joinGameClicked, this, &MainWindow::joinAMatch);
     connect(config, &configurationPage::newGameClicked, this, &MainWindow::createAMatch);
-    connect(config, &configurationPage::backClicked, this, &MainWindow::previousMenu);
+    connect(config, &configurationPage::backClicked, this, [this]() { changePage(menu); });
 
     connect(new_game, &newGame::playMatchClicked, this, &MainWindow::startGame);
-    connect(new_game, &newGame::backClicked, this, &MainWindow::previousMenu);
+    connect(new_game, &newGame::backClicked, this, [this]() { changePage(config); });
 
     connect(join_game, &joinGame::playMatchClicked, this, &MainWindow::startGame);
-    connect(join_game, &joinGame::backClicked, this, &MainWindow::previousMenu);
+    connect(join_game, &joinGame::backClicked, this, [this]() { changePage(config); });
 }
 
 MainWindow::MainWindow(QWidget* parent)
@@ -35,13 +33,12 @@ MainWindow::MainWindow(QWidget* parent)
     , ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    common_init(this, ":/backgrounds/duck-game.png"); // ver si va o no
+    common_init(this, ":/backgrounds/duck-game.png");
 
     menu = new mainMenu(this);
     config = new configurationPage(this);
     join_game = new joinGame(this);
     new_game = new newGame(this);
-    match_started = new matchStarted(this);
 
     setPagesAndConnections();
 }
@@ -50,11 +47,11 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::irASeleccionJugadores() {
-    ui->stackedWidget->setCurrentIndex(1); // esto es para ir a la pagina 1 del menu (estaria en la 0)
+void MainWindow::changePage(QWidget* page) {
+    ui->stackedWidget->setCurrentWidget(page);
 }
 
-void MainWindow::salirDelJuego() {
+void MainWindow::exitTheGame() {
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "Salir", "¿Seguro que querés salir?", QMessageBox::Yes | QMessageBox::No);
 
@@ -68,32 +65,20 @@ void MainWindow::createAMatch() {
     if (playersNumbers == -1) { // esto creo que aca no deberia estar, sino en config
         QMessageBox::warning(this, "Error", "Seleccioná si vas a jugar con 1 o 2 jugadores antes de continuar");
     } else {
-        //QMessageBox::information(this, "Crear Partida", QString("Partida creada para %1 jugador(es)").arg(cantJugadores));
-        ui->stackedWidget->setCurrentIndex(3);
+        changePage(new_game);
     }
 }
-
-// PODRIA UNIR ESTAS DOS FUNCIONES Y LLAMARLAS CON EL INDEX DE PARAMETRO
 
 void MainWindow::joinAMatch() {
     int playersNumbers = config->getSelectedPlayers();
     if (playersNumbers == -1) { // esto creo que aca no deberia estar, sino en config
         QMessageBox::warning(this, "Error", "Seleccioná si vas a jugar con 1 o 2 jugadores antes de continuar");
     }else {
-        ui->stackedWidget->setCurrentIndex(2);
+        changePage(join_game);
     }
 }
 
-void MainWindow::previousMenu() {
-    int menuActual = ui->stackedWidget->currentIndex();
-    if (menuActual == 1)
-        ui->stackedWidget->setCurrentIndex(0);
-    if (menuActual == 2 || menuActual == 3)
-        ui->stackedWidget->setCurrentIndex(1);
-}
-
 void MainWindow::startGame() {
-    //ui->stackedWidget->setCurrentIndex(4);
     emit initMatch();
     close();
     QCoreApplication::exit(0);
