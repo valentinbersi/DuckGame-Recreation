@@ -1,4 +1,4 @@
-#include "GameLoop.hpp"
+#include "GameLoop.h"
 
 #include <memory>
 #include <utility>

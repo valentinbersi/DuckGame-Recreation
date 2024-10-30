@@ -1,5 +1,5 @@
 #pragma once
-#include "GameLoop.hpp"
+#include "GameLoop.h"
 #include "GameStatus.hpp"
 #include "ClientMessage.h"
 #include "LobbyMessage.h"
