@@ -1,5 +1,7 @@
 #include "Player.h"
 
+#include <memory>
+
 #include "Capsule.h"
 
 #define MOVE_RIGHT "Move Right"
