@@ -18,7 +18,7 @@ CollisionObject2D::CollisionObject2D(Object* parent, Vector2 position, const flo
         _collisionLayer(collisionLayer),
         _collisionMask(collisionMask),
         _shape(shape.release()) {
-    registerEvent<CollisionObject2D&>("bodyEntered");
+    registerEvent<CollisionObject2D, CollisionObject2D&>("bodyEntered");
 }
 
 u32 CollisionObject2D::collisionLayer() const { return _collisionLayer; }
@@ -39,5 +39,5 @@ void CollisionObject2D::deactivateCollisionMask(const u8 layer) {
 
 void CollisionObject2D::collideWith(CollisionObject2D& other) {
     if ((_collisionMask & other.collisionLayer()) != 0 && _shape->intersects(*other._shape))
-        fire<CollisionObject2D&>("bodyEntered", other);
+        fire<CollisionObject2D, CollisionObject2D&>("bodyEntered", other);
 }
