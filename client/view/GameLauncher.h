@@ -12,13 +12,14 @@ class GameLauncher: public QObject {
 private:
     Communicator communicator;
     LobbyQT lobby;
+    bool startGame;
 
 public:
     GameLauncher(int argc, char* argv[], cppstring hostname, cppstring servname);
     void exec();
 
 private slots:
-    void onInitMatch();
+    void startedSDL();
 
 };
 

@@ -28,18 +28,29 @@ GameLauncher::GameLauncher(int argc, char* argv[], cppstring hostname,
                            cppstring servname):
         communicator(hostname, servname),
         lobby(argc, argv, communicator) {
-    connect(&lobby, &LobbyQT::initMatch, this, &GameLauncher::onInitMatch);
+    connect(&lobby, &LobbyQT::initMatch, this, &GameLauncher::startedSDL);
 }
 
 void GameLauncher::exec() {
     lobby.exec();
+
+    if (startGame) {
+        try {
+            Game game(communicator);
+            //two players? lo debo mandar al game
+            //debo recibir la cantidad de patos que hay en la partida para pintar N patos distintos
+            game.init();
+
+            // Here all resources are automatically released and library deinitialized
+            //return 0;
+
+        } catch (std::exception& e) {
+            std::cerr << e.what() << std::endl;
+            //return 1;
+        }
+    }
 }
 
-void GameLauncher::onInitMatch() {
-    try {
-        Game game(communicator);  // Instancia `Game` solo cuando el lobby finaliza
-        game.init();              // Inicia el juego
-    } catch (std::exception& e) {
-        std::cerr << e.what() << std::endl;
-    }
+void GameLauncher::startedSDL() {
+    startGame = true;
 }
