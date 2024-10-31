@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QPointer>
 
+#include "Communicator.h"
 #include "GameInfo.h"
 #include "MyLobbyMessage.h"
 #include "configurationpage.h"
@@ -25,6 +26,7 @@ class MainWindow: public QMainWindow {
 
 private:
     Ui::MainWindow* ui;
+    Communicator& communicator;
 
     QPointer<mainMenu> menu;
     QPointer<configurationPage> config;
@@ -44,7 +46,7 @@ signals:
     void startGame();
 
 public:
-    explicit MainWindow(QWidget* parent);
+    MainWindow(QWidget* parent, Communicator& communicator);
     ~MainWindow() override;
 };
 

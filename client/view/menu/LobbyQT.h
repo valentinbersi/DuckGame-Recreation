@@ -13,8 +13,8 @@ class LobbyQT: public QObject {
 
 private:
     QApplication app;
-    MainWindow mainWindow;
     Communicator& communicator;
+    MainWindow mainWindow;
 
 public:
     LobbyQT(int argc, char* argv[], Communicator& communicator);

@@ -36,13 +36,13 @@ void newGame::verificarDatos() {
 }
 
 void newGame::onPlayClicked() {
-    message.setPlayer1Name(ui->lineEditPlayer1->text().toStdString());
-    message.setPlayer2Name(ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString());
+    message.player1Name = ui->lineEditPlayer1->text().toStdString();
+    message.player2Name = ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString();
 
     QModelIndexList selectedIndexes = ui->mapsList->selectionModel()->selectedIndexes();
     if (!selectedIndexes.isEmpty()) {
         QString selectedMap = selectedIndexes.first().data().toString();
-        message.setMapChosen(selectedMap.toStdString());
+        message.mapChosen = selectedMap.toStdString();
     }
 
     emit playMatchClicked();
