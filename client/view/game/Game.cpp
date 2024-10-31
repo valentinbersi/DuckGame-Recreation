@@ -34,8 +34,8 @@ void Game::init() {
 
     Texture backgroundTexture = startBackground();
     renderer.Present();
-    SDL_Delay(5000);
-    return;
+    //SDL_Delay(5000);
+    //return;
 
     while(running) {
         getSnapshot();           //handle everything sended by the gameloop
@@ -78,11 +78,12 @@ void Game::init() {
 }
 
 void Game::getSnapshot() {
-    GameStatus snapshot;
+    std::unique_ptr<GameStatus> snapshot;
+
     std::optional<std::unique_ptr<Message>> optionalMessage = communicator.tryrecv();
     if (optionalMessage.has_value()) {
         std::unique_ptr<Message> message = std::move(optionalMessage.value());
-        snapshot = std::move(dynamic_cast<GameStatus&>(*message));
+        snapshot = std::unique_ptr<GameStatus>(dynamic_cast<GameStatus*>(message.release()));
     } else {
         return;
     }
@@ -95,7 +96,7 @@ void Game::getSnapshot() {
     // para esto puedo mover punteros para lo que necesito
 
     clearObjects();
-    for (auto& gameObject: snapshot.gameObjects) {
+    for (auto& gameObject: snapshot->gameObjects) {
         switch (gameObject->objectID) {
             case GameObjectID::Object2D: {
                 auto* object2D = dynamic_cast<GameObject2DData*>(gameObject.get());
@@ -115,7 +116,6 @@ void Game::getSnapshot() {
                 break;
         }
     }
-    snapshot.gameObjects.clear();
 }
 
 void Game::updatePlayers(std::unordered_map<DuckID, SpriteManager>& spritesMapping) {

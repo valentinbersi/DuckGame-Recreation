@@ -19,7 +19,7 @@ private:
     Sender sender;
 
 public:
-    VirtualClient(ActiveSocket&& socket, GameMapMonitor& monitor);
+    VirtualClient(ActiveSocket socket, GameMapMonitor& monitor);
 
     bool isConnected();
 
