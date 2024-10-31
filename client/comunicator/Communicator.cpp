@@ -1,7 +1,7 @@
 #include "Communicator.h"
 
-Communicator::Communicator(ActiveSocket&& socket):
-        skt(std::move(socket)),
+Communicator::Communicator(const std::string& hostname, const std::string& servername):
+        skt(hostname.c_str(), servername.c_str()),
         sendQueue(),
         recvQueue(),
         sender(skt, sendQueue),

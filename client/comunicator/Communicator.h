@@ -18,7 +18,7 @@ private:
     CommunicatorReceiver receiver;
 
 public:
-    explicit Communicator(ActiveSocket&& socket);
+    explicit Communicator(const std::string& hostname, const std::string& servername);
 
     bool trysend(std::unique_ptr<Message>&& Message);
 
