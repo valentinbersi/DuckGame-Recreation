@@ -1,14 +1,14 @@
 #pragma once
 
 #include <list>
+#include <memory>
+#include <queue>
 
 #include "BlockingQueue.h"
+#include "Command.h"
 #include "GameController.h"
-#include "GameStatus.h"
 #include "Message.h"
 #include "Thread.h"
-
-class Command;
 
 class GameLoop final: public Thread {
     constexpr static std::uint8_t FRAME_TIMES_AMOUNT = 2;
@@ -17,7 +17,7 @@ class GameLoop final: public Thread {
     BlockingQueue<std::unique_ptr<Command>> clientCommands;
     std::queue<std::unique_ptr<Command>> currentFrameCommands;
     GameController game;
-    std::uint64_t prevTicks;
+    std::chrono::steady_clock::time_point prevTicks;
 
     /**
      * Calculate the time between the previous frame and the current frame

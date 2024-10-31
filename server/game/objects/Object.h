@@ -4,6 +4,9 @@
 #include <string>
 #include <unordered_map>
 
+#include "GameObjectData.h"
+#include "GameStatus.h"
+#include "RefCounted.h"
 #include "Startable.h"
 #include "Subject.h"
 #include "Types.h"
@@ -12,23 +15,31 @@
 /**
  * An object in the game
  */
-class Object: public Subject, public Updatable, public Startable {
+class Object: public Subject, public RefCounted, public Updatable, public Startable {
     Object* _parent;
     HashMap<std::string, Object*> children;
 
+    /**
+     * Called when an object is added to the subtree of this object
+     * @param object The child that was added
+     */
+    void onTreeEntered(Object& object);
+
+    /**
+     * Called when an object is removed from the subtree of this object
+     * @param object The child that was removed
+     */
+    void onTreeExited(Object& object);
+
+
 protected:
+    constexpr static auto INVALID_EVENT_TYPE = "Invalid event type";
+
     /**
      * A constructor for derived classes.
      * Initializes the signals
      */
     explicit Object(Object* parent);
-
-    /**
-     * Get a child of the object.
-     * @param name The name of the child to get
-     * @return A ptr to the child
-     */
-    Object* getChild(const std::string& name) const;
 
     /**
      * Add a child to the object
@@ -38,10 +49,10 @@ protected:
     void addChild(std::string name, Object* newChild);
 
     /**
-     * Get the parent of the object.
-     * @return A ptr to the parent
+     * Get the map of children of the object
+     * @return The map of children
      */
-    Object* parent() const;
+    const HashMap<std::string, Object*>& getChildren() const;
 
 public:
     /**
@@ -60,13 +71,12 @@ public:
         explicit ChildNotInTree(const std::string& name);
     };
 
-    enum class EventTypes { CHILD_ADDED, CHILD_REMOVED };
-
     Object();
     Object(const Object& other);
     Object& operator=(const Object& other);
     Object(Object&& other) noexcept;
     Object& operator=(Object&& other) noexcept;
+    ~Object() override;
 
     /**
      * Updates the children of the object
@@ -86,12 +96,45 @@ public:
      * @param name The name of the child to remove
      * @return A pointer to the removed child
      */
-    std::unique_ptr<Object> removeChild(const std::string& name);
+    void removeChild(const std::string& name);
+
+    /**
+     * Get a child of the object.
+     * @param name The name of the child to get
+     * @return A reference to the child
+     */
+    Object& getChild(const std::string& name) const;
+
+    /**
+     * Get the parent of the object.
+     * @return A reference to the parent
+     */
+    Object& parent() const;
+
+    /**
+     * Get the status of the object
+     * @return The status of the object
+     */
+    virtual GameStatus status() = 0;
+
+    /**
+     * The events the Object class has
+     */
+    enum class Events : u8 {
+        /**
+         * A child entered the tree
+         */
+        TREE_ENTERED,
+        /**
+         * A child exited the tree
+         */
+        TREE_EXITED
+    };
 
     /**
      * Get the event name of an event type
      * @param eventType The event type
      * @return The event name
      */
-    static std::string getEventName(EventTypes eventType);
+    static std::string eventName(Events eventType);
 };

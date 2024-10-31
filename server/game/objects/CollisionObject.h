@@ -5,7 +5,7 @@
 #include "Object2D.h"
 #include "Shape2D.h"
 
-class CollisionObject2D: public Object2D {
+class CollisionObject: public Object2D {
     u32 _collisionLayer;
     u32 _collisionMask;
     Shape2D* _shape;
@@ -15,13 +15,13 @@ protected:
      * Construct a CollisionObject2D with the given parent, position = (0, 0), rotation = 0, scale =
      * (1, 1), collision Layer and Mask = 0
      */
-    explicit CollisionObject2D(Object* parent);
+    explicit CollisionObject(Object* parent);
 
     /**
      * Construct a CollisionObject2D with collision Layer and Mask = 0
      */
-    CollisionObject2D(Object* parent, Vector2 position, float rotation, u32 collisionLayer,
-                      u32 collisionMask, std::unique_ptr<Shape2D> shape);
+    CollisionObject(Object* parent, Vector2 position, float rotation, u32 collisionLayer,
+                    u32 collisionMask, std::unique_ptr<Shape2D> shape);
 
 public:
     /**
@@ -69,5 +69,22 @@ public:
      * with the given CollisionObject as argument
      * @param other the other object to check collision with
      */
-    void collideWith(CollisionObject2D& other);
+    void collideWith(CollisionObject& other);
+
+    /**
+     * The events the CollisionObject class has
+     */
+    enum class Events : u8 {
+        /**
+         * The collisionObject collided with something
+         */
+        COLLISION
+    };
+
+    /**
+     * Get the event name of an event type
+     * @param eventType The event type
+     * @return The event name
+     */
+    static std::string eventName(Events eventType);
 };
