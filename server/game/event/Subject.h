@@ -92,7 +92,7 @@ public:
 
 template <typename Object, typename... Args>
 void Subject::registerEvent(std::string name) {
-    if (!events.contains(name))
+    if (events.contains(name))
         throw AlreadyRegisteredEvent(name);
 
     events.insert({std::move(name), new Event<Object, Args...>()});
