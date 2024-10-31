@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 
+#include "GameObjectData.h"
 #include "RefCounted.h"
 #include "Startable.h"
 #include "Subject.h"
@@ -102,6 +103,12 @@ public:
      * @return A reference to the parent
      */
     Object& parent() const;
+
+    /**
+     * Get the status of the object
+     * @return The status of the object
+     */
+    virtual std::unique_ptr<GameObjectData> status() = 0;
 
     /**
      * The events the Object class has
