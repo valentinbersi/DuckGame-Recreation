@@ -5,14 +5,14 @@
 #include "BlockingQueue.h"
 #include "GameController.h"
 #include "GameStatus.h"
+#include "Command.h"
+#include "Message.h"
 #include "Thread.h"
-
-class Command;
 
 class GameLoop final: public Thread {
     constexpr static std::uint8_t FRAME_TIMES_AMOUNT = 2;
 
-    std::list<std::weak_ptr<BlockingQueue<std::shared_ptr<GameStatus>>>> clientQueues{};
+    std::list<std::weak_ptr<BlockingQueue<std::shared_ptr<Message>>>> clientQueues{};
     BlockingQueue<std::unique_ptr<Command>> clientCommands;
     std::queue<std::unique_ptr<Command>> currentFrameCommands;
     GameController game;
@@ -56,7 +56,7 @@ public:
      * @param clientQueue the queue of the client to add
      */
     void addClient(u16 clientID,
-                   std::weak_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> clientQueue);
+                   std::weak_ptr<BlockingQueue<std::shared_ptr<Message>>> clientQueue);
 
     /**
      * @return the pointer to the gameloop Queue.

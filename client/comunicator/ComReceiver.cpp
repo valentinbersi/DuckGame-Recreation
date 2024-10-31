@@ -2,7 +2,7 @@
 
 #define ERROR_MSG "UNOWN ERROR DURING RUNTIME."
 
-CommunicatorReceiver::CommunicatorReceiver(ActiveSocket& socket, BlockingQueue<GameStatus>& queue):
+CommunicatorReceiver::CommunicatorReceiver(ActiveSocket& socket, BlockingQueue<std::unique_ptr<Message>>& queue):
         recvProtocol(socket), recvQueue(queue) {}
 
 void CommunicatorReceiver::run() {

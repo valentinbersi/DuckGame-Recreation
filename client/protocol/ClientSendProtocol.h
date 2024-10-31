@@ -10,7 +10,7 @@ class ClientSendProtocol: public SendProtocol {
 public:
     explicit ClientSendProtocol(ActiveSocket& socket);
 
-    void sendMessage(const Message& message);
+    void sendMessage(std::unique_ptr<Message> message);
 
     ~ClientSendProtocol() override = default;
 };

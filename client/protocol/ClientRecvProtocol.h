@@ -14,10 +14,12 @@ private:
 
     std::unique_ptr<GameObjectData> recvDuckData();
 
+    std::unique_ptr<Message> recvGameStatus();
+
 public:
     explicit ClientRecvProtocol(ActiveSocket& socket);
 
-    GameStatus receiveMessage();
+    std::unique_ptr<Message> receiveMessage();
 
     ~ClientRecvProtocol() = default;
 };

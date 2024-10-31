@@ -19,13 +19,11 @@ protected:
      * @param parent The parent of the object
      */
     explicit Object2D(Object* parent);
-
     /**
      * Initialize an Object2D with a parent, a position a rotation and a scale
      * @param parent The parent of the object
      * @param position The position
      * @param rotation The rotation
-     * @param scale The scale
      */
     Object2D(Object* parent, Vector2 position, float rotation);
 

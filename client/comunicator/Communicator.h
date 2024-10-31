@@ -12,17 +12,17 @@
 class Communicator {
 private:
     ActiveSocket skt;
-    BlockingQueue<Message> sendQueue;
-    BlockingQueue<GameStatus> recvQueue;
+    BlockingQueue<std::unique_ptr<Message>> sendQueue;
+    BlockingQueue<std::unique_ptr<Message>> recvQueue;
     CommunicatorSender sender;
     CommunicatorReceiver receiver;
 
 public:
     explicit Communicator(ActiveSocket&& socket);
 
-    bool trysend(const Message& Message);
+    bool trysend(std::unique_ptr<Message>&& Message);
 
-    std::optional<GameStatus> tryrecv();
+    std::optional<std::unique_ptr<Message>> tryrecv();
 
     ~Communicator();
 };
