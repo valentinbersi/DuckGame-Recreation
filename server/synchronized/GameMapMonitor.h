@@ -3,6 +3,7 @@
 #include <unordered_map>
 
 #include "GameLoop.h"
+#include "Message.h"
 #include "Types.h"
 
 class GameMapMonitor {
@@ -14,7 +15,7 @@ public:
     GameMapMonitor();
 
     BlockingQueue<std::unique_ptr<Command>>* joinGameIfCreated(
-            u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> senderQueue,
+            u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<Message>>> senderQueue,
             u16 clientId);
 
     void startGameIfCreated(u16 matchID);

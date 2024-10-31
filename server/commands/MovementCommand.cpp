@@ -1,0 +1,27 @@
+
+#include "MovementCommand.h"
+MovementCommand::MovementCommand(PlayerID id, InputAction action):id(id), action(action) {}
+
+void MovementCommand::execute(GameController& gameController){
+    
+    Player& player = gameController.getPlayer(id);
+    switch (action){
+        case InputAction::LEFT_PRESSED:
+            player.moveLeft();
+            break;
+        case InputAction::RIGHT_PRESSED:
+            player.moveRight();
+            break;
+        
+        case InputAction::LEFT_RELEASED:
+            player.stopMoveLeft();
+            break;
+
+        case InputAction::RIGHT_RELEASED:
+            player.stopMoveRight();
+            break;
+
+        default:
+            break;
+    }   
+}

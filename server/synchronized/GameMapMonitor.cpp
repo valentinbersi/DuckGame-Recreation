@@ -7,13 +7,12 @@ GameMapMonitor::GameMapMonitor() {}
 
 
 BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGameIfCreated(
-        u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> senderQueue,
+        u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<Message>>> senderQueue,
         u16 clientId) {
     std::lock_guard lock(mutex);
-    (void)senderQueue;
-    (void)clientId;
+
     if (gameMap.find(matchID) != gameMap.end()) {
-        // gameMap[matchID]->addClient(clienId,senderQueue);
+        gameMap[matchID]->addClient(clientId,senderQueue);
         return gameMap[matchID]->getQueue();
     }
     return nullptr;
@@ -37,8 +36,7 @@ u16 GameMapMonitor::creatGameSafe() {
         random_number = dist(gen);
 
     } while (gameMap.contains(random_number));
-    // std::unique_ptr<GameLoop> gameloop = std::make_unique<GameLoop>();
-    // gameMap[random_number] = std::move(gameloop);
+    gameMap[random_number] = std::make_unique<GameLoop>();
     return random_number;
 }
 
