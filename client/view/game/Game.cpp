@@ -79,13 +79,13 @@ void Game::init() {
 
 void Game::getSnapshot() {
     GameStatus snapshot;
-    std::optional<GameStatus> status =
-            communicator.tryrecv();  // ES UN OPTIONAL. Debo chequear que el optional me de
-                                     // gamestatus usando .value. Sino si es null ya está
-    if (status.has_value()) {
-        snapshot = std::move(status.value());
-    } else
+    std::optional<std::unique_ptr<Message>> optionalMessage = communicator.tryrecv();
+    if (optionalMessage.has_value()) {
+        std::unique_ptr<Message> message = std::move(optionalMessage.value());
+        snapshot = std::move(dynamic_cast<GameStatus&>(*message));
+    } else {
         return;
+    }
 
     // aca deberia conseguir los diversos duck data hasta que en el casteo dinamico me de nullptr
     // en ese caso no habrán más ducks y ya entraré a los objetos
@@ -184,10 +184,10 @@ std::unordered_map<DuckID, SpriteManager> Game::createSpritesMapping() {
 
     // Create textures and add to the map
     Texture whiteTexture(renderer, whiteSheet);
-    //Texture whiteFeathersTexture(renderer, whiteFeathers);
-    //spritesMapping.emplace(DuckID::White,
-                           //SpriteManager(whiteSheet, whiteFeathers, renderer, whiteTexture,
-                                         //whiteFeathersTexture, window_width, window_height));
+    Texture whiteFeathersTexture(renderer, whiteFeathers);
+    spritesMapping.emplace(DuckID::White,
+                           SpriteManager(whiteSheet, whiteFeathers, renderer, whiteTexture,
+                                         whiteFeathersTexture, window_width, window_height));
 
     Texture orangeTexture(renderer, orangeSheet);
     Texture orangeFeathersTexture(renderer, orangeFeathers);
@@ -242,8 +242,8 @@ void Game::handleEvents() {
             auto it = keyMappingPressed.find(scancode);
             if (it != keyMappingPressed.end()) {
                 InputAction m_key = it->second;
-                GameMessage message(m_key);
-                communicator.trysend(message);
+                auto message = std::make_unique<GameMessage>(m_key);
+                communicator.trysend(std::move(message));
             }
 
         } else if (event.type == SDL_KEYUP) {
@@ -251,8 +251,8 @@ void Game::handleEvents() {
             auto it = keyMappingReleased.find(scancode);
             if (it != keyMappingReleased.end()) {
                 InputAction m_key = it->second;
-                GameMessage message(m_key);
-                communicator.trysend(message);
+                auto message = std::make_unique<GameMessage>(m_key);
+                communicator.trysend(std::move(message));
             }
 
             // MOUSE EVENTS ETC...? MULTIPLES TECLAS?
