@@ -31,6 +31,8 @@ class Object: public Subject, public RefCounted, public Updatable, public Starta
 
 
 protected:
+    constexpr static auto INVALID_EVENT_TYPE = "Invalid event type";
+
     /**
      * A constructor for derived classes.
      * Initializes the signals

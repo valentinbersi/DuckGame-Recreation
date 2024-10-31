@@ -130,7 +130,6 @@ Object& Object::parent() const { return *_parent; }
 
 #define TREE_ADDED_NAME "TreeEntered"
 #define TREE_EXITED_NAME "TreeExited"
-#define INVALID_EVENT_TYPE "Invalid Event Type"
 
 std::string Object::eventName(const Events eventType) {
     switch (eventType) {
