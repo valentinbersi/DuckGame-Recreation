@@ -7,13 +7,14 @@
 #include "GameStatus.h"
 #include "Message.h"
 #include "ReceiveProtocol.h"
+#include <memory>
 
 class ServerRecvProtocol: public ReceiveProtocol {
 private:
 public:
     explicit ServerRecvProtocol(ActiveSocket& socket);
 
-    Message receiveMessage();
+    std::unique_ptr<Message> receiveMessage();
 
     ~ServerRecvProtocol() = default;
 };

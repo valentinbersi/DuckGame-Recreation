@@ -8,7 +8,8 @@ Acceptor::Acceptor(const std::string& hostname, GameMapMonitor& monitor):
 
 bool Acceptor::removeIfNotConnected(VirtualClient& client) { return !client.isConnected(); }
 
-void Acceptor::reapDead() { clientes.remove_if(removeIfNotConnected); }
+void Acceptor::reapDead() { clientes.remove_if([this](VirtualClient& client){
+                                                return removeIfNotConnected(client);}); }
 
 void Acceptor::run() {
     try {

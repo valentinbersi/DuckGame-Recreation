@@ -12,7 +12,7 @@ void Receiver::run() {
     try {
         while (_keep_running) {
             // se viene refactor
-            Message message = recvProtocol.receiveMessage();
+            std::unique_ptr<Message> message = recvProtocol.receiveMessage();
             // std::unique_ptr<Command> = factory.makeCommand(message);
             // gamequeue.push()
         }
