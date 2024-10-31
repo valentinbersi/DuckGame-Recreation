@@ -5,7 +5,7 @@
 #include <QMainWindow>
 #include <QObject>
 
-#include "ActiveSocket.h"
+#include "Communicator.h"
 #include "mainwindow.h"
 
 class LobbyQT: public QObject {
@@ -14,9 +14,10 @@ class LobbyQT: public QObject {
 private:
     QApplication app;
     MainWindow mainWindow;
+    Communicator& communicator;
 
 public:
-    explicit LobbyQT(int argc, char* argv[] /*, ActiveSocket& socket*/);
+    LobbyQT(int argc, char* argv[], Communicator& communicator);
     int exec();
 
 signals:

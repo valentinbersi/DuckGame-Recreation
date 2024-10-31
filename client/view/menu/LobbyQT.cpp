@@ -2,8 +2,10 @@
 
 #include "mainwindow.h"
 
-LobbyQT::LobbyQT(int argc, char** argv /*, ActiveSocket& socket*/):
-        app(argc, argv), mainWindow(nullptr) {
+LobbyQT::LobbyQT(int argc, char* argv[], Communicator& communicator):
+        app(argc, argv),
+        mainWindow(nullptr),
+        communicator(communicator) {
     mainWindow.show();
 
     connect(&mainWindow, &MainWindow::initMatch, this, &LobbyQT::initMatch);

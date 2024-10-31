@@ -1,4 +1,4 @@
-#include <exception>
+/*#include <exception>
 #include <iostream>
 
 #include "game/Game.hpp"
@@ -34,9 +34,8 @@ int main(int argc, char* argv[]) {
         }
     }
     return 0;
-}
+}*/
 
-/*
 #include "GameLauncher.h"
 
 int main(int argc, char* argv[]) {
@@ -47,4 +46,4 @@ int main(int argc, char* argv[]) {
     launcher.exec();
 
     return 0;
-}*/
+}

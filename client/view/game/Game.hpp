@@ -25,7 +25,7 @@
 class Game {
 
 public:
-    Game(ActiveSocket&& skt);
+    Game(Communicator& communicator);
     ~Game();
 
     void init();
@@ -46,7 +46,7 @@ private:
     bool running;
     int window_width;
     int window_height;
-    Communicator communicator;
+    Communicator& communicator;
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
 
