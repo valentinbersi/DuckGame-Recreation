@@ -13,7 +13,7 @@ std::string Server::readInput() {
     return input;
 }
 
-int Server::run() {
+int Server::run() noexcept {
     acceptor.start();
     while (readInput() != CLOSE_SERVER) {
         continue;
