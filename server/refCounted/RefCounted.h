@@ -12,8 +12,8 @@ public:
     RefCounted();
     RefCounted(const RefCounted& other) = delete;
     RefCounted& operator=(const RefCounted& other) = delete;
-    RefCounted(RefCounted&& other) noexcept;
-    RefCounted& operator=(RefCounted&& other) noexcept;
+    RefCounted(RefCounted&& other) noexcept = delete;
+    RefCounted& operator=(RefCounted&& other) noexcept = delete;
     virtual ~RefCounted();
 
     /**
