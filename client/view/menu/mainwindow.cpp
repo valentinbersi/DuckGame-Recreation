@@ -28,9 +28,10 @@ void MainWindow::setPagesAndConnections() {
     connect(join_game, &joinGame::backClicked, this, [this]() { changePage(config); });
 }
 
-MainWindow::MainWindow(QWidget* parent)
+MainWindow::MainWindow(QWidget* parent, Communicator& communicator)
         : QMainWindow(parent),
         ui(new Ui::MainWindow),
+        communicator(communicator),
         message() {
     ui->setupUi(this);
 
@@ -81,11 +82,18 @@ void MainWindow::joinAMatch() {
 
 void MainWindow::startGameHandler() {
     qDebug() << "Lobby Message Info:";
-    qDebug() << "Players Count:" << message.getPlayerCount();
-    qDebug() << "Player 1 Name:" << QString::fromStdString(message.getPlayer1Name());
-    qDebug() << "Player 2 Name:" << QString::fromStdString(message.getPlayer2Name());
-    qDebug() << "Match ID:" << message.getMatchId();
-    qDebug() << "Map Name:" << QString::fromStdString(message.getMapChosen());
+    qDebug() << "Players Numbers:" << message.playersNumber;
+    qDebug() << "Player 1 Name:" << QString::fromStdString(message.player1Name);
+    qDebug() << "Player 2 Name:" << QString::fromStdString(message.player2Name);
+    qDebug() << "Match ID:" << message.matchId;
+    qDebug() << "Map Name:" << QString::fromStdString(message.mapChosen);
+
+//    auto messagePtr = std::make_unique<Message>(message);
+//
+//    if (!communicator.trysend(std::move(messagePtr))) {
+//        qDebug() << "Error al enviar el mensaje.";
+//    }
+
     emit startGame();
     close();
     QCoreApplication::exit(0);

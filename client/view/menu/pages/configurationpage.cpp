@@ -20,16 +20,16 @@ configurationPage::configurationPage(QWidget* parent, LobbyMessage_& message):
 }
 
 int configurationPage::getSelectedPlayers() const {
-    return CantidadPlayersGroup->checkedId();  // Devuelve el ID del botón seleccionado
+    return CantidadPlayersGroup->checkedId();
 }
 
 void configurationPage::handleJoinGame() {
-    message.setPlayerCount(getSelectedPlayers());
+    message.playersNumber = getSelectedPlayers();
     emit joinGameClicked();
 }
 
 void configurationPage::handleNewGame() {
-    message.setPlayerCount(getSelectedPlayers());
+    message.playersNumber = getSelectedPlayers();
     emit newGameClicked();
 }
 

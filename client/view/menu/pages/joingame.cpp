@@ -32,12 +32,12 @@ void joinGame::verificarDatos() {
 }
 
 void joinGame::onPlayClicked() {
-    message.setPlayer1Name(ui->lineEditPlayer1->text().toStdString());
-    message.setPlayer2Name(ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString());
-    message.setMatchId(ui->lineEditMatchID->text().toUShort());
+    message.player1Name = ui->lineEditPlayer1->text().toStdString();
+    message.player2Name = ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString();
+    message.matchId = ui->lineEditMatchID->text().toUShort();
 
     qDebug() << "Match ID:" << ui->lineEditMatchID->text().toUShort();
-    qDebug() << "Match ID:" << message.getMatchId();
+    qDebug() << "Match ID:" << message.matchId;
 
     emit playMatchClicked();
 }

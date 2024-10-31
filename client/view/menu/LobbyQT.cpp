@@ -4,8 +4,8 @@
 
 LobbyQT::LobbyQT(int argc, char* argv[], Communicator& communicator):
         app(argc, argv),
-        mainWindow(nullptr),
-        communicator(communicator) {
+        communicator(communicator),
+        mainWindow(nullptr, communicator) {
     mainWindow.show();
 
     connect(&mainWindow, &MainWindow::startGame, this, &LobbyQT::initMatch);
