@@ -36,7 +36,11 @@ void Object::addChild(std::string name, Object* newChild) {
     newChild->connect<Object, Object&>(eventName(Events::TREE_ENTERED),
                                        {weakReference<Object>(), &Object::onTreeEntered});
 
+    newChild->connect<Object, Object&>(eventName(Events::TREE_EXITED),
+                                       {weakReference<Object>(), &Object::onTreeExited});
+
     children.insert({std::move(name), newChild});
+    newChild->_parent = this;
     fire<Object, Object&>(eventName(Events::TREE_ENTERED), *newChild);
 }
 
@@ -57,12 +61,18 @@ Object& Object::operator=(const Object& other) {
 
     Subject::operator=(other);
     _parent = other._parent;
+
+    std::ranges::for_each(
+            children, [](const std::pair<std::string, Object*>& child) { delete child.second; });
     children = other.children;
     return *this;
 }
 
 Object::Object(Object&& other) noexcept:
-        Subject(std::move(other)), _parent(other._parent), children(std::move(other.children)) {
+        Subject(std::move(other)),
+        RefCounted(),
+        _parent(other._parent),
+        children(std::move(other.children)) {
     other._parent = nullptr;
 }
 
@@ -73,6 +83,8 @@ Object& Object::operator=(Object&& other) noexcept {
     Subject::operator=(std::move(other));
     _parent = other._parent;
     other._parent = nullptr;
+    std::ranges::for_each(
+            children, [](const std::pair<std::string, Object*>& child) { delete child.second; });
     children = std::move(other.children);
     return *this;
 }
