@@ -69,7 +69,7 @@ Object2D::Object2D(Vector2 position, const float rotation):
 Object2D& Object2D::globalPosition(Vector2 globalPosition) noexcept {
     _globalPosition = std::move(globalPosition);
 
-    const auto parent2D = dynamic_cast<Object2D*>(parent());
+    const auto parent2D = dynamic_cast<Object2D*>(&parent());
 
     if (parent2D == nullptr) {
         _position = _globalPosition;
@@ -85,7 +85,7 @@ const Vector2& Object2D::globalPosition() const noexcept { return _globalPositio
 Object2D& Object2D::globalRotation(const float globalRotation) noexcept {
     _globalRotation = globalRotation;
 
-    const auto parent2D = dynamic_cast<Object2D*>(parent());
+    const auto parent2D = dynamic_cast<Object2D*>(&parent());
 
     if (parent2D == nullptr) {
         _rotation = _globalRotation;
@@ -101,7 +101,7 @@ float Object2D::globalRotation() const noexcept { return _globalRotation; }
 Object2D& Object2D::position(Vector2 position) noexcept {
     _position = std::move(position);
 
-    const auto parent2D = dynamic_cast<Object2D*>(parent());
+    const auto parent2D = dynamic_cast<Object2D*>(&parent());
 
     if (parent2D == nullptr) {
         _globalPosition = _position;
@@ -117,7 +117,7 @@ const Vector2& Object2D::position() const noexcept { return _position; }
 Object2D& Object2D::rotation(const float rotation) noexcept {
     _rotation = rotation;
 
-    const auto parent2D = dynamic_cast<Object2D*>(parent());
+    const auto parent2D = dynamic_cast<Object2D*>(&parent());
 
     if (parent2D == nullptr) {
         _globalRotation = _rotation;
