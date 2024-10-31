@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include "GameObjectData.h"
+#include "GameStatus.h"
 #include "RefCounted.h"
 #include "Startable.h"
 #include "Subject.h"
@@ -46,6 +47,12 @@ protected:
      * @param newChild The child to add.
      */
     void addChild(std::string name, Object* newChild);
+
+    /**
+     * Get the map of children of the object
+     * @return The map of children
+     */
+    const HashMap<std::string, Object*>& getChildren() const;
 
 public:
     /**
@@ -108,7 +115,7 @@ public:
      * Get the status of the object
      * @return The status of the object
      */
-    virtual std::unique_ptr<GameObjectData> status() = 0;
+    virtual GameStatus status() = 0;
 
     /**
      * The events the Object class has

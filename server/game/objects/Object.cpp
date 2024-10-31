@@ -44,6 +44,8 @@ void Object::addChild(std::string name, Object* newChild) {
     fire<Object, Object&>(eventName(Events::TREE_ENTERED), *newChild);
 }
 
+const HashMap<std::string, Object*>& Object::getChildren() const { return children; }
+
 Object::AlreadyAddedChild::AlreadyAddedChild(const std::string& name):
         std::runtime_error("Child with name " + name + " already exists.") {}
 
