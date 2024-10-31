@@ -8,7 +8,7 @@ CommunicatorSender::CommunicatorSender(ActiveSocket& socket, BlockingQueue<std::
 void CommunicatorSender::run() {
     try {
         while (_keep_running) {
-            sendProtocol.sendMessage(std::move(sendQueue.pop()));
+            sendProtocol.sendMessage(sendQueue.pop());
         }
 
     } catch (const ClosedQueue& error) {
