@@ -10,9 +10,9 @@ Communicator::Communicator(ActiveSocket&& socket):
     receiver.start();
 }
 
-bool Communicator::trysend(const Message& message) { return sendQueue.try_push(message); }
+bool Communicator::trysend(std::unique_ptr<Message>&& message) { return sendQueue.try_push(std::move(message)); }
 
-std::optional<GameStatus> Communicator::tryrecv() { return recvQueue.try_pop(); }
+std::optional<std::unique_ptr<Message>> Communicator::tryrecv() { return recvQueue.try_pop(); }
 
 Communicator::~Communicator() {
     sender.stop();
