@@ -1,26 +1,9 @@
-
-#pragma once
-#include <string>
+#ifndef DUCKGAME_MYLOBBYMESSAGE_H
+#define DUCKGAME_MYLOBBYMESSAGE_H
 
 #include "Message.h"
 #include "Types.h"
 
-struct LobbyMessage: public Message {
-    LobbyRequest request;
-    std::string usrName;
-    u16 matchId;
-
-    LobbyMessage() :
-            Message(MessageType::Lobby),
-            request(),
-            usrName(""),
-            matchId(0) {}
-    LobbyMessage(LobbyRequest request, std::string name, u16 id):
-            Message(MessageType::Lobby), request(request), usrName(name), matchId(id) {}
-    ~LobbyMessage() = default;
-};
-
-/*
 struct LobbyMessage_ : public Message {
     LobbyRequest request;
     std::string player1Name;
@@ -64,4 +47,6 @@ struct LobbyMessage_ : public Message {
 
     [[nodiscard]] std::string getMapChosen() const { return mapChosen; }
     void setMapChosen(const std::string& map) { mapChosen = map; }
-};*/
+};
+
+#endif  // DUCKGAME_MYLOBBYMESSAGE_H

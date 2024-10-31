@@ -4,6 +4,8 @@
 #include <QButtonGroup>
 #include <QWidget>
 
+#include "GameInfo.h"
+#include "MyLobbyMessage.h"
 #include "ui_configurationPage.h"
 
 QT_BEGIN_NAMESPACE
@@ -15,8 +17,15 @@ QT_END_NAMESPACE
 class configurationPage: public QWidget {
     Q_OBJECT
 
+private:
+    Ui::configurationPage* ui;
+    QButtonGroup* CantidadPlayersGroup;
+    LobbyMessage_& message;
+    void handleJoinGame();
+    void handleNewGame();
+
 public:
-    explicit configurationPage(QWidget* parent = nullptr);
+    configurationPage(QWidget* parent, LobbyMessage_& message);
     int getSelectedPlayers() const;
     ~configurationPage() override;
 
@@ -24,10 +33,6 @@ signals:
     void newGameClicked();
     void joinGameClicked();
     void backClicked();
-
-private:
-    Ui::configurationPage* ui;
-    QButtonGroup* CantidadPlayersGroup;
 };
 
 #endif  // DUCKGAME_CONFIGURATIONPAGE_H

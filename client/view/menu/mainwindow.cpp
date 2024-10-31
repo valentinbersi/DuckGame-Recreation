@@ -21,24 +21,25 @@ void MainWindow::setPagesAndConnections() {
     connect(config, &configurationPage::newGameClicked, this, &MainWindow::createAMatch);
     connect(config, &configurationPage::backClicked, this, [this]() { changePage(menu); });
 
-    connect(new_game, &newGame::playMatchClicked, this, &MainWindow::startGame);
+    connect(new_game, &newGame::playMatchClicked, this, &MainWindow::startGameHandler);
     connect(new_game, &newGame::backClicked, this, [this]() { changePage(config); });
 
-    connect(join_game, &joinGame::playMatchClicked, this, &MainWindow::startGame);
+    connect(join_game, &joinGame::playMatchClicked, this, &MainWindow::startGameHandler);
     connect(join_game, &joinGame::backClicked, this, [this]() { changePage(config); });
 }
 
 MainWindow::MainWindow(QWidget* parent)
-        : QMainWindow(parent)
-        , ui(new Ui::MainWindow) {
+        : QMainWindow(parent),
+        ui(new Ui::MainWindow),
+        message() {
     ui->setupUi(this);
 
     common_init(this, ":/backgrounds/duck-game.png");
 
     menu = new mainMenu(this);
-    config = new configurationPage(this);
-    join_game = new joinGame(this);
-    new_game = new newGame(this);
+    config = new configurationPage(this, message);
+    join_game = new joinGame(this, message);
+    new_game = new newGame(this, message);
 
     setPagesAndConnections();
 }
@@ -78,8 +79,14 @@ void MainWindow::joinAMatch() {
     }
 }
 
-void MainWindow::startGame() {
-    emit initMatch();
+void MainWindow::startGameHandler() {
+    qDebug() << "Lobby Message Info:";
+    qDebug() << "Players Count:" << message.getPlayerCount();
+    qDebug() << "Player 1 Name:" << QString::fromStdString(message.getPlayer1Name());
+    qDebug() << "Player 2 Name:" << QString::fromStdString(message.getPlayer2Name());
+    qDebug() << "Match ID:" << message.getMatchId();
+    qDebug() << "Map Name:" << QString::fromStdString(message.getMapChosen());
+    emit startGame();
     close();
     QCoreApplication::exit(0);
 }

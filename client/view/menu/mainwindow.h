@@ -6,10 +6,12 @@
 #include <QMessageBox>
 #include <QPointer>
 
-#include "pages/configurationpage.h"
-#include "pages/joingame.h"
-#include "pages/mainmenu.h"
-#include "pages/newgame.h"
+#include "GameInfo.h"
+#include "MyLobbyMessage.h"
+#include "configurationpage.h"
+#include "joingame.h"
+#include "mainmenu.h"
+#include "newgame.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -29,15 +31,17 @@ private:
     QPointer<joinGame> join_game;
     QPointer<newGame> new_game;
 
+    LobbyMessage_ message;
+
     void setPagesAndConnections();
     void exitTheGame();
     void createAMatch();
     void joinAMatch();
-    void startGame();
+    void startGameHandler();
     void changePage(QWidget* page);
 
 signals:
-    void initMatch();
+    void startGame();
 
 public:
     explicit MainWindow(QWidget* parent);

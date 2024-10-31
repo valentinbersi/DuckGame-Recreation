@@ -8,7 +8,7 @@ LobbyQT::LobbyQT(int argc, char* argv[], Communicator& communicator):
         communicator(communicator) {
     mainWindow.show();
 
-    connect(&mainWindow, &MainWindow::initMatch, this, &LobbyQT::initMatch);
+    connect(&mainWindow, &MainWindow::startGame, this, &LobbyQT::initMatch);
     connect(this, &LobbyQT::initMatch, &app, &QApplication::quit);
 }
 
