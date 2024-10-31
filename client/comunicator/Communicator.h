@@ -20,7 +20,7 @@ private:
 public:
     explicit Communicator(const std::string& hostname, const std::string& servername);
 
-    bool trysend(std::unique_ptr<Message>&& Message);
+    bool trysend(std::unique_ptr<Message> Message);
 
     std::optional<std::unique_ptr<Message>> tryrecv();
 
