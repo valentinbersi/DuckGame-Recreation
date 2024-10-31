@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <memory>
+#include <utility>
 
 /**
  * Thrown when trying to call a method on an invalid object

@@ -4,6 +4,8 @@
 #include <string>
 #include <unordered_map>
 
+#include "GameObjectData.h"
+#include "GameStatus.h"
 #include "RefCounted.h"
 #include "Startable.h"
 #include "Subject.h"
@@ -31,6 +33,8 @@ class Object: public Subject, public RefCounted, public Updatable, public Starta
 
 
 protected:
+    constexpr static auto INVALID_EVENT_TYPE = "Invalid event type";
+
     /**
      * A constructor for derived classes.
      * Initializes the signals
@@ -43,6 +47,12 @@ protected:
      * @param newChild The child to add.
      */
     void addChild(std::string name, Object* newChild);
+
+    /**
+     * Get the map of children of the object
+     * @return The map of children
+     */
+    const HashMap<std::string, Object*>& getChildren() const;
 
 public:
     /**
@@ -100,6 +110,12 @@ public:
      * @return A reference to the parent
      */
     Object& parent() const;
+
+    /**
+     * Get the status of the object
+     * @return The status of the object
+     */
+    virtual GameStatus status() = 0;
 
     /**
      * The events the Object class has

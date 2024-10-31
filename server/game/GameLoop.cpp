@@ -6,15 +6,13 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
 
-#define INITIAL_TICKS 0
-
-#define MILI_TO_SECS 0.001f
+#include "GameStatus.h"
 
 float GameLoop::calculateDeltaTime() {
-    const u64 frameTicks = SDL_GetTicks64();
-    const u64 deltaTime = frameTicks - prevTicks;
+    const std::chrono::steady_clock::time_point frameTicks = std::chrono::steady_clock::now();
+    const std::chrono::duration<float> deltaTime = frameTicks - prevTicks;
     prevTicks = frameTicks;
-    return static_cast<float>(deltaTime) * MILI_TO_SECS;
+    return deltaTime.count();
 }
 
 void GameLoop::retrieveCurrentFrameCommands() {
@@ -25,12 +23,12 @@ void GameLoop::processCurrentFrameCommands() {
     while (!currentFrameCommands.empty()) {
         std::unique_ptr<Command> currentCommand = std::move(currentFrameCommands.front());
         currentFrameCommands.pop();
-        // currentCommand->execute(game);
+        currentCommand->execute(game);
     }
 }
 
 void GameLoop::broadcastGameStatus() {
-    std::shared_ptr<GameStatus> gameStatus = std::make_shared(std::move(game.status()));
+    auto gameStatus = std::make_shared<GameStatus>(std::move(game.status()));
     std::ranges::remove_if(clientQueues, [&gameStatus](const auto& clientQueue) {
         if (clientQueue.expired())
             return true;
@@ -40,10 +38,10 @@ void GameLoop::broadcastGameStatus() {
     });
 }
 
-GameLoop::GameLoop(): prevTicks(INITIAL_TICKS) {}
+GameLoop::GameLoop(): prevTicks(std::chrono::milliseconds::zero()) {}
 
 void GameLoop::run() {
-    prevTicks = SDL_GetTicks64();
+    prevTicks = std::chrono::steady_clock::now();
     game.start();
 
     while (_keep_running) {
@@ -52,7 +50,7 @@ void GameLoop::run() {
         processCurrentFrameCommands();
         game.update(deltaTime);
         broadcastGameStatus();
-        SDL_Delay(1);
+        std::this_thread::sleep_for(std::chrono::milliseconds(33));  // 30 fps aprox
     }
 }
 

@@ -3,7 +3,8 @@
 #include "Object.h"
 #include "Player.h"
 
-typedef std::uint16_t PlayerID;
+struct GameStatus;
+typedef u16 PlayerID;
 
 class GameController final: public Object {
     HashMap<PlayerID, Player*> players;
@@ -28,8 +29,26 @@ public:
     void update(float delta) override;
 
     /**
+     * Does nothing on the game controller
+     */
+    void updateInternal(float delta) override;
+
+    /**
      * Add a player to the match
      * @param playerID the id of the player to add
      */
     void addPlayer(PlayerID playerID);
+
+    /**
+     * Get a reference to a player by its id
+     * @param playerID the id of the player to get
+     * @return a reference to the player
+     */
+    Player& getPlayer(PlayerID playerID) const;
+
+    /**
+     * Does nothing on the game controller
+     * @return
+     */
+    GameStatus status() override;
 };

@@ -44,6 +44,8 @@ void Object::addChild(std::string name, Object* newChild) {
     fire<Object, Object&>(eventName(Events::TREE_ENTERED), *newChild);
 }
 
+const HashMap<std::string, Object*>& Object::getChildren() const { return children; }
+
 Object::AlreadyAddedChild::AlreadyAddedChild(const std::string& name):
         std::runtime_error("Child with name " + name + " already exists.") {}
 
@@ -118,17 +120,18 @@ void Object::removeChild(const std::string& name) {
 }
 
 Object& Object::getChild(const std::string& name) const {
-    if (!children.contains(name))
+    const auto child = children.find(name);
+
+    if (child == children.end())
         throw ChildNotInTree(name);
 
-    return *children.at(name);
+    return *child->second;
 }
 
 Object& Object::parent() const { return *_parent; }
 
 #define TREE_ADDED_NAME "TreeEntered"
 #define TREE_EXITED_NAME "TreeExited"
-#define INVALID_EVENT_TYPE "Invalid Event Type"
 
 std::string Object::eventName(const Events eventType) {
     switch (eventType) {
