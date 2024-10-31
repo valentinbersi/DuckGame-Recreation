@@ -1,4 +1,5 @@
 #include "ClientRecvProtocol.h"
+#include "LobbyMessage.h"
 
 ClientRecvProtocol::ClientRecvProtocol(ActiveSocket& socket): ReceiveProtocol(socket) {
     idsMap[GameObjectID::Object2D] = [this]() -> std::unique_ptr<GameObjectData> {
@@ -38,10 +39,10 @@ std::unique_ptr<Message> ClientRecvProtocol::recvGameStatus(){
 }
 
 std::unique_ptr<Message> ClientRecvProtocol::receiveMessage() {
-    // MessageType type = recv_byte();
-    // if (type == MessageType::Game){
+    MessageType type = recv_byte();
+    if (type == MessageType::Game){
         return recvGameStatus();
-    // }
-    // return recvLobbyResponse();
+    }
+    return std::make_unique<LobbyMessage>(LobbyRequest::JOINMATCH, "", recvShort());
 }
 
