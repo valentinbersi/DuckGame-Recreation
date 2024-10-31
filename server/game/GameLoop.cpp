@@ -6,6 +6,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
 
+#include "GameStatus.h"
+
 #define INITIAL_TICKS 0
 
 #define MILI_TO_SECS 0.001f
@@ -30,7 +32,7 @@ void GameLoop::processCurrentFrameCommands() {
 }
 
 void GameLoop::broadcastGameStatus() {
-    std::shared_ptr<GameStatus> gameStatus = std::make_shared(std::move(game.status()));
+    auto gameStatus = std::make_shared<GameStatus>(std::move(game.status()));
     std::ranges::remove_if(clientQueues, [&gameStatus](const auto& clientQueue) {
         if (clientQueue.expired())
             return true;

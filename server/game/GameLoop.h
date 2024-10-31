@@ -6,7 +6,6 @@
 
 #include "BlockingQueue.h"
 #include "GameController.h"
-#include "GameStatus.h"
 #include "Message.h"
 #include "Thread.h"
 
