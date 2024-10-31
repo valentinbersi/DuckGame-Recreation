@@ -10,7 +10,7 @@ Communicator::Communicator(const std::string& hostname, const std::string& serve
     receiver.start();
 }
 
-bool Communicator::trysend(std::unique_ptr<Message>&& message) { return sendQueue.try_push(std::move(message)); }
+bool Communicator::trysend(std::unique_ptr<Message> message) { return sendQueue.try_push(std::move(message)); }
 
 std::optional<std::unique_ptr<Message>> Communicator::tryrecv() { return recvQueue.try_pop(); }
 

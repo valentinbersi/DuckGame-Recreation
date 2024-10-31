@@ -50,7 +50,7 @@ void GameLoop::run() {
         processCurrentFrameCommands();
         game.update(deltaTime);
         broadcastGameStatus();
-        std::this_thread::sleep_for(std::chrono::milliseconds(33));  // 30 fps aprox
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // 30 fps aprox
     }
 }
 
