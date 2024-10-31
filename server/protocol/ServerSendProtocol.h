@@ -19,10 +19,12 @@ private:
 
     void sendDuckData(const DuckData* objData);
 
+    // void sendResponse();
+
 public:
     explicit ServerSendProtocol(ActiveSocket& socket);
 
-    void sendMessage(std::shared_ptr<GameStatus>& mensaje);
+    void sendMessage(std::shared_ptr<Message>&& mensaje);
 
     ~ServerSendProtocol() = default;
 };
