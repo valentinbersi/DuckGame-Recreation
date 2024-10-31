@@ -118,10 +118,12 @@ void Object::removeChild(const std::string& name) {
 }
 
 Object& Object::getChild(const std::string& name) const {
-    if (!children.contains(name))
+    const auto child = children.find(name);
+
+    if (child == children.end())
         throw ChildNotInTree(name);
 
-    return *children.at(name);
+    return *child->second;
 }
 
 Object& Object::parent() const { return *_parent; }
