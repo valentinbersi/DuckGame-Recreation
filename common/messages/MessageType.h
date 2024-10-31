@@ -75,7 +75,7 @@ public:
 
     [[nodiscard]] operator Value() const { return _value; }
 
-    LobbyRequest() = delete;
+    LobbyRequest() : _value(NEWMATCH) {};
 
     // bool operator==(LobbyRequest boxId) const {return boxId._value == _value;}
 

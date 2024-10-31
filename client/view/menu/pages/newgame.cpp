@@ -2,7 +2,7 @@
 
 #include <QStringListModel>
 
-newGame::newGame(QWidget* parent): QWidget(parent), ui(new Ui::newGame) {
+newGame::newGame(QWidget* parent, LobbyMessage_& message): QWidget(parent), ui(new Ui::newGame), message(message) {
     ui->setupUi(this);
 
     // inicializo la lista de mapas en modo de prueba.
@@ -10,7 +10,7 @@ newGame::newGame(QWidget* parent): QWidget(parent), ui(new Ui::newGame) {
     auto *modeloMapas = new QStringListModel(mapas, this);
     ui->mapsList->setModel(modeloMapas);
 
-    connect(ui->buttonPlay, &QPushButton::clicked, this, &newGame::playMatchClicked);
+    connect(ui->buttonPlay, &QPushButton::clicked, this, &newGame::onPlayClicked);
     connect(ui->buttonBack, &QPushButton::clicked, this, &newGame::backClicked);
 
     connect(ui->lineEditPlayer1, &QLineEdit::textChanged, this, &newGame::verificarDatos);
@@ -33,6 +33,19 @@ void newGame::verificarDatos() {
     bool jugador2Ingresado = !ui->lineEditPlayer2->text().isEmpty();
 
     ui->buttonPlay->setEnabled(mapaSeleccionado && jugador1Ingresado && jugador2Ingresado);
+}
+
+void newGame::onPlayClicked() {
+    message.setPlayer1Name(ui->lineEditPlayer1->text().toStdString());
+    message.setPlayer2Name(ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString());
+
+    QModelIndexList selectedIndexes = ui->mapsList->selectionModel()->selectedIndexes();
+    if (!selectedIndexes.isEmpty()) {
+        QString selectedMap = selectedIndexes.first().data().toString();
+        message.setMapChosen(selectedMap.toStdString());
+    }
+
+    emit playMatchClicked();
 }
 
 newGame::~newGame() { delete ui; }

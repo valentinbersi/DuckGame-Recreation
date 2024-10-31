@@ -7,6 +7,8 @@
 
 #include <QWidget>
 
+#include "GameInfo.h"
+#include "MyLobbyMessage.h"
 #include "ui_newGame.h"
 
 
@@ -19,17 +21,20 @@ QT_END_NAMESPACE
 class newGame: public QWidget {
     Q_OBJECT
 
+private:
+    Ui::newGame* ui;
+    LobbyMessage_& message;
+
+    void verificarDatos();
+    void onPlayClicked();
+
 public:
-    explicit newGame(QWidget* parent = nullptr);
+    newGame(QWidget* parent, LobbyMessage_& message);
     ~newGame() override;
 
 signals:
     void playMatchClicked();
     void backClicked();
-
-private:
-    Ui::newGame* ui;
-    void verificarDatos();
 };
 
 
