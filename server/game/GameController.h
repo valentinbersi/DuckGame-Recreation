@@ -40,6 +40,13 @@ public:
     void addPlayer(PlayerID playerID);
 
     /**
+     * Get a reference to a player by its id
+     * @param playerID the id of the player to get
+     * @return a reference to the player
+     */
+    Player& getPlayer(PlayerID playerID) const;
+
+    /**
      * Does nothing on the game controller
      * @return
      */

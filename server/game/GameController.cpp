@@ -25,6 +25,8 @@ void GameController::addPlayer(const PlayerID playerID) {
     players[playerID] = dynamic_cast<Player*>(&getChild(id));
 }
 
+Player& GameController::getPlayer(const PlayerID playerID) const { return *players.at(playerID); }
+
 GameStatus GameController::status() {
     GameStatus status;
 
