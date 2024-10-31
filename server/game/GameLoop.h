@@ -1,6 +1,8 @@
 #pragma once
 
 #include <list>
+#include <memory>
+#include <queue>
 
 #include "BlockingQueue.h"
 #include "GameController.h"
