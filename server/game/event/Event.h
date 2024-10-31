@@ -1,12 +1,12 @@
 #pragma once
 
-#include <forward_list>
 #include <functional>
+#include <list>
 #include <utility>
 
 #include <bits/ranges_algo.h>
 
-#include "Types.h"
+#include "Method.h"
 
 /**
  * A struct for referencing different template instantiation of events
@@ -18,30 +18,18 @@ struct EventBase {
     EventBase(EventBase&& other) noexcept = default;
     EventBase& operator=(EventBase&& other) noexcept = default;
     virtual ~EventBase() = default;
-
-    /**
-     * Disconnect a callable from the event
-     * @param id The id of the callable
-     */
-    virtual void disconnect(const std::string& id) = 0;
 };
 
 /**
- * An event that will call all connected callables when emitted
- * @tparam Args The types of the arguments to pass to the callables
+ * An event that will call all connected methods when emitted
+ * @tparam Obj The type of the object that the callables are member functions of
+ * @tparam Args The types of the arguments to pass to the methods
  */
-template <typename... Args>
+template <typename Obj, typename... Args>
 class Event final: public EventBase {
-    HashMap<std::string, Callable<Args...>> callables;
+    std::list<Method<Obj, void, Args...>> methods;
 
 public:
-    /**
-     * Thrown when trying to connect a callable with an id that is already connected
-     */
-    struct AlreadyConnectedCallable final: std::runtime_error {
-        explicit AlreadyConnectedCallable(const std::string& id);
-    };
-
     Event() noexcept;
     Event(const Event& other) noexcept;
     Event& operator=(const Event& other) noexcept;
@@ -51,16 +39,9 @@ public:
 
     /**
      * Connect a callable to the event
-     * @param name The id of the callable
-     * @param callable The callable to connect
+     * @param method The method to connect
      */
-    void connect(std::string name, Callable<Args...> callable);
-
-    /**
-     * Disconnect a callable from the event
-     * @param id The id of the callable
-     */
-    void disconnect(const std::string& id) override;
+    void connect(Method<Obj, void, Args...> method);
 
     /**
      * Fire the event. This will call all connected callables with the given arguments
@@ -69,54 +50,46 @@ public:
     void fire(Args... args);
 };
 
-template <typename... Args>
-Event<Args...>::AlreadyConnectedCallable::AlreadyConnectedCallable(const std::string& id):
-        std::runtime_error("Callable with id " + id + " already connected") {}
+template <typename Object, typename... Args>
+Event<Object, Args...>::Event() noexcept = default;
 
-template <typename... Args>
-Event<Args...>::Event() noexcept = default;
+template <typename Object, typename... Args>
+Event<Object, Args...>::Event(const Event& other) noexcept: methods(other.methods) {}
 
-template <typename... Args>
-Event<Args...>::Event(const Event& other) noexcept: callables(other.callables) {}
-
-template <typename... Args>
-Event<Args...>& Event<Args...>::operator=(const Event& other) noexcept {
+template <typename Object, typename... Args>
+Event<Object, Args...>& Event<Object, Args...>::operator=(const Event& other) noexcept {
     if (this == &other)
         return *this;
 
-    callables = other.callables;
+    methods = other.methods;
     return *this;
 }
 
-template <typename... Args>
-Event<Args...>::Event(Event&& other) noexcept: callables(std::move(other.callables)) {}
+template <typename Obj, typename... Args>
+Event<Obj, Args...>::Event(Event&& other) noexcept: methods(std::move(other.methods)) {}
 
-template <typename... Args>
-Event<Args...>& Event<Args...>::operator=(Event&& other) noexcept {
+template <typename Obj, typename... Args>
+Event<Obj, Args...>& Event<Obj, Args...>::operator=(Event&& other) noexcept {
     if (this == &other)
         return *this;
 
-    callables = std::move(other.callables);
+    methods = std::move(other.methods);
     return *this;
 }
 
-template <typename... Args>
-void Event<Args...>::connect(std::string name, Callable<Args...> callable) {
-    if (callables.contains(name))
-        throw AlreadyConnectedCallable(name);
-
-    callables.insert({std::move(name), std::move(callable)});
+template <typename Obj, typename... Args>
+void Event<Obj, Args...>::connect(Method<Obj, void, Args...> method) {
+    methods.push_back(std::move(method));
 }
 
-template <typename... Args>
-void Event<Args...>::disconnect(const std::string& id) {
-    callables.erase(id);
-}
+template <typename Obj, typename... Args>
+void Event<Obj, Args...>::fire(Args... args) {
 
-template <typename... Args>
-void Event<Args...>::fire(Args... args) {
-    std::ranges::for_each(callables,
-                          [&args...](std::pair<std::string, Callable<Args...>> callable) {
-                              callable.second(args...);
-                          });
+    std::ranges::remove_if(methods, [&args...](const Method<Obj, void, Args...>& method) -> bool {
+        if (!method.isValid())
+            return true;
+
+        method(args...);
+        return false;
+    });
 }
