@@ -34,10 +34,11 @@ protected:
     /**
      * Register an event with the given name and argument types
      * @param name The name of the event
+     * @tparam Object The type of the object that the callables are member functions of
      * @tparam Args The types of the arguments to pass to the callables
      * @throws AlreadyRegisteredEvent if there's already an event with this name
      */
-    template <typename... Args>
+    template <typename Object, typename... Args>
     void registerEvent(std::string name);
 
     /**
@@ -51,13 +52,14 @@ protected:
      * Fire the event with the given name
      * @param name The name of the event
      * @param args The arguments to pass to the callable
+     * @tparam Object The type of the object that the callable belongs to
      * @tparam Args The types of the arguments to pass to the callable. It's not mandatory to
      * specify these because the compiler can infer them, but sometimes types like const char*
      * and std::string are confused.
      * @throws UnregisteredEvent If the event is not registered
      * @throws InvalidEvent If the event has different arguments
      * */
-    template <typename... Args>
+    template <typename Object, typename... Args>
     void fire(const std::string& name, Args... args);
 
 public:
@@ -74,40 +76,32 @@ public:
     Subject& operator=(const Subject& other);
     Subject(Subject&& other) noexcept;
     Subject& operator=(Subject&& other) noexcept;
-    ~Subject();
+    virtual ~Subject();
 
     /**
      * Connect a callable to the event with the given name
      * @param to The name of the event
-     * @param callableID The id of the callable
-     * @param callable The callable to connect
+     * @param method The callable to connect
+     * @tparam Object The type of the object that the method belongs to
      * @tparam Args The types of the arguments to pass to the callable
      * @throws UnregisteredEvent If the event is not registered
      */
-    template <typename... Args>
-    void connect(const std::string& to, std::string callableID, Callable<Args...> callable);
-
-    /**
-     * Disconnect the given callable from the event with the given name
-     * @param from The name of the event
-     * @param callableID The id of the callable
-     * @throws UnregisteredEvent If the event is not registered
-     */
-    void disconnect(const std::string& from, const std::string& callableID);
+    template <typename Object, typename... Args>
+    void connect(const std::string& to, Method<Object, void, Args...> method);
 };
 
-template <typename... Args>
+template <typename Object, typename... Args>
 void Subject::registerEvent(std::string name) {
     if (!events.contains(name))
         throw AlreadyRegisteredEvent(name);
 
-    events.insert(std::make_pair<std::string, EventBase*>(std::move(name), new Event<Args...>()));
+    events.insert({std::move(name), new Event<Object, Args...>()});
 }
 
-template <typename... Args>
+template <typename Object, typename... Args>
 void Subject::fire(const std::string& name, Args... args) {
     if (const auto it = events.find(name); it != events.end()) {
-        if (auto event = dynamic_cast<Event<Args...>*>(it->second))
+        if (auto event = dynamic_cast<Event<Object, Args...>*>(it->second))
             event->fire(args...);
         else
             throw InvalidEvent();
@@ -117,11 +111,11 @@ void Subject::fire(const std::string& name, Args... args) {
     }
 }
 
-template <typename... Args>
-void Subject::connect(const std::string& to, std::string callableID, Callable<Args...> callable) {
+template <typename Object, typename... Args>
+void Subject::connect(const std::string& to, Method<Object, void, Args...> method) {
     if (const auto it = events.find(to); it != events.end()) {
-        if (auto event = dynamic_cast<Event<Args...>*>(it->second))
-            event->connect(std::move(callableID), std::move(callable));
+        if (auto event = dynamic_cast<Event<Object, Args...>*>(it->second))
+            event->connect(std::move(method));
         else
             throw InvalidEvent();
 

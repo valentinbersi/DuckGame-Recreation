@@ -33,14 +33,6 @@ Subject::~Subject() {
     std::ranges::for_each(events, [](const auto& pair) { delete pair.second; });
 }
 
-void Subject::disconnect(const std::string& from, const std::string& callableID) {
-    const auto event = events.find(from);
-    if (event == events.end())
-        throw UnregisteredEvent(from);
-
-    event->second->disconnect(callableID);
-}
-
 Subject::AlreadyRegisteredEvent::AlreadyRegisteredEvent(const std::string& eventName):
         std::invalid_argument("Event " + eventName + " is already registered for this subject") {}
 
