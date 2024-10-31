@@ -18,5 +18,5 @@ void GameController::addPlayer(const PlayerID playerID) {
     const std::string id = std::to_string(playerID);
 
     addChild(id, std::make_unique<Player>());
-    players[playerID] = dynamic_cast<Player*>(getChild(id));
+    players[playerID] = dynamic_cast<Player*>(&getChild(id));
 }
