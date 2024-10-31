@@ -13,7 +13,7 @@
 class LobbyResolver {
 private:
     GameMapMonitor& gameMap;
-    std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> senderQueue;
+    std::shared_ptr<BlockingQueue<std::shared_ptr<Message>>> senderQueue;
     BlockingQueue<std::unique_ptr<Command>>* recvQueue;  // empieza en nullptr
 
     void resolveNewMatch();
@@ -24,10 +24,10 @@ private:
 
 public:
     LobbyResolver(GameMapMonitor& gameMap,
-                  std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> senderQueue,
+                  std::shared_ptr<BlockingQueue<std::shared_ptr<Message>>> senderQueue,
                   BlockingQueue<std::unique_ptr<Command>>* recvQueue);
 
     void resolveRequest(const LobbyMessage& request);
 
-    ~LobbyResolver();
+    ~LobbyResolver() = default;
 };

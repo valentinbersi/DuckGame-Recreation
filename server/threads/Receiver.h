@@ -17,7 +17,7 @@ private:
     // CommnadFactory factory;
 public:
     Receiver(ActiveSocket& socket, BlockingQueue<std::unique_ptr<Command>>* queueRecv,
-             std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> queueSender,
+             std::shared_ptr<BlockingQueue<std::shared_ptr<Message>>> queueSender,
              GameMapMonitor& monitor);
 
     virtual void run() override;

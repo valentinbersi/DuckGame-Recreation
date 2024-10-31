@@ -14,7 +14,7 @@ private:
     // mapa de gameloops va aqui, referencia
     BlockingQueue<std::unique_ptr<Command>>* gameQueue;  // No tengo de otra porque aun no se cual
                                                          // es
-    std::shared_ptr<BlockingQueue<std::shared_ptr<GameStatus>>> sendQueue;
+    std::shared_ptr<BlockingQueue<std::shared_ptr<Message>>> sendQueue;
     Receiver receiver;
     Sender sender;
 
