@@ -21,7 +21,7 @@ protected:
      * Construct a CollisionObject2D with collision Layer and Mask = 0
      */
     CollisionObject(Object* parent, Vector2 position, float rotation, u32 collisionLayer,
-                      u32 collisionMask, std::unique_ptr<Shape2D> shape);
+                    u32 collisionMask, std::unique_ptr<Shape2D> shape);
 
 public:
     /**
@@ -70,4 +70,21 @@ public:
      * @param other the other object to check collision with
      */
     void collideWith(CollisionObject& other);
+
+    /**
+     * The events the CollisionObject class has
+     */
+    enum class Events : u8 {
+        /**
+         * The collisionObject collided with something
+         */
+        COLLISION
+    };
+
+    /**
+     * Get the event name of an event type
+     * @param eventType The event type
+     * @return The event name
+     */
+    static std::string eventName(Events eventType);
 };
