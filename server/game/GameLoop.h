@@ -6,10 +6,9 @@
 
 #include "BlockingQueue.h"
 #include "GameController.h"
+#include "Command.h"
 #include "Message.h"
 #include "Thread.h"
-
-class Command;
 
 class GameLoop final: public Thread {
     constexpr static std::uint8_t FRAME_TIMES_AMOUNT = 2;
