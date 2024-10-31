@@ -32,6 +32,7 @@ void ServerSendProtocol::sendDuck(const GameObjectData& objData) {
 }
 
 void ServerSendProtocol::sendMessage(std::shared_ptr<Message>&& status) {
+    sendByte(status->type);
     if (status->type == MessageType::Lobby){
         const LobbyMessage* lobbyMessage = dynamic_cast<const LobbyMessage*>(status.get());
         sendShort(lobbyMessage->matchId);
