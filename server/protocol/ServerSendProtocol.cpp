@@ -5,6 +5,8 @@
 
 #include "Math.h"
 
+#include "LobbyMessage.h"
+
 
 ServerSendProtocol::ServerSendProtocol(ActiveSocket& socket): SendProtocol(socket) {
     idsMap[GameObjectID::Object2D] = [this](const GameObjectData& objData) { sendDuck(objData); };
@@ -29,11 +31,17 @@ void ServerSendProtocol::sendDuck(const GameObjectData& objData) {
     sendDuckData(dynamic_cast<const DuckData*>(&objData));
 }
 
-void ServerSendProtocol::sendMessage(std::shared_ptr<GameStatus>& status) {
-    const auto& gameObjects = status->gameObjects;
-    sendShort(gameObjects.size());
-    for (const auto& ptr: gameObjects) {
-        GameObjectID id = ptr->objectID;
-        idsMap[id](*ptr);
+void ServerSendProtocol::sendMessage(std::shared_ptr<Message>&& status) {
+    if (status->type == MessageType::Lobby){
+        const LobbyMessage* lobbyMessage = dynamic_cast<const LobbyMessage*>(status.get());
+        sendShort(lobbyMessage->matchId);
+    }else{
+        const GameStatus* gameStatus = dynamic_cast<const GameStatus*>(status.get());
+        const auto& gameObjects = gameStatus->gameObjects;
+        sendShort(gameObjects.size());
+        for (const auto& ptr: gameObjects) {
+            GameObjectID id = ptr->objectID;
+            idsMap[id](*ptr);
+        }  
     }
 }
