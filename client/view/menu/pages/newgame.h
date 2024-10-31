@@ -29,6 +29,7 @@ signals:
 
 private:
     Ui::newGame* ui;
+    void verificarDatos();
 };
 
 

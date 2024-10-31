@@ -93,7 +93,7 @@
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QLabel" name="player1name">
+       <widget class="QLabel" name="labelPlayer1name">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -138,7 +138,7 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="player2name">
+       <widget class="QLabel" name="labelPlayer2name">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -194,7 +194,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QPushButton" name="btnJugar_2">
+       <widget class="QPushButton" name="buttonPlay">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -214,7 +214,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnVolver_2">
+       <widget class="QPushButton" name="buttonBack">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>

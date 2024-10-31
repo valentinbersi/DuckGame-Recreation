@@ -25,6 +25,7 @@ signals:
 
 private:
     Ui::joinGame* ui;
+    void verificarDatos();
 };
 
 

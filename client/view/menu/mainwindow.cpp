@@ -73,7 +73,7 @@ void MainWindow::joinAMatch() {
     int playersNumbers = config->getSelectedPlayers();
     if (playersNumbers == -1) { // esto creo que aca no deberia estar, sino en config
         QMessageBox::warning(this, "Error", "Seleccioná si vas a jugar con 1 o 2 jugadores antes de continuar");
-    }else {
+    } else {
         changePage(join_game);
     }
 }
