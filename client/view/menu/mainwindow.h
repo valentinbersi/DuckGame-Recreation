@@ -39,7 +39,6 @@ private:
 signals:
     void initMatch();
 
-
 public:
     explicit MainWindow(QWidget* parent);
     ~MainWindow() override;

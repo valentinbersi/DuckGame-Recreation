@@ -1,7 +1,7 @@
 #ifndef DUCKGAME_GAMELAUNCHER_H
 #define DUCKGAME_GAMELAUNCHER_H
 
-#include "../../common/socket/ActiveSocket.h"
+#include "ActiveSocket.h"
 #include "game/Game.hpp"
 #include "LobbyQT.h"
 #include "Communicator.h"

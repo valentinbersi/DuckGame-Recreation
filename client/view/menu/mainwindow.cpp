@@ -29,8 +29,8 @@ void MainWindow::setPagesAndConnections() {
 }
 
 MainWindow::MainWindow(QWidget* parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow) {
+        : QMainWindow(parent)
+        , ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
     common_init(this, ":/backgrounds/duck-game.png");
