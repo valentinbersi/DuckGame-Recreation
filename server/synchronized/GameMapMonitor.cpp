@@ -35,8 +35,8 @@ u16 GameMapMonitor::creatGameSafe() {
     // //     random_number = dist(gen);
 
     // // } while (gameMap.contains(random_number));
-    gameMap.insert({0,std::make_unique<GameLoop>()});
-    return 0; //va random number
+    gameMap.insert({1,std::make_unique<GameLoop>()});
+    return 1; //va random number
 }
 
 GameMapMonitor::~GameMapMonitor() {
