@@ -34,10 +34,10 @@ void Object::addChild(std::string name, Object* newChild) {
         throw AlreadyAddedChild(name);
 
     newChild->connect<Object, Object&>(eventName(Events::TREE_ENTERED),
-                                       {weakReference<Object>(), &Object::onTreeEntered});
+                                       {getReference<Object>(), &Object::onTreeEntered});
 
     newChild->connect<Object, Object&>(eventName(Events::TREE_EXITED),
-                                       {weakReference<Object>(), &Object::onTreeExited});
+                                       {getReference<Object>(), &Object::onTreeExited});
 
     children.insert({std::move(name), newChild});
     newChild->_parent = this;
@@ -55,7 +55,7 @@ Object::ChildNotInTree::ChildNotInTree(const std::string& name):
 Object::Object(): Object(nullptr) {}
 
 Object::Object(const Object& other):
-        Subject(other), RefCounted(), _parent(other._parent), children(other.children) {}
+        Subject(other), TrackedReference(), _parent(other._parent), children(other.children) {}
 
 Object& Object::operator=(const Object& other) {
     if (this == &other)
@@ -72,7 +72,7 @@ Object& Object::operator=(const Object& other) {
 
 Object::Object(Object&& other) noexcept:
         Subject(std::move(other)),
-        RefCounted(),
+        TrackedReference(),
         _parent(other._parent),
         children(std::move(other.children)) {
     other._parent = nullptr;

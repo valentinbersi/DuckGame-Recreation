@@ -6,16 +6,16 @@
 
 #include "GameObjectData.h"
 #include "GameStatus.h"
-#include "RefCounted.h"
 #include "Startable.h"
 #include "Subject.h"
+#include "TrackedReference.h"
 #include "Types.h"
 #include "Updatable.h"
 
 /**
  * An object in the game
  */
-class Object: public Subject, public RefCounted, public Updatable, public Startable {
+class Object: public Subject, public TrackedReference, public Updatable, public Startable {
     Object* _parent;
     HashMap<std::string, Object*> children;
 
