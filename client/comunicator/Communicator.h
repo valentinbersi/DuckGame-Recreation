@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <queue>
 
 #include "ActiveSocket.h"
 #include "BlockingQueue.h"
@@ -25,7 +26,7 @@ public:
 
     std::optional<std::unique_ptr<ServerMessage>> tryrecv();
 
-    std::queue<std::unique_ptr<ServerMessage>> recvAll();
+    std::optional<std::unique_ptr<ServerMessage>> tryRecvLast();
 
     ~Communicator();
 };
