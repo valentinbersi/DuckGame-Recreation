@@ -14,6 +14,8 @@ bool Communicator::trysend(std::unique_ptr<Message> message) { return sendQueue.
 
 std::optional<std::unique_ptr<Message>> Communicator::tryrecv() { return recvQueue.try_pop(); }
 
+std::queue<std::unique_ptr<Message>> Communicator::recvAll(){return recvQueue.popAll();}
+
 Communicator::~Communicator() {
     sender.stop();
     receiver.stop();

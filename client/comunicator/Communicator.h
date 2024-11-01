@@ -24,5 +24,7 @@ public:
 
     std::optional<std::unique_ptr<Message>> tryrecv();
 
+    std::queue<std::unique_ptr<Message>> recvAll();
+
     ~Communicator();
 };
