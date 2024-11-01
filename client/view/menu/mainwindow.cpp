@@ -6,6 +6,23 @@
 #include "common_init.h"
 #include "ui_mainwindow.h"
 
+MainWindow::MainWindow(QWidget* parent, Communicator& communicator)
+        : QMainWindow(parent),
+        ui(new Ui::MainWindow),
+        communicator(communicator),
+        gameInfo() {
+    ui->setupUi(this);
+
+    common_init(this, ":/backgrounds/duck-game.png");
+
+    menu = new mainMenu(this);
+    config = new configurationPage(this, gameInfo);
+    join_game = new joinGame(this, gameInfo);
+    new_game = new newGame(this, gameInfo);
+
+    setPagesAndConnections();
+}
+
 void MainWindow::setPagesAndConnections() {
     ui->stackedWidget->addWidget(menu);
     ui->stackedWidget->addWidget(config);
@@ -26,23 +43,6 @@ void MainWindow::setPagesAndConnections() {
 
     connect(join_game, &joinGame::playMatchClicked, this, &MainWindow::startGameHandler);
     connect(join_game, &joinGame::backClicked, this, [this]() { changePage(config); });
-}
-
-MainWindow::MainWindow(QWidget* parent, Communicator& communicator)
-        : QMainWindow(parent),
-        ui(new Ui::MainWindow),
-        communicator(communicator),
-        message() {
-    ui->setupUi(this);
-
-    common_init(this, ":/backgrounds/duck-game.png");
-
-    menu = new mainMenu(this);
-    config = new configurationPage(this, message);
-    join_game = new joinGame(this, message);
-    new_game = new newGame(this, message);
-
-    setPagesAndConnections();
 }
 
 MainWindow::~MainWindow() {
@@ -81,20 +81,41 @@ void MainWindow::joinAMatch() {
 }
 
 void MainWindow::startGameHandler() {
-    qDebug() << "Lobby Message Info:";
-    qDebug() << "Players Numbers:" << message.playersNumber;
-    qDebug() << "Player 1 Name:" << QString::fromStdString(message.player1Name);
-    qDebug() << "Player 2 Name:" << QString::fromStdString(message.player2Name);
-    qDebug() << "Match ID:" << message.matchId;
-    qDebug() << "Map Name:" << QString::fromStdString(message.mapChosen);
-
-//    auto messagePtr = std::make_unique<Message>(message);
-//
-//    if (!communicator.trysend(std::move(messagePtr))) {
-//        qDebug() << "Error al enviar el mensaje.";
-//    }
-
+    sendMessageToServer();
     emit startGame();
     close();
     QCoreApplication::exit(0);
+}
+
+void MainWindow::sendMessageToServer() {
+    qDebug() << "Game Info:";
+    qDebug() << "Players Numbers:" << gameInfo.playersNumber;
+    qDebug() << "Player 1 Name:" << QString::fromStdString(gameInfo.player1Name);
+    qDebug() << "Player 2 Name:" << QString::fromStdString(gameInfo.player2Name);
+    qDebug() << "Match ID:" << gameInfo.matchID;
+    qDebug() << "Map Name:" << QString::fromStdString(gameInfo.selectedMap);
+
+    // si se crea partida tendria que mostrar por pantalla el matchID.
+
+    LobbyRequest request = gameInfo.isNewGame ? LobbyRequest::NEWMATCH : LobbyRequest::JOINMATCH;
+
+    auto message = std::make_unique<LobbyMessage>(
+            request,
+            gameInfo.playersNumber,
+            gameInfo.player1Name,
+            gameInfo.player2Name,
+            gameInfo.matchID
+    );
+
+//    if (!communicator.trysend(std::move(message))) {
+//        qDebug() << "Error al enviar el mensaje.";
+//    }
+
+    qDebug() << "Lobby Message Info:";
+    qDebug() << "Request:" << message->request;
+    qDebug() << "Players Numbers:" << message->playerCount;
+    qDebug() << "Player 1 Name:" << QString::fromStdString(message->player1Name);
+    qDebug() << "Player 2 Name:" << QString::fromStdString(message->player2Name);
+    qDebug() << "Match ID:" << message->matchId;
+    //qDebug() << "Map Name:" << QString::fromStdString(gameInfo.selectedMap);
 }

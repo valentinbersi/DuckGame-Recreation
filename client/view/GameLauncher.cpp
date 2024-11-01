@@ -36,14 +36,11 @@ void GameLauncher::exec() {
 
     if (startGame) {
         try {
-            communicator.trysend(std::make_unique<LobbyMessage>(LobbyRequest::NEWMATCH, "penevsvagina", 0));
-            communicator.trysend(std::make_unique<LobbyMessage>(LobbyRequest::STARTMATCH, "speednig", 0));
+            communicator.trysend(std::make_unique<LobbyMessage>(LobbyRequest::NEWMATCH, 2, "tomas", "camilo", 1));
+            communicator.trysend(std::make_unique<LobbyMessage>(LobbyRequest::STARTMATCH, 2, "andres", "valentin", 1));
             Game game(communicator);
-            //two players? lo debo mandar al game
-            //debo recibir la cantidad de patos que hay en la partida para pintar N patos distintos
             game.init();
 
-            // Here all resources are automatically released and library deinitialized
             //return 0;
 
         } catch (std::exception& e) {

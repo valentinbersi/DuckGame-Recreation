@@ -2,7 +2,7 @@
 
 #include <QStringListModel>
 
-newGame::newGame(QWidget* parent, LobbyMessage_& message): QWidget(parent), ui(new Ui::newGame), message(message) {
+newGame::newGame(QWidget* parent, GameInfo& gameInfo): QWidget(parent), ui(new Ui::newGame), gameInfo(gameInfo) {
     ui->setupUi(this);
 
     // inicializo la lista de mapas en modo de prueba.
@@ -36,13 +36,13 @@ void newGame::verificarDatos() {
 }
 
 void newGame::onPlayClicked() {
-    message.player1Name = ui->lineEditPlayer1->text().toStdString();
-    message.player2Name = ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString();
+    gameInfo.player1Name = ui->lineEditPlayer1->text().toStdString();
+    gameInfo.player2Name = ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString();
 
     QModelIndexList selectedIndexes = ui->mapsList->selectionModel()->selectedIndexes();
     if (!selectedIndexes.isEmpty()) {
         QString selectedMap = selectedIndexes.first().data().toString();
-        message.mapChosen = selectedMap.toStdString();
+        gameInfo.selectedMap = selectedMap.toStdString();
     }
 
     emit playMatchClicked();
