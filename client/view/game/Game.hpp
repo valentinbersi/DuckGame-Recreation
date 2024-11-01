@@ -14,7 +14,7 @@
 
 #include "SpriteManager.h"
 #include "Communicator.h"
-#include "Message.h"
+#include "ServerMessage.h"
 #include "GameStatus.h"
 #include "GameObjectData.h"
 #include "GameObject2DData.h"

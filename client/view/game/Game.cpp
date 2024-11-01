@@ -80,9 +80,9 @@ void Game::init() {
 void Game::getSnapshot() {
     std::unique_ptr<GameStatus> snapshot;
 
-    std::optional<std::unique_ptr<Message>> optionalMessage = communicator.tryrecv();
+    std::optional<std::unique_ptr<ServerMessage>> optionalMessage = communicator.tryRecvLast();
     if (optionalMessage.has_value()) {
-        std::unique_ptr<Message> message = std::move(optionalMessage.value());
+        std::unique_ptr<ServerMessage> message = std::move(optionalMessage.value());
         snapshot = std::unique_ptr<GameStatus>(dynamic_cast<GameStatus*>(message.release()));
     } else {
         return;
