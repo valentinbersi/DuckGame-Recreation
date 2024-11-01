@@ -5,7 +5,7 @@
 #include <QWidget>
 
 #include "GameInfo.h"
-#include "MyLobbyMessage.h"
+#include "LobbyMessage.h"
 #include "ui_configurationPage.h"
 
 QT_BEGIN_NAMESPACE
@@ -20,12 +20,12 @@ class configurationPage: public QWidget {
 private:
     Ui::configurationPage* ui;
     QButtonGroup* CantidadPlayersGroup;
-    LobbyMessage_& message;
+    GameInfo& gameInfo;
     void handleJoinGame();
     void handleNewGame();
 
 public:
-    configurationPage(QWidget* parent, LobbyMessage_& message);
+    configurationPage(QWidget* parent, GameInfo& gameInfo);
     int getSelectedPlayers() const;
     ~configurationPage() override;
 

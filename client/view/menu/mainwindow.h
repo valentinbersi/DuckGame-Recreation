@@ -8,7 +8,7 @@
 
 #include "Communicator.h"
 #include "GameInfo.h"
-#include "MyLobbyMessage.h"
+#include "LobbyMessage.h"
 #include "configurationpage.h"
 #include "joingame.h"
 #include "mainmenu.h"
@@ -27,13 +27,12 @@ class MainWindow: public QMainWindow {
 private:
     Ui::MainWindow* ui;
     Communicator& communicator;
+    GameInfo gameInfo;
 
     QPointer<mainMenu> menu;
     QPointer<configurationPage> config;
     QPointer<joinGame> join_game;
     QPointer<newGame> new_game;
-
-    LobbyMessage_ message;
 
     void setPagesAndConnections();
     void exitTheGame();
@@ -41,6 +40,7 @@ private:
     void joinAMatch();
     void startGameHandler();
     void changePage(QWidget* page);
+    void sendMessageToServer();
 
 signals:
     void startGame();
