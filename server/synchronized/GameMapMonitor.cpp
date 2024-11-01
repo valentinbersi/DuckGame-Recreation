@@ -7,7 +7,7 @@ GameMapMonitor::GameMapMonitor() {}
 
 
 BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGameIfCreated(
-        u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<Message>>> senderQueue,
+        u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
         u16 clientId) {
     std::lock_guard lock(mutex);
 

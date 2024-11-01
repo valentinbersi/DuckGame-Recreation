@@ -3,7 +3,7 @@
 #include "MovementCommand.h"
 
 Receiver::Receiver(ActiveSocket& socket, BlockingQueue<std::unique_ptr<Command>>* queue_ptr,
-                   std::shared_ptr<BlockingQueue<std::shared_ptr<Message>>> queueSender,
+                   std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> queueSender,
                    GameMapMonitor& monitor):
         recvProtocol(socket),
         gameQueue(queue_ptr),
@@ -13,7 +13,7 @@ void Receiver::run() {
     try {
         while (_keep_running) {
         
-            std::unique_ptr<Message> message = recvProtocol.receiveMessage();
+            std::unique_ptr<ClientMessage> message = recvProtocol.receiveMessage();
             if (message->type == MessageType::Game){
                 const GameMessage* gameMessage = dynamic_cast<const GameMessage*>(message.get());
                 gameQueue->push(std::make_unique<MovementCommand>(0, gameMessage->action));

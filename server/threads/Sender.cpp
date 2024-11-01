@@ -1,7 +1,7 @@
 
 #include "Sender.h"
 
-Sender::Sender(ActiveSocket& socket,std::shared_ptr<BlockingQueue<std::shared_ptr<Message>>>& queue) : 
+Sender::Sender(ActiveSocket& socket,std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>>& queue) : 
                 sendProtocol(socket), sendQueue(queue) {}
 
 void Sender::run(){

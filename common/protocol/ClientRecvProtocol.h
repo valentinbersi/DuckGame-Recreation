@@ -1,6 +1,7 @@
 #pragma once
 #include "ActiveSocket.h"
 #include "DuckData.h"
+#include "ServerMessage.h"
 #include "GameStatus.h"
 #include "Math.h"
 #include "ReceiveProtocol.h"
@@ -14,12 +15,12 @@ private:
 
     std::unique_ptr<GameObjectData> recvDuckData();
 
-    std::unique_ptr<Message> recvGameStatus();
+    std::unique_ptr<ServerMessage> recvGameStatus();
 
 public:
     explicit ClientRecvProtocol(ActiveSocket& socket);
 
-    std::unique_ptr<Message> receiveMessage();
+    std::unique_ptr<ServerMessage> receiveMessage();
 
     ~ClientRecvProtocol() = default;
 };

@@ -23,5 +23,5 @@ protected:
     std::string recv_string();
 
 public:
-    ~ReceiveProtocol() {}
+    virtual ~ReceiveProtocol() {}
 };

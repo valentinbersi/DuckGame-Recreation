@@ -7,13 +7,13 @@
 #include "GameMessage.h"
 #include "GameStatus.h"
 #include "LobbyMessage.h"
-#include "Message.h"
+#include "ServerMessage.h"
 #include "Types.h"
 
 class LobbyResolver {
 private:
     GameMapMonitor& gameMap;
-    std::shared_ptr<BlockingQueue<std::shared_ptr<Message>>> senderQueue;
+    std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue;
     BlockingQueue<std::unique_ptr<Command>>* recvQueue;  // empieza en nullptr
 
     void resolveNewMatch();
@@ -24,7 +24,7 @@ private:
 
 public:
     LobbyResolver(GameMapMonitor& gameMap,
-                  std::shared_ptr<BlockingQueue<std::shared_ptr<Message>>> senderQueue,
+                  std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
                   BlockingQueue<std::unique_ptr<Command>>* recvQueue);
 
     void resolveRequest(const LobbyMessage& request);
