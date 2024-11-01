@@ -24,6 +24,8 @@ public:
 
     void sendMessage(std::shared_ptr<ServerMessage>&& mensaje);
 
+    void sendLen(u16 len);
+
     void sendDuck(const GameObjectData& objData);
 
     void sendReplyMessage(u16 matchID, u8 startGame);
