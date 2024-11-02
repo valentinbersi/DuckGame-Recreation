@@ -4,7 +4,6 @@
 #include <string>
 #include <unordered_map>
 
-#include "GameObjectData.h"
 #include "GameStatus.h"
 #include "Startable.h"
 #include "Subject.h"
@@ -35,6 +34,11 @@ class Object: public Subject, public TrackedReference, public Updatable, public 
 protected:
     constexpr static auto INVALID_EVENT_TYPE = "Invalid event type";
 
+    Object(const Object& other);
+    Object& operator=(const Object& other);
+    Object(Object&& other) noexcept;
+    Object& operator=(Object&& other) noexcept;
+
     /**
      * A constructor for derived classes.
      * Initializes the signals
@@ -49,10 +53,26 @@ protected:
     void addChild(std::string name, Object* newChild);
 
     /**
-     * Get the map of children of the object
-     * @return The map of children
+     * Apply the given function to all children
+     * @param f The function to apply
      */
-    const HashMap<std::string, Object*>& getChildren() const;
+    void forAllChildren(const std::function<void(Object&)>& f);
+
+    /**
+     * Apply the given function to a child
+     * @param name The name of the child
+     * @param f The function to apply
+     * @tparam Ret The return type of the function
+     * @return The result of the function
+     */
+    template <typename Ret>
+    Ret applyToChild(const std::string& name, const std::function<Ret(Object&)>& f);
+
+    /**
+     * Load the children the object should have at its creation. Children should not be added in the
+     * constructor
+     */
+    virtual void loadChildren() = 0;
 
 public:
     /**
@@ -71,11 +91,7 @@ public:
         explicit ChildNotInTree(const std::string& name);
     };
 
-    Object();
-    Object(const Object& other);
-    Object& operator=(const Object& other);
-    Object(Object&& other) noexcept;
-    Object& operator=(Object&& other) noexcept;
+    Object() = delete;
     ~Object() override;
 
     /**
@@ -138,3 +154,13 @@ public:
      */
     static std::string eventName(Events eventType);
 };
+
+template <typename Ret>
+Ret Object::applyToChild(const std::string& name, const std::function<Ret(Object&)>& f) {
+    const auto child = children.find(name);
+
+    if (child == children.end())
+        throw ChildNotInTree(name);
+
+    return f(*child->second);
+}

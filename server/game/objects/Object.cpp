@@ -15,45 +15,6 @@ void Object::onTreeExited(Object& object) {
     fire<Object, Object&>(eventName(Events::TREE_EXITED), object);
 }
 
-Object::Object(Object* parent): _parent(parent) {
-    registerEvent<Object, Object&>(eventName(Events::TREE_ENTERED));
-    registerEvent<Object, Object&>(eventName(Events::TREE_EXITED));
-}
-
-#define NULL_CHILD "newChild is nullptr"
-#define EMPTY_NAME "name is empty"
-
-void Object::addChild(std::string name, Object* newChild) {
-    if (newChild == nullptr)
-        throw std::invalid_argument(NULL_CHILD);
-
-    if (name.empty())
-        throw std::invalid_argument(EMPTY_NAME);
-
-    if (children.contains(name))
-        throw AlreadyAddedChild(name);
-
-    newChild->connect<Object, Object&>(eventName(Events::TREE_ENTERED),
-                                       {getReference<Object>(), &Object::onTreeEntered});
-
-    newChild->connect<Object, Object&>(eventName(Events::TREE_EXITED),
-                                       {getReference<Object>(), &Object::onTreeExited});
-
-    children.insert({std::move(name), newChild});
-    newChild->_parent = this;
-    fire<Object, Object&>(eventName(Events::TREE_ENTERED), *newChild);
-}
-
-const HashMap<std::string, Object*>& Object::getChildren() const { return children; }
-
-Object::AlreadyAddedChild::AlreadyAddedChild(const std::string& name):
-        std::runtime_error("Child with name " + name + " already exists.") {}
-
-Object::ChildNotInTree::ChildNotInTree(const std::string& name):
-        std::runtime_error("Child with name " + name + " is not in child tree.") {}
-
-Object::Object(): Object(nullptr) {}
-
 Object::Object(const Object& other):
         Subject(other), TrackedReference(), _parent(other._parent), children(other.children) {}
 
@@ -90,6 +51,52 @@ Object& Object::operator=(Object&& other) noexcept {
     children = std::move(other.children);
     return *this;
 }
+
+Object::Object(Object* parent): _parent(parent) {
+    registerEvent<Object, Object&>(eventName(Events::TREE_ENTERED));
+    registerEvent<Object, Object&>(eventName(Events::TREE_EXITED));
+}
+
+#define NULL_CHILD "newChild is nullptr"
+#define EMPTY_NAME "name is empty"
+
+void Object::addChild(std::string name, Object* newChild) {
+    if (newChild == nullptr)
+        throw std::invalid_argument(NULL_CHILD);
+
+    if (name.empty())
+        throw std::invalid_argument(EMPTY_NAME);
+
+    if (children.contains(name))
+        throw AlreadyAddedChild(name);
+
+    newChild->connect<Object, Object&>(eventName(Events::TREE_ENTERED),
+                                       {getReference<Object>(), &Object::onTreeEntered});
+
+    newChild->connect<Object, Object&>(eventName(Events::TREE_EXITED),
+                                       {getReference<Object>(), &Object::onTreeExited});
+
+    children.insert({std::move(name), newChild});
+    newChild->_parent = this;
+    fire<Object, Object&>(eventName(Events::TREE_ENTERED), *newChild);
+    newChild->loadChildren();  // This way the TREE_ENTERED events of the child will also be fired
+}
+
+void Object::forAllChildren(const std::function<void(Object&)>& f) {
+    std::ranges::for_each(children,
+                          [&f](const std::pair<std::string, Object*>& child) { f(*child.second); });
+}
+
+#define CHILD_NAME "Child with name"
+#define ALREADY_EXISTS " already exists."
+
+Object::AlreadyAddedChild::AlreadyAddedChild(const std::string& name):
+        std::runtime_error(CHILD_NAME + name + ALREADY_EXISTS) {}
+
+#define NOT_IN_TREE " is not in child tree."
+
+Object::ChildNotInTree::ChildNotInTree(const std::string& name):
+        std::runtime_error(CHILD_NAME + name + NOT_IN_TREE) {}
 
 Object::~Object() {
     std::ranges::for_each(
