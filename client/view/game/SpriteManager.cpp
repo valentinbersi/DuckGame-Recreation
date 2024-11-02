@@ -17,6 +17,8 @@
 
 #define NO_FEATHER false
 #define NO_RIGHT_FEATHER false
+#define FEATHER true
+#define RIGHT_FEATHER true
 
 SpriteManager::SpriteManager(const char* path1, const char* path2, SDL2pp::Renderer& renderer,
                              SDL2pp::Texture& m_texture_image, SDL2pp::Texture& m_texture_feathers,
@@ -85,13 +87,14 @@ void SpriteManager::draw(int col, int row) {
     spritesheet.drawSelectedSprite(position, flip, NO_FEATHER, NO_RIGHT_FEATHER);
 
     // Left feather
-    spritesheet.selectSprite(col, row, NO_FEATHER);
-    position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER);
-    spritesheet.drawSelectedSprite(position, flip, NO_FEATHER, NO_RIGHT_FEATHER);
+    spritesheet.selectSprite(col, row, FEATHER);
+    position = getPosition(FEATHER, NO_RIGHT_FEATHER);
+    spritesheet.drawSelectedSprite(position, flip, FEATHER, NO_RIGHT_FEATHER);
 
-    // Right feather
-    position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER);
-    spritesheet.drawSelectedSprite(position, flip, NO_FEATHER, NO_RIGHT_FEATHER);
+    /* Right feather
+    spritesheet.selectSprite(col, row + 1, FEATHER);
+    position = getPosition(FEATHER, RIGHT_FEATHER);
+    spritesheet.drawSelectedSprite(position, flip, FEATHER, RIGHT_FEATHER);*/
 }
 
 void SpriteManager::setFlags(bool air, bool flap, bool right, bool left) {
@@ -151,14 +154,16 @@ SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather) {
     int playerHeight = spritesheet.getClipHeight();
     SDL2pp::Rect position(m_position_x, m_position_y, playerWidth * scale, playerHeight * scale);
 
-    if (isFeather) {
+    if (isFeather || isRightFeather) {
         // Adjust the position for feathers
+        /*
         if (isRightFeather) {
-            position.x += playerWidth;  // Example adjustment for right feather
+            //position.x += playerWidth;  // Example adjustment for right feather
         } else {
-            position.x -= playerWidth;  // Example adjustment for left feather
-        }
-        position.y -= 10;  // Example adjustment for feathers, change as needed
+            //position.x -= playerWidth;  // Example adjustment for left feather
+        }*/
+        position.x += 27;  //duck width - (feathers width / 2) + 1 (offset)
+        position.y += 36;  //duck height + (feathers height / 2) - 4 (offset)
     }
 
     return position;
