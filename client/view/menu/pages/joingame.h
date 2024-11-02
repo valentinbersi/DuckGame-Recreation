@@ -4,7 +4,7 @@
 #include <QWidget>
 
 #include "GameInfo.h"
-#include "MyLobbyMessage.h"
+#include "LobbyMessage.h"
 #include "ui_joinGame.h"
 
 
@@ -20,12 +20,12 @@ class joinGame: public QWidget {
 private:
     Ui::joinGame* ui;
     void verificarDatos();
-    LobbyMessage_& message;
+    GameInfo& gameInfo;
 
     void onPlayClicked();
 
 public:
-    joinGame(QWidget* parent, LobbyMessage_& message);
+    joinGame(QWidget* parent, GameInfo& gameInfo);
     ~joinGame() override;
 
 signals:

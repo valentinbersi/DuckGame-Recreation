@@ -3,10 +3,10 @@
 #include <QButtonGroup>
 
 
-configurationPage::configurationPage(QWidget* parent, LobbyMessage_& message):
+configurationPage::configurationPage(QWidget* parent, GameInfo& gameInfo):
         QWidget(parent),
         ui(new Ui::configurationPage),
-        message(message) {
+        gameInfo(gameInfo) {
     ui->setupUi(this);
 
     CantidadPlayersGroup = new QButtonGroup(this);
@@ -24,12 +24,12 @@ int configurationPage::getSelectedPlayers() const {
 }
 
 void configurationPage::handleJoinGame() {
-    message.playersNumber = getSelectedPlayers();
+    gameInfo.playersNumber = getSelectedPlayers();
     emit joinGameClicked();
 }
 
 void configurationPage::handleNewGame() {
-    message.playersNumber = getSelectedPlayers();
+    gameInfo.playersNumber = getSelectedPlayers();
     emit newGameClicked();
 }
 

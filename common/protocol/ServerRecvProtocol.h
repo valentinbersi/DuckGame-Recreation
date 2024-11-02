@@ -5,7 +5,7 @@
 
 #include "ActiveSocket.h"
 #include "GameStatus.h"
-#include "Message.h"
+#include "ClientMessage.h"
 #include "ReceiveProtocol.h"
 #include <memory>
 
@@ -14,7 +14,7 @@ private:
 public:
     explicit ServerRecvProtocol(ActiveSocket& socket);
 
-    std::unique_ptr<Message> receiveMessage();
+    std::unique_ptr<ClientMessage> receiveMessage();
 
     ~ServerRecvProtocol() = default;
 };

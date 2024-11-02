@@ -2,10 +2,10 @@
 
 #include <utility>
 
-GameStatus::GameStatus(): Message(MessageType::Game) {}  // Luego chequeamos.
+GameStatus::GameStatus(): ServerMessage(MessageType::Game) {}  // Luego chequeamos.
 
 GameStatus::GameStatus(GameStatus&& other) noexcept:
-        Message(MessageType::Game), gameObjects(std::move(other.gameObjects)) {}
+        ServerMessage(MessageType::Game), gameObjects(std::move(other.gameObjects)) {}
 
 GameStatus& GameStatus::operator=(GameStatus&& other) noexcept {
     if (this == &other)
@@ -14,3 +14,11 @@ GameStatus& GameStatus::operator=(GameStatus&& other) noexcept {
     gameObjects = std::move(other.gameObjects);
     return *this;
 }
+
+void GameStatus::send(ServerSendProtocol& serverProtocol){
+    serverProtocol.sendLen(gameObjects.size());
+    for (const auto& object: gameObjects) {
+        serverProtocol.sendDuck(*object);
+    }
+}
+

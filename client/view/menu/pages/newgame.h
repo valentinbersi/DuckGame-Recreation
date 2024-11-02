@@ -8,7 +8,7 @@
 #include <QWidget>
 
 #include "GameInfo.h"
-#include "MyLobbyMessage.h"
+#include "LobbyMessage.h"
 #include "ui_newGame.h"
 
 
@@ -23,13 +23,13 @@ class newGame: public QWidget {
 
 private:
     Ui::newGame* ui;
-    LobbyMessage_& message;
+    GameInfo& gameInfo;
 
     void verificarDatos();
     void onPlayClicked();
 
 public:
-    newGame(QWidget* parent, LobbyMessage_& message);
+    newGame(QWidget* parent, GameInfo& gameInfo);
     ~newGame() override;
 
 signals:

@@ -4,12 +4,12 @@
 #include <memory>
 
 #include "GameObjectData.h"
-#include "Message.h"
+#include "ServerMessage.h"
 
 /**
  * A struct with the current game status.
  */
-struct GameStatus: public Message {
+struct GameStatus: public ServerMessage {
     GameStatus();
     GameStatus(const GameStatus& other) = delete;
     GameStatus& operator=(const GameStatus& other) = delete;
@@ -17,4 +17,6 @@ struct GameStatus: public Message {
     GameStatus& operator=(GameStatus&& other) noexcept;
 
     std::list<std::unique_ptr<GameObjectData>> gameObjects;
+
+    void send(ServerSendProtocol& serverProtocol) override;
 };

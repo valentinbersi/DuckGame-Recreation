@@ -2,7 +2,7 @@
 #include <QMessageBox>
 #include <QDebug>
 
-joinGame::joinGame(QWidget* parent, LobbyMessage_& message): QWidget(parent), ui(new Ui::joinGame), message(message) {
+joinGame::joinGame(QWidget* parent, GameInfo& gameInfo): QWidget(parent), ui(new Ui::joinGame), gameInfo(gameInfo) {
     ui->setupUi(this);
 
     connect(ui->buttonPlay, &QPushButton::clicked, this, &joinGame::onPlayClicked);
@@ -32,12 +32,12 @@ void joinGame::verificarDatos() {
 }
 
 void joinGame::onPlayClicked() {
-    message.player1Name = ui->lineEditPlayer1->text().toStdString();
-    message.player2Name = ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString();
-    message.matchId = ui->lineEditMatchID->text().toUShort();
+    gameInfo.player1Name = ui->lineEditPlayer1->text().toStdString();
+    gameInfo.player2Name = ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString();
+    gameInfo.matchID = ui->lineEditMatchID->text().toUShort();
 
     qDebug() << "Match ID:" << ui->lineEditMatchID->text().toUShort();
-    qDebug() << "Match ID:" << message.matchId;
+    qDebug() << "Match ID:" << gameInfo.matchID;
 
     emit playMatchClicked();
 }

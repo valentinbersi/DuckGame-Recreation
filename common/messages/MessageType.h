@@ -2,7 +2,7 @@
 
 class MessageType {
 public:
-    enum Value : unsigned char { Lobby = 0x0, Game = 0x1 };
+    enum Value : unsigned char { Lobby = 0x0, Game = 0x1, Reply=0x2 };
 
     // cppcheck-suppress noExplicitConstructor
     MessageType(Value value):

@@ -5,7 +5,7 @@
 #include "Command.h"
 #include "GameMapMonitor.h"
 #include "LobbyResolver.h"
-#include "Message.h"
+#include "ServerMessage.h"
 #include "ServerRecvProtocol.h"
 #include "Thread.h"
 
@@ -17,10 +17,10 @@ private:
     // CommnadFactory factory;
 public:
     Receiver(ActiveSocket& socket, BlockingQueue<std::unique_ptr<Command>>* queueRecv,
-             std::shared_ptr<BlockingQueue<std::shared_ptr<Message>>> queueSender,
+             std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> queueSender,
              GameMapMonitor& monitor);
 
-    virtual void run() override;
+    void run() override;
 
     void stop() override;
 

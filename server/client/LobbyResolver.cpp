@@ -2,7 +2,7 @@
 
 LobbyResolver::LobbyResolver(
         GameMapMonitor& gameMap,
-        std::shared_ptr<BlockingQueue<std::shared_ptr<Message>>> senderQueue,
+        std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
         BlockingQueue<std::unique_ptr<Command>>* recvQueue):
 
         gameMap(gameMap), senderQueue(senderQueue), recvQueue(recvQueue) {}

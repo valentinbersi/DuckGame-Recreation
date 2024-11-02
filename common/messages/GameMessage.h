@@ -1,8 +1,14 @@
 #pragma once
-#include "Message.h"
+#include "ClientMessage.h"
+#include "MessageType.h"
 
-struct GameMessage: public Message {
+struct GameMessage: public ClientMessage {
+public:
     InputAction action;
-    GameMessage(InputAction action): Message(MessageType::Game), action(action) {}
-    ~GameMessage() = default;
+
+    GameMessage(InputAction action);
+
+    void send(ClientSendProtocol& clientProtocol) override;
+    
+    ~GameMessage();
 };

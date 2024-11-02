@@ -1,5 +1,11 @@
 #include "Spritesheet.h"
 
+#define N_COL 5
+#define N_ROW 2
+
+#define N_COL_F 5  // Feathers
+#define N_ROW_F 8  // PERO NO LE DARÉ USO A TODAS
+
 Spritesheet::Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer& renderer,
                          SDL2pp::Texture& m_texture_image, SDL2pp::Texture& m_texture_feathers):
         m_texture_image(m_texture_image),
@@ -17,11 +23,19 @@ Spritesheet::Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer&
 
 void Spritesheet::selectSprite(int x, int y, bool feathers) {
     if (feathers) {
+
+
+        m_clip.w = 16;
+        m_clip.h = 16;
+        /*
         m_clip.w = m_spritesheet_feathers->w / N_COL_F;
-        m_clip.h = m_spritesheet_feathers->h / N_ROW_F;
+        m_clip.h = m_spritesheet_feathers->h / N_ROW_F;*/
     } else {
+        m_clip.w = 32;
+        m_clip.h = 32;
+        /*
         m_clip.w = m_spritesheet_image->w / N_COL;
-        m_clip.h = m_spritesheet_image->h / N_ROW;
+        m_clip.h = m_spritesheet_image->h / N_ROW;*/
     }
     m_clip.x = x * m_clip.w;
     m_clip.y = y * m_clip.h;

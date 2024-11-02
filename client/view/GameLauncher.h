@@ -2,7 +2,7 @@
 #define DUCKGAME_GAMELAUNCHER_H
 
 #include "ActiveSocket.h"
-#include "game/Game.hpp"
+#include "../game/Game.hpp"
 #include "LobbyQT.h"
 #include "Communicator.h"
 

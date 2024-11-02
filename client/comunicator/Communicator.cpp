@@ -10,11 +10,19 @@ Communicator::Communicator(const std::string& hostname, const std::string& serve
     receiver.start();
 }
 
-bool Communicator::trysend(std::unique_ptr<Message> message) { return sendQueue.try_push(std::move(message)); }
+bool Communicator::trysend(std::unique_ptr<ClientMessage> message) { return sendQueue.try_push(std::move(message)); }
 
-std::optional<std::unique_ptr<Message>> Communicator::tryrecv() { return recvQueue.try_pop(); }
+std::optional<std::unique_ptr<ServerMessage>> Communicator::tryrecv() { return recvQueue.try_pop(); }
 
-std::queue<std::unique_ptr<Message>> Communicator::recvAll(){return recvQueue.popAll();}
+std::optional<std::unique_ptr<ServerMessage>> Communicator::tryRecvLast(){ 
+    std::queue<std::unique_ptr<ServerMessage>> queue = recvQueue.popAll();
+    if(queue.empty()){
+        return std::nullopt;
+    }
+    std::unique_ptr<ServerMessage> message = std::move(queue.back());
+    queue.pop();
+    return message;
+}
 
 Communicator::~Communicator() {
     sender.stop();
