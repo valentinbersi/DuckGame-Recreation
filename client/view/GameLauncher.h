@@ -3,15 +3,17 @@
 
 #include "ActiveSocket.h"
 #include "../game/Game.hpp"
-#include "LobbyQT.h"
 #include "Communicator.h"
+#include "QApplication"
+#include "gameMenu.h"
 
 class GameLauncher: public QObject {
     Q_OBJECT
 
 private:
     Communicator communicator;
-    LobbyQT lobby;
+    QApplication app;
+    GameMenu menu;
     bool startGame;
 
 public:
@@ -20,7 +22,6 @@ public:
 
 private slots:
     void startedSDL();
-
 };
 
 #endif  // DUCKGAME_GAMELAUNCHER_H
