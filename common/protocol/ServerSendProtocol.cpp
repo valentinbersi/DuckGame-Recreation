@@ -36,6 +36,10 @@ void ServerSendProtocol::sendReplyMessage(u16 matchID, u8 startGame){
     sendByte(startGame);
 }
 
+void ServerSendProtocol::sendLen(u16 len){
+    sendShort(len);
+}
+
 void ServerSendProtocol::sendMessage(std::shared_ptr<ServerMessage>&& message) {
     sendByte(message->type);
     message->send(*this);

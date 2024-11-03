@@ -16,7 +16,9 @@ GameStatus& GameStatus::operator=(GameStatus&& other) noexcept {
 }
 
 void GameStatus::send(ServerSendProtocol& serverProtocol){
+    serverProtocol.sendLen(gameObjects.size());
     for (const auto& object: gameObjects) {
         serverProtocol.sendDuck(*object);
     }
 }
+

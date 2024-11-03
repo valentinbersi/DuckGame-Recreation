@@ -16,16 +16,16 @@
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class MainWindow;
+class GameMenu;
 }
 QT_END_NAMESPACE
 
-class MainWindow: public QMainWindow {
+class GameMenu: public QMainWindow {
     Q_OBJECT
 
 
 private:
-    Ui::MainWindow* ui;
+    Ui::GameMenu* ui;
     Communicator& communicator;
     GameInfo gameInfo;
 
@@ -35,9 +35,6 @@ private:
     QPointer<newGame> new_game;
 
     void setPagesAndConnections();
-    void exitTheGame();
-    void createAMatch();
-    void joinAMatch();
     void startGameHandler();
     void changePage(QWidget* page);
     void sendMessageToServer();
@@ -46,8 +43,8 @@ signals:
     void startGame();
 
 public:
-    MainWindow(QWidget* parent, Communicator& communicator);
-    ~MainWindow() override;
+    GameMenu(QWidget* parent, Communicator& communicator);
+    ~GameMenu() override;
 };
 
 #endif  // MAINWINDOW_H
