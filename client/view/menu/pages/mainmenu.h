@@ -21,10 +21,11 @@ public:
 
 signals:
     void play();
-    void exit();
+    void exitGameRequested();
 
 private:
     Ui::mainMenu* ui;
+    void handleExit();
 };
 
 

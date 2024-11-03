@@ -1,14 +1,15 @@
-#include "mainwindow.h"
+#include "gameMenu.h"
 
 #include <QDebug>
 #include <QDir>
+#include <QPushButton>
 
 #include "common_init.h"
-#include "ui_mainwindow.h"
+#include "ui_gamemenu.h"
 
-MainWindow::MainWindow(QWidget* parent, Communicator& communicator)
+GameMenu::GameMenu(QWidget* parent, Communicator& communicator)
         : QMainWindow(parent),
-        ui(new Ui::MainWindow),
+        ui(new Ui::GameMenu),
         communicator(communicator),
         gameInfo() {
     ui->setupUi(this);
@@ -23,7 +24,7 @@ MainWindow::MainWindow(QWidget* parent, Communicator& communicator)
     setPagesAndConnections();
 }
 
-void MainWindow::setPagesAndConnections() {
+void GameMenu::setPagesAndConnections() {
     ui->stackedWidget->addWidget(menu);
     ui->stackedWidget->addWidget(config);
     ui->stackedWidget->addWidget(join_game);
@@ -32,62 +33,36 @@ void MainWindow::setPagesAndConnections() {
     ui->stackedWidget->setCurrentWidget(menu);
 
     connect(menu, &mainMenu::play, this, [this]() { changePage(config); });
-    connect(menu, &mainMenu::exit, this, &MainWindow::exitTheGame);
+    connect(menu, &mainMenu::exitGameRequested, this, &QApplication::quit);
 
-    connect(config, &configurationPage::joinGameClicked, this, &MainWindow::joinAMatch);
-    connect(config, &configurationPage::newGameClicked, this, &MainWindow::createAMatch);
+    connect(config, &configurationPage::joinGameClicked, this, [this]() { changePage(join_game); });
+    connect(config, &configurationPage::newGameClicked, this, [this]() { changePage(new_game); });
     connect(config, &configurationPage::backClicked, this, [this]() { changePage(menu); });
 
-    connect(new_game, &newGame::playMatchClicked, this, &MainWindow::startGameHandler);
+    connect(new_game, &newGame::playMatchClicked, this, &GameMenu::startGameHandler);
     connect(new_game, &newGame::backClicked, this, [this]() { changePage(config); });
 
-    connect(join_game, &joinGame::playMatchClicked, this, &MainWindow::startGameHandler);
+    connect(join_game, &joinGame::playMatchClicked, this, &GameMenu::startGameHandler);
     connect(join_game, &joinGame::backClicked, this, [this]() { changePage(config); });
 }
 
-MainWindow::~MainWindow() {
+GameMenu::~GameMenu() {
     delete ui;
 }
 
-void MainWindow::changePage(QWidget* page) {
+void GameMenu::changePage(QWidget* page) {
     ui->stackedWidget->setCurrentWidget(page);
 }
 
-void MainWindow::exitTheGame() {
-    QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this, "Salir", "¿Seguro que querés salir?", QMessageBox::Yes | QMessageBox::No);
-
-    if (reply == QMessageBox::Yes) {
-        QApplication::quit();
-    }
-}
-
-void MainWindow::createAMatch() {
-    int playersNumbers = config->getSelectedPlayers();
-    if (playersNumbers == -1) { // esto creo que aca no deberia estar, sino en config
-        QMessageBox::warning(this, "Error", "Seleccioná si vas a jugar con 1 o 2 jugadores antes de continuar");
-    } else {
-        changePage(new_game);
-    }
-}
-
-void MainWindow::joinAMatch() {
-    int playersNumbers = config->getSelectedPlayers();
-    if (playersNumbers == -1) { // esto creo que aca no deberia estar, sino en config
-        QMessageBox::warning(this, "Error", "Seleccioná si vas a jugar con 1 o 2 jugadores antes de continuar");
-    } else {
-        changePage(join_game);
-    }
-}
-
-void MainWindow::startGameHandler() {
+void GameMenu::startGameHandler() {
     sendMessageToServer();
     emit startGame();
     close();
-    QCoreApplication::exit(0);
+    QCoreApplication::exit(0); // esto es necesario??
 }
 
-void MainWindow::sendMessageToServer() {
+void GameMenu::sendMessageToServer() {
+    // mensajes en consola para chequear que los datos se guardaron bien.
     qDebug() << "Game Info:";
     qDebug() << "Players Numbers:" << gameInfo.playersNumber;
     qDebug() << "Player 1 Name:" << QString::fromStdString(gameInfo.player1Name);
@@ -111,6 +86,7 @@ void MainWindow::sendMessageToServer() {
 //        qDebug() << "Error al enviar el mensaje.";
 //    }
 
+    // mensajes en consola para chequear que los datos se guardaron bien en el LobbyMessage.
     qDebug() << "Lobby Message Info:";
     qDebug() << "Request:" << message->request;
     qDebug() << "Players Numbers:" << message->playerCount;
