@@ -1,4 +1,6 @@
 #pragma once
+#include <memory>
+
 #include "Vector2.h"
 
 class Circle;
@@ -82,4 +84,10 @@ public:
      * @return True if the shapes intersect, false otherwise
      */
     [[nodiscard]] virtual bool intersects(const Capsule& capsule) const = 0;
+
+    /**
+     * Clone this shape
+     * @return a clone of this shape
+     */
+    [[nodiscard]] virtual std::unique_ptr<Shape2D> clone() const = 0;
 };

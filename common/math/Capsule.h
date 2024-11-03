@@ -54,4 +54,10 @@ public:
      * @return True if the capsules intersect, false otherwise
      */
     [[nodiscard]] bool intersects(const Capsule& capsule) const override;
+
+    /**
+     * Clone this capsule
+     * @return a new capsule with the same properties
+     */
+    [[nodiscard]] std::unique_ptr<Shape2D> clone() const override;
 };

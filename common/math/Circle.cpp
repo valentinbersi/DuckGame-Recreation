@@ -64,3 +64,5 @@ bool Circle::intersects(const Rectangle& rectangle) const {
 }
 
 bool Circle::intersects(const Capsule& capsule) const { return capsule.intersects(*this); }
+
+std::unique_ptr<Shape2D> Circle::clone() const { return std::make_unique<Circle>(*this); }

@@ -75,3 +75,5 @@ bool Capsule::intersects(const Capsule& capsule) const {
            thisRectangle.intersects(capsuleBottomCircle) ||
            thisRectangle.intersects(capsuleRectangle);
 }
+
+std::unique_ptr<Shape2D> Capsule::clone() const { return std::make_unique<Capsule>(*this); }

@@ -157,3 +157,5 @@ bool Rectangle::intersects(const Rectangle& rectangle) const {
 }
 
 bool Rectangle::intersects(const Capsule& capsule) const { return capsule.intersects(*this); }
+
+std::unique_ptr<Shape2D> Rectangle::clone() const { return std::make_unique<Rectangle>(*this); }

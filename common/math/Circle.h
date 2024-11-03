@@ -54,4 +54,10 @@ public:
      * @return True if the shapes intersect, false otherwise
      */
     [[nodiscard]] bool intersects(const Capsule& capsule) const override;
+
+    /**
+     * Get a clone of this circle
+     * @return A clone of this circle
+     */
+    [[nodiscard]] std::unique_ptr<Shape2D> clone() const override;
 };

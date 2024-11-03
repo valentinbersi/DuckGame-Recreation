@@ -127,4 +127,10 @@ public:
      * @return True if the shapes intersect, false otherwise
      */
     [[nodiscard]] bool intersects(const Capsule& capsule) const override;
+
+    /**
+     * Get a clone of this rectangle
+     * @return A clone of this rectangle
+     */
+    [[nodiscard]] std::unique_ptr<Shape2D> clone() const override;
 };
