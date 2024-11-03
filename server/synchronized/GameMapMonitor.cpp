@@ -18,11 +18,13 @@ BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGameIfCreated(
     return nullptr;
 }
 
-void GameMapMonitor::startGameIfCreated(u16 matchID) {
+BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::startGameIfCreated(u16 matchID) {
     std::lock_guard lock(mutex);
     if (gameMap.find(matchID) != gameMap.end()) {
         gameMap.at(matchID)->start();
+        return gameMap.at(matchID)->getQueue();
     }
+    return nullptr;
 }
 
 u16 GameMapMonitor::creatGameSafe() {
@@ -35,8 +37,8 @@ u16 GameMapMonitor::creatGameSafe() {
     // //     random_number = dist(gen);
 
     // // } while (gameMap.contains(random_number));
-    gameMap.insert({0,std::make_unique<GameLoop>()});
-    return 0; //va random number
+    gameMap.insert({1,std::make_unique<GameLoop>()});
+    return 1; //va random number
 }
 
 GameMapMonitor::~GameMapMonitor() {

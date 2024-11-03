@@ -4,12 +4,6 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#define N_COL 5
-#define N_ROW 2
-
-#define N_COL_F 5  // Feathers
-#define N_ROW_F 8  // PERO NO LE DARÉ USO A TODAS
-
 class Spritesheet {
 
 public:
