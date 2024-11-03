@@ -18,11 +18,13 @@ BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGameIfCreated(
     return nullptr;
 }
 
-void GameMapMonitor::startGameIfCreated(u16 matchID) {
+BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::startGameIfCreated(u16 matchID) {
     std::lock_guard lock(mutex);
     if (gameMap.find(matchID) != gameMap.end()) {
         gameMap.at(matchID)->start();
+        return gameMap.at(matchID)->getQueue();
     }
+    return nullptr;
 }
 
 u16 GameMapMonitor::creatGameSafe() {

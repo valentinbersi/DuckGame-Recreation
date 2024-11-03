@@ -18,7 +18,7 @@ public:
             u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
             u16 clientId);
 
-    void startGameIfCreated(u16 matchID);
+    BlockingQueue<std::unique_ptr<Command>>* startGameIfCreated(u16 matchID);
 
     u16 creatGameSafe();
 
