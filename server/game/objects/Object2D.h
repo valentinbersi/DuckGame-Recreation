@@ -45,7 +45,7 @@ public:
      * @param globalPosition The new global position
      * @return A reference to this object, to allow builder pattern.
      */
-    Object2D& globalPosition(Vector2 globalPosition) noexcept;
+    Object2D& setGlobalPosition(Vector2 globalPosition) noexcept;
 
     /**
      * Get the global position of the object
@@ -58,7 +58,7 @@ public:
      * @param globalRotation The new global rotation
      * @return A reference to this object, to allow builder pattern.
      */
-    Object2D& globalRotation(float globalRotation) noexcept;
+    Object2D& setGlobalRotation(float globalRotation) noexcept;
 
     /**
      * Get the global rotation of the object
@@ -71,7 +71,7 @@ public:
      * @param position The new local position
      * @return A reference to this object, to allow builder pattern.
      */
-    Object2D& position(Vector2 position) noexcept;
+    Object2D& setPosition(Vector2 position) noexcept;
 
     /**
      * Get the local position of the object
@@ -84,7 +84,7 @@ public:
      * @param rotation The new local rotation
      * @return A reference to this object, to allow builder pattern.
      */
-    Object2D& rotation(float rotation) noexcept;
+    Object2D& setRotation(float rotation) noexcept;
 
     /**
      * Get the local rotation of the object

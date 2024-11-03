@@ -77,7 +77,7 @@ void Object2D::updateInternal([[maybe_unused]] const float delta) {
     Object::updateInternal(delta);
 }
 
-Object2D& Object2D::globalPosition(Vector2 globalPosition) noexcept {
+Object2D& Object2D::setGlobalPosition(Vector2 globalPosition) noexcept {
     try {
         _globalPosition = std::move(globalPosition);
 
@@ -94,7 +94,7 @@ Object2D& Object2D::globalPosition(Vector2 globalPosition) noexcept {
 
 const Vector2& Object2D::globalPosition() const noexcept { return _globalPosition; }
 
-Object2D& Object2D::globalRotation(const float globalRotation) noexcept {
+Object2D& Object2D::setGlobalRotation(const float globalRotation) noexcept {
     _globalRotation = globalRotation;
 
     try {
@@ -109,7 +109,7 @@ Object2D& Object2D::globalRotation(const float globalRotation) noexcept {
 
 float Object2D::globalRotation() const noexcept { return _globalRotation; }
 
-Object2D& Object2D::position(Vector2 position) noexcept {
+Object2D& Object2D::setPosition(Vector2 position) noexcept {
     _position = std::move(position);
 
     try {
@@ -129,7 +129,7 @@ Object2D& Object2D::position(Vector2 position) noexcept {
 
 const Vector2& Object2D::position() const noexcept { return _position; }
 
-Object2D& Object2D::rotation(const float rotation) noexcept {
+Object2D& Object2D::setRotation(const float rotation) noexcept {
     _rotation = rotation;
 
     try {
