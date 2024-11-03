@@ -5,17 +5,19 @@
 #include "Object2D.h"
 #include "Shape2D.h"
 
+/**
+ * An Object that can collide with other collision objects
+ */
 class CollisionObject: public Object2D {
     u32 _collisionLayer;
     u32 _collisionMask;
     Shape2D* _shape;
 
 protected:
-    /**
-     * Construct a CollisionObject2D with the given parent, position = (0, 0), rotation = 0, scale =
-     * (1, 1), collision Layer and Mask = 0
-     */
-    explicit CollisionObject(Object* parent);
+    CollisionObject(const CollisionObject& other);
+    CollisionObject& operator=(const CollisionObject& other);
+    CollisionObject(CollisionObject&& other) noexcept;
+    CollisionObject& operator=(CollisionObject&& other) noexcept;
 
     /**
      * Construct a CollisionObject2D with collision Layer and Mask = 0
@@ -24,6 +26,15 @@ protected:
                     u32 collisionMask, std::unique_ptr<Shape2D> shape);
 
 public:
+    CollisionObject() = delete;
+    ~CollisionObject() override;
+
+    /**
+     * Update the shape's position
+     * @param delta the time since the last update
+     */
+    void updateInternal(float delta) override;
+
     /**
      * Get the collision layers of the Object
      * @return the collision layers of the Object
@@ -65,11 +76,10 @@ public:
     void deactivateCollisionMask(u8 layer);
 
     /**
-     * Check if this object collides with the other object. If it does, emit the "bodyEntered" event
-     * with the given CollisionObject as argument
+     * Check if this object collides with the other object.
      * @param other the other object to check collision with
      */
-    void collideWith(CollisionObject& other);
+    bool collidesWith(const CollisionObject& other) const;
 
     /**
      * The events the CollisionObject class has

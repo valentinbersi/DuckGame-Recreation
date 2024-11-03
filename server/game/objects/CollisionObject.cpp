@@ -3,13 +3,44 @@
 #include <memory>
 #include <utility>
 
-#define DEFAULT_ROTATION 0
-#define DEFAULT_COLLISION_LAYER 0
-#define DEFAULT_COLLISION_MASK 0
+CollisionObject::CollisionObject(const CollisionObject& other):
+        Object2D(other),
+        _collisionLayer(other._collisionLayer),
+        _collisionMask(other._collisionMask),
+        _shape(other._shape->clone().release()) {}
 
-CollisionObject::CollisionObject(Object* parent):
-        CollisionObject(parent, Vector2::ZERO, DEFAULT_ROTATION, DEFAULT_COLLISION_LAYER,
-                        DEFAULT_COLLISION_MASK, nullptr) {}
+CollisionObject& CollisionObject::operator=(const CollisionObject& other) {
+    if (this == &other)
+        return *this;
+
+    Object2D::operator=(other);
+    _collisionLayer = other._collisionLayer;
+    _collisionMask = other._collisionMask;
+    delete _shape;
+    _shape = other._shape->clone().release();
+    return *this;
+}
+
+CollisionObject::CollisionObject(CollisionObject&& other) noexcept:
+        Object2D(std::move(other)),
+        _collisionLayer(other._collisionLayer),
+        _collisionMask(other._collisionMask),
+        _shape(other._shape) {
+    other._shape = nullptr;
+}
+
+CollisionObject& CollisionObject::operator=(CollisionObject&& other) noexcept {
+    if (this == &other)
+        return *this;
+
+    Object2D::operator=(std::move(other));
+    _collisionLayer = other._collisionLayer;
+    _collisionMask = other._collisionMask;
+    delete _shape;
+    _shape = other._shape;
+    other._shape = nullptr;
+    return *this;
+}
 
 CollisionObject::CollisionObject(Object* parent, Vector2 position, const float rotation,
                                  const u32 collisionLayer, const u32 collisionMask,
@@ -19,6 +50,13 @@ CollisionObject::CollisionObject(Object* parent, Vector2 position, const float r
         _collisionMask(collisionMask),
         _shape(shape.release()) {
     registerEvent<CollisionObject, CollisionObject&>(eventName(Events::COLLISION));
+}
+
+CollisionObject::~CollisionObject() { delete _shape; }
+
+void CollisionObject::updateInternal([[maybe_unused]] const float delta) {
+    Object2D::updateInternal(delta);
+    _shape->center(position());
 }
 
 u32 CollisionObject::collisionLayer() const { return _collisionLayer; }
@@ -37,9 +75,8 @@ void CollisionObject::deactivateCollisionMask(const u8 layer) {
     _collisionMask &= UINT32_MAX ^ 1 << layer;
 }
 
-void CollisionObject::collideWith(CollisionObject& other) {
-    if ((_collisionMask & other.collisionLayer()) != 0 && _shape->intersects(*other._shape))
-        fire<CollisionObject, CollisionObject&>(eventName(Events::COLLISION), other);
+bool CollisionObject::collidesWith(const CollisionObject& other) const {
+    return (_collisionMask & other.collisionLayer()) != 0 && _shape->intersects(*other._shape);
 }
 
 #define COLLISION_NAME "collision"
