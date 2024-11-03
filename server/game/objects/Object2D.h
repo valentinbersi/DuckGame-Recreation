@@ -14,11 +14,11 @@ class Object2D: public Object {
     float _rotation;
 
 protected:
-    /**
-     * Initialize an Object2D with a parent
-     * @param parent The parent of the object
-     */
-    explicit Object2D(Object* parent);
+    Object2D(const Object2D& other);
+    Object2D& operator=(const Object2D& other);
+    Object2D(Object2D&& other) noexcept;
+    Object2D& operator=(Object2D&& other) noexcept;
+
     /**
      * Initialize an Object2D with a parent, a position a rotation and a scale
      * @param parent The parent of the object
@@ -31,19 +31,14 @@ public:
     /**
      * Initialize an Object2D with position (0, 0), rotation 0 and scale (1, 1)
      */
-    Object2D();
-    Object2D(const Object2D& other);
-    Object2D& operator=(const Object2D& other);
-    Object2D(Object2D&& other) noexcept;
-    Object2D& operator=(Object2D&& other) noexcept;
+    Object2D() = delete;
+    ~Object2D() override;
 
     /**
-     * Initialize an Object2D with a position a rotation and a scale
-     * @param position The position
-     * @param rotation The rotation
-     * @param scale The scale
+     * Update the object global position and rotation based on the parent
+     * @param delta The time since the last update
      */
-    Object2D(Vector2 position, float rotation);
+    void updateInternal(float delta) override;
 
     /**
      * Set the global position of the object
