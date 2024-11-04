@@ -2,19 +2,19 @@
 
 LobbyResolver::LobbyResolver(
         GameMapMonitor& gameMap,
-        std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
-        BlockingQueue<std::unique_ptr<Command>>* recvQueue):
+        std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue):
 
-        gameMap(gameMap), senderQueue(senderQueue), recvQueue(recvQueue) {}
+        gameMap(gameMap), senderQueue(senderQueue) {}
 
-void LobbyResolver::resolveRequest(const LobbyMessage& message) {
+BlockingQueue<std::unique_ptr<Command>>* LobbyResolver::resolveRequest(const LobbyMessage& message) {
     if (message.request == LobbyRequest::NEWMATCH) {
         u16 matchID = gameMap.creatGameSafe();
-        recvQueue = gameMap.joinGameIfCreated(matchID, senderQueue, 0);  // el ultimo es client id.
-        // senderQueue->push(matchID) aca hay que hacer la parte de herencia.
+        // senderQueue->push(matchID)
+        gameMap.joinGameIfCreated(matchID, senderQueue, 0); // aproposito no lo tomo, porque soy host del game.
+        return nullptr;
     } else if (message.request == LobbyRequest::JOINMATCH) {
-        gameMap.joinGameIfCreated(message.matchId, senderQueue, 0);  // idem antes
-    } else {                                                         // start game
-        gameMap.startGameIfCreated(message.matchId);
+        return gameMap.joinGameIfCreated(message.matchId, senderQueue, 0);  
+    } else {                                                        
+        return gameMap.startGameIfCreated(message.matchId);
     }
 }

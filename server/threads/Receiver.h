@@ -16,8 +16,7 @@ private:
     LobbyResolver lobbyResolver;
     // CommnadFactory factory;
 public:
-    Receiver(ActiveSocket& socket, BlockingQueue<std::unique_ptr<Command>>* queueRecv,
-             std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> queueSender,
+    Receiver(ActiveSocket& socket, std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> queueSender,
              GameMapMonitor& monitor);
 
     void run() override;

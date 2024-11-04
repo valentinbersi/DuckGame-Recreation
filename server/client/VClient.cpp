@@ -2,9 +2,8 @@
 
 VirtualClient::VirtualClient(ActiveSocket socket, GameMapMonitor& monitor):
         skt(std::move(socket)),
-        gameQueue(nullptr),
         sendQueue(std::make_shared<BlockingQueue<std::shared_ptr<ServerMessage>>>()),
-        receiver(skt, gameQueue, sendQueue, monitor),
+        receiver(skt, sendQueue, monitor),
         sender(skt, sendQueue)
 
 {
