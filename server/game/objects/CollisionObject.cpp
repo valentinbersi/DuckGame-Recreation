@@ -50,6 +50,10 @@ CollisionObject::CollisionObject(Object* parent, Vector2 position, const float r
         _collisionMask(collisionMask),
         _shape(shape.release()) {}
 
+bool CollisionObject::collidesWith(const CollisionObject& other) const {
+    return (_collisionMask & other._collisionLayer) != 0 && _shape->intersects(*other._shape);
+}
+
 CollisionObject::~CollisionObject() { delete _shape; }
 
 void CollisionObject::updateInternal([[maybe_unused]] const float delta) {

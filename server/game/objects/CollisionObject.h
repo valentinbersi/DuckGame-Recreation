@@ -25,6 +25,13 @@ protected:
     CollisionObject(Object* parent, Vector2 position, float rotation, u32 collisionLayer,
                     u32 collisionMask, std::unique_ptr<Shape2D> shape);
 
+    /**
+     * Check if the CollisionObject collides with another CollisionObject
+     * @param other the other CollisionObject to check collision with
+     * @return true if the CollisionObject collides with the other CollisionObject, false otherwise
+     */
+    bool collidesWith(const CollisionObject& other) const;
+
 public:
     CollisionObject() = delete;
     ~CollisionObject() override;
@@ -79,5 +86,5 @@ public:
      * Check for collisions with other collision object and perform the collision
      * @param other the other object to check collision with
      */
-    virtual void collideWith(const CollisionObject& other) const = 0;
+    virtual void collideWith(const CollisionObject& other) = 0;
 };
