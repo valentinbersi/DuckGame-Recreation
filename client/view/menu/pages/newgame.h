@@ -1,12 +1,9 @@
-//
-// Created by tomas-hevia on 25/10/24.
-//
-
 #ifndef DUCKGAME_NEWGAME_H
 #define DUCKGAME_NEWGAME_H
 
 #include <QWidget>
 
+#include "Communicator.h"
 #include "GameInfo.h"
 #include "LobbyMessage.h"
 #include "ui_newGame.h"
@@ -23,13 +20,15 @@ class newGame: public QWidget {
 
 private:
     Ui::newGame* ui;
+    Communicator& communicator;
     GameInfo& gameInfo;
 
-    void verificarDatos();
+    bool verificarDatos();
     void onPlayClicked();
+    bool NewMatchRequest();
 
 public:
-    newGame(QWidget* parent, GameInfo& gameInfo);
+    newGame(QWidget* parent, Communicator& communicator, GameInfo& gameInfo);
     ~newGame() override;
 
 signals:

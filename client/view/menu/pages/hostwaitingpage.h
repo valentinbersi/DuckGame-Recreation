@@ -1,11 +1,10 @@
-//
-// Created by tomas-hevia on 1/11/24.
-//
-
 #ifndef DUCKGAME_HOSTWAITINGPAGE_H
 #define DUCKGAME_HOSTWAITINGPAGE_H
 
 #include <QWidget>
+
+#include "Communicator.h"
+#include "GameInfo.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -17,12 +16,19 @@ QT_END_NAMESPACE
 class hostWaitingPage: public QWidget {
     Q_OBJECT
 
-public:
-    explicit hostWaitingPage(QWidget* parent = nullptr);
-    ~hostWaitingPage() override;
-
 private:
     Ui::hostWaitingPage* ui;
+    Communicator& communicator;
+    GameInfo& gameInfo;
+
+    void requestStartGame();
+
+public:
+    hostWaitingPage(QWidget* parent, Communicator& communicator, GameInfo& gameInfo);
+    ~hostWaitingPage() override;
+
+signals:
+    void startMatch();
 };
 
 

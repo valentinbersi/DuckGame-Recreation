@@ -13,6 +13,8 @@
 #include "joingame.h"
 #include "mainmenu.h"
 #include "newgame.h"
+#include "hostwaitingpage.h"
+#include "joinwaitingpage.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -37,7 +39,9 @@ private:
     void setPagesAndConnections();
     void startGameHandler();
     void changePage(QWidget* page);
-    void sendMessageToServer();
+    //void sendMessageToServer();
+    void showHostWaitingPage();
+    //void showJoinWaitingPage();
 
 signals:
     void startGame();

@@ -1,41 +1,41 @@
 #include "newgame.h"
 
+#include <QDebug>
+#include <QMessageBox>
 #include <QStringListModel>
 
-newGame::newGame(QWidget* parent, GameInfo& gameInfo): QWidget(parent), ui(new Ui::newGame), gameInfo(gameInfo) {
+#include "ReplyMessage.h"
+
+newGame::newGame(QWidget* parent, Communicator& communicator, GameInfo& gameInfo): QWidget(parent), ui(new Ui::newGame), communicator(communicator), gameInfo(gameInfo) {
     ui->setupUi(this);
 
-    // inicializo la lista de mapas en modo de prueba.
+    // esto tendriamos que recibirlo desde el server, nose cuando
     QStringList mapas = {"Selva", "Bosque", "Nave Espacial"};
-    auto *modeloMapas = new QStringListModel(mapas, this);
+    auto modeloMapas = new QStringListModel(mapas, this);
     ui->mapsList->setModel(modeloMapas);
 
     connect(ui->buttonPlay, &QPushButton::clicked, this, &newGame::onPlayClicked);
     connect(ui->buttonBack, &QPushButton::clicked, this, &newGame::backClicked);
-
-    connect(ui->lineEditPlayer1, &QLineEdit::textChanged, this, &newGame::verificarDatos);
-    connect(ui->lineEditPlayer2, &QLineEdit::textChanged, this, &newGame::verificarDatos);
-    connect(ui->mapsList->selectionModel(), &QItemSelectionModel::selectionChanged, this, &newGame::verificarDatos);
-
-    ui->buttonPlay->setEnabled(false);
 }
 
-void newGame::verificarDatos() {
+bool newGame::verificarDatos() {
     bool mapaSeleccionado = !ui->mapsList->selectionModel()->selectedIndexes().isEmpty();
-
     bool jugador1Ingresado = !ui->lineEditPlayer1->text().isEmpty();
 
-    //    bool jugador2Ingresado = true; // Asumimos juego de un jugador por defecto
-    //    if (esModoDosJugadores) {
-    //        jugador2Ingresado = !ui->lineEditPlayer2->text().isEmpty();
-    //    }
+    bool jugador2Ingresado = true;
+    if (gameInfo.playersNumber == 2)
+        jugador2Ingresado = !ui->lineEditPlayer2->text().isEmpty();
 
-    bool jugador2Ingresado = !ui->lineEditPlayer2->text().isEmpty();
-
-    ui->buttonPlay->setEnabled(mapaSeleccionado && jugador1Ingresado && jugador2Ingresado);
+    return (mapaSeleccionado && jugador1Ingresado && jugador2Ingresado);
 }
 
 void newGame::onPlayClicked() {
+    if (!verificarDatos()) {
+        QMessageBox::warning(this, "Datos incompletos",
+                             "Por favor, completa todos los datos antes de continuar.");
+        return;
+    }
+
     gameInfo.player1Name = ui->lineEditPlayer1->text().toStdString();
     gameInfo.player2Name = ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString();
 
@@ -45,7 +45,37 @@ void newGame::onPlayClicked() {
         gameInfo.selectedMap = selectedMap.toStdString();
     }
 
-    emit playMatchClicked();
+//    if (NewMatchRequest())        ESTO ESTA COMENTADO PARA PROBARLO CUANDO ESTE EL SERVER
+//        emit playMatchClicked();
+
+    emit playMatchClicked();   // esto no iria despues!
 }
+
+bool newGame::NewMatchRequest() {
+    auto message = std::make_unique<LobbyMessage>(
+            LobbyRequest::NEWMATCH,
+            gameInfo.playersNumber,
+            gameInfo.player1Name,
+            gameInfo.player2Name,
+            gameInfo.matchID // esto deberia ser 0 ¿?
+    );
+
+    if (!communicator.trysend(std::move(message))) {
+        qDebug() << "Error al enviar el mensaje.";
+        return false;
+    }
+
+    auto messageServerOpt = communicator.tryrecv();
+    if (messageServerOpt.has_value()) {
+        std::unique_ptr<ServerMessage> messageServer = std::move(messageServerOpt.value());
+        ReplyMessage reply = dynamic_cast<ReplyMessage&>(*messageServer);
+        gameInfo.matchID = reply.matchID;
+        return true;
+    } else {
+        QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
+        return false; // esto nose si es correcto, deberia manejarlo distinto yo creo.
+    }
+}
+
 
 newGame::~newGame() { delete ui; }
