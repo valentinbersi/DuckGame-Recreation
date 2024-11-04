@@ -19,9 +19,9 @@ class joinGame: public QWidget {
 
 private:
     Ui::joinGame* ui;
-    void verificarDatos();
     GameInfo& gameInfo;
 
+    bool verificarDatos();
     void onPlayClicked();
 
 public:
