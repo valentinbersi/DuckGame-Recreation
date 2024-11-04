@@ -76,25 +76,8 @@ public:
     void deactivateCollisionMask(u8 layer);
 
     /**
-     * Check if this object collides with the other object.
+     * Check for collisions with other collision object and perform the collision
      * @param other the other object to check collision with
      */
-    bool collidesWith(const CollisionObject& other) const;
-
-    /**
-     * The events the CollisionObject class has
-     */
-    enum class Events : u8 {
-        /**
-         * The collisionObject collided with something
-         */
-        COLLISION
-    };
-
-    /**
-     * Get the event name of an event type
-     * @param eventType The event type
-     * @return The event name
-     */
-    static std::string eventName(Events eventType);
+    virtual void collideWith(const CollisionObject& other) const = 0;
 };

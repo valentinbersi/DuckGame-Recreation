@@ -48,9 +48,7 @@ CollisionObject::CollisionObject(Object* parent, Vector2 position, const float r
         Object2D(parent, std::move(position), rotation),
         _collisionLayer(collisionLayer),
         _collisionMask(collisionMask),
-        _shape(shape.release()) {
-    registerEvent<CollisionObject, CollisionObject&>(eventName(Events::COLLISION));
-}
+        _shape(shape.release()) {}
 
 CollisionObject::~CollisionObject() { delete _shape; }
 
@@ -73,19 +71,4 @@ void CollisionObject::activateCollisionMask(const u8 layer) { _collisionMask |= 
 
 void CollisionObject::deactivateCollisionMask(const u8 layer) {
     _collisionMask &= UINT32_MAX ^ 1 << layer;
-}
-
-bool CollisionObject::collidesWith(const CollisionObject& other) const {
-    return (_collisionMask & other.collisionLayer()) != 0 && _shape->intersects(*other._shape);
-}
-
-#define COLLISION_NAME "collision"
-
-std::string CollisionObject::eventName(const Events eventType) {
-    switch (eventType) {
-        case Events::COLLISION:
-            return COLLISION_NAME;
-        default:
-            throw std::invalid_argument(INVALID_EVENT_TYPE);
-    }
 }
