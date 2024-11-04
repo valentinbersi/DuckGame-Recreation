@@ -9,7 +9,7 @@ public:
 
 private:
     Vector2 _velocity;
-    Vector2 prevPosition;
+    Vector2 lastSafePosition;
     Gravity gravity;
 
 protected:
@@ -45,6 +45,17 @@ public:
     ~PhysicsObject() override;
 
     /**
+     * Apply gravity to the object
+     * @param delta The time since the last update
+     */
+    void updateInternal(float delta) final;
+
+    /**
+     * Calculate the new position of the object based on its velocity. If it collides with
+     */
+    void collideWith(const CollisionObject& other) final;
+
+    /**
      * Returns the velocity of the object
      * @return The velocity of the object
      */
@@ -61,10 +72,4 @@ public:
      * @param gravity The gravity configuration for the object
      */
     void setGravity(Gravity gravity);
-
-    /**
-     * Apply gravity to the object
-     * @param delta The time since the last update
-     */
-    void updateInternal(float delta) final;
 };

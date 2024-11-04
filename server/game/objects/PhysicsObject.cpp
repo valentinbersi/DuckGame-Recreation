@@ -5,7 +5,7 @@
 PhysicsObject::PhysicsObject(const PhysicsObject& other):
         CollisionObject(other),
         _velocity(other._velocity),
-        prevPosition(other.prevPosition),
+        lastSafePosition(other.lastSafePosition),
         gravity(other.gravity) {}
 
 PhysicsObject& PhysicsObject::operator=(const PhysicsObject& other) {
@@ -14,7 +14,7 @@ PhysicsObject& PhysicsObject::operator=(const PhysicsObject& other) {
 
     CollisionObject::operator=(other);
     _velocity = other._velocity;
-    prevPosition = other.prevPosition;
+    lastSafePosition = other.lastSafePosition;
     gravity = other.gravity;
     return *this;
 }
@@ -22,7 +22,7 @@ PhysicsObject& PhysicsObject::operator=(const PhysicsObject& other) {
 PhysicsObject::PhysicsObject(PhysicsObject&& other) noexcept:
         CollisionObject(std::move(other)),
         _velocity(std::move(other._velocity)),
-        prevPosition(std::move(prevPosition)),
+        lastSafePosition(std::move(lastSafePosition)),
         gravity(other.gravity) {
 
     other.gravity = Gravity::Disabled;
@@ -34,7 +34,7 @@ PhysicsObject& PhysicsObject::operator=(PhysicsObject&& other) noexcept {
 
     CollisionObject::operator=(std::move(other));
     _velocity = std::move(other._velocity);
-    prevPosition = std::move(other.prevPosition);
+    lastSafePosition = std::move(other.lastSafePosition);
     gravity = other.gravity;
     other.gravity = Gravity::Disabled;
     return *this;
@@ -50,21 +50,27 @@ PhysicsObject::PhysicsObject(Object* parent, Vector2 position, const float rotat
         gravity(gravity) {}
 
 void PhysicsObject::moveAndCollide() {
-    prevPosition = position();
+    lastSafePosition = position();
     setPosition(position() + _velocity);
 }
 
 PhysicsObject::~PhysicsObject() = default;
+
+void PhysicsObject::updateInternal(const float delta) {
+    lastSafePosition = position();
+
+    if (gravity == Gravity::Enabled)
+        _velocity += GlobalPhysics::gravity;
+
+    CollisionObject::updateInternal(delta);
+}
+
+void PhysicsObject::collideWith(const CollisionObject& other) {
+    // Here code to get the object out of the collision
+}
 
 const Vector2& PhysicsObject::velocity() const { return _velocity; }
 
 void PhysicsObject::setVelocity(Vector2 velocity) { _velocity = std::move(velocity); }
 
 void PhysicsObject::setGravity(const Gravity gravity) { this->gravity = gravity; }
-
-void PhysicsObject::updateInternal(const float delta) {
-    if (gravity == Gravity::Enabled)
-        _velocity += GlobalPhysics::gravity;
-
-    CollisionObject::updateInternal(delta);
-}
