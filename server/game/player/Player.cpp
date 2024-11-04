@@ -44,7 +44,7 @@ void Player::update(const float delta) {
         flags |= DuckData::MOVING_LEFT;
     }
 
-    position(position() + velocity * delta);
+    setPosition(position() + velocity * delta);
 }
 
 void Player::updateInternal(const float delta) { CollisionObject::updateInternal(delta); }
