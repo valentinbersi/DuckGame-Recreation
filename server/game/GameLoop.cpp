@@ -48,6 +48,7 @@ void GameLoop::run() {
         const float deltaTime = calculateDeltaTime();
         retrieveCurrentFrameCommands();
         processCurrentFrameCommands();
+        game.updateInternal(deltaTime);
         game.update(deltaTime);
         broadcastGameStatus();
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // 30 fps aprox
