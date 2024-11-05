@@ -12,11 +12,11 @@ void Player::loadChildren() {}
 
 Player::Player():
         PhysicsObject(nullptr, {0, 0}, 0, 0, 0, std::make_unique<Capsule>(Vector2(0, 0), 0, 1, 3),
-                      {0, 0}, PhysicsObject::Gravity::Disabled),
+                      {0, 0}, Gravity::Enabled),
         id(DuckID::White),
         life(3),
         flags(0),
-        speed(5) {
+        speed(500) {
 
     input.addAction(MOVE_RIGHT);
     input.addAction(MOVE_LEFT);
@@ -41,9 +41,11 @@ void Player::update(const float delta) {
         flags |= DuckData::MOVING_RIGHT;
 
     } else if (input.isActionPressed(MOVE_LEFT)) {
-        setVelocity((velocity() + Vector2(speed, 0)) * delta);
+        setVelocity((velocity() + Vector2(-speed, 0)) * delta);
         flags |= DuckData::MOVING_LEFT;
     }
+
+    setPosition(position() + velocity());
 }
 
 Player::~Player() = default;
