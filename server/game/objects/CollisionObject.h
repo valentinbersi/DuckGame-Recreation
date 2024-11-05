@@ -1,5 +1,6 @@
 #pragma once
 
+#include <forward_list>
 #include <memory>
 
 #include "Object2D.h"
@@ -14,6 +15,8 @@ class CollisionObject: public Object2D {
     Shape2D* _shape;
 
 protected:
+    std::forward_list<std::weak_ptr<CollisionObject>> objectsToCollide;
+
     CollisionObject(const CollisionObject& other);
     CollisionObject& operator=(const CollisionObject& other);
     CollisionObject(CollisionObject&& other) noexcept;
@@ -83,8 +86,19 @@ public:
     void deactivateCollisionMask(u8 layer);
 
     /**
-     * Check for collisions with other collision object and perform the collision
-     * @param other the other object to check collision with
+     * Register a collision to process, the collision will only be processed if this collision
+     * object is scanning the given object layer
+     * @param collisionObject the collision object to register
      */
-    virtual void collideWith(const CollisionObject& other) = 0;
+    void registerCollision(std::weak_ptr<CollisionObject> collisionObject);
+
+    /**
+     * Reset the registered collisions
+     */
+    void resetRegisteredCollisions();
+
+    /**
+     * Check for collisions with other collision object and perform the collision
+     */
+    virtual void processCollisions() = 0;
 };

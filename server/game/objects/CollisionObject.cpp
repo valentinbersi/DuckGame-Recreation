@@ -51,7 +51,7 @@ CollisionObject::CollisionObject(Object* parent, Vector2 position, const float r
         _shape(shape.release()) {}
 
 bool CollisionObject::collidesWith(const CollisionObject& other) const {
-    return (_collisionMask & other._collisionLayer) != 0 && _shape->intersects(*other._shape);
+    return _shape->intersects(*other._shape);
 }
 
 CollisionObject::~CollisionObject() { delete _shape; }
@@ -76,3 +76,14 @@ void CollisionObject::activateCollisionMask(const u8 layer) { _collisionMask |= 
 void CollisionObject::deactivateCollisionMask(const u8 layer) {
     _collisionMask &= UINT32_MAX ^ 1 << layer;
 }
+
+#define EXPIRED_COLLISION_OBJECT "CollisionObject is expired"
+
+void CollisionObject::registerCollision(std::weak_ptr<CollisionObject> collisionObject) {
+    if (collisionObject.expired())
+        throw std::invalid_argument(EXPIRED_COLLISION_OBJECT);
+
+    objectsToCollide.push_front(std::move(collisionObject));
+}
+
+void CollisionObject::resetRegisteredCollisions() { objectsToCollide.clear(); }
