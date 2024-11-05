@@ -20,8 +20,11 @@
 #define FEATHER true
 #define RIGHT_FEATHER true
 
-SpriteManager::SpriteManager(const char* path1, const char* path2, SDL2pp::Renderer& renderer,
-                             SDL2pp::Texture* m_texture_image, SDL2pp::Texture* m_texture_feathers, int& window_width, int& window_height):
+#define OFFSET_RIGHT 3
+#define OFFSET_LEFT 3
+#define OFFSET_Y 4
+
+SpriteManager::SpriteManager(const char* path1, const char* path2, SDL2pp::Renderer& renderer/*, int& window_width, int& window_height*/):
         path1(path1),
         path2(path2),
         scale(DEFAULT_SCALE),
@@ -30,18 +33,19 @@ SpriteManager::SpriteManager(const char* path1, const char* path2, SDL2pp::Rende
         in_air(false),
         flapping(false),
         flip(false),
-        spritesheet(path1, path2, renderer, m_texture_image, m_texture_feathers),
+        spritesheet(path1, path2, renderer),
         frame(0),
         flappingFrame(0),
         m_position_x(0),
         m_position_y(0) {
 
     // Really needed? Idk
+    /*
     spritesheet.selectSprite(SPRITE_IDLE, SPRITE_IDLE, NO_FEATHER);
     int playerWidth = spritesheet.getClipWidth();
     int playerHeight = spritesheet.getClipHeight();
     m_position_x = (window_width - playerWidth * scale) / 2;
-    m_position_y = (window_height - playerHeight * scale) / 2 + DEFAULT_OFFSET_Y;
+    m_position_y = (window_height - playerHeight * scale) / 2 + DEFAULT_OFFSET_Y;*/
 }
 
 void SpriteManager::updatePosition(float new_x, float new_y) {
@@ -52,6 +56,10 @@ void SpriteManager::updatePosition(float new_x, float new_y) {
 // un bool 'started' para inicializar el playerWidth etc?
 void SpriteManager::update(bool playing_dead, bool crouching, bool air, bool flap,
                            bool being_damaged, bool right, bool left) {
+
+    if (left) flip = true;
+    else if (right) flip = false;
+
     if (being_damaged || playing_dead ||
         crouching) {  // no animation; only one sprite for each 'event'
         if (being_damaged) {
@@ -70,7 +78,6 @@ void SpriteManager::update(bool playing_dead, bool crouching, bool air, bool fla
     }
 
     setFlags(air, flap, right, left);  // sets flags for animations only
-    flip = left;
     if (air) {
         draw(frame, SPRITESHEET_JUMP_ROW);
 
@@ -85,15 +92,17 @@ void SpriteManager::draw(int col, int row) {
     SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER);
     spritesheet.drawSelectedSprite(position, flip, NO_FEATHER, NO_RIGHT_FEATHER);
 
-    // Left feather
-    spritesheet.selectSprite(col, row, FEATHER);
-    position = getPosition(FEATHER, NO_RIGHT_FEATHER);
-    spritesheet.drawSelectedSprite(position, flip, FEATHER, NO_RIGHT_FEATHER);
+    if (not flip) {
+        spritesheet.selectSprite(col, row, FEATHER);
+        position = getPosition(FEATHER, NO_RIGHT_FEATHER);
+        spritesheet.drawSelectedSprite(position, flip, FEATHER, NO_RIGHT_FEATHER);
 
-    /* Right feather
-    spritesheet.selectSprite(col, row + 1, FEATHER);
-    position = getPosition(FEATHER, RIGHT_FEATHER);
-    spritesheet.drawSelectedSprite(position, flip, FEATHER, RIGHT_FEATHER);*/
+    } else if (flip || in_air || flapping /* etc*/) {
+        spritesheet.selectSprite(col, row, FEATHER);
+        position = getPosition(FEATHER, RIGHT_FEATHER);
+        spritesheet.drawSelectedSprite(position, flip, FEATHER, RIGHT_FEATHER);
+
+    }
 }
 
 void SpriteManager::setFlags(bool air, bool flap, bool right, bool left) {
@@ -134,35 +143,18 @@ void SpriteManager::setFlags(bool air, bool flap, bool right, bool left) {
     }
 }*/
 
-void SpriteManager::start() {
-    spritesheet.selectSprite(SPRITE_IDLE, SPRITE_IDLE, NO_FEATHER);
-    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER);
-    spritesheet.drawSelectedSprite(position, flip, NO_FEATHER, NO_RIGHT_FEATHER);
-
-    spritesheet.selectSprite(FEATHERS_IDLE1_ROW, FEATHERS_IDLE1_ROW, NO_FEATHER);
-    SDL2pp::Rect feathersPosition = getPosition(NO_FEATHER, NO_RIGHT_FEATHER);
-    spritesheet.drawSelectedSprite(feathersPosition, flip, NO_FEATHER, NO_RIGHT_FEATHER);
-
-    spritesheet.selectSprite(FEATHERS_IDLE1_ROW, FEATHERS_IDLE2_ROW, NO_FEATHER);
-    SDL2pp::Rect leftFeatherPosition = getPosition(NO_FEATHER, NO_RIGHT_FEATHER);
-    spritesheet.drawSelectedSprite(leftFeatherPosition, flip, NO_FEATHER, NO_RIGHT_FEATHER);
-}
-
 SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather) {
-    int playerWidth = spritesheet.getClipWidth();
-    int playerHeight = spritesheet.getClipHeight();
-    SDL2pp::Rect position(m_position_x, m_position_y, playerWidth * scale, playerHeight * scale);
+    int spriteWidth = spritesheet.getClipWidth();
+    int spriteHeight = spritesheet.getClipHeight();
+    SDL2pp::Rect position(m_position_x, m_position_y, spriteWidth * scale, spriteHeight * scale);
 
-    if (isFeather || isRightFeather) {
-        // Adjust the position for feathers
-        /*
+    if (isFeather) {
         if (isRightFeather) {
-            //position.x += playerWidth;  // Example adjustment for right feather
+            position.x += spriteWidth * 2 - OFFSET_RIGHT;
         } else {
-            //position.x -= playerWidth;  // Example adjustment for left feather
-        }*/
-        position.x += 27;  //duck width - (feathers width / 2) + 1 (offset)
-        position.y += 36;  //duck height + (feathers height / 2) - 4 (offset)
+            position.x += spriteWidth / 2 + OFFSET_LEFT;     //(duck width - (feathers width / 2) + 1 (offset) ) - duck width ?
+        }
+        position.y += spriteWidth * 2 + OFFSET_Y;  //duck height + (feathers height / 2) - 4 (offset)
     }
 
     return position;

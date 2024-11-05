@@ -182,30 +182,14 @@ void Game::clearObjects() { ducks.clear(); }
 std::unordered_map<DuckID, SpriteManager> Game::createSpritesMapping() {
     std::unordered_map<DuckID, SpriteManager> spritesMapping;
 
-    // Create textures and add to the map
-    auto whiteTexture = new Texture(renderer, whiteSheet);
-    auto whiteFeathersTexture = new Texture(renderer, whiteFeathers);
     spritesMapping.emplace(DuckID::White,
-                                SpriteManager(whiteSheet, whiteFeathers, renderer, whiteTexture,
-                                              whiteFeathersTexture, window_width, window_height));
-
-    auto orangeTexture = new Texture(renderer, orangeSheet);
-    auto orangeFeathersTexture = new Texture(renderer, orangeFeathers);
+                                SpriteManager(whiteSheet, whiteFeathers, renderer /*, window_width, window_height*/));
     spritesMapping.emplace(DuckID::Orange,
-                                SpriteManager(orangeSheet, orangeFeathers, renderer, orangeTexture,
-                                              orangeFeathersTexture, window_width, window_height));
-
-    auto yellowTexture = new Texture(renderer, yellowSheet);
-    auto yellowFeathersTexture = new Texture(renderer, yellowFeathers);
+                                SpriteManager(orangeSheet, orangeFeathers, renderer/*, window_width, window_height*/));
     spritesMapping.emplace(DuckID::Yellow,
-                                SpriteManager(yellowSheet, yellowFeathers, renderer, yellowTexture,
-                                              yellowFeathersTexture, window_width, window_height));
-
-    auto greyTexture = new Texture(renderer, greySheet);
-    auto greyFeathersTexture = new Texture(renderer, greyFeathers);
+                                SpriteManager(yellowSheet, yellowFeathers, renderer/*, window_width, window_height*/));
     spritesMapping.emplace(DuckID::Grey,
-                                SpriteManager(greySheet, greyFeathers, renderer, greyTexture,
-                                              greyFeathersTexture, window_width, window_height));
+                                SpriteManager(greySheet, greyFeathers, renderer/*, window_width, window_height*/));
 
     return spritesMapping;
 }
