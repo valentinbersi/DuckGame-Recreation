@@ -183,29 +183,29 @@ std::unordered_map<DuckID, SpriteManager> Game::createSpritesMapping() {
     std::unordered_map<DuckID, SpriteManager> spritesMapping;
 
     // Create textures and add to the map
-    Texture whiteTexture(renderer, whiteSheet);
-    Texture whiteFeathersTexture(renderer, whiteFeathers);
+    auto whiteTexture = new Texture(renderer, whiteSheet);
+    auto whiteFeathersTexture = new Texture(renderer, whiteFeathers);
     spritesMapping.emplace(DuckID::White,
-                           SpriteManager(whiteSheet, whiteFeathers, renderer, whiteTexture,
-                                         whiteFeathersTexture, window_width, window_height));
+                                SpriteManager(whiteSheet, whiteFeathers, renderer, whiteTexture,
+                                              whiteFeathersTexture, window_width, window_height));
 
-    Texture orangeTexture(renderer, orangeSheet);
-    Texture orangeFeathersTexture(renderer, orangeFeathers);
+    auto orangeTexture = new Texture(renderer, orangeSheet);
+    auto orangeFeathersTexture = new Texture(renderer, orangeFeathers);
     spritesMapping.emplace(DuckID::Orange,
-                           SpriteManager(orangeSheet, orangeFeathers, renderer, orangeTexture,
-                                         orangeFeathersTexture, window_width, window_height));
+                                SpriteManager(orangeSheet, orangeFeathers, renderer, orangeTexture,
+                                              orangeFeathersTexture, window_width, window_height));
 
-    Texture yellowTexture(renderer, yellowSheet);
-    Texture yellowFeathersTexture(renderer, yellowFeathers);
+    auto yellowTexture = new Texture(renderer, yellowSheet);
+    auto yellowFeathersTexture = new Texture(renderer, yellowFeathers);
     spritesMapping.emplace(DuckID::Yellow,
-                           SpriteManager(yellowSheet, yellowFeathers, renderer, yellowTexture,
-                                         yellowFeathersTexture, window_width, window_height));
+                                SpriteManager(yellowSheet, yellowFeathers, renderer, yellowTexture,
+                                              yellowFeathersTexture, window_width, window_height));
 
-    Texture greyTexture(renderer, greySheet);
-    Texture greyFeathersTexture(renderer, greyFeathers);
+    auto greyTexture = new Texture(renderer, greySheet);
+    auto greyFeathersTexture = new Texture(renderer, greyFeathers);
     spritesMapping.emplace(DuckID::Grey,
-                           SpriteManager(greySheet, greyFeathers, renderer, greyTexture,
-                                         greyFeathersTexture, window_width, window_height));
+                                SpriteManager(greySheet, greyFeathers, renderer, greyTexture,
+                                              greyFeathersTexture, window_width, window_height));
 
     return spritesMapping;
 }
