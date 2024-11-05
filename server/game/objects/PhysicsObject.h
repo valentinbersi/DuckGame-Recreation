@@ -33,13 +33,6 @@ protected:
                   u32 collisionMask, std::unique_ptr<Shape2D> shape, Vector2 initialVelocity,
                   Gravity gravity);
 
-    /**
-     * Simulates that the object moves given its velocity. When collisions are processed, the object
-     * will be effectively moved or left where it it. This should be called after the calculation of
-     * the new velocity
-     */
-    void moveAndCollide();
-
 public:
     PhysicsObject() = delete;
     ~PhysicsObject() override;
@@ -53,7 +46,7 @@ public:
     /**
      * Calculate the new position of the object based on its velocity. If it collides with
      */
-    void collideWith(const CollisionObject& other) final;
+    void processCollisions() final;
 
     /**
      * Returns the velocity of the object

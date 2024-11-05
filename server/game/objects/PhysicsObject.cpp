@@ -2,11 +2,7 @@
 
 #include "GlobalPhysics.h"
 
-PhysicsObject::PhysicsObject(const PhysicsObject& other):
-        CollisionObject(other),
-        _velocity(other._velocity),
-        lastSafePosition(other.lastSafePosition),
-        gravity(other.gravity) {}
+PhysicsObject::PhysicsObject(const PhysicsObject& other) = default;
 
 PhysicsObject& PhysicsObject::operator=(const PhysicsObject& other) {
     if (this == &other)
@@ -49,11 +45,6 @@ PhysicsObject::PhysicsObject(Object* parent, Vector2 position, const float rotat
         _velocity(std::move(initialVelocity)),
         gravity(gravity) {}
 
-void PhysicsObject::moveAndCollide() {
-    lastSafePosition = position();
-    setPosition(position() + _velocity);
-}
-
 PhysicsObject::~PhysicsObject() = default;
 
 void PhysicsObject::updateInternal(const float delta) {
@@ -65,8 +56,8 @@ void PhysicsObject::updateInternal(const float delta) {
     CollisionObject::updateInternal(delta);
 }
 
-void PhysicsObject::collideWith(const CollisionObject& other) {
-    // Here code to get the object out of the collision
+void PhysicsObject::processCollisions() {
+    // Here code to process collision for a physics object
 }
 
 const Vector2& PhysicsObject::velocity() const { return _velocity; }
