@@ -8,15 +8,15 @@
 
 GameController::~GameController() = default;
 
-GameController::GameController() = default;
+GameController::GameController(): Object(nullptr){};
 
 void GameController::start() { std::cout << "The game has started" << std::endl; }
+
+void GameController::loadChildren() {}  // This should be empty
 
 void GameController::update(const float delta) {
     std::cout << "The game is running" << delta << std::endl;
 }
-
-void GameController::updateInternal([[maybe_unused]] float delta) {}
 
 void GameController::addPlayer(const PlayerID playerID) {
     const std::string id = std::to_string(playerID);
@@ -30,9 +30,9 @@ Player& GameController::getPlayer(const PlayerID playerID) const { return *playe
 GameStatus GameController::status() {
     GameStatus status;
 
-    std::ranges::for_each(getChildren(), [&status](const auto& child) {
+    forAllChildren([&status](Object& child) {
         status.gameObjects.splice(status.gameObjects.end(),
-                                  std::move(std::move(child.second->status()).gameObjects));
+                                  std::move(std::move(child.status()).gameObjects));
     });
 
     return status;

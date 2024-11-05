@@ -22,16 +22,18 @@ public:
      */
     void start() override;
 
+protected:
+    /**
+     * No need to load childs for the game controller
+     */
+    void loadChildren() override;
+
+public:
     /**
      * Update the match
      * @param delta Time since the last update
      */
     void update(float delta) override;
-
-    /**
-     * Does nothing on the game controller
-     */
-    void updateInternal(float delta) override;
 
     /**
      * Add a player to the match
