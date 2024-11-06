@@ -4,10 +4,9 @@
 #include <unordered_map>
 
 #include "ActiveSocket.h"
-#include "GameStatus.h"
 #include "ClientMessage.h"
+#include "GameStatus.h"
 #include "ReceiveProtocol.h"
-#include <memory>
 
 class ServerRecvProtocol: public ReceiveProtocol {
 private:

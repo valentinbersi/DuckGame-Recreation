@@ -12,7 +12,7 @@ BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGameIfCreated(
     std::lock_guard lock(mutex);
 
     if (gameMap.find(matchID) != gameMap.end()) {
-        gameMap.at(matchID)->addClient(clientId,senderQueue);
+        gameMap.at(matchID)->addClient(clientId, senderQueue);
         return gameMap.at(matchID)->getQueue();
     }
     return nullptr;
@@ -37,10 +37,10 @@ u16 GameMapMonitor::creatGameSafe() {
         random_number = dist(gen);
 
     } while (gameMap.contains(random_number));
-    gameMap.insert({random_number,std::make_unique<GameLoop>()});
+    gameMap.insert({random_number, std::make_unique<GameLoop>()});
     return random_number;
 }
 
 GameMapMonitor::~GameMapMonitor() {
-    // joinear values. 
+    // joinear values.
 }

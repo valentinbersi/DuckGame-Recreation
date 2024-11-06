@@ -10,9 +10,7 @@
 #define N_ROW_F 8  // PERO NO LE DARÉ USO A TODAS
 
 Spritesheet::Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer& renderer):
-        renderer(renderer),
-        path1(path1),
-        path2(path2) {
+        renderer(renderer), path1(path1), path2(path2) {
 
     m_texture_image = new SDL2pp::Texture(renderer, path1);
     m_texture_feathers = new SDL2pp::Texture(renderer, path2);
@@ -54,9 +52,9 @@ void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool fea
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     if (feathers) {
         if (isRightFeather) {
-            //position.x += m_clip.w - 15;
+            // position.x += m_clip.w - 15;
         } else {
-            //position.x -= m_clip.w;
+            // position.x -= m_clip.w;
         }
         SDL_RenderCopyEx(renderer.Get(), m_texture_feathers.Get(), &m_clip, &position, 0.0, nullptr,
                          flipType);

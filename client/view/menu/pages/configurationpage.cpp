@@ -4,9 +4,7 @@
 
 
 configurationPage::configurationPage(QWidget* parent, GameInfo& gameInfo):
-        QWidget(parent),
-        ui(new Ui::configurationPage),
-        gameInfo(gameInfo) {
+        QWidget(parent), ui(new Ui::configurationPage), gameInfo(gameInfo) {
     ui->setupUi(this);
 
     CantidadPlayersGroup = new QButtonGroup(this);
@@ -19,9 +17,7 @@ configurationPage::configurationPage(QWidget* parent, GameInfo& gameInfo):
     connect(ui->btnVolver, &QPushButton::clicked, this, &configurationPage::backClicked);
 }
 
-int configurationPage::getSelectedPlayers() const {
-    return CantidadPlayersGroup->checkedId();
-}
+int configurationPage::getSelectedPlayers() const { return CantidadPlayersGroup->checkedId(); }
 
 void configurationPage::handleJoinGame() {
     gameInfo.playersNumber = getSelectedPlayers();

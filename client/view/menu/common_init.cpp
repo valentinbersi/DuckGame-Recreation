@@ -1,11 +1,11 @@
 #include "common_init.h"
 
 #include <QApplication>
-#include <QFontDatabase>
 #include <QDebug>
+#include <QFontDatabase>
 
 
-QString common_init(QWidget* widget, const QString& backgroundPath){
+QString common_init(QWidget* widget, const QString& backgroundPath) {
     QPixmap pixmap(backgroundPath);
     QSize windowSize = widget->size();
     QPixmap scaledPixmap = pixmap.scaled(windowSize, Qt::KeepAspectRatioByExpanding);

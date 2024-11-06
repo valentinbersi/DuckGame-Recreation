@@ -35,12 +35,12 @@ void Game::init() {
 
     Texture backgroundTexture = startBackground();
     renderer.Present();
-    //SDL_Delay(5000);
-    //return;
+    // SDL_Delay(5000);
+    // return;
 
-    while(running) {
-        getSnapshot();           //handle everything sended by the gameloop
-        //Vector2 center = centerOfDucks();
+    while (running) {
+        getSnapshot();  // handle everything sended by the gameloop
+        // Vector2 center = centerOfDucks();
 
         renderer.Clear();
 
@@ -162,7 +162,7 @@ Vector2 Game::centerOfDucks() {
     float coordsY = 0.0f;
     size_t duckCount = ducks.size();
 
-    for (auto& duck : ducks) {
+    for (auto& duck: ducks) {
         coordsX += duck->position.x();
         coordsY += duck->position.y();
     }
@@ -175,7 +175,8 @@ Vector2 Game::centerOfDucks() {
     Vector2 result(coordsX, coordsY);
     return result;
 
-    // dividirlo por el numero por el que se multiplicó (dicho por valen etc (preguntar numero exacto))
+    // dividirlo por el numero por el que se multiplicó (dicho por valen etc (preguntar numero
+    // exacto))
 }
 
 void Game::clearObjects() { ducks.clear(); }
@@ -183,14 +184,17 @@ void Game::clearObjects() { ducks.clear(); }
 std::unordered_map<DuckID, SpriteManager> Game::createSpritesMapping() {
     std::unordered_map<DuckID, SpriteManager> spritesMapping;
 
-    spritesMapping.emplace(DuckID::White,
-                                SpriteManager(whiteSheet, whiteFeathers, renderer /*, window_width, window_height*/));
-    spritesMapping.emplace(DuckID::Orange,
-                                SpriteManager(orangeSheet, orangeFeathers, renderer/*, window_width, window_height*/));
-    spritesMapping.emplace(DuckID::Yellow,
-                                SpriteManager(yellowSheet, yellowFeathers, renderer/*, window_width, window_height*/));
-    spritesMapping.emplace(DuckID::Grey,
-                                SpriteManager(greySheet, greyFeathers, renderer/*, window_width, window_height*/));
+    spritesMapping.emplace(
+            DuckID::White,
+            SpriteManager(whiteSheet, whiteFeathers, renderer /*, window_width, window_height*/));
+    spritesMapping.emplace(
+            DuckID::Orange,
+            SpriteManager(orangeSheet, orangeFeathers, renderer /*, window_width, window_height*/));
+    spritesMapping.emplace(
+            DuckID::Yellow,
+            SpriteManager(yellowSheet, yellowFeathers, renderer /*, window_width, window_height*/));
+    spritesMapping.emplace(DuckID::Grey, SpriteManager(greySheet, greyFeathers,
+                                                       renderer /*, window_width, window_height*/));
 
     return spritesMapping;
 }

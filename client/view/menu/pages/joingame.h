@@ -31,7 +31,6 @@ public:
 signals:
     void playMatchClicked();
     void backClicked();
-
 };
 
 

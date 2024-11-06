@@ -4,11 +4,11 @@
 
 #include "ActiveSocket.h"
 #include "BlockingQueue.h"
+#include "ClientMessage.h"
 #include "ComReceiver.h"
 #include "ComSender.h"
-#include "ClientMessage.h"
-#include "ServerMessage.h"
 #include "GameStatus.h"
+#include "ServerMessage.h"
 #include "Thread.h"
 
 class Communicator {

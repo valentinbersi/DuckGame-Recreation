@@ -6,7 +6,8 @@
 
 #include "ReplyMessage.h"
 
-newGame::newGame(QWidget* parent, Communicator& communicator, GameInfo& gameInfo): QWidget(parent), ui(new Ui::newGame), communicator(communicator), gameInfo(gameInfo) {
+newGame::newGame(QWidget* parent, Communicator& communicator, GameInfo& gameInfo):
+        QWidget(parent), ui(new Ui::newGame), communicator(communicator), gameInfo(gameInfo) {
     ui->setupUi(this);
 
     // esto tendriamos que recibirlo desde el server, nose cuando
@@ -37,7 +38,8 @@ void newGame::onPlayClicked() {
     }
 
     gameInfo.player1Name = ui->lineEditPlayer1->text().toStdString();
-    gameInfo.player2Name = ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString();
+    gameInfo.player2Name =
+            ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString();
 
     QModelIndexList selectedIndexes = ui->mapsList->selectionModel()->selectedIndexes();
     if (!selectedIndexes.isEmpty()) {
@@ -52,12 +54,9 @@ void newGame::onPlayClicked() {
 }
 
 bool newGame::NewMatchRequest() {
-    auto message = std::make_unique<LobbyMessage>(
-            LobbyRequest::NEWMATCH,
-            gameInfo.playersNumber,
-            gameInfo.player1Name,
-            gameInfo.player2Name,
-            gameInfo.matchID // esto deberia ser 0 ¿?
+    auto message = std::make_unique<LobbyMessage>(LobbyRequest::NEWMATCH, gameInfo.playersNumber,
+                                                  gameInfo.player1Name, gameInfo.player2Name,
+                                                  gameInfo.matchID  // esto deberia ser 0 ¿?
     );
 
     if (!communicator.trysend(std::move(message))) {
@@ -78,7 +77,7 @@ bool newGame::NewMatchRequest() {
 
     auto messageServerOpt = communicator.recv();
     const ReplyMessage* reply = dynamic_cast<const ReplyMessage*>(messageServerOpt.get());
-    if(reply == nullptr){
+    if (reply == nullptr) {
         QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
         return false;
     }

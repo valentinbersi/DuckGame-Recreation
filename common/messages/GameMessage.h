@@ -9,6 +9,6 @@ public:
     GameMessage(InputAction action);
 
     void send(ClientSendProtocol& clientProtocol) override;
-    
+
     ~GameMessage();
 };

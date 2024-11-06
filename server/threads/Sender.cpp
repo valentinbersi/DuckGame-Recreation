@@ -1,21 +1,22 @@
 
 #include "Sender.h"
 
-Sender::Sender(ActiveSocket& socket,std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>>& queue) : 
-                sendProtocol(socket), sendQueue(queue) {}
+Sender::Sender(ActiveSocket& socket,
+               std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>>& queue):
+        sendProtocol(socket), sendQueue(queue) {}
 
-void Sender::run(){
+void Sender::run() {
     try {
         while (_keep_running) {
             sendProtocol.sendMessage(sendQueue->pop());
         }
 
-    // }catch(){
+        // }catch(){
 
     } catch (...) {}
 }
 
-void Sender::stop(){
+void Sender::stop() {
     _keep_running = false;
     _is_alive = false;
 }
