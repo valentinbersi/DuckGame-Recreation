@@ -8,14 +8,11 @@ class SpriteManager {
 
 public:
     // Constructor
-    SpriteManager(const char* path1, const char* path2, SDL2pp::Renderer& renderer,
-                  SDL2pp::Texture& m_texture_image, SDL2pp::Texture& m_texture_feathers,
-                  int& window_width, int& window_height);
+    SpriteManager(const char* path1, const char* path2, SDL2pp::Renderer& renderer/*, int& window_width, int& window_height*/);
 
     // Destructor
     ~SpriteManager() = default;
 
-    void start();
     void setFlags(bool in_air, bool flapping, bool moving_right, bool moving_left);
     void update(bool playing_dead, bool crouching, bool in_air, bool flapping, bool being_damaged,
                 bool moving_right, bool moving_left);

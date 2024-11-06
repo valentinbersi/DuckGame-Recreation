@@ -182,30 +182,14 @@ void Game::clearObjects() { ducks.clear(); }
 std::unordered_map<DuckID, SpriteManager> Game::createSpritesMapping() {
     std::unordered_map<DuckID, SpriteManager> spritesMapping;
 
-    // Create textures and add to the map
-    Texture whiteTexture(renderer, whiteSheet);
-    Texture whiteFeathersTexture(renderer, whiteFeathers);
     spritesMapping.emplace(DuckID::White,
-                           SpriteManager(whiteSheet, whiteFeathers, renderer, whiteTexture,
-                                         whiteFeathersTexture, window_width, window_height));
-
-    Texture orangeTexture(renderer, orangeSheet);
-    Texture orangeFeathersTexture(renderer, orangeFeathers);
+                                SpriteManager(whiteSheet, whiteFeathers, renderer /*, window_width, window_height*/));
     spritesMapping.emplace(DuckID::Orange,
-                           SpriteManager(orangeSheet, orangeFeathers, renderer, orangeTexture,
-                                         orangeFeathersTexture, window_width, window_height));
-
-    Texture yellowTexture(renderer, yellowSheet);
-    Texture yellowFeathersTexture(renderer, yellowFeathers);
+                                SpriteManager(orangeSheet, orangeFeathers, renderer/*, window_width, window_height*/));
     spritesMapping.emplace(DuckID::Yellow,
-                           SpriteManager(yellowSheet, yellowFeathers, renderer, yellowTexture,
-                                         yellowFeathersTexture, window_width, window_height));
-
-    Texture greyTexture(renderer, greySheet);
-    Texture greyFeathersTexture(renderer, greyFeathers);
+                                SpriteManager(yellowSheet, yellowFeathers, renderer/*, window_width, window_height*/));
     spritesMapping.emplace(DuckID::Grey,
-                           SpriteManager(greySheet, greyFeathers, renderer, greyTexture,
-                                         greyFeathersTexture, window_width, window_height));
+                                SpriteManager(greySheet, greyFeathers, renderer/*, window_width, window_height*/));
 
     return spritesMapping;
 }
