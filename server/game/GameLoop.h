@@ -64,6 +64,6 @@ public:
      */
     BlockingQueue<std::unique_ptr<Command>>* getQueue();
 
-    //funcion por el momento, despues vamos a hacer un solo broadcast.
+    // funcion por el momento, despues vamos a hacer un solo broadcast.
     void broadcastStartGame();
 };

@@ -10,13 +10,17 @@ Communicator::Communicator(const std::string& hostname, const std::string& serve
     receiver.start();
 }
 
-bool Communicator::trysend(std::unique_ptr<ClientMessage> message) { return sendQueue.try_push(std::move(message)); }
+bool Communicator::trysend(std::unique_ptr<ClientMessage> message) {
+    return sendQueue.try_push(std::move(message));
+}
 
-std::optional<std::unique_ptr<ServerMessage>> Communicator::tryrecv() { return recvQueue.try_pop(); }
+std::optional<std::unique_ptr<ServerMessage>> Communicator::tryrecv() {
+    return recvQueue.try_pop();
+}
 
-std::optional<std::unique_ptr<ServerMessage>> Communicator::tryRecvLast(){ 
+std::optional<std::unique_ptr<ServerMessage>> Communicator::tryRecvLast() {
     std::queue<std::unique_ptr<ServerMessage>> queue = recvQueue.popAll();
-    if(queue.empty()){
+    if (queue.empty()) {
         return std::nullopt;
     }
     std::unique_ptr<ServerMessage> message = std::move(queue.back());
@@ -24,7 +28,7 @@ std::optional<std::unique_ptr<ServerMessage>> Communicator::tryRecvLast(){
     return message;
 }
 
-std::unique_ptr<ServerMessage> Communicator::recv(){ return recvQueue.pop(); }
+std::unique_ptr<ServerMessage> Communicator::recv() { return recvQueue.pop(); }
 
 Communicator::~Communicator() {
     sender.stop();

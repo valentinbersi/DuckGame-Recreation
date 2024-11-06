@@ -5,8 +5,8 @@
 struct ServerMessage {
 public:
     MessageType type;
-    
-    explicit ServerMessage(MessageType type) : type(type) {}
+
+    explicit ServerMessage(MessageType type): type(type) {}
 
     virtual void send(ServerSendProtocol& serverProtocol) = 0;
 

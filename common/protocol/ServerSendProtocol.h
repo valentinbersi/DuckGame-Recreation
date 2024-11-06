@@ -11,13 +11,9 @@ struct ServerMessage;
 
 class ServerSendProtocol: public SendProtocol {
 private:
-    HashMap<GameObjectID, std::function<void(const GameObjectData&)>> idsMap;
-
     void sendGameObject2DData(const GameObject2DData* obj2Data);
 
     void sendDuckData(const DuckData* objData);
-
-    // void sendResponse();
 
 public:
     explicit ServerSendProtocol(ActiveSocket& socket);

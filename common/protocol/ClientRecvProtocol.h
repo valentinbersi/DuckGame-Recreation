@@ -1,10 +1,10 @@
 #pragma once
 #include "ActiveSocket.h"
 #include "DuckData.h"
-#include "ServerMessage.h"
 #include "GameStatus.h"
 #include "Math.h"
 #include "ReceiveProtocol.h"
+#include "ServerMessage.h"
 #include "Types.h"
 
 class ClientRecvProtocol: public ReceiveProtocol {

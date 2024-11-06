@@ -11,7 +11,8 @@ mainMenu::mainMenu(QWidget* parent): QWidget(parent), ui(new Ui::mainMenu) {
 
 void mainMenu::handleExit() {
     QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this, "Salir", "¿Seguro que querés salir?", QMessageBox::Yes | QMessageBox::No);
+    reply = QMessageBox::question(this, "Salir", "¿Seguro que querés salir?",
+                                  QMessageBox::Yes | QMessageBox::No);
 
     if (reply == QMessageBox::Yes) {
         emit exitGameRequested();

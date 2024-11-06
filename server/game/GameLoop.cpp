@@ -5,9 +5,9 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
-#include "ReplyMessage.h"
 
 #include "GameStatus.h"
+#include "ReplyMessage.h"
 
 float GameLoop::calculateDeltaTime() {
     const std::chrono::steady_clock::time_point frameTicks = std::chrono::steady_clock::now();
@@ -65,10 +65,10 @@ void GameLoop::addClient(const u16 clientID,
 
 BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCommands; }
 
-void GameLoop::broadcastStartGame(){
-    std::shared_ptr<ServerMessage> startMessage = std::make_shared<ReplyMessage>(1,1);
-    clientQueues.remove_if([&startMessage](const auto& clientQueue){
-        if (clientQueue.expired()){
+void GameLoop::broadcastStartGame() {
+    std::shared_ptr<ServerMessage> startMessage = std::make_shared<ReplyMessage>(1, 1);
+    clientQueues.remove_if([&startMessage](const auto& clientQueue) {
+        if (clientQueue.expired()) {
             return true;
         }
         clientQueue.lock()->try_push(startMessage);

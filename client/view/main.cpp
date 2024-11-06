@@ -3,6 +3,7 @@
 
 #include "game/Game.hpp"
 #include "menu/LobbyQT.h"
+
 #include "ActiveSocket.h"
 
 int main(int argc, char* argv[]) {
