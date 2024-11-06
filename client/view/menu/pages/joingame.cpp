@@ -38,8 +38,10 @@ void joinGame::onPlayClicked() {
     gameInfo.matchID = ui->lineEditMatchID->text().toUShort();
 
     qDebug() << "info:" << QString(gameInfo.player1Name.c_str()) << QString(gameInfo.player2Name.c_str()) << gameInfo.matchID;
-    if (joinMatchRequest())
+    if (joinMatchRequest()) {
+        qDebug() << "emite la señal playMatchClicked";
         emit playMatchClicked();
+    }
 
     //emit playMatchClicked();
 }
@@ -79,10 +81,12 @@ bool joinGame::joinMatchRequest() {
         QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
         return false;
     }
-    if(gameInfo.matchID == reply->matchID && reply->startGame == 0)
+    qDebug() << gameInfo.matchID << reply->matchID << reply->startGame;
+    if(gameInfo.matchID == reply->matchID && reply->startGame == 0) {
+        qDebug() << "retorna true";
         return true;
-    else
-        return false;
+    } else // ver los posibles mensajes al server: partida ya comenzada y partida no encontrada
+    {return false;}
 }
 
 joinGame::~joinGame() { delete ui; }
