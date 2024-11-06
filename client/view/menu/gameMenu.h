@@ -50,6 +50,7 @@ signals:
 public:
     GameMenu(QWidget* parent, Communicator& communicator, bool& twoPlayersLocal);
     ~GameMenu() override;
+    void showJoinWaitingPage();
 };
 
 #endif  // MAINWINDOW_H

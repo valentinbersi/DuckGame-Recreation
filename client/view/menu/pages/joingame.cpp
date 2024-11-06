@@ -3,8 +3,13 @@
 #include <QDebug>
 #include <QMessageBox>
 
-joinGame::joinGame(QWidget* parent, GameInfo& gameInfo):
-        QWidget(parent), ui(new Ui::joinGame), gameInfo(gameInfo) {
+#include "ReplyMessage.h"
+
+joinGame::joinGame(QWidget* parent, Communicator& communicator, GameInfo& gameInfo):
+        QWidget(parent),
+        ui(new Ui::joinGame),
+        communicator(communicator),
+        gameInfo(gameInfo) {
     ui->setupUi(this);
 
     connect(ui->buttonPlay, &QPushButton::clicked, this, &joinGame::onPlayClicked);
@@ -29,11 +34,55 @@ void joinGame::onPlayClicked() {
         return;
     }
     gameInfo.player1Name = ui->lineEditPlayer1->text().toStdString();
-    gameInfo.player2Name =
-            ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString();
+    gameInfo.player2Name = ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString();
     gameInfo.matchID = ui->lineEditMatchID->text().toUShort();
 
-    emit playMatchClicked();
+    qDebug() << "info:" << QString(gameInfo.player1Name.c_str()) << QString(gameInfo.player2Name.c_str()) << gameInfo.matchID;
+    if (joinMatchRequest())
+        emit playMatchClicked();
+
+    //emit playMatchClicked();
+}
+
+bool joinGame::joinMatchRequest() {
+    auto message = std::make_unique<LobbyMessage>(
+            LobbyRequest::JOINMATCH,
+            gameInfo.playersNumber,
+            gameInfo.player1Name,
+            gameInfo.player2Name,
+            gameInfo.matchID // esto deberia ser 0 ¿?
+    );
+    qDebug() << "joinMatchRequest";
+    qDebug() << "matchID del message:" << message->matchId;
+
+    if (!communicator.trysend(std::move(message))) {
+        qDebug() << "Error al enviar el mensaje.";
+        return false;
+    }
+
+    // auto messageServerOpt = communicator.tryrecv();
+    // if (messageServerOpt.has_value()) {
+    //     std::unique_ptr<ServerMessage> messageServer = std::move(messageServerOpt.value());
+    //     ReplyMessage reply = dynamic_cast<ReplyMessage&>(*messageServer);
+    //     gameInfo.matchID = reply.matchID;
+    //     return true;
+    // } else {
+    //     QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
+    //     return false; // esto nose si es correcto, deberia manejarlo distinto yo creo.
+    // }
+
+    qDebug() << "se pide el mensaje reply al comunicador";
+    auto messageServerOpt = communicator.recv();
+    qDebug() << "se recibio reply";
+    const auto* reply = dynamic_cast<const ReplyMessage*>(messageServerOpt.get());
+    if(reply == nullptr){
+        QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
+        return false;
+    }
+    if(gameInfo.matchID == reply->matchID && reply->startGame == 0)
+        return true;
+    else
+        return false;
 }
 
 joinGame::~joinGame() { delete ui; }

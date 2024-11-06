@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include "Communicator.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -15,9 +17,11 @@ class joinWaitingPage: public QWidget {
 
 private:
     Ui::joinWaitingPage* ui;
+    Communicator& communicator;
 
 public:
-    explicit joinWaitingPage(QWidget* parent = nullptr);
+    joinWaitingPage(QWidget* parent, Communicator& communicator);
+    void waitForMatchStart();
     ~joinWaitingPage() override;
 
 signals:
