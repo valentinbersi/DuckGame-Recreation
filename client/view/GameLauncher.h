@@ -13,6 +13,7 @@ class GameLauncher: public QObject {
 private:
     Communicator communicator;
     QApplication app;
+    bool twoPlayersLocal;
     GameMenu menu;
     bool startGame;
 

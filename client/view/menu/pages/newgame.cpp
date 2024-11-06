@@ -45,10 +45,10 @@ void newGame::onPlayClicked() {
         gameInfo.selectedMap = selectedMap.toStdString();
     }
 
-   if (NewMatchRequest())   //ESTO ESTA COMENTADO PARA PROBARLO CUANDO ESTE EL SERVER
+   if (NewMatchRequest())   // COMENTAR SI SE QUIERE PROBAR SIN SERVER
        emit playMatchClicked();
 
-    // emit playMatchClicked();   // esto no iria despues!
+    //emit playMatchClicked();   // COMENTAR SI SE QUIERE PROBAR CON SERVER
 }
 
 bool newGame::NewMatchRequest() {
