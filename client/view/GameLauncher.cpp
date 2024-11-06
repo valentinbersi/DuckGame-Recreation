@@ -16,8 +16,6 @@ void GameLauncher::exec() {
 
     if (startGame) {
         try {
-            communicator.trysend(std::make_unique<LobbyMessage>(LobbyRequest::NEWMATCH, 2, "tomas", "camilo", 1));
-            communicator.trysend(std::make_unique<LobbyMessage>(LobbyRequest::STARTMATCH, 2, "andres", "valentin", 1));
             Game game(communicator);
             game.init();
 
