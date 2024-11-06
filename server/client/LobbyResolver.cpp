@@ -29,7 +29,7 @@ BlockingQueue<std::unique_ptr<Command>>* LobbyResolver::resolveJoinMatch(
         const LobbyMessage& message) {
             
     auto* queue = gameMap.joinGameIfCreated(message.matchId, senderQueue, clientID);
-    if (gameMap.joinGameIfCreated(message.matchId, senderQueue, clientID)){
+    if (queue){
         senderQueue->push(std::make_shared<ReplyMessage>(message.matchId, 0));
     } else {
         senderQueue->push(std::make_shared<ReplyMessage>(0, 0));
