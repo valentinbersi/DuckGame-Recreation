@@ -3,10 +3,11 @@
 #include "MovementCommand.h"
 
 Receiver::Receiver(ActiveSocket& socket, std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> queueSender,
-                   GameMapMonitor& monitor):
+                   GameMapMonitor& monitor, const u16& clientID):
         recvProtocol(socket),
         gameQueue(nullptr),
-        lobbyResolver(monitor, queueSender) {}
+        clientID(clientID),
+        lobbyResolver(monitor, queueSender, clientID) {}
 
 void Receiver::run() {
     try {
@@ -19,7 +20,7 @@ void Receiver::run() {
         while (_keep_running){
             std::unique_ptr<ClientMessage> message = recvProtocol.receiveMessage();
             const GameMessage* gameMessage = dynamic_cast<const GameMessage*>(message.get());
-            gameQueue->push(std::make_unique<MovementCommand>(0, gameMessage->action));
+            gameQueue->push(std::make_unique<MovementCommand>(clientID, gameMessage->action));
         }
 
         // }catch(){

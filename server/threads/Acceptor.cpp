@@ -13,9 +13,11 @@ void Acceptor::reapDead() { clientes.remove_if([this](VirtualClient& client){
 
 void Acceptor::run() {
     try {
+        u16 clientID = -1;
         while (_keep_running) {
+            clientID+=2;  // voy saltando de a dos para considerar tener dos jugaddores x conexion.
             ActiveSocket peer = acceptorSocket.accept();
-            clientes.emplace_back(std::move(peer), gamesMonitor);
+            clientes.emplace_back(std::move(peer), gamesMonitor, clientID);
             reapDead();
         }
     } catch (const LibError& err) {

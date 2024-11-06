@@ -1,9 +1,10 @@
 #include "VClient.h"
 
-VirtualClient::VirtualClient(ActiveSocket socket, GameMapMonitor& monitor):
+VirtualClient::VirtualClient(ActiveSocket socket, GameMapMonitor& monitor, u16 clientID):
         skt(std::move(socket)),
+        id(clientID),
         sendQueue(std::make_shared<BlockingQueue<std::shared_ptr<ServerMessage>>>()),
-        receiver(skt, sendQueue, monitor),
+        receiver(skt, sendQueue, monitor, id),
         sender(skt, sendQueue)
 
 {

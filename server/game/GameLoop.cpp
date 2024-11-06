@@ -5,6 +5,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
+#include "ReplyMessage.h"
 
 #include "GameStatus.h"
 
@@ -41,6 +42,7 @@ void GameLoop::broadcastGameStatus() {
 GameLoop::GameLoop(): prevTicks(std::chrono::milliseconds::zero()) {}
 
 void GameLoop::run() {
+    broadcastStartGame();
     prevTicks = std::chrono::steady_clock::now();
     game.start();
 
@@ -62,3 +64,14 @@ void GameLoop::addClient(const u16 clientID,
 }
 
 BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCommands; }
+
+void GameLoop::broadcastStartGame(){
+    std::shared_ptr<ServerMessage> startMessage = std::make_shared<ReplyMessage>(1,1);
+    clientQueues.remove_if([&startMessage](const auto& clientQueue){
+        if (clientQueue.expired()){
+            return true;
+        }
+        clientQueue.lock()->try_push(startMessage);
+        return false;
+    });
+}

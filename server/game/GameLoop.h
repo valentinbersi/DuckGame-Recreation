@@ -63,4 +63,7 @@ public:
      * @return the pointer to the gameloop Queue.
      */
     BlockingQueue<std::unique_ptr<Command>>* getQueue();
+
+    //funcion por el momento, despues vamos a hacer un solo broadcast.
+    void broadcastStartGame();
 };

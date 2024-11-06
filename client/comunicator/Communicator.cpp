@@ -24,6 +24,8 @@ std::optional<std::unique_ptr<ServerMessage>> Communicator::tryRecvLast(){
     return message;
 }
 
+std::unique_ptr<ServerMessage> Communicator::recv(){ return recvQueue.pop(); }
+
 Communicator::~Communicator() {
     sender.stop();
     receiver.stop();

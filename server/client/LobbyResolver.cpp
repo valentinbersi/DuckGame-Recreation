@@ -2,18 +2,18 @@
 
 LobbyResolver::LobbyResolver(
         GameMapMonitor& gameMap,
-        std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue):
+        std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue, const u16& clientID):
 
-        gameMap(gameMap), senderQueue(senderQueue) {}
+        gameMap(gameMap), senderQueue(senderQueue), clientID(clientID) {}
 
 BlockingQueue<std::unique_ptr<Command>>* LobbyResolver::resolveRequest(const LobbyMessage& message) {
     if (message.request == LobbyRequest::NEWMATCH) {
         u16 matchID = gameMap.creatGameSafe();
-        // senderQueue->push(matchID)
-        gameMap.joinGameIfCreated(matchID, senderQueue, 0); // aproposito no lo tomo, porque soy host del game.
+        senderQueue->push(std::make_shared<ReplyMessage>(matchID, 0));
+        gameMap.joinGameIfCreated(matchID, senderQueue, clientID); // aproposito no lo tomo, porque soy host del game.
         return nullptr;
     } else if (message.request == LobbyRequest::JOINMATCH) {
-        return gameMap.joinGameIfCreated(message.matchId, senderQueue, 0);  
+        return gameMap.joinGameIfCreated(message.matchId, senderQueue, clientID);  
     } else {                                                        
         return gameMap.startGameIfCreated(message.matchId);
     }

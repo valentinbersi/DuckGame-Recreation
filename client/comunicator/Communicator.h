@@ -28,5 +28,7 @@ public:
 
     std::optional<std::unique_ptr<ServerMessage>> tryRecvLast();
 
+    std::unique_ptr<ServerMessage> recv();
+
     ~Communicator();
 };

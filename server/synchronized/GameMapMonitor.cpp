@@ -29,16 +29,16 @@ BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::startGameIfCreated(u16 
 
 u16 GameMapMonitor::creatGameSafe() {
     std::lock_guard lock(mutex);
-    // u16 random_number;
-    // // do {
-    // //     std::random_device rd;
-    // //     std::mt19937 gen(rd());
-    // //     std::uniform_int_distribution<uint16_t> dist(1, 65535);
-    // //     random_number = dist(gen);
+    u16 random_number;
+    do {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<uint16_t> dist(1, 65535);
+        random_number = dist(gen);
 
-    // // } while (gameMap.contains(random_number));
-    gameMap.insert({1,std::make_unique<GameLoop>()});
-    return 1; //va random number
+    } while (gameMap.contains(random_number));
+    gameMap.insert({random_number,std::make_unique<GameLoop>()});
+    return random_number;
 }
 
 GameMapMonitor::~GameMapMonitor() {

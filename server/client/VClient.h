@@ -13,14 +13,14 @@ class VirtualClient {
 private:
     ActiveSocket skt;
     // mapa de gameloops va aqui, referencia
-    // BlockingQueue<std::unique_ptr<Command>>* gameQueue;  // No tengo de otra porque aun no se cual
-    //                                                      // es
+    // BlockingQueue<std::unique_ptr<Command>>* gameQueue;
+    u16 id;                                                   
     std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> sendQueue;
     Receiver receiver;
     Sender sender;
 
 public:
-    VirtualClient(ActiveSocket socket, GameMapMonitor& monitor);
+    VirtualClient(ActiveSocket socket, GameMapMonitor& monitor, u16 clientID);
 
     bool isConnected();
 
