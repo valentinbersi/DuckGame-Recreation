@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+#include "Communicator.h"
 #include "GameInfo.h"
 #include "LobbyMessage.h"
 #include "ui_joinGame.h"
@@ -19,18 +20,22 @@ class joinGame: public QWidget {
 
 private:
     Ui::joinGame* ui;
+    Communicator& communicator;
     GameInfo& gameInfo;
 
     bool verificarDatos();
     void onPlayClicked();
+    bool joinMatchRequest();
 
 public:
-    joinGame(QWidget* parent, GameInfo& gameInfo);
+    joinGame(QWidget* parent, Communicator& communicator, GameInfo& gameInfo);
     ~joinGame() override;
 
 signals:
     void playMatchClicked();
     void backClicked();
+
+
 };
 
 
