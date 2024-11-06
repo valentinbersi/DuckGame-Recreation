@@ -29,6 +29,7 @@ class GameMenu: public QMainWindow {
 private:
     Ui::GameMenu* ui;
     Communicator& communicator;
+    bool& twoPlayersLocal;
     GameInfo gameInfo;
 
     QPointer<mainMenu> menu;
@@ -47,7 +48,7 @@ signals:
     void startGame();
 
 public:
-    GameMenu(QWidget* parent, Communicator& communicator);
+    GameMenu(QWidget* parent, Communicator& communicator, bool& twoPlayersLocal);
     ~GameMenu() override;
 };
 

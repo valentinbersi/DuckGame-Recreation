@@ -19,12 +19,13 @@ hostWaitingPage::hostWaitingPage(QWidget* parent, Communicator& communicator, Ga
     connect(ui->playButton, &QPushButton::clicked, this, &hostWaitingPage::requestStartGame);
 }
 
+// USAR ESTA CUANDO SE QUIERE PROBAR SIN SERVER
+//void hostWaitingPage::requestStartGame() {
+//    emit startMatch();
+//}
+
+// USAR ESTA PARA CORRER CON SERVER
 void hostWaitingPage::requestStartGame() {
-    // emit startMatch();
-
-    // ESTO LO COMENTO AHORA MIENTRAS NO PROBEMOS QUE FUNCIONA,
-    // PERO ES MAS O MENOS LO QUE IRIA PARA COMUNICARSE CON EL SERVER Y INICIAR LA PARTIDA
-
    auto message = std::make_unique<LobbyMessage>(
            LobbyRequest::STARTMATCH,
            gameInfo.playersNumber,
@@ -59,7 +60,7 @@ void hostWaitingPage::requestStartGame() {
         QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
         return;
     }
-    
+
 }
 
 hostWaitingPage::~hostWaitingPage() { delete ui; }

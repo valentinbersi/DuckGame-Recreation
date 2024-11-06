@@ -25,7 +25,7 @@
 class Game {
 
 public:
-    Game(Communicator& communicator);
+    Game(Communicator& communicator, bool& twoPlayersLocal);
     ~Game();
 
     void init();
@@ -49,6 +49,7 @@ private:
     Communicator& communicator;
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
+    bool& twoPlayersLocal;
 
     std::list<std::unique_ptr<DuckData>> ducks;
     //std::list<std::unique_ptr<GameObjectData>> objects;

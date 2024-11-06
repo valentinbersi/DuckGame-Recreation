@@ -8,10 +8,11 @@
 #include "ui_gamemenu.h"
 #include "hostwaitingpage.h"
 
-GameMenu::GameMenu(QWidget* parent, Communicator& communicator)
+GameMenu::GameMenu(QWidget* parent, Communicator& communicator, bool& twoPlayersLocal)
         : QMainWindow(parent),
         ui(new Ui::GameMenu),
         communicator(communicator),
+        twoPlayersLocal(twoPlayersLocal),
         gameInfo() {
     ui->setupUi(this);
 
@@ -72,6 +73,8 @@ void GameMenu::showHostWaitingPage() {
 //}
 
 void GameMenu::startGameHandler() {
+    if (gameInfo.playersNumber == 2)
+        twoPlayersLocal = true;
     emit startGame();
     close();
     QCoreApplication::exit(0); // esto es necesario??

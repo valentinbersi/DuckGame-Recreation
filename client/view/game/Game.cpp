@@ -18,14 +18,15 @@
 // Here we should just declare the classes that are use in this file. But for now a NOLINT is fine.
 using namespace SDL2pp;  // NOLINT(build/namespaces)
 
-Game::Game(Communicator& communicator):
+Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         running(true),
         window_width(DEF_WINDOW_WIDTH),
         window_height(DEF_WINDOW_HEIGHT),
         communicator(communicator),
         window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width,
                window_height, SDL_WINDOW_RESIZABLE),
-        renderer(window, -1, SDL_RENDERER_ACCELERATED) {}
+        renderer(window, -1, SDL_RENDERER_ACCELERATED),
+        twoPlayersLocal(twoPlayersLocal){}
 
 void Game::init() {
     std::unordered_map<DuckID, SpriteManager> spritesMapping = createSpritesMapping();
