@@ -1,8 +1,10 @@
 #include "joingame.h"
-#include <QMessageBox>
-#include <QDebug>
 
-joinGame::joinGame(QWidget* parent, GameInfo& gameInfo): QWidget(parent), ui(new Ui::joinGame), gameInfo(gameInfo) {
+#include <QDebug>
+#include <QMessageBox>
+
+joinGame::joinGame(QWidget* parent, GameInfo& gameInfo):
+        QWidget(parent), ui(new Ui::joinGame), gameInfo(gameInfo) {
     ui->setupUi(this);
 
     connect(ui->buttonPlay, &QPushButton::clicked, this, &joinGame::onPlayClicked);
@@ -27,7 +29,8 @@ void joinGame::onPlayClicked() {
         return;
     }
     gameInfo.player1Name = ui->lineEditPlayer1->text().toStdString();
-    gameInfo.player2Name = ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString();
+    gameInfo.player2Name =
+            ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString();
     gameInfo.matchID = ui->lineEditMatchID->text().toUShort();
 
     emit playMatchClicked();

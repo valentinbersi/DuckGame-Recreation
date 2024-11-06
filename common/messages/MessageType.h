@@ -2,7 +2,7 @@
 
 class MessageType {
 public:
-    enum Value : unsigned char { Lobby = 0x0, Game = 0x1, Reply=0x2 };
+    enum Value : unsigned char { Lobby = 0x0, Game = 0x1, Reply = 0x2 };
 
     // cppcheck-suppress noExplicitConstructor
     MessageType(Value value):
@@ -75,7 +75,7 @@ public:
 
     [[nodiscard]] operator Value() const { return _value; }
 
-    LobbyRequest() : _value(NEWMATCH) {};
+    LobbyRequest(): _value(NEWMATCH){};
 
     // bool operator==(LobbyRequest boxId) const {return boxId._value == _value;}
 

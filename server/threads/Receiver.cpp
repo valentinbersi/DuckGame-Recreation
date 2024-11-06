@@ -1,8 +1,10 @@
 
 #include "Receiver.h"
+
 #include "MovementCommand.h"
 
-Receiver::Receiver(ActiveSocket& socket, std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> queueSender,
+Receiver::Receiver(ActiveSocket& socket,
+                   std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> queueSender,
                    GameMapMonitor& monitor, const u16& clientID):
         recvProtocol(socket),
         gameQueue(nullptr),
@@ -17,7 +19,7 @@ void Receiver::run() {
             gameQueue = lobbyResolver.resolveRequest(*lobbyMessage);
         }
 
-        while (_keep_running){
+        while (_keep_running) {
             std::unique_ptr<ClientMessage> message = recvProtocol.receiveMessage();
             const GameMessage* gameMessage = dynamic_cast<const GameMessage*>(message.get());
             gameQueue->push(std::make_unique<MovementCommand>(clientID, gameMessage->action));
@@ -27,7 +29,7 @@ void Receiver::run() {
     } catch (...) {}
 }
 
-void Receiver::stop(){
+void Receiver::stop() {
     _keep_running = false;
     _is_alive = false;
 }

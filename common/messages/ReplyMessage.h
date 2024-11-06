@@ -1,10 +1,10 @@
 
 #include "ServerMessage.h"
 
-struct ReplyMessage: public ServerMessage{
+struct ReplyMessage: public ServerMessage {
 public:
     u16 matchID;
-    
+
     u8 startGame;
 
     ReplyMessage();

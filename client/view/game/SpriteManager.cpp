@@ -24,7 +24,9 @@
 #define OFFSET_LEFT 3
 #define OFFSET_Y 4
 
-SpriteManager::SpriteManager(const char* path1, const char* path2, SDL2pp::Renderer& renderer/*, int& window_width, int& window_height*/):
+SpriteManager::SpriteManager(
+        const char* path1, const char* path2,
+        SDL2pp::Renderer& renderer /*, int& window_width, int& window_height*/):
         path1(path1),
         path2(path2),
         scale(DEFAULT_SCALE),
@@ -57,8 +59,10 @@ void SpriteManager::updatePosition(float new_x, float new_y) {
 void SpriteManager::update(bool playing_dead, bool crouching, bool air, bool flap,
                            bool being_damaged, bool right, bool left) {
 
-    if (left) flip = true;
-    else if (right) flip = false;
+    if (left)
+        flip = true;
+    else if (right)
+        flip = false;
 
     if (being_damaged || playing_dead ||
         crouching) {  // no animation; only one sprite for each 'event'
@@ -101,7 +105,6 @@ void SpriteManager::draw(int col, int row) {
         spritesheet.selectSprite(col, row, FEATHER);
         position = getPosition(FEATHER, RIGHT_FEATHER);
         spritesheet.drawSelectedSprite(position, flip, FEATHER, RIGHT_FEATHER);
-
     }
 }
 
@@ -152,9 +155,12 @@ SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather) {
         if (isRightFeather) {
             position.x += spriteWidth * 2 - OFFSET_RIGHT;
         } else {
-            position.x += spriteWidth / 2 + OFFSET_LEFT;     //(duck width - (feathers width / 2) + 1 (offset) ) - duck width ?
+            position.x +=
+                    spriteWidth / 2 +
+                    OFFSET_LEFT;  //(duck width - (feathers width / 2) + 1 (offset) ) - duck width ?
         }
-        position.y += spriteWidth * 2 + OFFSET_Y;  //duck height + (feathers height / 2) - 4 (offset)
+        position.y +=
+                spriteWidth * 2 + OFFSET_Y;  // duck height + (feathers height / 2) - 4 (offset)
     }
 
     return position;

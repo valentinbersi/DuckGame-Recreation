@@ -8,14 +8,16 @@ Acceptor::Acceptor(const std::string& hostname, GameMapMonitor& monitor):
 
 bool Acceptor::removeIfNotConnected(VirtualClient& client) { return !client.isConnected(); }
 
-void Acceptor::reapDead() { clientes.remove_if([this](VirtualClient& client){
-                                                return removeIfNotConnected(client);}); }
+void Acceptor::reapDead() {
+    clientes.remove_if([this](VirtualClient& client) { return removeIfNotConnected(client); });
+}
 
 void Acceptor::run() {
     try {
         u16 clientID = -1;
         while (_keep_running) {
-            clientID+=2;  // voy saltando de a dos para considerar tener dos jugaddores x conexion.
+            clientID +=
+                    2;  // voy saltando de a dos para considerar tener dos jugaddores x conexion.
             ActiveSocket peer = acceptorSocket.accept();
             clientes.emplace_back(std::move(peer), gamesMonitor, clientID);
             reapDead();

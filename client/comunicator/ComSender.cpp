@@ -2,7 +2,8 @@
 
 #define ERROR_MSG "UNOWN ERROR DURING RUNTIME."
 
-CommunicatorSender::CommunicatorSender(ActiveSocket& socket, BlockingQueue<std::unique_ptr<ClientMessage>>& queue):
+CommunicatorSender::CommunicatorSender(ActiveSocket& socket,
+                                       BlockingQueue<std::unique_ptr<ClientMessage>>& queue):
         sendProtocol(socket), sendQueue(queue) {}
 
 void CommunicatorSender::run() {

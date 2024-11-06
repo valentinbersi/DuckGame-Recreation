@@ -2,9 +2,9 @@
 
 #include "ActiveSocket.h"
 #include "BlockingQueue.h"
-#include "ClientSendProtocol.h"
 #include "ClientMessage.h"
-#include "LibError.h" 
+#include "ClientSendProtocol.h"
+#include "LibError.h"
 #include "Thread.h"
 #include "syslog.h"
 
@@ -16,7 +16,8 @@ private:
     BlockingQueue<std::unique_ptr<ClientMessage>>& sendQueue;
 
 public:
-    explicit CommunicatorSender(ActiveSocket& socket, BlockingQueue<std::unique_ptr<ClientMessage>>& queue);
+    explicit CommunicatorSender(ActiveSocket& socket,
+                                BlockingQueue<std::unique_ptr<ClientMessage>>& queue);
 
     void run() override;
 
