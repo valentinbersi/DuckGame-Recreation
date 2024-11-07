@@ -2,40 +2,6 @@
 
 #include "GlobalPhysics.h"
 
-PhysicsObject::PhysicsObject(const PhysicsObject& other) = default;
-
-PhysicsObject& PhysicsObject::operator=(const PhysicsObject& other) {
-    if (this == &other)
-        return *this;
-
-    CollisionObject::operator=(other);
-    _velocity = other._velocity;
-    lastSafePosition = other.lastSafePosition;
-    gravity = other.gravity;
-    return *this;
-}
-
-PhysicsObject::PhysicsObject(PhysicsObject&& other) noexcept:
-        CollisionObject(std::move(other)),
-        _velocity(std::move(other._velocity)),
-        lastSafePosition(std::move(lastSafePosition)),
-        gravity(other.gravity) {
-
-    other.gravity = Gravity::Disabled;
-}
-
-PhysicsObject& PhysicsObject::operator=(PhysicsObject&& other) noexcept {
-    if (this == &other)
-        return *this;
-
-    CollisionObject::operator=(std::move(other));
-    _velocity = std::move(other._velocity);
-    lastSafePosition = std::move(other.lastSafePosition);
-    gravity = other.gravity;
-    other.gravity = Gravity::Disabled;
-    return *this;
-}
-
 PhysicsObject::PhysicsObject(Object* parent, Vector2 position, const float rotation,
                              const u32 collisionLayer, const u32 collisionMask,
                              std::unique_ptr<Shape2D> shape, Vector2 initialVelocity,
@@ -48,8 +14,6 @@ PhysicsObject::PhysicsObject(Object* parent, Vector2 position, const float rotat
 PhysicsObject::~PhysicsObject() = default;
 
 void PhysicsObject::updateInternal(const float delta) {
-    lastSafePosition = position();
-
     if (gravity == Gravity::Enabled)
         _velocity += GlobalPhysics::gravity;
 
@@ -57,7 +21,14 @@ void PhysicsObject::updateInternal(const float delta) {
 }
 
 void PhysicsObject::processCollisions() {
-    // Here code to process collision for a physics object
+    std::ranges::for_each(objectsToCollide, [this](const std::weak_ptr<CollisionObject>& object) {
+        if (const auto objectPtr = object.lock();
+            objectPtr != nullptr && collidesWith(*objectPtr)) {
+            _velocity = Vector2::ZERO;
+        }
+    });
+
+    setPosition(position() + _velocity);
 }
 
 const Vector2& PhysicsObject::velocity() const { return _velocity; }

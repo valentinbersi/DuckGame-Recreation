@@ -9,15 +9,9 @@ public:
 
 private:
     Vector2 _velocity;
-    Vector2 lastSafePosition;
     Gravity gravity;
 
 protected:
-    PhysicsObject(const PhysicsObject& other);
-    PhysicsObject& operator=(const PhysicsObject& other);
-    PhysicsObject(PhysicsObject&& other) noexcept;
-    PhysicsObject& operator=(PhysicsObject&& other) noexcept;
-
     /**
      * Creates a new physics object
      * @param parent The parent object
@@ -35,6 +29,10 @@ protected:
 
 public:
     PhysicsObject() = delete;
+    PhysicsObject(const PhysicsObject& other) = delete;
+    PhysicsObject& operator=(const PhysicsObject& other) = delete;
+    PhysicsObject(PhysicsObject&& other) noexcept = delete;
+    PhysicsObject& operator=(PhysicsObject&& other) noexcept = delete;
     ~PhysicsObject() override;
 
     /**
