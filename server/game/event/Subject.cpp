@@ -1,11 +1,12 @@
 #include "Subject.h"
 
-#include <utility>
-
 #include <bits/ranges_algo.h>
 
+#define EVENT "Event "
+#define ALREADY_REGISTERED " is already registered for this subject"
+
 Subject::AlreadyRegisteredEvent::AlreadyRegisteredEvent(const std::string& eventName):
-        std::invalid_argument("Event " + eventName + " is already registered for this subject") {}
+        std::invalid_argument(EVENT + eventName + ALREADY_REGISTERED) {}
 
 #define INVALID_EVENT                                                                    \
     "The signal you are trying to connect/call has a different signature.\n"             \
@@ -17,18 +18,18 @@ Subject::AlreadyRegisteredEvent::AlreadyRegisteredEvent(const std::string& event
 
 Subject::InvalidEvent::InvalidEvent(): std::runtime_error(INVALID_EVENT) {}
 
+#define NOT_REGISTERED " is not registered for this subject"
+
 Subject::UnregisteredEvent::UnregisteredEvent(const std::string& eventName):
-        std::invalid_argument("Event " + eventName + " is not registered for this subject") {}
+        std::invalid_argument(EVENT + eventName + NOT_REGISTERED) {}
 
-Subject& Subject::unregisterEvent(const std::string& name) {
-    const auto event = events.find(name);
+void Subject::unregisterEvent(const std::string& name) {
+    const auto event = events.extract(name);
 
-    if (event == events.end())
+    if (event.empty())
         throw UnregisteredEvent(name);
 
-    delete event->second;
-    events.erase(event);
-    return *this;
+    delete event.mapped();
 }
 
 Subject::Subject() noexcept = default;
