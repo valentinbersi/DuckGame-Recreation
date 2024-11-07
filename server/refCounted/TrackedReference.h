@@ -8,13 +8,15 @@
 class TrackedReference {
     std::shared_ptr<TrackedReference> refCounter;
 
-public:
+protected:
     TrackedReference();
+    virtual ~TrackedReference();
+
+public:
     TrackedReference(const TrackedReference& other) = delete;
     TrackedReference& operator=(const TrackedReference& other) = delete;
     TrackedReference(TrackedReference&& other) noexcept = delete;
     TrackedReference& operator=(TrackedReference&& other) noexcept = delete;
-    virtual ~TrackedReference();
 
     /**
      * Get a reference to this object to track its lifetime
