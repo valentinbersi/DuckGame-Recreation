@@ -71,9 +71,9 @@ public:
         explicit UnregisteredEvent(const std::string& eventName);
     };
 
-    Subject();
-    Subject(const Subject& other);
-    Subject& operator=(const Subject& other);
+    Subject() noexcept;
+    Subject(const Subject& other) noexcept;
+    Subject& operator=(const Subject& other) noexcept;
     Subject(Subject&& other) noexcept;
     Subject& operator=(Subject&& other) noexcept;
     virtual ~Subject();
