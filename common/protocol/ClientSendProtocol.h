@@ -14,7 +14,7 @@ public:
     void sendLobbyMessage(u8 type, u8 request, u8 playerCount, std::string& player1Name,
                           std::string& player2Name, u16 matchId);
 
-    void sendGameMessage(u8 type, u8 action);
+    void sendGameMessage(u8 type, u8 action, u8 player);
 
     ~ClientSendProtocol() override = default;
 };

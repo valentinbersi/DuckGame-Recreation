@@ -64,4 +64,6 @@ struct DuckData final: GameObject2DData {
      */
     DuckData(Vector2 position, float rotation, DuckID duckID, u8 life,
              std::unique_ptr<EquippedGunData> gun, DuckFlag extraData);
+
+    bool operator==(const DuckData& other) const;
 };

@@ -19,25 +19,21 @@ class Object: public Subject, public TrackedReference, public Updatable, public 
     HashMap<std::string, Object*> children;
 
     /**
-     * Called when an object is added to the subtree of this object
+     * Called when an object is added to the subtree of this object.\n
+     * It simply fires the event so parents are notified of a new child in the tree
      * @param object The child that was added
      */
     void onTreeEntered(Object& object);
 
     /**
-     * Called when an object is removed from the subtree of this object
+     * Called when an object is removed from the subtree of this object.\n
+     * It simply fires the event so parents are notified of a new child in the tree.
      * @param object The child that was removed
      */
     void onTreeExited(Object& object);
 
-
 protected:
     constexpr static auto INVALID_EVENT_TYPE = "Invalid event type";
-
-    Object(const Object& other);
-    Object& operator=(const Object& other);
-    Object(Object&& other) noexcept;
-    Object& operator=(Object&& other) noexcept;
 
     /**
      * A constructor for derived classes.
@@ -49,12 +45,16 @@ protected:
      * Add a child to the object
      * @param name The name of the child. If the name is already taken, an exception is thrown.
      * @param newChild The child to add.
+     * @throws  std::invalid_argument If newChild is nullptr
+     * @throws  std::invalid_argument If newChild already has a parent
+     * @throws  std::invalid_argument If name is empty
+     * @throws  AlreadyAddedChild If the name is already taken
      */
-    void addChild(std::string name, Object* newChild);
+    virtual void addChild(std::string name, Object* newChild);
 
     /**
      * Apply the given function to all children
-     * @param f The function to apply
+     * @param f The function to apply, should not throw exceptions
      */
     void forAllChildren(const std::function<void(Object&)>& f);
 
@@ -64,34 +64,42 @@ protected:
      * @param f The function to apply
      * @tparam Ret The return type of the function
      * @return The result of the function
+     * @throws std::out_of_range If the child is not found
      */
     template <typename Ret>
     Ret applyToChild(const std::string& name, const std::function<Ret(Object&)>& f);
-
-    /**
-     * Load the children the object should have at its creation. Children should not be added in the
-     * constructor
-     */
-    virtual void loadChildren() = 0;
 
 public:
     /**
      * An exception thrown when trying to add a child with a name that is already taken
      */
-    class AlreadyAddedChild final: public std::runtime_error {
-    public:
+    struct AlreadyAddedChild final: std::runtime_error {
         explicit AlreadyAddedChild(const std::string& name);
     };
 
     /**
      * An exception thrown when trying to add a child with a name that is already taken
      */
-    class ChildNotInTree final: public std::runtime_error {
-    public:
+    struct ChildNotInTree final: std::out_of_range {
         explicit ChildNotInTree(const std::string& name);
     };
 
+    /**
+     * An exception thrown when trying access the parent of the root object
+     */
+    struct RootObject final: std::logic_error {
+        explicit RootObject();
+    };
+
+    struct AddedChildWithChildren final: std::logic_error {
+        explicit AddedChildWithChildren();
+    };
+
     Object() = delete;
+    Object(const Object& other) = delete;
+    Object& operator=(const Object& other) = delete;
+    Object(Object&& other) noexcept = delete;
+    Object& operator=(Object&& other) noexcept = delete;
     ~Object() override;
 
     /**
@@ -103,7 +111,10 @@ public:
      * Add a child to the object
      * @param name The name of the child. If the name is already taken, an exception is thrown.
      * @param newChild The child to add.
-     * @throw
+     * @throws  std::invalid_argument If newChild is nullptr
+     * @throws  std::invalid_argument If name is empty
+     * @throws std::invalid_argument if newChild already has a parent
+     * @throws  AlreadyAddedChild If the name is already taken
      */
     void addChild(std::string name, std::unique_ptr<Object> newChild);
 
@@ -112,18 +123,33 @@ public:
      * @param name The name of the child to remove
      * @return A pointer to the removed child
      */
-    void removeChild(const std::string& name);
+    std::unique_ptr<Object> removeChild(const std::string& name);
+
+    /**
+     * Transfer a child from another object to this
+     * @param name The name of the child to transfer
+     * @param parent The parent object to transfer the child from
+     */
+    void transferChild(std::string name, Object& parent);
 
     /**
      * Get a child of the object.
      * @param name The name of the child to get
      * @return A reference to the child
+     * @throws std::out_of_range If the child is not found
      */
     Object& getChild(const std::string& name) const;
 
     /**
-     * Get the parent of the object.
+     * Check if the object has children
+     * @return True if the object has children, false otherwise
+     */
+    bool hasChildren() const;
+
+    /**
+     * Get the parent of the object
      * @return A reference to the parent
+     * @throws RootObject If the object has no parent
      */
     Object& parent() const;
 
@@ -157,10 +183,5 @@ public:
 
 template <typename Ret>
 Ret Object::applyToChild(const std::string& name, const std::function<Ret(Object&)>& f) {
-    const auto child = children.find(name);
-
-    if (child == children.end())
-        throw ChildNotInTree(name);
-
-    return f(*child->second);
+    return f(children.at(name));
 }

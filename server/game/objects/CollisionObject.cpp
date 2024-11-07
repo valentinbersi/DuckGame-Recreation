@@ -3,45 +3,6 @@
 #include <memory>
 #include <utility>
 
-CollisionObject::CollisionObject(const CollisionObject& other):
-        Object2D(other),
-        _collisionLayer(other._collisionLayer),
-        _collisionMask(other._collisionMask),
-        _shape(other._shape->clone().release()) {}
-
-CollisionObject& CollisionObject::operator=(const CollisionObject& other) {
-    if (this == &other)
-        return *this;
-
-    Object2D::operator=(other);
-    _collisionLayer = other._collisionLayer;
-    _collisionMask = other._collisionMask;
-    delete _shape;
-    _shape = other._shape->clone().release();
-    return *this;
-}
-
-CollisionObject::CollisionObject(CollisionObject&& other) noexcept:
-        Object2D(std::move(other)),
-        _collisionLayer(other._collisionLayer),
-        _collisionMask(other._collisionMask),
-        _shape(other._shape) {
-    other._shape = nullptr;
-}
-
-CollisionObject& CollisionObject::operator=(CollisionObject&& other) noexcept {
-    if (this == &other)
-        return *this;
-
-    Object2D::operator=(std::move(other));
-    _collisionLayer = other._collisionLayer;
-    _collisionMask = other._collisionMask;
-    delete _shape;
-    _shape = other._shape;
-    other._shape = nullptr;
-    return *this;
-}
-
 CollisionObject::CollisionObject(Object* parent, Vector2 position, const float rotation,
                                  const u32 collisionLayer, const u32 collisionMask,
                                  std::unique_ptr<Shape2D> shape):
@@ -65,16 +26,50 @@ u32 CollisionObject::collisionLayer() const { return _collisionLayer; }
 
 u32 CollisionObject::collisionMask() const { return _collisionMask; }
 
-void CollisionObject::activateCollisionLayer(const u8 layer) { _collisionLayer |= 1 << layer; }
-
-void CollisionObject::deactivateCollisionLayer(const u8 layer) {
-    _collisionLayer &= UINT32_MAX ^ 1 << layer;
+CollisionObject& CollisionObject::setCollisionLayer(const u32 collisionLayer) noexcept {
+    _collisionLayer = collisionLayer;
+    return *this;
 }
 
-void CollisionObject::activateCollisionMask(const u8 layer) { _collisionMask |= 1 << layer; }
+#define FIRST_BIT 1
+#define MAX_LAYER 31
+#define LAYER_OUT_OF_RANGE "layer must be between 0 and 32"
 
-void CollisionObject::deactivateCollisionMask(const u8 layer) {
+CollisionObject& CollisionObject::activateCollisionLayer(const u8 layer) {
+    if (layer > MAX_LAYER)
+        throw std::out_of_range(LAYER_OUT_OF_RANGE);
+
+    _collisionLayer |= FIRST_BIT << layer;
+    return *this;
+}
+
+CollisionObject& CollisionObject::deactivateCollisionLayer(const u8 layer) {
+    if (layer > MAX_LAYER)
+        throw std::out_of_range(LAYER_OUT_OF_RANGE);
+
+    _collisionLayer &= UINT32_MAX ^ FIRST_BIT << layer;
+    return *this;
+}
+
+CollisionObject& CollisionObject::setCollisionMask(const u32 collisionMask) noexcept {
+    _collisionMask = collisionMask;
+    return *this;
+}
+
+CollisionObject& CollisionObject::activateCollisionMask(const u8 layer) {
+    if (layer > MAX_LAYER)
+        throw std::out_of_range(LAYER_OUT_OF_RANGE);
+
+    _collisionMask |= 1 << layer;
+    return *this;
+}
+
+CollisionObject& CollisionObject::deactivateCollisionMask(const u8 layer) {
+    if (layer > MAX_LAYER)
+        throw std::out_of_range(LAYER_OUT_OF_RANGE);
+
     _collisionMask &= UINT32_MAX ^ 1 << layer;
+    return *this;
 }
 
 #define EXPIRED_COLLISION_OBJECT "CollisionObject is expired"

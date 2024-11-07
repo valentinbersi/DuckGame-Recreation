@@ -22,13 +22,6 @@ public:
      */
     void start() override;
 
-protected:
-    /**
-     * No need to load childs for the game controller
-     */
-    void loadChildren() override;
-
-public:
     /**
      * Update the match
      * @param delta Time since the last update

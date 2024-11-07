@@ -56,8 +56,8 @@ protected:
      * @tparam Args The types of the arguments to pass to the callable. It's not mandatory to
      * specify these because the compiler can infer them, but sometimes types like const char*
      * and std::string are confused.
-     * @throws UnregisteredEvent If the event is not registered
-     * @throws InvalidEvent If the event has different arguments
+     * @throws std::out_of_range If the event is not registered
+     * @throws InvalidEvent If the event has different arguments type
      * */
     template <typename Object, typename... Args>
     void fire(const std::string& name, Args... args);
@@ -71,9 +71,9 @@ public:
         explicit UnregisteredEvent(const std::string& eventName);
     };
 
-    Subject();
-    Subject(const Subject& other);
-    Subject& operator=(const Subject& other);
+    Subject() noexcept;
+    Subject(const Subject& other) noexcept;
+    Subject& operator=(const Subject& other) noexcept;
     Subject(Subject&& other) noexcept;
     Subject& operator=(Subject&& other) noexcept;
     virtual ~Subject();
@@ -84,7 +84,8 @@ public:
      * @param method The callable to connect
      * @tparam Object The type of the object that the method belongs to
      * @tparam Args The types of the arguments to pass to the callable
-     * @throws UnregisteredEvent If the event is not registered
+     * @throws std::out_of_range If the event is not registered
+     * @throws InvalidEvent If the event has different arguments type
      */
     template <typename Object, typename... Args>
     void connect(const std::string& to, Method<Object, void, Args...> method);
@@ -95,31 +96,26 @@ void Subject::registerEvent(std::string name) {
     if (events.contains(name))
         throw AlreadyRegisteredEvent(name);
 
-    events.insert({std::move(name), new Event<Object, Args...>()});
+    events.emplace(std::move(name), new Event<Object, Args...>());
 }
 
 template <typename Object, typename... Args>
 void Subject::fire(const std::string& name, Args... args) {
-    if (const auto it = events.find(name); it != events.end()) {
-        if (auto event = dynamic_cast<Event<Object, Args...>*>(it->second))
-            event->fire(args...);
-        else
-            throw InvalidEvent();
+    auto event = dynamic_cast<Event<Object, Args...>*>(events.at(name));
 
-    } else {
-        throw UnregisteredEvent(name);
-    }
+    if (event == nullptr)
+        throw InvalidEvent();
+
+    event->fire(args...);
 }
+
 
 template <typename Object, typename... Args>
 void Subject::connect(const std::string& to, Method<Object, void, Args...> method) {
-    if (const auto it = events.find(to); it != events.end()) {
-        if (auto event = dynamic_cast<Event<Object, Args...>*>(it->second))
-            event->connect(std::move(method));
-        else
-            throw InvalidEvent();
+    auto event = dynamic_cast<Event<Object, Args...>*>(events.at(to));
 
-    } else {
-        throw UnregisteredEvent(to);
-    }
+    if (event == nullptr)
+        throw InvalidEvent();
+
+    event->connect(std::move(method));
 }

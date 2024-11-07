@@ -59,8 +59,13 @@ void GameLoop::run() {
 
 void GameLoop::addClient(const u16 clientID,
                          std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue) {
-    clientQueues.push_back(std::move(clientQueue));
     game.addPlayer(clientID);
+    for (const auto& queue : clientQueues) {
+        if (queue.lock().get() == clientQueue.lock().get()) {
+            return;
+        }
+    }
+    clientQueues.push_back(std::move(clientQueue));
 }
 
 BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCommands; }

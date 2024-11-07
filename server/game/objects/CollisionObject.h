@@ -17,13 +17,15 @@ class CollisionObject: public Object2D {
 protected:
     std::forward_list<std::weak_ptr<CollisionObject>> objectsToCollide;
 
-    CollisionObject(const CollisionObject& other);
-    CollisionObject& operator=(const CollisionObject& other);
-    CollisionObject(CollisionObject&& other) noexcept;
-    CollisionObject& operator=(CollisionObject&& other) noexcept;
-
     /**
-     * Construct a CollisionObject2D with collision Layer and Mask = 0
+     * Construct a CollisionObject with the given parent, position, rotation, collision layer,
+     * collision mask, and shape
+     * @param parent the parent Object
+     * @param position the position of the CollisionObject
+     * @param rotation the rotation of the CollisionObject
+     * @param collisionLayer the collision layer of the CollisionObject
+     * @param collisionMask the collision mask of the CollisionObject
+     * @param shape the shape of the CollisionObject
      */
     CollisionObject(Object* parent, Vector2 position, float rotation, u32 collisionLayer,
                     u32 collisionMask, std::unique_ptr<Shape2D> shape);
@@ -37,6 +39,10 @@ protected:
 
 public:
     CollisionObject() = delete;
+    CollisionObject(const CollisionObject& other) = delete;
+    CollisionObject& operator=(const CollisionObject& other) = delete;
+    CollisionObject(CollisionObject&& other) noexcept = delete;
+    CollisionObject& operator=(CollisionObject&& other) noexcept = delete;
     ~CollisionObject() override;
 
     /**
@@ -58,32 +64,54 @@ public:
     u32 collisionMask() const;
 
     /**
+     * Set the collision layer of the Object
+     * @param collisionLayer the collision layer to set
+     * @return this CollisionObject
+     */
+    CollisionObject& setCollisionLayer(u32 collisionLayer) noexcept;
+
+    /**
      * Activate collision for the given layer
      * @param layer the layer to activate collision for
-     * @pre 0 <= layer <= 32
+     * @return this CollisionObject
+     * @exception std::out_of_range if layer is not in the range [0, 31]
+     * @pre 0 <= layer <= 31
      */
-    void activateCollisionLayer(u8 layer);
+    CollisionObject& activateCollisionLayer(u8 layer);
 
     /**
      * Deactivate collision for the given layer
      * @param layer the layer to deactivate collision for
-     * @pre 0 <= layer <= 32
+     * @return this CollisionObject
+     * @exception std::out_of_range if layer is not in the range [0, 31]
+     * @pre 0 <= layer <= 31
      */
-    void deactivateCollisionLayer(u8 layer);
+    CollisionObject& deactivateCollisionLayer(u8 layer);
+
+    /**
+     * Set the collision mask of the Object
+     * @param collisionMask the collision mask to set
+     * @return this CollisionObject
+     */
+    CollisionObject& setCollisionMask(u32 collisionMask) noexcept;
 
     /**
      * Activate the collision mask for the given layer
      * @param layer the layer to activate the collision mask for
-     * @pre 0 <= layer <= 32
+     * @return this CollisionObject
+     * @exception std::out_of_range if layer is not in the range [0, 31]
+     * @pre 0 <= layer <= 31
      */
-    void activateCollisionMask(u8 layer);
+    CollisionObject& activateCollisionMask(u8 layer);
 
     /**
      * Deactivate the collision mask for the given layer
      * @param layer the layer to deactivate the collision mask for
-     * @pre 0 <= layer <= 32
+     * @return this CollisionObject
+     * @exception std::out_of_range if layer is not in the range [0, 31]
+     * @pre 0 <= layer <= 31
      */
-    void deactivateCollisionMask(u8 layer);
+    CollisionObject& deactivateCollisionMask(u8 layer);
 
     /**
      * Register a collision to process, the collision will only be processed if this collision

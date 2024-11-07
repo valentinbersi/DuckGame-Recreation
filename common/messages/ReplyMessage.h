@@ -13,5 +13,7 @@ public:
 
     void send(ServerSendProtocol& serverProtocol) override;
 
+    bool operator==(const ReplyMessage& other) const;
+
     ~ReplyMessage();
 };

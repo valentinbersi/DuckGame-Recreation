@@ -30,7 +30,7 @@ class Event final: public EventBase {
     std::list<Method<Obj, void, Args...>> methods;
 
 public:
-    Event() noexcept;
+    Event() noexcept = default;
     Event(const Event& other) noexcept;
     Event& operator=(const Event& other) noexcept;
     Event(Event&& other) noexcept;
@@ -39,19 +39,16 @@ public:
 
     /**
      * Connect a callable to the event
-     * @param method The method to connect
+     * @param method The method to connect, this method should not throw exceptions
      */
-    void connect(Method<Obj, void, Args...> method);
+    void connect(Method<Obj, void, Args...> method) noexcept;
 
     /**
-     * Fire the event. This will call all connected callables with the given arguments
+     * Fire the event. This will call all connected methods with the given arguments.
      * @param args The arguments to pass to the callables
      */
     void fire(Args... args);
 };
-
-template <typename Object, typename... Args>
-Event<Object, Args...>::Event() noexcept = default;
 
 template <typename Object, typename... Args>
 Event<Object, Args...>::Event(const Event& other) noexcept: methods(other.methods) {}
@@ -78,15 +75,14 @@ Event<Obj, Args...>& Event<Obj, Args...>::operator=(Event&& other) noexcept {
 }
 
 template <typename Obj, typename... Args>
-void Event<Obj, Args...>::connect(Method<Obj, void, Args...> method) {
+void Event<Obj, Args...>::connect(Method<Obj, void, Args...> method) noexcept {
     methods.push_back(std::move(method));
 }
 
 template <typename Obj, typename... Args>
 void Event<Obj, Args...>::fire(Args... args) {
-
     std::ranges::remove_if(methods, [&args...](const Method<Obj, void, Args...>& method) -> bool {
-        if (!method.isValid())
+        if (not method.isValid())
             return true;
 
         method(args...);

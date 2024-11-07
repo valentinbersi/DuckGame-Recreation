@@ -16,7 +16,7 @@ public:
 
     BlockingQueue<std::unique_ptr<Command>>* joinGameIfCreated(
             u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
-            u16 clientId);
+            u16 clientId, u8 playerCount);
 
     BlockingQueue<std::unique_ptr<Command>>* startGameIfCreated(u16 matchID);
 

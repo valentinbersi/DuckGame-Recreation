@@ -5,13 +5,19 @@
 #include "gtest/gtest.h"
 
 #include "ActiveSocket.h"
-#include "ClientMessage.h"
-#include "ClientRecvProtocol.h"
-#include "ClientSendProtocol.h"
-#include "DuckData.h"
 #include "ListenerSocket.h"
+
+#include "GameStatus.h"
+#include "ReplyMessage.h"
+#include "GameMessage.h"
+#include "LobbyMessage.h"
+
+#include "DuckData.h"
 #include "Math.h"
 #include "MessageType.h"
+
+#include "ClientRecvProtocol.h"
+#include "ClientSendProtocol.h"
 #include "ServerRecvProtocol.h"
 #include "ServerSendProtocol.h"
 
@@ -27,90 +33,124 @@ std::unique_ptr<GameObjectData> creatDuckData(float x, float y, float rot, DuckI
                                       std::make_unique<EquippedGunData>(gunID), actions);
 }
 
-TEST(ProtocolTest, ClientToServerSend) {
+TEST(ProtocolTest,  LobbyToServerSend) {
     ListenerSocket skt("8080");
-    ClientMessage clientMsg(MessageType::Input, InputAction::LEFT);
+    LobbyMessage lobbyMsg(LobbyRequest::NEWMATCH, 2, "Player1", "Player2", 0);
 
-    std::thread client([]() {
+    std::thread client([lobbyMsg]() {
         ActiveSocket sktClient("localhost", "8080");
         ClientSendProtocol sendProt(sktClient);
-        ClientMessage clientMsg(MessageType::Input, InputAction::LEFT);
-        sendProt.sendMessage(clientMsg);
+        sendProt.sendMessage(std::make_unique<LobbyMessage>(lobbyMsg));
     });
 
     ActiveSocket peer = skt.accept();
     ServerRecvProtocol recvProt(peer);
-
-    ClientMessage recvMsg = recvProt.receiveMessage();
-    EXPECT_EQ(recvMsg.type, clientMsg.type);
-    EXPECT_EQ(recvMsg.action, clientMsg.action);
+    LobbyMessage recvMsg = recvProt.receiveLobbyMessage();
+    
+    ASSERT_TRUE(lobbyMsg == recvMsg);
 
     client.join();
 }
 
-TEST(ProtocolTest, ClientToServerMultipleSends) {
+TEST(ProtocolTest, LobbyToServerMultipleSends) {
     ListenerSocket skt("8080");
-    std::list<ClientMessage> list;
-    for (int i = 0; i < 50; i++) {
-        list.push_back(ClientMessage(MessageType::Input, InputAction::LEFT));
-        list.push_back(ClientMessage(MessageType::Input, InputAction::RIGHT));
-    }
+    std::list<LobbyMessage> list;
+    list.push_back(LobbyMessage());
+    list.push_back(LobbyMessage(LobbyRequest::NEWMATCH, 2, "Player1", "Player2", 0));
+    list.push_back(LobbyMessage(LobbyRequest::JOINMATCH, 1, "Andres", "Camilo", 4281));
+    list.push_back(LobbyMessage(LobbyRequest::JOINMATCH, 1, "Valentin", "Tomas", 16678));
+    list.push_back(LobbyMessage(LobbyRequest::STARTMATCH, 2, "", "", 31227));
 
     std::thread client([list]() {
         ActiveSocket sktClient("localhost", "8080");
         ClientSendProtocol sendProt(sktClient);
-        for (auto iter = list.begin(); iter != list.end(); iter++) {
-            sendProt.sendMessage(*iter);
+        for (const auto& msg : list) {
+            sendProt.sendMessage(std::make_unique<LobbyMessage>(msg));
         }
     });
 
     ActiveSocket peer = skt.accept();
     ServerRecvProtocol recvProt(peer);
 
-    for (auto iter = list.begin(); iter != list.end(); iter++) {
-        ClientMessage recvMsg = recvProt.receiveMessage();
-        EXPECT_EQ(iter->type, recvMsg.type);
-        EXPECT_EQ(iter->action, recvMsg.action);
+    for (const auto& msg : list) {
+        LobbyMessage recvMsg = recvProt.receiveLobbyMessage();
+        ASSERT_TRUE(msg == recvMsg);
     }
 
     client.join();
 }
 
-TEST(ProtocolTest, MultiClientSend) {
+TEST(ProtocolTest, MultiLoobySend) {
     ListenerSocket skt("8080");
-    ClientMessage msg1(MessageType::Input, InputAction::LEFT);
-    ClientMessage msg2(MessageType::Input, InputAction::RIGHT);
+    LobbyMessage msg1(LobbyRequest::NEWMATCH, 2, "Player1", "Player2", 0);
+    LobbyMessage msg2(LobbyRequest::JOINMATCH, 1, "Andres", "", 4281);
 
     std::thread client1([msg1]() {
         ActiveSocket sktClient("localhost", "8080");
         ClientSendProtocol sendProt(sktClient);
-        sendProt.sendMessage(msg1);
+        sendProt.sendMessage(std::make_unique<LobbyMessage>(msg1));
     });
 
     std::thread client2([msg2]() {
         ActiveSocket sktClient("localhost", "8080");
         ClientSendProtocol sendProt(sktClient);
-        sendProt.sendMessage(msg2);
+        sendProt.sendMessage(std::make_unique<LobbyMessage>(msg2));
     });
 
     ActiveSocket peer1 = skt.accept();
     ServerRecvProtocol recvProt1(peer1);
     ActiveSocket peer2 = skt.accept();
     ServerRecvProtocol recvProt2(peer2);
-    ClientMessage recv1 = recvProt1.receiveMessage();
-    ClientMessage recv2 = recvProt2.receiveMessage();
 
-    if (recv1.type == msg1.type && recv1.action == msg1.action) {
-        ASSERT_TRUE(recv2.type == msg2.type && recv2.action == msg2.action);
-    } else {
-        ASSERT_TRUE(recv1.type == msg2.type && recv1.action == msg2.action);
-    }
+    LobbyMessage recv1 = recvProt1.receiveLobbyMessage();
+    LobbyMessage recv2 = recvProt2.receiveLobbyMessage();
+
+    ASSERT_TRUE((msg1 == recv1 || msg1 == recv2) && (msg2 == recv1 || msg2 == recv2));
 
     client1.join();
     client2.join();
 }
 
-TEST(ProtocolTest, ServerToClientSendOneStatus) {
+TEST(ProtocolTest, ServerToLobbySend) {
+    ListenerSocket skt("8080");
+    ReplyMessage replyMsg;
+
+    std::thread client([replyMsg]() {
+        ActiveSocket sktClient("localhost", "8080");
+        ClientRecvProtocol recvProt(sktClient);
+        std::unique_ptr<ServerMessage> recvMsg = recvProt.receiveMessage();
+        ReplyMessage* reply = dynamic_cast<ReplyMessage*>(&*recvMsg);
+        ASSERT_TRUE(*reply == replyMsg);
+        
+    });
+
+    ActiveSocket peer = skt.accept();
+    ServerSendProtocol sendProt(peer);
+    sendProt.sendMessage(std::make_shared<ReplyMessage>(replyMsg));
+
+    client.join();
+}
+
+TEST(ProtocolTest, GameToServerOneMessage) {
+    ListenerSocket skt("8080");
+    GameMessage gameMsg(InputAction::LEFT_PRESSED, 1);
+
+    std::thread client([gameMsg]() {
+        ActiveSocket sktClient("localhost", "8080");
+        ClientSendProtocol sendProt(sktClient);
+        sendProt.sendMessage(std::make_unique<GameMessage>(gameMsg));
+    });
+
+    ActiveSocket peer = skt.accept();
+    ServerRecvProtocol recvProt(peer);
+    GameMessage recvMsg = recvProt.receiveGameMessage();
+
+    ASSERT_TRUE(gameMsg == recvMsg);
+
+    client.join();
+}
+
+TEST(ProtocolTest, ServerToGameSendOneStatus) {
     ListenerSocket peer("8080");
 
     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
@@ -120,8 +160,9 @@ TEST(ProtocolTest, ServerToClientSendOneStatus) {
     std::thread client([]() {
         ActiveSocket clientSkt("localhost", "8080");
         ClientRecvProtocol recvProtocol(clientSkt);
-        GameStatus recvStatus = recvProtocol.receiveMessage();
-        ASSERT_TRUE(recvStatus.gameObjects.size() == 1);
+        std::unique_ptr<ServerMessage> recvStatus = recvProtocol.receiveMessage();
+        const GameStatus* status = dynamic_cast<const GameStatus*>(&*recvStatus);
+        ASSERT_TRUE(status->gameObjects.size() == 1);
     });
 
     ActiveSocket skt = peer.accept();
@@ -131,7 +172,7 @@ TEST(ProtocolTest, ServerToClientSendOneStatus) {
     client.join();
 }
 
-TEST(ProtocolTest, ServerToClientCorrectValues) {
+TEST(ProtocolTest, ServerToGameCorrectValues) {
     ListenerSocket peer("8080");
 
     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
@@ -141,24 +182,13 @@ TEST(ProtocolTest, ServerToClientCorrectValues) {
     std::thread client([status]() {
         ActiveSocket clientSkt("localhost", "8080");
         ClientRecvProtocol recvProtocol(clientSkt);
-        GameStatus recvStatus = recvProtocol.receiveMessage();
-        std::unique_ptr<GameObjectData> data = std::move(recvStatus.gameObjects.front());
+        std::unique_ptr<ServerMessage> msg = recvProtocol.receiveMessage();
+        GameStatus* statusRecv = dynamic_cast<GameStatus*>(&*msg);
+        std::unique_ptr<GameObjectData> data = std::move(statusRecv->gameObjects.front());
         const DuckData* duckdata = dynamic_cast<const DuckData*>(&*data);
         const DuckData* originalData = dynamic_cast<const DuckData*>(&*status->gameObjects.front());
 
-        // CheckIDS
-        ASSERT_TRUE(duckdata->objectID == originalData->objectID);
-        ASSERT_TRUE(duckdata->object2DID == originalData->object2DID);
-        ASSERT_TRUE(duckdata->duckID == originalData->duckID);
-        ASSERT_TRUE(duckdata->gun->gunID == originalData->gun->gunID);
-
-        // Check vector traits
-        ASSERT_TRUE(duckdata->position == originalData->position);
-        ASSERT_TRUE(duckdata->rotation == originalData->rotation);
-
-        // Check DuckTraits
-        ASSERT_TRUE(duckdata->life == originalData->life);
-        ASSERT_TRUE(duckdata->extraData == originalData->extraData);
+        ASSERT_TRUE(*duckdata == *originalData);
     });
 
     ActiveSocket skt = peer.accept();
@@ -168,35 +198,7 @@ TEST(ProtocolTest, ServerToClientCorrectValues) {
     client.join();
 }
 
-TEST(ProtocolTest, ServerToClientFloatCheck) {
-    ListenerSocket peer("8080");
-
-    std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
-    status->gameObjects.emplace_back(
-            creatDuckData(42.7, 5.5134, 47.89, DuckID::Grey, 100, GunID::Ak47, 0b1 | 0b10));
-
-    std::thread client([status]() {
-        ActiveSocket clientSkt("localhost", "8080");
-        ClientRecvProtocol recvProtocol(clientSkt);
-        GameStatus recvStatus = recvProtocol.receiveMessage();
-
-        std::unique_ptr<GameObjectData> data = std::move(recvStatus.gameObjects.front());
-        const DuckData* duckdata = dynamic_cast<const DuckData*>(&*data);
-        const DuckData* originalData = dynamic_cast<const DuckData*>(&*status->gameObjects.front());
-
-        // Check vector traits
-        ASSERT_TRUE(duckdata->position == originalData->position);
-        ASSERT_TRUE(Math::isEqualAprox(duckdata->rotation, originalData->rotation));
-    });
-
-    ActiveSocket skt = peer.accept();
-    ServerSendProtocol sendProtocol(skt);
-    sendProtocol.sendMessage(status);
-
-    client.join();
-}
-
-TEST(ProtocolTest, ServerToOneClientMultiSend) {
+TEST(ProtocolTest, ServerToOneGameMultiSend) {
     ListenerSocket peer("8080");
 
     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
@@ -213,27 +215,16 @@ TEST(ProtocolTest, ServerToOneClientMultiSend) {
     std::thread client([status]() {
         ActiveSocket clientSkt("localhost", "8080");
         ClientRecvProtocol recvProtocol(clientSkt);
-        GameStatus recvStatus = recvProtocol.receiveMessage();
+        std::unique_ptr<ServerMessage> msg = recvProtocol.receiveMessage();
+        GameStatus* statusRecv = dynamic_cast<GameStatus*>(&*msg);
         auto it1 = status->gameObjects.begin();
-        auto it2 = recvStatus.gameObjects.begin();
-        while (it1 != status->gameObjects.end() && it2 != recvStatus.gameObjects.end()) {
+        auto it2 = statusRecv->gameObjects.begin();
+        while (it1 != status->gameObjects.end() && it2 != statusRecv->gameObjects.end()) {
 
             const DuckData* originalData = dynamic_cast<const DuckData*>(&**it1);
             const DuckData* duckdata = dynamic_cast<const DuckData*>(&**it2);
 
-            // CheckIDS
-            ASSERT_TRUE(duckdata->objectID == originalData->objectID);
-            ASSERT_TRUE(duckdata->object2DID == originalData->object2DID);
-            ASSERT_TRUE(duckdata->duckID == originalData->duckID);
-            ASSERT_TRUE(duckdata->gun->gunID == originalData->gun->gunID);
-
-            // Check vector traits
-            ASSERT_TRUE(duckdata->position == originalData->position);
-            ASSERT_TRUE(Math::isEqualAprox(duckdata->rotation, originalData->rotation));
-
-            // Check DuckTraits
-            ASSERT_TRUE(duckdata->life == originalData->life);
-            ASSERT_TRUE(duckdata->extraData == originalData->extraData);
+            ASSERT_TRUE(*duckdata == *originalData);
 
             it1++;
             it2++;

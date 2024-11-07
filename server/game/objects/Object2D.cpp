@@ -2,40 +2,6 @@
 
 #include <utility>
 
-Object2D::Object2D(const Object2D& other) = default;
-
-Object2D& Object2D::operator=(const Object2D& other) {
-    if (this == &other)
-        return *this;
-
-    Object::operator=(other);
-    _globalPosition = other._globalPosition;
-    _globalRotation = other._globalRotation;
-    _position = other._position;
-    _rotation = other._rotation;
-    return *this;
-}
-
-Object2D::Object2D(Object2D&& other) noexcept:
-        Object(std::move(other)),
-        _globalPosition(std::move(other._globalPosition)),
-        _globalRotation(other._globalRotation),
-        _position(std::move(other._position)),
-        _rotation(other._rotation) {}
-
-Object2D& Object2D::operator=(Object2D&& other) noexcept {
-    if (this == &other)
-        return *this;
-
-    Object::operator=(std::move(other));
-    _globalPosition = std::move(other._globalPosition);
-    _globalRotation = other._globalRotation;
-    _position = std::move(other._position);
-    _rotation = other._rotation;
-    other._rotation = 0;
-    return *this;
-}
-
 Object2D::Object2D(Object* parent, Vector2 position, const float rotation):
         Object(parent), _position(std::move(position)), _rotation(rotation) {
 
@@ -72,7 +38,8 @@ void Object2D::updateInternal([[maybe_unused]] const float delta) {
                               Vector2::RIGHT.rotated(parent2D._globalRotation) * _position.length();
 
         _globalRotation = _rotation + parent2D._globalRotation;
-    } catch (const std::bad_cast&) {}
+    } catch (const std::bad_cast&) {
+    } catch (const RootObject&) {}
 
     Object::updateInternal(delta);
 }
@@ -86,6 +53,8 @@ Object2D& Object2D::setGlobalPosition(Vector2 globalPosition) noexcept {
         _position =
                 (_globalPosition - parent2D._globalPosition).rotated(-parent2D.globalRotation());
     } catch (const std::bad_cast&) {
+        _position = _globalPosition;
+    } catch (const RootObject&) {
         _position = _globalPosition;
     }
 
@@ -101,6 +70,8 @@ Object2D& Object2D::setGlobalRotation(const float globalRotation) noexcept {
         const auto& parent2D = dynamic_cast<Object2D&>(parent());
         _rotation = _globalRotation - parent2D._globalRotation;
     } catch (const std::bad_cast&) {
+        _rotation = _globalRotation;
+    } catch (const RootObject&) {
         _rotation = _globalRotation;
     }
 
@@ -122,6 +93,8 @@ Object2D& Object2D::setPosition(Vector2 position) noexcept {
                               Vector2::RIGHT.rotated(parent2D._globalRotation) * position.length();
     } catch (const std::bad_cast&) {
         _globalPosition = _position;
+    } catch (const RootObject&) {
+        _globalPosition = _position;
     }
 
     return *this;
@@ -136,6 +109,8 @@ Object2D& Object2D::setRotation(const float rotation) noexcept {
         const auto& parent2D = dynamic_cast<Object2D&>(parent());
         _globalRotation = _rotation + parent2D._globalRotation;
     } catch (const std::bad_cast&) {
+        _globalRotation = _rotation;
+    } catch (const RootObject&) {
         _globalRotation = _rotation;
     }
 
