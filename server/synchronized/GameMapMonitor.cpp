@@ -14,7 +14,7 @@ BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGameIfCreated(
 
     if (gameMap.find(matchID) != gameMap.end()) {
         for(u8 i = PLAYER_COUNT_BEGINING; i < playerCount; i++) {
-            gameMap.at(matchID)->addClient(clientId, senderQueue);
+            gameMap.at(matchID)->addClient(clientId+i, senderQueue);
         }
         return gameMap.at(matchID)->getQueue();
     }
