@@ -17,13 +17,15 @@ class CollisionObject: public Object2D {
 protected:
     std::forward_list<std::weak_ptr<CollisionObject>> objectsToCollide;
 
-    CollisionObject(const CollisionObject& other);
-    CollisionObject& operator=(const CollisionObject& other);
-    CollisionObject(CollisionObject&& other) noexcept;
-    CollisionObject& operator=(CollisionObject&& other) noexcept;
-
     /**
-     * Construct a CollisionObject2D with collision Layer and Mask = 0
+     * Construct a CollisionObject with the given parent, position, rotation, collision layer,
+     * collision mask, and shape
+     * @param parent the parent Object
+     * @param position the position of the CollisionObject
+     * @param rotation the rotation of the CollisionObject
+     * @param collisionLayer the collision layer of the CollisionObject
+     * @param collisionMask the collision mask of the CollisionObject
+     * @param shape the shape of the CollisionObject
      */
     CollisionObject(Object* parent, Vector2 position, float rotation, u32 collisionLayer,
                     u32 collisionMask, std::unique_ptr<Shape2D> shape);
@@ -37,6 +39,10 @@ protected:
 
 public:
     CollisionObject() = delete;
+    CollisionObject(const CollisionObject& other) = delete;
+    CollisionObject& operator=(const CollisionObject& other) = delete;
+    CollisionObject(CollisionObject&& other) noexcept = delete;
+    CollisionObject& operator=(CollisionObject&& other) noexcept = delete;
     ~CollisionObject() override;
 
     /**

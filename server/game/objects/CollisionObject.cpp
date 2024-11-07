@@ -3,45 +3,6 @@
 #include <memory>
 #include <utility>
 
-CollisionObject::CollisionObject(const CollisionObject& other):
-        Object2D(other),
-        _collisionLayer(other._collisionLayer),
-        _collisionMask(other._collisionMask),
-        _shape(other._shape->clone().release()) {}
-
-CollisionObject& CollisionObject::operator=(const CollisionObject& other) {
-    if (this == &other)
-        return *this;
-
-    Object2D::operator=(other);
-    _collisionLayer = other._collisionLayer;
-    _collisionMask = other._collisionMask;
-    delete _shape;
-    _shape = other._shape->clone().release();
-    return *this;
-}
-
-CollisionObject::CollisionObject(CollisionObject&& other) noexcept:
-        Object2D(std::move(other)),
-        _collisionLayer(other._collisionLayer),
-        _collisionMask(other._collisionMask),
-        _shape(other._shape) {
-    other._shape = nullptr;
-}
-
-CollisionObject& CollisionObject::operator=(CollisionObject&& other) noexcept {
-    if (this == &other)
-        return *this;
-
-    Object2D::operator=(std::move(other));
-    _collisionLayer = other._collisionLayer;
-    _collisionMask = other._collisionMask;
-    delete _shape;
-    _shape = other._shape;
-    other._shape = nullptr;
-    return *this;
-}
-
 CollisionObject::CollisionObject(Object* parent, Vector2 position, const float rotation,
                                  const u32 collisionLayer, const u32 collisionMask,
                                  std::unique_ptr<Shape2D> shape):
