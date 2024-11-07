@@ -46,8 +46,11 @@ protected:
      * Add a child to the object
      * @param name The name of the child. If the name is already taken, an exception is thrown.
      * @param newChild The child to add.
+     * @throws  std::invalid_argument If newChild is nullptr
+     * @throws  std::invalid_argument If name is empty
+     * @throws  AlreadyAddedChild If the name is already taken
      */
-    void addChild(std::string name, Object* newChild);
+    virtual void addChild(std::string name, Object* newChild);
 
     /**
      * Apply the given function to all children
@@ -103,6 +106,9 @@ public:
      * Add a child to the object
      * @param name The name of the child. If the name is already taken, an exception is thrown.
      * @param newChild The child to add.
+     * @throws  std::invalid_argument If newChild is nullptr
+     * @throws  std::invalid_argument If name is empty
+     * @throws  AlreadyAddedChild If the name is already taken
      */
     void addChild(std::string name, std::unique_ptr<Object> newChild);
 
