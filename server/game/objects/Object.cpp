@@ -106,7 +106,7 @@ std::unique_ptr<Object> Object::removeChild(const std::string& name) {
 }
 
 void Object::transferChild(std::string name, Object& parent) {
-    addChild(std::move(name), std::move(parent.removeChild(name)));
+    addChild(std::move(name), parent.removeChild(name));
 }
 
 Object& Object::getChild(const std::string& name) const { return *children.at(name); }
