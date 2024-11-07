@@ -39,14 +39,14 @@ protected:
      * @throws AlreadyRegisteredEvent if there's already an event with this name
      */
     template <typename Object, typename... Args>
-    void registerEvent(std::string name);
+    Subject& registerEvent(std::string name);
 
     /**
      * Unregister an event with the given name
      * @param name The name of the event
      * @throws UnregisteredEvent If the event is not registered
      */
-    void unregisterEvent(const std::string& name);
+    Subject& unregisterEvent(const std::string& name);
 
     /**
      * Fire the event with the given name
@@ -87,44 +87,40 @@ public:
      * @throws UnregisteredEvent If the event is not registered
      */
     template <typename Object, typename... Args>
-    Subject& connect(const std::string& to, Method<Object, void, Args...> method);
+    void connect(const std::string& to, Method<Object, void, Args...> method);
 };
 
 template <typename Object, typename... Args>
-void Subject::registerEvent(std::string name) {
+Subject& Subject::registerEvent(std::string name) {
     if (events.contains(name))
         throw AlreadyRegisteredEvent(name);
 
     events.emplace(std::move(name), new Event<Object, Args...>());
+    return *this;
 }
 
 template <typename Object, typename... Args>
 void Subject::fire(const std::string& name, Args... args) {
-    const auto eventIt = events.find(name);
+    if (const auto it = events.find(name); it != events.end()) {
+        if (auto event = dynamic_cast<Event<Object, Args...>*>(it->second))
+            event->fire(args...);
+        else
+            throw InvalidEvent();
 
-    if (eventIt == events.end())
+    } else {
         throw UnregisteredEvent(name);
-
-    auto event = dynamic_cast<Event<Object, Args...>*>(eventIt->second);
-
-    if (event == nullptr)
-        throw InvalidEvent();
-
-    event->fire(args...);
+    }
 }
 
 template <typename Object, typename... Args>
-Subject& Subject::connect(const std::string& to, Method<Object, void, Args...> method) {
-    const auto eventIt = events.find(to);
+void Subject::connect(const std::string& to, Method<Object, void, Args...> method) {
+    if (const auto it = events.find(to); it != events.end()) {
+        if (auto event = dynamic_cast<Event<Object, Args...>*>(it->second))
+            event->connect(std::move(method));
+        else
+            throw InvalidEvent();
 
-    if (eventIt == events.end())
+    } else {
         throw UnregisteredEvent(to);
-
-    auto event = dynamic_cast<Event<Object, Args...>*>(eventIt->second);
-
-    if (event == nullptr)
-        throw InvalidEvent();
-
-    event->connect(std::move(method));
-    return *this;
+    }
 }
