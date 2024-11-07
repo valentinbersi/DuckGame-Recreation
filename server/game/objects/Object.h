@@ -147,6 +147,13 @@ public:
     bool hasChildren() const;
 
     /**
+     * Get the parent of the object
+     * @return A reference to the parent
+     * @throws RootObject If the object has no parent
+     */
+    Object& parent() const;
+
+    /**
      * Get the status of the object
      * @return The status of the object
      */

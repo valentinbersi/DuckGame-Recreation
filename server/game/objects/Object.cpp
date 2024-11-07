@@ -20,6 +20,13 @@ Object::Object(Object* parent): _parent(parent) {
     registerEvent<Object, Object&>(eventName(Events::TREE_EXITED));
 }
 
+Object& Object::parent() const {
+    if (_parent == nullptr)
+        throw RootObject();
+
+    return *_parent;
+}
+
 #define NULL_CHILD "newChild is nullptr"
 #define CHILD_HAS_PARENT "newChild already has a parent"
 #define EMPTY_NAME "name is empty"
