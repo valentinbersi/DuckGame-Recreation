@@ -19,50 +19,69 @@
   <property name="windowTitle">
    <string>joinwaitingpage</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">background-color: rgb(229, 165, 10);</string>
-  </property>
-  <widget class="QLabel" name="label_2">
+  <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>280</y>
-     <width>801</width>
-     <height>131</height>
+     <x>90</x>
+     <y>110</y>
+     <width>661</width>
+     <height>281</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color:  rgb(165, 29, 45);</string>
+    <string notr="true">QFrame #frame {
+background-color: rgba(229, 165, 10, 0.95);
+border-radius: 30px;
+}</string>
    </property>
-   <property name="text">
-    <string>PLAYERS CONNECTED: 2/4</string>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
    </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
    </property>
-  </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>140</y>
-     <width>801</width>
-     <height>131</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: rgb(165, 29, 45);
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>641</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="labelWaitingMsg">
+       <property name="styleSheet">
+        <string notr="true">color: rgb(165, 29, 45);
 </string>
-   </property>
-   <property name="text">
-    <string>WAITING FOR THE HOST START THE GAME</string>
-   </property>
-   <property name="textFormat">
-    <enum>Qt::AutoText</enum>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
+       </property>
+       <property name="text">
+        <string>WAITING FOR PLAYER TO JOIN</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::AutoText</enum>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelPlayersConnected">
+       <property name="styleSheet">
+        <string notr="true">color:  rgb(165, 29, 45);</string>
+       </property>
+       <property name="text">
+        <string>PLAYERS CONNECTED: 2/4</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
  </widget>
  <resources/>
