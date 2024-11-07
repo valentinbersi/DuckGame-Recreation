@@ -21,6 +21,14 @@ void MovementCommand::execute(GameController& gameController) {
             player.stopMoveRight();
             break;
 
+        case InputAction::DOWN_PRESSED:
+            player.crouch();
+            break;
+        
+        case InputAction::DOWN_RELEASED:
+            player.stopCrouch();
+            break;
+
         default:
             break;
     }
