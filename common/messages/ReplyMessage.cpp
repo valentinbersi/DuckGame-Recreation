@@ -13,4 +13,8 @@ void ReplyMessage::send(ServerSendProtocol& serverProtocol) {
     serverProtocol.sendReplyMessage(matchID, startGame);
 }
 
+bool ReplyMessage::operator==(const ReplyMessage& other) const {
+    return type == other.type && matchID == other.matchID && startGame == other.startGame;
+}
+
 ReplyMessage::~ReplyMessage() {}

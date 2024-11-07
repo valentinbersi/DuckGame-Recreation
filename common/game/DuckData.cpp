@@ -1,6 +1,7 @@
 #include "DuckData.h"
 
 #include <utility>
+#include "Math.h"
 
 DuckData::DuckData(DuckData&& other) noexcept:
         GameObject2DData(std::move(other)),
@@ -30,3 +31,14 @@ DuckData::DuckData(Vector2 position, const float rotation, const DuckID duckID, 
         life(life),
         gun(std::move(gun)),
         extraData(extraData) {}
+
+bool DuckData::operator==(const DuckData& other) const {
+    return objectID == other.objectID &&
+           object2DID == other.object2DID &&
+           position == other.position &&
+           Math::isEqualAprox(rotation, other.rotation) &&
+           duckID == other.duckID &&
+           life == other.life &&
+           gun->gunID == other.gun->gunID &&
+           extraData == other.extraData;
+}
