@@ -2,6 +2,17 @@
 
 #include <utility>
 
+#define ACTION "Action "
+#define ALREADY_ADDED " has already been added"
+
+Input::AlreadyAddedAction::AlreadyAddedAction(const std::string& actionName):
+        std::runtime_error(ACTION + actionName + ALREADY_ADDED) {}
+
+#define NOT_FOUND " has not been found"
+
+Input::ActionNotFound::ActionNotFound(const std::string& actionName):
+        std::runtime_error(ACTION + actionName + NOT_FOUND) {}
+
 Input::Input() noexcept = default;
 
 Input::Input(const Input& other) noexcept = default;
@@ -25,12 +36,17 @@ Input& Input::operator=(Input&& other) noexcept {
 }
 
 Input& Input::addAction(std::string action) {
+    if (inputs.contains(action))
+        throw AlreadyAddedAction(action);
+
     inputs.emplace(std::move(action), false);
     return *this;
 }
 
 Input& Input::removeAction(const std::string& action) {
-    inputs.erase(action);
+    if (inputs.erase(action) == 0)
+        throw ActionNotFound(action);
+
     return *this;
 }
 
