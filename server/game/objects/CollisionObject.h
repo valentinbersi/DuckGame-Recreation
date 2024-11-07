@@ -58,32 +58,54 @@ public:
     u32 collisionMask() const;
 
     /**
+     * Set the collision layer of the Object
+     * @param collisionLayer the collision layer to set
+     * @return this CollisionObject
+     */
+    CollisionObject& setCollisionLayer(u32 collisionLayer) noexcept;
+
+    /**
      * Activate collision for the given layer
      * @param layer the layer to activate collision for
-     * @pre 0 <= layer <= 32
+     * @return this CollisionObject
+     * @exception std::out_of_range if layer is not in the range [0, 31]
+     * @pre 0 <= layer <= 31
      */
-    void activateCollisionLayer(u8 layer);
+    CollisionObject& activateCollisionLayer(u8 layer);
 
     /**
      * Deactivate collision for the given layer
      * @param layer the layer to deactivate collision for
-     * @pre 0 <= layer <= 32
+     * @return this CollisionObject
+     * @exception std::out_of_range if layer is not in the range [0, 31]
+     * @pre 0 <= layer <= 31
      */
-    void deactivateCollisionLayer(u8 layer);
+    CollisionObject& deactivateCollisionLayer(u8 layer);
+
+    /**
+     * Set the collision mask of the Object
+     * @param collisionMask the collision mask to set
+     * @return this CollisionObject
+     */
+    CollisionObject& setCollisionMask(u32 collisionMask) noexcept;
 
     /**
      * Activate the collision mask for the given layer
      * @param layer the layer to activate the collision mask for
-     * @pre 0 <= layer <= 32
+     * @return this CollisionObject
+     * @exception std::out_of_range if layer is not in the range [0, 31]
+     * @pre 0 <= layer <= 31
      */
-    void activateCollisionMask(u8 layer);
+    CollisionObject& activateCollisionMask(u8 layer);
 
     /**
      * Deactivate the collision mask for the given layer
      * @param layer the layer to deactivate the collision mask for
-     * @pre 0 <= layer <= 32
+     * @return this CollisionObject
+     * @exception std::out_of_range if layer is not in the range [0, 31]
+     * @pre 0 <= layer <= 31
      */
-    void deactivateCollisionMask(u8 layer);
+    CollisionObject& deactivateCollisionMask(u8 layer);
 
     /**
      * Register a collision to process, the collision will only be processed if this collision
