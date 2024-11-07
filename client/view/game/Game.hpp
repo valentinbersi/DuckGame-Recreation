@@ -34,6 +34,7 @@ private:
     //void selectLevel();
     SDL2pp::Texture startBackground();
     void handleEvents();
+    void handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown);
     std::unordered_map<DuckID, SpriteManager> createSpritesMapping();
     void updatePlayers(std::unordered_map<DuckID, SpriteManager>& spritesMapping);
     Vector2 centerOfDucks();
@@ -70,6 +71,24 @@ private:
             {SDL_SCANCODE_D, InputAction::RIGHT_RELEASED},
             {SDL_SCANCODE_E, InputAction::ACTION_RELEASED},
             {SDL_SCANCODE_SPACE, InputAction::JUMP_RELEASED}
+    };
+
+    std::unordered_map<SDL_Scancode, InputAction> keyMappingPressedPlayer2 = {
+        {SDL_SCANCODE_UP, InputAction::UP_PRESSED},
+        {SDL_SCANCODE_DOWN, InputAction::DOWN_PRESSED},
+        {SDL_SCANCODE_LEFT, InputAction::LEFT_PRESSED},
+        {SDL_SCANCODE_RIGHT, InputAction::RIGHT_PRESSED},
+        {SDL_SCANCODE_RCTRL, InputAction::ACTION_PRESSED},
+        {SDL_SCANCODE_RSHIFT, InputAction::JUMP_PRESSED}
+    };
+
+    std::unordered_map<SDL_Scancode, InputAction> keyMappingReleasedPlayer2 = {
+        {SDL_SCANCODE_UP, InputAction::UP_RELEASED},
+        {SDL_SCANCODE_DOWN, InputAction::DOWN_RELEASED},
+        {SDL_SCANCODE_LEFT, InputAction::LEFT_RELEASED},
+        {SDL_SCANCODE_RIGHT, InputAction::RIGHT_RELEASED},
+        {SDL_SCANCODE_RCTRL, InputAction::ACTION_RELEASED},
+        {SDL_SCANCODE_RSHIFT, InputAction::JUMP_RELEASED}
     };
 
     /*std::unordered_map<int, std::string> levels {
