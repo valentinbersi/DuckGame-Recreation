@@ -131,6 +131,25 @@ TEST(ProtocolTest, ServerToLobbySend) {
     client.join();
 }
 
+TEST(ProtocolTest, GameToServerOneMessage) {
+    ListenerSocket skt("8080");
+    GameMessage gameMsg(InputAction::LEFT_PRESSED, 1);
+
+    std::thread client([gameMsg]() {
+        ActiveSocket sktClient("localhost", "8080");
+        ClientSendProtocol sendProt(sktClient);
+        sendProt.sendMessage(std::make_unique<GameMessage>(gameMsg));
+    });
+
+    ActiveSocket peer = skt.accept();
+    ServerRecvProtocol recvProt(peer);
+    GameMessage recvMsg = recvProt.receiveGameMessage();
+
+    ASSERT_TRUE(gameMsg == recvMsg);
+
+    client.join();
+}
+
 TEST(ProtocolTest, ServerToGameSendOneStatus) {
     ListenerSocket peer("8080");
 
