@@ -2,4 +2,4 @@
 
 const Vector2 GlobalPhysics::gravity(initializeGravity());
 
-Vector2 GlobalPhysics::initializeGravity() { return Vector2::DOWN * gravityScalar; }
+Vector2 GlobalPhysics::initializeGravity() noexcept { return Vector2::DOWN * gravityScalar; }

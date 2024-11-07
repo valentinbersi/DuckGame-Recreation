@@ -11,5 +11,5 @@ private:
      * Get the gravity's value
      * @return the gravity's value
      */
-    static Vector2 initializeGravity();
+    static Vector2 initializeGravity() noexcept;
 };
