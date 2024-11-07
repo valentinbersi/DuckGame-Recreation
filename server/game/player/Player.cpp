@@ -13,8 +13,8 @@
 #define DEFAULT_SPEED 500
 
 Player::Player(const DuckID id):
-        PhysicsObject(nullptr, {0, 0}, 0, 0, 0, std::make_unique<Capsule>(Vector2(0, 0), 0, 1, 3),
-                      {0, 0}, Gravity::Enabled),
+        PhysicsObject(nullptr, {0, 600.f}, 0, 0, 0,
+                      std::make_unique<Capsule>(Vector2(0, 0), 0, 1, 3), {0, 0}, Gravity::Enabled),
         id(id),
         life(DEFAULT_LIFE),
         flags(DEFAULT_FLAGS),
