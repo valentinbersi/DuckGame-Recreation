@@ -1,7 +1,6 @@
 #pragma once
 
 #include <functional>  // If IDE shows this as unused include, don't remove it, otherwise server won't compile
-#include <iostream>
 #include <list>
 #include <utility>
 
