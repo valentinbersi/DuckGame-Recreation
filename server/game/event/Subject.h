@@ -95,7 +95,7 @@ Subject& Subject::registerEvent(std::string name) {
     if (events.contains(name))
         throw AlreadyRegisteredEvent(name);
 
-    events.insert({std::move(name), new Event<Object, Args...>()});
+    events.emplace(std::move(name), new Event<Object, Args...>());
     return *this;
 }
 
