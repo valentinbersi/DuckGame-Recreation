@@ -2,23 +2,34 @@
 
 #include <utility>
 
-void Input::setAction(const InputName& action, const bool value) {
-    const auto input = inputs.find(action);
+Input::Input() noexcept = default;
 
-    if (input == inputs.end())
-        return;
+Input::Input(const Input& other) noexcept = default;
 
-    input->second = value;
+Input& Input::operator=(const Input& other) noexcept {
+    if (this == &other)
+        return *this;
+
+    inputs = other.inputs;
+    return *this;
 }
 
-Input::Input() = default;
+Input::Input(Input&& other) noexcept: inputs(std::move(other.inputs)) {}
 
-void Input::addAction(InputName action) { inputs.insert({std::move(action), false}); }
+Input& Input::operator=(Input&& other) noexcept {
+    if (this == &other)
+        return *this;
 
-void Input::removeAction(const InputName& action) { inputs.erase(action); }
+    inputs = std::move(other.inputs);
+    return *this;
+}
 
-void Input::pressAction(const InputName& action) { setAction(action, true); }
+void Input::addAction(std::string action) { inputs.emplace(std::move(action), false); }
 
-void Input::releaseAction(const InputName& action) { setAction(action, false); }
+void Input::removeAction(const std::string& action) { inputs.erase(action); }
 
-bool Input::isActionPressed(const InputName& action) const { return inputs.find(action)->second; }
+void Input::pressAction(const std::string& action) { inputs.at(action) = true; }
+
+void Input::releaseAction(const std::string& action) { inputs.at(action) = false; }
+
+bool Input::isActionPressed(const std::string& action) const { return inputs.at(action); }
