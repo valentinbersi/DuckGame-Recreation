@@ -7,6 +7,7 @@
 
 #define MOVE_RIGHT "Move Right"
 #define MOVE_LEFT "Move Left"
+#define CROUCH "Crouch"
 
 #define DEFAULT_LIFE 10
 #define DEFAULT_FLAGS 0
@@ -21,6 +22,7 @@ Player::Player(const DuckID id):
         speed(DEFAULT_SPEED) {
     input.addAction(MOVE_RIGHT);
     input.addAction(MOVE_LEFT);
+    input.addAction(CROUCH);
 }
 
 void Player::moveRight() { input.pressAction(MOVE_RIGHT); }
@@ -31,16 +33,21 @@ void Player::moveLeft() { input.pressAction(MOVE_LEFT); }
 
 void Player::stopMoveLeft() { input.releaseAction(MOVE_LEFT); }
 
+void Player::crouch() { input.pressAction(CROUCH); }
+
+void Player::stopCrouch() { input.releaseAction(CROUCH); }
+
 void Player::start() {}
 
 void Player::update(const float delta) {
     setVelocity({0, 0});
     flags = 0;
 
-    if (input.isActionPressed(MOVE_RIGHT)) {
+    if (input.isActionPressed(CROUCH))
+        flags |= DuckData::CROUCHING;
+    else if (input.isActionPressed(MOVE_RIGHT)) {
         setVelocity((velocity() + Vector2(speed, 0)) * delta);
         flags |= DuckData::MOVING_RIGHT;
-
     } else if (input.isActionPressed(MOVE_LEFT)) {
         setVelocity((velocity() + Vector2(-speed, 0)) * delta);
         flags |= DuckData::MOVING_LEFT;

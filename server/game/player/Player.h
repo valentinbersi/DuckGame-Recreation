@@ -53,4 +53,14 @@ public:
      * does nothing
      */
     void stopMoveLeft();
+
+    /**
+     * Makes the player crouch
+     */
+    void crouch();
+
+    /**
+     * Stops the player from crouching
+     */
+    void stopCrouch();
 };
