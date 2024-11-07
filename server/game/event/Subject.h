@@ -39,14 +39,14 @@ protected:
      * @throws AlreadyRegisteredEvent if there's already an event with this name
      */
     template <typename Object, typename... Args>
-    void registerEvent(std::string name);
+    Subject& registerEvent(std::string name);
 
     /**
      * Unregister an event with the given name
      * @param name The name of the event
      * @throws UnregisteredEvent If the event is not registered
      */
-    void unregisterEvent(const std::string& name);
+    Subject& unregisterEvent(const std::string& name);
 
     /**
      * Fire the event with the given name
@@ -91,11 +91,12 @@ public:
 };
 
 template <typename Object, typename... Args>
-void Subject::registerEvent(std::string name) {
+Subject& Subject::registerEvent(std::string name) {
     if (events.contains(name))
         throw AlreadyRegisteredEvent(name);
 
     events.insert({std::move(name), new Event<Object, Args...>()});
+    return *this;
 }
 
 template <typename Object, typename... Args>

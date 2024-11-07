@@ -20,9 +20,15 @@ Subject::InvalidEvent::InvalidEvent(): std::runtime_error(INVALID_EVENT) {}
 Subject::UnregisteredEvent::UnregisteredEvent(const std::string& eventName):
         std::invalid_argument("Event " + eventName + " is not registered for this subject") {}
 
-void Subject::unregisterEvent(const std::string& name) {
-    if (const size_t deleted = events.erase(name); deleted == 0)
+Subject& Subject::unregisterEvent(const std::string& name) {
+    const auto event = events.find(name);
+
+    if (event == events.end())
         throw UnregisteredEvent(name);
+
+    delete event->second;
+    events.erase(event);
+    return *this;
 }
 
 Subject::Subject() noexcept = default;
