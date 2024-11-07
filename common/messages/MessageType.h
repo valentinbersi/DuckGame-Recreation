@@ -18,7 +18,7 @@ public:
 
     MessageType() = delete;
 
-    // bool operator==(MessageType message) const {return message._value == _value;}
+    // bool operator==(const MessageType& other) const {return _value == other._value;}
 
     // bool operator!=(MessageType boxId) const;
 
@@ -54,7 +54,7 @@ public:
 
     InputAction() = delete;
 
-    // bool operator==(InputAction boxId) const {return boxId._value == _value;}
+    // bool operator==(const InputAction& other) const {return _value == other._value;}
 
     // bool operator!=(InputAction boxId) const;
 
@@ -77,7 +77,7 @@ public:
 
     LobbyRequest(): _value(NEWMATCH){};
 
-    // bool operator==(LobbyRequest boxId) const {return boxId._value == _value;}
+    // bool operator==(const LobbyRequest& other) const {return _value == other._value;}
 
     // bool operator!=(LobbyRequest boxId) const;
 
