@@ -69,7 +69,6 @@ void GameMenu::showHostWaitingPage() {
 void GameMenu::showJoinWaitingPage() {
     auto* join_waiting_page = new joinWaitingPage(this, communicator);
     ui->stackedWidget->addWidget(join_waiting_page);
-    int index = ui->stackedWidget->indexOf(join_waiting_page);
     changePage(join_waiting_page);
     QApplication::processEvents();
     connect(join_waiting_page, &joinWaitingPage::matchStarted, this, &GameMenu::startGameHandler);

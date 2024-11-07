@@ -16,6 +16,8 @@ hostWaitingPage::hostWaitingPage(QWidget* parent, Communicator& communicator, Ga
         gameInfo(gameInfo){
     ui->setupUi(this);
 
+    ui->labelMatchID->setText(QString("MATCH ID: %1").arg(gameInfo.matchID));
+
     connect(ui->playButton, &QPushButton::clicked, this, &hostWaitingPage::requestStartGame);
 }
 
