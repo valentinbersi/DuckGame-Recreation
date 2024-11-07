@@ -14,11 +14,6 @@ class Object2D: public Object {
     float _rotation;
 
 protected:
-    Object2D(const Object2D& other);
-    Object2D& operator=(const Object2D& other);
-    Object2D(Object2D&& other) noexcept;
-    Object2D& operator=(Object2D&& other) noexcept;
-
     /**
      * Initialize an Object2D with a parent, a position a rotation and a scale
      * @param parent The parent of the object
@@ -28,10 +23,11 @@ protected:
     Object2D(Object* parent, Vector2 position, float rotation);
 
 public:
-    /**
-     * Initialize an Object2D with position (0, 0), rotation 0 and scale (1, 1)
-     */
     Object2D() = delete;
+    Object2D(const Object2D& other) = delete;
+    Object2D& operator=(const Object2D& other) = delete;
+    Object2D(Object2D&& other) noexcept = delete;
+    Object2D& operator=(Object2D&& other) noexcept = delete;
     ~Object2D() override;
 
     /**
@@ -71,7 +67,7 @@ public:
      * @param position The new local position
      * @return A reference to this object, to allow builder pattern.
      */
-    Object2D& setPosition(Vector2 position) noexcept;
+    virtual Object2D& setPosition(Vector2 position) noexcept;
 
     /**
      * Get the local position of the object
