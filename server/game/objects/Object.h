@@ -32,7 +32,6 @@ class Object: public Subject, public TrackedReference, public Updatable, public 
      */
     void onTreeExited(Object& object);
 
-
 protected:
     constexpr static auto INVALID_EVENT_TYPE = "Invalid event type";
 
@@ -47,6 +46,7 @@ protected:
      * @param name The name of the child. If the name is already taken, an exception is thrown.
      * @param newChild The child to add.
      * @throws  std::invalid_argument If newChild is nullptr
+     * @throws  std::invalid_argument If newChild already has a parent
      * @throws  std::invalid_argument If name is empty
      * @throws  AlreadyAddedChild If the name is already taken
      */
@@ -113,6 +113,7 @@ public:
      * @param newChild The child to add.
      * @throws  std::invalid_argument If newChild is nullptr
      * @throws  std::invalid_argument If name is empty
+     * @throws std::invalid_argument if newChild already has a parent
      * @throws  AlreadyAddedChild If the name is already taken
      */
     void addChild(std::string name, std::unique_ptr<Object> newChild);
@@ -123,6 +124,13 @@ public:
      * @return A pointer to the removed child
      */
     std::unique_ptr<Object> removeChild(const std::string& name);
+
+    /**
+     * Transfer a child from another object to this
+     * @param name The name of the child to transfer
+     * @param parent The parent object to transfer the child from
+     */
+    void transferChild(std::string name, Object& parent);
 
     /**
      * Get a child of the object.

@@ -21,11 +21,15 @@ Object::Object(Object* parent): _parent(parent) {
 }
 
 #define NULL_CHILD "newChild is nullptr"
+#define CHILD_HAS_PARENT "newChild already has a parent"
 #define EMPTY_NAME "name is empty"
 
 void Object::addChild(std::string name, Object* newChild) {
     if (newChild == nullptr)
         throw std::invalid_argument(NULL_CHILD);
+
+    if (newChild->_parent != nullptr)
+        throw std::invalid_argument(CHILD_HAS_PARENT);
 
     if (name.empty())
         throw std::invalid_argument(EMPTY_NAME);
@@ -90,7 +94,12 @@ std::unique_ptr<Object> Object::removeChild(const std::string& name) {
         throw ChildNotInTree(name);
 
     fire<Object, Object&>(eventName(Events::TREE_EXITED), *child.mapped());
+    child.mapped()->_parent = nullptr;
     return std::unique_ptr<Object>(child.mapped());
+}
+
+void Object::transferChild(std::string name, Object& parent) {
+    addChild(std::move(name), std::move(parent.removeChild(name)));
 }
 
 Object& Object::getChild(const std::string& name) const { return *children.at(name); }
