@@ -8,16 +8,17 @@
 #define MOVE_RIGHT "Move Right"
 #define MOVE_LEFT "Move Left"
 
-void Player::loadChildren() {}
+#define DEFAULT_LIFE 10
+#define DEFAULT_FLAGS 0
+#define DEFAULT_SPEED 500
 
-Player::Player():
+Player::Player(const DuckID id):
         PhysicsObject(nullptr, {0, 0}, 0, 0, 0, std::make_unique<Capsule>(Vector2(0, 0), 0, 1, 3),
                       {0, 0}, Gravity::Enabled),
-        id(DuckID::White),
-        life(3),
-        flags(0),
-        speed(500) {
-
+        id(id),
+        life(DEFAULT_LIFE),
+        flags(DEFAULT_FLAGS),
+        speed(DEFAULT_SPEED) {
     input.addAction(MOVE_RIGHT);
     input.addAction(MOVE_LEFT);
 }
@@ -44,8 +45,6 @@ void Player::update(const float delta) {
         setVelocity((velocity() + Vector2(-speed, 0)) * delta);
         flags |= DuckData::MOVING_LEFT;
     }
-
-    setPosition(position() + velocity());
 }
 
 Player::~Player() = default;

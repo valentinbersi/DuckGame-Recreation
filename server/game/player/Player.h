@@ -12,14 +12,8 @@ class Player final: public PhysicsObject {
     Input input;
     float speed;
 
-protected:
-    /**
-     * Load the player's children
-     */
-    void loadChildren() override;
-
 public:
-    Player();
+    explicit Player(DuckID id);
     ~Player() override;
 
     /**
