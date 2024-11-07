@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>  // If IDE shows this as unused include, don't remove it, otherwise server won't compile
+#include <iostream>
 #include <list>
 #include <utility>
 
@@ -39,12 +40,12 @@ public:
 
     /**
      * Connect a callable to the event
-     * @param method The method to connect
+     * @param method The method to connect, this method should not throw exceptions
      */
-    void connect(Method<Obj, void, Args...> method);
+    void connect(Method<Obj, void, Args...> method) noexcept;
 
     /**
-     * Fire the event. This will call all connected callables with the given arguments
+     * Fire the event. This will call all connected methods with the given arguments.
      * @param args The arguments to pass to the callables
      */
     void fire(Args... args);
@@ -75,7 +76,7 @@ Event<Obj, Args...>& Event<Obj, Args...>::operator=(Event&& other) noexcept {
 }
 
 template <typename Obj, typename... Args>
-void Event<Obj, Args...>::connect(Method<Obj, void, Args...> method) {
+void Event<Obj, Args...>::connect(Method<Obj, void, Args...> method) noexcept {
     methods.push_back(std::move(method));
 }
 
