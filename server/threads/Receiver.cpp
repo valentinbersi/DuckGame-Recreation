@@ -14,18 +14,17 @@ Receiver::Receiver(ActiveSocket& socket,
 void Receiver::run() {
     try {
         while (gameQueue == nullptr) {
-            std::unique_ptr<ClientMessage> message = recvProtocol.receiveMessage();
-            const LobbyMessage* lobbyMessage = dynamic_cast<const LobbyMessage*>(message.get());
-            gameQueue = lobbyResolver.resolveRequest(*lobbyMessage);
+            LobbyMessage lobbyMessage = recvProtocol.receiveLobbyMessage();
+            // const LobbyMessage* lobbyMessage = dynamic_cast<const LobbyMessage*>(message.get());
+            gameQueue = lobbyResolver.resolveRequest(lobbyMessage);
         }
 
         while (_keep_running) {
-            std::unique_ptr<ClientMessage> message = recvProtocol.receiveMessage();
-            const GameMessage* gameMessage = dynamic_cast<const GameMessage*>(message.get());
-            gameQueue->push(std::make_unique<MovementCommand>(clientID-1+gameMessage->player, gameMessage->action));
+            GameMessage gameMessage = recvProtocol.receiveGameMessage();
+            // const GameMessage* gameMessage = dynamic_cast<const GameMessage*>(message.get());
+            gameQueue->push(std::make_unique<MovementCommand>(clientID-1+gameMessage.player, gameMessage.action));
         }
 
-        // }catch(){
     } catch (...) {}
 }
 

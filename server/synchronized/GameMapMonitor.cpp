@@ -3,6 +3,7 @@
 #include <random>
 
 #define PLAYER_COUNT_BEGINING 0
+
 GameMapMonitor::GameMapMonitor() {}
 
 
@@ -44,5 +45,8 @@ u16 GameMapMonitor::creatGameSafe() {
 }
 
 GameMapMonitor::~GameMapMonitor() {
-    // joinear values.
+    for(auto& [key, value] : gameMap) {
+        value->stop();
+        value->join();
+    }
 }
