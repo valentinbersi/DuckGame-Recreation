@@ -45,6 +45,8 @@ void Player::update(const float delta) {
         setVelocity((velocity() + Vector2(-speed, 0)) * delta);
         flags |= DuckData::MOVING_LEFT;
     }
+
+    setPosition(position() + velocity());
 }
 
 Player::~Player() = default;
