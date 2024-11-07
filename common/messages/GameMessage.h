@@ -12,5 +12,7 @@ public:
 
     void send(ClientSendProtocol& clientProtocol) override;
 
+    bool operator==(const GameMessage& other) const;
+
     ~GameMessage();
 };
