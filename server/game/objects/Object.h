@@ -15,17 +15,18 @@
  * An object in the game
  */
 class Object: public Subject, public TrackedReference, public Updatable, public Startable {
-    Object* _parent;
     HashMap<std::string, Object*> children;
 
     /**
-     * Called when an object is added to the subtree of this object
+     * Called when an object is added to the subtree of this object.\n
+     * It simply fires the event so parents are notified of a new child in the tree
      * @param object The child that was added
      */
     void onTreeEntered(Object& object);
 
     /**
-     * Called when an object is removed from the subtree of this object
+     * Called when an object is removed from the subtree of this object.\n
+     * It simply fires the event so parents are notified of a new child in the tree.
      * @param object The child that was removed
      */
     void onTreeExited(Object& object);
@@ -34,16 +35,12 @@ class Object: public Subject, public TrackedReference, public Updatable, public 
 protected:
     constexpr static auto INVALID_EVENT_TYPE = "Invalid event type";
 
+    Object();
     Object(const Object& other);
     Object& operator=(const Object& other);
     Object(Object&& other) noexcept;
     Object& operator=(Object&& other) noexcept;
 
-    /**
-     * A constructor for derived classes.
-     * Initializes the signals
-     */
-    explicit Object(Object* parent);
 
     /**
      * Add a child to the object
@@ -54,7 +51,7 @@ protected:
 
     /**
      * Apply the given function to all children
-     * @param f The function to apply
+     * @param f The function to apply, should not throw exceptions
      */
     void forAllChildren(const std::function<void(Object&)>& f);
 
@@ -64,34 +61,37 @@ protected:
      * @param f The function to apply
      * @tparam Ret The return type of the function
      * @return The result of the function
+     * @throws std::out_of_range If the child is not found
      */
     template <typename Ret>
     Ret applyToChild(const std::string& name, const std::function<Ret(Object&)>& f);
-
-    /**
-     * Load the children the object should have at its creation. Children should not be added in the
-     * constructor
-     */
-    virtual void loadChildren() = 0;
 
 public:
     /**
      * An exception thrown when trying to add a child with a name that is already taken
      */
-    class AlreadyAddedChild final: public std::runtime_error {
-    public:
+    struct AlreadyAddedChild final: std::runtime_error {
         explicit AlreadyAddedChild(const std::string& name);
     };
 
     /**
      * An exception thrown when trying to add a child with a name that is already taken
      */
-    class ChildNotInTree final: public std::runtime_error {
-    public:
+    struct ChildNotInTree final: std::out_of_range {
         explicit ChildNotInTree(const std::string& name);
     };
 
-    Object() = delete;
+    /**
+     * An exception thrown when trying access the parent of the root object
+     */
+    struct RootObject final: std::logic_error {
+        explicit RootObject();
+    };
+
+    struct AddedChildWithChildren final: std::logic_error {
+        explicit AddedChildWithChildren();
+    };
+
     ~Object() override;
 
     /**
@@ -103,7 +103,6 @@ public:
      * Add a child to the object
      * @param name The name of the child. If the name is already taken, an exception is thrown.
      * @param newChild The child to add.
-     * @throw
      */
     void addChild(std::string name, std::unique_ptr<Object> newChild);
 
@@ -118,14 +117,15 @@ public:
      * Get a child of the object.
      * @param name The name of the child to get
      * @return A reference to the child
+     * @throws std::out_of_range If the child is not found
      */
     Object& getChild(const std::string& name) const;
 
     /**
-     * Get the parent of the object.
-     * @return A reference to the parent
+     * Check if the object has children
+     * @return True if the object has children, false otherwise
      */
-    Object& parent() const;
+    bool hasChildren() const;
 
     /**
      * Get the status of the object
@@ -157,10 +157,5 @@ public:
 
 template <typename Ret>
 Ret Object::applyToChild(const std::string& name, const std::function<Ret(Object&)>& f) {
-    const auto child = children.find(name);
-
-    if (child == children.end())
-        throw ChildNotInTree(name);
-
-    return f(*child->second);
+    return f(children.at(name));
 }

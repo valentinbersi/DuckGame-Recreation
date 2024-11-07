@@ -15,15 +15,18 @@ void Object::onTreeExited(Object& object) {
     fire<Object, Object&>(eventName(Events::TREE_EXITED), object);
 }
 
-Object::Object(const Object& other):
-        Subject(other), TrackedReference(), _parent(other._parent), children(other.children) {}
+Object::Object() {
+    registerEvent<Object, Object&>(eventName(Events::TREE_ENTERED));
+    registerEvent<Object, Object&>(eventName(Events::TREE_EXITED));
+}
+
+Object::Object(const Object& other): Subject(other), TrackedReference(), children(other.children) {}
 
 Object& Object::operator=(const Object& other) {
     if (this == &other)
         return *this;
 
     Subject::operator=(other);
-    _parent = other._parent;
 
     std::ranges::for_each(
             children, [](const std::pair<std::string, Object*>& child) { delete child.second; });
@@ -32,29 +35,17 @@ Object& Object::operator=(const Object& other) {
 }
 
 Object::Object(Object&& other) noexcept:
-        Subject(std::move(other)),
-        TrackedReference(),
-        _parent(other._parent),
-        children(std::move(other.children)) {
-    other._parent = nullptr;
-}
+        Subject(std::move(other)), TrackedReference(), children(std::move(other.children)) {}
 
 Object& Object::operator=(Object&& other) noexcept {
     if (this == &other)
         return *this;
 
     Subject::operator=(std::move(other));
-    _parent = other._parent;
-    other._parent = nullptr;
     std::ranges::for_each(
             children, [](const std::pair<std::string, Object*>& child) { delete child.second; });
     children = std::move(other.children);
     return *this;
-}
-
-Object::Object(Object* parent): _parent(parent) {
-    registerEvent<Object, Object&>(eventName(Events::TREE_ENTERED));
-    registerEvent<Object, Object&>(eventName(Events::TREE_EXITED));
 }
 
 #define NULL_CHILD "newChild is nullptr"
@@ -76,10 +67,12 @@ void Object::addChild(std::string name, Object* newChild) {
     newChild->connect<Object, Object&>(eventName(Events::TREE_EXITED),
                                        {getReference<Object>(), &Object::onTreeExited});
 
-    children.insert({std::move(name), newChild});
-    newChild->_parent = this;
+    children.emplace(std::move(name), newChild);
+
     fire<Object, Object&>(eventName(Events::TREE_ENTERED), *newChild);
-    newChild->loadChildren();  // This way the TREE_ENTERED events of the child will also be fired
+    newChild->forAllChildren([this](Object& child) {
+        fire<Object, Object&>(eventName(Events::TREE_ENTERED), child);
+    });
 }
 
 void Object::forAllChildren(const std::function<void(Object&)>& f) {
@@ -96,7 +89,11 @@ Object::AlreadyAddedChild::AlreadyAddedChild(const std::string& name):
 #define NOT_IN_TREE " is not in child tree."
 
 Object::ChildNotInTree::ChildNotInTree(const std::string& name):
-        std::runtime_error(CHILD_NAME + name + NOT_IN_TREE) {}
+        std::out_of_range(CHILD_NAME + name + NOT_IN_TREE) {}
+
+#define NO_PARENT "Object has no parent"
+
+Object::RootObject::RootObject(): std::logic_error(NO_PARENT) {}
 
 Object::~Object() {
     std::ranges::for_each(
@@ -115,27 +112,18 @@ void Object::addChild(std::string name, std::unique_ptr<Object> newChild) {
 }
 
 void Object::removeChild(const std::string& name) {
-    const auto child = children.find(name);
+    const HashMap<std::string, Object*>::node_type child(children.extract(name));
 
-    if (child == children.end())
+    if (child.empty())
         throw ChildNotInTree(name);
 
-    fire<Object, Object&>(eventName(Events::TREE_EXITED), *child->second);
-
-    delete child->second;
-    children.erase(child);
+    fire<Object, Object&>(eventName(Events::TREE_EXITED), *child.mapped());
+    delete child.mapped();
 }
 
-Object& Object::getChild(const std::string& name) const {
-    const auto child = children.find(name);
+Object& Object::getChild(const std::string& name) const { return *children.at(name); }
 
-    if (child == children.end())
-        throw ChildNotInTree(name);
-
-    return *child->second;
-}
-
-Object& Object::parent() const { return *_parent; }
+bool Object::hasChildren() const { return not children.empty(); }
 
 #define TREE_ADDED_NAME "TreeEntered"
 #define TREE_EXITED_NAME "TreeExited"
