@@ -1,3 +1,5 @@
 #include "GlobalPhysics.h"
 
-const Vector2 GlobalPhysics::gravity = Vector2::DOWN * gravityModule;
+const Vector2 GlobalPhysics::gravity(initializeGravity());
+
+Vector2 GlobalPhysics::initializeGravity() { return Vector2::DOWN * gravityScalar; }
