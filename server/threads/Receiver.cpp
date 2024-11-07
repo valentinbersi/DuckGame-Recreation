@@ -22,7 +22,7 @@ void Receiver::run() {
         while (_keep_running) {
             std::unique_ptr<ClientMessage> message = recvProtocol.receiveMessage();
             const GameMessage* gameMessage = dynamic_cast<const GameMessage*>(message.get());
-            gameQueue->push(std::make_unique<MovementCommand>(clientID, gameMessage->action));
+            gameQueue->push(std::make_unique<MovementCommand>(clientID-1+gameMessage->player, gameMessage->action));
         }
 
         // }catch(){

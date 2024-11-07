@@ -15,5 +15,7 @@ std::unique_ptr<ClientMessage> ServerRecvProtocol::receiveMessage() {
         u16 matchID = recvShort();
         return std::make_unique<LobbyMessage>(request, playerCount, name1, name2, matchID);
     }
-    return std::make_unique<GameMessage>(recv_byte());
+    u8 action = recv_byte();
+    u8 player = recv_byte();
+    return std::make_unique<GameMessage>(action, player);
 }

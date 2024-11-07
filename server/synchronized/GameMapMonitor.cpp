@@ -2,17 +2,19 @@
 
 #include <random>
 
-
+#define PLAYER_COUNT_BEGINING 0
 GameMapMonitor::GameMapMonitor() {}
 
 
 BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGameIfCreated(
         u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
-        u16 clientId) {
+        u16 clientId, u8 playerCount) {
     std::lock_guard lock(mutex);
 
     if (gameMap.find(matchID) != gameMap.end()) {
-        gameMap.at(matchID)->addClient(clientId, senderQueue);
+        for(u8 i = PLAYER_COUNT_BEGINING; i < playerCount; i++) {
+            gameMap.at(matchID)->addClient(clientId, senderQueue);
+        }
         return gameMap.at(matchID)->getQueue();
     }
     return nullptr;
