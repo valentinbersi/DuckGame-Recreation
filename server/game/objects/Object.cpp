@@ -15,37 +15,9 @@ void Object::onTreeExited(Object& object) {
     fire<Object, Object&>(eventName(Events::TREE_EXITED), object);
 }
 
-Object::Object() {
+Object::Object(Object* parent): _parent(parent) {
     registerEvent<Object, Object&>(eventName(Events::TREE_ENTERED));
     registerEvent<Object, Object&>(eventName(Events::TREE_EXITED));
-}
-
-Object::Object(const Object& other): Subject(other), TrackedReference(), children(other.children) {}
-
-Object& Object::operator=(const Object& other) {
-    if (this == &other)
-        return *this;
-
-    Subject::operator=(other);
-
-    std::ranges::for_each(
-            children, [](const std::pair<std::string, Object*>& child) { delete child.second; });
-    children = other.children;
-    return *this;
-}
-
-Object::Object(Object&& other) noexcept:
-        Subject(std::move(other)), TrackedReference(), children(std::move(other.children)) {}
-
-Object& Object::operator=(Object&& other) noexcept {
-    if (this == &other)
-        return *this;
-
-    Subject::operator=(std::move(other));
-    std::ranges::for_each(
-            children, [](const std::pair<std::string, Object*>& child) { delete child.second; });
-    children = std::move(other.children);
-    return *this;
 }
 
 #define NULL_CHILD "newChild is nullptr"
@@ -111,14 +83,14 @@ void Object::addChild(std::string name, std::unique_ptr<Object> newChild) {
     addChild(std::move(name), newChild.release());
 }
 
-void Object::removeChild(const std::string& name) {
+std::unique_ptr<Object> Object::removeChild(const std::string& name) {
     const HashMap<std::string, Object*>::node_type child(children.extract(name));
 
     if (child.empty())
         throw ChildNotInTree(name);
 
     fire<Object, Object&>(eventName(Events::TREE_EXITED), *child.mapped());
-    delete child.mapped();
+    return std::unique_ptr<Object>(child.mapped());
 }
 
 Object& Object::getChild(const std::string& name) const { return *children.at(name); }

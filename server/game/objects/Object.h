@@ -15,6 +15,7 @@
  * An object in the game
  */
 class Object: public Subject, public TrackedReference, public Updatable, public Startable {
+    Object* _parent;
     HashMap<std::string, Object*> children;
 
     /**
@@ -35,12 +36,11 @@ class Object: public Subject, public TrackedReference, public Updatable, public 
 protected:
     constexpr static auto INVALID_EVENT_TYPE = "Invalid event type";
 
-    Object();
-    Object(const Object& other);
-    Object& operator=(const Object& other);
-    Object(Object&& other) noexcept;
-    Object& operator=(Object&& other) noexcept;
-
+    /**
+     * A constructor for derived classes.
+     * Initializes the signals
+     */
+    explicit Object(Object* parent);
 
     /**
      * Add a child to the object
@@ -95,6 +95,11 @@ public:
         explicit AddedChildWithChildren();
     };
 
+    Object() = delete;
+    Object(const Object& other) = delete;
+    Object& operator=(const Object& other) = delete;
+    Object(Object&& other) noexcept = delete;
+    Object& operator=(Object&& other) noexcept = delete;
     ~Object() override;
 
     /**
@@ -117,7 +122,7 @@ public:
      * @param name The name of the child to remove
      * @return A pointer to the removed child
      */
-    void removeChild(const std::string& name);
+    std::unique_ptr<Object> removeChild(const std::string& name);
 
     /**
      * Get a child of the object.
