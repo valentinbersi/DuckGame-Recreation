@@ -67,7 +67,7 @@ public:
      * @param position The new local position
      * @return A reference to this object, to allow builder pattern.
      */
-    virtual Object2D& setPosition(Vector2 position) noexcept;
+    Object2D& setPosition(Vector2 position) noexcept;
 
     /**
      * Get the local position of the object
