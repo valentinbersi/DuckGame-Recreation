@@ -1,6 +1,6 @@
 #pragma once
 
-#include <functional>
+#include <functional>  // If IDE shows this as unused include, don't remove it, otherwise server won't compile
 #include <list>
 #include <utility>
 
@@ -30,7 +30,7 @@ class Event final: public EventBase {
     std::list<Method<Obj, void, Args...>> methods;
 
 public:
-    Event() noexcept;
+    Event() noexcept = default;
     Event(const Event& other) noexcept;
     Event& operator=(const Event& other) noexcept;
     Event(Event&& other) noexcept;
@@ -49,9 +49,6 @@ public:
      */
     void fire(Args... args);
 };
-
-template <typename Object, typename... Args>
-Event<Object, Args...>::Event() noexcept = default;
 
 template <typename Object, typename... Args>
 Event<Object, Args...>::Event(const Event& other) noexcept: methods(other.methods) {}
@@ -84,9 +81,8 @@ void Event<Obj, Args...>::connect(Method<Obj, void, Args...> method) {
 
 template <typename Obj, typename... Args>
 void Event<Obj, Args...>::fire(Args... args) {
-
     std::ranges::remove_if(methods, [&args...](const Method<Obj, void, Args...>& method) -> bool {
-        if (!method.isValid())
+        if (not method.isValid())
             return true;
 
         method(args...);
