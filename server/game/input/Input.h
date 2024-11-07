@@ -20,26 +20,30 @@ public:
     /**
      * Add a given action to the input
      *  @param action the action to add
+     *  @return a reference to the input
      */
-    void addAction(std::string action);
+    Input& addAction(std::string action);
 
     /**
      * Remove a given action from the input
      * @param action the action to remove
+     * @return a reference to the input
      */
-    void removeAction(const std::string& action);
+    Input& removeAction(const std::string& action);
 
     /**
      * Sets the given action as pressed
      * @param action the action to set as pressed
+     * @return a reference to the input
      */
-    void pressAction(const std::string& action);
+    Input& pressAction(const std::string& action);
 
     /**
      * Sets the given action as not pressed
      * @param action the action to set as not pressed
+     * @return a reference to the input
      */
-    void releaseAction(const std::string& action);
+    Input& releaseAction(const std::string& action);
 
     /**
      * Check whether the given action is pressed

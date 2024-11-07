@@ -24,12 +24,24 @@ Input& Input::operator=(Input&& other) noexcept {
     return *this;
 }
 
-void Input::addAction(std::string action) { inputs.emplace(std::move(action), false); }
+Input& Input::addAction(std::string action) {
+    inputs.emplace(std::move(action), false);
+    return *this;
+}
 
-void Input::removeAction(const std::string& action) { inputs.erase(action); }
+Input& Input::removeAction(const std::string& action) {
+    inputs.erase(action);
+    return *this;
+}
 
-void Input::pressAction(const std::string& action) { inputs.at(action) = true; }
+Input& Input::pressAction(const std::string& action) {
+    inputs.at(action) = true;
+    return *this;
+}
 
-void Input::releaseAction(const std::string& action) { inputs.at(action) = false; }
+Input& Input::releaseAction(const std::string& action) {
+    inputs.at(action) = false;
+    return *this;
+}
 
 bool Input::isActionPressed(const std::string& action) const { return inputs.at(action); }
