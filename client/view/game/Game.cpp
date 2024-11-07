@@ -222,7 +222,7 @@ void Game::handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown) {
     auto it = keyMapping.find(scancode);
     if (it != keyMapping.end()) {
         InputAction m_key = it->second;
-        auto message = std::make_unique<GameMessage>(m_key);
+        auto message = std::make_unique<GameMessage>(m_key, 1);
         communicator.trysend(std::move(message));
     }
 
@@ -231,7 +231,7 @@ void Game::handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown) {
         auto it2 = keyMappingPlayer2.find(scancode);
         if (it2 != keyMappingPlayer2.end()) {
             InputAction m_key = it2->second;
-            auto message = std::make_unique<GameMessage>(m_key);
+            auto message = std::make_unique<GameMessage>(m_key, 2);
             communicator.trysend(std::move(message));
         }
     }
