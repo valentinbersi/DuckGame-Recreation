@@ -35,8 +35,6 @@ void Game::init() {
 
     Texture backgroundTexture = startBackground();
     renderer.Present();
-    // SDL_Delay(5000);
-    // return;
 
     while (running) {
         getSnapshot();  // handle everything sended by the gameloop
@@ -61,16 +59,14 @@ void Game::init() {
         SDL_Delay(33);  // 33ms = 30fps
 
 
-        // poner en algún lado una struct de players (ducks) y asociarles una ID
-
 
         /*
         handleEvents();       // handle user input
         renderer.Clear();
         showBackground(backgroundTexture);
         update(player1);             //update ducks
-        //render();         render EVERYTHING again (outside players, that are being rendered in the
-        player class) SDL_Delay(33);
+        //render();         render EVERYTHING again (outside players, that are being rendered in the player class)
+        SDL_Delay(33);
         */
     }
 
@@ -221,8 +217,42 @@ renderer, textureImage, textureFeathers));
     return spritesMapping;
 }*/
 
+void Game::handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown) {
+    const auto& keyMapping = isKeyDown ? keyMappingPressed : keyMappingReleased;
+    auto it = keyMapping.find(scancode);
+    if (it != keyMapping.end()) {
+        InputAction m_key = it->second;
+        auto message = std::make_unique<GameMessage>(m_key);
+        communicator.trysend(std::move(message));
+    }
+
+    if (twoPlayersLocal) {
+        const auto& keyMappingPlayer2 = isKeyDown ? keyMappingPressedPlayer2 : keyMappingReleasedPlayer2;
+        auto it2 = keyMappingPlayer2.find(scancode);
+        if (it2 != keyMappingPlayer2.end()) {
+            InputAction m_key = it2->second;
+            auto message = std::make_unique<GameMessage>(m_key);
+            communicator.trysend(std::move(message));
+        }
+    }
+}
 
 void Game::handleEvents() {
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
+            SDL_Scancode scancode = event.key.keysym.scancode;
+            bool isKeyDown = (event.type == SDL_KEYDOWN);
+            handleKeyEvent(scancode, isKeyDown);
+        } else if (event.type == SDL_QUIT) {
+            running = false;
+        }
+    }
+}
+
+
+/*void Game::handleEvents() {
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
@@ -235,6 +265,15 @@ void Game::handleEvents() {
                 communicator.trysend(std::move(message));
             }
 
+            if (twoPlayersLocal) {
+                auto it2 = keyMappingPressedPlayer2.find(scancode);
+                if (it2 != keyMappingPressedPlayer2.end()) {
+                    InputAction m_key = it2->second;
+                    auto message = std::make_unique<GameMessage>(m_key);
+                    communicator.trysend(std::move(message));
+                }
+            }
+
         } else if (event.type == SDL_KEYUP) {
             SDL_Scancode scancode = event.key.keysym.scancode;
             auto it = keyMappingReleased.find(scancode);
@@ -244,13 +283,20 @@ void Game::handleEvents() {
                 communicator.trysend(std::move(message));
             }
 
-            // MOUSE EVENTS ETC...? MULTIPLES TECLAS?
+            if (twoPlayersLocal) {
+                auto it2 = keyMappingReleasedPlayer2.find(scancode);
+                if (it2 != keyMappingReleasedPlayer2.end()) {
+                    InputAction m_key = it2->second;
+                    auto message = std::make_unique<GameMessage>(m_key);
+                    communicator.trysend(std::move(message));
+                }
+            }
 
         } else if (event.type == SDL_QUIT) {
             running = false;
         }
     }
-}
+}*/
 
 Texture Game::startBackground() {
     SDL_Surface* rawBackgroundSurface = IMG_Load("../assets/background/background1.png");
