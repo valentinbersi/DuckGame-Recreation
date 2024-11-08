@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>818</width>
     <height>600</height>
    </rect>
   </property>
@@ -19,16 +19,16 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>801</width>
-      <height>601</height>
+      <width>800</width>
+      <height>600</height>
      </rect>
     </property>
    </widget>
    <widget class="QPushButton" name="addRectButton">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>510</y>
+      <x>530</x>
+      <y>560</y>
       <width>151</width>
       <height>26</height>
      </rect>
@@ -38,6 +38,70 @@
     </property>
    </widget>
   </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgb(192, 191, 188);</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>RightToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="Platform"/>
+   <addaction name="SpawnDuck"/>
+   <addaction name="SpawnGun"/>
+   <addaction name="separator"/>
+   <addaction name="Box"/>
+   <addaction name="AddRect"/>
+   <addaction name="separator"/>
+  </widget>
+  <action name="Platform">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Platform</string>
+   </property>
+   <property name="toolTip">
+    <string>platform</string>
+   </property>
+  </action>
+  <action name="SpawnDuck">
+   <property name="text">
+    <string>SpawnDuck</string>
+   </property>
+   <property name="toolTip">
+    <string>SpawnDuck</string>
+   </property>
+  </action>
+  <action name="SpawnGun">
+   <property name="text">
+    <string>SpawnGun</string>
+   </property>
+   <property name="toolTip">
+    <string>SpawnGun</string>
+   </property>
+  </action>
+  <action name="Box">
+   <property name="text">
+    <string>Box</string>
+   </property>
+   <property name="toolTip">
+    <string>Box</string>
+   </property>
+  </action>
+  <action name="AddRect">
+   <property name="text">
+    <string>AddRect</string>
+   </property>
+   <property name="toolTip">
+    <string>AddRect</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
