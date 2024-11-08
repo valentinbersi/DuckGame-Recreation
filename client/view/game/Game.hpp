@@ -13,6 +13,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "SpriteManager.h"
+#include "Camera.h"
 #include "Communicator.h"
 #include "ServerMessage.h"
 #include "GameStatus.h"
@@ -51,6 +52,7 @@ private:
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
     bool& twoPlayersLocal;
+    Camera camera;
 
     std::list<std::unique_ptr<DuckData>> ducks;
     //std::list<std::unique_ptr<GameObjectData>> objects;

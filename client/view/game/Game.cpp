@@ -26,7 +26,7 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width,
                window_height, SDL_WINDOW_RESIZABLE),
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
-        twoPlayersLocal(twoPlayersLocal){}
+        twoPlayersLocal(twoPlayersLocal), camera(window_width, window_height){}
 
 void Game::init() {
     std::unordered_map<DuckID, SpriteManager> spritesMapping = createSpritesMapping();
@@ -34,6 +34,7 @@ void Game::init() {
     IMG_Init(IMG_INIT_PNG);
 
     Texture backgroundTexture = startBackground();
+    camera.loadBackgroundSize(backgroundTexture);
     renderer.Present();
 
     while (running) {
@@ -47,6 +48,11 @@ void Game::init() {
         // hago un zoom de Y pixeles esto lo puedo guardar en alguna variable y luego DIBUJAR EL
         // BACKGROUND acorde para esto poner una funcion a vector2 que haga un promedio de los
         // vectores
+
+        if (!ducks.empty()) {
+            auto& firstDuck = ducks.front();
+            camera.update(firstDuck->position.x(), firstDuck->position.y());
+        }
 
         showBackground(backgroundTexture);
         updatePlayers(spritesMapping);
@@ -119,7 +125,7 @@ void Game::updatePlayers(std::unordered_map<DuckID, SpriteManager>& spritesMappi
     for (auto& duck: ducks) {
         DuckID duckID = duck->duckID;
         Vector2 coords = duck->position;
-        spritesMapping.at(duckID).updatePosition(coords.x(), coords.y());
+        spritesMapping.at(duckID).updatePosition(coords.x() - camera.getViewRect().x, coords.y() - camera.getViewRect().y);
         spritesMapping.at(duckID).update(duck->extraData[DuckData::PLAYING_DEAD_INDEX],
                                          duck->extraData[DuckData::CROUCHING_INDEX],
                                          duck->extraData[DuckData::IN_AIR_INDEX],
@@ -309,15 +315,19 @@ Texture Game::startBackground() {
 
 void Game::showBackground(Texture& backgroundTexture) {
     SDL_Rect dstRect;
+    dstRect.x = -camera.getViewRect().x;
+    dstRect.y = -camera.getViewRect().y;
+    dstRect.w = window_width * SCALE;
+    dstRect.h = window_height * SCALE;
+    renderer.Copy(backgroundTexture, NullOpt, dstRect);
+}
+    /*
+    SDL_Rect dstRect;
     dstRect.x = 0;
     dstRect.y = -1000;
     dstRect.w = window_width * SCALE;
     dstRect.h = window_height * SCALE;
-
-    // renderer.Clear();
-
-    renderer.Copy(backgroundTexture, NullOpt, dstRect);
-}
+    renderer.Copy(backgroundTexture, NullOpt, dstRect);*/
 
 /*void Game::selectLevel() {
     std::random_device rd;
