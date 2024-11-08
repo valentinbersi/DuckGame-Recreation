@@ -71,7 +71,7 @@ void GameLoop::addClient(const u16 clientID,
 BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCommands; }
 
 void GameLoop::broadcastStartGame() {
-    std::shared_ptr<ServerMessage> startMessage = std::make_shared<ReplyMessage>(1, 1);
+    std::shared_ptr<ServerMessage> startMessage = std::make_shared<ReplyMessage>(1, 1, 0);
     clientQueues.remove_if([&startMessage](const auto& clientQueue) {
         if (clientQueue.expired()) {
             return true;
