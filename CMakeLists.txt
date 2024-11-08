@@ -45,6 +45,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(yaml-cpp)
 
+add_dependencies(common yaml-cpp)
 target_link_libraries(common PUBLIC yaml-cpp)
 
 # set compiler warnings to the targets
