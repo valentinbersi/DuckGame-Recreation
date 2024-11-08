@@ -30,12 +30,22 @@ option(MAKE_WARNINGS_AS_ERRORS "Enable / disable warnings as errors." ON)
 
 message(CMAKE_CXX_COMPILER_ID="${CMAKE_CXX_COMPILER_ID}")
 
+include(FetchContent)
+
 # Define target: lib common between client, server and editor programs
 add_library(common STATIC)
 
 # add the source files that make the lib
 add_subdirectory(common/)
 
+FetchContent_Declare(
+        yaml-cpp
+        URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.zip
+)
+
+FetchContent_MakeAvailable(yaml-cpp)
+
+target_link_libraries(common PUBLIC yaml-cpp)
 
 # set compiler warnings to the targets
 include(cmake/CompilerWarnings.cmake)
@@ -48,7 +58,6 @@ target_include_directories(common PUBLIC .)
 
 # Install libSDL2pp (for client or editor)
 if (CLIENT OR EDITOR)
-    include(FetchContent)
     FetchContent_Declare(
             libSDL2pp
             URL https://github.com/libSDL2pp/libSDL2pp/archive/cc198c9a5657048bee67ece82de620b2d5661084.zip
