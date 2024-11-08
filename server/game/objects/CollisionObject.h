@@ -10,28 +10,34 @@
  * An Object that can collide with other collision objects
  */
 class CollisionObject: public Object2D {
-    u32 _collisionLayer;
-    u32 _collisionMask;
-    Shape2D* _shape;
+public:
+    constexpr static u8 LAYERS_COUNT = 32;
+
+private:
+    std::bitset<LAYERS_COUNT> _layers;
+    std::bitset<LAYERS_COUNT> _scannedLayers;
+    Shape2D* shape;
 
 protected:
     std::forward_list<std::weak_ptr<CollisionObject>> objectsToCollide;
 
     /**
-     * Construct a CollisionObject with the given parent, position, rotation, collision layer,
-     * collision mask, and shape
+     * Construct a CollisionObject with the given parent, position, rotation, layers, scanned
+     * layers, and shape
      * @param parent the parent Object
      * @param position the position of the CollisionObject
      * @param rotation the rotation of the CollisionObject
-     * @param collisionLayer the collision layer of the CollisionObject
-     * @param collisionMask the collision mask of the CollisionObject
+     * @param layers the layers that the object is in
+     * @param scanning the layers the object scans in search for other collisionObjects
      * @param shape the shape of the CollisionObject
      */
-    CollisionObject(Object* parent, Vector2 position, float rotation, u32 collisionLayer,
-                    u32 collisionMask, std::unique_ptr<Shape2D> shape);
+    CollisionObject(Object* parent, Vector2 position, float rotation,
+                    std::bitset<LAYERS_COUNT> layers, std::bitset<LAYERS_COUNT> scanning,
+                    std::unique_ptr<Shape2D> shape);
 
     /**
-     * Check if the CollisionObject collides with another CollisionObject
+     * Check if the CollisionObject collides with another CollisionObject.\n
+     * This method only checks the shape, layers are checked when registering collisions
      * @param other the other CollisionObject to check collision with
      * @return true if the CollisionObject collides with the other CollisionObject, false otherwise
      */
@@ -55,63 +61,63 @@ public:
      * Get the collision layers of the Object
      * @return the collision layers of the Object
      */
-    u32 collisionLayer() const;
+    std::bitset<LAYERS_COUNT> layers() const;
 
     /**
-     * Get the collision mask of the Object
-     * @return the collision mask of the Object
+     * Get the layers that this object scans
+     * @return the layers that this object scans
      */
-    u32 collisionMask() const;
+    std::bitset<LAYERS_COUNT> scannedLayers() const;
 
     /**
-     * Set the collision layer of the Object
-     * @param collisionLayer the collision layer to set
+     * Set the layers of the Object
+     * @param layers the collision layers to set
      * @return this CollisionObject
      */
-    CollisionObject& setCollisionLayer(u32 collisionLayer) noexcept;
+    CollisionObject& setLayers(std::bitset<LAYERS_COUNT> layers) noexcept;
 
     /**
-     * Activate collision for the given layer
-     * @param layer the layer to activate collision for
+     * Adds the object to the given layer
+     * @param layer the layer in which the object is going to be added
      * @return this CollisionObject
-     * @exception std::out_of_range if layer is not in the range [0, 31]
-     * @pre 0 <= layer <= 31
+     * @exception std::out_of_range if layer is not in the range [0, @code LAYER_COUNT@endcode)
+     * @pre 0 <= layer < @code LAYER_COUNT@endcode
      */
-    CollisionObject& activateCollisionLayer(u8 layer);
+    CollisionObject& addToLayer(u8 layer);
 
     /**
-     * Deactivate collision for the given layer
-     * @param layer the layer to deactivate collision for
+     * Remove the object from the given layer
+     * @param layer the layer from which the object is going to be removed
      * @return this CollisionObject
-     * @exception std::out_of_range if layer is not in the range [0, 31]
-     * @pre 0 <= layer <= 31
+     * @exception std::out_of_range if layer is not in the range [0, @code LAYER_COUNT@endcode)
+     * @pre 0 <= layer < @code LAYER_COUNT@endcode
      */
-    CollisionObject& deactivateCollisionLayer(u8 layer);
+    CollisionObject& removeFromLayer(u8 layer);
 
     /**
-     * Set the collision mask of the Object
-     * @param collisionMask the collision mask to set
+     * Set the scanned layers of the Object
+     * @param scannedLayers the scanned layers to set
      * @return this CollisionObject
      */
-    CollisionObject& setCollisionMask(u32 collisionMask) noexcept;
+    CollisionObject& setScannedLayers(std::bitset<LAYERS_COUNT> scannedLayers) noexcept;
 
     /**
-     * Activate the collision mask for the given layer
-     * @param layer the layer to activate the collision mask for
+     * Add a layer to the scanned layers
+     * @param layer the layer to be scanned by this object
      * @return this CollisionObject
-     * @exception std::out_of_range if layer is not in the range [0, 31]
-     * @pre 0 <= layer <= 31
+     * @exception std::out_of_range if layer is not in the range [0, @code LAYER_COUNT@endcode)
+     * @pre 0 <= layer < @code LAYER_COUNT@endcode
      */
-    CollisionObject& activateCollisionMask(u8 layer);
+    CollisionObject& addLayerToScan(u8 layer);
 
     /**
-     * Deactivate the collision mask for the given layer
-     * @param layer the layer to deactivate the collision mask for
+     * Remove a layer from the scanned layers
+     * @param layer the layer to stop being scanned by this object
      * @return this CollisionObject
-     * @exception std::out_of_range if layer is not in the range [0, 31]
-     * @pre 0 <= layer <= 31
+     * @exception std::out_of_range if layer is not in the range [0, @code LAYER_COUNT@endcode)
+     * @pre 0 <= layer < @code LAYER_COUNT@endcode
      */
-    CollisionObject& deactivateCollisionMask(u8 layer);
+    CollisionObject& removeLayerToScan(u8 layer);
 
     /**
      * Register a collision to process, the collision will only be processed if this collision

@@ -4,71 +4,61 @@
 #include <utility>
 
 CollisionObject::CollisionObject(Object* parent, Vector2 position, const float rotation,
-                                 const u32 collisionLayer, const u32 collisionMask,
+                                 const std::bitset<LAYERS_COUNT> layers,
+                                 const std::bitset<LAYERS_COUNT> scanning,
                                  std::unique_ptr<Shape2D> shape):
         Object2D(parent, std::move(position), rotation),
-        _collisionLayer(collisionLayer),
-        _collisionMask(collisionMask),
-        _shape(shape.release()) {}
+        _layers(layers),
+        _scannedLayers(scanning),
+        shape(shape.release()) {}
 
 bool CollisionObject::collidesWith(const CollisionObject& other) const {
-    return _shape->intersects(*other._shape);
+    return shape->intersects(*other.shape);
 }
 
-CollisionObject::~CollisionObject() { delete _shape; }
+CollisionObject::~CollisionObject() { delete shape; }
 
 void CollisionObject::updateInternal([[maybe_unused]] const float delta) {
     Object2D::updateInternal(delta);
-    _shape->center(position());
+    shape->center(position());
 }
 
-u32 CollisionObject::collisionLayer() const { return _collisionLayer; }
+std::bitset<CollisionObject::LAYERS_COUNT> CollisionObject::layers() const { return _layers; }
 
-u32 CollisionObject::collisionMask() const { return _collisionMask; }
+std::bitset<CollisionObject::LAYERS_COUNT> CollisionObject::scannedLayers() const {
+    return _scannedLayers;
+}
 
-CollisionObject& CollisionObject::setCollisionLayer(const u32 collisionLayer) noexcept {
-    _collisionLayer = collisionLayer;
+CollisionObject& CollisionObject::setLayers(const std::bitset<LAYERS_COUNT> layers) noexcept {
+    _layers = layers;
     return *this;
 }
 
-#define FIRST_BIT 1
-#define MAX_LAYER 31
-#define LAYER_OUT_OF_RANGE "layer must be between 0 and 32"
 
-CollisionObject& CollisionObject::activateCollisionLayer(const u8 layer) {
-    if (layer > MAX_LAYER)
-        throw std::out_of_range(LAYER_OUT_OF_RANGE);
-
-    _collisionLayer |= FIRST_BIT << layer;
+CollisionObject& CollisionObject::addToLayer(const u8 layer) {
+    _layers.set(layer);
     return *this;
 }
 
-CollisionObject& CollisionObject::deactivateCollisionLayer(const u8 layer) {
-    if (layer > MAX_LAYER)
-        throw std::out_of_range(LAYER_OUT_OF_RANGE);
-
-    _collisionLayer &= UINT32_MAX ^ FIRST_BIT << layer;
+CollisionObject& CollisionObject::removeFromLayer(const u8 layer) {
+    _layers.reset(layer);
     return *this;
 }
 
-CollisionObject& CollisionObject::setCollisionMask(const u32 collisionMask) noexcept {
-    _collisionMask = collisionMask;
+CollisionObject& CollisionObject::setScannedLayers(
+        const std::bitset<LAYERS_COUNT> scannedLayers) noexcept {
+
+    _scannedLayers = scannedLayers;
     return *this;
 }
 
-CollisionObject& CollisionObject::activateCollisionMask(const u8 layer) {
-    if (layer > MAX_LAYER)
-        throw std::out_of_range(LAYER_OUT_OF_RANGE);
-
-    _collisionMask |= 1 << layer;
+CollisionObject& CollisionObject::addLayerToScan(const u8 layer) {
+    _scannedLayers.set(layer);
     return *this;
 }
 
-CollisionObject& CollisionObject::deactivateCollisionMask(const u8 layer) {
-    if (layer > MAX_LAYER)
-        throw std::out_of_range(LAYER_OUT_OF_RANGE);
-
-    _collisionMask &= UINT32_MAX ^ 1 << layer;
+CollisionObject& CollisionObject::removeLayerToScan(const u8 layer) {
+    _scannedLayers.reset(layer);
     return *this;
 }
 
@@ -78,7 +68,8 @@ void CollisionObject::registerCollision(std::weak_ptr<CollisionObject> collision
     if (collisionObject.expired())
         throw std::invalid_argument(EXPIRED_COLLISION_OBJECT);
 
-    objectsToCollide.push_front(std::move(collisionObject));
+    if ((_layers & collisionObject.lock()->_scannedLayers).any())
+        objectsToCollide.push_front(std::move(collisionObject));
 }
 
 void CollisionObject::resetRegisteredCollisions() { objectsToCollide.clear(); }
