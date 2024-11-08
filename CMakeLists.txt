@@ -58,6 +58,15 @@ target_include_directories(common PUBLIC .)
 
 # Install libSDL2pp (for client or editor)
 if (CLIENT OR EDITOR)
+    add_custom_command(
+            OUTPUT ${CMAKE_BINARY_DIR}/install_dependencies.stamp
+            COMMAND ${CMAKE_COMMAND} -E env sudo bash ${CMAKE_SOURCE_DIR}/install_dependencies.sh
+            COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/install_dependencies.stamp
+            COMMENT "Installing dependencies, sudo password may be required."
+    )
+
+    add_custom_target(run_install_script ALL DEPENDS ${CMAKE_BINARY_DIR}/install_dependencies.stamp)
+
     FetchContent_Declare(
             libSDL2pp
             URL https://github.com/libSDL2pp/libSDL2pp/archive/cc198c9a5657048bee67ece82de620b2d5661084.zip
@@ -86,7 +95,7 @@ if (CLIENT)
     add_executable(DuckGame)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGame common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    add_dependencies(DuckGame common run_install_script SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(client)
@@ -125,7 +134,7 @@ if (EDITOR)
     add_executable(DuckGameLevelEditor)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGameLevelEditor common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    add_dependencies(DuckGameLevelEditor common run_install_script SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(editor)
