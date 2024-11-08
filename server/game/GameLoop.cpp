@@ -2,12 +2,15 @@
 
 #include <memory>
 #include <utility>
+#include <syslog.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
 
 #include "GameStatus.h"
 #include "ReplyMessage.h"
+
+#define ERROR_MSG "UNOWN ERROR DURING RUNTIME."
 
 float GameLoop::calculateDeltaTime() {
     const std::chrono::steady_clock::time_point frameTicks = std::chrono::steady_clock::now();
@@ -42,19 +45,33 @@ void GameLoop::broadcastGameStatus() {
 GameLoop::GameLoop(): prevTicks(std::chrono::milliseconds::zero()) {}
 
 void GameLoop::run() {
-    broadcastStartGame();
-    prevTicks = std::chrono::steady_clock::now();
-    game.start();
+    try{
+        broadcastStartGame();
+        prevTicks = std::chrono::steady_clock::now();
+        game.start();
 
-    while (_keep_running) {
-        const float deltaTime = calculateDeltaTime();
-        retrieveCurrentFrameCommands();
-        processCurrentFrameCommands();
-        game.updateInternal(deltaTime);
-        game.update(deltaTime);
-        broadcastGameStatus();
-        std::this_thread::sleep_for(std::chrono::milliseconds(30));  // 30 fps aprox
+        while (_keep_running) {
+            const float deltaTime = calculateDeltaTime();
+            retrieveCurrentFrameCommands();
+            processCurrentFrameCommands();
+            game.updateInternal(deltaTime);
+            game.update(deltaTime);
+            broadcastGameStatus();
+            std::this_thread::sleep_for(std::chrono::milliseconds(30));  // 30 fps aprox
+        }
+    }catch(const ClosedQueue& err){
+        //Expected when closing server
+    }catch(...){
+        syslog(LOG_CRIT, ERROR_MSG);
     }
+    _keep_running = false;
+    _is_alive = false;
+}
+
+void GameLoop::stop() {
+    clientCommands.close();
+    _keep_running = false;
+    _is_alive = false;
 }
 
 void GameLoop::addClient(const u16 clientID,

@@ -22,5 +22,7 @@ public:
 
     u16 creatGameSafe();
 
+    void stopAllGames();
+
     ~GameMapMonitor();
 };

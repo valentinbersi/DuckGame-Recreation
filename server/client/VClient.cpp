@@ -19,8 +19,6 @@ VirtualClient::~VirtualClient() {
     sender.stop();
     skt.shutdown(Socket::ShutdownOptions::READ_WRITE);
     skt.close();
-    // Despues ver si poner referenia nula y catch el error en el recevier.
-    sendQueue->close();
     receiver.join();
     sender.join();
 }

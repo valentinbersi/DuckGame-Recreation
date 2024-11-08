@@ -51,6 +51,8 @@ public:
      */
     void run() override;
 
+    void stop() override;
+
     /**
      * Add a client queue to the list of client queues
      * @param clientID the id of the client to add
