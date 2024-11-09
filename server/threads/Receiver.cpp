@@ -6,6 +6,7 @@
 #include <syslog.h>
 
 #define ERROR_MSG "UNOWN ERROR DURING RUNTIME."
+#define FORMAT "%s"
 
 Receiver::Receiver(ActiveSocket& socket,
                    std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> queueSender,
@@ -15,7 +16,7 @@ Receiver::Receiver(ActiveSocket& socket,
         clientID(clientID),
         lobbyResolver(monitor, queueSender, clientID) {}
 
-void Receiver::run() {
+void Receiver::run() noexcept {
     try {
         while (gameQueue == nullptr) {
             LobbyMessage lobbyMessage = recvProtocol.receiveLobbyMessage();
@@ -29,7 +30,7 @@ void Receiver::run() {
 
     } catch (const LibError& err) {
         if (is_alive()){
-            syslog(LOG_CRIT, err.what());
+            syslog(LOG_CRIT, FORMAT, err.what());
         }
         //expected otherwise
     } catch (const ClosedQueue& err) {

@@ -3,6 +3,7 @@
 #include <syslog.h>
 #include "LibError.h"
 #define ERROR_MSG "UNOWN ERROR DURING RUNTIME."
+#define FORMAT "%s"
 
 Sender::Sender(ActiveSocket& socket,
                std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>>& queue):
@@ -16,12 +17,12 @@ void Sender::run() noexcept {
 
     } catch (const ClosedQueue& err) {
         if (is_alive()){
-            syslog(LOG_INFO, err.what());
+            syslog(LOG_INFO, FORMAT, err.what());
         }
         //expected otherwise
     } catch (const LibError& err) {
         if (is_alive()){
-            syslog(LOG_CRIT, err.what());
+            syslog(LOG_CRIT, FORMAT, err.what());
         }
         //expected otherwise
     } catch (...) {

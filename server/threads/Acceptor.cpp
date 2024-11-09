@@ -6,6 +6,7 @@
 #include <syslog.h>
 
 #define ERROR_MSG "UNOWN ERROR DURING RUNTIME."
+#define FORMAT "%s"
 #define MAX_LOCAL_PLAYERS 2
 #define ID_START_COUNT -1
 
@@ -30,7 +31,7 @@ void Acceptor::run() noexcept {
         }
     } catch (const LibError& err) {
         if (is_alive()) {
-            syslog(LOG_CRIT, err.what());
+            syslog(LOG_CRIT, FORMAT, err.what());
         }
         // LibError originated from stop() call. Expected when closing the server.
     } catch (...) {
