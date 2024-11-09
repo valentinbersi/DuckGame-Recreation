@@ -124,7 +124,7 @@ public:
      * object is scanning the given object layer
      * @param collisionObject the collision object to register
      */
-    void registerCollision(std::weak_ptr<CollisionObject> collisionObject);
+    virtual void registerCollision(std::weak_ptr<CollisionObject> collisionObject);
 
     /**
      * Reset the registered collisions
