@@ -38,15 +38,15 @@ add_library(common STATIC)
 # add the source files that make the lib
 add_subdirectory(common/)
 
-FetchContent_Declare(
-        yaml-cpp
-        URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.zip
-)
-
-FetchContent_MakeAvailable(yaml-cpp)
-
-add_dependencies(common yaml-cpp)
-target_link_libraries(common PUBLIC yaml-cpp)
+#FetchContent_Declare(
+#        yaml-cpp
+#        URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.zip
+#)
+#
+#FetchContent_MakeAvailable(yaml-cpp)
+#
+#add_dependencies(common yaml-cpp)
+#target_link_libraries(common PUBLIC yaml-cpp)
 
 # set compiler warnings to the targets
 include(cmake/CompilerWarnings.cmake)
