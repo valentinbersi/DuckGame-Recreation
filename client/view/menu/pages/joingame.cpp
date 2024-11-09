@@ -54,36 +54,14 @@ bool joinGame::joinMatchRequest() {
             gameInfo.player2Name,
             gameInfo.matchID // esto deberia ser 0 ¿?
     );
-    qDebug() << "joinMatchRequest";
-    qDebug() << "matchID del message:" << message->matchId;
 
     if (!communicator.trysend(std::move(message))) {
         qDebug() << "Error al enviar el mensaje.";
-        return false;
+        return false; // ver como manejar aca
     }
 
-    // auto messageServerOpt = communicator.tryrecv();
-    // if (messageServerOpt.has_value()) {
-    //     std::unique_ptr<ServerMessage> messageServer = std::move(messageServerOpt.value());
-    //     ReplyMessage reply = dynamic_cast<ReplyMessage&>(*messageServer);
-    //     gameInfo.matchID = reply.matchID;
-    //     return true;
-    // } else {
-    //     QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
-    //     return false; // esto nose si es correcto, deberia manejarlo distinto yo creo.
-    // }
-
-    qDebug() << "se pide el mensaje reply al comunicador";
-    auto messageServerOpt = communicator.recv();
-    qDebug() << "se recibio reply";
-    const auto* reply = dynamic_cast<const ReplyMessage*>(messageServerOpt.get());
-    if(reply == nullptr){
-        QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
-        return false;
-    }
-    qDebug() << gameInfo.matchID << reply->matchID << reply->startGame;
-    if(gameInfo.matchID == reply->matchID && reply->startGame == 0) {
-        qDebug() << "retorna true";
+    ReplyMessage messageServer = communicator.recvSync();
+    if(gameInfo.matchID == messageServer.matchID && messageServer.startGame == 0) {
         return true;
     } else // ver los posibles mensajes al server: partida ya comenzada y partida no encontrada
     {return false;}

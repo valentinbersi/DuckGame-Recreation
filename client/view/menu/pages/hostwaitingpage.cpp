@@ -47,12 +47,22 @@ void hostWaitingPage::requestStartGame() {
        return; // chequear que hacer aca!
    }
 
-    ReplyMessage replyMessage = communicator.recvSync();
-    if (replyMessage.startGame == 1) {
-        emit startMatch();
-    } else {
-        QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
-        return;
+    while (true) {
+        ReplyMessage replyMessage = communicator.recvSync();
+
+        if (replyMessage.matchID != gameInfo.matchID) {
+            qDebug() << "Mensaje recibido de otro matchID";
+            continue;
+        }
+
+        if (replyMessage.startGame == 1) {
+            emit startMatch();
+            return;
+        } else if (replyMessage.startGame == 0) {
+            ui->labelPlayersConnected->setText(
+                    QString("PLAYERS CONNECTED: %1 / 4").arg(replyMessage.connectedPlayers)
+            );
+        }
     }
 }
 

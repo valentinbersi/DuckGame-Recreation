@@ -64,24 +64,8 @@ bool newGame::NewMatchRequest() {
         return false;
     }
 
-    // auto messageServerOpt = communicator.tryrecv();
-    // if (messageServerOpt.has_value()) {
-    //     std::unique_ptr<ServerMessage> messageServer = std::move(messageServerOpt.value());
-    //     ReplyMessage reply = dynamic_cast<ReplyMessage&>(*messageServer);
-    //     gameInfo.matchID = reply.matchID;
-    //     return true;
-    // } else {
-    //     QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
-    //     return false; // esto nose si es correcto, deberia manejarlo distinto yo creo.
-    // }
-
-    auto messageServerOpt = communicator.recv();
-    const ReplyMessage* reply = dynamic_cast<const ReplyMessage*>(messageServerOpt.get());
-    if (reply == nullptr) {
-        QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
-        return false;
-    }
-    gameInfo.matchID = reply->matchID;
+    ReplyMessage replyMessage = communicator.recvSync();
+    gameInfo.matchID = replyMessage.matchID;
     return true;
 }
 
