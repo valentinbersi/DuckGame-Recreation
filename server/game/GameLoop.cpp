@@ -3,18 +3,8 @@
 #include <memory>
 #include <utility>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_timer.h>
-
 #include "GameStatus.h"
 #include "ReplyMessage.h"
-
-float GameLoop::calculateDeltaTime() {
-    const std::chrono::steady_clock::time_point frameTicks = std::chrono::steady_clock::now();
-    const std::chrono::duration<float> deltaTime = frameTicks - prevTicks;
-    prevTicks = frameTicks;
-    return deltaTime.count();
-}
 
 void GameLoop::retrieveCurrentFrameCommands() {
     currentFrameCommands = std::move(clientCommands.popAll());
@@ -39,28 +29,30 @@ void GameLoop::broadcastGameStatus() {
     });
 }
 
-GameLoop::GameLoop(): prevTicks(std::chrono::milliseconds::zero()) {}
+GameLoop::GameLoop() = default;
+
+#define FPS 240
 
 void GameLoop::run() {
     broadcastStartGame();
-    prevTicks = std::chrono::steady_clock::now();
+    timer.start();
     game.start();
 
     while (_keep_running) {
-        const float deltaTime = calculateDeltaTime();
+        const float deltaTime = timer.iterationStartSeconds().count();
         retrieveCurrentFrameCommands();
         processCurrentFrameCommands();
         game.updateInternal(deltaTime);
         game.update(deltaTime);
         broadcastGameStatus();
-        std::this_thread::sleep_for(std::chrono::milliseconds(30));  // 30 fps aprox
+        timer.iterationEnd(FPS);
     }
 }
 
 void GameLoop::addClient(const u16 clientID,
                          std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue) {
     game.addPlayer(clientID);
-    for (const auto& queue : clientQueues) {
+    for (const auto& queue: clientQueues) {
         if (queue.lock().get() == clientQueue.lock().get()) {
             return;
         }
