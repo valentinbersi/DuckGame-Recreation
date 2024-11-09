@@ -40,12 +40,6 @@ void Game::init() {
         getSnapshot();
         renderer.Clear();
 
-        // corroboro que ningún duck se haya ido de la pantalla. si es así, debo quitar zoom de la
-        // pantalla en otro caso, si todos los patos están a más de X pixeles de lejanía los bordes,
-        // hago un zoom de Y pixeles esto lo puedo guardar en alguna variable y luego DIBUJAR EL
-        // BACKGROUND acorde para esto poner una funcion a vector2 que haga un promedio de los
-        // vectores
-
         camera.update(ducks);
         float currentScale = camera.getScale();
 
@@ -58,19 +52,7 @@ void Game::init() {
         handleEvents(spritesMapping);  // y según lo que pase acá... lo envío
 
         SDL_Delay(33);  // 33ms = 30fps
-
-
-
-        /*
-        handleEvents();       // handle user input
-        renderer.Clear();
-        showBackground(backgroundTexture);
-        update(player1);             //update ducks
-        //render();         render EVERYTHING again (outside players, that are being rendered in the player class)
-        SDL_Delay(33);
-        */
     }
-
 
     IMG_Quit();
 }
@@ -83,13 +65,8 @@ Texture Game::startBackground() {
 }
 
 void Game::getSnapshot() {
-    std::unique_ptr<GameStatus> snapshot;
-
-    std::optional<std::unique_ptr<ServerMessage>> optionalMessage = communicator.tryRecvLast();
-    if (optionalMessage.has_value()) {
-        std::unique_ptr<ServerMessage> message = std::move(optionalMessage.value());
-        snapshot = std::unique_ptr<GameStatus>(dynamic_cast<GameStatus*>(message.release()));
-    } else return;
+    std::optional<GameStatus> snapshot = communicator.tryrecv();
+    if (!snapshot.has_value()) return;
 
 
     clearObjects();
