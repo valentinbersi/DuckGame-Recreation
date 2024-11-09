@@ -96,7 +96,7 @@ if (CLIENT)
     add_executable(DuckGame)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGame common run_install_script SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    add_dependencies(DuckGame run_install_script yaml-cpp common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(client)
@@ -107,7 +107,7 @@ if (CLIENT)
     target_include_directories(DuckGame PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(DuckGame common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    target_link_libraries(DuckGame yaml-cpp common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     install(TARGETS DuckGame
             BUNDLE DESTINATION .
@@ -120,7 +120,7 @@ if (SERVER)
     add_executable(DuckGameDedicatedServer)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGameDedicatedServer common)
+    add_dependencies(DuckGameDedicatedServer yaml-cpp common)
 
     # Add source files and enable warnings
     add_subdirectory(server)
@@ -128,14 +128,14 @@ if (SERVER)
     set_project_warnings(DuckGameDedicatedServer ${MAKE_WARNINGS_AS_ERRORS} FALSE)
 
     # Link the taller_common lib target
-    target_link_libraries(DuckGameDedicatedServer common)
+    target_link_libraries(DuckGameDedicatedServer yaml-cpp common)
 endif ()
 
 if (EDITOR)
     add_executable(DuckGameLevelEditor)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGameLevelEditor common run_install_script SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    add_dependencies(DuckGameLevelEditor run_install_script yaml-cpp common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(editor)
@@ -146,7 +146,7 @@ if (EDITOR)
     target_include_directories(DuckGameLevelEditor PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(DuckGameLevelEditor common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    target_link_libraries(DuckGameLevelEditor yaml-cpp common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     install(TARGETS DuckGameLevelEditor
             BUNDLE DESTINATION .
