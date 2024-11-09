@@ -3,6 +3,8 @@
 #include <memory>
 #include <utility>
 
+#define NULL_SHAPE "Shape cannot be null"
+
 CollisionObject::CollisionObject(Object* parent, Vector2 position, const float rotation,
                                  const std::bitset<LAYERS_COUNT> layers,
                                  const std::bitset<LAYERS_COUNT> scanning,
@@ -10,7 +12,11 @@ CollisionObject::CollisionObject(Object* parent, Vector2 position, const float r
         Object2D(parent, std::move(position), rotation),
         _layers(layers),
         _scannedLayers(scanning),
-        shape(shape.release()) {}
+        shape(shape.release()) {
+
+    if (this->shape == nullptr)
+        throw std::invalid_argument(NULL_SHAPE);
+}
 
 bool CollisionObject::collidesWith(const CollisionObject& other) const {
     return shape->intersects(*other.shape);
@@ -21,6 +27,7 @@ CollisionObject::~CollisionObject() { delete shape; }
 void CollisionObject::updateInternal([[maybe_unused]] const float delta) {
     Object2D::updateInternal(delta);
     shape->center(position());
+    shape->rotation(rotation());
 }
 
 std::bitset<CollisionObject::LAYERS_COUNT> CollisionObject::layers() const { return _layers; }
