@@ -22,6 +22,11 @@ void Camera::update(std::list<std::unique_ptr<DuckData>>& ducks) {
     } else {
         x = 0;
     }
+
+    x = std::max(0.0f, std::min(x, static_cast<float>(backgroundWidth - windowWidth)));
+    y = std::max(0.0f, std::min(y, static_cast<float>(backgroundHeight - windowHeight)));
+
+
     calculateScale(ducks);
 }
 
