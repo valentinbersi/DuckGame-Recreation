@@ -32,9 +32,7 @@ void Camera::calculateScale(std::list<std::unique_ptr<DuckData>>& ducks) {
     // Adjust the scale value based on the maximum distance
     float desiredScale = std::clamp(25.0f / (maxDistance / 70.0f), 0.7f, 5.0f);
 
-    // Only update the scale if it has changed significantly
     if (std::abs(desiredScale - scale) > 0.01f) {
-        //float scaleChange = desiredScale / scale;
         scale = desiredScale;
     }
 }

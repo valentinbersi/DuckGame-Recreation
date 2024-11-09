@@ -143,11 +143,11 @@ SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather) {
     // Si es un sprite de pluma, ajustamos su posición
     if (isFeather) {
         if (isRightFeather) {
-            position.x += spriteWidth * 2 - OFFSET_RIGHT;
+            position.x += (spriteWidth * 2 - OFFSET_RIGHT) * scale / DEFAULT_SCALE;
         } else {
-            position.x += spriteWidth / 2 + OFFSET_LEFT;
+            position.x += (spriteWidth / 2 + OFFSET_LEFT) * scale / DEFAULT_SCALE;
         }
-        position.y += spriteWidth * 2 + OFFSET_Y;  // Ajuste para las plumas
+        position.y += (spriteWidth * 2 + OFFSET_Y) * scale / DEFAULT_SCALE;  // Ajuste para las plumas
     }
 
     return position;
