@@ -21,12 +21,6 @@ class GameLoop final: public Thread {
     Timer timer;
 
     /**
-     * Calculate the time between the previous frame and the current frame
-     * @return the time between the previous frame and the current frame in seconds
-     */
-    float calculateDeltaTime();
-
-    /**
      * Retrieve all the commands the clients send between the previous frame and the current frame
      */
     void retrieveCurrentFrameCommands();
