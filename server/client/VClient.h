@@ -12,8 +12,6 @@
 class VirtualClient {
 private:
     ActiveSocket skt;
-    // mapa de gameloops va aqui, referencia
-    // BlockingQueue<std::unique_ptr<Command>>* gameQueue;
     u16 id;
     std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> sendQueue;
     Receiver receiver;

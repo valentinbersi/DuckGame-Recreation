@@ -24,7 +24,7 @@ public:
 
     void sendDuck(const GameObjectData& objData);
 
-    void sendReplyMessage(u16 matchID, u8 startGame);
+    void sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers);
 
     ~ServerSendProtocol() = default;
 };

@@ -28,9 +28,10 @@ void ServerSendProtocol::sendDuck(const GameObjectData& objData) {
     sendDuckData(dynamic_cast<const DuckData*>(&objData));
 }
 
-void ServerSendProtocol::sendReplyMessage(u16 matchID, u8 startGame) {
+void ServerSendProtocol::sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers) {
     sendShort(matchID);
     sendByte(startGame);
+    sendByte(connectedPlayers);
 }
 
 void ServerSendProtocol::sendLen(u16 len) { sendShort(len); }

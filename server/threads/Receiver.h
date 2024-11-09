@@ -21,7 +21,7 @@ public:
              std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> queueSender,
              GameMapMonitor& monitor, const u16& clientID);
 
-    void run() override;
+    void run() noexcept override;
 
     void stop() override;
 

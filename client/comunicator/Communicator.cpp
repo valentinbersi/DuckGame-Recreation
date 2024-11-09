@@ -4,6 +4,7 @@ Communicator::Communicator(const std::string& hostname, const std::string& serve
         skt(hostname.c_str(), servername.c_str()),
         sendQueue(),
         recvQueue(),
+        sync(skt),
         sender(skt, sendQueue),
         receiver(skt, recvQueue) {
     sender.start();
@@ -14,21 +15,23 @@ bool Communicator::trysend(std::unique_ptr<ClientMessage> message) {
     return sendQueue.try_push(std::move(message));
 }
 
-std::optional<std::unique_ptr<ServerMessage>> Communicator::tryrecv() {
+std::optional<GameStatus> Communicator::tryrecv() {
     return recvQueue.try_pop();
 }
 
-std::optional<std::unique_ptr<ServerMessage>> Communicator::tryRecvLast() {
-    std::queue<std::unique_ptr<ServerMessage>> queue = recvQueue.popAll();
+std::optional<GameStatus> Communicator::tryRecvLast() {
+    std::queue<GameStatus> queue = recvQueue.popAll();
     if (queue.empty()) {
         return std::nullopt;
     }
-    std::unique_ptr<ServerMessage> message = std::move(queue.back());
+    GameStatus message = std::move(queue.back());
     queue.pop();
     return message;
 }
 
-std::unique_ptr<ServerMessage> Communicator::recv() { return recvQueue.pop(); }
+void Communicator::sendSync(std::unique_ptr<ClientMessage> message) { sync.sendMessage(std::move(message)); }
+
+ReplyMessage Communicator::recvSync() { return sync.recvMessage(); }
 
 Communicator::~Communicator() {
     sender.stop();

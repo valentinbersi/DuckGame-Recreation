@@ -29,22 +29,21 @@ std::unique_ptr<GameObjectData> ClientRecvProtocol::recvData() {
     return idsMap[id]();
 }
 
-std::unique_ptr<ServerMessage> ClientRecvProtocol::recvGameStatus() {
+GameStatus ClientRecvProtocol::recvGameStatus() {
+    recv_byte(); //type
     u16 size = recvShort();
-    std::unique_ptr<GameStatus> statusPtr = std::make_unique<GameStatus>();
+    GameStatus status;
     while (size) {
-        statusPtr->gameObjects.emplace_back(recvData());
+        status.gameObjects.emplace_back(recvData());
         size--;
     }
-    return statusPtr;
+    return status;
 }
 
-std::unique_ptr<ServerMessage> ClientRecvProtocol::receiveMessage() {
-    MessageType type = recv_byte();
-    if (type == MessageType::Game) {
-        return recvGameStatus();
-    }
+ReplyMessage ClientRecvProtocol::recvReplyMessage() {
+    recv_byte(); //type
     u16 matchID = recvShort();
     u8 startGame = recv_byte();
-    return std::make_unique<ReplyMessage>(matchID, startGame);
+    u8 connectedPlayers = recv_byte();  
+    return ReplyMessage(matchID, startGame, connectedPlayers);
 }
