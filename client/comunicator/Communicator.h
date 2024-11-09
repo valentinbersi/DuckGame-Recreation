@@ -25,6 +25,8 @@ private:
 public:
     explicit Communicator(const std::string& hostname, const std::string& servername);
 
+    void runAsync();
+
     bool trysend(std::unique_ptr<ClientMessage> message);
 
     std::optional<GameStatus> tryrecv();

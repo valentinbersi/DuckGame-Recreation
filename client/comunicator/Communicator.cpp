@@ -7,6 +7,9 @@ Communicator::Communicator(const std::string& hostname, const std::string& serve
         sync(skt),
         sender(skt, sendQueue),
         receiver(skt, recvQueue) {
+}
+
+void Communicator::runAsync() {
     sender.start();
     receiver.start();
 }
