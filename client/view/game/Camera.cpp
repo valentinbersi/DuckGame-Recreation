@@ -7,6 +7,8 @@ Camera::Camera(int& windowWidth, int& windowHeight):
         y(0), scale(0), oldScale(0) {}
 
 void Camera::update(std::list<std::unique_ptr<DuckData>>& ducks) {
+    if (ducks.empty()) return;
+
     Vector2 center = centerOfDucks(ducks);
     float targetX = center.x();
     float targetY = center.y();
@@ -24,12 +26,16 @@ void Camera::update(std::list<std::unique_ptr<DuckData>>& ducks) {
 }
 
 void Camera::calculateScale(std::list<std::unique_ptr<DuckData>>& ducks) {
-    if (ducks.size() < 2) return;
+    if (ducks.size() == 1) {
+        scale = 4.0f;
+        auto& duck = ducks.front();
+        x = duck->position.x() - windowWidth / 2;
+        y = duck->position.y() - windowHeight / 2;
+        return;
+    }
+
     oldScale = scale;
-
     float maxDistance = calculateMaxDistance(ducks);
-
-    // Adjust the scale value based on the maximum distance
     float desiredScale = std::clamp(25.0f / (maxDistance / 70.0f), 0.7f, 5.0f);
 
     if (std::abs(desiredScale - scale) > 0.01f) {

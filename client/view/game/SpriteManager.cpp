@@ -135,16 +135,15 @@ void SpriteManager::setFlags(bool air, bool flap, bool right, bool left) {
 SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather) {
     int spriteWidth = spritesheet->getClipWidth();
     int spriteHeight = spritesheet->getClipHeight();
-    // Crear el rectángulo de posición, manteniendo las coordenadas globales (m_position_x, m_position_y)
     SDL2pp::Rect position(m_position_x, m_position_y, spriteWidth * scale, spriteHeight * scale);
-    // Si es un sprite de pluma, ajustamos su posición
+
     if (isFeather) {
         if (isRightFeather) {
             position.x += (spriteWidth * 2 - OFFSET_RIGHT) * scale / DEFAULT_SCALE;
         } else {
             position.x += (spriteWidth / 2 + OFFSET_LEFT) * scale / DEFAULT_SCALE;
         }
-        position.y += (spriteWidth * 2 + OFFSET_Y) * scale / DEFAULT_SCALE;  // Ajuste para las plumas
+        position.y += (spriteWidth * 2 + OFFSET_Y) * scale / DEFAULT_SCALE;
     }
 
     return position;
