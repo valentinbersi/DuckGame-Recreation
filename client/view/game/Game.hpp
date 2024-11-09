@@ -13,6 +13,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "SpriteManager.h"
+#include "Camera.h"
 #include "Communicator.h"
 #include "ServerMessage.h"
 #include "GameStatus.h"
@@ -32,12 +33,14 @@ public:
 
 private:
     //void selectLevel();
+    bool isFullscreen(SDL2pp::Window& window);
+    void setFullscreen(bool fullscreen);
     SDL2pp::Texture startBackground();
-    void handleEvents();
+    void handleEvents(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping);
+    void handleScreenEvents(SDL_Event& event, bool isKeyDown, SDL_Scancode& scancode, std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping);
     void handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown);
-    std::unordered_map<DuckID, SpriteManager> createSpritesMapping();
-    void updatePlayers(std::unordered_map<DuckID, SpriteManager>& spritesMapping);
-    Vector2 centerOfDucks();
+    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping();
+    void updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping, float currentScale);
     void getSnapshot();
     void showBackground(SDL2pp::Texture& backgroundTexture);
 
@@ -51,6 +54,7 @@ private:
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
     bool& twoPlayersLocal;
+    Camera camera;
 
     std::list<std::unique_ptr<DuckData>> ducks;
     //std::list<std::unique_ptr<GameObjectData>> objects;

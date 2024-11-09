@@ -35,30 +35,19 @@ SpriteManager::SpriteManager(
         in_air(false),
         flapping(false),
         flip(false),
-        spritesheet(path1, path2, renderer),
+        spritesheet(std::make_unique<Spritesheet>(path1, path2, renderer)),
         frame(0),
         flappingFrame(0),
         m_position_x(0),
-        m_position_y(0) {
-
-    // Really needed? Idk
-    /*
-    spritesheet.selectSprite(SPRITE_IDLE, SPRITE_IDLE, NO_FEATHER);
-    int playerWidth = spritesheet.getClipWidth();
-    int playerHeight = spritesheet.getClipHeight();
-    m_position_x = (window_width - playerWidth * scale) / 2;
-    m_position_y = (window_height - playerHeight * scale) / 2 + DEFAULT_OFFSET_Y;*/
-}
+        m_position_y(0) {}
 
 void SpriteManager::updatePosition(float new_x, float new_y) {
     m_position_x = new_x;
     m_position_y = new_y;
 }
 
-// un bool 'started' para inicializar el playerWidth etc?
 void SpriteManager::update(bool playing_dead, bool crouching, bool air, bool flap,
                            bool being_damaged, bool right, bool left) {
-
     if (left)
         flip = true;
     else if (right)
@@ -72,11 +61,8 @@ void SpriteManager::update(bool playing_dead, bool crouching, bool air, bool fla
 
         } else if (playing_dead) {
             draw(SPRITESHEET_PLAYING_DEAD_COL, SPRITESHEET_DEAD_ROW);
-            // draw
-
         } else {
             draw(SPRITESHEET_CROUCH_COL, SPRITESHEET_CROUCH_ROW);
-            // draw
         }
         return;
     }
@@ -92,19 +78,19 @@ void SpriteManager::update(bool playing_dead, bool crouching, bool air, bool fla
 
 void SpriteManager::draw(int col, int row) {
     // Sprite
-    spritesheet.selectSprite(col, row, NO_FEATHER);
+    spritesheet->selectSprite(col, row, NO_FEATHER);
     SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER);
-    spritesheet.drawSelectedSprite(position, flip, NO_FEATHER, NO_RIGHT_FEATHER);
+    spritesheet->drawSelectedSprite(position, flip, NO_FEATHER/*, NO_RIGHT_FEATHER*/);
 
     if (not flip) {
-        spritesheet.selectSprite(col, row, FEATHER);
+        spritesheet->selectSprite(col, row, FEATHER);
         position = getPosition(FEATHER, NO_RIGHT_FEATHER);
-        spritesheet.drawSelectedSprite(position, flip, FEATHER, NO_RIGHT_FEATHER);
+        spritesheet->drawSelectedSprite(position, flip, FEATHER/*, NO_RIGHT_FEATHER*/);
 
     } else if (flip || in_air || flapping /* etc*/) {
-        spritesheet.selectSprite(col, row, FEATHER);
+        spritesheet->selectSprite(col, row, FEATHER);
         position = getPosition(FEATHER, RIGHT_FEATHER);
-        spritesheet.drawSelectedSprite(position, flip, FEATHER, RIGHT_FEATHER);
+        spritesheet->drawSelectedSprite(position, flip, FEATHER/*, RIGHT_FEATHER*/);
     }
 }
 
@@ -147,35 +133,25 @@ void SpriteManager::setFlags(bool air, bool flap, bool right, bool left) {
 }*/
 
 SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather) {
-    int spriteWidth = spritesheet.getClipWidth();
-    int spriteHeight = spritesheet.getClipHeight();
+    int spriteWidth = spritesheet->getClipWidth();
+    int spriteHeight = spritesheet->getClipHeight();
+    // Crear el rectángulo de posición, manteniendo las coordenadas globales (m_position_x, m_position_y)
     SDL2pp::Rect position(m_position_x, m_position_y, spriteWidth * scale, spriteHeight * scale);
-
+    // Si es un sprite de pluma, ajustamos su posición
     if (isFeather) {
         if (isRightFeather) {
-            position.x += spriteWidth * 2 - OFFSET_RIGHT;
+            position.x += (spriteWidth * 2 - OFFSET_RIGHT) * scale / DEFAULT_SCALE;
         } else {
-            position.x +=
-                    spriteWidth / 2 +
-                    OFFSET_LEFT;  //(duck width - (feathers width / 2) + 1 (offset) ) - duck width ?
+            position.x += (spriteWidth / 2 + OFFSET_LEFT) * scale / DEFAULT_SCALE;
         }
-        position.y +=
-                spriteWidth * 2 + OFFSET_Y;  // duck height + (feathers height / 2) - 4 (offset)
+        position.y += (spriteWidth * 2 + OFFSET_Y) * scale / DEFAULT_SCALE;  // Ajuste para las plumas
     }
 
     return position;
 }
 
-void SpriteManager::incFrame() {
-    frame += 1;
-    // if frame... ? (caminar y saltar tienen el mismo número de sprites)
-    //  pero si empieza a usar las feathers, se quedará en el sprite n = 3 (4)
+Spritesheet& SpriteManager::getSpritesheet() {return *spritesheet;}
+
+void SpriteManager::setScale(float newScale) {
+    scale = newScale;
 }
-
-void SpriteManager::incFlappingFrame() { flappingFrame += 1; }
-
-void SpriteManager::resetFrame() { frame = 0; }
-
-void SpriteManager::resetFlappingFrame() { flappingFrame = 0; }
-
-void SpriteManager::changeFlapping() { flapping = !flapping; }

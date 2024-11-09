@@ -26,71 +26,48 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width,
                window_height, SDL_WINDOW_RESIZABLE),
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
-        twoPlayersLocal(twoPlayersLocal){}
+        twoPlayersLocal(twoPlayersLocal), camera(window_width, window_height){}
 
 void Game::init() {
-    std::unordered_map<DuckID, SpriteManager> spritesMapping = createSpritesMapping();
+    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping = createSpritesMapping();
     SDL sdl(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG);
 
     Texture backgroundTexture = startBackground();
-    renderer.Present();
+    camera.loadBackgroundSize(backgroundTexture);
 
     while (running) {
-        getSnapshot();  // handle everything sended by the gameloop
-        // Vector2 center = centerOfDucks();
-
+        getSnapshot();
         renderer.Clear();
 
-        // corroboro que ningún duck se haya ido de la pantalla. si es así, debo quitar zoom de la
-        // pantalla en otro caso, si todos los patos están a más de X pixeles de lejanía los bordes,
-        // hago un zoom de Y pixeles esto lo puedo guardar en alguna variable y luego DIBUJAR EL
-        // BACKGROUND acorde para esto poner una funcion a vector2 que haga un promedio de los
-        // vectores
+        camera.update(ducks);
+        float currentScale = camera.getScale();
 
         showBackground(backgroundTexture);
-        updatePlayers(spritesMapping);
+        updatePlayers(spritesMapping, currentScale);
         // updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
         renderer.Present();
         clearObjects();
 
-        handleEvents();  // y según lo que pase acá... lo envío
+        handleEvents(spritesMapping);  // y según lo que pase acá... lo envío
 
         SDL_Delay(33);  // 33ms = 30fps
-
-
-
-        /*
-        handleEvents();       // handle user input
-        renderer.Clear();
-        showBackground(backgroundTexture);
-        update(player1);             //update ducks
-        //render();         render EVERYTHING again (outside players, that are being rendered in the player class)
-        SDL_Delay(33);
-        */
     }
-
 
     IMG_Quit();
 }
 
+Texture Game::startBackground() {
+    SDL_Surface* rawBackgroundSurface = IMG_Load("../assets/background/background1.png");
+    Surface backgroundSurface(rawBackgroundSurface);
+    Texture backgroundTexture(renderer, backgroundSurface);
+    return backgroundTexture;
+}
+
 void Game::getSnapshot() {
-    std::unique_ptr<GameStatus> snapshot;
+    std::optional<GameStatus> snapshot = communicator.tryrecv();
+    if (!snapshot.has_value()) return;
 
-    std::optional<std::unique_ptr<ServerMessage>> optionalMessage = communicator.tryRecvLast();
-    if (optionalMessage.has_value()) {
-        std::unique_ptr<ServerMessage> message = std::move(optionalMessage.value());
-        snapshot = std::unique_ptr<GameStatus>(dynamic_cast<GameStatus*>(message.release()));
-    } else {
-        return;
-    }
-
-    // aca deberia conseguir los diversos duck data hasta que en el casteo dinamico me de nullptr
-    // en ese caso no habrán más ducks y ya entraré a los objetos
-
-    // acomodarme cosas en sublistas. sublistas de patos, de armas, de bloques, objetos... etc
-    // al final hago clear a cada sublista y vuelvo a obtener una nueva snapshot
-    // para esto puedo mover punteros para lo que necesito
 
     clearObjects();
     for (auto& gameObject: snapshot->gameObjects) {
@@ -115,12 +92,13 @@ void Game::getSnapshot() {
     }
 }
 
-void Game::updatePlayers(std::unordered_map<DuckID, SpriteManager>& spritesMapping) {
+void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping, float currentScale) {
     for (auto& duck: ducks) {
         DuckID duckID = duck->duckID;
         Vector2 coords = duck->position;
-        spritesMapping.at(duckID).updatePosition(coords.x(), coords.y());
-        spritesMapping.at(duckID).update(duck->extraData[DuckData::PLAYING_DEAD_INDEX],
+        spritesMapping.at(duckID)->updatePosition(coords.x() - camera.getViewRect().x, coords.y() - camera.getViewRect().y);
+        spritesMapping.at(duckID)->setScale(currentScale);
+        spritesMapping.at(duckID)->update(duck->extraData[DuckData::PLAYING_DEAD_INDEX],
                                          duck->extraData[DuckData::CROUCHING_INDEX],
                                          duck->extraData[DuckData::IN_AIR_INDEX],
                                          duck->extraData[DuckData::FLAPPING_INDEX],
@@ -152,70 +130,34 @@ void Game::updatePlayers(std::unordered_map<DuckID, SpriteManager>& spritesMappi
     }
 }*/
 
+void Game::showBackground(Texture& backgroundTexture) {
+    SDL_Rect dstRect;
+    dstRect.x = 0;
+    dstRect.y = 0;
+    SDL_GetWindowSize(window.Get(), &window_width, &window_height);
+    dstRect.w = window_width;
+    dstRect.h = window_height;
 
-Vector2 Game::centerOfDucks() {
-    float coordsX = 0.0f;
-    float coordsY = 0.0f;
-    size_t duckCount = ducks.size();
-
-    for (auto& duck: ducks) {
-        coordsX += duck->position.x();
-        coordsY += duck->position.y();
-    }
-
-    if (duckCount > 0) {
-        coordsX /= static_cast<float>(duckCount);
-        coordsY /= static_cast<float>(duckCount);
-    }
-
-    Vector2 result(coordsX, coordsY);
-    return result;
-
-    // dividirlo por el numero por el que se multiplicó (dicho por valen etc (preguntar numero
-    // exacto))
+    renderer.Copy(backgroundTexture, NullOpt, dstRect);
 }
 
-void Game::clearObjects() { ducks.clear(); }
-
-std::unordered_map<DuckID, SpriteManager> Game::createSpritesMapping() {
-    std::unordered_map<DuckID, SpriteManager> spritesMapping;
+std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> Game::createSpritesMapping() {
+    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping;
 
     spritesMapping.emplace(
             DuckID::White,
-            SpriteManager(whiteSheet, whiteFeathers, renderer /*, window_width, window_height*/));
+            std::make_unique<SpriteManager>(whiteSheet, whiteFeathers, renderer /*, window_width, window_height*/));
     spritesMapping.emplace(
             DuckID::Orange,
-            SpriteManager(orangeSheet, orangeFeathers, renderer /*, window_width, window_height*/));
+            std::make_unique<SpriteManager>(orangeSheet, orangeFeathers, renderer /*, window_width, window_height*/));
     spritesMapping.emplace(
             DuckID::Yellow,
-            SpriteManager(yellowSheet, yellowFeathers, renderer /*, window_width, window_height*/));
-    spritesMapping.emplace(DuckID::Grey, SpriteManager(greySheet, greyFeathers,
+            std::make_unique<SpriteManager>(yellowSheet, yellowFeathers, renderer /*, window_width, window_height*/));
+    spritesMapping.emplace(DuckID::Grey, std::make_unique<SpriteManager>(greySheet, greyFeathers,
                                                        renderer /*, window_width, window_height*/));
 
     return spritesMapping;
 }
-
-// ANOTHER FORM... (I think this is better, but i'm not sure)
-
-/*std::unordered_map<DuckID, SpriteManager>& createSpritesMapping(SDL2pp::Renderer& renderer) {
-    static std::unordered_map<DuckID, SpriteManager> spritesMapping;
-
-    const std::vector<std::pair<DuckID, std::pair<const char*, const char*>>> duckData = {
-        {DuckID::White, {whiteSheet, whiteFeathers}},
-        {DuckID::Orange, {orangeSheet, orangeFeathers}},
-        {DuckID::Yellow, {yellowSheet, yellowFeathers}},
-        {DuckID::Grey, {greySheet, greyFeathers}}
-    };
-
-    for (const auto& data : duckData) {
-        SDL2pp::Texture textureImage(renderer, data.second.first);
-        SDL2pp::Texture textureFeathers(renderer, data.second.second);
-        spritesMapping.emplace(data.first, SpriteManager(data.second.first, data.second.second,
-renderer, textureImage, textureFeathers));
-    }
-
-    return spritesMapping;
-}*/
 
 void Game::handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown) {
     const auto& keyMapping = isKeyDown ? keyMappingPressed : keyMappingReleased;
@@ -237,87 +179,52 @@ void Game::handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown) {
     }
 }
 
-void Game::handleEvents() {
+void Game::handleEvents(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping) {
     SDL_Event event;
-
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
             SDL_Scancode scancode = event.key.keysym.scancode;
             bool isKeyDown = (event.type == SDL_KEYDOWN);
             handleKeyEvent(scancode, isKeyDown);
-        } else if (event.type == SDL_QUIT) {
-            running = false;
-        }
-    }
-}
-
-
-/*void Game::handleEvents() {
-    SDL_Event event;
-
-    while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_KEYDOWN) {
-            SDL_Scancode scancode = event.key.keysym.scancode;
-            auto it = keyMappingPressed.find(scancode);
-            if (it != keyMappingPressed.end()) {
-                InputAction m_key = it->second;
-                auto message = std::make_unique<GameMessage>(m_key);
-                communicator.trysend(std::move(message));
-            }
-
-            if (twoPlayersLocal) {
-                auto it2 = keyMappingPressedPlayer2.find(scancode);
-                if (it2 != keyMappingPressedPlayer2.end()) {
-                    InputAction m_key = it2->second;
-                    auto message = std::make_unique<GameMessage>(m_key);
-                    communicator.trysend(std::move(message));
-                }
-            }
-
-        } else if (event.type == SDL_KEYUP) {
-            SDL_Scancode scancode = event.key.keysym.scancode;
-            auto it = keyMappingReleased.find(scancode);
-            if (it != keyMappingReleased.end()) {
-                InputAction m_key = it->second;
-                auto message = std::make_unique<GameMessage>(m_key);
-                communicator.trysend(std::move(message));
-            }
-
-            if (twoPlayersLocal) {
-                auto it2 = keyMappingReleasedPlayer2.find(scancode);
-                if (it2 != keyMappingReleasedPlayer2.end()) {
-                    InputAction m_key = it2->second;
-                    auto message = std::make_unique<GameMessage>(m_key);
-                    communicator.trysend(std::move(message));
-                }
-            }
+            handleScreenEvents(event, isKeyDown, scancode, spritesMapping);
 
         } else if (event.type == SDL_QUIT) {
             running = false;
         }
     }
-}*/
-
-Texture Game::startBackground() {
-    SDL_Surface* rawBackgroundSurface = IMG_Load("../assets/background/background1.png");
-    Surface backgroundSurface(rawBackgroundSurface);
-    Texture backgroundTexture(renderer, backgroundSurface);
-
-    showBackground(backgroundTexture);
-    return backgroundTexture;
 }
 
-void Game::showBackground(Texture& backgroundTexture) {
-    SDL_Rect dstRect;
-    dstRect.x = 0;
-    dstRect.y = -1000;
-    dstRect.w = window_width * SCALE;
-    dstRect.h = window_height * SCALE;
-
-    // renderer.Clear();
-
-    renderer.Copy(backgroundTexture, NullOpt, dstRect);
+void Game::handleScreenEvents(SDL_Event& event, bool isKeyDown, SDL_Scancode& scancode, std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping) {
+    if (isKeyDown && scancode == SDL_SCANCODE_F11) {
+        if (isFullscreen(window)) {
+            setFullscreen(false);
+        } else {
+            setFullscreen(true);
+        }
+    } else if (event.type == SDL_WINDOWEVENT) {
+        if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+            SDL_GetWindowSize(window.Get(), &window_width, &window_height);
+            camera.update(ducks);
+            float currentScale = camera.getScale();
+            updatePlayers(spritesMapping, currentScale);
+        }
+    }
 }
+
+bool Game::isFullscreen(Window& window) {
+    Uint32 flags = SDL_GetWindowFlags(window.Get());
+    return (flags & SDL_WINDOW_FULLSCREEN) || (flags & SDL_WINDOW_FULLSCREEN_DESKTOP);
+}
+
+void Game::setFullscreen(bool fullscreen) {
+    if (fullscreen) {
+        SDL_SetWindowFullscreen(window.Get(), SDL_WINDOW_FULLSCREEN_DESKTOP);
+    } else {
+        SDL_SetWindowFullscreen(window.Get(), 0);
+    }
+    SDL_GetWindowSize(window.Get(), &window_width, &window_height);
+}
+
 
 /*void Game::selectLevel() {
     std::random_device rd;
@@ -328,6 +235,8 @@ void Game::showBackground(Texture& backgroundTexture) {
 
     selectedLevel = levels[randomLevel];
 }*/
+
+void Game::clearObjects() { ducks.clear(); }
 
 Game::~Game() {
     // SDL_DestroyRenderer(renderer.Get());

@@ -1,4 +1,5 @@
 #include "ComSync.h"
+#include "ClientMessage.h"
 
 CommunicatorSync::CommunicatorSync(ActiveSocket& socket): sendProtocol(socket), recvProtocol(socket) {}
 
