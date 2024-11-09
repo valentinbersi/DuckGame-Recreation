@@ -35,7 +35,6 @@ void Game::init() {
 
     Texture backgroundTexture = startBackground();
     camera.loadBackgroundSize(backgroundTexture);
-    //renderer.Present();
 
     while (running) {
         getSnapshot();
@@ -56,7 +55,7 @@ void Game::init() {
         renderer.Present();
         clearObjects();
 
-        handleEvents();  // y según lo que pase acá... lo envío
+        handleEvents(spritesMapping);  // y según lo que pase acá... lo envío
 
         SDL_Delay(33);  // 33ms = 30fps
 
@@ -74,6 +73,13 @@ void Game::init() {
 
 
     IMG_Quit();
+}
+
+Texture Game::startBackground() {
+    SDL_Surface* rawBackgroundSurface = IMG_Load("../assets/background/background1.png");
+    Surface backgroundSurface(rawBackgroundSurface);
+    Texture backgroundTexture(renderer, backgroundSurface);
+    return backgroundTexture;
 }
 
 void Game::getSnapshot() {
@@ -147,7 +153,16 @@ void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManage
     }
 }*/
 
-void Game::clearObjects() { ducks.clear(); }
+void Game::showBackground(Texture& backgroundTexture) {
+    SDL_Rect dstRect;
+    dstRect.x = 0;
+    dstRect.y = 0;
+    SDL_GetWindowSize(window.Get(), &window_width, &window_height);
+    dstRect.w = window_width;
+    dstRect.h = window_height;
+
+    renderer.Copy(backgroundTexture, NullOpt, dstRect);
+}
 
 std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> Game::createSpritesMapping() {
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping;
@@ -187,36 +202,50 @@ void Game::handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown) {
     }
 }
 
-void Game::handleEvents() {
+void Game::handleEvents(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping) {
     SDL_Event event;
-
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
             SDL_Scancode scancode = event.key.keysym.scancode;
             bool isKeyDown = (event.type == SDL_KEYDOWN);
             handleKeyEvent(scancode, isKeyDown);
+            handleScreenEvents(event, isKeyDown, scancode, spritesMapping);
+
         } else if (event.type == SDL_QUIT) {
             running = false;
         }
     }
 }
 
-Texture Game::startBackground() {
-    SDL_Surface* rawBackgroundSurface = IMG_Load("../assets/background/background1.png");
-    Surface backgroundSurface(rawBackgroundSurface);
-    Texture backgroundTexture(renderer, backgroundSurface);
-    return backgroundTexture;
+void Game::handleScreenEvents(SDL_Event& event, bool isKeyDown, SDL_Scancode& scancode, std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping) {
+    if (isKeyDown && scancode == SDL_SCANCODE_F11) {
+        if (isFullscreen(window)) {
+            setFullscreen(false);
+        } else {
+            setFullscreen(true);
+        }
+    } else if (event.type == SDL_WINDOWEVENT) {
+        if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+            SDL_GetWindowSize(window.Get(), &window_width, &window_height);
+            camera.update(ducks);
+            float currentScale = camera.getScale();
+            updatePlayers(spritesMapping, currentScale);
+        }
+    }
 }
 
-void Game::showBackground(Texture& backgroundTexture) {
-    SDL_Rect dstRect;
-    dstRect.x = 0;
-    dstRect.y = 0;
-    SDL_GetWindowSize(window.Get(), &window_width, &window_height);
-    dstRect.w = window_width;
-    dstRect.h = window_height;
+bool Game::isFullscreen(Window& window) {
+    Uint32 flags = SDL_GetWindowFlags(window.Get());
+    return (flags & SDL_WINDOW_FULLSCREEN) || (flags & SDL_WINDOW_FULLSCREEN_DESKTOP);
+}
 
-    renderer.Copy(backgroundTexture, NullOpt, dstRect);
+void Game::setFullscreen(bool fullscreen) {
+    if (fullscreen) {
+        SDL_SetWindowFullscreen(window.Get(), SDL_WINDOW_FULLSCREEN_DESKTOP);
+    } else {
+        SDL_SetWindowFullscreen(window.Get(), 0);
+    }
+    SDL_GetWindowSize(window.Get(), &window_width, &window_height);
 }
 
 
@@ -229,6 +258,8 @@ void Game::showBackground(Texture& backgroundTexture) {
 
     selectedLevel = levels[randomLevel];
 }*/
+
+void Game::clearObjects() { ducks.clear(); }
 
 Game::~Game() {
     // SDL_DestroyRenderer(renderer.Get());

@@ -24,9 +24,6 @@
 #define OFFSET_LEFT 3
 #define OFFSET_Y 4
 
-#define DEF_WINDOW_WIDTH 1040
-#define DEF_WINDOW_HEIGHT 680
-
 SpriteManager::SpriteManager(
         const char* path1, const char* path2,
         SDL2pp::Renderer& renderer /*, int& window_width, int& window_height*/):
@@ -83,17 +80,17 @@ void SpriteManager::draw(int col, int row) {
     // Sprite
     spritesheet->selectSprite(col, row, NO_FEATHER);
     SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER);
-    spritesheet->drawSelectedSprite(position, flip, NO_FEATHER, NO_RIGHT_FEATHER);
+    spritesheet->drawSelectedSprite(position, flip, NO_FEATHER/*, NO_RIGHT_FEATHER*/);
 
     if (not flip) {
         spritesheet->selectSprite(col, row, FEATHER);
         position = getPosition(FEATHER, NO_RIGHT_FEATHER);
-        spritesheet->drawSelectedSprite(position, flip, FEATHER, NO_RIGHT_FEATHER);
+        spritesheet->drawSelectedSprite(position, flip, FEATHER/*, NO_RIGHT_FEATHER*/);
 
     } else if (flip || in_air || flapping /* etc*/) {
         spritesheet->selectSprite(col, row, FEATHER);
         position = getPosition(FEATHER, RIGHT_FEATHER);
-        spritesheet->drawSelectedSprite(position, flip, FEATHER, RIGHT_FEATHER);
+        spritesheet->drawSelectedSprite(position, flip, FEATHER/*, RIGHT_FEATHER*/);
     }
 }
 

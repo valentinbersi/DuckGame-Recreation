@@ -11,7 +11,7 @@ public:
     ~Spritesheet();
 
     void selectSprite(int x, int y, bool feathers);
-    void drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool feathers, bool isRightFeather);
+    void drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool feathers/*, bool isRightFeather*/);
     int getClipWidth() const;
     int getClipHeight() const;
 

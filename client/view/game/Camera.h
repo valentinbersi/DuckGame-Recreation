@@ -25,8 +25,8 @@ private:
     void calculateScale(std::list<std::unique_ptr<DuckData>>& ducks);
     Vector2 centerOfDucks(std::list<std::unique_ptr<DuckData>>& ducks);
 
-    int windowWidth;
-    int windowHeight;
+    int& windowWidth;
+    int& windowHeight;
     int backgroundWidth;
     int backgroundHeight;
     float x;

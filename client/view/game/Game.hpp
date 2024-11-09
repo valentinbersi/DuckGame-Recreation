@@ -33,8 +33,11 @@ public:
 
 private:
     //void selectLevel();
+    bool isFullscreen(SDL2pp::Window& window);
+    void setFullscreen(bool fullscreen);
     SDL2pp::Texture startBackground();
-    void handleEvents();
+    void handleEvents(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping);
+    void handleScreenEvents(SDL_Event& event, bool isKeyDown, SDL_Scancode& scancode, std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping);
     void handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown);
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping();
     void updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping, float currentScale);

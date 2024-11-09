@@ -53,8 +53,8 @@ void Spritesheet::selectSprite(int x, int y, bool feathers) {
     m_clip.y = y * m_clip.h;
 }
 
-void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool feathers,
-                                     bool isRightFeather) {
+void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool feathers/*,
+                                     bool isRightFeather*/) {
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
     SDL_Texture* texture = feathers ? m_texture_feathers->Get() : m_texture_image->Get();
@@ -64,19 +64,6 @@ void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool fea
     }
 
     SDL_RenderCopyEx(renderer.Get(), texture, &m_clip, &position, 0.0, nullptr, flipType);
-
-    if (feathers) {
-        if (isRightFeather) {
-            // position.x += m_clip.w - 15;
-        } else {
-            // position.x -= m_clip.w;
-        }
-        //SDL_RenderCopyEx(renderer.Get(), m_texture_feathers.Get(), &m_clip, &position, 0.0, nullptr,
-                         //flipType);
-    } else {
-        //SDL_RenderCopyEx(renderer.Get(), m_texture_image.Get(), &m_clip, &position, 0.0, nullptr,
-                         //flipType);
-    }
 }
 
 SDL2pp::Texture* Spritesheet::getTexture(bool feathers) {
