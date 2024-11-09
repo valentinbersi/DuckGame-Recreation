@@ -3,6 +3,14 @@
 
 #include "LibError.h"
 
+#include <syslog.h>
+
+#define ERROR_MSG "UNOWN ERROR DURING RUNTIME."
+#define FORMAT "%s"
+#define MAX_LOCAL_PLAYERS 2
+#define ID_START_COUNT -1
+
+
 Acceptor::Acceptor(const std::string& hostname, GameMapMonitor& monitor):
         acceptorSocket(hostname.c_str()), gamesMonitor(monitor), clientes() {}
 
@@ -12,24 +20,25 @@ void Acceptor::reapDead() {
     clientes.remove_if([this](VirtualClient& client) { return removeIfNotConnected(client); });
 }
 
-void Acceptor::run() {
+void Acceptor::run() noexcept {
     try {
-        u16 clientID = -1;
+        u16 clientID = ID_START_COUNT;
         while (_keep_running) {
-            clientID +=
-                    2;  // voy saltando de a dos para considerar tener dos jugaddores x conexion.
+            clientID += MAX_LOCAL_PLAYERS;
             ActiveSocket peer = acceptorSocket.accept();
             clientes.emplace_back(std::move(peer), gamesMonitor, clientID);
             reapDead();
         }
     } catch (const LibError& err) {
         if (is_alive()) {
-            // syslog
+            syslog(LOG_CRIT, FORMAT, err.what());
         }
-        // esperado
+        // LibError originated from stop() call. Expected when closing the server.
     } catch (...) {
-        // syslog
+        syslog(LOG_CRIT, ERROR_MSG);
     }
+    //Just to mantain consistency in the class status
+    _keep_running = false;
     _is_alive = false;
 }
 
@@ -40,4 +49,4 @@ void Acceptor::stop() {
     _is_alive = false;
 }
 
-Acceptor::~Acceptor() = default;
+Acceptor::~Acceptor() {} //ALL RAII

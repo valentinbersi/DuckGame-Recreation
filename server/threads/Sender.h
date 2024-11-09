@@ -14,7 +14,7 @@ public:
     Sender(ActiveSocket& socket,
            std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>>& queue);
 
-    void run() override;
+    void run() noexcept override;
 
     void stop() override;
 

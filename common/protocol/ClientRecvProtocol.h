@@ -2,9 +2,9 @@
 #include "ActiveSocket.h"
 #include "DuckData.h"
 #include "GameStatus.h"
+#include "ReplyMessage.h"
 #include "Math.h"
 #include "ReceiveProtocol.h"
-#include "ServerMessage.h"
 #include "Types.h"
 
 class ClientRecvProtocol: public ReceiveProtocol {
@@ -15,12 +15,12 @@ private:
 
     std::unique_ptr<GameObjectData> recvDuckData();
 
-    std::unique_ptr<ServerMessage> recvGameStatus();
-
 public:
     explicit ClientRecvProtocol(ActiveSocket& socket);
 
-    std::unique_ptr<ServerMessage> receiveMessage();
+    ReplyMessage recvReplyMessage();
+
+    GameStatus recvGameStatus();
 
     ~ClientRecvProtocol() = default;
 };

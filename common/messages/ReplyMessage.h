@@ -1,4 +1,4 @@
-
+#pragma once
 #include "ServerMessage.h"
 
 struct ReplyMessage: public ServerMessage {
@@ -7,9 +7,11 @@ public:
 
     u8 startGame;
 
+    u8 connectedPlayers;
+
     ReplyMessage();
 
-    ReplyMessage(u16 id, u8 startGame);
+    ReplyMessage(u16 id, u8 startGame, u8 connectedPlayers);
 
     void send(ServerSendProtocol& serverProtocol) override;
 

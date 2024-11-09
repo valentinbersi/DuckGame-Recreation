@@ -9,6 +9,7 @@
 #include "GameController.h"
 #include "ServerMessage.h"
 #include "Thread.h"
+#include "Timer.h"
 
 class GameLoop final: public Thread {
     constexpr static std::uint8_t FRAME_TIMES_AMOUNT = 2;
@@ -17,13 +18,7 @@ class GameLoop final: public Thread {
     BlockingQueue<std::unique_ptr<Command>> clientCommands;
     std::queue<std::unique_ptr<Command>> currentFrameCommands;
     GameController game;
-    std::chrono::steady_clock::time_point prevTicks;
-
-    /**
-     * Calculate the time between the previous frame and the current frame
-     * @return the time between the previous frame and the current frame in seconds
-     */
-    float calculateDeltaTime();
+    Timer timer;
 
     /**
      * Retrieve all the commands the clients send between the previous frame and the current frame
@@ -50,6 +45,8 @@ public:
      * Run the gameloop
      */
     void run() override;
+
+    void stop() override;
 
     /**
      * Add a client queue to the list of client queues
