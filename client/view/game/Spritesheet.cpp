@@ -16,8 +16,17 @@ Spritesheet::Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer&
     m_texture_feathers = new SDL2pp::Texture(renderer, path2);
     m_spritesheet_image = IMG_Load(path1);
     m_spritesheet_feathers = IMG_Load(path2);
-    if (!m_spritesheet_image || !m_spritesheet_feathers) {
-        throw std::runtime_error("Failed to load spritesheet/s image");
+    if (!m_spritesheet_image) {
+        throw std::runtime_error("Failed to load spritesheet image: " + std::string(path1));
+    }
+    if (!m_spritesheet_feathers) {
+        throw std::runtime_error("Failed to load spritesheet feathers: " + std::string(path2));
+    }
+    if (!m_texture_image) {
+        throw std::runtime_error("Failed to create texture from image: " + std::string(path1));
+    }
+    if (!m_texture_feathers) {
+        throw std::runtime_error("Failed to create texture from feathers: " + std::string(path2));
     }
 }
 
@@ -46,22 +55,33 @@ void Spritesheet::selectSprite(int x, int y, bool feathers) {
 
 void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool feathers,
                                      bool isRightFeather) {
-    SDL2pp::Texture m_texture_image(renderer, path1);
-    SDL2pp::Texture m_texture_feathers(renderer, path2);
-
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+
+    SDL_Texture* texture = feathers ? m_texture_feathers->Get() : m_texture_image->Get();
+
+    if (texture == nullptr) {
+        throw std::runtime_error("Texture is null in drawSelectedSprite.");
+    }
+
+    SDL_RenderCopyEx(renderer.Get(), texture, &m_clip, &position, 0.0, nullptr, flipType);
+
     if (feathers) {
         if (isRightFeather) {
             // position.x += m_clip.w - 15;
         } else {
             // position.x -= m_clip.w;
         }
-        SDL_RenderCopyEx(renderer.Get(), m_texture_feathers.Get(), &m_clip, &position, 0.0, nullptr,
-                         flipType);
+        //SDL_RenderCopyEx(renderer.Get(), m_texture_feathers.Get(), &m_clip, &position, 0.0, nullptr,
+                         //flipType);
     } else {
-        SDL_RenderCopyEx(renderer.Get(), m_texture_image.Get(), &m_clip, &position, 0.0, nullptr,
-                         flipType);
+        //SDL_RenderCopyEx(renderer.Get(), m_texture_image.Get(), &m_clip, &position, 0.0, nullptr,
+                         //flipType);
     }
+}
+
+SDL2pp::Texture* Spritesheet::getTexture(bool feathers) {
+    if (feathers) return m_texture_feathers;
+    return m_texture_image;
 }
 
 int Spritesheet::getClipWidth() const { return m_clip.w; }

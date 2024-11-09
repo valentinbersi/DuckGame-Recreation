@@ -19,19 +19,11 @@ public:
                 bool moving_right, bool moving_left);
     void draw(int col, int row);
     void updatePosition(float new_x, float new_y);
+    void setScale(float newScale);
 
-    // Initializes the position where the sprite will be drawn
-    // void selectPosition(int c, int r);
-
-    void incFrame();
-    void incFlappingFrame();
-    void changeActive();
+    Spritesheet& getSpritesheet();
 
 private:
-    void resetFrame();
-    void resetFlappingFrame();
-    void activateManager();
-    void changeFlapping();
     SDL2pp::Rect getPosition(bool isFeather, bool isRightFeather);
 
     const char* path1;
@@ -42,11 +34,7 @@ private:
     bool in_air;
     bool flapping;
     bool flip;
-
-    Spritesheet spritesheet;
-
-    // enum de types (de active). es decir, que tipo de animacion esta activa que tenga multiples
-    // frame
+    std::unique_ptr<Spritesheet> spritesheet;
     int frame;
     int flappingFrame;
     double m_position_x;

@@ -36,9 +36,8 @@ private:
     SDL2pp::Texture startBackground();
     void handleEvents();
     void handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown);
-    std::unordered_map<DuckID, SpriteManager> createSpritesMapping();
-    void updatePlayers(std::unordered_map<DuckID, SpriteManager>& spritesMapping);
-    Vector2 centerOfDucks();
+    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping();
+    void updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping, float currentScale);
     void getSnapshot();
     void showBackground(SDL2pp::Texture& backgroundTexture);
 
