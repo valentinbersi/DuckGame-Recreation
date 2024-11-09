@@ -47,28 +47,23 @@ void hostWaitingPage::requestStartGame() {
        return; // chequear que hacer aca!
    }
 
-//    auto messageServerOpt = communicator.tryrecv();
-//    if (messageServerOpt.has_value()) {
-//        std::unique_ptr<ServerMessage> messageServer = std::move(messageServerOpt.value());
-//        ReplyMessage reply = dynamic_cast<ReplyMessage&>(*messageServer);
-//        if (reply.startGame == 1) {
-//            emit startMatch();
-//        } else {
-//            // ver que hacer aca!
-//        }
-//    } else {
-//        QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
-//        return; // esto nose si es correcto, deberia manejarlo distinto yo creo.
-//    }
-    auto messageServerOpt = communicator.recv();
-    ReplyMessage* reply = dynamic_cast<ReplyMessage*>(messageServerOpt.get());
-    if (reply != nullptr && reply->startGame == 1) {
-        emit startMatch();
-    } else {
-        QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
-        return;
-    }
+    while (true) {
+        ReplyMessage replyMessage = communicator.recvSync();
 
+        if (replyMessage.matchID != gameInfo.matchID) {
+            qDebug() << "Mensaje recibido de otro matchID";
+            continue;
+        }
+
+        if (replyMessage.startGame == 1) {
+            emit startMatch();
+            return;
+        } else if (replyMessage.startGame == 0) {
+            ui->labelPlayersConnected->setText(
+                    QString("PLAYERS CONNECTED: %1 / 4").arg(replyMessage.connectedPlayers)
+            );
+        }
+    }
 }
 
 hostWaitingPage::~hostWaitingPage() { delete ui; }
