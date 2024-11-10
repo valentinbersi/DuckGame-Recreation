@@ -9,7 +9,7 @@ CommunicatorReceiver::CommunicatorReceiver(ActiveSocket& socket,
 
 void CommunicatorReceiver::run() {
     try {
-        u8 startGame = 0;
+        u8 startGame;
         do{
             ReplyMessage reply = recvProtocol.recvReplyMessage();
             startGame = reply.startGame;
