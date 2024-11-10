@@ -22,6 +22,7 @@ private:
     GameInfo& gameInfo;
 
     void requestStartGame();
+    void updateConnectedPlayers();
 
 public:
     hostWaitingPage(QWidget* parent, Communicator& communicator, GameInfo& gameInfo);

@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QMessageBox>
+#include <QTimer>
 
 #include "LobbyMessage.h"
 #include "ReplyMessage.h"
@@ -18,7 +19,22 @@ hostWaitingPage::hostWaitingPage(QWidget* parent, Communicator& communicator, Ga
 
     ui->labelMatchID->setText(QString("MATCH ID: %1").arg(gameInfo.matchID));
 
+    auto* timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &hostWaitingPage::updateConnectedPlayers);
+    timer->start(5000);
+
     connect(ui->playButton, &QPushButton::clicked, this, &hostWaitingPage::requestStartGame);
+}
+
+
+void hostWaitingPage::updateConnectedPlayers() {
+    try {
+        ReplyMessage messageServer = communicator.recvSync(); // aca iria el tryRecvLobby o lo que fuese
+        // deberia chequear que se recibio algo, si se recibio actualizo el label.
+        ui->labelPlayersConnected->setText(QString("PLAYERS CONNECTED: %1 / 4").arg(messageServer.connectedPlayers));
+    } catch (const LibError& e) {
+        qDebug() << "Error receiving message: " << e.what();
+    }
 }
 
 // USAR ESTA CUANDO SE QUIERE PROBAR SIN SERVER
@@ -36,33 +52,24 @@ void hostWaitingPage::requestStartGame() {
            gameInfo.matchID
            );
 
-   qDebug() << "LobbyMessage - STARTMATCH Request:";
-   qDebug() << "Players Number:" << message->playerCount;
-   qDebug() << "Player 1 Name:" << QString::fromStdString(message->player1Name);
-   qDebug() << "Player 2 Name:" << QString::fromStdString(message->player2Name);
-   qDebug() << "Match ID:" << message->matchId;
-
-   if (!communicator.trysend(std::move(message))) {
-       qDebug() << "Error al enviar el mensaje.";
-       return; // chequear que hacer aca!
+   try {
+       communicator.sendSync(std::move(message));
+   } catch (LibError& libError){
+       qDebug() << "Error sending start game request: " << libError.what();
+       return; // aca podria mostrar elgun mensaje
    }
 
-    while (true) {
-        ReplyMessage replyMessage = communicator.recvSync();
+   ReplyMessage replyMessage;
+   try {
+       replyMessage = communicator.recvSync();
+   } catch (LibError& libError) {
+       qDebug() << "Error receiving start game response: " << libError.what();
+       return;
+   }
 
-        if (replyMessage.matchID != gameInfo.matchID) {
-            qDebug() << "Mensaje recibido de otro matchID";
-            continue;
-        }
-
-        if (replyMessage.startGame == 1) {
-            emit startMatch();
-            return;
-        } else if (replyMessage.startGame == 0) {
-            ui->labelPlayersConnected->setText(
-                    QString("PLAYERS CONNECTED: %1 / 4").arg(replyMessage.connectedPlayers)
-            );
-        }
+    if (replyMessage.startGame == 1) {
+        emit startMatch();
+        return;
     }
 }
 

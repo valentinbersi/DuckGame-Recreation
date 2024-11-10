@@ -17,7 +17,7 @@ void joinWaitingPage::waitForMatchStart() {
         ReplyMessage replyMessage = communicator.recvSync();
 
         if (replyMessage.connectedPlayers > 0) {
-            ui->labelPlayersConnected->setText(QString("Player Connected: %1").arg(replyMessage.connectedPlayers));
+            ui->labelPlayersConnected->setText(QString("Player Connected: %1 / 4").arg(replyMessage.connectedPlayers));
         } else {
             QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
             break; // nose si esta bien esto!
