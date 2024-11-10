@@ -12,6 +12,24 @@
 #include "Updatable.h"
 
 /**
+ * Register an event for an object
+ * @param Types The types of the arguments accepted by the event
+ */
+#define registerObjectEvent(...) registerEvent<Object, __VA_ARGS__>
+
+/**
+ * Connect a callable to an event
+ * @param Types The types of the arguments accepted by the event
+ */
+#define connectObjectEvent(...) connect<Object, __VA_ARGS__>
+
+/**
+ * Fire an event for an object
+ * @param Types The types of the arguments accepted by the event
+ */
+#define fireObjectEvent(...) fire<Object, __VA_ARGS__>
+
+/**
  * An object in the game
  */
 class Object: public Subject, public TrackedReference, public Updatable, public Startable {

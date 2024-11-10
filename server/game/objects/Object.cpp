@@ -8,16 +8,16 @@
 #include "Method.h"
 
 void Object::onTreeEntered(Object& object) {
-    fire<Object, Object&>(eventName(Events::TREE_ENTERED), object);
+    fireObjectEvent(Object&)(eventName(Events::TREE_ENTERED), object);
 }
 
 void Object::onTreeExited(Object& object) {
-    fire<Object, Object&>(eventName(Events::TREE_EXITED), object);
+    fireObjectEvent(Object&)(eventName(Events::TREE_EXITED), object);
 }
 
 Object::Object(Object* parent): _parent(parent) {
-    registerEvent<Object, Object&>(eventName(Events::TREE_ENTERED));
-    registerEvent<Object, Object&>(eventName(Events::TREE_EXITED));
+    registerObjectEvent(Object&)(eventName(Events::TREE_ENTERED));
+    registerObjectEvent(Object&)(eventName(Events::TREE_EXITED));
 }
 
 Object& Object::parent() const {
@@ -44,17 +44,17 @@ void Object::addChild(std::string name, Object* newChild) {
     if (children.contains(name))
         throw AlreadyAddedChild(name);
 
-    newChild->connect<Object, Object&>(eventName(Events::TREE_ENTERED),
-                                       {getReference<Object>(), &Object::onTreeEntered});
+    newChild->connectObjectEvent(Object&)(eventName(Events::TREE_ENTERED),
+                                          {getReference<Object>(), &Object::onTreeEntered});
 
-    newChild->connect<Object, Object&>(eventName(Events::TREE_EXITED),
-                                       {getReference<Object>(), &Object::onTreeExited});
+    newChild->connectObjectEvent(Object&)(eventName(Events::TREE_EXITED),
+                                          {getReference<Object>(), &Object::onTreeExited});
 
     children.emplace(std::move(name), newChild);
 
-    fire<Object, Object&>(eventName(Events::TREE_ENTERED), *newChild);
+    fireObjectEvent(Object&)(eventName(Events::TREE_ENTERED), *newChild);
     newChild->forAllChildren([this](Object& child) {
-        fire<Object, Object&>(eventName(Events::TREE_ENTERED), child);
+        fireObjectEvent(Object&)(eventName(Events::TREE_ENTERED), child);
     });
 }
 
@@ -100,7 +100,7 @@ std::unique_ptr<Object> Object::removeChild(const std::string& name) {
     if (child.empty())
         throw ChildNotInTree(name);
 
-    fire<Object, Object&>(eventName(Events::TREE_EXITED), *child.mapped());
+    fireObjectEvent(Object&)(eventName(Events::TREE_EXITED), *child.mapped());
     child.mapped()->_parent = nullptr;
     return std::unique_ptr<Object>(child.mapped());
 }
