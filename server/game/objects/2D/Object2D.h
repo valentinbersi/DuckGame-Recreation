@@ -4,7 +4,7 @@
 #include "Vector2.h"
 
 /**
- * 2D object with a position, rotation and scale
+ * 2D object with a position and rotation
  */
 class Object2D: public Object {
     Vector2 _globalPosition;
