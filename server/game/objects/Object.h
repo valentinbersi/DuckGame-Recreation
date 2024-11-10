@@ -12,25 +12,31 @@
 #include "Updatable.h"
 
 /**
- * Register an event for an object
- * @param Types The types of the arguments accepted by the event
+ * Register an event for an object.\n
+ * The arguments taken by the macro are the types of the arguments accepted by the event
  */
 #define registerObjectEvent(...) registerEvent<Object, __VA_ARGS__>
 
 /**
- * Connect a callable to an event
- * @param Types The types of the arguments accepted by the event
+ * Connect an event for an object.\n
+ * The arguments taken by the macro are the types of the arguments accepted by the event
  */
 #define connectObjectEvent(...) connect<Object, __VA_ARGS__>
 
 /**
- * Fire an event for an object
- * @param Types The types of the arguments accepted by the event
+ * Fire an event for an object.\n
+ * The arguments taken by the macro are the types of the arguments accepted by the event
  */
 #define fireObjectEvent(...) fire<Object, __VA_ARGS__>
 
 /**
- * An object in the game
+ * An object in the game.\n
+ * The objects organize in a tree way, where each object can have children.\n
+ * Every object is responsible for managing the memory of its children,
+ * because of this, objects are not copyable or movable, and they can only have one parent.\n
+ * Callers don't own pointers returned by Objects, in the same way,
+ * any raw pointer passed as argument inside Objects does not hold ownership of the
+ * underlying object.\n
  */
 class Object: public Subject, public TrackedReference, public Updatable, public Startable {
     Object* _parent;
@@ -41,14 +47,14 @@ class Object: public Subject, public TrackedReference, public Updatable, public 
      * It simply fires the event so parents are notified of a new child in the tree
      * @param object The child that was added
      */
-    void onTreeEntered(Object& object);
+    void onTreeEntered(Object* object);
 
     /**
      * Called when an object is removed from the subtree of this object.\n
      * It simply fires the event so parents are notified of a new child in the tree.
      * @param object The child that was removed
      */
-    void onTreeExited(Object& object);
+    void onTreeExited(Object* object);
 
 protected:
     constexpr static auto INVALID_EVENT_TYPE = "Invalid event type";
@@ -74,7 +80,7 @@ protected:
      * Apply the given function to all children
      * @param f The function to apply, should not throw exceptions
      */
-    void forAllChildren(const std::function<void(Object&)>& f);
+    void forAllChildren(const std::function<void(Object*)>& f);
 
     /**
      * Apply the given function to a child
@@ -85,7 +91,7 @@ protected:
      * @throws std::out_of_range If the child is not found
      */
     template <typename Ret>
-    Ret applyToChild(const std::string& name, const std::function<Ret(Object&)>& f);
+    Ret applyToChild(const std::string& name, const std::function<Ret(Object*)>& f);
 
 public:
     /**
@@ -100,17 +106,6 @@ public:
      */
     struct ChildNotInTree final: std::out_of_range {
         explicit ChildNotInTree(const std::string& name);
-    };
-
-    /**
-     * An exception thrown when trying access the parent of the root object
-     */
-    struct RootObject final: std::logic_error {
-        explicit RootObject();
-    };
-
-    struct AddedChildWithChildren final: std::logic_error {
-        explicit AddedChildWithChildren();
     };
 
     Object() = delete;
@@ -156,20 +151,26 @@ public:
      * @return A reference to the child
      * @throws std::out_of_range If the child is not found
      */
-    Object& getChild(const std::string& name) const;
+    Object* getChild(const std::string& name) const;
 
     /**
      * Check if the object has children
      * @return True if the object has children, false otherwise
      */
-    bool hasChildren() const;
+    bool isParent() const;
 
     /**
      * Get the parent of the object
      * @return A reference to the parent
      * @throws RootObject If the object has no parent
      */
-    Object& parent() const;
+    Object* parent() const;
+
+    /**
+     * Check if the object is the root object
+     * @return True if the object is the root object, false otherwise
+     */
+    bool isRoot() const;
 
     /**
      * Get the status of the object
@@ -200,6 +201,6 @@ public:
 };
 
 template <typename Ret>
-Ret Object::applyToChild(const std::string& name, const std::function<Ret(Object&)>& f) {
+Ret Object::applyToChild(const std::string& name, const std::function<Ret(Object*)>& f) {
     return f(children.at(name));
 }

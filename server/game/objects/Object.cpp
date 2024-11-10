@@ -7,24 +7,17 @@
 
 #include "Method.h"
 
-void Object::onTreeEntered(Object& object) {
-    fireObjectEvent(Object&)(eventName(Events::TREE_ENTERED), object);
+void Object::onTreeEntered(Object* object) {
+    fireObjectEvent(Object*)(eventName(Events::TREE_ENTERED), object);
 }
 
-void Object::onTreeExited(Object& object) {
-    fireObjectEvent(Object&)(eventName(Events::TREE_EXITED), object);
+void Object::onTreeExited(Object* object) {
+    fireObjectEvent(Object*)(eventName(Events::TREE_EXITED), object);
 }
 
 Object::Object(Object* parent): _parent(parent) {
-    registerObjectEvent(Object&)(eventName(Events::TREE_ENTERED));
-    registerObjectEvent(Object&)(eventName(Events::TREE_EXITED));
-}
-
-Object& Object::parent() const {
-    if (_parent == nullptr)
-        throw RootObject();
-
-    return *_parent;
+    registerObjectEvent(Object*)(eventName(Events::TREE_ENTERED));
+    registerObjectEvent(Object*)(eventName(Events::TREE_EXITED));
 }
 
 #define NULL_CHILD "newChild is nullptr"
@@ -44,23 +37,23 @@ void Object::addChild(std::string name, Object* newChild) {
     if (children.contains(name))
         throw AlreadyAddedChild(name);
 
-    newChild->connectObjectEvent(Object&)(eventName(Events::TREE_ENTERED),
+    newChild->connectObjectEvent(Object*)(eventName(Events::TREE_ENTERED),
                                           {getReference<Object>(), &Object::onTreeEntered});
 
-    newChild->connectObjectEvent(Object&)(eventName(Events::TREE_EXITED),
+    newChild->connectObjectEvent(Object*)(eventName(Events::TREE_EXITED),
                                           {getReference<Object>(), &Object::onTreeExited});
 
     children.emplace(std::move(name), newChild);
 
-    fireObjectEvent(Object&)(eventName(Events::TREE_ENTERED), *newChild);
-    newChild->forAllChildren([this](Object& child) {
-        fireObjectEvent(Object&)(eventName(Events::TREE_ENTERED), child);
+    fireObjectEvent(Object*)(eventName(Events::TREE_ENTERED), newChild);
+    newChild->forAllChildren([this](Object* child) {
+        fireObjectEvent(Object*)(eventName(Events::TREE_ENTERED), child);
     });
 }
 
-void Object::forAllChildren(const std::function<void(Object&)>& f) {
+void Object::forAllChildren(const std::function<void(Object*)>& f) {
     std::ranges::for_each(children,
-                          [&f](const std::pair<std::string, Object*>& child) { f(*child.second); });
+                          [&f](const std::pair<std::string, Object*>& child) { f(child.second); });
 }
 
 #define CHILD_NAME "Child with name"
@@ -75,8 +68,6 @@ Object::ChildNotInTree::ChildNotInTree(const std::string& name):
         std::out_of_range(CHILD_NAME + name + NOT_IN_TREE) {}
 
 #define NO_PARENT "Object has no parent"
-
-Object::RootObject::RootObject(): std::logic_error(NO_PARENT) {}
 
 Object::~Object() {
     std::ranges::for_each(
@@ -109,9 +100,13 @@ void Object::transferChild(std::string name, Object& parent) {
     addChild(std::move(name), parent.removeChild(name));
 }
 
-Object& Object::getChild(const std::string& name) const { return *children.at(name); }
+Object* Object::getChild(const std::string& name) const { return children.at(name); }
 
-bool Object::hasChildren() const { return not children.empty(); }
+bool Object::isParent() const { return not children.empty(); }
+
+Object* Object::parent() const { return _parent; }
+
+bool Object::isRoot() const { return _parent == nullptr; }
 
 #define TREE_ADDED_NAME "TreeEntered"
 #define TREE_EXITED_NAME "TreeExited"
