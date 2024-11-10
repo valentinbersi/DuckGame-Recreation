@@ -60,8 +60,10 @@ bool newGame::NewMatchRequest() {
     );
 
     try {
-        communicator.sendSync(std::move(message));
-        ReplyMessage replyMessage = communicator.recvSync();
+        communicator.trysend(std::move(message));
+        // chequear si se envio
+        ReplyMessage replyMessage = communicator.blockingRecv();
+        // chequear si se recibio bien
         gameInfo.matchID = replyMessage.matchID;
         return true;
     } catch(LibError& libError){
