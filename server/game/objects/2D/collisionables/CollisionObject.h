@@ -28,11 +28,11 @@ protected:
      * @param position the position of the CollisionObject
      * @param rotation the rotation of the CollisionObject
      * @param layers the layers that the object is in
-     * @param scanning the layers the object scans in search for other collisionObjects
+     * @param scannedLayers the layers the object scans in search for other collisionObjects
      * @param shape the shape of the CollisionObject
      */
     CollisionObject(Object* parent, Vector2 position, float rotation,
-                    std::bitset<LAYERS_COUNT> layers, std::bitset<LAYERS_COUNT> scanning,
+                    std::bitset<LAYERS_COUNT> layers, std::bitset<LAYERS_COUNT> scannedLayers,
                     std::unique_ptr<Shape2D> shape);
 
     /**

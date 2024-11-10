@@ -7,11 +7,11 @@
 
 CollisionObject::CollisionObject(Object* parent, Vector2 position, const float rotation,
                                  const std::bitset<LAYERS_COUNT> layers,
-                                 const std::bitset<LAYERS_COUNT> scanning,
+                                 const std::bitset<LAYERS_COUNT> scannedLayers,
                                  std::unique_ptr<Shape2D> shape):
         Object2D(parent, std::move(position), rotation),
         _layers(layers),
-        _scannedLayers(scanning),
+        _scannedLayers(scannedLayers),
         shape(shape.release()) {
 
     if (this->shape == nullptr)
