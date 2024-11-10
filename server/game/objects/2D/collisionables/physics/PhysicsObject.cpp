@@ -3,10 +3,12 @@
 #include "GlobalPhysics.h"
 
 PhysicsObject::PhysicsObject(Object* parent, Vector2 position, const float rotation,
-                             const u32 collisionLayer, const u32 collisionMask,
+                             const std::bitset<LAYERS_COUNT> layers,
+                             const std::bitset<LAYERS_COUNT> scannedLayers,
                              std::unique_ptr<Shape2D> shape, Vector2 initialVelocity,
                              const Gravity gravity):
-        CollisionObject(parent, std::move(position), rotation, collisionLayer, collisionMask,
+
+        CollisionObject(parent, std::move(position), rotation, layers, scannedLayers,
                         std::move(shape)),
         _velocity(std::move(initialVelocity)),
         gravity(gravity) {}

@@ -17,15 +17,15 @@ protected:
      * @param parent The parent object
      * @param position The position of the object
      * @param rotation The rotation of the object
-     * @param collisionLayer The collision layer of the object
-     * @param collisionMask The collision mask of the object
+     * @param layers The layer the object is in
+     * @param scannedLayers The layer the object scans for collisions
      * @param shape The shape of the object
      * @param initialVelocity The initial velocity of the object
      * @param gravity the gravity configuration for this object
      */
-    PhysicsObject(Object* parent, Vector2 position, float rotation, u32 collisionLayer,
-                  u32 collisionMask, std::unique_ptr<Shape2D> shape, Vector2 initialVelocity,
-                  Gravity gravity);
+    PhysicsObject(Object* parent, Vector2 position, float rotation,
+                  std::bitset<LAYERS_COUNT> layers, std::bitset<LAYERS_COUNT> scannedLayers,
+                  std::unique_ptr<Shape2D> shape, Vector2 initialVelocity, Gravity gravity);
 
 public:
     PhysicsObject() = delete;
