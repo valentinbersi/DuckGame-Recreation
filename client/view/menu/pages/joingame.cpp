@@ -56,8 +56,10 @@ bool joinGame::joinMatchRequest() {
     );
 
     try {
-        communicator.sendSync(std::move(message));
-        ReplyMessage replyMessage = communicator.recvSync();
+        communicator.trysend(std::move(message));
+        // chequear si se envio bien
+        ReplyMessage replyMessage = communicator.blockingRecv();
+        // deberia chequear si se recibio ¿?
         gameInfo.matchID = replyMessage.matchID;
         return true;
     } catch(LibError& libError){
