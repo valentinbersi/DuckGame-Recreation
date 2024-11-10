@@ -50,7 +50,7 @@ protected:
      * @throws  std::invalid_argument If name is empty
      * @throws  AlreadyAddedChild If the name is already taken
      */
-    virtual void addChild(std::string name, Object* newChild);
+    void addChild(std::string name, Object* newChild);
 
     /**
      * Apply the given function to all children
