@@ -4,7 +4,7 @@
 /**
  * A collision object that throws events when colliding with another collision object
  */
-class Area: public CollisionObject {
+class Area final: public CollisionObject {
 protected:
     /**
      * Construct an Area
@@ -27,22 +27,37 @@ public:
     ~Area() override = default;
 
     /**
+     * Does nothing on area
+     */
+    void start() override;
+
+    /**
+     * Does nothing on Area
+     */
+    void update(float delta) override;
+
+    /**
      * Update the area, does nothing on Area
      * @param delta The time since the last update
      */
-    void updateInternal(float delta) final;
+    void updateInternal(float delta) override;
 
     /**
      * Register a collision object to be checked for collisions
      * @param collisionObject The collision object to check for collisions
      */
-    void registerCollision(std::weak_ptr<CollisionObject> collisionObject) final;
+    void registerCollision(std::weak_ptr<CollisionObject> collisionObject) override;
 
     /**
      * Process the collisions of the area. This will throw events when colliding with another
      * collision object
      */
-    void processCollisions() final;
+    void processCollisions() override;
+
+    /**
+     * Does nothing on area
+     */
+    GameStatus status() override;
 
     /**
      * The events the Area class has

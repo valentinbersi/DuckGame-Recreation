@@ -10,6 +10,10 @@ Area::Area(Object* parent, Vector2 position, const float rotation,
     registerObjectEvent(CollisionObject&)(eventName(Events::COLLISION));
 }
 
+void Area::start() {}
+
+void Area::update(float delta) {}
+
 void Area::updateInternal(const float delta) { CollisionObject::updateInternal(delta); }
 
 void Area::registerCollision(std::weak_ptr<CollisionObject> collisionObject) {
@@ -23,6 +27,8 @@ void Area::processCollisions() {
             fireObjectEvent(CollisionObject&)(eventName(Events::COLLISION), *ownedObject);
     });
 }
+
+GameStatus Area::status() { return {}; }
 
 #define COLLISION_NAME "Collision"
 
