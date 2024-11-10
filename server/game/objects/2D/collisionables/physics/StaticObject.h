@@ -7,6 +7,19 @@
  * It's intended for creating objects not affected by physics that physics object can collide with
  */
 class StaticObject: public CollisionObject {
+protected:
+    /**
+     * Creates a new static object
+     * @param parent The parent object
+     * @param position The position of the object
+     * @param rotation The rotation of the object
+     * @param layers The layers the object is in
+     * @param scannedLayers The layers the object scans for collisions
+     * @param shape The shape of the object
+     */
+    StaticObject(Object* parent, Vector2 position, float rotation, std::bitset<LAYERS_COUNT> layers,
+                 std::bitset<LAYERS_COUNT> scannedLayers, std::unique_ptr<Shape2D> shape);
+
 public:
     StaticObject() = delete;
     StaticObject(const StaticObject&) = delete;
