@@ -21,7 +21,7 @@ void LobbyMessage::send(ClientSendProtocol& clientProtocol) {
     clientProtocol.sendLobbyMessage(type, request, playerCount, player1Name, player2Name, matchId);
 }
 
-bool LobbyMessage::operator==(const LobbyMessage& other) {
+bool LobbyMessage::operator==(const LobbyMessage& other) const {
     return type == other.type &&
            request == other.request && 
            playerCount == other.playerCount &&
