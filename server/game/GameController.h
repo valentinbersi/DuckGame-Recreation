@@ -41,6 +41,8 @@ public:
      */
     Player& getPlayer(PlayerID playerID) const;
 
+    u8 playersCount() const;
+
     /**
      * Does nothing on the game controller
      * @return

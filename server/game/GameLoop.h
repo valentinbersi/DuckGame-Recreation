@@ -31,10 +31,11 @@ class GameLoop final: public Thread {
     void processCurrentFrameCommands();
 
     /**
-     * Broadcast the game status to all the clients
-     */
-    void broadcastGameStatus();
-
+     * Broadcast a message to all the clients
+     * @param message the std::shared_ptr<Servermessage> to broadcast
+     */  
+    void broadcast(std::shared_ptr<ServerMessage> message);
+    
 public:
     /**
      * Construct a gameloop with no players
@@ -61,6 +62,4 @@ public:
      */
     BlockingQueue<std::unique_ptr<Command>>* getQueue();
 
-    // funcion por el momento, despues vamos a hacer un solo broadcast.
-    void broadcastStartGame();
 };

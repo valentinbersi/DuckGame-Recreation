@@ -19,9 +19,9 @@ hostWaitingPage::hostWaitingPage(QWidget* parent, Communicator& communicator, Ga
 
     ui->labelMatchID->setText(QString("MATCH ID: %1").arg(gameInfo.matchID));
 
-    // auto* timer = new QTimer(this);
-    // connect(timer, &QTimer::timeout, this, &hostWaitingPage::updateConnectedPlayers);
-    // timer->start(5000);
+    auto* timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &hostWaitingPage::updateConnectedPlayers);
+    timer->start(5000);
 
     connect(ui->playButton, &QPushButton::clicked, this, &hostWaitingPage::requestStartGame);
 }

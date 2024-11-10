@@ -34,6 +34,8 @@ void GameController::addPlayer(const PlayerID playerID) {
 
 Player& GameController::getPlayer(const PlayerID playerID) const { return *players.at(playerID); }
 
+u8 GameController::playersCount() const { return players.size(); }
+
 GameStatus GameController::status() {
     GameStatus status;
 
