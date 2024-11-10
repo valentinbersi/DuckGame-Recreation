@@ -11,11 +11,14 @@ class CommunicatorReceiver: public Thread {
 private:
     ClientRecvProtocol recvProtocol;
 
-    BlockingQueue<GameStatus>& recvQueue;
+    BlockingQueue<ReplyMessage>& recvQueueLobby;
+    
+    BlockingQueue<GameStatus>& recvQueueGame;
 
 public:
     explicit CommunicatorReceiver(ActiveSocket& socket,
-                                  BlockingQueue<GameStatus>& queue);
+                                  BlockingQueue<ReplyMessage>& queueLobby,
+                                  BlockingQueue<GameStatus>& queueGame);
 
     void run() override;
 
