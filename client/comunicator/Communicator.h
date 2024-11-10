@@ -19,14 +19,11 @@ private:
     BlockingQueue<std::unique_ptr<ClientMessage>> sendQueue;
     BlockingQueue<ReplyMessage> recvQueueLobby;
     BlockingQueue<GameStatus> recvQueueGame;
-    // CommunicatorSync sync;
     CommunicatorSender sender;
     CommunicatorReceiver receiver;
 
 public:
     explicit Communicator(const std::string& hostname, const std::string& servername);
-
-    void runAsync();
 
     bool trysend(std::unique_ptr<ClientMessage> message);
 

@@ -21,7 +21,6 @@ void GameLauncher::exec() {
     if (startGame) {
         try {
             qDebug() << "twoPlayerLocal is" << twoPlayersLocal;
-            communicator.runAsync();
             Game game(communicator, twoPlayersLocal);
             game.init();
 
