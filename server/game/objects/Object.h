@@ -42,22 +42,22 @@ class Object: public Subject, public TrackedReference, public Updatable, public 
     Object* _parent;
     HashMap<std::string, Object*> children;
 
+protected:
+    constexpr static auto INVALID_EVENT_TYPE = "Invalid event type";
+
     /**
      * Called when an object is added to the subtree of this object.\n
      * It simply fires the event so parents are notified of a new child in the tree
      * @param object The child that was added
      */
-    void onTreeEntered(Object* object);
+    virtual void onTreeEntered(Object* object);
 
     /**
      * Called when an object is removed from the subtree of this object.\n
      * It simply fires the event so parents are notified of a new child in the tree.
      * @param object The child that was removed
      */
-    void onTreeExited(Object* object);
-
-protected:
-    constexpr static auto INVALID_EVENT_TYPE = "Invalid event type";
+    virtual void onTreeExited(Object* object);
 
     /**
      * A constructor for derived classes.

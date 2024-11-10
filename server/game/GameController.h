@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CollisionManager.h"
 #include "Object.h"
 #include "Player.h"
 
@@ -8,6 +9,19 @@ typedef u16 PlayerID;
 
 class GameController final: public Object {
     HashMap<PlayerID, Player*> players;
+    CollisionManager collisionManager;
+
+    /**
+     * Called when an object is added to the subtree of this object.
+     * @param object The child that was added
+     */
+    void onTreeEntered(Object* object) override;
+
+    /**
+     * Called when an object is removed from the subtree of this object.
+     * @param object The child that was removed
+     */
+    void onTreeExited(Object* object) override;
 
 public:
     GameController();

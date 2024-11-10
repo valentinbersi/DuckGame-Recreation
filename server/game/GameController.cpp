@@ -8,6 +8,22 @@
 
 GameController::~GameController() = default;
 
+void GameController::onTreeEntered(Object* object) {
+    if (const auto collisionObject = dynamic_cast<CollisionObject*>(object);
+        collisionObject != nullptr)
+        collisionManager.addCollisionObject(collisionObject);
+
+    Object::onTreeEntered(object);
+}
+
+void GameController::onTreeExited(Object* object) {
+    if (const auto collisionObject = dynamic_cast<CollisionObject*>(object);
+        collisionObject != nullptr)
+        collisionManager.removeCollisionObject(collisionObject);
+
+    Object::onTreeExited(object);
+}
+
 GameController::GameController(): Object(nullptr){};
 
 void GameController::start() { std::cout << "The game has started" << std::endl; }
