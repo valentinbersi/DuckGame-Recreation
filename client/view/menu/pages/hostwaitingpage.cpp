@@ -19,9 +19,9 @@ hostWaitingPage::hostWaitingPage(QWidget* parent, Communicator& communicator, Ga
 
     ui->labelMatchID->setText(QString("MATCH ID: %1").arg(gameInfo.matchID));
 
-    auto* timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &hostWaitingPage::updateConnectedPlayers);
-    timer->start(5000);
+    // auto* timer = new QTimer(this);
+    // connect(timer, &QTimer::timeout, this, &hostWaitingPage::updateConnectedPlayers);
+    // timer->start(5000);
 
     connect(ui->playButton, &QPushButton::clicked, this, &hostWaitingPage::requestStartGame);
 }
@@ -62,11 +62,10 @@ void hostWaitingPage::requestStartGame() {
        return; // aca podria mostrar elgun mensaje
    }
 
-   ReplyMessage replyMessage;
    try {
        while (true) {
            ReplyMessage messageServer = communicator.blockingRecv();
-           if (replyMessage.startGame == 1) {
+           if (messageServer.startGame == 1) {
                emit startMatch();
                break;
            } else {
