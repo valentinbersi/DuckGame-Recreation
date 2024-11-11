@@ -1,13 +1,13 @@
-# Collect all .cpp files recursively in the server directory
+# Collect all .cpp files recursively in the client directory
 file(GLOB_RECURSE CLIENT_SRC "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
-# Collect all .h files recursively in the server directory
+# Collect all .h files recursively in the client directory
 file(GLOB_RECURSE CLIENT_INC "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 
-# Collect all .ui files recursively in the server directory
+# Collect all .ui files recursively in the client directory
 file(GLOB_RECURSE CLIENT_UI "${CMAKE_CURRENT_SOURCE_DIR}/*.ui")
 
-# Collect all .qrc files recursively in the server directory
+# Collect all .qrc files recursively in the client directory
 file(GLOB_RECURSE CLIENT_QRC "${CMAKE_CURRENT_SOURCE_DIR}/*.qrc")
 
 # Collect all directories recursively

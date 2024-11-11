@@ -1,11 +1,14 @@
-# Collect all .cpp files recursively in the server directory
+# Collect all .cpp files recursively in the editor directory
 file(GLOB_RECURSE EDITOR_SRC "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
-# Collect all .h files recursively in the server directory
+# Collect all .h files recursively in the editor directory
 file(GLOB_RECURSE EDITOR_INC "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 
-# Collect all .ui files recursively in the server directory
+# Collect all .ui files recursively in the editor directory
 file(GLOB_RECURSE EDITOR_UI "${CMAKE_CURRENT_SOURCE_DIR}/*.ui")
+
+# Collect all .qrc files recursively in the editor directory
+file(GLOB_RECURSE EDITOR_QRC "${CMAKE_CURRENT_SOURCE_DIR}/*.qrc")
 
 # Collect all directories recursively
 file(GLOB_RECURSE ALL_EDITOR_DIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*)
