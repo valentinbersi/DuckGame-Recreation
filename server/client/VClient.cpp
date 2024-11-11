@@ -17,8 +17,12 @@ bool VirtualClient::isConnected() { return receiver.is_alive() && sender.is_aliv
 VirtualClient::~VirtualClient() {
     receiver.stop();
     sender.stop();
-    skt.shutdown(Socket::ShutdownOptions::READ_WRITE);
-    skt.close();
+    try{
+        skt.shutdown(Socket::ShutdownOptions::READ_WRITE);
+        skt.close();
+    }catch(const LibError& err){
+        //client already shutdown and closed socket
+    }
     receiver.join();
     sender.join();
 }

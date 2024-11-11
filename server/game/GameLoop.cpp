@@ -57,28 +57,36 @@ void GameLoop::stop() {
     _is_alive = false;
 }
 
+bool GameLoop::shouldAddQueue(const u16 clientID) {
+    return clientID % 2 == 1;
+}
+
 void GameLoop::addClient(const u16 clientID,
                          std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue) {
 
     game.addPlayer(clientID);
-    const auto it = std::ranges::find_if(clientQueues, [&clientQueue](const auto& queue) {
-        return queue.lock() == clientQueue.lock();
-    });
-
-    if (it == clientQueues.end())
-        clientQueues.push_back(std::move(clientQueue));
-
+    if(!shouldAddQueue(clientID)){
+        return;
+    }
+    clientQueuesMap.insert({clientID, std::move(clientQueue)});
     broadcast(std::make_shared<ReplyMessage>(0, 0, game.playersCount()));
 }
 
 BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCommands; }
 
 void GameLoop::broadcast(std::shared_ptr<ServerMessage> message) {
-    clientQueues.remove_if([&message](const auto& clientQueue) {
-        if (clientQueue.expired()) {
-            return true;
+    for(auto it = clientQueuesMap.begin(); it != clientQueuesMap.end();){
+        if(it->second.expired()){
+            try{
+                game.removePlayer((it->first)+1);
+            } catch (const GameController::PlayerNotFound& err){
+                // There was no player 2
+            }
+            game.removePlayer(it->first);
+            it = clientQueuesMap.erase(it);
+        } else {
+            it->second.lock()->push(message);
+            ++it;
         }
-        clientQueue.lock()->try_push(message);
-        return false;
-    });
+    }   
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <list>
+#include <map>
 #include <memory>
 #include <queue>
 
@@ -14,7 +14,7 @@
 class GameLoop final: public Thread {
     constexpr static std::uint8_t FRAME_TIMES_AMOUNT = 2;
 
-    std::list<std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>>> clientQueues{};
+    std::map<PlayerID, std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>>> clientQueuesMap{};
     BlockingQueue<std::unique_ptr<Command>> clientCommands;
     std::queue<std::unique_ptr<Command>> currentFrameCommands;
     GameController game;
@@ -35,6 +35,12 @@ class GameLoop final: public Thread {
      * @param message the std::shared_ptr<Servermessage> to broadcast
      */  
     void broadcast(std::shared_ptr<ServerMessage> message);
+
+    /**
+     * Check if a clientQueue should be maped.
+     * @param
+     */
+    bool shouldAddQueue(const u16 clientID);
     
 public:
     /**
