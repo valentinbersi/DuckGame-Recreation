@@ -56,7 +56,8 @@ void GameMapMonitor::stopAllGames() {
 
 GameMapMonitor::~GameMapMonitor() {
     for(auto& [key, value] : gameMap) {
-        if (value->is_alive())
-        value->join();
+        if (value->isJoinable()) {
+            value->join();
+        }
     }
 }

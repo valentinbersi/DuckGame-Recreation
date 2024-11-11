@@ -17,6 +17,8 @@ void Thread::start() {
 
 void Thread::join() { thread.join(); }
 
+bool Thread::isJoinable() const { return thread.joinable(); }
+
 void Thread::main() {
     try {
         this->run();
