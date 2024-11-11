@@ -72,10 +72,7 @@ GameObject::ChildNotInTree::ChildNotInTree(const std::string& name):
 #define NO_PARENT "Object has no parent"
 
 GameObject::~GameObject() {
-    for (auto& [name, child]: children) {
-        fire(eventName(Events::TREE_EXITED), child);
-        delete child;
-    }
+    for (auto& [name, child]: children) delete child;
 }
 
 void GameObject::updateInternal(const float delta) {
