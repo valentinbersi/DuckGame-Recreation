@@ -43,7 +43,7 @@ private:
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping();
     void updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping, float currentScale);
     void getSnapshot();
-    void showBackground(SDL2pp::Texture& backgroundTexture);
+    void showBackground(SDL2pp::Texture& backgroundTexture, float currentScale);
 
     void clearObjects();
     //void typeOfObject2D(std::unique_ptr<GameObject2DData> gameObject2D);

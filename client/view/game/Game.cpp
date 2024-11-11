@@ -46,7 +46,7 @@ void Game::init() {
         camera.update(ducks);
         float currentScale = camera.getScale();
 
-        showBackground(backgroundTexture);
+        showBackground(backgroundTexture, currentScale);
         updatePlayers(spritesMapping, currentScale);
         // updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc (debo hacer un clearObjects aca tambien)
         renderer.Present();
@@ -98,7 +98,7 @@ void Game::getSnapshot() {
     }
 }
 
-void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping, float currentScale) {
+void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr <SpriteManager>>& spritesMapping, float currentScale) {
     for (auto& duck: ducks) {
         DuckID duckID = duck->duckID;
         Vector2 coords = duck->position;
@@ -136,13 +136,13 @@ void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManage
     }
 }*/
 
-void Game::showBackground(Texture& backgroundTexture) {
+void Game::showBackground(Texture& backgroundTexture, float currentScale) {
     SDL_Rect dstRect;
     dstRect.x = 0;
     dstRect.y = 0;
     SDL_GetWindowSize(window.Get(), &window_width, &window_height);
-    dstRect.w = window_width;
-    dstRect.h = window_height;
+    dstRect.w = static_cast<int>(window_width * currentScale);
+    dstRect.h = static_cast<int>(window_height * currentScale);
 
     renderer.Copy(backgroundTexture, NullOpt, dstRect);
 }
