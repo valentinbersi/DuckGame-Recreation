@@ -40,7 +40,8 @@ add_subdirectory(common/)
 
 FetchContent_Declare(
         yaml-cpp
-        URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.zip
+        GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+        GIT_TAG yaml-cpp-0.6.3
 )
 
 FetchContent_MakeAvailable(yaml-cpp)
@@ -60,13 +61,12 @@ target_include_directories(common PUBLIC .)
 # Install libSDL2pp (for client or editor)
 if (CLIENT OR EDITOR)
     add_custom_command(
-            OUTPUT ${CMAKE_BINARY_DIR}/install_dependencies.stamp
-            COMMAND ${CMAKE_COMMAND} -E env sudo bash ${CMAKE_SOURCE_DIR}/install_dependencies.sh
-            COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/install_dependencies.stamp
-            COMMENT "Installing dependencies, sudo password may be required."
+            OUTPUT ${CMAKE_BINARY_DIR}/graphics.stamp
+            COMMAND ${CMAKE_COMMAND} -E env bash ${CMAKE_SOURCE_DIR}/install_graphics.sh
+            COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/graphics.stamp
     )
 
-    add_custom_target(run_install_script ALL DEPENDS ${CMAKE_BINARY_DIR}/install_dependencies.stamp)
+    add_custom_target(graphics ALL DEPENDS ${CMAKE_BINARY_DIR}/graphics.stamp)
 
     FetchContent_Declare(
             libSDL2pp
@@ -96,7 +96,7 @@ if (CLIENT)
     add_executable(DuckGame)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGame common run_install_script SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    add_dependencies(DuckGame graphics common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(client)
@@ -135,7 +135,7 @@ if (EDITOR)
     add_executable(DuckGameLevelEditor)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGameLevelEditor common run_install_script SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    add_dependencies(DuckGameLevelEditor graphics common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(editor)

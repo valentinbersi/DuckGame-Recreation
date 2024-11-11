@@ -59,14 +59,16 @@ bool newGame::NewMatchRequest() {
                                                   gameInfo.matchID  // esto deberia ser 0 ¿?
     );
 
-    if (!communicator.trysend(std::move(message))) {
-        qDebug() << "Error al enviar el mensaje.";
+    try {
+        communicator.trysend(std::move(message));
+        // chequear si se envio
+        ReplyMessage replyMessage = communicator.blockingRecv();
+        // chequear si se recibio bien
+        gameInfo.matchID = replyMessage.matchID;
+        return true;
+    } catch(LibError& libError){
         return false;
     }
-
-    ReplyMessage replyMessage = communicator.recvSync();
-    gameInfo.matchID = replyMessage.matchID;
-    return true;
 }
 
 

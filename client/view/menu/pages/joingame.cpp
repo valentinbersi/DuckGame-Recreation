@@ -55,16 +55,16 @@ bool joinGame::joinMatchRequest() {
             gameInfo.matchID // esto deberia ser 0 ¿?
     );
 
-    if (!communicator.trysend(std::move(message))) {
-        qDebug() << "Error al enviar el mensaje.";
-        return false; // ver como manejar aca
-    }
-
-    ReplyMessage messageServer = communicator.recvSync();
-    if(gameInfo.matchID == messageServer.matchID && messageServer.startGame == 0) {
+    try {
+        communicator.trysend(std::move(message));
+        // chequear si se envio bien
+        ReplyMessage replyMessage = communicator.blockingRecv();
+        // deberia chequear si se recibio ¿?
+        gameInfo.matchID = replyMessage.matchID;
         return true;
-    } else // ver los posibles mensajes al server: partida ya comenzada y partida no encontrada
-    {return false;}
+    } catch(LibError& libError){
+        return false;
+    }
 }
 
 joinGame::~joinGame() { delete ui; }

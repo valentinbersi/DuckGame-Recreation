@@ -14,13 +14,14 @@ joinWaitingPage::joinWaitingPage(QWidget* parent, Communicator& communicator):
 
 void joinWaitingPage::waitForMatchStart() {
     while (true) {
-        ReplyMessage replyMessage = communicator.recvSync();
+        ReplyMessage replyMessage = communicator.blockingRecv();
+        // ver el chequeo de si se recibio bien.
 
         if (replyMessage.connectedPlayers > 0) {
-            ui->labelPlayersConnected->setText(QString("Player Connected: %1").arg(replyMessage.connectedPlayers));
-        } else {
-            QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
-            break; // nose si esta bien esto!
+            ui->labelPlayersConnected->setText(QString("Player Connected: %1 / 4").arg(replyMessage.connectedPlayers));
+        // } else {
+        //     QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
+        //     break; // nose si esta bien esto!
         }
 
         if (replyMessage.startGame == 1) {

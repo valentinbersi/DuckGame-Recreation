@@ -21,10 +21,7 @@ void Sender::run() noexcept {
         }
         //expected otherwise
     } catch (const LibError& err) {
-        if (is_alive()){
-            syslog(LOG_CRIT, FORMAT, err.what());
-        }
-        //expected otherwise
+        //expected
     } catch (...) {
         syslog(LOG_CRIT, ERROR_MSG);
     }

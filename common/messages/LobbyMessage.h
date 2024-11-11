@@ -18,7 +18,7 @@ public:
 
     void send(ClientSendProtocol& clientProtocol) override;
 
-    bool operator==(const LobbyMessage& other);
+    bool operator==(const LobbyMessage& other) const;
 
     ~LobbyMessage();
 };

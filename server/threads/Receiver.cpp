@@ -29,10 +29,7 @@ void Receiver::run() noexcept {
         }
 
     } catch (const LibError& err) {
-        if (is_alive()){
-            syslog(LOG_CRIT, FORMAT, err.what());
-        }
-        //expected otherwise
+        //expected 
     } catch (const ClosedQueue& err) {
         //expected
     } catch (...) {

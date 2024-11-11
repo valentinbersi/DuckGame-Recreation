@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>818</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGraphicsView" name="graphicsView">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>800</width>
+      <height>600</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgb(192, 191, 188);</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>RightToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="Platform"/>
+   <addaction name="SpawnDuck"/>
+   <addaction name="SpawnGun"/>
+   <addaction name="Box"/>
+  </widget>
+  <action name="Platform">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Platform</string>
+   </property>
+   <property name="toolTip">
+    <string>platform</string>
+   </property>
+  </action>
+  <action name="SpawnDuck">
+   <property name="text">
+    <string>SpawnDuck</string>
+   </property>
+   <property name="toolTip">
+    <string>SpawnDuck</string>
+   </property>
+  </action>
+  <action name="SpawnGun">
+   <property name="text">
+    <string>SpawnGun</string>
+   </property>
+   <property name="toolTip">
+    <string>SpawnGun</string>
+   </property>
+  </action>
+  <action name="Box">
+   <property name="text">
+    <string>Box</string>
+   </property>
+   <property name="toolTip">
+    <string>Box</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

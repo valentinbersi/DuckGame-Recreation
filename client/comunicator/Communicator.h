@@ -17,8 +17,8 @@ class Communicator {
 private:
     ActiveSocket skt;
     BlockingQueue<std::unique_ptr<ClientMessage>> sendQueue;
-    BlockingQueue<GameStatus> recvQueue;
-    CommunicatorSync sync;
+    BlockingQueue<ReplyMessage> recvQueueLobby;
+    BlockingQueue<GameStatus> recvQueueGame;
     CommunicatorSender sender;
     CommunicatorReceiver receiver;
 
@@ -31,9 +31,9 @@ public:
 
     std::optional<GameStatus> tryRecvLast();
 
-    void sendSync (std::unique_ptr<ClientMessage> message); 
+    std::optional<ReplyMessage> tryRecvReply();
 
-    ReplyMessage recvSync();
+    ReplyMessage blockingRecv();
 
     ~Communicator();
 };
