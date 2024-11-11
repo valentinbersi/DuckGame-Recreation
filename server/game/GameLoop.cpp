@@ -24,7 +24,7 @@ void GameLoop::processCurrentFrameCommands() {
 
 GameLoop::GameLoop() = default;
 
-#define FPS 240
+#define FPS 30
 
 void GameLoop::run() {
     try{
