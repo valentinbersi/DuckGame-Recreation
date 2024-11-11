@@ -67,7 +67,7 @@ Texture Game::startBackground() {
 }
 
 void Game::getSnapshot() {
-    std::optional<GameStatus> snapshot = communicator.tryrecv();
+    std::optional<GameStatus> snapshot = communicator.tryRecvLast();
     if (!snapshot.has_value()) return;
 
         clearObjects();
@@ -91,8 +91,8 @@ void Game::getSnapshot() {
                     break;
             }
         }
-    }
 }
+
 
 void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr <SpriteManager>>& spritesMapping, float currentScale) {
     for (auto& duck: ducks) {
