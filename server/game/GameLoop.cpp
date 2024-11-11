@@ -1,8 +1,9 @@
 #include "GameLoop.h"
 
-#include <memory>
 #include <algorithm>
+#include <memory>
 #include <utility>
+
 #include <syslog.h>
 
 #include "GameStatus.h"
@@ -27,7 +28,7 @@ GameLoop::GameLoop() = default;
 #define FPS 30
 
 void GameLoop::run() {
-    try{
+    try {
         broadcast(std::make_shared<ReplyMessage>(0, 1, 0));
         timer.start();
         game.start();
@@ -41,9 +42,9 @@ void GameLoop::run() {
             broadcast(std::make_shared<GameStatus>(std::move(game.status())));
             timer.iterationEnd(FPS);
         }
-    }catch(const ClosedQueue& err){
-        //Expected when closing server
-    }catch(...){
+    } catch (const ClosedQueue& err) {
+        // Expected when closing server
+    } catch (...) {
         syslog(LOG_CRIT, ERROR_MSG);
     }
     _keep_running = false;
@@ -58,15 +59,16 @@ void GameLoop::stop() {
 
 void GameLoop::addClient(const u16 clientID,
                          std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue) {
-    game.addPlayer(clientID);
-    auto it = std::find_if(clientQueues.begin(), clientQueues.end(), [&clientQueue](const auto& queue) {
-                            return queue.lock() == clientQueue.lock();});
-                            
-    if (it == clientQueues.end()) {
-        clientQueues.push_back(std::move(clientQueue));
-    }
 
-    broadcast(std::make_shared<ReplyMessage>(0, 0, game.playersCount()));   
+    game.addPlayer(clientID);
+    const auto it = std::ranges::find_if(clientQueues, [&clientQueue](const auto& queue) {
+        return queue.lock() == clientQueue.lock();
+    });
+
+    if (it == clientQueues.end())
+        clientQueues.push_back(std::move(clientQueue));
+
+    broadcast(std::make_shared<ReplyMessage>(0, 0, game.playersCount()));
 }
 
 BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCommands; }

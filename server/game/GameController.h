@@ -23,6 +23,28 @@ class GameController final: public GameObject {
     void onTreeExited(GameObject* object) override;
 
 public:
+    /**
+     * Exception thrown when trying to add a player that is already in the match
+     */
+    struct AlreadyAddedPlayer final: std::logic_error {
+        /**
+         * Construct an AlreadyAddedPlayer exception
+         * @param id The id of the player that was already added
+         */
+        explicit AlreadyAddedPlayer(PlayerID id);
+    };
+
+    /**
+     * Exception thrown when trying to remove a player that is not in the match
+     */
+    struct PlayerNotFound final: std::out_of_range {
+        /**
+         * Construct a PlayerNotFound exception
+         * @param id The id of the player that was not found
+         */
+        explicit PlayerNotFound(PlayerID id);
+    };
+
     GameController();
     GameController(const GameController&) = delete;
     GameController& operator=(const GameController&) = delete;
@@ -44,21 +66,34 @@ public:
     /**
      * Add a player to the match
      * @param playerID the id of the player to add
+     * @throw AlreadyAddedPlayer if the player is already in the match
      */
     void addPlayer(PlayerID playerID);
+
+    /**
+     * Remove a player from the match
+     * @param playerID the id of the player to remove
+     * @throw PlayerNotFound if the player is not in the match
+     */
+    void removePlayer(PlayerID playerID);
 
     /**
      * Get a reference to a player by its id
      * @param playerID the id of the player to get
      * @return a reference to the player
+     * @throw std::out_of_range if the player is not in the match
      */
     Player& getPlayer(PlayerID playerID) const;
 
+    /**
+     * Get the number of players in the match
+     * @return the number of players in the match
+     */
     u8 playersCount() const;
 
     /**
-     * Does nothing on the game controller
-     * @return
+     * Get the status of the game
+     * @return the status of the game
      */
     GameStatus status() override;
 };
