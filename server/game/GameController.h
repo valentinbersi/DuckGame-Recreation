@@ -1,13 +1,26 @@
 #pragma once
 
-#include "Object.h"
+#include "CollisionManager.h"
 #include "Player.h"
 
 struct GameStatus;
 typedef u16 PlayerID;
 
-class GameController final: public Object {
+class GameController final: public GameObject {
     HashMap<PlayerID, Player*> players;
+    CollisionManager collisionManager;
+
+    /**
+     * GameController handler for tree entered event
+     * @param object The child that was added
+     */
+    void onTreeEntered(GameObject* object) override;
+
+    /**
+     * GameController handler for tree entered event
+     * @param object The child that was removed
+     */
+    void onTreeExited(GameObject* object) override;
 
 public:
     GameController();

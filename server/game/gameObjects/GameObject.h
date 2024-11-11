@@ -4,33 +4,42 @@
 #include <string>
 #include <unordered_map>
 
+#include "../Updatable.h"
+
 #include "GameStatus.h"
 #include "Startable.h"
 #include "Subject.h"
 #include "TrackedReference.h"
 #include "Types.h"
-#include "Updatable.h"
+
+using gameObject::Subject;
 
 /**
- * An object in the game
+ * An object in the game.\n
+ * The objects organize in a tree way, where each object can have children.\n
+ * Every object is responsible for managing the memory of its children,
+ * because of this, objects are not copyable or movable, and they can only have one parent.\n
+ * Callers don't own pointers returned by Objects, in the same way,
+ * any raw pointer passed as argument inside Objects does not hold ownership of the
+ * underlying object.\n
  */
-class Object: public Subject, public TrackedReference, public Updatable, public Startable {
-    Object* _parent;
-    HashMap<std::string, Object*> children;
+class GameObject: public Subject, public TrackedReference, public Updatable, public Startable {
+    GameObject* _parent;
+    HashMap<std::string, GameObject*> children;
 
     /**
-     * Called when an object is added to the subtree of this object.\n
+     * Object class handler for tree entered event.\n
      * It simply fires the event so parents are notified of a new child in the tree
      * @param object The child that was added
      */
-    void onTreeEntered(Object& object);
+    virtual void onTreeEntered(GameObject* object);
 
     /**
-     * Called when an object is removed from the subtree of this object.\n
+     * Object class handler for tree exited event.\n
      * It simply fires the event so parents are notified of a new child in the tree.
      * @param object The child that was removed
      */
-    void onTreeExited(Object& object);
+    virtual void onTreeExited(GameObject* object);
 
 protected:
     constexpr static auto INVALID_EVENT_TYPE = "Invalid event type";
@@ -39,7 +48,7 @@ protected:
      * A constructor for derived classes.
      * Initializes the signals
      */
-    explicit Object(Object* parent);
+    explicit GameObject(GameObject* parent);
 
     /**
      * Add a child to the object
@@ -50,13 +59,13 @@ protected:
      * @throws  std::invalid_argument If name is empty
      * @throws  AlreadyAddedChild If the name is already taken
      */
-    virtual void addChild(std::string name, Object* newChild);
+    void addChild(std::string name, GameObject* newChild);
 
     /**
      * Apply the given function to all children
      * @param f The function to apply, should not throw exceptions
      */
-    void forAllChildren(const std::function<void(Object&)>& f);
+    void forAllChildren(const std::function<void(GameObject*)>& f);
 
     /**
      * Apply the given function to a child
@@ -67,7 +76,7 @@ protected:
      * @throws std::out_of_range If the child is not found
      */
     template <typename Ret>
-    Ret applyToChild(const std::string& name, const std::function<Ret(Object&)>& f);
+    Ret applyToChild(const std::string& name, const std::function<Ret(GameObject*)>& f);
 
 public:
     /**
@@ -84,23 +93,12 @@ public:
         explicit ChildNotInTree(const std::string& name);
     };
 
-    /**
-     * An exception thrown when trying access the parent of the root object
-     */
-    struct RootObject final: std::logic_error {
-        explicit RootObject();
-    };
-
-    struct AddedChildWithChildren final: std::logic_error {
-        explicit AddedChildWithChildren();
-    };
-
-    Object() = delete;
-    Object(const Object& other) = delete;
-    Object& operator=(const Object& other) = delete;
-    Object(Object&& other) noexcept = delete;
-    Object& operator=(Object&& other) noexcept = delete;
-    ~Object() override;
+    GameObject() = delete;
+    GameObject(const GameObject& other) = delete;
+    GameObject& operator=(const GameObject& other) = delete;
+    GameObject(GameObject&& other) noexcept = delete;
+    GameObject& operator=(GameObject&& other) noexcept = delete;
+    ~GameObject() override;
 
     /**
      * Updates the children of the object
@@ -116,21 +114,21 @@ public:
      * @throws std::invalid_argument if newChild already has a parent
      * @throws  AlreadyAddedChild If the name is already taken
      */
-    void addChild(std::string name, std::unique_ptr<Object> newChild);
+    void addChild(std::string name, std::unique_ptr<GameObject> newChild);
 
     /**
      * Remove a child from the object
      * @param name The name of the child to remove
      * @return A pointer to the removed child
      */
-    std::unique_ptr<Object> removeChild(const std::string& name);
+    std::unique_ptr<GameObject> removeChild(const std::string& name);
 
     /**
      * Transfer a child from another object to this
      * @param name The name of the child to transfer
      * @param parent The parent object to transfer the child from
      */
-    void transferChild(std::string name, Object& parent);
+    void transferChild(std::string name, GameObject& parent);
 
     /**
      * Get a child of the object.
@@ -138,20 +136,26 @@ public:
      * @return A reference to the child
      * @throws std::out_of_range If the child is not found
      */
-    Object& getChild(const std::string& name) const;
+    GameObject* getChild(const std::string& name) const;
 
     /**
      * Check if the object has children
      * @return True if the object has children, false otherwise
      */
-    bool hasChildren() const;
+    bool isParent() const;
 
     /**
      * Get the parent of the object
      * @return A reference to the parent
      * @throws RootObject If the object has no parent
      */
-    Object& parent() const;
+    GameObject* parent() const;
+
+    /**
+     * Check if the object is the root object
+     * @return True if the object is the root object, false otherwise
+     */
+    bool isRoot() const;
 
     /**
      * Get the status of the object
@@ -182,6 +186,6 @@ public:
 };
 
 template <typename Ret>
-Ret Object::applyToChild(const std::string& name, const std::function<Ret(Object&)>& f) {
+Ret GameObject::applyToChild(const std::string& name, const std::function<Ret(GameObject*)>& f) {
     return f(children.at(name));
 }

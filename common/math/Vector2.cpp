@@ -165,7 +165,11 @@ Vector2& Vector2::operator*=(const float scalar) { return *this = *this * scalar
 
 Vector2 Vector2::operator+(const Vector2& v) const { return {v._x + _x, v._y + _y}; }
 
-Vector2& Vector2::operator+=(const Vector2& v) { return *this = *this + v; }
+Vector2& Vector2::operator+=(const Vector2& v) {
+    _x += v._x;
+    _y += v._y;
+    return *this;
+}
 
 Vector2 Vector2::operator-(const Vector2& v) const { return {v._x - _x, v._y - _y}; }
 
