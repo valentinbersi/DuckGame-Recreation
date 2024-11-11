@@ -23,6 +23,10 @@ class GameController final: public GameObject {
     void onTreeExited(GameObject* object) override;
 
 public:
+    struct AlreadyAddedPlayer final: std::logic_error {
+        explicit AlreadyAddedPlayer(PlayerID id);
+    };
+
     GameController();
     GameController(const GameController&) = delete;
     GameController& operator=(const GameController&) = delete;

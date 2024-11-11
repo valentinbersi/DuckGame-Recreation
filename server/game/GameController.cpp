@@ -30,6 +30,9 @@ void GameController::onTreeExited(GameObject* object) {
         collisionManager.removeCollisionObject(collisionObject);
 }
 
+GameController::AlreadyAddedPlayer::AlreadyAddedPlayer(const PlayerID id):
+        std::logic_error("Player with id " + std::to_string(id) + " already added") {}
+
 GameController::GameController(): GameObject(nullptr) {
     connect(eventName(Events::TREE_ENTERED),
             eventHandler(&GameController::onTreeEntered, GameObject*));
@@ -51,7 +54,12 @@ void GameController::update(const float delta) {
 
 #define MAX_PLAYERS 4
 
+#define PLAYER "Player "
+
 void GameController::addPlayer(const PlayerID playerID) {
+    if (players.contains(playerID))
+        throw AlreadyAddedPlayer(playerID);
+
     const std::string id = std::to_string(playerID);
 
     if (players.size() >= MAX_PLAYERS)
@@ -67,8 +75,8 @@ void GameController::addPlayer(const PlayerID playerID) {
     newPlayer->connect(eventName(Events::TREE_EXITED),
                        eventHandler(&GameController::onTreeExited, GameObject*));
 
-    addChild(id, newPlayer);
-    players[playerID] = newPlayer;
+    addChild(PLAYER + id, newPlayer);
+    players.emplace(playerID, newPlayer);
 }
 
 Player& GameController::getPlayer(const PlayerID playerID) const { return *players.at(playerID); }
