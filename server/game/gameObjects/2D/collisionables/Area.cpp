@@ -1,18 +1,16 @@
 #include "Area.h"
 
-Area::Area(Object* parent, Vector2 position, const float rotation,
+Area::Area(GameObject* parent, Vector2 position, const float rotation,
            const std::bitset<LAYERS_COUNT> layers, const std::bitset<LAYERS_COUNT> scannedLayers,
            std::unique_ptr<Shape2D> shape):
-
         CollisionObject(parent, std::move(position), rotation, layers, scannedLayers,
                         std::move(shape)) {
-
-    registerObjectEvent(CollisionObject&)(eventName(Events::COLLISION));
+    registerEvent<CollisionObject*>(eventName(Events::COLLISION));
 }
 
 void Area::start() {}
 
-void Area::update(float delta) {}
+void Area::update([[maybe_unused]] float delta) {}
 
 void Area::updateInternal(const float delta) { CollisionObject::updateInternal(delta); }
 
@@ -21,11 +19,11 @@ void Area::registerCollision(std::weak_ptr<CollisionObject> collisionObject) {
 }
 
 void Area::processCollisions() {
-    std::ranges::for_each(objectsToCollide, [this](const std::weak_ptr<CollisionObject>& object) {
+    for (auto& object: objectsToCollide) {
         if (const std::shared_ptr ownedObject(object.lock());
             ownedObject != nullptr && collidesWith(*ownedObject))
-            fireObjectEvent(CollisionObject&)(eventName(Events::COLLISION), *ownedObject);
-    });
+            fire<CollisionObject*>(eventName(Events::COLLISION), ownedObject.get());
+    }
 }
 
 GameStatus Area::status() { return {}; }

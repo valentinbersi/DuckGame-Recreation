@@ -5,6 +5,7 @@
 #define EVENT "Event "
 #define ALREADY_REGISTERED " is already registered for this subject"
 
+namespace gameObject {
 Subject::AlreadyRegisteredEvent::AlreadyRegisteredEvent(const std::string& eventName):
         std::invalid_argument(EVENT + eventName + ALREADY_REGISTERED) {}
 
@@ -34,27 +35,8 @@ void Subject::unregisterEvent(const std::string& name) {
 
 Subject::Subject() noexcept = default;
 
-Subject::Subject(const Subject& other) noexcept = default;
-
-Subject& Subject::operator=(const Subject& other) noexcept {
-    if (this == &other)
-        return *this;
-
-    events = other.events;
-    return *this;
-}
-
-Subject::Subject(Subject&& other) noexcept: events(std::move(other.events)) {}
-
-Subject& Subject::operator=(Subject&& other) noexcept {
-    if (this == &other)
-        return *this;
-
-    events = std::move(other.events);
-    return *this;
-}
-
 Subject::~Subject() {
     std::ranges::for_each(
             events, [](const std::pair<std::string, EventBase*>& event) { delete event.second; });
 }
+}  // namespace gameObject

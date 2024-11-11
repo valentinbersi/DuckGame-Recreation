@@ -23,7 +23,7 @@ protected:
      * @param initialVelocity The initial velocity of the object
      * @param gravity the gravity configuration for this object
      */
-    PhysicsObject(Object* parent, Vector2 position, float rotation,
+    PhysicsObject(GameObject* parent, Vector2 position, float rotation,
                   std::bitset<LAYERS_COUNT> layers, std::bitset<LAYERS_COUNT> scannedLayers,
                   std::unique_ptr<Shape2D> shape, Vector2 initialVelocity, Gravity gravity);
 

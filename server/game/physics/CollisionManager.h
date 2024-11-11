@@ -30,5 +30,5 @@ public:
     /**
      * Process all collisions between collisionObjects
      */
-    void processCollisions();
+    void processCollisions() const;
 };

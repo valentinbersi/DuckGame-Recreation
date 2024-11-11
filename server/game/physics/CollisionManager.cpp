@@ -1,6 +1,6 @@
 #include "CollisionManager.h"
 
-#include <bits/ranges_algo.h>
+#include <functional>
 
 #include "CollisionObject.h"
 
@@ -15,18 +15,15 @@ void CollisionManager::removeCollisionObject(CollisionObject* collisionObject) {
     collisionObjects.remove(collisionObject);
 }
 
-void CollisionManager::processCollisions() {
-    std::ranges::for_each(collisionObjects, [this](CollisionObject* collisionObject) {
-        std::ranges::for_each(
-                collisionObjects, [collisionObject](const CollisionObject* otherCollisionObject) {
-                    if (collisionObject != otherCollisionObject) {
-                        collisionObject->registerCollision(
-                                otherCollisionObject->getReference<CollisionObject>());
-                    }
-                });
-    });
+void CollisionManager::processCollisions() const {
+    for (CollisionObject* collisionObject: collisionObjects)
+        for (const CollisionObject* otherCollisionObject: collisionObjects)
+            if (collisionObject != otherCollisionObject)
+                collisionObject->registerCollision(
+                        otherCollisionObject->getReference<CollisionObject>());
 
-    std::ranges::for_each(collisionObjects, [](CollisionObject* collisionObject) {
+    for (CollisionObject* collisionObject: collisionObjects) {
         collisionObject->processCollisions();
-    });
+        collisionObject->resetRegisteredCollisions();
+    }
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -7,6 +8,7 @@
 #include "Event.h"
 #include "Types.h"
 
+namespace gameObject {
 /**
  * A subject of the observer pattern. Differs from the observer pattern in the way that it doesn't
  * register observers, but callables.
@@ -34,11 +36,10 @@ protected:
     /**
      * Register an event with the given name and argument types
      * @param name The name of the event
-     * @tparam Object The type of the object that the callables are member functions of
-     * @tparam Args The types of the arguments to pass to the callables
+     * @tparam Args The arguments that the event takes
      * @throws AlreadyRegisteredEvent if there's already an event with this name
      */
-    template <typename Object, typename... Args>
+    template <typename... Args>
     void registerEvent(std::string name);
 
     /**
@@ -52,14 +53,13 @@ protected:
      * Fire the event with the given name
      * @param name The name of the event
      * @param args The arguments to pass to the callable
-     * @tparam Object The type of the object that the callable belongs to
      * @tparam Args The types of the arguments to pass to the callable. It's not mandatory to
      * specify these because the compiler can infer them, but sometimes types like const char*
      * and std::string are confused.
      * @throws std::out_of_range If the event is not registered
      * @throws InvalidEvent If the event has different arguments type
      * */
-    template <typename Object, typename... Args>
+    template <typename... Args>
     void fire(const std::string& name, Args... args);
 
 public:
@@ -72,36 +72,37 @@ public:
     };
 
     Subject() noexcept;
-    Subject(const Subject& other) noexcept;
-    Subject& operator=(const Subject& other) noexcept;
-    Subject(Subject&& other) noexcept;
-    Subject& operator=(Subject&& other) noexcept;
+    Subject(const Subject& other) noexcept = delete;
+    Subject& operator=(const Subject& other) noexcept = delete;
+    Subject(Subject&& other) noexcept = delete;
+    Subject& operator=(Subject&& other) noexcept = delete;
     virtual ~Subject();
 
     /**
-     * Connect a callable to the event with the given name
+     * Connect a EventHandler to the event with the given name
      * @param to The name of the event
-     * @param method The callable to connect
-     * @tparam Object The type of the object that the method belongs to
-     * @tparam Args The types of the arguments to pass to the callable
+     * @param eventHandler The EventHandler to connect to the event
+     * @tparam CallerClass The class that the method wrapped by the EventHandler belongs to
+     * @tparam Args The types of the arguments to pass to the EventHandler
      * @throws std::out_of_range If the event is not registered
      * @throws InvalidEvent If the event has different arguments type
      */
-    template <typename Object, typename... Args>
-    void connect(const std::string& to, Method<Object, void, Args...> method);
+    template <typename CallerClass, typename... Args>
+    void connect(const std::string& to,
+                 std::unique_ptr<EventHandler<CallerClass, Args...>> eventHandler);
 };
 
-template <typename Object, typename... Args>
+template <typename... Args>
 void Subject::registerEvent(std::string name) {
     if (events.contains(name))
         throw AlreadyRegisteredEvent(name);
 
-    events.emplace(std::move(name), new Event<Object, Args...>());
+    events.emplace(std::move(name), new Event<Args...>());
 }
 
-template <typename Object, typename... Args>
+template <typename... Args>
 void Subject::fire(const std::string& name, Args... args) {
-    auto event = dynamic_cast<Event<Object, Args...>*>(events.at(name));
+    auto event = dynamic_cast<Event<Args...>*>(events.at(name));
 
     if (event == nullptr)
         throw InvalidEvent();
@@ -109,13 +110,14 @@ void Subject::fire(const std::string& name, Args... args) {
     event->fire(args...);
 }
 
-
-template <typename Object, typename... Args>
-void Subject::connect(const std::string& to, Method<Object, void, Args...> method) {
-    auto event = dynamic_cast<Event<Object, Args...>*>(events.at(to));
+template <typename CallerClass, typename... Args>
+void Subject::connect(const std::string& to,
+                      std::unique_ptr<EventHandler<CallerClass, Args...>> eventHandler) {
+    auto event = dynamic_cast<Event<Args...>*>(events.at(to));
 
     if (event == nullptr)
         throw InvalidEvent();
 
-    event->connect(std::move(method));
+    event->connect(std::move(eventHandler));
 }
+}  // namespace gameObject

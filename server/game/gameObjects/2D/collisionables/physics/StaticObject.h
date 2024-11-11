@@ -17,8 +17,9 @@ protected:
      * @param scannedLayers The layers the object scans for collisions
      * @param shape The shape of the object
      */
-    StaticObject(Object* parent, Vector2 position, float rotation, std::bitset<LAYERS_COUNT> layers,
-                 std::bitset<LAYERS_COUNT> scannedLayers, std::unique_ptr<Shape2D> shape);
+    StaticObject(GameObject* parent, Vector2 position, float rotation,
+                 std::bitset<LAYERS_COUNT> layers, std::bitset<LAYERS_COUNT> scannedLayers,
+                 std::unique_ptr<Shape2D> shape);
 
 public:
     StaticObject() = delete;

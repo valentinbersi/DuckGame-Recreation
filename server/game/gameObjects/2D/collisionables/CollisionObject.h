@@ -3,13 +3,13 @@
 #include <forward_list>
 #include <memory>
 
-#include "Object2D.h"
+#include "GameObject2D.h"
 #include "Shape2D.h"
 
 /**
  * An Object that can collide with other collision objects
  */
-class CollisionObject: public Object2D {
+class CollisionObject: public GameObject2D {
 public:
     constexpr static u8 LAYERS_COUNT = 32;
 
@@ -31,7 +31,7 @@ protected:
      * @param scannedLayers the layers the object scans in search for other collisionObjects
      * @param shape the shape of the CollisionObject
      */
-    CollisionObject(Object* parent, Vector2 position, float rotation,
+    CollisionObject(GameObject* parent, Vector2 position, float rotation,
                     std::bitset<LAYERS_COUNT> layers, std::bitset<LAYERS_COUNT> scannedLayers,
                     std::unique_ptr<Shape2D> shape);
 

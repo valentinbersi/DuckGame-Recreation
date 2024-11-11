@@ -60,7 +60,7 @@ void GameLoop::run() {
 void GameLoop::addClient(const u16 clientID,
                          std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue) {
     game.addPlayer(clientID);
-    for (const auto& queue : clientQueues) {
+    for (const auto& queue: clientQueues) {
         if (queue.lock().get() == clientQueue.lock().get()) {
             return;
         }

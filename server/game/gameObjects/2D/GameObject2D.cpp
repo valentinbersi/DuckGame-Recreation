@@ -1,11 +1,11 @@
-#include "Object2D.h"
+#include "GameObject2D.h"
 
 #include <utility>
 
-Object2D::Object2D(Object* parent, Vector2 position, const float rotation):
-        Object(parent), _position(std::move(position)), _rotation(rotation) {
+GameObject2D::GameObject2D(GameObject* parent, Vector2 position, const float rotation):
+        GameObject(parent), _position(std::move(position)), _rotation(rotation) {
 
-    const auto parent2D = dynamic_cast<Object2D*>(parent);
+    const auto parent2D = dynamic_cast<GameObject2D*>(parent);
 
     if (parent2D == nullptr) {
         _globalPosition = _position;
@@ -25,10 +25,10 @@ Object2D::Object2D(Object* parent, Vector2 position, const float rotation):
     _globalRotation = _rotation + parent2D->_globalRotation;
 }
 
-Object2D::~Object2D() = default;
+GameObject2D::~GameObject2D() = default;
 
-void Object2D::updateInternal([[maybe_unused]] const float delta) {
-    if (const auto parent2D = dynamic_cast<Object2D*>(parent()); parent2D != nullptr) {
+void GameObject2D::updateInternal([[maybe_unused]] const float delta) {
+    if (const auto parent2D = dynamic_cast<GameObject2D*>(parent()); parent2D != nullptr) {
         if (_position == Vector2::ZERO)
             _globalPosition = parent2D->_globalPosition;
         else
@@ -39,13 +39,13 @@ void Object2D::updateInternal([[maybe_unused]] const float delta) {
         _globalRotation = _rotation + parent2D->_globalRotation;
     }
 
-    Object::updateInternal(delta);
+    GameObject::updateInternal(delta);
 }
 
-Object2D& Object2D::setGlobalPosition(Vector2 globalPosition) noexcept {
+GameObject2D& GameObject2D::setGlobalPosition(Vector2 globalPosition) noexcept {
     _globalPosition = std::move(globalPosition);
 
-    const auto parent2D = dynamic_cast<Object2D*>(parent());
+    const auto parent2D = dynamic_cast<GameObject2D*>(parent());
 
     if (parent2D == nullptr) {
         _position = _globalPosition;
@@ -56,12 +56,12 @@ Object2D& Object2D::setGlobalPosition(Vector2 globalPosition) noexcept {
     return *this;
 }
 
-const Vector2& Object2D::globalPosition() const noexcept { return _globalPosition; }
+const Vector2& GameObject2D::globalPosition() const noexcept { return _globalPosition; }
 
-Object2D& Object2D::setGlobalRotation(const float globalRotation) noexcept {
+GameObject2D& GameObject2D::setGlobalRotation(const float globalRotation) noexcept {
     _globalRotation = globalRotation;
 
-    const auto parent2D = dynamic_cast<Object2D*>(parent());
+    const auto parent2D = dynamic_cast<GameObject2D*>(parent());
 
     if (parent2D == nullptr) {
         _rotation = _globalRotation;
@@ -72,12 +72,12 @@ Object2D& Object2D::setGlobalRotation(const float globalRotation) noexcept {
     return *this;
 }
 
-float Object2D::globalRotation() const noexcept { return _globalRotation; }
+float GameObject2D::globalRotation() const noexcept { return _globalRotation; }
 
-Object2D& Object2D::setPosition(Vector2 position) noexcept {
+GameObject2D& GameObject2D::setPosition(Vector2 position) noexcept {
     _position = std::move(position);
 
-    const auto parent2D = dynamic_cast<Object2D*>(parent());
+    const auto parent2D = dynamic_cast<GameObject2D*>(parent());
 
     if (parent2D == nullptr) {
         _globalPosition = _position;
@@ -92,12 +92,12 @@ Object2D& Object2D::setPosition(Vector2 position) noexcept {
     return *this;
 }
 
-const Vector2& Object2D::position() const noexcept { return _position; }
+const Vector2& GameObject2D::position() const noexcept { return _position; }
 
-Object2D& Object2D::setRotation(const float rotation) noexcept {
+GameObject2D& GameObject2D::setRotation(const float rotation) noexcept {
     _rotation = rotation;
 
-    const auto& parent2D = dynamic_cast<Object2D*>(parent());
+    const auto& parent2D = dynamic_cast<GameObject2D*>(parent());
 
     if (parent2D == nullptr) {
         _globalRotation = _rotation;
@@ -108,4 +108,4 @@ Object2D& Object2D::setRotation(const float rotation) noexcept {
     return *this;
 }
 
-float Object2D::rotation() const noexcept { return _rotation; }
+float GameObject2D::rotation() const noexcept { return _rotation; }

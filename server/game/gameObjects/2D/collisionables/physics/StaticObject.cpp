@@ -1,6 +1,6 @@
 #include "StaticObject.h"
 
-StaticObject::StaticObject(Object* parent, Vector2 position, const float rotation,
+StaticObject::StaticObject(GameObject* parent, Vector2 position, const float rotation,
                            const std::bitset<LAYERS_COUNT> layers,
                            const std::bitset<LAYERS_COUNT> scannedLayers,
                            std::unique_ptr<Shape2D> shape):
