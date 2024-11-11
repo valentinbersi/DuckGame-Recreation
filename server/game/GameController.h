@@ -23,7 +23,14 @@ class GameController final: public GameObject {
     void onTreeExited(GameObject* object) override;
 
 public:
+    /**
+     * Exception thrown when trying to add a player that is already in the match
+     */
     struct AlreadyAddedPlayer final: std::logic_error {
+        /**
+         * Construct an AlreadyAddedPlayer exception
+         * @param id The id of the player that was already added
+         */
         explicit AlreadyAddedPlayer(PlayerID id);
     };
 
