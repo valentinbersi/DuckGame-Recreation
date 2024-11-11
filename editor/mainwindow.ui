@@ -24,19 +24,6 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="addRectButton">
-    <property name="geometry">
-     <rect>
-      <x>530</x>
-      <y>560</y>
-      <width>151</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>addRectButton</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
@@ -54,10 +41,7 @@
    <addaction name="Platform"/>
    <addaction name="SpawnDuck"/>
    <addaction name="SpawnGun"/>
-   <addaction name="separator"/>
    <addaction name="Box"/>
-   <addaction name="AddRect"/>
-   <addaction name="separator"/>
   </widget>
   <action name="Platform">
    <property name="checkable">
@@ -92,14 +76,6 @@
    </property>
    <property name="toolTip">
     <string>Box</string>
-   </property>
-  </action>
-  <action name="AddRect">
-   <property name="text">
-    <string>AddRect</string>
-   </property>
-   <property name="toolTip">
-    <string>AddRect</string>
    </property>
   </action>
  </widget>

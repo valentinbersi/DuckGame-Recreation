@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>platformIcon.png</file>
+        <file>duckIcon.png</file>
+        <file>gunIcon.png</file>
+        <file>boxIcon.png</file>
+    </qresource>
+</RCC>
