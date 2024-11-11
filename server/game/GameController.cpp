@@ -30,8 +30,16 @@ void GameController::onTreeExited(GameObject* object) {
         collisionManager.removeCollisionObject(collisionObject);
 }
 
+#define PLAYER_ID "Player with id "
+#define ALREADY_ADDED " already added"
+
 GameController::AlreadyAddedPlayer::AlreadyAddedPlayer(const PlayerID id):
-        std::logic_error("Player with id " + std::to_string(id) + " already added") {}
+        std::logic_error(PLAYER_ID + std::to_string(id) + ALREADY_ADDED) {}
+
+#define NOT_FOUND " was not found"
+
+GameController::PlayerNotFound::PlayerNotFound(const PlayerID id):
+        std::out_of_range(PLAYER_ID + std::to_string(id) + NOT_FOUND) {}
 
 GameController::GameController(): GameObject(nullptr) {
     connect(eventName(Events::TREE_ENTERED),
@@ -40,7 +48,7 @@ GameController::GameController(): GameObject(nullptr) {
     connect(eventName(Events::TREE_EXITED),
             eventHandler(&GameController::onTreeExited, GameObject*));
 
-    addChild("Platform", new Platform);
+    addChild("Platform", new Platform);  // This simulated loading a level
 }
 
 void GameController::start() { std::cout << "The game has started" << std::endl; }
@@ -77,6 +85,13 @@ void GameController::addPlayer(const PlayerID playerID) {
 
     addChild(PLAYER + id, newPlayer);
     players.emplace(playerID, newPlayer);
+}
+
+void GameController::removePlayer(const PlayerID playerID) {
+    if (const auto player = players.extract(playerID); player.empty())
+        throw PlayerNotFound(playerID);
+
+    (void)removeChild(PLAYER + std::to_string(playerID));
 }
 
 Player& GameController::getPlayer(const PlayerID playerID) const { return *players.at(playerID); }
