@@ -42,8 +42,6 @@ void joinGame::onPlayClicked() {
         qDebug() << "emite la señal playMatchClicked";
         emit playMatchClicked();
     }
-
-    //emit playMatchClicked();
 }
 
 bool joinGame::joinMatchRequest() {

@@ -62,7 +62,9 @@ bool newGame::NewMatchRequest() {
     try {
         communicator.trysend(std::move(message));
         // chequear si se envio
+        qDebug() << "se envio PLAY";
         ReplyMessage replyMessage = communicator.blockingRecv();
+        qDebug() << "se recibio el mensaje";
         // chequear si se recibio bien
         gameInfo.matchID = replyMessage.matchID;
         return true;
