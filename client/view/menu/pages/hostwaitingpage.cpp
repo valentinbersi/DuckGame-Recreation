@@ -14,37 +14,32 @@ hostWaitingPage::hostWaitingPage(QWidget* parent, Communicator& communicator, Ga
         QWidget(parent),
         ui(new Ui::hostWaitingPage),
         communicator(communicator),
-        gameInfo(gameInfo){
+        gameInfo(gameInfo),
+        timer(new QTimer(this)){
     ui->setupUi(this);
 
     ui->labelMatchID->setText(QString("MATCH ID: %1").arg(gameInfo.matchID));
 
-    auto* timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &hostWaitingPage::updateConnectedPlayers);
-    timer->start(5000);
+    connect(timer, &QTimer::timeout, this, &hostWaitingPage::recvServerMessage);
+    timer->start(1000);
 
     connect(ui->playButton, &QPushButton::clicked, this, &hostWaitingPage::requestStartGame);
 }
 
-void hostWaitingPage::updateConnectedPlayers() {
-    try {
-        std::optional<ReplyMessage> messageServer = communicator.tryRecvReply();
-        if (messageServer.has_value()) {
-            ui->labelPlayersConnected->setText(
-                    QString("PLAYERS CONNECTED: %1 / 4").arg(messageServer->connectedPlayers));
+void hostWaitingPage::recvServerMessage() {
+    std::optional<ReplyMessage> replyMessageOpt = communicator.tryRecvReply();
+
+    if (replyMessageOpt.has_value()) {
+        ReplyMessage message = replyMessageOpt.value();
+        ui->labelPlayersConnected->setText(QString("PLAYERS CONNECTED: %1 / 4").arg(message.connectedPlayers));
+
+        if (message.startGame == 1) {
+            emit startMatch();
+            timer->stop();
         }
-    } catch (const LibError& e) {
-        qDebug() << "Error receiving message: " << e.what();
-    }
+    } else {qDebug() << "replyMessage is NULL";}
 }
 
-
-// USAR ESTA CUANDO SE QUIERE PROBAR SIN SERVER
-//void hostWaitingPage::requestStartGame() {
-//    emit startMatch();
-//}
-
-// USAR ESTA PARA CORRER CON SERVER
 void hostWaitingPage::requestStartGame() {
    auto message = std::make_unique<LobbyMessage>(
            LobbyRequest::STARTMATCH,
@@ -53,33 +48,8 @@ void hostWaitingPage::requestStartGame() {
            gameInfo.player2Name,
            gameInfo.matchID
            );
-
-   try {
-       communicator.trysend(std::move(message));
-       // aca deberia chequear si se envio bien ¿?
-   } catch (LibError& libError){
-       qDebug() << "Error sending start game request: " << libError.what();
-       return; // aca podria mostrar elgun mensaje
-   }
-
-   try {
-       while (true) {
-           ReplyMessage messageServer = communicator.blockingRecv();
-           if (messageServer.startGame == 1) {
-               emit startMatch();
-               break;
-           } else {
-               ui->labelPlayersConnected->setText(QString("PLAYERS CONNECTED: %1 / 4").arg(messageServer.connectedPlayers));
-           }
-       }
-//       ReplyMessage messageServer = communicator.blockingRecv();
-//       if (replyMessage.startGame == 1) {
-//           emit startMatch();
-//       }
-   } catch (LibError& libError) {
-       qDebug() << "Error receiving start game response: " << libError.what();
-       return;
-   }
+   communicator.trysend(std::move(message));
+   // tengo que chequear si se envio bien?
 }
 
 hostWaitingPage::~hostWaitingPage() { delete ui; }
