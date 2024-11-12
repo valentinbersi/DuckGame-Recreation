@@ -39,7 +39,7 @@ void newGame::onPlayClicked() {
 
     gameInfo.player1Name = ui->lineEditPlayer1->text().toStdString();
     gameInfo.player2Name =
-            ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString();
+            ui->lineEditPlayer2->text().isEmpty() ? " " : ui->lineEditPlayer2->text().toStdString();
 
     QModelIndexList selectedIndexes = ui->mapsList->selectionModel()->selectedIndexes();
     if (!selectedIndexes.isEmpty()) {
@@ -59,8 +59,7 @@ bool newGame::NewMatchRequest() {
                                                   gameInfo.matchID  // esto deberia ser 0 ¿?
     );
 
-    try {
-        communicator.trysend(std::move(message));
+    if (communicator.trysend(std::move(message))) {
         // chequear si se envio
         qDebug() << "se envio PLAY";
         ReplyMessage replyMessage = communicator.blockingRecv();
@@ -68,10 +67,10 @@ bool newGame::NewMatchRequest() {
         // chequear si se recibio bien
         gameInfo.matchID = replyMessage.matchID;
         return true;
-    } catch(LibError& libError){
+    } else {
+        qDebug() << "no se envio PLAY";  // deberia mostrarle un mensaje al usuario
         return false;
     }
 }
-
 
 newGame::~newGame() { delete ui; }

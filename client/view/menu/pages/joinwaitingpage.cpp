@@ -20,11 +20,9 @@ joinWaitingPage::joinWaitingPage(QWidget* parent, Communicator& communicator)
 }
 
 void joinWaitingPage::recvServerMessage() {
-    qDebug() << "entra a recvServerMessage";
     std::optional<ReplyMessage> replyMessageOpt = communicator.tryRecvReply();
 
     if (replyMessageOpt.has_value()) {
-        qDebug() << "entra a has_value";
         ReplyMessage message = replyMessageOpt.value();
         ui->labelPlayersConnected->setText(QString("PLAYERS CONNECTED: %1 / 4").arg(message.connectedPlayers));
 
