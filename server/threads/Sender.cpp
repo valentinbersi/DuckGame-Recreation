@@ -16,17 +16,13 @@ void Sender::run() noexcept {
         }
 
     } catch (const ClosedQueue& err) {
-        if (is_alive()){
-            syslog(LOG_INFO, FORMAT, err.what());
-        }
-        //expected otherwise
+        //expected 
     } catch (const LibError& err) {
         //expected
     } catch (...) {
         syslog(LOG_CRIT, ERROR_MSG);
     }
     _keep_running = false;
-    _is_alive = false;   
 }
 
 void Sender::stop() {

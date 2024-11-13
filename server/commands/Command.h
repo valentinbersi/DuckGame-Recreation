@@ -1,8 +1,11 @@
 #pragma once
-#include "GameController.h"  //despues porque voy a importar es gamecontroler.
+#include "GameController.h" 
 
 class Command {
+protected:
+    const PlayerID id;
 public:
+    Command(PlayerID id): id(id) {}
     virtual void execute(GameController&) = 0;
     virtual ~Command() = default;
 };

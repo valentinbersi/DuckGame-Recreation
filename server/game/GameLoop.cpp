@@ -77,16 +77,10 @@ BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCo
 void GameLoop::broadcast(std::shared_ptr<ServerMessage> message) {
     for(auto it = clientQueuesMap.begin(); it != clientQueuesMap.end();){
         if(it->second.expired()){
-            try{
-                game.removePlayer((it->first)+1);
-            } catch (const GameController::PlayerNotFound& err){
-                // There was no player 2
-            }
-            game.removePlayer(it->first);
             it = clientQueuesMap.erase(it);
         } else {
-            it->second.lock()->push(message);
-            ++it;
+            bool sucess = it->second.lock()->try_push(message);
+            it = sucess ? ++it : clientQueuesMap.erase(it);
         }
     }   
 }
