@@ -47,15 +47,9 @@ u16 GameMapMonitor::creatGameSafe() {
     return random_number;
 }
 
-void GameMapMonitor::stopAllGames() {
-    std::lock_guard lock(mutex);
-    for(auto& [key, value] : gameMap) {
-        value->stop();
-    }
-}   
-
 GameMapMonitor::~GameMapMonitor() {
     for(auto& [key, value] : gameMap) {
+        value->stop();
         if (value->isJoinable()) {
             value->join();
         }
