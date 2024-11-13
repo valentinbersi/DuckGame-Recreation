@@ -1,6 +1,5 @@
 #include "GameController.h"
 
-#include <iostream>
 #include <memory>
 #include <string>
 
@@ -51,11 +50,10 @@ GameController::GameController(): GameObject(nullptr) {
     addChild("Platform", new Platform);  // This simulated loading a level
 }
 
-void GameController::start() { std::cout << "The game has started" << std::endl; }
+void GameController::start() {}
 
-void GameController::update(const float delta) {
+void GameController::update([[maybe_unused]] const float delta) {
     collisionManager.processCollisions();
-    std::cout << "The game is running" << delta << std::endl;
 }
 
 #define FULL_GAME "The game is full"

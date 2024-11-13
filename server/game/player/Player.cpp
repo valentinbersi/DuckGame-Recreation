@@ -1,8 +1,10 @@
 #include "Player.h"
 
 #include <memory>
+#include <string>
 
 #include "Capsule.h"
+#include "Debug.h"
 #include "DuckData.h"
 
 #define MOVE_RIGHT "Move Right"
@@ -40,6 +42,10 @@ void Player::stopCrouch() { input.releaseAction(CROUCH); }
 void Player::start() {}
 
 void Player::update(const float delta) {
+    Debug::cout().print("Position: " + std::to_string(globalPosition().x()) + ", " +
+                        std::to_string(globalPosition().y()) + "\n");
+    Debug::cout().flush();
+
     setVelocity({0, 0});
     flags = 0;
 
