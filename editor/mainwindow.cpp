@@ -3,21 +3,25 @@
 #include <QAbstractButton>
 #include <QAction>
 #include <QDrag>
+#include <QScrollBar>
 
-#include "levelscene.h"
-#include "ui_mainwindow.h"
+#include "MapExporter.h"
 #include "Object.h"
+#include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    auto* scene = new LevelScene(this, 100, 100);
+    mapHeight = 50;
+    mapWidth = 50;    //esto despues tengo que hacerlo que lo elija el usuario
+
+    scene = new LevelScene(this, mapWidth, mapHeight, objects);
     ui->graphicsView->setScene(scene);
 
-    Object platform("Platform", 2, 2, ":/icons/platformIcon.png");
-    Object spawnDuck("SpawnDuck", 4, 2, ":/icons/duckIcon.png");
-    Object spawnGun("SpawnGun", 3, 3, ":/icons/gunIcon.png");
-    Object box("Box", 2, 2, ":/icons/boxIcon.png");
+    Object platform(PLATFORM, 2, 2, ":/icons/platformIcon.png");
+    Object spawnDuck(DUCK, 3, 2, ":/icons/duckIcon.png");
+    Object spawnGun(GUN, 3, 3, ":/icons/gunIcon.png");
+    Object box(BOX, 2, 2, ":/icons/boxIcon.png");
 
     // Configura los íconos en la barra de herramientas
     ui->Platform->setIcon(QIcon(platform.icon));
@@ -26,11 +30,19 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->Box->setIcon(QIcon(box.icon));
 
     // Conexiones de acciones de la barra de herramientas
-    connect(ui->Platform, &QAction::triggered, this, [scene, platform]() { scene->addObject(platform); });
-    connect(ui->SpawnDuck, &QAction::triggered, this, [scene, spawnDuck]() { scene->addObject(spawnDuck); });
-    connect(ui->SpawnGun, &QAction::triggered, this, [scene, spawnGun]() { scene->addObject(spawnGun); });
-    connect(ui->Box, &QAction::triggered, this, [scene, box]() { scene->addObject(box); });
+    connect(ui->Platform, &QAction::triggered, this, [this, platform]() { scene->addObject(platform); });
+    connect(ui->SpawnDuck, &QAction::triggered, this, [this, spawnDuck]() { scene->addObject(spawnDuck); });
+    connect(ui->SpawnGun, &QAction::triggered, this, [this, spawnGun]() { scene->addObject(spawnGun); });
+    connect(ui->Box, &QAction::triggered, this, [this, box]() { scene->addObject(box); });
 
+    connect(ui->SaveMap, &QAction::triggered, this, [this]() { MapExporter::exportMap(objects, "mapita", mapWidth, mapHeight); });
 }
 
-MainWindow::~MainWindow() { delete ui; }
+void MainWindow::resizeEvent(QResizeEvent* event) {
+    QMainWindow::resizeEvent(event);
+    scene->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height());
+}
+MainWindow::~MainWindow() {
+    delete scene;
+    delete ui;
+}

@@ -14,23 +14,40 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QGraphicsView" name="graphicsView">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>800</width>
-      <height>600</height>
-     </rect>
-    </property>
-   </widget>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QGraphicsView" name="graphicsView">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(222, 221, 218);</string>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
+      </property>
+      <property name="viewportUpdateMode">
+       <enum>QGraphicsView::BoundingRectViewportUpdate</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color:rgb(192, 191, 188);</string>
+    <string notr="true">background-color:rgb(229, 165, 10);</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>64</width>
+     <height>64</height>
+    </size>
    </property>
    <attribute name="toolBarArea">
     <enum>RightToolBarArea</enum>
@@ -42,6 +59,8 @@
    <addaction name="SpawnDuck"/>
    <addaction name="SpawnGun"/>
    <addaction name="Box"/>
+   <addaction name="separator"/>
+   <addaction name="SaveMap"/>
   </widget>
   <action name="Platform">
    <property name="checkable">
@@ -76,6 +95,14 @@
    </property>
    <property name="toolTip">
     <string>Box</string>
+   </property>
+  </action>
+  <action name="SaveMap">
+   <property name="text">
+    <string>Save Map</string>
+   </property>
+   <property name="toolTip">
+    <string>Save Map</string>
    </property>
   </action>
  </widget>
