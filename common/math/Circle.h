@@ -8,10 +8,10 @@ class Circle final: public Shape2D {
 
 public:
     Circle() = delete;
-    Circle(const Circle& other);
-    Circle& operator=(const Circle& other);
-    Circle(Circle&& other) noexcept;
-    Circle& operator=(Circle&& other) noexcept;
+    Circle(const Circle& other) = delete;
+    Circle& operator=(const Circle& other) = delete;
+    Circle(Circle&& other) noexcept = delete;
+    Circle& operator=(Circle&& other) noexcept = delete;
     ~Circle() override = default;
 
     /**
@@ -47,17 +47,4 @@ public:
      * @return True if the shapes intersect, false otherwise
      */
     [[nodiscard]] bool intersects(const Rectangle& rectangle) const override;
-
-    /**
-     * Check if this circle intersects with a capsule
-     * @param capsule a capsule
-     * @return True if the shapes intersect, false otherwise
-     */
-    [[nodiscard]] bool intersects(const Capsule& capsule) const override;
-
-    /**
-     * Get a clone of this circle
-     * @return A clone of this circle
-     */
-    [[nodiscard]] std::unique_ptr<Shape2D> clone() const override;
 };

@@ -1,4 +1,5 @@
 #pragma once
+
 #include <memory>
 
 #include "Vector2.h"
@@ -12,23 +13,20 @@ class Capsule;
  */
 class Shape2D {
     Vector2 _center;
-    float _rotation;
 
 protected:
-    Shape2D(const Shape2D& other);
-    Shape2D& operator=(const Shape2D& other);
-    Shape2D(Shape2D&& other) noexcept;
-    Shape2D& operator=(Shape2D&& other) noexcept;
-
     /**
      * Construct a shape with a center and rotation
      * @param center the center of the shape
-     * @param rotation the rotation of the shape
      */
-    Shape2D(Vector2 center, float rotation);
+    explicit Shape2D(Vector2 center);
 
 public:
     Shape2D() = delete;
+    Shape2D(const Shape2D& other) = delete;
+    Shape2D& operator=(const Shape2D& other) = delete;
+    Shape2D(Shape2D&& other) noexcept = delete;
+    Shape2D& operator=(Shape2D&& other) noexcept = delete;
     virtual ~Shape2D() = default;
 
     /**
@@ -43,19 +41,6 @@ public:
      * @return this shape
      */
     Shape2D& center(Vector2 center);
-
-    /**
-     * Get the rotation of the shape
-     * @return the rotation of the shape
-     */
-    [[nodiscard]] float rotation() const;
-
-    /**
-     * Set the rotation of the shape
-     * @param rotation the new rotation of the shape
-     * @return this shape
-     */
-    Shape2D& rotation(float rotation);
 
     /**
      * Check if this shape intersects another shape
@@ -77,17 +62,4 @@ public:
      * @return True if the shapes intersect, false otherwise
      */
     [[nodiscard]] virtual bool intersects(const Rectangle& rectangle) const = 0;
-
-    /**
-     * Check if this shape intersects with a capsule
-     * @param capsule a capsule
-     * @return True if the shapes intersect, false otherwise
-     */
-    [[nodiscard]] virtual bool intersects(const Capsule& capsule) const = 0;
-
-    /**
-     * Clone this shape
-     * @return a clone of this shape
-     */
-    [[nodiscard]] virtual std::unique_ptr<Shape2D> clone() const = 0;
 };
