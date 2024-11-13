@@ -16,7 +16,7 @@ protected:
      * @param scannedLayers The layers that the area will scan
      * @param shape The shape of the area
      */
-    Area(GameObject* parent, Vector2 position, float rotation, std::bitset<LAYERS_COUNT> layers,
+    Area(GameObject* parent, Vector2 position, std::bitset<LAYERS_COUNT> layers,
          std::bitset<LAYERS_COUNT> scannedLayers, std::unique_ptr<Shape2D> shape);
 
 public:

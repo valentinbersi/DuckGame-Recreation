@@ -1,10 +1,8 @@
 #include "Area.h"
 
-Area::Area(GameObject* parent, Vector2 position, const float rotation,
-           const std::bitset<LAYERS_COUNT> layers, const std::bitset<LAYERS_COUNT> scannedLayers,
-           std::unique_ptr<Shape2D> shape):
-        CollisionObject(parent, std::move(position), rotation, layers, scannedLayers,
-                        std::move(shape)) {
+Area::Area(GameObject* parent, Vector2 position, const std::bitset<LAYERS_COUNT> layers,
+           const std::bitset<LAYERS_COUNT> scannedLayers, std::unique_ptr<Shape2D> shape):
+        CollisionObject(parent, std::move(position), layers, scannedLayers, std::move(shape)) {
     registerEvent<CollisionObject*>(eventName(Events::COLLISION));
 }
 

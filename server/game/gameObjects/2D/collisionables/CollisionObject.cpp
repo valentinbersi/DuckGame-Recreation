@@ -5,11 +5,11 @@
 
 #define NULL_SHAPE "Shape cannot be null"
 
-CollisionObject::CollisionObject(GameObject* parent, Vector2 position, const float rotation,
+CollisionObject::CollisionObject(GameObject* parent, Vector2 position,
                                  const std::bitset<LAYERS_COUNT> layers,
                                  const std::bitset<LAYERS_COUNT> scannedLayers,
                                  std::unique_ptr<Shape2D> shape):
-        GameObject2D(parent, std::move(position), rotation),
+        GameObject2D(parent, std::move(position)),
         _layers(layers),
         _scannedLayers(scannedLayers),
         shape(shape.release()) {
@@ -27,7 +27,6 @@ CollisionObject::~CollisionObject() { delete shape; }
 void CollisionObject::updateInternal([[maybe_unused]] const float delta) {
     GameObject2D::updateInternal(delta);
     shape->center(position());
-    shape->rotation(rotation());
 }
 
 std::bitset<CollisionObject::LAYERS_COUNT> CollisionObject::layers() const { return _layers; }

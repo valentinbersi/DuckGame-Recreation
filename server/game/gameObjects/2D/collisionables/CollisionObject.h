@@ -26,14 +26,12 @@ protected:
      * layers, and shape
      * @param parent the parent Object
      * @param position the position of the CollisionObject
-     * @param rotation the rotation of the CollisionObject
      * @param layers the layers that the object is in
      * @param scannedLayers the layers the object scans in search for other collisionObjects
      * @param shape the shape of the CollisionObject
      */
-    CollisionObject(GameObject* parent, Vector2 position, float rotation,
-                    std::bitset<LAYERS_COUNT> layers, std::bitset<LAYERS_COUNT> scannedLayers,
-                    std::unique_ptr<Shape2D> shape);
+    CollisionObject(GameObject* parent, Vector2 position, std::bitset<LAYERS_COUNT> layers,
+                    std::bitset<LAYERS_COUNT> scannedLayers, std::unique_ptr<Shape2D> shape);
 
     /**
      * Check if the CollisionObject collides with another CollisionObject.\n

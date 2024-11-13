@@ -3,9 +3,9 @@
 #include <memory>
 #include <string>
 
-#include "Capsule.h"
 #include "Debug.h"
 #include "DuckData.h"
+#include "Rectangle.h"
 
 #define MOVE_RIGHT "Move Right"
 #define MOVE_LEFT "Move Left"
@@ -16,7 +16,7 @@
 #define DEFAULT_SPEED 100
 
 Player::Player(const DuckID id):
-        PhysicsObject(nullptr, {0, 0}, 0, 1, 2, std::make_unique<Capsule>(Vector2(0, 0), 0, 1, 3),
+        PhysicsObject(nullptr, {0, 0}, 1, 2, std::make_unique<Rectangle>(Vector2(0, 0), 2, 3),
                       {0, 0}, Gravity::Enabled),
         id(id),
         life(DEFAULT_LIFE),
@@ -64,8 +64,7 @@ Player::~Player() = default;
 
 GameStatus Player::status() {
     GameStatus status;
-    status.gameObjects.push_back(
-            std::make_unique<DuckData>(globalPosition(), globalRotation(), id, life,
-                                       std::make_unique<EquippedGunData>(GunID::Ak47), flags));
+    status.gameObjects.push_back(std::make_unique<DuckData>(
+            globalPosition(), 0, id, life, std::make_unique<EquippedGunData>(GunID::Ak47), flags));
     return status;
 }
