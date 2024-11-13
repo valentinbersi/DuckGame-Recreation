@@ -9,12 +9,13 @@ class LevelScene : public QGraphicsScene {
     Q_OBJECT
 
 private:
-    //    int gridHeigth;
-    //    int gridWidth;
+    int gridWidth;
+    int gridHeight;
     QGraphicsItem* selectedItem;
+    std::vector<Object>& objects;
 
 public:
-    LevelScene(QObject* parent, int width, int heigth);
+    LevelScene(QObject* parent, int width, int height, std::vector<Object>& objects);
     ~LevelScene() override = default;
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
     void addObject(const Object& object);
