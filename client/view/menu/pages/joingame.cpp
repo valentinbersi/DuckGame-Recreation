@@ -34,7 +34,7 @@ void joinGame::onPlayClicked() {
         return;
     }
     gameInfo.player1Name = ui->lineEditPlayer1->text().toStdString();
-    gameInfo.player2Name = ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString();
+    gameInfo.player2Name = ui->lineEditPlayer2->text().isEmpty() ? " " : ui->lineEditPlayer2->text().toStdString();
     gameInfo.matchID = ui->lineEditMatchID->text().toUShort();
 
     qDebug() << "info:" << QString(gameInfo.player1Name.c_str()) << QString(gameInfo.player2Name.c_str()) << gameInfo.matchID;
@@ -42,8 +42,6 @@ void joinGame::onPlayClicked() {
         qDebug() << "emite la señal playMatchClicked";
         emit playMatchClicked();
     }
-
-    //emit playMatchClicked();
 }
 
 bool joinGame::joinMatchRequest() {

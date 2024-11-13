@@ -19,11 +19,14 @@ public:
     void loadBackgroundSize(SDL2pp::Texture& backgroundTexture);
     SDL_Rect getViewRect();
     float getScale() const;
-    float calculateMaxDistance(std::list<std::unique_ptr<DuckData>>& ducks);
+    int getBackgroundWidth() const;
+    int getBackgroundHeight() const;
 
 private:
     void calculateScale(std::list<std::unique_ptr<DuckData>>& ducks);
+    float calculateMaxDistance(std::list<std::unique_ptr<DuckData>>& ducks);
     Vector2 centerOfDucks(std::list<std::unique_ptr<DuckData>>& ducks);
+    //void adjustSpritePositions(std::list<std::unique_ptr<DuckData>>& ducks);
 
     int& windowWidth;
     int& windowHeight;

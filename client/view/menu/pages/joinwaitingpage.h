@@ -18,10 +18,11 @@ class joinWaitingPage: public QWidget {
 private:
     Ui::joinWaitingPage* ui;
     Communicator& communicator;
+    QTimer* timer;
 
 public:
     joinWaitingPage(QWidget* parent, Communicator& communicator);
-    void waitForMatchStart();
+    void recvServerMessage();
     ~joinWaitingPage() override;
 
 signals:

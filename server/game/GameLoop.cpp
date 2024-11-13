@@ -65,10 +65,9 @@ void GameLoop::addClient(const u16 clientID,
                          std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue) {
 
     game.addPlayer(clientID);
-    if(!shouldAddQueue(clientID)){
-        return;
+    if(shouldAddQueue(clientID)){
+        clientQueuesMap.insert({clientID, std::move(clientQueue)});
     }
-    clientQueuesMap.insert({clientID, std::move(clientQueue)});
     broadcast(std::make_shared<ReplyMessage>(0, 0, game.playersCount()));
 }
 

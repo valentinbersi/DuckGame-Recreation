@@ -39,6 +39,8 @@ public:
      */
     void join() override;
 
+    bool isJoinable() const;
+
     /**
      * Main function that will be executed by the thread
      */

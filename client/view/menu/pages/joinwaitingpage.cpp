@@ -1,34 +1,36 @@
 #include "joinwaitingpage.h"
 
 #include <QMessageBox>
+#include <QTimer>
 
 #include "ReplyMessage.h"
 #include "ui_joinwaitingpage.h"
 
-joinWaitingPage::joinWaitingPage(QWidget* parent, Communicator& communicator):
-        QWidget(parent),
+#include <QDebug>
+
+joinWaitingPage::joinWaitingPage(QWidget* parent, Communicator& communicator)
+        : QWidget(parent),
         ui(new Ui::joinWaitingPage),
-        communicator(communicator) {
+        communicator(communicator),
+        timer(new QTimer(this)) {
     ui->setupUi(this);
+
+    connect(timer, &QTimer::timeout, this, &joinWaitingPage::recvServerMessage);
+    timer->start(1000);
 }
 
-void joinWaitingPage::waitForMatchStart() {
-    while (true) {
-        ReplyMessage replyMessage = communicator.blockingRecv();
-        // ver el chequeo de si se recibio bien.
+void joinWaitingPage::recvServerMessage() {
+    std::optional<ReplyMessage> replyMessageOpt = communicator.tryRecvReply();
 
-        if (replyMessage.connectedPlayers > 0) {
-            ui->labelPlayersConnected->setText(QString("Player Connected: %1 / 4").arg(replyMessage.connectedPlayers));
-        // } else {
-        //     QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
-        //     break; // nose si esta bien esto!
-        }
+    if (replyMessageOpt.has_value()) {
+        ReplyMessage message = replyMessageOpt.value();
+        ui->labelPlayersConnected->setText(QString("PLAYERS CONNECTED: %1 / 4").arg(message.connectedPlayers));
 
-        if (replyMessage.startGame == 1) {
+        if (message.startGame == 1) {
             emit matchStarted();
-            break;
+            timer->stop();
         }
-    }
+    } else {qDebug() << "replyMessage is NULL";}
 }
 
 joinWaitingPage::~joinWaitingPage() { delete ui; }

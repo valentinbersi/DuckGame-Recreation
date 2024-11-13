@@ -22,6 +22,7 @@
 #include "DuckData.h"
 #include "MessageType.h"
 #include "GameMessage.h"
+#include "EventHandler.h"
 
 class Game {
 
@@ -42,7 +43,7 @@ private:
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping();
     void updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping, float currentScale);
     void getSnapshot();
-    void showBackground(SDL2pp::Texture& backgroundTexture);
+    void showBackground(SDL2pp::Texture& backgroundTexture, float currentScale);
 
     void clearObjects();
     //void typeOfObject2D(std::unique_ptr<GameObject2DData> gameObject2D);
@@ -58,42 +59,6 @@ private:
 
     std::list<std::unique_ptr<DuckData>> ducks;
     //std::list<std::unique_ptr<GameObjectData>> objects;
-
-    std::unordered_map<SDL_Scancode, InputAction> keyMappingPressed = {
-        {SDL_SCANCODE_W, InputAction::UP_PRESSED},
-        {SDL_SCANCODE_S, InputAction::DOWN_PRESSED},
-        {SDL_SCANCODE_A, InputAction::LEFT_PRESSED},
-        {SDL_SCANCODE_D, InputAction::RIGHT_PRESSED},
-        {SDL_SCANCODE_E, InputAction::ACTION_PRESSED},
-        {SDL_SCANCODE_SPACE, InputAction::JUMP_PRESSED}
-    };
-
-    std::unordered_map<SDL_Scancode, InputAction> keyMappingReleased = {
-            {SDL_SCANCODE_W, InputAction::UP_RELEASED},
-            {SDL_SCANCODE_S, InputAction::DOWN_RELEASED},
-            {SDL_SCANCODE_A, InputAction::LEFT_RELEASED},
-            {SDL_SCANCODE_D, InputAction::RIGHT_RELEASED},
-            {SDL_SCANCODE_E, InputAction::ACTION_RELEASED},
-            {SDL_SCANCODE_SPACE, InputAction::JUMP_RELEASED}
-    };
-
-    std::unordered_map<SDL_Scancode, InputAction> keyMappingPressedPlayer2 = {
-        {SDL_SCANCODE_UP, InputAction::UP_PRESSED},
-        {SDL_SCANCODE_DOWN, InputAction::DOWN_PRESSED},
-        {SDL_SCANCODE_LEFT, InputAction::LEFT_PRESSED},
-        {SDL_SCANCODE_RIGHT, InputAction::RIGHT_PRESSED},
-        {SDL_SCANCODE_RCTRL, InputAction::ACTION_PRESSED},
-        {SDL_SCANCODE_RSHIFT, InputAction::JUMP_PRESSED}
-    };
-
-    std::unordered_map<SDL_Scancode, InputAction> keyMappingReleasedPlayer2 = {
-        {SDL_SCANCODE_UP, InputAction::UP_RELEASED},
-        {SDL_SCANCODE_DOWN, InputAction::DOWN_RELEASED},
-        {SDL_SCANCODE_LEFT, InputAction::LEFT_RELEASED},
-        {SDL_SCANCODE_RIGHT, InputAction::RIGHT_RELEASED},
-        {SDL_SCANCODE_RCTRL, InputAction::ACTION_RELEASED},
-        {SDL_SCANCODE_RSHIFT, InputAction::JUMP_RELEASED}
-    };
 
     /*std::unordered_map<int, std::string> levels {
         {1, "background1.png"},
