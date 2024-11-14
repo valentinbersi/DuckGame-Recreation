@@ -52,7 +52,7 @@ public:
      * Check if this circle intersects with a circle
      * @param circle a circle
      * @param displacement The displacement of the circle
-     * @return True if the circles intersect, false otherwise
+     * @return An IntersectionInfo with information about the collision if it happened
      */
     [[nodiscard]] IntersectionInfo intersects(const Circle& circle,
                                               Vector2 displacement) const override;
@@ -63,4 +63,13 @@ public:
      * @return True if the shapes intersect, false otherwise
      */
     [[nodiscard]] bool intersects(const Rectangle& rectangle) const override;
+
+    /**
+     * Check if this circle intersects with a rectangle
+     * @param rectangle a rectangle
+     * @param displacement The displacement of the circle
+     * @return An IntersectionInfo with information about the collision if it happened
+     */
+    [[nodiscard]] IntersectionInfo intersects(const Rectangle& rectangle,
+                                              Vector2 displacement) const override;
 };

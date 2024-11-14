@@ -29,8 +29,10 @@ IntersectionInfo Circle::intersects(const Circle& circle, const Vector2 displace
 
     if (Math::isEqualAprox(nextCenter.distance(circle.center()), _radius + circle._radius)) {
         const Vector2 collisionNormal = (center() - circle.center()).normalized();
-        const Vector2 touchingPoint = center() + collisionNormal * _radius;
-        return {true, touchingPoint, collisionNormal};
+        const Vector2 safeDisplacementProportion = Vector2(1, 1) - collisionNormal;
+        const Vector2 safeDisplacement(displacement.x() * safeDisplacementProportion.x(),
+                                       displacement.y() * safeDisplacementProportion.y());
+        return {true, safeDisplacement, collisionNormal};
     }
 
     if (Math::isLessOrEqualAprox(nextCenter.distanceSquared(circle.center()),
@@ -52,7 +54,11 @@ IntersectionInfo Circle::intersects(const Circle& circle, const Vector2 displace
         const Vector2 realDisplacement = displacement.normalized() * realDisplacementLenght;
         const Vector2 newPosition = center() + realDisplacement;
         const Vector2 collisionNormal = (newPosition - circle.center()).normalized();
-        return {true, newPosition, collisionNormal};
+        const Vector2 safeDisplacementProportion = Vector2(1, 1) - collisionNormal;
+        const Vector2 safeDisplacement(displacement.x() * safeDisplacementProportion.x(),
+                                       displacement.y() * safeDisplacementProportion.y());
+
+        return {true, safeDisplacement, collisionNormal};
     }
 
     return {false};
@@ -71,4 +77,11 @@ bool Circle::intersects(const Rectangle& rectangle) const {
                                           rectCenter.y() + rectHalfHeight));
 
     return Math::isLessOrEqualAprox(circleCenter.distanceSquared(closestPoint), _radius * _radius);
+}
+
+IntersectionInfo Circle::intersects(const Rectangle& rectangle, const Vector2 displacement) const {
+    const Vector2 nextCenter = center() + displacement;
+
+
+    return {false};
 }

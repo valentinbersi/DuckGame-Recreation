@@ -28,6 +28,10 @@ public:
      * A vector pointing RIGHT (1, 0)
      */
     static const Vector2 RIGHT;
+    /**
+     * A vector with all its coordinates set to NaN
+     */
+    static const Vector2 NANV;
 
     /**
      * Construct a default initialized Vector2 with all coordinates set to 0
@@ -282,4 +286,15 @@ public:
      * @result The scaled vector
      */
     friend Vector2 operator*(float scalar, const Vector2& v);
+
+    enum class Orientation { Collinear, CounterClockwise, Clockwise };
+
+    /**
+     * Get the orientation of the triplet (p, q, r)
+     * @param p The first vector
+     * @param q The second vector
+     * @param r The third vector
+     * @return The orientation of the triplet
+     */
+    static Orientation orientation(const Vector2& p, const Vector2& q, const Vector2& r);
 };
