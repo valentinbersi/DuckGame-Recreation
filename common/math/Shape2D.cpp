@@ -5,14 +5,14 @@
 #include "Circle.h"
 #include "Rectangle.h"
 
-IntersectionInfo::IntersectionInfo(Vector2 safeDisplacement, Vector2 surfaceNormal):
-        safeDisplacement(std::move(safeDisplacement)), surfaceNormal(std::move(surfaceNormal)) {}
+IntersectionInfo::IntersectionInfo(Vector2 nextPosition, Vector2 surfaceNormal):
+        nextPosition(std::move(nextPosition)), surfaceNormal(std::move(surfaceNormal)) {}
 
 Shape2D::Shape2D(Vector2 center): _center(std::move(center)) {}
 
 const Vector2& Shape2D::center() const { return _center; }
 
-Shape2D& Shape2D::center(Vector2 center) {
+Shape2D& Shape2D::setCenter(Vector2 center) {
     _center = std::move(center);
     return *this;
 }

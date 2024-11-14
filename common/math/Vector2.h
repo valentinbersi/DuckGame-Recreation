@@ -73,16 +73,30 @@ public:
     [[nodiscard]] float y() const;
 
     /**
+     * Get a vector 2 based on this vector with its position set to the given x coordinate
+     * @param value The new x coordinate
+     * @return  A new vector with the x coordinate set to the given value
+     */
+    [[nodiscard]] Vector2 x(float value) const;
+
+    /**
+     * Get a vector 2 based on this vector with its position set to the given y coordinate
+     * @param value The new y coordinate
+     * @return  A new vector with the y coordinate set to the given value
+     */
+    [[nodiscard]] Vector2 y(float value) const;
+
+    /**
      * Set the x coordinate of the vector
      * @param x The new x coordinate
      */
-    void x(float x);
+    void setX(float x);
 
     /**
      * Set the y coordinate of the vector
      * @param y The new y coordinate
      */
-    void y(float y);
+    void setY(float y);
 
     /**
      * Get this vector's angle with respect to the positive X axis, or RIGHT (1, 0)

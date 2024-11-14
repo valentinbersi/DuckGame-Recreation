@@ -26,7 +26,7 @@ CollisionObject::~CollisionObject() { delete shape; }
 
 void CollisionObject::updateInternal([[maybe_unused]] const float delta) {
     GameObject2D::updateInternal(delta);
-    shape->center(position());
+    shape->setCenter(position());
 }
 
 std::bitset<CollisionObject::LAYERS_COUNT> CollisionObject::layers() const { return _layers; }

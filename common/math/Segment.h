@@ -13,10 +13,10 @@ class Segment {
 
 public:
     Segment() = delete;
-    Segment(const Segment& other) = delete;
-    Segment(Segment&& other) noexcept = delete;
-    Segment& operator=(const Segment& other) = delete;
-    Segment& operator=(Segment&& other) noexcept = delete;
+    Segment(const Segment& other);
+    Segment(Segment&& other) noexcept;
+    Segment& operator=(const Segment& other);
+    Segment& operator=(Segment&& other) noexcept;
 
     /**
      * Construct a segment with a start and an end
@@ -52,11 +52,11 @@ public:
     Segment& setEnd(Vector2 end);
 
     /**
-     * Check if a point is lying on this segment
+     * Check if a point is contained in this segment
      * @param v The point to check
-     * @return True if the point is lying on the segment, false otherwise
+     * @return True if the point is cointained in the segment, false otherwise
      */
-    bool isLying(const Vector2& v) const;
+    [[nodiscard]] bool contains(const Vector2& v) const;
 
     /**
      * Check if this segment intersects with another segment

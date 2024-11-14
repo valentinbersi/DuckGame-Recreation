@@ -9,10 +9,10 @@ class Rectangle;
 class Capsule;
 
 struct IntersectionInfo {
-    Vector2 safeDisplacement;
+    Vector2 nextPosition;
     Vector2 surfaceNormal;
 
-    IntersectionInfo(Vector2 safeDisplacement, Vector2 surfaceNormal);
+    IntersectionInfo(Vector2 nextPosition, Vector2 surfaceNormal);
 };
 
 /**
@@ -47,7 +47,14 @@ public:
      * @param center the new center of the shape
      * @return this shape
      */
-    Shape2D& center(Vector2 center);
+    virtual Shape2D& setCenter(Vector2 center);
+
+    /**
+     * Check if this shape containes a point
+     * @param point the point
+     * @return True if the point is inside the shape, false otherwise
+     */
+    [[nodiscard]] virtual bool contains(const Vector2& point) const = 0;
 
     /**
      * Check if this shape intersects another shape

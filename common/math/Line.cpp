@@ -18,7 +18,7 @@ const Vector2& Line::pasingPoint() const { return _pasingPoint; }
 
 void Line::setPasingPoint(Vector2 pasingPoint) { _pasingPoint = std::move(pasingPoint); }
 
-std::optional<Vector2> Line::intersection(const Line& other) const {
+std::optional<Vector2> Line::intersects(const Line& other) const {
     // Line 1: _passingPoint + t * _direction
     // Line 2: other._passingPoint + u * other._direction
     // We need to solve for t and u where the lines intersect
@@ -47,7 +47,7 @@ std::optional<Vector2> Line::intersection(const Line& other) const {
     return Vector2(x, y);  // Intersection point
 }
 
-std::optional<Vector2> Line::intersection(const Segment& segment) const {
+std::optional<Vector2> Line::intersects(const Segment& segment) const {
     // Line: _passingPoint + t * _direction
     // Segment: segment.start() + u * segmentDirection
     const Vector2& segmentDirection = segment.end() - segment.start();
@@ -55,7 +55,7 @@ std::optional<Vector2> Line::intersection(const Segment& segment) const {
     // Solve for t and u
     float denom = _direction.x() * segmentDirection.y() - _direction.y() * segmentDirection.x();
     if (Math::isZeroAprox(std::abs(denom))) {
-        if (intersection(segment.start()))
+        if (intersects(segment.start()))
             return Vector2::NANV;  // Coincident lines
 
         return std::nullopt;  // Parallel or coincident
@@ -74,7 +74,7 @@ std::optional<Vector2> Line::intersection(const Segment& segment) const {
     return _pasingPoint + _direction * t;  // Intersection point
 }
 
-bool Line::intersection(const Vector2& point) const {
+bool Line::intersects(const Vector2& point) const {
     // Line: _passingPoint + t * _direction
     // Check if the point lies on the line
 
@@ -95,7 +95,7 @@ bool Line::isBetween(const Line& line1, Vector2 point, const Line& line2) {
     if (not line1.isParallelTo(line2))
         throw std::invalid_argument("The lines must be parallel");
 
-    if (!line1.intersection(point) || !line2.intersection(point))
+    if (!line1.intersects(point) || !line2.intersects(point))
         return false;  // Lines are contained on each other
 
     // Find the intersection points of the two lines with a perpendicular line passing through the
@@ -103,8 +103,8 @@ bool Line::isBetween(const Line& line1, Vector2 point, const Line& line2) {
     const Vector2 perpendicularDirection(line1.direction().orthogonal());
     const Line perpendicularLine(perpendicularDirection, point);
 
-    const std::optional intersection1(perpendicularLine.intersection(line1));
-    const std::optional intersection2(perpendicularLine.intersection(line2));
+    const std::optional intersection1(perpendicularLine.intersects(line1));
+    const std::optional intersection2(perpendicularLine.intersects(line2));
 
     if (!intersection1.has_value() || !intersection2.has_value())
         return false;

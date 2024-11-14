@@ -4,6 +4,29 @@
 #include <cmath>
 #include <utility>
 
+Segment::Segment(const Segment& other) = default;
+
+Segment::Segment(Segment&& other) noexcept:
+        _start(std::move(other._start)), _end(std::move(other._end)) {}
+
+Segment& Segment::operator=(const Segment& other) {
+    if (this == &other)
+        return *this;
+
+    _start = other._start;
+    _end = other._end;
+    return *this;
+}
+
+Segment& Segment::operator=(Segment&& other) noexcept {
+    if (this == &other)
+        return *this;
+
+    _start = std::move(other._start);
+    _end = std::move(other._end);
+    return *this;
+}
+
 Segment::Segment(Vector2 start, Vector2 end): _start(std::move(start)), _end(std::move(end)) {}
 
 const Vector2& Segment::start() const { return _start; }
@@ -20,7 +43,7 @@ Segment& Segment::setEnd(Vector2 end) {
     return *this;
 }
 
-bool Segment::isLying(const Vector2& v) const {
+bool Segment::contains(const Vector2& v) const {
     return v.x() <= std::max(_start.x(), _end.x()) and v.x() >= std::min(_start.x(), _end.x()) and
            v.y() <= std::max(_start.y(), _end.y()) and v.y() >= std::min(_start.y(), _end.y());
 }
@@ -55,22 +78,22 @@ std::optional<Vector2> Segment::intersects(const Segment& segment) const {
     // Special cases:
     // _start, _end and segment._start are collinear and segment._start lies on segment [_start,
     // _end]
-    if (orientation1 == Vector2::Orientation::Collinear and isLying(segment._start))
+    if (orientation1 == Vector2::Orientation::Collinear and contains(segment._start))
         return segment._start;
 
     // _start, _end and segment._end are collinear and segment._end lies on segment [_start,
     // _end]
-    if (orientation2 == Vector2::Orientation::Collinear and isLying(segment._end))
+    if (orientation2 == Vector2::Orientation::Collinear and contains(segment._end))
         return segment._end;
 
     // segment._start, segment._end and _start are collinear and _start lies on segment
     // [segment._start, segment._end]
-    if (orientation3 == Vector2::Orientation::Collinear and segment.isLying(_start))
+    if (orientation3 == Vector2::Orientation::Collinear and segment.contains(_start))
         return _start;
 
     // segment._start, segment._end and _end are collinear and _end lies on segment [segment._start,
     // segment._end]
-    if (orientation4 == Vector2::Orientation::Collinear and segment.isLying(_end))
+    if (orientation4 == Vector2::Orientation::Collinear and segment.contains(_end))
         return _end;
 
     // If none of the above, the segments don't intersect

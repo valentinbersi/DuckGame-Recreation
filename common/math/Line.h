@@ -60,7 +60,7 @@ public:
      * @param other  The other line
      * @return The intersection point if the lines intersect, otherwise std::nullopt
      */
-    [[nodiscard]] std::optional<Vector2> intersection(const Line& other) const;
+    [[nodiscard]] std::optional<Vector2> intersects(const Line& other) const;
 
     /**
      * Check if the line intersects with a segment
@@ -68,14 +68,14 @@ public:
      * @return The intersection point if the line intersects with the segment, otherwise
      * std::nullopt
      */
-    [[nodiscard]] std::optional<Vector2> intersection(const Segment& segment) const;
+    [[nodiscard]] std::optional<Vector2> intersects(const Segment& segment) const;
 
     /**
      * Check if the line intersects with a point
      * @param point The point
      * @return True if the line intersects with the point, otherwise false
      */
-    [[nodiscard]] bool intersection(const Vector2& point) const;
+    [[nodiscard]] bool intersects(const Vector2& point) const;
 
     /**
      * Check if the line is parallel to another line

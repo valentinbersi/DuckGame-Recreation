@@ -44,9 +44,13 @@ float Vector2::x() const { return _x; }
 
 float Vector2::y() const { return _y; }
 
-void Vector2::x(const float x) { _x = x; }
+Vector2 Vector2::x(float value) const { return {value, _y}; }
 
-void Vector2::y(const float y) { _y = y; }
+Vector2 Vector2::y(float value) const { return {_x, value}; }
+
+void Vector2::setX(const float x) { _x = x; }
+
+void Vector2::setY(const float y) { _y = y; }
 
 #define ANGLE "Vector2::angle()"
 #define UNDEFINED_FOR_ZERO " is undefined for (0, 0) vector"

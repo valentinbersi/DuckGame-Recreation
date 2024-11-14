@@ -1,10 +1,18 @@
 #pragma once
 
+#include "Rectangle.h"
 #include "Shape2D.h"
 #include "Vector2.h"
 
+class Segment;
+
 class Circle final: public Shape2D {
     float _radius;
+
+    /**
+     * Calculates the axis points of a circle and caches them
+     */
+    void calculateAxisPoints();
 
 public:
     Circle() = delete;
@@ -23,6 +31,13 @@ public:
     Circle(Vector2 center, float radius);
 
     /**
+     * Set the center of the circle
+     * @param center The new center of the circle
+     * @return This circle
+     */
+    Shape2D& setCenter(Vector2 center) override;
+
+    /**
      * Get the radius of the circle
      * @return The radius of the circle
      */
@@ -33,6 +48,13 @@ public:
      * @param radius The new radius of the circle
      */
     Circle& radius(float radius);
+
+    /**
+     * Check if this circle contains a point
+     * @param point a point
+     * @return True if the circle contains the point, false otherwise
+     */
+    [[nodiscard]] bool contains(const Vector2& point) const override;
 
     /**
      * Check if this circle intersects with a circle
@@ -65,4 +87,16 @@ public:
      */
     [[nodiscard]] std::optional<IntersectionInfo> intersects(const Rectangle& rectangle,
                                                              Vector2 displacement) const override;
+
+    enum AxisPoint { North = 0, East = 1, South = 2, West = 3 };
+    constexpr static u8 AxisPointAmount = 4;
+    using AxisPoints = std::array<Vector2, AxisPointAmount>;
+
+    /**
+     * Get the axis points of this circle
+     */
+    AxisPoints getAxisPoints();
+
+private:
+    std::optional<AxisPoints> cachedAxisPoints;
 };
