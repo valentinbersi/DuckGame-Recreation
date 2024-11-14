@@ -52,9 +52,7 @@ GameController::GameController(): GameObject(nullptr) {
 
 void GameController::start() {}
 
-void GameController::update([[maybe_unused]] const float delta) {
-    collisionManager.processCollisions();
-}
+void GameController::update(const float delta) { collisionManager.processCollisions(delta); }
 
 #define FULL_GAME "The game is full"
 
