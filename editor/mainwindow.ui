@@ -16,6 +16,43 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="styleSheet">
+         <string notr="true">    color: white;
+                                        background-color: rgb(165, 29, 45);
+                                        padding: 10px;
+                                        border-radius: 10px;
+                                        margin: 5px;</string>
+        </property>
+        <property name="text">
+         <string>Map Name:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEditMapName">
+        <property name="styleSheet">
+         <string notr="true">color: rgb(165, 29, 45);
+                                        background-color: rgba(229, 165, 10, 0.95);
+                                        padding: 10px;
+                                        border-radius: 10px;
+                                        margin: 5px;
+                                        border-color: rgb(165, 29, 45);
+                                    </string>
+        </property>
+        <property name="placeholderText">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
      <widget class="QGraphicsView" name="graphicsView">
       <property name="styleSheet">
        <string notr="true">background-color: rgb(222, 221, 218);</string>

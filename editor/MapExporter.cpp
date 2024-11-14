@@ -3,8 +3,8 @@
 #include <QDebug>
 #include <fstream>
 
-void MapExporter::exportMap(const std::vector<Object>& objects, const std::string& fileName, int mapWidth, int mapHeight){
-    std::string path = "../maps/" + fileName;
+void MapExporter::exportMap(const std::vector<Object>& objects, const std::string& mapName, int mapWidth, int mapHeight){
+    std::string path = "../maps/" + mapName + ".yaml";
     std::ofstream fout(path);
     if (!fout.is_open()) {
         qWarning() << "No se pudo abrir el archivo para guardar.";
@@ -13,11 +13,10 @@ void MapExporter::exportMap(const std::vector<Object>& objects, const std::strin
 
     YAML::Node mapNode;
 
+    mapNode["map_name"] = mapName;
+    mapNode["background"] = "background_image.png";
     mapNode["map_width"] = mapWidth;
     mapNode["map_height"] = mapHeight;
-    mapNode["background"] = "background_image.png";
-    mapNode["map_name"] = "MyMap";
-
 
     YAML::Node objectsNode(YAML::NodeType::Sequence);
     for (const auto& obj : objects) {

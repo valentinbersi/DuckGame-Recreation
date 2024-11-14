@@ -23,19 +23,17 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     Object spawnGun(GUN, 3, 3, ":/icons/gunIcon.png");
     Object box(BOX, 2, 2, ":/icons/boxIcon.png");
 
-    // Configura los íconos en la barra de herramientas
     ui->Platform->setIcon(QIcon(platform.icon));
     ui->SpawnDuck->setIcon(QIcon(spawnDuck.icon));
     ui->SpawnGun->setIcon(QIcon(spawnGun.icon));
     ui->Box->setIcon(QIcon(box.icon));
 
-    // Conexiones de acciones de la barra de herramientas
     connect(ui->Platform, &QAction::triggered, this, [this, platform]() { scene->addObject(platform); });
     connect(ui->SpawnDuck, &QAction::triggered, this, [this, spawnDuck]() { scene->addObject(spawnDuck); });
     connect(ui->SpawnGun, &QAction::triggered, this, [this, spawnGun]() { scene->addObject(spawnGun); });
     connect(ui->Box, &QAction::triggered, this, [this, box]() { scene->addObject(box); });
 
-    connect(ui->SaveMap, &QAction::triggered, this, [this]() { MapExporter::exportMap(objects, "mapita", mapWidth, mapHeight); });
+    connect(ui->SaveMap, &QAction::triggered, this, [this]() { MapExporter::exportMap(objects, ui->lineEditMapName->text().toStdString(), mapWidth, mapHeight); });
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event) {

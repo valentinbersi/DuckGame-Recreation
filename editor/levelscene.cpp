@@ -46,7 +46,7 @@ void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
         auto* obj = selectedItem->data(0).value<Object*>();
         if (obj) {
-            obj->setPos(x,y);
+            obj->setPos(x/PixelSize,y/PixelSize);
         }
 
         selectedItem = nullptr;

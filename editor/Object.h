@@ -6,6 +6,8 @@
 #include <utility>
 #include <QMetaType>
 
+#include <QDebug>
+
 enum ObjectType {
     PLATFORM,
     DUCK,
@@ -31,6 +33,7 @@ struct Object {
     void setPos(int x, int y) {
         pos_x = x;
         pos_y = y;
+        qDebug() << "la posicion del objecto de tipo" << type << "es (" << pos_x << "," << pos_y << ")";
     }
 };
 
