@@ -8,6 +8,12 @@ class Circle;
 class Rectangle;
 class Capsule;
 
+struct IntersectionInfo {
+    bool intersects;
+    Vector2 safeDisplacement;
+    Vector2 surfaceNormal;
+};
+
 /**
  * Common interface for all shapes in 2D space
  */
@@ -50,6 +56,14 @@ public:
     [[nodiscard]] bool intersects(const Shape2D& shape) const;
 
     /**
+     * Check if this shape intersects with another shape when having a displacement
+     * @param shape The other shape
+     * @param displacement The displacement of this shape
+     * @return True if the shapes intersect, false otherwise
+     */
+    [[nodiscard]] IntersectionInfo intersects(const Shape2D& shape, Vector2 displacement) const;
+
+    /**
      * Check if this shape intersects a circle
      * @param circle a circle
      * @return True if the shapes intersect, false otherwise
@@ -57,9 +71,27 @@ public:
     [[nodiscard]] virtual bool intersects(const Circle& circle) const = 0;
 
     /**
+     * Check if this shape intersects a circle
+     * @param circle a circle
+     * @param displacement The displacement of this shape
+     * @return True if the shapes intersect, false otherwise
+     */
+    [[nodiscard]] virtual IntersectionInfo intersects(const Circle& circle,
+                                                      Vector2 displacement) const = 0;
+
+    /**
      * Check if this shape intersects a rectangle
      * @param rectangle a rectangle
      * @return True if the shapes intersect, false otherwise
      */
     [[nodiscard]] virtual bool intersects(const Rectangle& rectangle) const = 0;
+
+    /**
+     * Check if this shape intersects a rectangle
+     * @param rectangle a rectangle
+     * @param displacement The displacement of this shape
+     * @return True if the shapes intersect, false otherwise
+     */
+    [[nodiscard]] virtual IntersectionInfo intersects(const Rectangle& rectangle,
+                                                      Vector2 displacement) const = 0;
 };

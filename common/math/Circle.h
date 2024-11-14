@@ -6,6 +6,13 @@
 class Circle final: public Shape2D {
     float _radius;
 
+    /**
+     * Check if this circle touches but does not overlap another circle
+     * @param circle a circle
+     * @return True if the circles touch, false otherwise
+     */
+    bool touches(const Circle& circle) const;
+
 public:
     Circle() = delete;
     Circle(const Circle& other) = delete;
@@ -40,6 +47,15 @@ public:
      * @return True if the circles intersect, false otherwise
      */
     [[nodiscard]] bool intersects(const Circle& circle) const override;
+
+    /**
+     * Check if this circle intersects with a circle
+     * @param circle a circle
+     * @param displacement The displacement of the circle
+     * @return True if the circles intersect, false otherwise
+     */
+    [[nodiscard]] IntersectionInfo intersects(const Circle& circle,
+                                              Vector2 displacement) const override;
 
     /**
      * Check if this circle intersects with a rectangle

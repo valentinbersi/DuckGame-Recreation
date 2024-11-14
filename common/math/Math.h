@@ -98,6 +98,15 @@ struct Math {
      * @return The converted float
      */
     constexpr static float integerToFloat(u32 i);
+
+    /**
+     * Solves a quadratic equation of the form ax^2 + bx + c = 0.
+     * @param a The coefficient of x^2
+     * @param b The coefficient of x
+     * @param c The constant term
+     * @return An array with the solutions to the equation
+     */
+    constexpr static std::array<float, 2> solveQuadratic(float a, float b, float c);
 };
 
 constexpr bool Math::isEqualAprox(const float a, const float b) noexcept {
@@ -142,4 +151,17 @@ constexpr u32 Math::floatToInteger(const float f) { return static_cast<u32>(f * 
 
 constexpr float Math::integerToFloat(const u32 i) {
     return static_cast<float>(i) * INVERSE_EPSILON;
+}
+
+constexpr std::array<float, 2> Math::solveQuadratic(const float a, const float b, const float c) {
+    const float discriminant = b * b - 4 * a * c;
+
+    if (discriminant < 0)
+        return {NAN, NAN};
+
+    if (discriminant == 0)
+        return {-b / (2 * a), -b / (2 * a)};
+
+    const float sqrtDiscriminant = std::sqrt(discriminant);
+    return {(-b + sqrtDiscriminant) / (2 * a), (-b - sqrtDiscriminant) / (2 * a)};
 }
