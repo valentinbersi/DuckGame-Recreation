@@ -35,7 +35,7 @@ public:
      * Get the direction of the line
      * @return The direction of the line
      */
-    [[nodiscard]] const Vector2& direction1() const;
+    [[nodiscard]] const Vector2& direction() const;
 
     /**
      * Set the direction of the line
@@ -75,5 +75,22 @@ public:
      * @param point The point
      * @return True if the line intersects with the point, otherwise false
      */
-    bool intersection(const Vector2& point) const;
+    [[nodiscard]] bool intersection(const Vector2& point) const;
+
+    /**
+     * Check if the line is parallel to another line
+     * @param other The other line
+     * @return True if the line is parallel to the other line, otherwise false
+     */
+    [[nodiscard]] bool isParallelTo(const Line& other) const;
+
+    /**
+     * Check if a given point is between two lines
+     * @param line1 The first line
+     * @param point The point
+     * @param line2 The second line
+     * @return True if the point is between the two lines, otherwise false
+     * @pre The lines must be parallel
+     */
+    static bool isBetween(const Line& line1, Vector2 point, const Line& line2);
 };

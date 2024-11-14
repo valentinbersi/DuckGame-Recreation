@@ -10,7 +10,7 @@ Line::Line(Vector2 direction, Vector2 passingPoint):
 
 Line::Line(const Segment& segment): _direction(segment.end()), _pasingPoint(segment.start()) {}
 
-const Vector2& Line::direction1() const { return _direction; }
+const Vector2& Line::direction() const { return _direction; }
 
 void Line::setDirection(Vector2 direction) { this->_direction = std::move(direction); }
 
@@ -84,4 +84,36 @@ bool Line::intersection(const Vector2& point) const {
 
     // If tX and tY are approximately equal, the point lies on the line
     return Math::isEqualAprox(tX, tY);
+}
+
+bool Line::isParallelTo(const Line& other) const {
+    return Math::isZeroAprox(std::abs(_direction.x() * other._direction.y() -
+                                      _direction.y() * other._direction.x()));
+}
+
+bool Line::isBetween(const Line& line1, Vector2 point, const Line& line2) {
+    if (not line1.isParallelTo(line2))
+        throw std::invalid_argument("The lines must be parallel");
+
+    if (!line1.intersection(point) || !line2.intersection(point))
+        return false;  // Lines are contained on each other
+
+    // Find the intersection points of the two lines with a perpendicular line passing through the
+    // point
+    const Vector2 perpendicularDirection(line1.direction().orthogonal());
+    const Line perpendicularLine(perpendicularDirection, point);
+
+    const std::optional intersection1(perpendicularLine.intersection(line1));
+    const std::optional intersection2(perpendicularLine.intersection(line2));
+
+    if (!intersection1.has_value() || !intersection2.has_value())
+        return false;
+
+    // Check if the point is within the bounds defined by the intersection points
+    const float minX = std::min(intersection1->x(), intersection2->x());
+    const float maxX = std::max(intersection1->x(), intersection2->x());
+    const float minY = std::min(intersection1->y(), intersection2->y());
+    const float maxY = std::max(intersection1->y(), intersection2->y());
+
+    return point.x() >= minX && point.x() <= maxX && point.y() >= minY && point.y() <= maxY;
 }
