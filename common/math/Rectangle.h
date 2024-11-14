@@ -4,12 +4,16 @@
 #include "Types.h"
 #include "Vector2.h"
 
+
+class Segment;
 class Rectangle final: public Shape2D {
-    constexpr static u8 VertexAmount = 4;
+
 
     float _width, _height;
 
 public:
+    constexpr static u8 SidesAmount = 4;
+
     Rectangle() = delete;
     Rectangle(const Rectangle& other) = delete;
     Rectangle& operator=(const Rectangle& other) = delete;
@@ -36,6 +40,14 @@ public:
      * @return The height of the rectangle
      */
     [[nodiscard]] float height() const;
+
+    enum Sides { North = 0, East = 1, South = 2, West = 3 };
+
+    /**
+     * Get the sides of a rectangle as segments
+     * @return An array of segments representing the sides of the rectangle
+     */
+    [[nodiscard]] std::array<Segment, SidesAmount> getSides() const;
 
     /**
      * Check if this rectangle intersects a circle
