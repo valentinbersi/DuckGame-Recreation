@@ -1,11 +1,10 @@
 #pragma once
 
+#include "Segment.h"
 #include "Shape2D.h"
 #include "Types.h"
 #include "Vector2.h"
 
-
-class Segment;
 class Rectangle final: public Shape2D {
     float _width, _height;
 
