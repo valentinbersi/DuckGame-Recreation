@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
+add_compile_options(-Wno-error=zero-as-null-pointer-constant -Wno-error=deprecated-declarations)
+
 if (POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif ()

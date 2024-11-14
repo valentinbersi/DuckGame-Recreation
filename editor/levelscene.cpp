@@ -12,9 +12,11 @@
 
 #define PixelSize 15
 
-LevelScene::LevelScene(QObject *parent, int width, int heigth)
-        : QGraphicsScene(parent), selectedItem(nullptr) {
-    setSceneRect(0, 0, width*PixelSize, heigth*PixelSize);
+LevelScene::LevelScene(QObject *parent, int width, int height, std::vector<Object>& objects)
+        : QGraphicsScene(parent), selectedItem(nullptr), objects(objects) {
+    gridWidth = width*PixelSize;
+    gridHeight = height*PixelSize;
+    setSceneRect(0, 0, gridWidth, gridHeight);
 }
 
 void LevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
@@ -41,6 +43,12 @@ void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
         int x = int(pos.x()) / PixelSize * PixelSize;
         int y = int(pos.y()) / PixelSize * PixelSize;
         selectedItem->setPos(x, y);
+
+        auto* obj = selectedItem->data(0).value<Object*>();
+        if (obj) {
+            obj->setPos(x,y);
+        }
+
         selectedItem = nullptr;
     }
 
@@ -49,10 +57,9 @@ void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
 void LevelScene::addObject(const Object& object) {
     QPixmap icon(object.icon);
-    QPixmap iconScaled = icon.scaled(object.width* PixelSize, object.heigth * PixelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QPixmap iconScaled = icon.scaled(object.width* PixelSize, object.height * PixelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     auto* item = new QGraphicsPixmapItem(iconScaled);
-
     item->setFlag(QGraphicsItem::ItemIsMovable);
     item->setFlag(QGraphicsItem::ItemIsSelectable);
 
@@ -63,6 +70,8 @@ void LevelScene::addObject(const Object& object) {
     item->setPos(x, y);
 
     addItem(item);
+    objects.push_back(object);
+    item->setData(0, QVariant::fromValue(&objects.back()));
 
     auto *itemAction = qobject_cast<QAction*>(sender());
     if (itemAction) {
@@ -70,14 +79,23 @@ void LevelScene::addObject(const Object& object) {
     }
 }
 
-void LevelScene::drawBackground(QPainter* painter, const QRectF& rect) {
+void LevelScene::drawBackground(QPainter* painter, const QRectF&) {
+    painter->save();
     QPen pen(Qt::lightGray);
     painter->setPen(pen);
 
-    for (qreal x = std::floor(rect.left() / PixelSize) * PixelSize; x < rect.right(); x += PixelSize) {
-        painter->drawLine(QPointF(x, rect.top()), QPointF(x, rect.bottom()));
+    // Tamaño total del área de visualización
+    qreal viewWidth = gridWidth; // Cambia esto a un valor que represente el ancho total deseado
+    qreal viewHeight = gridHeight; // Cambia esto a un valor que represente el alto total deseado
+
+    // Dibuja las líneas verticales
+    for (qreal x = 0; x <= viewWidth; x += PixelSize) {
+        painter->drawLine(QPointF(x, 0), QPointF(x, viewHeight));
     }
-    for (qreal y = std::floor(rect.top() / PixelSize) * PixelSize; y < rect.bottom(); y += PixelSize) {
-        painter->drawLine(QPointF(rect.left(), y), QPointF(rect.right(), y));
+
+    // Dibuja las líneas horizontales
+    for (qreal y = 0; y <= viewHeight; y += PixelSize) {
+        painter->drawLine(QPointF(0, y), QPointF(viewWidth, y));
     }
+    painter->restore();
 }

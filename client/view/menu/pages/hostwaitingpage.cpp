@@ -37,6 +37,10 @@ void hostWaitingPage::recvServerMessage() {
             emit startMatch();
             timer->stop();
         }
+
+        if (message.connectedPlayers == 4)
+            requestStartGame();
+
     } else {qDebug() << "replyMessage is NULL";}
 }
 
