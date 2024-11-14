@@ -32,6 +32,10 @@ public:
      * A vector with all its coordinates set to NaN
      */
     static const Vector2 NANV;
+    /**
+     * A vector with all its coordinates set to 1
+     */
+    static const Vector2 ONE;
 
     /**
      * Construct a default initialized Vector2 with all coordinates set to 0

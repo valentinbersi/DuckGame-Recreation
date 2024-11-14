@@ -11,6 +11,7 @@ const Vector2 Vector2::DOWN(0, 1);
 const Vector2 Vector2::LEFT(-1, 0);
 const Vector2 Vector2::RIGHT(1, 0);
 const Vector2 Vector2::NANV(NAN, NAN);
+const Vector2 Vector2::ONE(1, 1);
 
 #define DEFAULT_VALUE 0
 

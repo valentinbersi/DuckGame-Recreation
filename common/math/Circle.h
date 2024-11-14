@@ -6,13 +6,6 @@
 class Circle final: public Shape2D {
     float _radius;
 
-    /**
-     * Check if this circle touches but does not overlap another circle
-     * @param circle a circle
-     * @return True if the circles touch, false otherwise
-     */
-    bool touches(const Circle& circle) const;
-
 public:
     Circle() = delete;
     Circle(const Circle& other) = delete;

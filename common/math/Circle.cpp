@@ -6,10 +6,6 @@
 #include "Math.h"
 #include "Rectangle.h"
 
-bool Circle::touches(const Circle& circle) const {
-    return Math::isEqualAprox(center().distance(circle.center()), _radius + circle._radius);
-}
-
 Circle::Circle(Vector2 center, const float radius): Shape2D(std::move(center)), _radius(radius) {}
 
 float Circle::radius() const { return _radius; }
@@ -54,7 +50,7 @@ IntersectionInfo Circle::intersects(const Circle& circle, const Vector2 displace
         const Vector2 realDisplacement = displacement.normalized() * realDisplacementLenght;
         const Vector2 newPosition = center() + realDisplacement;
         const Vector2 collisionNormal = (newPosition - circle.center()).normalized();
-        const Vector2 safeDisplacementProportion = Vector2(1, 1) - collisionNormal;
+        const Vector2 safeDisplacementProportion = Vector2::ONE - collisionNormal;
         const Vector2 safeDisplacement(displacement.x() * safeDisplacementProportion.x(),
                                        displacement.y() * safeDisplacementProportion.y());
 
