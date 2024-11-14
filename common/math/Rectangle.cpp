@@ -1,9 +1,11 @@
 #include "Rectangle.h"
 
+#include <bitset>
 #include <cmath>
 #include <utility>
 
 #include "Circle.h"
+#include "Line.h"
 #include "Math.h"
 #include "Segment.h"
 
@@ -118,9 +120,16 @@ bool Rectangle::contains(const Vector2& point) const {
 
 bool Rectangle::intersects(const Circle& circle) const { return circle.intersects(*this); }
 
-std::optional<IntersectionInfo> Rectangle::intersects([[maybe_unused]] const Circle& circle,
-                                                      [[maybe_unused]] Vector2 displacement) const {
-    return {};
+std::optional<IntersectionInfo> Rectangle::intersects(
+        [[maybe_unused]] const Circle& circle, [[maybe_unused]] const Vector2 displacement) const {
+    std::optional intersectionInfo(circle.intersects(*this, -displacement));
+
+    if (not intersectionInfo.has_value())
+        return std::nullopt;
+
+    const Vector2 rectangleReadDisplacement = circle.center() - intersectionInfo->nextPosition;
+    intersectionInfo->nextPosition = center() + rectangleReadDisplacement;
+    return intersectionInfo;
 }
 
 bool Rectangle::intersects(const Rectangle& rectangle) const {
@@ -142,5 +151,116 @@ bool Rectangle::intersects(const Rectangle& rectangle) const {
 
 std::optional<IntersectionInfo> Rectangle::intersects([[maybe_unused]] const Rectangle& rectangle,
                                                       [[maybe_unused]] Vector2 displacement) const {
-    return std::nullopt;
+    Rectangle nextRectangle(center() + displacement, _width, _height);
+
+    if (!nextRectangle.intersects(rectangle))
+        return std::nullopt;
+
+    const Line velocityLine(center() + displacement, center());
+    std::bitset<SidesAmount> collisionInSide;
+
+    if (Math::isLessAprox(displacement.x(), 0))
+        collisionInSide.set(West);
+    else if (Math::isGreaterAprox(displacement.x(), 0))
+        collisionInSide.set(East);
+
+    if (Math::isLessAprox(displacement.y(), 0))
+        collisionInSide.set(South);
+    else if (Math::isGreaterAprox(displacement.y(), 0))
+        collisionInSide.set(North);
+
+    if (collisionInSide.test(North) and rectangle.contains(nextRectangle.getAxisPoints()[South])) {
+        const float collisionDistance = std::abs(rectangle.getAxisPoints()[North].y() -
+                                                 nextRectangle.getAxisPoints()[South].y());
+
+        nextRectangle.setCenter(center() + Vector2::UP * collisionDistance);
+        return {{nextRectangle.center(), Vector2::UP}};
+    }
+
+    if (collisionInSide.test(South) and rectangle.contains(nextRectangle.getAxisPoints()[North])) {
+        const float collisionDistance = std::abs(rectangle.getAxisPoints()[South].y() -
+                                                 nextRectangle.getAxisPoints()[North].y());
+
+        nextRectangle.setCenter(center() + Vector2::DOWN * collisionDistance);
+        return {{nextRectangle.center(), Vector2::DOWN}};
+    }
+
+    if (collisionInSide.test(East) and rectangle.contains(nextRectangle.getAxisPoints()[West])) {
+        const float collisionDistance = std::abs(rectangle.getAxisPoints()[East].y() -
+                                                 nextRectangle.getAxisPoints()[West].y());
+
+        nextRectangle.setCenter(center() + Vector2::RIGHT * collisionDistance);
+        return {{nextRectangle.center(), Vector2::RIGHT}};
+    }
+
+    if (collisionInSide.test(West) and rectangle.contains(nextRectangle.getAxisPoints()[East])) {
+        const float collisionDistance = std::abs(rectangle.getAxisPoints()[West].y() -
+                                                 nextRectangle.getAxisPoints()[East].y());
+
+        nextRectangle.setCenter(center() + Vector2::LEFT * collisionDistance);
+        return {{nextRectangle.center(), Vector2::LEFT}};
+    }
+
+    if (collisionInSide.test(North) and collisionInSide.test(East) and
+        nextRectangle.contains(rectangle.getVertices()[NorthEast])) {
+        if (Math::isGreaterAprox(std::abs(displacement.y()), std::abs(displacement.x()))) {
+            const float collisionDistance = std::abs(rectangle.getAxisPoints()[North].y() -
+                                                     nextRectangle.getAxisPoints()[South].y());
+
+            nextRectangle.setCenter(center() + Vector2::UP * collisionDistance);
+            return {{nextRectangle.center(), Vector2::UP}};
+        }
+
+        const float collisionDistance = std::abs(rectangle.getAxisPoints()[East].y() -
+                                                 nextRectangle.getAxisPoints()[West].y());
+
+        nextRectangle.setCenter(center() + Vector2::RIGHT * collisionDistance);
+        return {{nextRectangle.center(), Vector2::RIGHT}};
+    }
+
+    if (collisionInSide.test(North) and collisionInSide.test(West) and
+        nextRectangle.contains(rectangle.getVertices()[NorthWest])) {
+        if (Math::isGreaterAprox(std::abs(displacement.y()), std::abs(displacement.x()))) {
+            const float collisionDistance = std::abs(rectangle.getAxisPoints()[North].y() -
+                                                     nextRectangle.getAxisPoints()[South].y());
+
+            nextRectangle.setCenter(center() + Vector2::UP * collisionDistance);
+            return {{nextRectangle.center(), Vector2::UP}};
+        }
+        const float collisionDistance = std::abs(rectangle.getAxisPoints()[West].y() -
+                                                 nextRectangle.getAxisPoints()[East].y());
+
+        nextRectangle.setCenter(center() + Vector2::LEFT * collisionDistance);
+        return {{nextRectangle.center(), Vector2::LEFT}};
+    }
+
+    if (collisionInSide.test(South) and collisionInSide.test(East) and
+        nextRectangle.contains(rectangle.getVertices()[SouthEast])) {
+        if (Math::isGreaterAprox(std::abs(displacement.y()), std::abs(displacement.x()))) {
+            const float collisionDistance = std::abs(rectangle.getAxisPoints()[South].y() -
+                                                     nextRectangle.getAxisPoints()[North].y());
+
+            nextRectangle.setCenter(center() + Vector2::DOWN * collisionDistance);
+            return {{nextRectangle.center(), Vector2::DOWN}};
+        }
+        const float collisionDistance = std::abs(rectangle.getAxisPoints()[East].y() -
+                                                 nextRectangle.getAxisPoints()[West].y());
+
+        nextRectangle.setCenter(center() + Vector2::RIGHT * collisionDistance);
+        return {{nextRectangle.center(), Vector2::RIGHT}};
+    }
+
+
+    if (Math::isGreaterAprox(std::abs(displacement.y()), std::abs(displacement.x()))) {
+        const float collisionDistance = std::abs(rectangle.getAxisPoints()[South].y() -
+                                                 nextRectangle.getAxisPoints()[North].y());
+
+        nextRectangle.setCenter(center() + Vector2::DOWN * collisionDistance);
+        return {{nextRectangle.center(), Vector2::DOWN}};
+    }
+    const float collisionDistance =
+            std::abs(rectangle.getAxisPoints()[West].y() - nextRectangle.getAxisPoints()[East].y());
+
+    nextRectangle.setCenter(center() + Vector2::LEFT * collisionDistance);
+    return {{nextRectangle.center(), Vector2::LEFT}};
 }

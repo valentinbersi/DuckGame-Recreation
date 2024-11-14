@@ -105,7 +105,6 @@ std::optional<IntersectionInfo> Circle::intersects(const Rectangle& rectangle,
     if (!nextCircle.intersects(rectangle))
         return std::nullopt;
 
-    const Line velocityLine(center() + displacement, center());
     std::bitset<Rectangle::SidesAmount> collisionInSide;
 
     if (Math::isLessAprox(displacement.x(), 0))
