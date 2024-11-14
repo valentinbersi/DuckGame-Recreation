@@ -23,7 +23,8 @@ bool Circle::intersects(const Circle& circle) const {
                                     _radius * _radius + circle._radius * circle._radius);
 }
 
-IntersectionInfo Circle::intersects(const Circle& circle, const Vector2 displacement) const {
+std::optional<IntersectionInfo> Circle::intersects(const Circle& circle,
+                                                   const Vector2 displacement) const {
     const Vector2 nextCenter = center() + displacement;
 
     if (Math::isEqualAprox(nextCenter.distance(circle.center()), _radius + circle._radius)) {
@@ -31,7 +32,7 @@ IntersectionInfo Circle::intersects(const Circle& circle, const Vector2 displace
         const Vector2 safeDisplacementProportion = Vector2(1, 1) - collisionNormal;
         const Vector2 safeDisplacement(displacement.x() * safeDisplacementProportion.x(),
                                        displacement.y() * safeDisplacementProportion.y());
-        return {true, safeDisplacement, collisionNormal};
+        return {{safeDisplacement, collisionNormal}};
     }
 
     if (Math::isLessOrEqualAprox(nextCenter.distanceSquared(circle.center()),
@@ -57,10 +58,10 @@ IntersectionInfo Circle::intersects(const Circle& circle, const Vector2 displace
         const Vector2 safeDisplacement(displacement.x() * safeDisplacementProportion.x(),
                                        displacement.y() * safeDisplacementProportion.y());
 
-        return {true, safeDisplacement, collisionNormal};
+        return {{safeDisplacement, collisionNormal}};
     }
 
-    return {false};
+    return std::nullopt;
 }
 
 bool Circle::intersects(const Rectangle& rectangle) const {
@@ -78,11 +79,12 @@ bool Circle::intersects(const Rectangle& rectangle) const {
     return Math::isLessOrEqualAprox(circleCenter.distanceSquared(closestPoint), _radius * _radius);
 }
 
-IntersectionInfo Circle::intersects(const Rectangle& rectangle, const Vector2 displacement) const {
+std::optional<IntersectionInfo> Circle::intersects(const Rectangle& rectangle,
+                                                   const Vector2 displacement) const {
     const Segment circlePath(center(), center() + displacement);
 
     if (Circle(center() + displacement, _radius).intersects(rectangle))
-        return {false};
+        return std::nullopt;
 
     const std::array sides(rectangle.getSides());
     std::bitset<Rectangle::SidesAmount> collisionInSide;
@@ -105,7 +107,7 @@ IntersectionInfo Circle::intersects(const Rectangle& rectangle, const Vector2 di
             const Vector2 safeHeight = Vector2::UP * _radius;
 
             Vector2 safePosition = intersection.value() + safeHeight - (displacement - safeHeight);
-            return {true, intersection.value() + Vector2::UP * _radius, Vector2::UP};
+            return {{intersection.value() + Vector2::UP * _radius, Vector2::UP}};
         }
     }
 
@@ -116,7 +118,7 @@ IntersectionInfo Circle::intersects(const Rectangle& rectangle, const Vector2 di
             const Vector2 safeHeight = Vector2::DOWN * _radius;
 
             Vector2 safePosition = intersection.value() + safeHeight - (displacement - safeHeight);
-            return {true, intersection.value() + Vector2::DOWN * _radius, Vector2::DOWN};
+            return {{intersection.value() + Vector2::DOWN * _radius, Vector2::DOWN}};
         }
     }
 
@@ -127,7 +129,7 @@ IntersectionInfo Circle::intersects(const Rectangle& rectangle, const Vector2 di
             const Vector2 safeHeight = Vector2::LEFT * _radius;
 
             Vector2 safePosition = intersection.value() + safeHeight - (displacement - safeHeight);
-            return {true, intersection.value() + Vector2::LEFT * _radius, Vector2::LEFT};
+            return {{intersection.value() + Vector2::LEFT * _radius, Vector2::LEFT}};
         }
     }
 
@@ -138,7 +140,7 @@ IntersectionInfo Circle::intersects(const Rectangle& rectangle, const Vector2 di
             const Vector2 safeHeight = Vector2::RIGHT * _radius;
 
             Vector2 safePosition = intersection.value() + safeHeight - (displacement - safeHeight);
-            return {true, intersection.value() + Vector2::RIGHT * _radius, Vector2::RIGHT};
+            return {{intersection.value() + Vector2::RIGHT * _radius, Vector2::RIGHT}};
         }
     }
 

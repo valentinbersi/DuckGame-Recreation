@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <optional>
 
 #include "Vector2.h"
 
@@ -9,9 +9,10 @@ class Rectangle;
 class Capsule;
 
 struct IntersectionInfo {
-    bool intersects;
     Vector2 safeDisplacement;
     Vector2 surfaceNormal;
+
+    IntersectionInfo(Vector2 safeDisplacement, Vector2 surfaceNormal);
 };
 
 /**
@@ -61,7 +62,8 @@ public:
      * @param displacement The displacement of this shape
      * @return True if the shapes intersect, false otherwise
      */
-    [[nodiscard]] IntersectionInfo intersects(const Shape2D& shape, Vector2 displacement) const;
+    [[nodiscard]] std::optional<IntersectionInfo> intersects(const Shape2D& shape,
+                                                             Vector2 displacement) const;
 
     /**
      * Check if this shape intersects a circle
@@ -76,8 +78,8 @@ public:
      * @param displacement The displacement of this shape
      * @return True if the shapes intersect, false otherwise
      */
-    [[nodiscard]] virtual IntersectionInfo intersects(const Circle& circle,
-                                                      Vector2 displacement) const = 0;
+    [[nodiscard]] virtual std::optional<IntersectionInfo> intersects(
+            const Circle& circle, Vector2 displacement) const = 0;
 
     /**
      * Check if this shape intersects a rectangle
@@ -92,6 +94,6 @@ public:
      * @param displacement The displacement of this shape
      * @return True if the shapes intersect, false otherwise
      */
-    [[nodiscard]] virtual IntersectionInfo intersects(const Rectangle& rectangle,
-                                                      Vector2 displacement) const = 0;
+    [[nodiscard]] virtual std::optional<IntersectionInfo> intersects(
+            const Rectangle& rectangle, Vector2 displacement) const = 0;
 };

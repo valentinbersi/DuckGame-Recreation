@@ -56,10 +56,16 @@ public:
      */
     [[nodiscard]] bool intersects(const Circle& circle) const override;
 
+    [[nodiscard]] std::optional<IntersectionInfo> intersects(const Circle& circle,
+                                                             Vector2 displacement) const override;
+
     /**
      * Check if this rectangle intersects a rectangle
      * @param rectangle a rectangle
      * @return True if the shapes intersect, false otherwise
      */
     [[nodiscard]] bool intersects(const Rectangle& rectangle) const override;
+
+    [[nodiscard]] std::optional<IntersectionInfo> intersects(const Rectangle& rectangle,
+                                                             Vector2 displacement) const override;
 };

@@ -47,8 +47,8 @@ public:
      * @param displacement The displacement of the circle
      * @return An IntersectionInfo with information about the collision if it happened
      */
-    [[nodiscard]] IntersectionInfo intersects(const Circle& circle,
-                                              Vector2 displacement) const override;
+    [[nodiscard]] std::optional<IntersectionInfo> intersects(const Circle& circle,
+                                                             Vector2 displacement) const override;
 
     /**
      * Check if this circle intersects with a rectangle
@@ -63,6 +63,6 @@ public:
      * @param displacement The displacement of the circle
      * @return An IntersectionInfo with information about the collision if it happened
      */
-    [[nodiscard]] IntersectionInfo intersects(const Rectangle& rectangle,
-                                              Vector2 displacement) const override;
+    [[nodiscard]] std::optional<IntersectionInfo> intersects(const Rectangle& rectangle,
+                                                             Vector2 displacement) const override;
 };

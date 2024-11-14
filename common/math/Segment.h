@@ -29,7 +29,7 @@ public:
      * Get the start of the segment
      * @return The start of the segment
      */
-    [[nodiscard]] Vector2 start() const;
+    [[nodiscard]] const Vector2& start() const;
 
     /**
      * Set the start of the segment
@@ -42,7 +42,7 @@ public:
      * Get the end of the segment
      * @return The end of the segment
      */
-    [[nodiscard]] Vector2 end() const;
+    [[nodiscard]] const Vector2& end() const;
 
     /**
      * Set the end of the segment

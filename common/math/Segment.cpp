@@ -6,14 +6,14 @@
 
 Segment::Segment(Vector2 start, Vector2 end): _start(std::move(start)), _end(std::move(end)) {}
 
-Vector2 Segment::start() const { return _start; }
+const Vector2& Segment::start() const { return _start; }
 
 Segment& Segment::setStart(Vector2 start) {
     _start = std::move(start);
     return *this;
 }
 
-Vector2 Segment::end() const { return _end; }
+const Vector2& Segment::end() const { return _end; }
 
 Segment& Segment::setEnd(Vector2 end) {
     _end = std::move(end);
@@ -21,8 +21,8 @@ Segment& Segment::setEnd(Vector2 end) {
 }
 
 bool Segment::isLying(const Vector2& v) const {
-    return v.x <= std::max(_start.x, _end.x) and v.x >= std::min(_start.x, _end.x) and
-           v.y <= std::max(_start.y, _end.y) and v.y >= std::min(_start.y, _end.y);
+    return v.x() <= std::max(_start.x(), _end.x()) and v.x() >= std::min(_start.x(), _end.x()) and
+           v.y() <= std::max(_start.y(), _end.y()) and v.y() >= std::min(_start.y(), _end.y());
 }
 
 #define INFINITE_POINTS 0
@@ -38,15 +38,16 @@ std::optional<Vector2> Segment::intersects(const Segment& segment) const {
     // General case: if the orientations are different, the segments intersect
     if (orientation1 != orientation2 && orientation3 != orientation4) {
         // Compute the intersection point using parametric equations
-        float denom = (_end.x - _start.x) * (segment._end.y - segment._start.y) -
-                      (_end.y - _start.y) * (segment._end.x - segment._start.x);
+        float denom = (_end.x() - _start.x()) * (segment._end.y() - segment._start.y()) -
+                      (_end.y() - _start.y()) * (segment._end.x() - segment._start.x());
 
         if (denom == INFINITE_POINTS)
             return Vector2::NANV;  // Parallel or collinear
 
-        const float lambda = ((_start.x - segment._start.x) * (segment._end.y - segment._start.y) -
-                              (_start.y - segment._start.y) * (segment._end.x - segment._start.x)) /
-                             denom;
+        const float lambda =
+                ((_start.x() - segment._start.x()) * (segment._end.y() - segment._start.y()) -
+                 (_start.y() - segment._start.y()) * (segment._end.x() - segment._start.x())) /
+                denom;
 
         return _start + (_end - _start) * lambda;
     }

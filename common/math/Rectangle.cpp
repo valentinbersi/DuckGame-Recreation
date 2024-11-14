@@ -30,6 +30,11 @@ std::array<Segment, Rectangle::SidesAmount> Rectangle::getSides() const {
 
 bool Rectangle::intersects(const Circle& circle) const { return circle.intersects(*this); }
 
+std::optional<IntersectionInfo> Rectangle::intersects([[maybe_unused]] const Circle& circle,
+                                                      [[maybe_unused]] Vector2 displacement) const {
+    return {};
+}
+
 bool Rectangle::intersects(const Rectangle& rectangle) const {
     const Vector2& rect1Center = this->center();
     const float rect1HalfWidth = this->width() / 2.0f;
@@ -45,4 +50,9 @@ bool Rectangle::intersects(const Rectangle& rectangle) const {
             std::abs(rect1Center.y() - rect2Center.y()) <= rect1HalfHeight + rect2HalfHeight;
 
     return overlapX and overlapY;
+}
+
+std::optional<IntersectionInfo> Rectangle::intersects([[maybe_unused]] const Rectangle& rectangle,
+                                                      [[maybe_unused]] Vector2 displacement) const {
+    return std::nullopt;
 }

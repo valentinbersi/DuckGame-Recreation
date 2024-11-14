@@ -5,7 +5,8 @@
 #include "Circle.h"
 #include "Rectangle.h"
 
-IntersectionInfo::operator bool() const { return intersects; }
+IntersectionInfo::IntersectionInfo(Vector2 safeDisplacement, Vector2 surfaceNormal):
+        safeDisplacement(std::move(safeDisplacement)), surfaceNormal(std::move(surfaceNormal)) {}
 
 Shape2D::Shape2D(Vector2 center): _center(std::move(center)) {}
 
@@ -22,7 +23,8 @@ bool Shape2D::intersects(const Shape2D& shape) const try {
     return intersects(dynamic_cast<const Rectangle&>(shape));
 }
 
-IntersectionInfo Shape2D::intersects(const Shape2D& shape, Vector2 displacement) const try {
+std::optional<IntersectionInfo> Shape2D::intersects(const Shape2D& shape,
+                                                    Vector2 displacement) const try {
     return intersects(dynamic_cast<const Circle&>(shape), std::move(displacement));
 } catch (const std::bad_cast&) {
     return intersects(dynamic_cast<const Rectangle&>(shape), std::move(displacement));
