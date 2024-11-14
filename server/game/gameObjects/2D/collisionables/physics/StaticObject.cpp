@@ -13,7 +13,7 @@ void StaticObject::registerCollision(
     // Left empty on purpose, a static object does nothing with the collisions it registers
 }
 
-void StaticObject::processCollisions() {
+void StaticObject::processCollisions(float delta) {
     // Left empty on purpose, a static object does not process collisions (this may change in the
     // future)
 }

@@ -41,6 +41,14 @@ protected:
      */
     bool collidesWith(const CollisionObject& other) const;
 
+    /**
+     * Move the CollisionObject and check for collisions with another CollisionObject
+     * @param other the other CollisionObject to check collision with
+     * @param displacement the displacement to move the CollisionObject
+     */
+    std::optional<IntersectionInfo> moveAndCollide(const CollisionObject& other,
+                                                   const Vector2& displacement) const;
+
 public:
     CollisionObject() = delete;
     CollisionObject(const CollisionObject& other) = delete;
@@ -131,6 +139,7 @@ public:
 
     /**
      * Check for collisions with other collision object and perform the collision
+     * @param delta the time since the last update
      */
-    virtual void processCollisions() = 0;
+    virtual void processCollisions(float delta) = 0;
 };

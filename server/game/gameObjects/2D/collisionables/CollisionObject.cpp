@@ -22,6 +22,11 @@ bool CollisionObject::collidesWith(const CollisionObject& other) const {
     return shape->intersects(*other.shape);
 }
 
+std::optional<IntersectionInfo> CollisionObject::moveAndCollide(const CollisionObject& other,
+                                                                const Vector2& displacement) const {
+    return shape->intersects(*other.shape, displacement);
+}
+
 CollisionObject::~CollisionObject() { delete shape; }
 
 void CollisionObject::updateInternal([[maybe_unused]] const float delta) {

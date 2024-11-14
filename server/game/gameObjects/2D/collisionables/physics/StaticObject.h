@@ -40,5 +40,5 @@ public:
     /**
      * Does nothing on StaticObject
      */
-    void processCollisions() final;
+    void processCollisions(float delta) final;
 };
