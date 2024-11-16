@@ -38,7 +38,7 @@ std::string MapExporter::objectTypeToString(ObjectType type) {
     switch (type) {
         case PLATFORM: return "PLATFORM";
         case DUCK: return "DUCK";
-        case GUN: return "GUN";
+        case ARMAMENT: return "ARMAMENT";
         case BOX: return "BOX";
         default: return "UNKNOWN";
     }
