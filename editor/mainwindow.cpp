@@ -7,6 +7,7 @@
 
 #include "MapExporter.h"
 #include "Object.h"
+#include "ObjectConstants.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -18,22 +19,55 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     scene = new LevelScene(this, mapWidth, mapHeight, objects);
     ui->graphicsView->setScene(scene);
 
-    Object platform(PLATFORM, 2, 2, ":/icons/platformIcon.png");
-    Object spawnDuck(DUCK, 3, 2, ":/icons/duckIcon.png");
-    Object spawnGun(GUN, 3, 3, ":/icons/gunIcon.png");
-    Object box(BOX, 2, 2, ":/icons/boxIcon.png");
+    ui->Platform->setIcon(QIcon(PLATFORM_ICON));
+    ui->SpawnDuck->setIcon(QIcon(DUCK_ICON));
+    ui->SpawnGun->setIcon(QIcon(ARMAMENT_ICON));
+    ui->Box->setIcon(QIcon(BOX_ICON));
 
-    ui->Platform->setIcon(QIcon(platform.icon));
-    ui->SpawnDuck->setIcon(QIcon(spawnDuck.icon));
-    ui->SpawnGun->setIcon(QIcon(spawnGun.icon));
-    ui->Box->setIcon(QIcon(box.icon));
+//    connect(ui->Platform, &QAction::triggered, this, [this]() {
+//        scene->addObject(PLATFORM);
+//    });
+//
+//    connect(ui->SpawnDuck, &QAction::triggered, this, [this]() {
+//        scene->addObject(DUCK);
+//    });
+//
+//    connect(ui->SpawnGun, &QAction::triggered, this, [this]() {
+//        scene->addObject(ARMAMENT);
+//    });
+//
+//    connect(ui->Box, &QAction::triggered, this, [this]() {
+//        scene->addObject(BOX);
+//    });
 
-    connect(ui->Platform, &QAction::triggered, this, [this, platform]() { scene->addObject(platform); });
-    connect(ui->SpawnDuck, &QAction::triggered, this, [this, spawnDuck]() { scene->addObject(spawnDuck); });
-    connect(ui->SpawnGun, &QAction::triggered, this, [this, spawnGun]() { scene->addObject(spawnGun); });
-    connect(ui->Box, &QAction::triggered, this, [this, box]() { scene->addObject(box); });
+    connect(ui->Platform, &QAction::triggered, this, [this]() {
+        scene->toggleAddingObject(PLATFORM);
+    });
 
-    connect(ui->SaveMap, &QAction::triggered, this, [this]() { MapExporter::exportMap(objects, ui->lineEditMapName->text().toStdString(), mapWidth, mapHeight); });
+    connect(ui->SpawnDuck, &QAction::triggered, this, [this]() {
+        scene->toggleAddingObject(DUCK);
+    });
+
+    connect(ui->SpawnGun, &QAction::triggered, this, [this]() {
+        scene->toggleAddingObject(ARMAMENT);
+    });
+
+    connect(ui->Box, &QAction::triggered, this, [this]() {
+        scene->toggleAddingObject(BOX);
+    });
+
+    connect(scene, &LevelScene::addingObjectChanged, this, [this](ObjectType type, bool isAdding) {
+        ui->SpawnDuck->setChecked(type == DUCK && isAdding);
+        ui->Platform->setChecked(type == PLATFORM && isAdding);
+        ui->SpawnGun->setChecked(type == ARMAMENT && isAdding);
+        ui->Box->setChecked(type == BOX && isAdding);
+    });
+
+    connect(ui->ClearAll, &QAction::triggered, scene, &LevelScene::clearAll);
+
+    connect(ui->SaveMap, &QAction::triggered, this, [this](){
+        MapExporter::exportMap(objects, ui->lineEditMapName->text().toStdString(), mapWidth, mapHeight);
+    });
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event) {
