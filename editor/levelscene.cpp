@@ -46,6 +46,31 @@ void LevelScene::deleteObjectAt(const QPointF& position) {
         }
     }
 }
+
+void LevelScene::addObject(ObjectType type, QPointF pos) {
+    Object newObject = createObject(type);
+    QPixmap icon(newObject.icon);
+    QPixmap iconScaled = icon.scaled(newObject.width * PixelSize, newObject.height * PixelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+    auto* item = new QGraphicsPixmapItem(iconScaled);
+    item->setFlag(QGraphicsItem::ItemIsMovable);
+    item->setFlag(QGraphicsItem::ItemIsSelectable);
+
+    int x = int(pos.x()) / PixelSize * PixelSize;
+    int y = int(pos.y()) / PixelSize * PixelSize;
+    item->setPos(x, y);
+    newObject.setPos(x/PixelSize,y/PixelSize);
+
+    addItem(item);
+    objects.push_back(newObject);
+    item->setData(0, QVariant::fromValue(&objects.back()));
+
+    auto *itemAction = qobject_cast<QAction*>(sender());
+    if (itemAction) {
+        itemAction->setChecked(false);
+    }
+}
+
 void LevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     qDebug() << "Clic en la escena en: " << event->scenePos();
 
@@ -56,24 +81,7 @@ void LevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
     if (addingObject && objectTypeToAdd != UNKNOWN) {
         QPointF pos = event->scenePos();
-        int x = int(pos.x()) / PixelSize * PixelSize;
-        int y = int(pos.y()) / PixelSize * PixelSize;
-
-        Object newObject = createObject(objectTypeToAdd);
-
-        QPixmap icon(newObject.icon);
-        QPixmap iconScaled = icon.scaled(newObject.width * PixelSize, newObject.height * PixelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-        auto* item = new QGraphicsPixmapItem(iconScaled);
-        item->setFlag(QGraphicsItem::ItemIsMovable);
-        item->setFlag(QGraphicsItem::ItemIsSelectable);
-
-        item->setPos(x, y);
-        addItem(item);
-
-        objects.push_back(newObject);
-        item->setData(0, QVariant::fromValue(&objects.back()));
-
+        addObject(objectTypeToAdd, pos);
         return;
     }
 
@@ -123,32 +131,6 @@ Object LevelScene::createObject(ObjectType type) {
         default:
             qWarning() << "Tipo de objeto desconocido";
             return {UNKNOWN, 0, 0, ""};
-    }
-}
-
-void LevelScene::addObject(ObjectType type) {
-    Object newObject = createObject(type);
-    
-    QPixmap icon(newObject.icon);
-    QPixmap iconScaled = icon.scaled(newObject.width * PixelSize, newObject.height * PixelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-    auto* item = new QGraphicsPixmapItem(iconScaled);
-    item->setFlag(QGraphicsItem::ItemIsMovable);
-    item->setFlag(QGraphicsItem::ItemIsSelectable);
-
-    auto viewCenter = this->views().first()->viewport()->rect().center();
-    QPointF sceneCenter = this->views().first()->mapToScene(viewCenter);
-    qreal x = std::round(sceneCenter.x() / PixelSize) * PixelSize;
-    qreal y = std::round(sceneCenter.y() / PixelSize) * PixelSize;
-    item->setPos(x, y);
-
-    addItem(item);
-    objects.push_back(newObject);
-    item->setData(0, QVariant::fromValue(&objects.back()));
-
-    auto *itemAction = qobject_cast<QAction*>(sender());
-    if (itemAction) {
-        itemAction->setChecked(false);
     }
 }
 

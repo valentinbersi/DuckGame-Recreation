@@ -22,7 +22,7 @@ public:
     ~LevelScene() override = default;
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
     static Object createObject(ObjectType type);
-    void addObject(ObjectType type);
+    void addObject(ObjectType type, QPointF pos);
     void drawBackground(QPainter* painter, const QRectF& rect) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
