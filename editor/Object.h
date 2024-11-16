@@ -11,8 +11,9 @@
 enum ObjectType {
     PLATFORM,
     DUCK,
-    GUN,
-    BOX
+    ARMAMENT,
+    BOX,
+    UNKNOWN // objeto invalido
 };
 
 struct Object {

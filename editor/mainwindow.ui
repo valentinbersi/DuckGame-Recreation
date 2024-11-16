@@ -97,6 +97,7 @@
    <addaction name="SpawnGun"/>
    <addaction name="Box"/>
    <addaction name="separator"/>
+   <addaction name="ClearAll"/>
    <addaction name="SaveMap"/>
   </widget>
   <action name="Platform">
@@ -140,6 +141,14 @@
    </property>
    <property name="toolTip">
     <string>Save Map</string>
+   </property>
+  </action>
+  <action name="ClearAll">
+   <property name="text">
+    <string>Clear All</string>
+   </property>
+   <property name="toolTip">
+    <string>Clear All</string>
    </property>
   </action>
  </widget>
