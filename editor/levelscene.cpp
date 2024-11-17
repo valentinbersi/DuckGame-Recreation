@@ -12,10 +12,10 @@
 
 #define PixelSize 15
 
-LevelScene::LevelScene(QObject *parent, int width, int height, std::vector<Object>& objects)
+LevelScene::LevelScene(QObject *parent, std::vector<Object>& objects)
         : QGraphicsScene(parent), selectedItem(nullptr), objects(objects), addingObject(false), objectTypeToAdd(UNKNOWN) {
-    gridWidth = width*PixelSize;
-    gridHeight = height*PixelSize;
+    gridWidth = 50*PixelSize;
+    gridHeight = 50*PixelSize;
     setSceneRect(0, 0, gridWidth, gridHeight);
 }
 
@@ -48,39 +48,44 @@ void LevelScene::deleteObjectAt(const QPointF& position) {
 void LevelScene::addObject(ObjectType type, QPointF pos) {
     Object newObject = createObject(type);
     QPixmap icon(newObject.icon);
-    QPixmap iconScaled = icon.scaled(newObject.size.width() * PixelSize, newObject.size.height() * PixelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QPixmap iconScaled =
+            icon.scaled(newObject.size.width() * PixelSize, newObject.size.height() * PixelSize,
+                        Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     auto* item = new QGraphicsPixmapItem(iconScaled);
     item->setFlag(QGraphicsItem::ItemIsMovable);
     item->setFlag(QGraphicsItem::ItemIsSelectable);
 
-    QPointF topLeftPos(
-            pos.x() - (newObject.size.width() / 2) * PixelSize,
-            pos.y() - (newObject.size.height() / 2) * PixelSize);
+    QPointF topLeftPos(pos.x() - (newObject.size.width() / 2) * PixelSize,
+                       pos.y() - (newObject.size.height() / 2) * PixelSize);
 
     int x = (int(topLeftPos.x()) / PixelSize) * PixelSize;
     int y = (int(topLeftPos.y()) / PixelSize) * PixelSize;
     item->setPos(x, y);
 
-    newObject.setCenterPosition(
-            QPointF(x / PixelSize + newObject.size.width() / 2,
-                    y / PixelSize + newObject.size.height() / 2));
+    newObject.setCenterPosition(QPointF(x / PixelSize + newObject.size.width() / 2,
+                                        y / PixelSize + newObject.size.height() / 2));
 
     addItem(item);
     objects.push_back(newObject);
     item->setData(0, QVariant::fromValue(&objects.back()));
 
-    QRectF currentRect = sceneRect();
+    //    QRectF currentRect = sceneRect();
+    //
+    //    //QRectF objectRect(item->pos(), QSizeF(newObject.size.width() * PixelSize, newObject.size.height() * PixelSize)); QPointF objectTopLeft = item->scenePos();  // Convertir a coordenadas globales QRectF objectRect(objectTopLeft, QSizeF(newObject.size.width() * PixelSize, newObject.size.height() * PixelSize));
 
-    //QRectF objectRect(item->pos(), QSizeF(newObject.size.width() * PixelSize, newObject.size.height() * PixelSize));
-    QPointF objectTopLeft = item->scenePos();  // Convertir a coordenadas globales
-    QRectF objectRect(objectTopLeft, QSizeF(newObject.size.width() * PixelSize, newObject.size.height() * PixelSize));
+    QRectF objectRect(item->scenePos(),
+                      QSizeF(newObject.size.width() * PixelSize,
+                             newObject.size.height() * PixelSize));
+    QRectF currentRect = sceneRect();
 
     qDebug() << "Current sceneRect:" << currentRect;
     qDebug() << "Object rect:" << objectRect;
     if (!currentRect.contains(objectRect)) {
-        QRectF expandedRect = currentRect.united(objectRect); // Unir los rectángulos
-        setSceneRect(expandedRect); // Actualizar la escena
+        QRectF expandedRect = currentRect.united(objectRect);
+        setSceneRect(expandedRect);
+        gridWidth = expandedRect.width();
+        gridHeight = expandedRect.height();
         qDebug() << "Expanded rect:" << expandedRect;
     }
 

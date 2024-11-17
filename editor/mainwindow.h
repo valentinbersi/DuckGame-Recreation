@@ -16,7 +16,7 @@ class MainWindow: public QMainWindow {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget* parent = nullptr);
+    explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow() override;
 
 private:
@@ -27,5 +27,6 @@ private:
     LevelScene* scene;
     MapExporter mapExporter; // esto capaz no es necesario!
     void resizeEvent(QResizeEvent* event) override;
+    void wheelEvent(QWheelEvent* event) override;
 };
 #endif  // MAINWINDOW_H
