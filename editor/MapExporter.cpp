@@ -22,8 +22,8 @@ void MapExporter::exportMap(const std::vector<Object>& objects, const std::strin
     for (const auto& obj : objects) {
         YAML::Node objNode;
         objNode["type"] = objectTypeToString(obj.type);
-        objNode["x"] = obj.pos_x;
-        objNode["y"] = obj.pos_y;
+        objNode["x"] = obj.centerPos.x();
+        objNode["y"] = obj.centerPos.y();
 
         objectsNode.push_back(objNode);
     }
