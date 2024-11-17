@@ -40,7 +40,7 @@ private:
     void handleEvents(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping);
     void handleScreenEvents(SDL_Event& event, bool isKeyDown, SDL_Scancode& scancode, std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping);
     void handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown);
-    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping();
+    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping(TextureManager& textureManager);
     void updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping, float currentScale);
     void getSnapshot();
     void showBackground(SDL2pp::Texture& backgroundTexture, float currentScale);

@@ -26,7 +26,7 @@
 
 SpriteManager::SpriteManager(
         const char* path1, const char* path2,
-        SDL2pp::Renderer& renderer /*, int& window_width, int& window_height*/):
+        SDL2pp::Renderer& renderer, TextureManager& textureManager /*, int& window_width, int& window_height*/):
         path1(path1),
         path2(path2),
         scale(DEFAULT_SCALE),
@@ -35,7 +35,7 @@ SpriteManager::SpriteManager(
         in_air(false),
         flapping(false),
         flip(false),
-        spritesheet(std::make_unique<Spritesheet>(path1, path2, renderer)),
+        spritesheet(std::make_unique<Spritesheet>(path1, path2, renderer, textureManager)),
         frame(0),
         flappingFrame(0),
         m_position_x(0),
@@ -106,18 +106,10 @@ void SpriteManager::setFlags(bool air, bool flap, bool right, bool left) {
         // if (flappingFrame)
     }
 
-    if (in_air != air) {
-        in_air = !in_air;
-        frame = 0;
-    }
-    if (moving_right != right) {
-        moving_right = !moving_right;
-        frame = 0;
-    }
-    if (moving_left != left) {
-        moving_left = !moving_left;
-        frame = 0;
-    }
+    negateFlag(air, in_air);
+    negateFlag(right, moving_right);
+    negateFlag(left, moving_left);
+
     if (flapping != flap) {
         flapping = !flapping;
         frame = 0;
@@ -125,12 +117,12 @@ void SpriteManager::setFlags(bool air, bool flap, bool right, bool left) {
     }
 }
 
-/*void SpriteManager::negateFlag(bool flag, bool& flagToNegate) {
+void SpriteManager::negateFlag(bool flag, bool& flagToNegate) {
     if (flagToNegate != flag) {
         flagToNegate = !flagToNegate;
         frame = 0;
     }
-}*/
+}
 
 SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather) {
     int spriteWidth = spritesheet->getClipWidth();

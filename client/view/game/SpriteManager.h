@@ -3,13 +3,14 @@
 #include <string>
 
 #include "Spritesheet.h"
+#include <SDL2pp/SDL2pp.hh>
 
 class SpriteManager {
 
 public:
     // Constructor
     SpriteManager(const char* path1, const char* path2,
-                  SDL2pp::Renderer& renderer /*, int& window_width, int& window_height*/);
+                  SDL2pp::Renderer& renderer, TextureManager& textureManager /*, int& window_width, int& window_height*/);
 
     // Destructor
     ~SpriteManager() = default;
@@ -20,6 +21,7 @@ public:
     void draw(int col, int row);
     void updatePosition(float new_x, float new_y);
     void setScale(float newScale);
+    void negateFlag(bool flag, bool& flagToNegate);
 
     Spritesheet& getSpritesheet();
 
@@ -34,6 +36,7 @@ private:
     bool in_air;
     bool flapping;
     bool flip;
+    //bool hasHelmet;
     std::unique_ptr<Spritesheet> spritesheet;
     int frame;
     int flappingFrame;
