@@ -1,10 +1,10 @@
 #include "StaticObject.h"
 
 StaticObject::StaticObject(GameObject* parent, Vector2 position,
-                           const std::bitset<LAYERS_COUNT> layers,
-                           const std::bitset<LAYERS_COUNT> scannedLayers,
-                           std::unique_ptr<Shape2D> shape):
-        CollisionObject(parent, std::move(position), layers, scannedLayers, std::move(shape)) {}
+                           const std::bitset<LayersCount> layers,
+                           const std::bitset<LayersCount> scannedLayers, const float width,
+                           const float height):
+        CollisionObject(parent, std::move(position), layers, scannedLayers, width, height) {}
 
 void StaticObject::updateInternal(const float delta) { CollisionObject::updateInternal(delta); }
 

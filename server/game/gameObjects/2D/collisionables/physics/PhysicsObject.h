@@ -9,7 +9,7 @@ public:
 
 private:
     Vector2 _velocity;
-    Vector2 acceleration;
+    Vector2 gravityAccumulator;
     Gravity gravity;
 
 protected:
@@ -19,13 +19,13 @@ protected:
      * @param position The position of the object
      * @param layers The layer the object is in
      * @param scannedLayers The layer the object scans for collisions
-     * @param shape The shape of the object
+     * @param width The width of the object
+     * @param height The height of the object
      * @param initialVelocity The initial velocity of the object
-     * @param initialAcceleration The initial acceleration of the object
      * @param gravity the gravity configuration for this object
      */
-    PhysicsObject(GameObject* parent, Vector2 position, std::bitset<LAYERS_COUNT> layers,
-                  std::bitset<LAYERS_COUNT> scannedLayers, std::unique_ptr<Shape2D> shape,
+    PhysicsObject(GameObject* parent, Vector2 position, std::bitset<LayersCount> layers,
+                  std::bitset<LayersCount> scannedLayers, float width, float height,
                   Vector2 initialVelocity, Gravity gravity);
 
 public:

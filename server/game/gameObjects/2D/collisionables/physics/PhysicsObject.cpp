@@ -4,40 +4,43 @@
 #include "Math.h"
 
 PhysicsObject::PhysicsObject(GameObject* parent, Vector2 position,
-                             const std::bitset<LAYERS_COUNT> layers,
-                             const std::bitset<LAYERS_COUNT> scannedLayers,
-                             std::unique_ptr<Shape2D> shape, Vector2 initialVelocity,
-                             const Gravity gravity):
-
-        CollisionObject(parent, std::move(position), layers, scannedLayers, std::move(shape)),
+                             const std::bitset<LayersCount> layers,
+                             const std::bitset<LayersCount> scannedLayers, const float width,
+                             const float height, Vector2 initialVelocity, const Gravity gravity):
+        CollisionObject(parent, std::move(position), layers, scannedLayers, width, height),
         _velocity(std::move(initialVelocity)),
-        acceleration({0, 0}),
+        gravityAccumulator({0, 0}),
         gravity(gravity) {}
 
 PhysicsObject::~PhysicsObject() = default;
 
 void PhysicsObject::updateInternal(const float delta) {
     if (gravity == Gravity::Enabled)
-        acceleration += GlobalPhysics::gravity;
+        gravityAccumulator += GlobalPhysics::gravity;
 
-    _velocity += acceleration * delta;
+    _velocity += gravityAccumulator * delta;
     CollisionObject::updateInternal(delta);
 }
 
 void PhysicsObject::processCollisions(const float delta) {
+    if (Math::isEqualAprox(_velocity.lengthSquared(), 0))
+        return;
+
+    Vector2 velocityStep;
+
+    if (Math::isLessAprox(_velocity.lengthSquared(), 4))
+        velocityStep = _velocity;
+    else
+        velocityStep = _velocity.normalized() * 2;
+
+    bool finishCollisions = false;
     Vector2 finalVelocity;
 
-    float stepScalar = _velocity.length() / 2;
-
-    if (stepScalar < 1)
-        stepScalar = 1;
-
-    Vector2 velocityStep = _velocity / stepScalar;
-    bool finishCollisions = false;
-
     for (Vector2 displaced = velocityStep;
-         displaced.lengthSquared() < _velocity.lengthSquared() and not finishCollisions;
+         Math::isLessAprox(displaced.lengthSquared(), _velocity.lengthSquared()) and
+         not finishCollisions;
          displaced += velocityStep) {
+
         for (const auto& object: objectsToCollide) {
             if (const auto objectPtr = object.lock(); objectPtr != nullptr) {
                 std::optional collisionInfo(moveAndCollide(*objectPtr, velocityStep));
@@ -45,9 +48,9 @@ void PhysicsObject::processCollisions(const float delta) {
                 if (not collisionInfo.has_value())
                     continue;
 
-                velocityStep = collisionInfo->nextPosition - position();
-                if (Math::isGreaterAprox(collisionInfo->surfaceNormal.y(), 0))
-                    acceleration = {0, 0};
+                velocityStep = collisionInfo->pushedPosition - position();
+                if (Math::isGreaterAprox(collisionInfo->collisionNormal.y(), 0))
+                    gravityAccumulator = {0, 0};
 
                 finishCollisions = true;
             }

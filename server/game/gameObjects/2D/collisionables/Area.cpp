@@ -1,8 +1,8 @@
 #include "Area.h"
 
-Area::Area(GameObject* parent, Vector2 position, const std::bitset<LAYERS_COUNT> layers,
-           const std::bitset<LAYERS_COUNT> scannedLayers, std::unique_ptr<Shape2D> shape):
-        CollisionObject(parent, std::move(position), layers, scannedLayers, std::move(shape)) {
+Area::Area(GameObject* parent, Vector2 position, const std::bitset<LayersCount> layers,
+           const std::bitset<LayersCount> scannedLayers, const float width, const float height):
+        CollisionObject(parent, std::move(position), layers, scannedLayers, width, height) {
     registerEvent<CollisionObject*>(eventName(Events::COLLISION));
 }
 
@@ -20,7 +20,7 @@ void Area::processCollisions([[maybe_unused]] const float delta) {
     for (auto& object: objectsToCollide) {
         if (const std::shared_ptr ownedObject(object.lock());
             ownedObject != nullptr && collidesWith(*ownedObject))
-            fire<CollisionObject*>(eventName(Events::COLLISION), ownedObject.get());
+            fire(eventName(Events::COLLISION), ownedObject.get());
     }
 }
 

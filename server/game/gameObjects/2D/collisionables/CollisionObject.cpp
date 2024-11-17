@@ -6,41 +6,37 @@
 #define NULL_SHAPE "Shape cannot be null"
 
 CollisionObject::CollisionObject(GameObject* parent, Vector2 position,
-                                 const std::bitset<LAYERS_COUNT> layers,
-                                 const std::bitset<LAYERS_COUNT> scannedLayers,
-                                 std::unique_ptr<Shape2D> shape):
-        GameObject2D(parent, std::move(position)),
+                                 const std::bitset<LayersCount> layers,
+                                 const std::bitset<LayersCount> scannedLayers, const float width,
+                                 const float height):
+        GameObject2D(parent, position),
         _layers(layers),
         _scannedLayers(scannedLayers),
-        shape(shape.release()) {
-
-    if (this->shape == nullptr)
-        throw std::invalid_argument(NULL_SHAPE);
-}
+        shape(std::move(position), width, height) {}
 
 bool CollisionObject::collidesWith(const CollisionObject& other) const {
-    return shape->intersects(*other.shape);
+    return shape.intersects(other.shape);
 }
 
 std::optional<IntersectionInfo> CollisionObject::moveAndCollide(const CollisionObject& other,
                                                                 const Vector2& displacement) const {
-    return shape->intersects(*other.shape, displacement);
+    return shape.intersects(other.shape, displacement);
 }
 
-CollisionObject::~CollisionObject() { delete shape; }
+CollisionObject::~CollisionObject() = default;
 
 void CollisionObject::updateInternal([[maybe_unused]] const float delta) {
     GameObject2D::updateInternal(delta);
-    shape->setCenter(position());
+    shape.setCenter(position());
 }
 
-std::bitset<CollisionObject::LAYERS_COUNT> CollisionObject::layers() const { return _layers; }
+std::bitset<CollisionObject::LayersCount> CollisionObject::layers() const { return _layers; }
 
-std::bitset<CollisionObject::LAYERS_COUNT> CollisionObject::scannedLayers() const {
+std::bitset<CollisionObject::LayersCount> CollisionObject::scannedLayers() const {
     return _scannedLayers;
 }
 
-CollisionObject& CollisionObject::setLayers(const std::bitset<LAYERS_COUNT> layers) noexcept {
+CollisionObject& CollisionObject::setLayers(const std::bitset<LayersCount> layers) noexcept {
     _layers = layers;
     return *this;
 }
@@ -57,7 +53,7 @@ CollisionObject& CollisionObject::removeFromLayer(const u8 layer) {
 }
 
 CollisionObject& CollisionObject::setScannedLayers(
-        const std::bitset<LAYERS_COUNT> scannedLayers) noexcept {
+        const std::bitset<LayersCount> scannedLayers) noexcept {
 
     _scannedLayers = scannedLayers;
     return *this;
