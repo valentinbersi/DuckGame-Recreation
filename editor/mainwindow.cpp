@@ -19,6 +19,12 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     scene = new LevelScene(this, mapWidth, mapHeight, objects);
     ui->graphicsView->setScene(scene);
 
+
+    // ESTO PODRIA PONERLO DIRECTAMENTE EN EL UI CREO
+    ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
+    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
     ui->Platform->setIcon(QIcon(PLATFORM_ICON));
     ui->SpawnDuck->setIcon(QIcon(DUCK_ICON));
     ui->SpawnGun->setIcon(QIcon(ARMAMENT_ICON));

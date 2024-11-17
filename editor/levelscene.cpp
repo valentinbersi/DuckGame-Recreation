@@ -29,7 +29,6 @@ void LevelScene::deleteObjectAt(const QPointF& position) {
             if (objectData.isValid()) {
                 Object* object = objectData.value<Object*>();
                 if (object) {
-                    // Eliminamos el objeto de la lista de objetos
                     auto it = std::find_if(objects.begin(), objects.end(), [object](const Object& obj) {
                         return object == &obj;
                     });
@@ -39,7 +38,6 @@ void LevelScene::deleteObjectAt(const QPointF& position) {
                 }
             }
 
-            // Eliminamos el ítem gráfico
             removeItem(pixmapItem);
             delete pixmapItem;
             break;
@@ -50,20 +48,41 @@ void LevelScene::deleteObjectAt(const QPointF& position) {
 void LevelScene::addObject(ObjectType type, QPointF pos) {
     Object newObject = createObject(type);
     QPixmap icon(newObject.icon);
-    QPixmap iconScaled = icon.scaled(newObject.width * PixelSize, newObject.height * PixelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QPixmap iconScaled = icon.scaled(newObject.size.width() * PixelSize, newObject.size.height() * PixelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     auto* item = new QGraphicsPixmapItem(iconScaled);
     item->setFlag(QGraphicsItem::ItemIsMovable);
     item->setFlag(QGraphicsItem::ItemIsSelectable);
 
-    int x = int(pos.x()) / PixelSize * PixelSize;
-    int y = int(pos.y()) / PixelSize * PixelSize;
+    QPointF topLeftPos(
+            pos.x() - (newObject.size.width() / 2) * PixelSize,
+            pos.y() - (newObject.size.height() / 2) * PixelSize);
+
+    int x = (int(topLeftPos.x()) / PixelSize) * PixelSize;
+    int y = (int(topLeftPos.y()) / PixelSize) * PixelSize;
     item->setPos(x, y);
-    newObject.setPos(x/PixelSize,y/PixelSize);
+
+    newObject.setCenterPosition(
+            QPointF(x / PixelSize + newObject.size.width() / 2,
+                    y / PixelSize + newObject.size.height() / 2));
 
     addItem(item);
     objects.push_back(newObject);
     item->setData(0, QVariant::fromValue(&objects.back()));
+
+    QRectF currentRect = sceneRect();
+
+    //QRectF objectRect(item->pos(), QSizeF(newObject.size.width() * PixelSize, newObject.size.height() * PixelSize));
+    QPointF objectTopLeft = item->scenePos();  // Convertir a coordenadas globales
+    QRectF objectRect(objectTopLeft, QSizeF(newObject.size.width() * PixelSize, newObject.size.height() * PixelSize));
+
+    qDebug() << "Current sceneRect:" << currentRect;
+    qDebug() << "Object rect:" << objectRect;
+    if (!currentRect.contains(objectRect)) {
+        QRectF expandedRect = currentRect.united(objectRect); // Unir los rectángulos
+        setSceneRect(expandedRect); // Actualizar la escena
+        qDebug() << "Expanded rect:" << expandedRect;
+    }
 
     auto *itemAction = qobject_cast<QAction*>(sender());
     if (itemAction) {
@@ -101,6 +120,7 @@ void LevelScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+
     if (selectedItem) {
         QPointF pos = selectedItem->pos();
         int x = int(pos.x()) / PixelSize * PixelSize;
@@ -109,7 +129,11 @@ void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
         auto* obj = selectedItem->data(0).value<Object*>();
         if (obj) {
-            obj->setPos(x/PixelSize,y/PixelSize);
+            QPointF centerPos(
+                    (x + (obj->size.width() * PixelSize) / 2) / PixelSize,
+                    (y + (obj->size.height() * PixelSize) / 2) / PixelSize
+            );
+            obj->setCenterPosition(centerPos);
         }
 
         selectedItem = nullptr;
@@ -139,23 +163,18 @@ void LevelScene::drawBackground(QPainter* painter, const QRectF&) {
     QPen pen(Qt::lightGray);
     painter->setPen(pen);
 
-    // Tamaño total del área de visualización
-    qreal viewWidth = gridWidth; // Cambia esto a un valor que represente el ancho total deseado
-    qreal viewHeight = gridHeight; // Cambia esto a un valor que represente el alto total deseado
+    qreal viewWidth = gridWidth;
+    qreal viewHeight = gridHeight;
 
-    // Dibuja las líneas verticales
     for (qreal x = 0; x <= viewWidth; x += PixelSize) {
         painter->drawLine(QPointF(x, 0), QPointF(x, viewHeight));
     }
 
-    // Dibuja las líneas horizontales
     for (qreal y = 0; y <= viewHeight; y += PixelSize) {
         painter->drawLine(QPointF(0, y), QPointF(viewWidth, y));
     }
     painter->restore();
 }
-
-
 
 void LevelScene::toggleAddingObject(ObjectType type) {
     if (addingObject && objectTypeToAdd == type){
