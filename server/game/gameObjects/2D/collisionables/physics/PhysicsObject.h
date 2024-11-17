@@ -26,7 +26,7 @@ protected:
      */
     PhysicsObject(GameObject* parent, Vector2 position, std::bitset<LAYERS_COUNT> layers,
                   std::bitset<LAYERS_COUNT> scannedLayers, std::unique_ptr<Shape2D> shape,
-                  Vector2 initialVelocity, Vector2 initialAcceleration, Gravity gravity);
+                  Vector2 initialVelocity, Gravity gravity);
 
 public:
     PhysicsObject() = delete;

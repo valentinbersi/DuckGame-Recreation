@@ -4,10 +4,15 @@
 #include <cmath>
 #include <utility>
 
-#include "Circle.h"
 #include "Line.h"
 #include "Math.h"
 #include "Segment.h"
+
+void Rectangle::invalidateCachedValues() {
+    cachedSides.reset();
+    cachedVertices.reset();
+    cachedAxisPoints.reset();
+}
 
 void Rectangle::calculateVertices() {
     const Vector2& center = this->center();
@@ -24,10 +29,10 @@ void Rectangle::calculateVertices() {
 
 void Rectangle::calculateSides() {
     calculateVertices();
-    cachedSides = {Segment(getVertices()[NorthWest], getVertices()[NorthEast]),
-                   Segment(getVertices()[NorthEast], getVertices()[SouthEast]),
-                   Segment(getVertices()[SouthEast], getVertices()[SouthWest]),
-                   Segment(getVertices()[SouthWest], getVertices()[NorthWest])};
+    cachedSides = {Segment(vertices()[NorthWest], vertices()[NorthEast]),
+                   Segment(vertices()[NorthEast], vertices()[SouthEast]),
+                   Segment(vertices()[SouthEast], vertices()[SouthWest]),
+                   Segment(vertices()[SouthWest], vertices()[NorthWest])};
 }
 
 void Rectangle::calculateAxisPoints() {
@@ -38,28 +43,212 @@ void Rectangle::calculateAxisPoints() {
                         center() + Vector2::DOWN * midHeight, center() + Vector2::LEFT * midWidth};
 }
 
-Shape2D& Rectangle::setCenter(Vector2 center) {
-    if (this->center() != center) {
-        cachedSides.reset();
-        cachedVertices.reset();
+std::optional<IntersectionInfo> Rectangle::calculateNorthIntersection(
+        const Rectangle& rectangle, const Rectangle& nextRectangle,
+        const Line& velocityLine) const {
+    const float collisionDistance =
+            std::abs(rectangle.axisPoints()[North].y() - nextRectangle.axisPoints()[South].y());
+
+    const Vector2 pushedPosition(_center + Vector2::UP * collisionDistance);
+    return {{Line(Vector2::RIGHT, pushedPosition).intersects(velocityLine).value(), pushedPosition,
+             Vector2::UP}};
+}
+
+std::optional<IntersectionInfo> Rectangle::calculateSouthIntersection(
+        const Rectangle& rectangle, const Rectangle& nextRectangle,
+        const Line& velocityLine) const {
+    const float collisionDistance =
+            std::abs(rectangle.axisPoints()[South].y() - nextRectangle.axisPoints()[North].y());
+
+    const Vector2 pushedPosition(_center + Vector2::DOWN * collisionDistance);
+    return {{Line(Vector2::RIGHT, pushedPosition).intersects(velocityLine).value(), pushedPosition,
+             Vector2::DOWN}};
+}
+
+std::optional<IntersectionInfo> Rectangle::calculateEastIntersection(
+        const Rectangle& rectangle, const Rectangle& nextRectangle,
+        const Line& velocityLine) const {
+    const float collisionDistance =
+            std::abs(rectangle.axisPoints()[East].y() - nextRectangle.axisPoints()[West].y());
+
+    const Vector2 pushedPosition(_center + Vector2::RIGHT * collisionDistance);
+    return {{Line(Vector2::UP, pushedPosition).intersects(velocityLine).value(), pushedPosition,
+             Vector2::RIGHT}};
+}
+
+std::optional<IntersectionInfo> Rectangle::calculateWestIntersection(
+        const Rectangle& rectangle, const Rectangle& nextRectangle,
+        const Line& velocityLine) const {
+    const float collisionDistance =
+            std::abs(rectangle.axisPoints()[West].y() - nextRectangle.axisPoints()[East].y());
+
+    const Vector2 pushedPosition(_center + Vector2::LEFT * collisionDistance);
+    return {{Line(Vector2::UP, pushedPosition).intersects(velocityLine).value(), pushedPosition,
+             Vector2::LEFT}};
+}
+
+std::optional<IntersectionInfo> Rectangle::calculateNorthEastIntersection(
+        const Rectangle& rectangle, const Vector2& displacement, const Rectangle& nextRectangle,
+        const Line& velocityLine) const {
+
+    const float yDistance =
+            std::abs(rectangle.sides()[North].intersects(sides()[East]).value().y() -
+                     vertices()[SouthEast].y());
+
+    const float xDistance =
+            std::abs(rectangle.sides()[West].intersects(sides()[South]).value().x() -
+                     vertices()[SouthEast].x());
+
+    if (not Math::isEqualAprox(yDistance, xDistance)) {
+        if (Math::isGreaterAprox(yDistance, xDistance))
+            return calculateNorthIntersection(rectangle, nextRectangle, velocityLine);
+
+        return calculateWestIntersection(rectangle, nextRectangle, velocityLine);
     }
 
-    return Shape2D::setCenter(std::move(center));
+    if (Math::isEqualAprox(std::abs(displacement.y()), std::abs(displacement.x()))) {
+        Vector2 newPosition = rectangle.vertices()[NorthWest] + Vector2(-_width, _height);
+        return {{newPosition, newPosition, Vector2::ONE.x(-1)}};
+    }
+
+    if (Math::isGreaterAprox(std::abs(displacement.y()), std::abs(displacement.x())))
+        return calculateNorthIntersection(rectangle, nextRectangle, velocityLine);
+
+    return calculateWestIntersection(rectangle, nextRectangle, velocityLine);
+}
+
+std::optional<IntersectionInfo> Rectangle::calculateNorthWestIntersection(
+        const Rectangle& rectangle, const Vector2& displacement, const Rectangle& nextRectangle,
+        const Line& velocityLine) const {
+
+    const float yDistance =
+            std::abs(rectangle.sides()[North].intersects(sides()[East]).value().y() -
+                     vertices()[SouthEast].y());
+
+    const float xDistance =
+            std::abs(rectangle.sides()[West].intersects(sides()[South]).value().x() -
+                     vertices()[SouthEast].x());
+
+    if (not Math::isEqualAprox(yDistance, xDistance)) {
+        if (Math::isGreaterAprox(yDistance, xDistance))
+            return calculateNorthIntersection(rectangle, nextRectangle, velocityLine);
+
+        return calculateWestIntersection(rectangle, nextRectangle, velocityLine);
+    }
+
+    if (Math::isEqualAprox(std::abs(displacement.y()), std::abs(displacement.x()))) {
+        Vector2 newPosition = rectangle.vertices()[NorthWest] + Vector2(-_width, _height);
+        return {{newPosition, newPosition, Vector2::ONE.x(-1)}};
+    }
+
+    if (Math::isGreaterAprox(std::abs(displacement.y()), std::abs(displacement.x())))
+        return calculateNorthIntersection(rectangle, nextRectangle, velocityLine);
+
+    return calculateWestIntersection(rectangle, nextRectangle, velocityLine);
+}
+
+std::optional<IntersectionInfo> Rectangle::calculateSouthEastIntersection(
+        const Rectangle& rectangle, const Vector2& displacement, const Rectangle& nextRectangle,
+        const Line& velocityLine) const {
+
+    const float yDistance =
+            std::abs(rectangle.sides()[South].intersects(sides()[West]).value().y() -
+                     vertices()[NorthWest].y());
+
+    const float xDistance =
+            std::abs(rectangle.sides()[East].intersects(sides()[North]).value().x() -
+                     vertices()[NorthWest].x());
+
+    if (not Math::isEqualAprox(yDistance, xDistance)) {
+        if (Math::isGreaterAprox(yDistance, xDistance))
+            return calculateSouthIntersection(rectangle, nextRectangle, velocityLine);
+
+        return calculateEastIntersection(rectangle, nextRectangle, velocityLine);
+    }
+
+    if (Math::isEqualAprox(std::abs(displacement.y()), std::abs(displacement.x()))) {
+        Vector2 newPosition = rectangle.vertices()[SouthEast] + Vector2(_width, -_height);
+        return {{newPosition, newPosition, Vector2::ONE.y(-1)}};
+    }
+
+    if (Math::isGreaterAprox(std::abs(displacement.y()), std::abs(displacement.x())))
+        return calculateSouthIntersection(rectangle, nextRectangle, velocityLine);
+
+    return calculateEastIntersection(rectangle, nextRectangle, velocityLine);
+}
+
+std::optional<IntersectionInfo> Rectangle::calculateSouthWestIntersection(
+        const Rectangle& rectangle, const Vector2& displacement, const Rectangle& nextRectangle,
+        const Line& velocityLine) const {
+
+    const float yDistance =
+            std::abs(rectangle.sides()[South].intersects(sides()[East]).value().y() -
+                     vertices()[NorthEast].y());
+
+    const float xDistance =
+            std::abs(rectangle.sides()[West].intersects(sides()[North]).value().x() -
+                     vertices()[NorthEast].x());
+
+    if (not Math::isEqualAprox(yDistance, xDistance)) {
+        if (Math::isGreaterAprox(yDistance, xDistance))
+            return calculateSouthIntersection(rectangle, nextRectangle, velocityLine);
+
+        return calculateWestIntersection(rectangle, nextRectangle, velocityLine);
+    }
+
+    if (Math::isEqualAprox(std::abs(displacement.y()), std::abs(displacement.x()))) {
+        Vector2 newPosition = rectangle.vertices()[SouthWest] - Vector2(_width, _height);
+        return {{newPosition, newPosition, -Vector2::ONE}};
+    }
+
+    if (Math::isGreaterAprox(std::abs(displacement.y()), std::abs(displacement.x())))
+        return calculateSouthIntersection(rectangle, nextRectangle, velocityLine);
+
+    return calculateWestIntersection(rectangle, nextRectangle, velocityLine);
 }
 
 Rectangle::Rectangle(Vector2 center, const float width, const float height):
-        Shape2D(std::move(center)),
+        _center(std::move(center)),
         _width(width),
         _height(height),
         cachedSides(std::nullopt),
         cachedVertices(std::nullopt) {}
 
+Rectangle& Rectangle::setCenter(Vector2 center) {
+    if (this->center() != center) {
+        _center = std::move(center);
+        invalidateCachedValues();
+    }
+
+    return *this;
+}
+
+const Vector2& Rectangle::center() const { return _center; }
+
 float Rectangle::width() const { return _width; }
+
+Rectangle& Rectangle::setWidth(const float width) {
+    if (not Math::isEqualAprox(_width, width)) {
+        _width = width;
+        invalidateCachedValues();
+    }
+
+    return *this;
+}
 
 float Rectangle::height() const { return _height; }
 
+Rectangle& Rectangle::setHeight(const float height) {
+    if (not Math::isEqualAprox(_height, height)) {
+        _height = height;
+        invalidateCachedValues();
+    }
+
+    return *this;
+}
+
 Rectangle::Region Rectangle::regionOfPoint(const Vector2& point) const {
-    const auto vertices = getVertices();
+    const auto vertices = this->vertices();
 
     if (Math::isLessAprox(vertices[NorthWest].y(), point.y())) {       // North situation
         if (Math::isGreaterAprox(vertices[NorthWest].x(), point.x()))  // NorthWest situation
@@ -87,21 +276,21 @@ Rectangle::Region Rectangle::regionOfPoint(const Vector2& point) const {
     return Region::East;
 }
 
-const Rectangle::Sides& Rectangle::getSides() const {
+const Rectangle::Sides& Rectangle::sides() const {
     if (not cachedSides.has_value())
         const_cast<Rectangle*>(this)->calculateSides();
 
     return cachedSides.value();
 }
 
-std::array<Vector2, Rectangle::VertexAmount> Rectangle::getVertices() const {
+const Rectangle::Vertices& Rectangle::vertices() const {
     if (not cachedVertices.has_value())
         const_cast<Rectangle*>(this)->calculateVertices();
 
     return cachedVertices.value();
 }
 
-Rectangle::AxisPoints Rectangle::getAxisPoints() const {
+const Rectangle::AxisPoints& Rectangle::axisPoints() const {
     if (not cachedAxisPoints.has_value())
         const_cast<Rectangle*>(this)->calculateAxisPoints();
 
@@ -109,27 +298,13 @@ Rectangle::AxisPoints Rectangle::getAxisPoints() const {
 }
 
 bool Rectangle::contains(const Vector2& point) const {
-    const auto vertices = getVertices();
+    const auto vertices = this->vertices();
     const float minX = std::min(vertices[NorthWest].x(), vertices[SouthWest].x());
     const float maxX = std::max(vertices[NorthEast].x(), vertices[SouthEast].x());
     const float minY = std::min(vertices[SouthWest].y(), vertices[SouthEast].y());
     const float maxY = std::max(vertices[NorthWest].y(), vertices[NorthEast].y());
 
     return point.x() >= minX && point.x() <= maxX && point.y() >= minY && point.y() <= maxY;
-}
-
-bool Rectangle::intersects(const Circle& circle) const { return circle.intersects(*this); }
-
-std::optional<IntersectionInfo> Rectangle::intersects(
-        [[maybe_unused]] const Circle& circle, [[maybe_unused]] const Vector2 displacement) const {
-    std::optional intersectionInfo(circle.intersects(*this, -displacement));
-
-    if (not intersectionInfo.has_value())
-        return std::nullopt;
-
-    const Vector2 rectangleReadDisplacement = circle.center() - intersectionInfo->nextPosition;
-    intersectionInfo->nextPosition = center() + rectangleReadDisplacement;
-    return intersectionInfo;
 }
 
 bool Rectangle::intersects(const Rectangle& rectangle) const {
@@ -149,15 +324,17 @@ bool Rectangle::intersects(const Rectangle& rectangle) const {
     return overlapX and overlapY;
 }
 
-std::optional<IntersectionInfo> Rectangle::intersects([[maybe_unused]] const Rectangle& rectangle,
-                                                      [[maybe_unused]] Vector2 displacement) const {
-    Rectangle nextRectangle(center() + displacement, _width, _height);
+std::optional<IntersectionInfo> Rectangle::intersects(const Rectangle& rectangle,
+                                                      const Vector2& displacement) const {
 
-    if (!nextRectangle.intersects(rectangle))
+    const Rectangle nextRectangle(_center + displacement, _width, _height);
+
+    if (not nextRectangle.intersects(rectangle))
         return std::nullopt;
 
-    const Line velocityLine(center() + displacement, center());
     std::bitset<SidesAmount> collisionInSide;
+
+    const Line velocityLine(_center + displacement, _center);
 
     if (Math::isLessAprox(displacement.x(), 0))
         collisionInSide.set(West);
@@ -169,98 +346,26 @@ std::optional<IntersectionInfo> Rectangle::intersects([[maybe_unused]] const Rec
     else if (Math::isGreaterAprox(displacement.y(), 0))
         collisionInSide.set(North);
 
-    if (collisionInSide.test(North) and rectangle.contains(nextRectangle.getAxisPoints()[South])) {
-        const float collisionDistance = std::abs(rectangle.getAxisPoints()[North].y() -
-                                                 nextRectangle.getAxisPoints()[South].y());
+    if (collisionInSide.test(North) and rectangle.contains(nextRectangle.axisPoints()[South]))
+        return calculateNorthIntersection(rectangle, nextRectangle, velocityLine);
 
-        nextRectangle.setCenter(center() + Vector2::UP * collisionDistance);
-        return {{nextRectangle.center(), Vector2::UP}};
-    }
+    if (collisionInSide.test(South) and rectangle.contains(nextRectangle.axisPoints()[North]))
+        return calculateSouthIntersection(rectangle, nextRectangle, velocityLine);
 
-    if (collisionInSide.test(South) and rectangle.contains(nextRectangle.getAxisPoints()[North])) {
-        const float collisionDistance = std::abs(rectangle.getAxisPoints()[South].y() -
-                                                 nextRectangle.getAxisPoints()[North].y());
+    if (collisionInSide.test(East) and rectangle.contains(nextRectangle.axisPoints()[West]))
+        return calculateEastIntersection(rectangle, nextRectangle, velocityLine);
 
-        nextRectangle.setCenter(center() + Vector2::DOWN * collisionDistance);
-        return {{nextRectangle.center(), Vector2::DOWN}};
-    }
+    if (collisionInSide.test(West) and rectangle.contains(nextRectangle.axisPoints()[East]))
+        return calculateWestIntersection(rectangle, nextRectangle, velocityLine);
 
-    if (collisionInSide.test(East) and rectangle.contains(nextRectangle.getAxisPoints()[West])) {
-        const float collisionDistance = std::abs(rectangle.getAxisPoints()[East].y() -
-                                                 nextRectangle.getAxisPoints()[West].y());
+    if (collisionInSide.test(North) and collisionInSide.test(East))
+        return calculateNorthEastIntersection(rectangle, displacement, nextRectangle, velocityLine);
 
-        nextRectangle.setCenter(center() + Vector2::RIGHT * collisionDistance);
-        return {{nextRectangle.center(), Vector2::RIGHT}};
-    }
+    if (collisionInSide.test(North) and collisionInSide.test(West))
+        return calculateNorthWestIntersection(rectangle, displacement, nextRectangle, velocityLine);
 
-    if (collisionInSide.test(West) and rectangle.contains(nextRectangle.getAxisPoints()[East])) {
-        const float collisionDistance = std::abs(rectangle.getAxisPoints()[West].y() -
-                                                 nextRectangle.getAxisPoints()[East].y());
+    if (collisionInSide.test(South) and collisionInSide.test(East))
+        return calculateSouthEastIntersection(rectangle, displacement, nextRectangle, velocityLine);
 
-        nextRectangle.setCenter(center() + Vector2::LEFT * collisionDistance);
-        return {{nextRectangle.center(), Vector2::LEFT}};
-    }
-
-    if (collisionInSide.test(North) and collisionInSide.test(East) and
-        nextRectangle.contains(rectangle.getVertices()[NorthEast])) {
-        if (Math::isGreaterAprox(std::abs(displacement.y()), std::abs(displacement.x()))) {
-            const float collisionDistance = std::abs(rectangle.getAxisPoints()[North].y() -
-                                                     nextRectangle.getAxisPoints()[South].y());
-
-            nextRectangle.setCenter(center() + Vector2::UP * collisionDistance);
-            return {{nextRectangle.center(), Vector2::UP}};
-        }
-
-        const float collisionDistance = std::abs(rectangle.getAxisPoints()[East].y() -
-                                                 nextRectangle.getAxisPoints()[West].y());
-
-        nextRectangle.setCenter(center() + Vector2::RIGHT * collisionDistance);
-        return {{nextRectangle.center(), Vector2::RIGHT}};
-    }
-
-    if (collisionInSide.test(North) and collisionInSide.test(West) and
-        nextRectangle.contains(rectangle.getVertices()[NorthWest])) {
-        if (Math::isGreaterAprox(std::abs(displacement.y()), std::abs(displacement.x()))) {
-            const float collisionDistance = std::abs(rectangle.getAxisPoints()[North].y() -
-                                                     nextRectangle.getAxisPoints()[South].y());
-
-            nextRectangle.setCenter(center() + Vector2::UP * collisionDistance);
-            return {{nextRectangle.center(), Vector2::UP}};
-        }
-        const float collisionDistance = std::abs(rectangle.getAxisPoints()[West].y() -
-                                                 nextRectangle.getAxisPoints()[East].y());
-
-        nextRectangle.setCenter(center() + Vector2::LEFT * collisionDistance);
-        return {{nextRectangle.center(), Vector2::LEFT}};
-    }
-
-    if (collisionInSide.test(South) and collisionInSide.test(East) and
-        nextRectangle.contains(rectangle.getVertices()[SouthEast])) {
-        if (Math::isGreaterAprox(std::abs(displacement.y()), std::abs(displacement.x()))) {
-            const float collisionDistance = std::abs(rectangle.getAxisPoints()[South].y() -
-                                                     nextRectangle.getAxisPoints()[North].y());
-
-            nextRectangle.setCenter(center() + Vector2::DOWN * collisionDistance);
-            return {{nextRectangle.center(), Vector2::DOWN}};
-        }
-        const float collisionDistance = std::abs(rectangle.getAxisPoints()[East].y() -
-                                                 nextRectangle.getAxisPoints()[West].y());
-
-        nextRectangle.setCenter(center() + Vector2::RIGHT * collisionDistance);
-        return {{nextRectangle.center(), Vector2::RIGHT}};
-    }
-
-
-    if (Math::isGreaterAprox(std::abs(displacement.y()), std::abs(displacement.x()))) {
-        const float collisionDistance = std::abs(rectangle.getAxisPoints()[South].y() -
-                                                 nextRectangle.getAxisPoints()[North].y());
-
-        nextRectangle.setCenter(center() + Vector2::DOWN * collisionDistance);
-        return {{nextRectangle.center(), Vector2::DOWN}};
-    }
-    const float collisionDistance =
-            std::abs(rectangle.getAxisPoints()[West].y() - nextRectangle.getAxisPoints()[East].y());
-
-    nextRectangle.setCenter(center() + Vector2::LEFT * collisionDistance);
-    return {{nextRectangle.center(), Vector2::LEFT}};
+    return calculateSouthWestIntersection(rectangle, displacement, nextRectangle, velocityLine);
 }

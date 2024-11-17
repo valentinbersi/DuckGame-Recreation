@@ -16,7 +16,7 @@ void Area::registerCollision(std::weak_ptr<CollisionObject> collisionObject) {
     CollisionObject::registerCollision(std::move(collisionObject));
 }
 
-void Area::processCollisions() {
+void Area::processCollisions([[maybe_unused]] const float delta) {
     for (auto& object: objectsToCollide) {
         if (const std::shared_ptr ownedObject(object.lock());
             ownedObject != nullptr && collidesWith(*ownedObject))

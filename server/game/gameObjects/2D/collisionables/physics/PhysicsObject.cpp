@@ -1,16 +1,17 @@
 #include "PhysicsObject.h"
 
 #include "GlobalPhysics.h"
+#include "Math.h"
 
 PhysicsObject::PhysicsObject(GameObject* parent, Vector2 position,
                              const std::bitset<LAYERS_COUNT> layers,
                              const std::bitset<LAYERS_COUNT> scannedLayers,
                              std::unique_ptr<Shape2D> shape, Vector2 initialVelocity,
-                             Vector2 initialAcceleration, const Gravity gravity):
+                             const Gravity gravity):
 
         CollisionObject(parent, std::move(position), layers, scannedLayers, std::move(shape)),
         _velocity(std::move(initialVelocity)),
-        acceleration(std::move(initialAcceleration)),
+        acceleration({0, 0}),
         gravity(gravity) {}
 
 PhysicsObject::~PhysicsObject() = default;
@@ -25,7 +26,13 @@ void PhysicsObject::updateInternal(const float delta) {
 
 void PhysicsObject::processCollisions(const float delta) {
     Vector2 finalVelocity;
-    Vector2 velocityStep = _velocity / (_velocity.lengthSquared() / 4);
+
+    float stepScalar = _velocity.length() / 2;
+
+    if (stepScalar < 1)
+        stepScalar = 1;
+
+    Vector2 velocityStep = _velocity / stepScalar;
     bool finishCollisions = false;
 
     for (Vector2 displaced = velocityStep;
@@ -39,6 +46,9 @@ void PhysicsObject::processCollisions(const float delta) {
                     continue;
 
                 velocityStep = collisionInfo->nextPosition - position();
+                if (Math::isGreaterAprox(collisionInfo->surfaceNormal.y(), 0))
+                    acceleration = {0, 0};
+
                 finishCollisions = true;
             }
         }

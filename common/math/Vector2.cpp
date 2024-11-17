@@ -190,7 +190,7 @@ Vector2 Vector2::operator/(const float scalar) const {
     if (Math::isZeroAprox(scalar))
         throw std::logic_error(DIVISION_BY_ZERO);
 
-    return {scalar / _x, scalar / _y};
+    return {_x / scalar, _y / scalar};
 }
 
 Vector2& Vector2::operator/=(const float scalar) { return *this = *this / scalar; }
