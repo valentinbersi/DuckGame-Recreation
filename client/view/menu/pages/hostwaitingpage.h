@@ -20,8 +20,10 @@ private:
     Ui::hostWaitingPage* ui;
     Communicator& communicator;
     GameInfo& gameInfo;
+    QTimer* timer;
 
     void requestStartGame();
+    void recvServerMessage();
 
 public:
     hostWaitingPage(QWidget* parent, Communicator& communicator, GameInfo& gameInfo);

@@ -1,11 +1,21 @@
 cmake_minimum_required(VERSION 3.13)
 
+add_compile_options(-Wno-error=zero-as-null-pointer-constant -Wno-error=deprecated-declarations)
+
 if (POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif ()
 
 if (NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 20)
+endif ()
+
+if (NOT DEFINED CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Debug")
+endif ()
+
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_definitions(-DDEBUG)
 endif ()
 
 # strongly encouraged to enable this globally to avoid conflicts between
@@ -30,12 +40,24 @@ option(MAKE_WARNINGS_AS_ERRORS "Enable / disable warnings as errors." ON)
 
 message(CMAKE_CXX_COMPILER_ID="${CMAKE_CXX_COMPILER_ID}")
 
+include(FetchContent)
+
 # Define target: lib common between client, server and editor programs
 add_library(common STATIC)
 
 # add the source files that make the lib
 add_subdirectory(common/)
 
+FetchContent_Declare(
+        yaml-cpp
+        GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+        GIT_TAG yaml-cpp-0.6.3
+)
+
+FetchContent_MakeAvailable(yaml-cpp)
+
+add_dependencies(common yaml-cpp)
+target_link_libraries(common PUBLIC yaml-cpp)
 
 # set compiler warnings to the targets
 include(cmake/CompilerWarnings.cmake)
@@ -48,7 +70,14 @@ target_include_directories(common PUBLIC .)
 
 # Install libSDL2pp (for client or editor)
 if (CLIENT OR EDITOR)
-    include(FetchContent)
+    add_custom_command(
+            OUTPUT ${CMAKE_BINARY_DIR}/graphics.stamp
+            COMMAND ${CMAKE_COMMAND} -E env bash ${CMAKE_SOURCE_DIR}/install_graphics.sh
+            COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/graphics.stamp
+    )
+
+    add_custom_target(graphics ALL DEPENDS ${CMAKE_BINARY_DIR}/graphics.stamp)
+
     FetchContent_Declare(
             libSDL2pp
             URL https://github.com/libSDL2pp/libSDL2pp/archive/cc198c9a5657048bee67ece82de620b2d5661084.zip
@@ -77,7 +106,7 @@ if (CLIENT)
     add_executable(DuckGame)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGame common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    add_dependencies(DuckGame graphics common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(client)
@@ -116,7 +145,7 @@ if (EDITOR)
     add_executable(DuckGameLevelEditor)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGameLevelEditor common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    add_dependencies(DuckGameLevelEditor graphics common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(editor)

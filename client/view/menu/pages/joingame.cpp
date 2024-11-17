@@ -34,7 +34,7 @@ void joinGame::onPlayClicked() {
         return;
     }
     gameInfo.player1Name = ui->lineEditPlayer1->text().toStdString();
-    gameInfo.player2Name = ui->lineEditPlayer2->text().isEmpty() ? "" : ui->lineEditPlayer2->text().toStdString();
+    gameInfo.player2Name = ui->lineEditPlayer2->text().isEmpty() ? " " : ui->lineEditPlayer2->text().toStdString();
     gameInfo.matchID = ui->lineEditMatchID->text().toUShort();
 
     qDebug() << "info:" << QString(gameInfo.player1Name.c_str()) << QString(gameInfo.player2Name.c_str()) << gameInfo.matchID;
@@ -42,8 +42,6 @@ void joinGame::onPlayClicked() {
         qDebug() << "emite la señal playMatchClicked";
         emit playMatchClicked();
     }
-
-    //emit playMatchClicked();
 }
 
 bool joinGame::joinMatchRequest() {
@@ -54,39 +52,17 @@ bool joinGame::joinMatchRequest() {
             gameInfo.player2Name,
             gameInfo.matchID // esto deberia ser 0 ¿?
     );
-    qDebug() << "joinMatchRequest";
-    qDebug() << "matchID del message:" << message->matchId;
 
-    if (!communicator.trysend(std::move(message))) {
-        qDebug() << "Error al enviar el mensaje.";
-        return false;
-    }
-
-    // auto messageServerOpt = communicator.tryrecv();
-    // if (messageServerOpt.has_value()) {
-    //     std::unique_ptr<ServerMessage> messageServer = std::move(messageServerOpt.value());
-    //     ReplyMessage reply = dynamic_cast<ReplyMessage&>(*messageServer);
-    //     gameInfo.matchID = reply.matchID;
-    //     return true;
-    // } else {
-    //     QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
-    //     return false; // esto nose si es correcto, deberia manejarlo distinto yo creo.
-    // }
-
-    qDebug() << "se pide el mensaje reply al comunicador";
-    auto messageServerOpt = communicator.recv();
-    qDebug() << "se recibio reply";
-    const auto* reply = dynamic_cast<const ReplyMessage*>(messageServerOpt.get());
-    if(reply == nullptr){
-        QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
-        return false;
-    }
-    qDebug() << gameInfo.matchID << reply->matchID << reply->startGame;
-    if(gameInfo.matchID == reply->matchID && reply->startGame == 0) {
-        qDebug() << "retorna true";
+    try {
+        communicator.trysend(std::move(message));
+        // chequear si se envio bien
+        ReplyMessage replyMessage = communicator.blockingRecv();
+        // deberia chequear si se recibio ¿?
+        gameInfo.matchID = replyMessage.matchID;
         return true;
-    } else // ver los posibles mensajes al server: partida ya comenzada y partida no encontrada
-    {return false;}
+    } catch(LibError& libError){
+        return false;
+    }
 }
 
 joinGame::~joinGame() { delete ui; }

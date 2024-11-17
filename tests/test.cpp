@@ -111,16 +111,15 @@ TEST(ProtocolTest, MultiLoobySend) {
     client2.join();
 }
 
-TEST(ProtocolTest, ServerToLobbySend) {
+TEST(ProtocolTest, ServerToLobbySendReply) {
     ListenerSocket skt("8080");
     ReplyMessage replyMsg;
 
     std::thread client([replyMsg]() {
         ActiveSocket sktClient("localhost", "8080");
         ClientRecvProtocol recvProt(sktClient);
-        std::unique_ptr<ServerMessage> recvMsg = recvProt.receiveMessage();
-        ReplyMessage* reply = dynamic_cast<ReplyMessage*>(&*recvMsg);
-        ASSERT_TRUE(*reply == replyMsg);
+        ReplyMessage recvMsg = recvProt.recvReplyMessage();
+        ASSERT_TRUE(recvMsg == replyMsg);
         
     });
 
@@ -160,9 +159,8 @@ TEST(ProtocolTest, ServerToGameSendOneStatus) {
     std::thread client([]() {
         ActiveSocket clientSkt("localhost", "8080");
         ClientRecvProtocol recvProtocol(clientSkt);
-        std::unique_ptr<ServerMessage> recvStatus = recvProtocol.receiveMessage();
-        const GameStatus* status = dynamic_cast<const GameStatus*>(&*recvStatus);
-        ASSERT_TRUE(status->gameObjects.size() == 1);
+        GameStatus recvStatus = recvProtocol.recvGameStatus();
+        ASSERT_TRUE(recvStatus.gameObjects.size() == 1);
     });
 
     ActiveSocket skt = peer.accept();
@@ -182,12 +180,11 @@ TEST(ProtocolTest, ServerToGameCorrectValues) {
     std::thread client([status]() {
         ActiveSocket clientSkt("localhost", "8080");
         ClientRecvProtocol recvProtocol(clientSkt);
-        std::unique_ptr<ServerMessage> msg = recvProtocol.receiveMessage();
-        GameStatus* statusRecv = dynamic_cast<GameStatus*>(&*msg);
-        std::unique_ptr<GameObjectData> data = std::move(statusRecv->gameObjects.front());
+        GameStatus statusRecv = recvProtocol.recvGameStatus();
+        std::unique_ptr<GameObjectData> data = std::move(statusRecv.gameObjects.front());
+
         const DuckData* duckdata = dynamic_cast<const DuckData*>(&*data);
         const DuckData* originalData = dynamic_cast<const DuckData*>(&*status->gameObjects.front());
-
         ASSERT_TRUE(*duckdata == *originalData);
     });
 
@@ -215,11 +212,10 @@ TEST(ProtocolTest, ServerToOneGameMultiSend) {
     std::thread client([status]() {
         ActiveSocket clientSkt("localhost", "8080");
         ClientRecvProtocol recvProtocol(clientSkt);
-        std::unique_ptr<ServerMessage> msg = recvProtocol.receiveMessage();
-        GameStatus* statusRecv = dynamic_cast<GameStatus*>(&*msg);
+        GameStatus statusRecv = recvProtocol.recvGameStatus();
         auto it1 = status->gameObjects.begin();
-        auto it2 = statusRecv->gameObjects.begin();
-        while (it1 != status->gameObjects.end() && it2 != statusRecv->gameObjects.end()) {
+        auto it2 = statusRecv.gameObjects.begin();
+        while (it1 != status->gameObjects.end() && it2 != statusRecv.gameObjects.end()) {
 
             const DuckData* originalData = dynamic_cast<const DuckData*>(&**it1);
             const DuckData* duckdata = dynamic_cast<const DuckData*>(&**it2);

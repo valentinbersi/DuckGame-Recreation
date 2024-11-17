@@ -24,5 +24,4 @@ int Server::run() noexcept {
 Server::~Server() {
     acceptor.stop();
     acceptor.join();
-    // gameMap.joinAllValues();
 }

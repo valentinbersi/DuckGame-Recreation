@@ -1,20 +1,15 @@
 #include "GameLoop.h"
 
+#include <algorithm>
 #include <memory>
 #include <utility>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_timer.h>
+#include <syslog.h>
 
 #include "GameStatus.h"
 #include "ReplyMessage.h"
 
-float GameLoop::calculateDeltaTime() {
-    const std::chrono::steady_clock::time_point frameTicks = std::chrono::steady_clock::now();
-    const std::chrono::duration<float> deltaTime = frameTicks - prevTicks;
-    prevTicks = frameTicks;
-    return deltaTime.count();
-}
+#define ERROR_MSG "UNOWN ERROR DURING RUNTIME."
 
 void GameLoop::retrieveCurrentFrameCommands() {
     currentFrameCommands = std::move(clientCommands.popAll());
@@ -28,55 +23,63 @@ void GameLoop::processCurrentFrameCommands() {
     }
 }
 
-void GameLoop::broadcastGameStatus() {
-    auto gameStatus = std::make_shared<GameStatus>(std::move(game.status()));
-    std::ranges::remove_if(clientQueues, [&gameStatus](const auto& clientQueue) {
-        if (clientQueue.expired())
-            return true;
+GameLoop::GameLoop() = default;
 
-        clientQueue.lock()->try_push(gameStatus);
-        return false;
-    });
-}
-
-GameLoop::GameLoop(): prevTicks(std::chrono::milliseconds::zero()) {}
+#define FPS 30
 
 void GameLoop::run() {
-    broadcastStartGame();
-    prevTicks = std::chrono::steady_clock::now();
-    game.start();
+    try {
+        broadcast(std::make_shared<ReplyMessage>(0, 1, 0));
+        timer.start();
+        game.start();
 
-    while (_keep_running) {
-        const float deltaTime = calculateDeltaTime();
-        retrieveCurrentFrameCommands();
-        processCurrentFrameCommands();
-        game.updateInternal(deltaTime);
-        game.update(deltaTime);
-        broadcastGameStatus();
-        std::this_thread::sleep_for(std::chrono::milliseconds(30));  // 30 fps aprox
+        while (_keep_running) {
+            const float deltaTime = timer.iterationStartSeconds().count();
+            retrieveCurrentFrameCommands();
+            processCurrentFrameCommands();
+            game.updateInternal(deltaTime);
+            game.update(deltaTime);
+            broadcast(std::make_shared<GameStatus>(std::move(game.status())));
+            timer.iterationEnd(FPS);
+        }
+    } catch (const ClosedQueue& err) {
+        // Expected when closing server
+    } catch (...) {
+        syslog(LOG_CRIT, ERROR_MSG);
     }
+    _keep_running = false;
+    _is_alive = false;
+}
+
+void GameLoop::stop() {
+    clientCommands.close();
+    _keep_running = false;
+    _is_alive = false;
+}
+
+bool GameLoop::shouldAddQueue(const u16 clientID) {
+    return clientID % 2 == 1;
 }
 
 void GameLoop::addClient(const u16 clientID,
                          std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue) {
+
     game.addPlayer(clientID);
-    for (const auto& queue : clientQueues) {
-        if (queue.lock().get() == clientQueue.lock().get()) {
-            return;
-        }
+    if(shouldAddQueue(clientID)){
+        clientQueuesMap.insert({clientID, std::move(clientQueue)});
     }
-    clientQueues.push_back(std::move(clientQueue));
+    broadcast(std::make_shared<ReplyMessage>(0, 0, game.playersCount()));
 }
 
 BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCommands; }
 
-void GameLoop::broadcastStartGame() {
-    std::shared_ptr<ServerMessage> startMessage = std::make_shared<ReplyMessage>(1, 1);
-    clientQueues.remove_if([&startMessage](const auto& clientQueue) {
-        if (clientQueue.expired()) {
-            return true;
+void GameLoop::broadcast(std::shared_ptr<ServerMessage> message) {
+    for(auto it = clientQueuesMap.begin(); it != clientQueuesMap.end();){
+        if(it->second.expired()){
+            it = clientQueuesMap.erase(it);
+        } else {
+            bool sucess = it->second.lock()->try_push(message);
+            it = sucess ? ++it : clientQueuesMap.erase(it);
         }
-        clientQueue.lock()->try_push(startMessage);
-        return false;
-    });
+    }   
 }

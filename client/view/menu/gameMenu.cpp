@@ -72,7 +72,6 @@ void GameMenu::showJoinWaitingPage() {
     changePage(join_waiting_page);
     QApplication::processEvents();
     connect(join_waiting_page, &joinWaitingPage::matchStarted, this, &GameMenu::startGameHandler);
-    join_waiting_page->waitForMatchStart();
 }
 
 void GameMenu::startGameHandler() {

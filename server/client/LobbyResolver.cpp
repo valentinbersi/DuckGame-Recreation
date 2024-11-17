@@ -19,21 +19,14 @@ LobbyResolver::LobbyResolver(
 BlockingQueue<std::unique_ptr<Command>>* LobbyResolver::resolveNewMatch(
         const LobbyMessage& message) {
     u16 matchID = gameMap.creatGameSafe();
-    senderQueue->push(std::make_shared<ReplyMessage>(matchID, 0));
+    senderQueue->push(std::make_shared<ReplyMessage>(matchID, 0, 0));
     gameMap.joinGameIfCreated(matchID, senderQueue, clientID, message.playerCount);
     return nullptr;
 }
-
+ 
 BlockingQueue<std::unique_ptr<Command>>* LobbyResolver::resolveJoinMatch(
         const LobbyMessage& message) {
-            
-    auto* queue = gameMap.joinGameIfCreated(message.matchId, senderQueue, clientID, message.playerCount);
-    if (queue){
-        senderQueue->push(std::make_shared<ReplyMessage>(message.matchId, 0));
-    } else {
-        senderQueue->push(std::make_shared<ReplyMessage>(0, 0));
-    }
-    return queue;
+    return gameMap.joinGameIfCreated(message.matchId, senderQueue, clientID, message.playerCount);
 }
 
 BlockingQueue<std::unique_ptr<Command>>* LobbyResolver::resolveStartMatch(

@@ -1,6 +1,6 @@
 
 #include "MovementCommand.h"
-MovementCommand::MovementCommand(PlayerID id, InputAction action): id(id), action(action) {}
+MovementCommand::MovementCommand(PlayerID id, InputAction action): Command(id), action(action) {}
 
 void MovementCommand::execute(GameController& gameController) {
 

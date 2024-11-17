@@ -3,9 +3,10 @@
 Communicator::Communicator(const std::string& hostname, const std::string& servername):
         skt(hostname.c_str(), servername.c_str()),
         sendQueue(),
-        recvQueue(),
+        recvQueueLobby(),
+        recvQueueGame(),
         sender(skt, sendQueue),
-        receiver(skt, recvQueue) {
+        receiver(skt, recvQueueLobby, recvQueueGame) {
     sender.start();
     receiver.start();
 }
@@ -14,28 +15,32 @@ bool Communicator::trysend(std::unique_ptr<ClientMessage> message) {
     return sendQueue.try_push(std::move(message));
 }
 
-std::optional<std::unique_ptr<ServerMessage>> Communicator::tryrecv() {
-    return recvQueue.try_pop();
+std::optional<GameStatus> Communicator::tryrecv() {
+    return recvQueueGame.try_pop();
 }
 
-std::optional<std::unique_ptr<ServerMessage>> Communicator::tryRecvLast() {
-    std::queue<std::unique_ptr<ServerMessage>> queue = recvQueue.popAll();
+std::optional<GameStatus> Communicator::tryRecvLast() {
+    std::queue<GameStatus> queue = recvQueueGame.popAll();
     if (queue.empty()) {
         return std::nullopt;
     }
-    std::unique_ptr<ServerMessage> message = std::move(queue.back());
+    GameStatus message = std::move(queue.back());
     queue.pop();
     return message;
 }
 
-std::unique_ptr<ServerMessage> Communicator::recv() { return recvQueue.pop(); }
+std::optional<ReplyMessage> Communicator::tryRecvReply() {
+    return recvQueueLobby.try_pop();
+}
+
+ReplyMessage Communicator::blockingRecv() { return recvQueueLobby.pop(); }
 
 Communicator::~Communicator() {
     sender.stop();
     receiver.stop();
     skt.close();
     sendQueue.close();
-    recvQueue.close();
+    recvQueueGame.close();
     sender.join();
     receiver.join();
 }

@@ -54,7 +54,7 @@ void Game::init() {
 
         handler.handleEvents();
 
-        SDL_Delay(33);  // 33ms =
+        SDL_Delay(33);  // 33ms = 30fps
     }
 
     IMG_Quit();
@@ -68,12 +68,8 @@ Texture Game::startBackground() {
 }
 
 void Game::getSnapshot() {
-    std::unique_ptr<GameStatus> snapshot;
-
-    std::optional<std::unique_ptr<ServerMessage>> optionalMessage = communicator.tryRecvLast();
-    if (optionalMessage.has_value()) {
-        std::unique_ptr<ServerMessage> message = std::move(optionalMessage.value());
-        snapshot = std::unique_ptr<GameStatus>(dynamic_cast<GameStatus*>(message.release()));
+    std::optional<GameStatus> snapshot = communicator.tryRecvLast();
+    if (!snapshot.has_value()) return;
 
         clearObjects();
         for (auto& gameObject: snapshot->gameObjects) {
@@ -96,8 +92,8 @@ void Game::getSnapshot() {
                     break;
             }
         }
-    }
 }
+
 
 void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr <SpriteManager>>& spritesMapping, float currentScale) {
     for (auto& duck: ducks) {

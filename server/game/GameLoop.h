@@ -1,6 +1,6 @@
 #pragma once
 
-#include <list>
+#include <map>
 #include <memory>
 #include <queue>
 
@@ -9,21 +9,16 @@
 #include "GameController.h"
 #include "ServerMessage.h"
 #include "Thread.h"
+#include "Timer.h"
 
 class GameLoop final: public Thread {
     constexpr static std::uint8_t FRAME_TIMES_AMOUNT = 2;
 
-    std::list<std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>>> clientQueues{};
+    std::map<PlayerID, std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>>> clientQueuesMap{};
     BlockingQueue<std::unique_ptr<Command>> clientCommands;
     std::queue<std::unique_ptr<Command>> currentFrameCommands;
     GameController game;
-    std::chrono::steady_clock::time_point prevTicks;
-
-    /**
-     * Calculate the time between the previous frame and the current frame
-     * @return the time between the previous frame and the current frame in seconds
-     */
-    float calculateDeltaTime();
+    Timer timer;
 
     /**
      * Retrieve all the commands the clients send between the previous frame and the current frame
@@ -36,10 +31,17 @@ class GameLoop final: public Thread {
     void processCurrentFrameCommands();
 
     /**
-     * Broadcast the game status to all the clients
-     */
-    void broadcastGameStatus();
+     * Broadcast a message to all the clients
+     * @param message the std::shared_ptr<Servermessage> to broadcast
+     */  
+    void broadcast(std::shared_ptr<ServerMessage> message);
 
+    /**
+     * Check if a clientQueue should be maped.
+     * @param
+     */
+    bool shouldAddQueue(const u16 clientID);
+    
 public:
     /**
      * Construct a gameloop with no players
@@ -50,6 +52,8 @@ public:
      * Run the gameloop
      */
     void run() override;
+
+    void stop() override;
 
     /**
      * Add a client queue to the list of client queues
@@ -64,6 +68,4 @@ public:
      */
     BlockingQueue<std::unique_ptr<Command>>* getQueue();
 
-    // funcion por el momento, despues vamos a hacer un solo broadcast.
-    void broadcastStartGame();
 };

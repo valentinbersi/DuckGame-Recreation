@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QMessageBox>
+#include <QTimer>
 
 #include "LobbyMessage.h"
 #include "ReplyMessage.h"
@@ -13,20 +14,36 @@ hostWaitingPage::hostWaitingPage(QWidget* parent, Communicator& communicator, Ga
         QWidget(parent),
         ui(new Ui::hostWaitingPage),
         communicator(communicator),
-        gameInfo(gameInfo){
+        gameInfo(gameInfo),
+        timer(new QTimer(this)){
     ui->setupUi(this);
 
     ui->labelMatchID->setText(QString("MATCH ID: %1").arg(gameInfo.matchID));
 
+    connect(timer, &QTimer::timeout, this, &hostWaitingPage::recvServerMessage);
+    timer->start(1000);
+
     connect(ui->playButton, &QPushButton::clicked, this, &hostWaitingPage::requestStartGame);
 }
 
-// USAR ESTA CUANDO SE QUIERE PROBAR SIN SERVER
-//void hostWaitingPage::requestStartGame() {
-//    emit startMatch();
-//}
+void hostWaitingPage::recvServerMessage() {
+    std::optional<ReplyMessage> replyMessageOpt = communicator.tryRecvReply();
 
-// USAR ESTA PARA CORRER CON SERVER
+    if (replyMessageOpt.has_value()) {
+        ReplyMessage message = replyMessageOpt.value();
+        ui->labelPlayersConnected->setText(QString("PLAYERS CONNECTED: %1 / 4").arg(message.connectedPlayers));
+
+        if (message.startGame == 1) {
+            emit startMatch();
+            timer->stop();
+        }
+
+        if (message.connectedPlayers == 4)
+            requestStartGame();
+
+    } else {qDebug() << "replyMessage is NULL";}
+}
+
 void hostWaitingPage::requestStartGame() {
    auto message = std::make_unique<LobbyMessage>(
            LobbyRequest::STARTMATCH,
@@ -35,40 +52,8 @@ void hostWaitingPage::requestStartGame() {
            gameInfo.player2Name,
            gameInfo.matchID
            );
-
-   qDebug() << "LobbyMessage - STARTMATCH Request:";
-   qDebug() << "Players Number:" << message->playerCount;
-   qDebug() << "Player 1 Name:" << QString::fromStdString(message->player1Name);
-   qDebug() << "Player 2 Name:" << QString::fromStdString(message->player2Name);
-   qDebug() << "Match ID:" << message->matchId;
-
-   if (!communicator.trysend(std::move(message))) {
-       qDebug() << "Error al enviar el mensaje.";
-       return; // chequear que hacer aca!
-   }
-
-//    auto messageServerOpt = communicator.tryrecv();
-//    if (messageServerOpt.has_value()) {
-//        std::unique_ptr<ServerMessage> messageServer = std::move(messageServerOpt.value());
-//        ReplyMessage reply = dynamic_cast<ReplyMessage&>(*messageServer);
-//        if (reply.startGame == 1) {
-//            emit startMatch();
-//        } else {
-//            // ver que hacer aca!
-//        }
-//    } else {
-//        QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
-//        return; // esto nose si es correcto, deberia manejarlo distinto yo creo.
-//    }
-    auto messageServerOpt = communicator.recv();
-    ReplyMessage* reply = dynamic_cast<ReplyMessage*>(messageServerOpt.get());
-    if (reply != nullptr && reply->startGame == 1) {
-        emit startMatch();
-    } else {
-        QMessageBox::warning(this, "Error", "No se recibió respuesta del servidor.");
-        return;
-    }
-
+   communicator.trysend(std::move(message));
+   // tengo que chequear si se envio bien?
 }
 
 hostWaitingPage::~hostWaitingPage() { delete ui; }

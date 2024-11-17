@@ -1,4 +1,5 @@
 #include "GameMapMonitor.h"
+#include "ReplyMessage.h"
 
 #include <random>
 
@@ -13,14 +14,16 @@ BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGameIfCreated(
     std::lock_guard lock(mutex);
 
     if (gameMap.find(matchID) != gameMap.end()) {
+        senderQueue->push(std::make_shared<ReplyMessage>(matchID, 0, 0));
         for(u8 i = PLAYER_COUNT_BEGINING; i < playerCount; i++) {
             gameMap.at(matchID)->addClient(clientId+i, senderQueue);
         }
         return gameMap.at(matchID)->getQueue();
     }
+    senderQueue->push(std::make_shared<ReplyMessage>(0, 0, 0));
     return nullptr;
 }
-
+ 
 BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::startGameIfCreated(u16 matchID) {
     std::lock_guard lock(mutex);
     if (gameMap.find(matchID) != gameMap.end()) {
@@ -47,6 +50,8 @@ u16 GameMapMonitor::creatGameSafe() {
 GameMapMonitor::~GameMapMonitor() {
     for(auto& [key, value] : gameMap) {
         value->stop();
-        value->join();
+        if (value->isJoinable()) {
+            value->join();
+        }
     }
 }
