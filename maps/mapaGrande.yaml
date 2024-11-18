@@ -1,0 +1,32 @@
+map_name: mapaGrande
+background: background_image.png
+map_width: 30452
+map_height: -511630016
+objects:
+  - type: PLATFORM
+    x: 106
+    y: 21
+  - type: PLATFORM
+    x: 113
+    y: 54
+  - type: PLATFORM
+    x: 118
+    y: 98
+  - type: PLATFORM
+    x: 28
+    y: 78
+  - type: BOX
+    x: 83
+    y: 65
+  - type: BOX
+    x: 48
+    y: 48
+  - type: BOX
+    x: 47
+    y: 67
+  - type: BOX
+    x: 74
+    y: 77
+  - type: BOX
+    x: 101
+    y: 51

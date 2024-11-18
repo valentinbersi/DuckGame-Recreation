@@ -10,11 +10,9 @@
 #include "GameInfo.h"
 #include "LobbyMessage.h"
 #include "configurationpage.h"
-#include "hostwaitingpage.h"
-#include "joingame.h"
-#include "joinwaitingpage.h"
 #include "mainmenu.h"
-#include "newgame.h"
+#include "matchSetup.h"
+#include "waitingPage.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -34,8 +32,8 @@ private:
 
     QPointer<mainMenu> menu;
     QPointer<configurationPage> config;
-    QPointer<joinGame> join_game;
-    QPointer<newGame> new_game;
+    QPointer<matchSetup> join_game;
+    QPointer<matchSetup> new_game;
 
     void setPagesAndConnections();
     void startGameHandler();

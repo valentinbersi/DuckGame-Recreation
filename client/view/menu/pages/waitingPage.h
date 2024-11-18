@@ -1,5 +1,5 @@
-#ifndef DUCKGAME_HOSTWAITINGPAGE_H
-#define DUCKGAME_HOSTWAITINGPAGE_H
+#ifndef DUCKGAME_WAITINGPAGE_H
+#define DUCKGAME_WAITINGPAGE_H
 
 #include <QWidget>
 
@@ -9,15 +9,16 @@
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class hostWaitingPage;
+class WaitingPage;
 }
 QT_END_NAMESPACE
 
-class hostWaitingPage: public QWidget {
+class WaitingPage: public QWidget {
     Q_OBJECT
 
 private:
-    Ui::hostWaitingPage* ui;
+    Ui::WaitingPage* ui;
+    bool isHost;
     Communicator& communicator;
     GameInfo& gameInfo;
     QTimer* timer;
@@ -26,12 +27,12 @@ private:
     void recvServerMessage();
 
 public:
-    hostWaitingPage(QWidget* parent, Communicator& communicator, GameInfo& gameInfo);
-    ~hostWaitingPage() override;
+    WaitingPage(QWidget* parent, bool isHost, Communicator& communicator, GameInfo& gameInfo);
+    ~WaitingPage() override;
 
 signals:
     void startMatch();
 };
 
 
-#endif  // DUCKGAME_HOSTWAITINGPAGE_H
+#endif  // DUCKGAME_WAITINGPAGE_H
