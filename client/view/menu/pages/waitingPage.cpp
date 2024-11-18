@@ -1,4 +1,4 @@
-#include "hostwaitingpage.h"
+#include "waitingPage.h"
 
 #include <QDebug>
 #include <QMessageBox>
@@ -6,13 +6,13 @@
 
 #include "LobbyMessage.h"
 #include "ReplyMessage.h"
-#include "common_init.h"
-#include "ui_hostwaitingpage.h"
+#include "ui_waitingPage.h"
 
 
-hostWaitingPage::hostWaitingPage(QWidget* parent, Communicator& communicator, GameInfo& gameInfo):
+WaitingPage::WaitingPage(QWidget* parent, bool isHost, Communicator& communicator, GameInfo& gameInfo):
         QWidget(parent),
-        ui(new Ui::hostWaitingPage),
+        ui(new Ui::WaitingPage),
+        isHost(isHost),
         communicator(communicator),
         gameInfo(gameInfo),
         timer(new QTimer(this)){
@@ -20,13 +20,16 @@ hostWaitingPage::hostWaitingPage(QWidget* parent, Communicator& communicator, Ga
 
     ui->labelMatchID->setText(QString("MATCH ID: %1").arg(gameInfo.matchID));
 
-    connect(timer, &QTimer::timeout, this, &hostWaitingPage::recvServerMessage);
+    connect(timer, &QTimer::timeout, this, &WaitingPage::recvServerMessage);
     timer->start(1000);
 
-    connect(ui->playButton, &QPushButton::clicked, this, &hostWaitingPage::requestStartGame);
+    if (!isHost)
+        ui->playButton->setVisible(false);
+    else
+        connect(ui->playButton, &QPushButton::clicked, this, &WaitingPage::requestStartGame);
 }
 
-void hostWaitingPage::recvServerMessage() {
+void WaitingPage::recvServerMessage() {
     std::optional<ReplyMessage> replyMessageOpt = communicator.tryRecvReply();
 
     if (replyMessageOpt.has_value()) {
@@ -38,13 +41,13 @@ void hostWaitingPage::recvServerMessage() {
             timer->stop();
         }
 
-        if (message.connectedPlayers == 4)
+        if (isHost && message.connectedPlayers == 4)
             requestStartGame();
 
     } else {qDebug() << "replyMessage is NULL";}
 }
 
-void hostWaitingPage::requestStartGame() {
+void WaitingPage::requestStartGame() {
    auto message = std::make_unique<LobbyMessage>(
            LobbyRequest::STARTMATCH,
            gameInfo.playersNumber,
@@ -56,4 +59,4 @@ void hostWaitingPage::requestStartGame() {
    // tengo que chequear si se envio bien?
 }
 
-hostWaitingPage::~hostWaitingPage() { delete ui; }
+WaitingPage::~WaitingPage() { delete ui; }
