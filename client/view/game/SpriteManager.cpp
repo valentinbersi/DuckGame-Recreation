@@ -17,8 +17,12 @@
 
 #define NO_FEATHER false
 #define NO_RIGHT_FEATHER false
+#define NO_CHESTPLATE false
+#define NO_HELMET false
 #define FEATHER true
 #define RIGHT_FEATHER true
+#define CHESTPLATE true
+#define HELMET true
 
 #define OFFSET_RIGHT 3
 #define OFFSET_LEFT 3
@@ -35,6 +39,8 @@ SpriteManager::SpriteManager(
         in_air(false),
         flapping(false),
         flip(false),
+        hasHelmet(true),
+        hasChestplate(true),
         spritesheet(std::make_unique<Spritesheet>(path1, path2, renderer, textureManager)),
         frame(0),
         flappingFrame(0),
@@ -48,10 +54,8 @@ void SpriteManager::updatePosition(float new_x, float new_y) {
 
 void SpriteManager::update(bool playing_dead, bool crouching, bool air, bool flap,
                            bool being_damaged, bool right, bool left) {
-    if (left)
-        flip = true;
-    else if (right)
-        flip = false;
+    if (left) flip = true;
+    else if (right) flip = false;
 
     if (being_damaged || playing_dead ||
         crouching) {  // no animation; only one sprite for each 'event'
@@ -73,24 +77,6 @@ void SpriteManager::update(bool playing_dead, bool crouching, bool air, bool fla
 
     } else {
         draw(frame, SPRITESHEET_RIGHT_LEFT_ROW);
-    }
-}
-
-void SpriteManager::draw(int col, int row) {
-    // Sprite
-    spritesheet->selectSprite(col, row, NO_FEATHER);
-    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER);
-    spritesheet->drawSelectedSprite(position, flip, NO_FEATHER/*, NO_RIGHT_FEATHER*/);
-
-    if (not flip) {
-        spritesheet->selectSprite(col, row, FEATHER);
-        position = getPosition(FEATHER, NO_RIGHT_FEATHER);
-        spritesheet->drawSelectedSprite(position, flip, FEATHER/*, NO_RIGHT_FEATHER*/);
-
-    } else if (flip || in_air || flapping /* etc*/) {
-        spritesheet->selectSprite(col, row, FEATHER);
-        position = getPosition(FEATHER, RIGHT_FEATHER);
-        spritesheet->drawSelectedSprite(position, flip, FEATHER/*, RIGHT_FEATHER*/);
     }
 }
 
@@ -117,6 +103,74 @@ void SpriteManager::setFlags(bool air, bool flap, bool right, bool left) {
     }
 }
 
+/*void SpriteManager::draw(int col, int row) {
+    // Sprite
+    spritesheet->selectSprite(col, row, NO_FEATHER);
+    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE);
+    spritesheet->drawSelectedSprite(position, flip, NO_FEATHER, NO_RIGHT_FEATHER);
+
+    if (not flip) {
+        spritesheet->selectSprite(col, row, FEATHER);
+        position = getPosition(FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE);
+        spritesheet->drawSelectedSprite(position, flip, FEATHER, NO_RIGHT_FEATHER);
+
+    } else if (flip || in_air || flapping ) {
+        spritesheet->selectSprite(col, row, FEATHER);
+        position = getPosition(FEATHER, RIGHT_FEATHER, NO_CHESTPLATE);
+        spritesheet->drawSelectedSprite(position, flip, FEATHER, RIGHT_FEATHER);
+    }
+
+    if (hasChestplate) {
+        spritesheet->selectSprite(col, row, NO_FEATHER);
+        position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, CHESTPLATE);
+        spritesheet->drawChestplate(position, flip);
+    }
+
+    if (hasHelmet) {
+        spritesheet->selectSprite(2, 0, NO_FEATHER);
+        position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE);
+        spritesheet->drawHelmet(position, flip);
+    }
+}*/
+
+void SpriteManager::draw(int col, int row) {
+    drawMainSprite(col, row);
+    drawFeathers(col, row);
+    if (hasChestplate) drawChestplate(col, row);
+    if (hasHelmet) drawHelmet();
+}
+
+void SpriteManager::drawMainSprite(int col, int row) {
+    spritesheet->selectSprite(col, row, NO_FEATHER);
+    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET);
+    spritesheet->drawSelectedSprite(position, flip, NO_FEATHER);
+}
+
+void SpriteManager::drawFeathers(int col, int row) {
+    if (!flip) {
+        spritesheet->selectSprite(col, row, FEATHER);
+        SDL2pp::Rect position = getPosition(FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET);
+        spritesheet->drawSelectedSprite(position, flip, FEATHER);
+
+    } else if (flip || in_air || flapping) {
+        spritesheet->selectSprite(col, row, FEATHER);
+        SDL2pp::Rect position = getPosition(FEATHER, RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET);
+        spritesheet->drawSelectedSprite(position, flip, FEATHER);
+    }
+}
+
+void SpriteManager::drawChestplate(int col, int row) {
+    spritesheet->selectSprite(col, row, NO_FEATHER);
+    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, CHESTPLATE, NO_HELMET);
+    spritesheet->drawChestplate(position, flip);
+}
+
+void SpriteManager::drawHelmet() {
+    spritesheet->selectSprite(2, 0, NO_FEATHER);
+    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, HELMET);
+    spritesheet->drawHelmet(position, flip);
+}
+
 void SpriteManager::negateFlag(bool flag, bool& flagToNegate) {
     if (flagToNegate != flag) {
         flagToNegate = !flagToNegate;
@@ -124,21 +178,40 @@ void SpriteManager::negateFlag(bool flag, bool& flagToNegate) {
     }
 }
 
-SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather) {
-    int spriteWidth = spritesheet->getClipWidth();
+SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather, bool isChestplate, bool isHelmet) {
+    SDL2pp::Rect position = calculateBasePosition();
     int spriteHeight = spritesheet->getClipHeight();
-    SDL2pp::Rect position(m_position_x, m_position_y, spriteWidth * scale, spriteHeight * scale);
 
-    if (isFeather) {
-        if (isRightFeather) {
-            position.x += (spriteWidth * 2 - OFFSET_RIGHT) * scale / DEFAULT_SCALE;
-        } else {
-            position.x += (spriteWidth / 2 + OFFSET_LEFT) * scale / DEFAULT_SCALE;
-        }
-        position.y += (spriteWidth * 2 + OFFSET_Y) * scale / DEFAULT_SCALE;
-    }
+    if (isFeather) adjustForFeathers(position, isRightFeather);
+    if (isChestplate) if (frame == 0) position.y += (spriteHeight / 2) * scale / DEFAULT_SCALE;
+    if (isHelmet) adjustForHelmet(position);
 
     return position;
+}
+
+SDL2pp::Rect SpriteManager::calculateBasePosition() {
+    int spriteWidth = spritesheet->getClipWidth();
+    int spriteHeight = spritesheet->getClipHeight();
+    return SDL2pp::Rect(m_position_x, m_position_y, spriteWidth * scale, spriteHeight * scale);
+}
+
+void SpriteManager::adjustForFeathers(SDL2pp::Rect& position, bool isRightFeather) {
+    int spriteWidth = spritesheet->getClipWidth();
+    int spriteHeight = spritesheet->getClipHeight();
+
+    if (isRightFeather) {
+        position.x += (spriteWidth * 2 - OFFSET_RIGHT) * scale / DEFAULT_SCALE;
+    } else {
+        position.x += (spriteWidth / 2 + OFFSET_LEFT) * scale / DEFAULT_SCALE;
+    }
+    position.y += (spriteHeight * 2 + OFFSET_Y) * scale / DEFAULT_SCALE;
+}
+
+void SpriteManager::adjustForHelmet(SDL2pp::Rect& position) {
+    if (flip) position.x -= /*frame*/ 2 * scale / DEFAULT_SCALE;
+    else position.x += /*frame*/ 2 * scale / DEFAULT_SCALE;
+
+    position.y -= 14 * scale / DEFAULT_SCALE;
 }
 
 Spritesheet& SpriteManager::getSpritesheet() {return *spritesheet;}

@@ -12,6 +12,8 @@ public:
 
     void selectSprite(int x, int y, bool feathers);
     void drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool feathers/*, bool isRightFeather*/);
+    void drawChestplate(SDL2pp::Rect& playerPosition, bool flip);
+    void drawHelmet(SDL2pp::Rect& playerPosition, bool flip);
     int getClipWidth() const;
     int getClipHeight() const;
 

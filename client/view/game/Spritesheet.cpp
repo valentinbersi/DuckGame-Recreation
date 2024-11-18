@@ -6,6 +6,9 @@
 #define WIDTH_HEIGHT_FEATHERS 16
 #define WIDTH_HEIGHT_SPRITE 32
 
+#define CHESTPLATE_PATH "../assets/player/chestplate.png"
+#define HELMET_PATH "../assets/player/helmets.png"
+
 #define N_COL_F 5  // Feathers
 #define N_ROW_F 8  // PERO NO LE DARÉ USO A TODAS
 
@@ -46,6 +49,16 @@ void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool fea
     }
 
     SDL_RenderCopyEx(renderer.Get(), texture, &m_clip, &position, 0.0, nullptr, flipType);
+}
+
+void Spritesheet::drawChestplate(SDL2pp::Rect& playerPosition, bool flip) {
+    SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    SDL_RenderCopyEx(renderer.Get(), textureManager.getTexture(CHESTPLATE_PATH).Get(), &m_clip, &playerPosition, 0.0, nullptr, flipType);
+}
+
+void Spritesheet::drawHelmet(SDL2pp::Rect& playerPosition, bool flip) {
+    SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    SDL_RenderCopyEx(renderer.Get(), textureManager.getTexture(HELMET_PATH).Get(), &m_clip, &playerPosition, 0.0, nullptr, flipType);
 }
 
 SDL2pp::Texture& Spritesheet::getTexture(bool feathers) {

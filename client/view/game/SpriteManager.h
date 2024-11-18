@@ -26,7 +26,14 @@ public:
     Spritesheet& getSpritesheet();
 
 private:
-    SDL2pp::Rect getPosition(bool isFeather, bool isRightFeather);
+    void drawMainSprite(int col, int row);
+    void drawFeathers(int col, int row);
+    void drawChestplate(int col, int row);
+    void drawHelmet();
+    SDL2pp::Rect getPosition(bool isFeather, bool isRightFeather, bool isChestPlate, bool isHelmet);
+    SDL2pp::Rect calculateBasePosition();
+    void adjustForFeathers(SDL2pp::Rect& position, bool isRightFeather);
+    void adjustForHelmet(SDL2pp::Rect& position);
 
     const char* path1;
     const char* path2;
@@ -36,7 +43,8 @@ private:
     bool in_air;
     bool flapping;
     bool flip;
-    //bool hasHelmet;
+    bool hasHelmet;
+    bool hasChestplate;
     std::unique_ptr<Spritesheet> spritesheet;
     int frame;
     int flappingFrame;
