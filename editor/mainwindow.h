@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-#include "MapExporter.h"
+#include "MapManager.h"
 #include "levelscene.h"
 
 QT_BEGIN_NAMESPACE
@@ -23,10 +23,13 @@ private:
     Ui::MainWindow* ui;
     int mapHeight;
     int mapWidth;
+    std::string background;
     std::vector<Object> objects;
     LevelScene* scene;
-    MapExporter mapExporter; // esto capaz no es necesario!
+    MapManager mapExporter; // esto capaz no es necesario!
     void resizeEvent(QResizeEvent* event) override;
     void wheelEvent(QWheelEvent* event) override;
+    void on_actionNewMap_triggered();
+    void on_actionEditMap_triggered();
 };
 #endif  // MAINWINDOW_H

@@ -3,10 +3,13 @@
 #include <QAbstractButton>
 #include <QAction>
 #include <QDrag>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QMessageBox>
 #include <QScrollBar>
 #include <QWheelEvent>
 
-#include "MapExporter.h"
+#include "MapManager.h"
 #include "Object.h"
 #include "ObjectConstants.h"
 #include "ui_mainwindow.h"
@@ -20,13 +23,11 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     qDebug() << "Current graphicsView:" << ui->graphicsView->sceneRect();
 
     // ESTO PODRIA PONERLO DIRECTAMENTE EN EL UI CREO
-    //ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    //ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
-    ui->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    ui->graphicsView->setTransformationAnchor(QGraphicsView::NoAnchor);
+//    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
+//    ui->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+//    ui->graphicsView->setTransformationAnchor(QGraphicsView::NoAnchor);
 
     ui->Platform->setIcon(QIcon(PLATFORM_ICON));
     ui->SpawnDuck->setIcon(QIcon(DUCK_ICON));
@@ -59,9 +60,13 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     connect(ui->ClearAll, &QAction::triggered, scene, &LevelScene::clearAll);
 
-    connect(ui->SaveMap, &QAction::triggered, this, [this](){
-        MapExporter::exportMap(objects, ui->lineEditMapName->text().toStdString(), mapWidth, mapHeight);
+    connect(ui->actionSaveMap, &QAction::triggered, this, [this](){
+        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), mapWidth, mapHeight);
     });
+
+    connect(ui->actionNewMap, &QAction::triggered, this, &MainWindow::on_actionNewMap_triggered);
+
+    connect(ui->actionEditMap, &QAction::triggered, this, &MainWindow::on_actionEditMap_triggered);
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event) {
@@ -87,7 +92,61 @@ void MainWindow::wheelEvent(QWheelEvent* event) {
 
         event->accept();
     } else {
-        QMainWindow::wheelEvent(event); // Comportamiento por defecto
+        QMainWindow::wheelEvent(event);
+    }
+}
+
+
+void MainWindow::on_actionNewMap_triggered() {
+    if (!objects.empty()) {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "Confirmación",
+                                      "Tenes un mapa abierto. ¿Deseas guardarlo antes de abrir uno nuevo?",
+                                      QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+        if (reply == QMessageBox::Yes) {
+            MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), mapWidth, mapHeight);
+        } else if (reply == QMessageBox::Cancel) {
+            return;
+        }
+    }
+
+    scene->clearAll();
+    objects.clear();
+
+    QMessageBox::information(this, "Nuevo Mapa", "Se ha creado un nuevo mapa.");
+}
+
+void MainWindow::on_actionEditMap_triggered() {
+    if (!objects.empty()) {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "Confirmar",
+                                      "¿Deseas guardar los cambios del mapa actual antes de importar uno nuevo?",
+                                      QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
+
+        if (reply == QMessageBox::Yes) {
+            MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), mapWidth, mapHeight);
+        } else if (reply == QMessageBox::Cancel) {
+            return;
+        }
+    }
+
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                                    "Seleccionar Mapa", "../maps/", "Archivos YAML (*.yaml)");
+
+    if (!fileName.isEmpty()) {
+        QFileInfo fileInfo(fileName);
+        QString mapName = fileInfo.baseName();
+
+        scene->clearAll();
+
+        bool success = MapManager::importMap(objects, fileName.toStdString(), mapWidth, mapHeight, background);
+
+        if (success) {
+            scene->loadMap(objects, mapWidth, mapHeight);
+            QMessageBox::information(this, "Mapa Importado", "El mapa se ha importado correctamente.");
+        } else {
+            QMessageBox::warning(this, "Error", "Hubo un error al importar el mapa.");
+        }
     }
 }
 

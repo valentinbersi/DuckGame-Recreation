@@ -29,7 +29,8 @@ public:
     void toggleAddingObject(ObjectType type);
     void deleteObjectAt(const QPointF& position);
     void clearAll();
-    void zoom(double factor);
+    void loadMap(const std::vector<Object>& newObjects, int mapWidth, int mapHeight);
+    // void zoom(double factor);
 
 signals:
     void addingObjectChanged(ObjectType type, bool isAdding);
