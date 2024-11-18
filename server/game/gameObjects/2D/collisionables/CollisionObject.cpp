@@ -18,8 +18,8 @@ bool CollisionObject::collidesWith(const CollisionObject& other) const {
     return shape.intersects(other.shape);
 }
 
-std::optional<IntersectionInfo> CollisionObject::moveAndCollide(const CollisionObject& other,
-                                                                const Vector2& displacement) const {
+std::optional<Vector2> CollisionObject::moveAndCollide(const CollisionObject& other,
+                                                       const Vector2& displacement) const {
     return shape.intersects(other.shape, displacement);
 }
 

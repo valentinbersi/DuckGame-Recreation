@@ -1,10 +1,7 @@
 #pragma once
 
-#include <bitset>
-
-#include "IntersectionInfo.h"
 #include "Segment.h"
-#include "Types.h"
+#include <array>
 #include "Vector2.h"
 
 class Line;
@@ -41,9 +38,8 @@ class Rectangle final {
      * @param velocityLine The velocity line
      * @return The intersection info
      */
-    [[nodiscard]] std::optional<IntersectionInfo> calculateNorthIntersection(
-            const Rectangle& rectangle, const Rectangle& nextRectangle,
-            const Line& velocityLine) const;
+    [[nodiscard]] std::optional<Vector2> calculateNorthIntersection(
+            const Rectangle& rectangle, const Rectangle& nextRectangle) const;
 
     /**
      * Handle the collision when the rectangle is colliding with the south side of the other
@@ -53,9 +49,8 @@ class Rectangle final {
      * @param velocityLine The velocity line
      * @return The intersection info
      */
-    [[nodiscard]] std::optional<IntersectionInfo> calculateSouthIntersection(
-            const Rectangle& rectangle, const Rectangle& nextRectangle,
-            const Line& velocityLine) const;
+    [[nodiscard]] std::optional<Vector2> calculateSouthIntersection(
+            const Rectangle& rectangle, const Rectangle& nextRectangle) const;
 
     /**
      * Handle the collision when the rectangle is colliding with the east side of the other
@@ -65,9 +60,8 @@ class Rectangle final {
      * @param velocityLine The velocity line
      * @return The intersection info
      */
-    [[nodiscard]] std::optional<IntersectionInfo> calculateEastIntersection(
-            const Rectangle& rectangle, const Rectangle& nextRectangle,
-            const Line& velocityLine) const;
+    [[nodiscard]] std::optional<Vector2> calculateEastIntersection(
+            const Rectangle& rectangle, const Rectangle& nextRectangle) const;
 
     /**
      * Handle the collision when the rectangle is colliding with the west side of the other
@@ -77,9 +71,8 @@ class Rectangle final {
      * @param velocityLine The velocity line
      * @return The intersection info
      */
-    [[nodiscard]] std::optional<IntersectionInfo> calculateWestIntersection(
-            const Rectangle& rectangle, const Rectangle& nextRectangle,
-            const Line& velocityLine) const;
+    [[nodiscard]] std::optional<Vector2> calculateWestIntersection(
+            const Rectangle& rectangle, const Rectangle& nextRectangle) const;
 
     /**
      * Handle the collision when the rectangle is colliding with the north east side of the other
@@ -90,9 +83,8 @@ class Rectangle final {
      * @param velocityLine The velocity line
      * @return The intersection info
      */
-    [[nodiscard]] std::optional<IntersectionInfo> calculateNorthEastIntersection(
-            const Rectangle& rectangle, const Vector2& displacement, const Rectangle& nextRectangle,
-            const Line& velocityLine) const;
+    [[nodiscard]] std::optional<Vector2> calculateNorthEastIntersection(
+            const Rectangle& rectangle, const Vector2& displacement, const Rectangle& nextRectangle) const;
 
     /**
      * Handle the collision when the rectangle is colliding with the north west side of the other
@@ -103,9 +95,8 @@ class Rectangle final {
      * @param velocityLine The velocity line
      * @return The intersection info
      */
-    [[nodiscard]] std::optional<IntersectionInfo> calculateNorthWestIntersection(
-            const Rectangle& rectangle, const Vector2& displacement, const Rectangle& nextRectangle,
-            const Line& velocityLine) const;
+    [[nodiscard]] std::optional<Vector2> calculateNorthWestIntersection(
+            const Rectangle& rectangle, const Vector2& displacement, const Rectangle& nextRectangle) const;
 
     /**
      * Handle the collision when the rectangle is colliding with the south east side of the other
@@ -116,9 +107,8 @@ class Rectangle final {
      * @param velocityLine The velocity line
      * @return The intersection info
      */
-    [[nodiscard]] std::optional<IntersectionInfo> calculateSouthEastIntersection(
-            const Rectangle& rectangle, const Vector2& displacement, const Rectangle& nextRectangle,
-            const Line& velocityLine) const;
+    [[nodiscard]] std::optional<Vector2> calculateSouthEastIntersection(
+            const Rectangle& rectangle, const Vector2& displacement, const Rectangle& nextRectangle) const;
 
     /**
      * Handle the collision when the rectangle is colliding with the south west side of the other
@@ -129,9 +119,17 @@ class Rectangle final {
      * @param velocityLine The velocity line
      * @return The intersection info
      */
-    [[nodiscard]] std::optional<IntersectionInfo> calculateSouthWestIntersection(
-            const Rectangle& rectangle, const Vector2& displacement, const Rectangle& nextRectangle,
-            const Line& velocityLine) const;
+    [[nodiscard]] std::optional<Vector2> calculateSouthWestIntersection(
+            const Rectangle& rectangle, const Vector2& displacement, const Rectangle& nextRectangle) const;
+
+    /**
+     * Calculate the intersection info when the rectangles are intersecting in the next frame
+     * @param rectangle The other rectangle
+     * @param displacement The displacement of the rectangle
+     * @return The intersection info
+     */
+    [[nodiscard]] std::optional<Vector2> calculateIntersectionIntersectingNextFrame(
+            const Rectangle& rectangle, const Vector2& displacement) const;
 
 public:
     Rectangle() = delete;
@@ -198,7 +196,7 @@ public:
     [[nodiscard]] Region regionOfPoint(const Vector2& point) const;
 
     enum Side { North = 0, East = 1, South = 2, West = 3 };
-    constexpr static u8 SidesAmount = 4;
+    constexpr static unsigned char SidesAmount = 4;
     using Sides = std::array<Segment, SidesAmount>;
 
     /**
@@ -208,7 +206,7 @@ public:
     [[nodiscard]] const Sides& sides() const;
 
     enum Vertex { NorthWest = 0, NorthEast = 1, SouthEast = 2, SouthWest = 3 };
-    constexpr static u8 VertexAmount = 4;
+    constexpr static unsigned char VertexAmount = 4;
     using Vertices = std::array<Vector2, VertexAmount>;
 
     /**
@@ -217,7 +215,7 @@ public:
      */
     [[nodiscard]] const Vertices& vertices() const;
 
-    constexpr static u8 AxisPoinstAmount = 4;
+    constexpr static unsigned char AxisPoinstAmount = 4;
     using AxisPoints = std::array<Vector2, VertexAmount>;
 
     /**
@@ -233,6 +231,13 @@ public:
     [[nodiscard]] bool contains(const Vector2& point) const;
 
     /**
+     * Check if this rectangle touches another rectangle
+     * @param rectangle a rectangle
+     * @return True if the shapes touch, false otherwise
+     */
+    [[nodiscard]] std::optional<Side> touches(const Rectangle& rectangle) const;
+
+    /**
      * Check if this rectangle intersects a rectangle
      * @param rectangle a rectangle
      * @return True if the shapes intersect, false otherwise
@@ -240,13 +245,13 @@ public:
     [[nodiscard]] bool intersects(const Rectangle& rectangle) const;
 
     /**
-     * Check if this rectangle intersects with other rectangle when having a displacement and get
-     * the intersection info
+     * Check if this rectangle intersects with other rectangle when having a displacement
+     * and get the intersection info
      * @param rectangle a rectangle
      * @param displacement the displacement of the rectangle
      * @return The intersection info if the rectangles intersect, std::nullopt otherwise
      */
-    [[nodiscard]] std::optional<IntersectionInfo> intersects(const Rectangle& rectangle,
+    [[nodiscard]] std::optional<Vector2> intersects(const Rectangle& rectangle,
                                                              const Vector2& displacement) const;
 
 private:

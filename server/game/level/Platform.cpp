@@ -1,8 +1,6 @@
 #include "Platform.h"
 
-#include "Rectangle.h"
-
-Platform::Platform(): StaticObject(nullptr, {0, 400}, 2, 0, 1000, 80) {}
+Platform::Platform(): StaticObject(nullptr, {0, 600}, 2, 0, 800, 200) {}
 
 void Platform::start() {}
 

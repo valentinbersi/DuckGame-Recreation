@@ -5,7 +5,6 @@
 
 #include "Debug.h"
 #include "DuckData.h"
-#include "Rectangle.h"
 
 #define MOVE_RIGHT "Move Right"
 #define MOVE_LEFT "Move Left"
@@ -13,7 +12,7 @@
 
 #define DEFAULT_LIFE 10
 #define DEFAULT_FLAGS 0
-#define DEFAULT_SPEED 100
+#define DEFAULT_SPEED 500
 
 Player::Player(const DuckID id):
         PhysicsObject(nullptr, {0, 0}, 1, 2, 2, 3, {0, 0}, Gravity::Enabled),
@@ -40,21 +39,21 @@ void Player::stopCrouch() { input.releaseAction(CROUCH); }
 
 void Player::start() {}
 
-void Player::update(const float delta) {
+void Player::update([[maybe_unused]] const float delta) {
     Debug::cout().print("Position: " + std::to_string(globalPosition().x()) + ", " +
                         std::to_string(globalPosition().y()) + "\n");
     Debug::cout().flush();
 
-    setVelocity({0, 0});
+    setVelocity(velocity().x(0));
     flags = 0;
 
     if (input.isActionPressed(CROUCH))
         flags |= DuckData::CROUCHING;
     else if (input.isActionPressed(MOVE_RIGHT)) {
-        setVelocity((velocity() + Vector2(speed, 0)) * delta);
+        setVelocity(velocity() + Vector2(speed, 0));
         flags |= DuckData::MOVING_RIGHT;
     } else if (input.isActionPressed(MOVE_LEFT)) {
-        setVelocity((velocity() + Vector2(-speed, 0)) * delta);
+        setVelocity(velocity() + Vector2(-speed, 0));
         flags |= DuckData::MOVING_LEFT;
     }
 }

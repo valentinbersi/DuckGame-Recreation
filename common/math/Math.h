@@ -1,12 +1,13 @@
 #pragma once
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 
 #include "Types.h"
 
 struct Math {
-    constexpr static u32 EPSILON = 10000;
+    constexpr static u16 EPSILON = 10000;
     constexpr static float INVERSE_EPSILON = 1.f / EPSILON;
 
     /**
@@ -89,7 +90,7 @@ struct Math {
      * @param f The float to convert
      * @return The converted integer
      */
-    constexpr static u32 floatToInteger(float f);
+    constexpr static unsigned int floatToInteger(float f);
 
     /**
      * To sum up, it multiplies the integer by a constant and converts it to a float.
@@ -97,7 +98,7 @@ struct Math {
      * @param i The integer to convert
      * @return The converted float
      */
-    constexpr static float integerToFloat(u32 i);
+    constexpr static float integerToFloat(unsigned int i);
 
     /**
      * Solves a quadratic equation of the form ax^2 + bx + c = 0.

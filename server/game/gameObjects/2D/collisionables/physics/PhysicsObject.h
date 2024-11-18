@@ -9,7 +9,6 @@ public:
 
 private:
     Vector2 _velocity;
-    Vector2 gravityAccumulator;
     Gravity gravity;
 
 protected:

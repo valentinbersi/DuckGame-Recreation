@@ -47,8 +47,8 @@ protected:
      * @param other the other CollisionObject to check collision with
      * @param displacement the displacement to move the CollisionObject
      */
-    std::optional<IntersectionInfo> moveAndCollide(const CollisionObject& other,
-                                                   const Vector2& displacement) const;
+    std::optional<Vector2> moveAndCollide(const CollisionObject& other,
+                                          const Vector2& displacement) const;
 
 public:
     CollisionObject() = delete;
