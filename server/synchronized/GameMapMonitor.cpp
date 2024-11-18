@@ -4,6 +4,8 @@
 #include <random>
 
 #define PLAYER_COUNT_BEGINING 0
+#define MIN_MATCH_ID 1
+#define MAX_MATCH_ID 65535
 
 GameMapMonitor::GameMapMonitor() {}
 
@@ -14,13 +16,13 @@ BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGameIfCreated(
     std::lock_guard lock(mutex);
 
     if (gameMap.find(matchID) != gameMap.end()) {
-        senderQueue->push(std::make_shared<ReplyMessage>(matchID, 0, 0));
+        senderQueue->push(std::make_shared<ReplyMessage>(matchID));
         for(u8 i = PLAYER_COUNT_BEGINING; i < playerCount; i++) {
             gameMap.at(matchID)->addClient(clientId+i, senderQueue);
         }
         return gameMap.at(matchID)->getQueue();
     }
-    senderQueue->push(std::make_shared<ReplyMessage>(0, 0, 0));
+    senderQueue->push(std::make_shared<ReplyMessage>());
     return nullptr;
 }
  
@@ -39,7 +41,7 @@ u16 GameMapMonitor::creatGameSafe() {
     do {
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_int_distribution<uint16_t> dist(1, 65535);
+        std::uniform_int_distribution<uint16_t> dist(MIN_MATCH_ID, MAX_MATCH_ID);
         random_number = dist(gen);
 
     } while (gameMap.contains(random_number));

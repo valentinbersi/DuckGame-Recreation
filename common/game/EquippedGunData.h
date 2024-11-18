@@ -2,7 +2,7 @@
 #include <cstdint>
 #include <string>
 
-#include "GunID.cpp"
+#include "GunID.h"
 #include "Types.h"
 
 using u8 = std::uint8_t;
