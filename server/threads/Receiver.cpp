@@ -2,6 +2,7 @@
 #include "Receiver.h"
 
 #include "MovementCommand.h"
+#include "ExitCommand.h"
 #include "LibError.h"
 #include <syslog.h>
 
@@ -28,15 +29,17 @@ void Receiver::run() noexcept {
             gameQueue->push(std::make_unique<MovementCommand>(clientID-1+gameMessage.player, gameMessage.action));
         }
 
-    } catch (const LibError& err) {
-        //expected 
     } catch (const ClosedQueue& err) {
-        //expected
+        // expected
+    } catch (const LibError& err) {
+        if (gameQueue != nullptr) {
+            gameQueue->push(std::make_unique<ExitCommand>(clientID));
+            gameQueue->push(std::make_unique<ExitCommand>(clientID+1));
+        }
     } catch (...) {
         syslog(LOG_CRIT, ERROR_MSG);
     }
-    _keep_running = false;
-    _is_alive = false;   
+    _keep_running = false; 
 }
 
 void Receiver::stop() {

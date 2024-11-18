@@ -16,20 +16,15 @@ GameLauncher::GameLauncher(int argc, char* argv[], cppstring hostname,
 }
 
 void GameLauncher::exec() {
-    app.exec();
+    try {
+        app.exec();
 
-    if (startGame) {
-        try {
-            qDebug() << "twoPlayerLocal is" << twoPlayersLocal;
+        if (startGame) {
             Game game(communicator, twoPlayersLocal);
             game.init();
-
-            // return 0;
-
-        } catch (std::exception& e) {
-            std::cerr << e.what() << std::endl;
-            // return 1;
         }
+    } catch (const LibError& libError) {
+        syslog(LOG_CRIT, "%s", libError.what());
     }
 }
 

@@ -6,33 +6,18 @@
 #define WIDTH_HEIGHT_FEATHERS 16
 #define WIDTH_HEIGHT_SPRITE 32
 
+#define CHESTPLATE_PATH "../assets/player/chestplate.png"
+#define HELMET_PATH "../assets/player/helmets.png"
+
 #define N_COL_F 5  // Feathers
 #define N_ROW_F 8  // PERO NO LE DARÉ USO A TODAS
 
-Spritesheet::Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer& renderer):
-        renderer(renderer), path1(path1), path2(path2) {
-
-    m_texture_image = new SDL2pp::Texture(renderer, path1);
-    m_texture_feathers = new SDL2pp::Texture(renderer, path2);
-    m_spritesheet_image = IMG_Load(path1);
-    m_spritesheet_feathers = IMG_Load(path2);
-    if (!m_spritesheet_image) {
-        throw std::runtime_error("Failed to load spritesheet image: " + std::string(path1));
-    }
-    if (!m_spritesheet_feathers) {
-        throw std::runtime_error("Failed to load spritesheet feathers: " + std::string(path2));
-    }
-    if (!m_texture_image) {
-        throw std::runtime_error("Failed to create texture from image: " + std::string(path1));
-    }
-    if (!m_texture_feathers) {
-        throw std::runtime_error("Failed to create texture from feathers: " + std::string(path2));
-    }
-}
+Spritesheet::Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer& renderer, TextureManager& textureManager):
+        renderer(renderer), pathPlayer(path1), pathFeather(path2), textureManager(textureManager) {}
 
 Spritesheet::~Spritesheet() {
-    delete m_texture_image;
-    delete m_texture_feathers;
+    //delete m_texture_image;
+    //delete m_texture_feathers;
 }
 
 void Spritesheet::selectSprite(int x, int y, bool feathers) {
@@ -57,7 +42,7 @@ void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool fea
                                      bool isRightFeather*/) {
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
-    SDL_Texture* texture = feathers ? m_texture_feathers->Get() : m_texture_image->Get();
+    SDL_Texture* texture = feathers ? textureManager.getTexture(pathFeather).Get() : textureManager.getTexture(pathPlayer).Get();
 
     if (texture == nullptr) {
         throw std::runtime_error("Texture is null in drawSelectedSprite.");
@@ -66,9 +51,19 @@ void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool fea
     SDL_RenderCopyEx(renderer.Get(), texture, &m_clip, &position, 0.0, nullptr, flipType);
 }
 
-SDL2pp::Texture* Spritesheet::getTexture(bool feathers) {
-    if (feathers) return m_texture_feathers;
-    return m_texture_image;
+void Spritesheet::drawChestplate(SDL2pp::Rect& playerPosition, bool flip) {
+    SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    SDL_RenderCopyEx(renderer.Get(), textureManager.getTexture(CHESTPLATE_PATH).Get(), &m_clip, &playerPosition, 0.0, nullptr, flipType);
+}
+
+void Spritesheet::drawHelmet(SDL2pp::Rect& playerPosition, bool flip) {
+    SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    SDL_RenderCopyEx(renderer.Get(), textureManager.getTexture(HELMET_PATH).Get(), &m_clip, &playerPosition, 0.0, nullptr, flipType);
+}
+
+SDL2pp::Texture& Spritesheet::getTexture(bool feathers) {
+    if (feathers) return textureManager.getTexture(pathFeather);
+    return textureManager.getTexture(pathPlayer);
 }
 
 int Spritesheet::getClipWidth() const { return m_clip.w; }

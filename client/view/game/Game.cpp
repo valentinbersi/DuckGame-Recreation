@@ -31,7 +31,8 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         twoPlayersLocal(twoPlayersLocal), camera(window_width, window_height){}
 
 void Game::init() {
-    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping = createSpritesMapping();
+    TextureManager textureManager(renderer);
+    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping = createSpritesMapping(textureManager);
     SDL sdl(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG);
 
@@ -143,20 +144,20 @@ void Game::showBackground(Texture& backgroundTexture, float currentScale) {
     renderer.Copy(backgroundTexture, NullOpt, dstRect);
 }
 
-std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> Game::createSpritesMapping() {
+std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> Game::createSpritesMapping(TextureManager& textureManager) {
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping;
 
     spritesMapping.emplace(
             DuckID::White,
-            std::make_unique<SpriteManager>(whiteSheet, whiteFeathers, renderer /*, window_width, window_height*/));
+            std::make_unique<SpriteManager>(whiteSheet, whiteFeathers, renderer, textureManager /*, window_width, window_height*/));
     spritesMapping.emplace(
             DuckID::Orange,
-            std::make_unique<SpriteManager>(orangeSheet, orangeFeathers, renderer /*, window_width, window_height*/));
+            std::make_unique<SpriteManager>(orangeSheet, orangeFeathers, renderer, textureManager /*, window_width, window_height*/));
     spritesMapping.emplace(
             DuckID::Yellow,
-            std::make_unique<SpriteManager>(yellowSheet, yellowFeathers, renderer /*, window_width, window_height*/));
+            std::make_unique<SpriteManager>(yellowSheet, yellowFeathers, renderer, textureManager /*, window_width, window_height*/));
     spritesMapping.emplace(DuckID::Grey, std::make_unique<SpriteManager>(greySheet, greyFeathers,
-                                                       renderer /*, window_width, window_height*/));
+                                                       renderer, textureManager /*, window_width, window_height*/));
 
     return spritesMapping;
 }
