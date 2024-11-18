@@ -29,4 +29,7 @@ void configurationPage::handleNewGame() {
     emit newGameClicked();
 }
 
-configurationPage::~configurationPage() { delete ui; }
+configurationPage::~configurationPage() {
+    delete CantidadPlayersGroup;
+    delete ui;
+}
