@@ -27,7 +27,7 @@ objects:
   - type: DUCK
     x: 0
     y: 0
-  - type: GUN
+  - type: ARMAMENT
     x: 11
     y: 9
   - type: BOX
@@ -39,7 +39,7 @@ objects:
   - type: DUCK
     x: 18
     y: 12
-  - type: GUN
+  - type: ARMAMENT
     x: 17
     y: 39
   - type: BOX

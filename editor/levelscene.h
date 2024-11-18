@@ -18,7 +18,7 @@ private:
     ObjectType objectTypeToAdd;
 
 public:
-    LevelScene(QObject* parent, int width, int height, std::vector<Object>& objects);
+    LevelScene(QObject* parent, std::vector<Object>& objects);
     ~LevelScene() override = default;
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
     static Object createObject(ObjectType type);
@@ -29,6 +29,8 @@ public:
     void toggleAddingObject(ObjectType type);
     void deleteObjectAt(const QPointF& position);
     void clearAll();
+    void loadMap(const std::vector<Object>& newObjects, int mapWidth, int mapHeight);
+    // void zoom(double factor);
 
 signals:
     void addingObjectChanged(ObjectType type, bool isAdding);

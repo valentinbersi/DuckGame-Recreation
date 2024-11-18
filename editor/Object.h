@@ -5,6 +5,7 @@
 #include <QString>
 #include <utility>
 #include <QMetaType>
+#include "ObjectConstants.h"
 
 #include <QDebug>
 
@@ -22,16 +23,31 @@ struct Object {
     QPointF centerPos;
     QSize size;
 
-    Object(ObjectType type, int height, int width, QString icon)
-            : type(type),
-            icon(std::move(icon)),
-            size(width, height){}
-
-//    void setPos(int x, int y) {
-//        pos_x = x;
-//        pos_y = y;
-//        qDebug() << "la posicion del objecto de tipo" << type << "es (" << pos_x << "," << pos_y << ")";
-//    }
+    Object(ObjectType type) : type(type) {
+        switch (type) {
+            case PLATFORM:
+                icon = PLATFORM_ICON;
+                size = QSize(PLATFORM_WIDTH, PLATFORM_HEIGHT);
+                break;
+            case DUCK:
+                icon = DUCK_ICON;
+                size = QSize(DUCK_WIDTH, DUCK_HEIGHT);
+                break;
+            case ARMAMENT:
+                icon = ARMAMENT_ICON;
+                size = QSize(ARMAMENT_WIDTH, ARMAMENT_HEIGHT);
+                break;
+            case BOX:
+                icon = BOX_ICON;
+                size = QSize(BOX_WIDTH, BOX_HEIGHT);
+                break;
+            default:
+                qWarning() << "Tipo de objeto desconocido";
+                icon = "";
+                size = QSize(0, 0);
+                break;
+        }
+    }
 
     void setCenterPosition(QPointF center) {
         centerPos = center;
