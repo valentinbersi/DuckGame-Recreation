@@ -66,7 +66,7 @@ void Game::init() {
 }
 
 Texture Game::startBackground() {
-    SDL_Surface* rawBackgroundSurface = IMG_Load("../assets/background/background1.png");
+    SDL_Surface* rawBackgroundSurface = IMG_Load("../assets/background/forest-night.png");
     Surface backgroundSurface(rawBackgroundSurface);
     Texture backgroundTexture(renderer, backgroundSurface);
     return backgroundTexture;
