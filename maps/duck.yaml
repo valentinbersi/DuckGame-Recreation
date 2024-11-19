@@ -1,0 +1,8 @@
+map_name: duck
+background: background_image.png
+map_width: 0
+map_height: 17
+objects:
+  - type: DUCK
+    x: 37
+    y: 18

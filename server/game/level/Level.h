@@ -1,7 +1,6 @@
 #pragma once
 
 #include <fstream>
-#include <list>
 
 #include "Types.h"
 #include "Vector2.h"
@@ -13,5 +12,13 @@ struct Level {
     std::vector<Vector2> gunSpawnPoints;
     u64 width, height;
 
-    static Level load(const std::string& name);
+    static std::vector<Level> loadLevels();
+
+private:
+    /**
+     * Load a level from a file.
+     * @param fileName The name of the file to load.
+     * @return The loaded level.
+     */
+    static Level load(const std::string& path);
 };

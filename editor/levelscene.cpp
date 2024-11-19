@@ -9,12 +9,12 @@
 #include <cmath>
 
 
-#define PIXEL_SIZE 15
-#define DEFAULT_WIDTH 50
-#define DEFAULT_HEIGHT 50
+#define PIXEL_SIZE 10
+#define DEFAULT_WIDTH 200
+#define DEFAULT_HEIGHT 200
 
 LevelScene::LevelScene(QObject *parent, std::vector<Object>& objects)
-        : QGraphicsScene(parent), selectedItem(nullptr), objects(objects), addingObject(false), objectTypeToAdd(UNKNOWN) {
+        : QGraphicsScene(parent), selectedItem(nullptr), objects(objects), ducksCount(0), objectTypeToAdd(UNKNOWN) {
     gridWidth = DEFAULT_WIDTH * PIXEL_SIZE;
     gridHeight = DEFAULT_HEIGHT * PIXEL_SIZE;
     setSceneRect(0, 0, gridWidth, gridHeight);
@@ -30,6 +30,8 @@ void LevelScene::deleteObjectAt(const QPointF& position) {
             if (objectData.isValid()) {
                 Object* object = objectData.value<Object*>();
                 if (object) {
+                    if (object->type == DUCK) ducksCount--;
+
                     auto it = std::find_if(objects.begin(), objects.end(), [object](const Object& obj) {
                         return object == &obj;
                     });
@@ -46,7 +48,11 @@ void LevelScene::deleteObjectAt(const QPointF& position) {
     }
 }
 
+bool LevelScene::enoughDucks() const { return ducksCount >= 1;}
+
 void LevelScene::addObjectInMap(Object object) {
+    if (object.type == DUCK && ducksCount >= 4)
+        return;
     QPixmap icon(object.icon);
     QPixmap iconScaled =
             icon.scaled(object.size.width() * PIXEL_SIZE, object.size.height() * PIXEL_SIZE,
@@ -63,9 +69,10 @@ void LevelScene::addObjectInMap(Object object) {
     item->setPos(x, y);
 
     addItem(item);
-    item->setData(0, QVariant::fromValue(&objects.back()));
+    item->setData(0, QVariant::fromValue(&object));
+    if (object.type == DUCK)
+        ducksCount++;
 
-    // esto capaz podria manejarlo en otro lado ¿?
     QRectF objectRect(item->scenePos(),
                       QSizeF(object.size.width() * PIXEL_SIZE,
                              object.size.height() * PIXEL_SIZE));
@@ -87,12 +94,9 @@ void LevelScene::newMap() {
 }
 
 void LevelScene::loadMap(int mapWidth, int mapHeight) {
-    qDebug() << "width loadMap: " << mapWidth << ", height loadMap: " << mapHeight;
     setSceneRect(0, 0, mapWidth * PIXEL_SIZE, mapHeight * PIXEL_SIZE);
-    qDebug() << "width SceneRect: " << sceneRect().width() << ", height lSceneRect: " << sceneRect().height();
     gridWidth = mapWidth * PIXEL_SIZE;
     gridHeight = mapHeight * PIXEL_SIZE;
-    qDebug() << "gridWidth: " << gridWidth << ", gridHeight: " << gridHeight;
     for (const auto& object : objects) {
         addObjectInMap(object);
     }
