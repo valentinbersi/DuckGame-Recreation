@@ -45,6 +45,7 @@ private:
     bool movingRight;
     bool movingLeft;
     bool inAir;
+    bool crouching;
     bool flapping;
     bool flip;
     bool hasHelmet;

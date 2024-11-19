@@ -43,6 +43,7 @@ SpriteManager::SpriteManager(
         movingRight(false),
         movingLeft(false),
         inAir(false),
+        crouching(false),
         flapping(false),
         flip(false),
         hasHelmet(true),
@@ -62,9 +63,12 @@ void SpriteManager::updatePosition(float new_x, float new_y) {
 void SpriteManager::update(const DuckState& state) {
     if (state.movingLeft) flip = true;
     else if (state.movingRight) flip = false;
+    setFlags(state);
 
-    if (state.beingDamaged || state.playingDead ||
-        state.crouching) {  // no animation; only one sprite for each 'event'
+    if (state.inAir) draw(frame, SPRITESHEET_JUMP_ROW);
+
+    else if (state.beingDamaged || state.playingDead ||
+        state.crouching) {
         if (state.beingDamaged) {
             draw(SPRITESHEET_DEAD_COL, SPRITESHEET_DEAD_ROW);
             // do something...? how the game is gonna change for this duck and the others?
@@ -74,16 +78,8 @@ void SpriteManager::update(const DuckState& state) {
         } else {
             draw(SPRITESHEET_CROUCH_COL, SPRITESHEET_CROUCH_ROW);
         }
-        return;
-    }
 
-    setFlags(state);  // sets flags for animations only
-    if (state.inAir) {
-        draw(frame, SPRITESHEET_JUMP_ROW);
-
-    } else {
-        draw(frame, SPRITESHEET_RIGHT_LEFT_ROW);
-    }
+        } else draw(frame, SPRITESHEET_RIGHT_LEFT_ROW);
 }
 
 void SpriteManager::updateEquipment(bool helmet, bool chestplate/*, GunID& gun*/) {
@@ -107,6 +103,7 @@ void SpriteManager::setFlags(const DuckState& state) {
     negateFlag(state.inAir, inAir);
     negateFlag(state.movingRight, movingRight);
     negateFlag(state.movingLeft, movingLeft);
+    negateFlag(state.crouching, crouching);
 
     if (flapping != state.flapping) {
         flapping = !flapping;
@@ -147,6 +144,7 @@ void SpriteManager::drawFeathers(int col, int row, bool hasWeapon) {
 }
 
 void SpriteManager::drawChestplate(int col, int row) {
+    if (crouching) col = 1;
     spritesheet->selectSprite(col, row, NO_FEATHER);
     SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, CHESTPLATE, NO_HELMET, NO_WEAPON);
     spritesheet->drawChestplate(position, flip);
@@ -200,14 +198,15 @@ void SpriteManager::adjustForFeathers(SDL2pp::Rect& position, bool isRightFeathe
     } else {
         position.x += (spriteWidth / 2 + OFFSET_LEFT) * scale / DEFAULT_SCALE;
     }
-    position.y += (spriteHeight * 2 + OFFSET_Y) * scale / DEFAULT_SCALE;
+    if (crouching) position.y += 48 * scale / DEFAULT_SCALE;
+    else position.y += (spriteHeight * 2 + OFFSET_Y) * scale / DEFAULT_SCALE;
 }
 
 void SpriteManager::adjustForHelmet(SDL2pp::Rect& position) {
     if (flip) position.x -= /*frame*/ 2 * scale / DEFAULT_SCALE;
     else position.x += /*frame*/ 2 * scale / DEFAULT_SCALE;
-
-    position.y -= 14 * scale / DEFAULT_SCALE;
+    if (crouching) position.y += 3 * scale / DEFAULT_SCALE;
+    else position.y -= 14 * scale / DEFAULT_SCALE;
 }
 
 void SpriteManager::adjustForWeapon(SDL2pp::Rect& position) {
@@ -217,7 +216,8 @@ void SpriteManager::adjustForWeapon(SDL2pp::Rect& position) {
     if (flip) position.x -= (spriteWidth / 2) + 2 * scale / DEFAULT_SCALE;
     else position.x += (spriteHeight / 2) + 2 * scale / DEFAULT_SCALE;
 
-    position.y += 8 * scale / DEFAULT_SCALE;
+    if (crouching) position.y += 20 * scale / DEFAULT_SCALE;
+    else position.y += 8 * scale / DEFAULT_SCALE;
 }
 
 Spritesheet& SpriteManager::getSpritesheet() {return *spritesheet;}

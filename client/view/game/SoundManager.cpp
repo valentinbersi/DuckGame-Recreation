@@ -1,7 +1,7 @@
 #include "SoundManager.h"
 
 #define MUSIC_PATH "../assets/sounds/ost.ogg"
-#define DEFAULT_VOLUME 60
+#define DEFAULT_VOLUME 40
 
 SoundManager::SoundManager() {
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 512) < 0) std::cerr << "Error: " << Mix_GetError() << std::endl;
@@ -28,7 +28,7 @@ void SoundManager::playSound(GunID id) {
     if (it == soundMap.end()) loadSound(id);
     it = soundMap.find(id);
 
-    Mix_VolumeChunk(it->second, 40);
+    Mix_VolumeChunk(it->second, 20);
     Mix_PlayChannel(-1, it->second, 0);
 }
 
