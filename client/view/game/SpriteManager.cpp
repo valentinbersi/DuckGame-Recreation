@@ -103,36 +103,6 @@ void SpriteManager::setFlags(bool air, bool flap, bool right, bool left) {
     }
 }
 
-/*void SpriteManager::draw(int col, int row) {
-    // Sprite
-    spritesheet->selectSprite(col, row, NO_FEATHER);
-    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE);
-    spritesheet->drawSelectedSprite(position, flip, NO_FEATHER, NO_RIGHT_FEATHER);
-
-    if (not flip) {
-        spritesheet->selectSprite(col, row, FEATHER);
-        position = getPosition(FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE);
-        spritesheet->drawSelectedSprite(position, flip, FEATHER, NO_RIGHT_FEATHER);
-
-    } else if (flip || in_air || flapping ) {
-        spritesheet->selectSprite(col, row, FEATHER);
-        position = getPosition(FEATHER, RIGHT_FEATHER, NO_CHESTPLATE);
-        spritesheet->drawSelectedSprite(position, flip, FEATHER, RIGHT_FEATHER);
-    }
-
-    if (hasChestplate) {
-        spritesheet->selectSprite(col, row, NO_FEATHER);
-        position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, CHESTPLATE);
-        spritesheet->drawChestplate(position, flip);
-    }
-
-    if (hasHelmet) {
-        spritesheet->selectSprite(2, 0, NO_FEATHER);
-        position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE);
-        spritesheet->drawHelmet(position, flip);
-    }
-}*/
-
 void SpriteManager::draw(int col, int row) {
     drawMainSprite(col, row);
     drawFeathers(col, row);
