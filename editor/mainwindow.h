@@ -26,10 +26,12 @@ private:
     std::string background;
     std::vector<Object> objects;
     LevelScene* scene;
-    MapManager mapExporter; // esto capaz no es necesario!
+    std::map<QAction*, ObjectType> actionTypeMap;
+
     void resizeEvent(QResizeEvent* event) override;
     void wheelEvent(QWheelEvent* event) override;
     void on_actionNewMap_triggered();
     void on_actionEditMap_triggered();
+    void setActionButtons();
 };
 #endif  // MAINWINDOW_H
