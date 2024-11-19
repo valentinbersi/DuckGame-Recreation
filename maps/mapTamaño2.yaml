@@ -1,0 +1,110 @@
+map_name: mapTamaño2
+background: background_image.png
+map_width: 50
+map_height: 50
+objects:
+  - type: PLATFORM
+    x: 22
+    y: 12
+  - type: PLATFORM
+    x: 20
+    y: 12
+  - type: PLATFORM
+    x: 18
+    y: 12
+  - type: PLATFORM
+    x: 118
+    y: 3
+  - type: PLATFORM
+    x: 105
+    y: 35
+  - type: PLATFORM
+    x: 114
+    y: 64
+  - type: PLATFORM
+    x: 119
+    y: 99
+  - type: DUCK
+    x: 79
+    y: 13
+  - type: DUCK
+    x: 57
+    y: 30
+  - type: DUCK
+    x: 50
+    y: 9
+  - type: DUCK
+    x: 32
+    y: 27
+  - type: ARMAMENT
+    x: 99
+    y: 25
+  - type: ARMAMENT
+    x: 73
+    y: 18
+  - type: ARMAMENT
+    x: 57
+    y: 11
+  - type: ARMAMENT
+    x: 42
+    y: 23
+  - type: ARMAMENT
+    x: 18
+    y: 14
+  - type: BOX
+    x: 86
+    y: 32
+  - type: BOX
+    x: 91
+    y: 18
+  - type: BOX
+    x: 72
+    y: 24
+  - type: BOX
+    x: 63
+    y: 32
+  - type: BOX
+    x: 61
+    y: 41
+  - type: BOX
+    x: 41
+    y: 41
+  - type: BOX
+    x: 32
+    y: 35
+  - type: BOX
+    x: 26
+    y: 35
+  - type: BOX
+    x: 27
+    y: 40
+  - type: BOX
+    x: 30
+    y: 44
+  - type: BOX
+    x: 41
+    y: 48
+  - type: BOX
+    x: 64
+    y: 49
+  - type: BOX
+    x: 81
+    y: 47
+  - type: BOX
+    x: 84
+    y: 44
+  - type: BOX
+    x: 73
+    y: 39
+  - type: BOX
+    x: 68
+    y: 40
+  - type: BOX
+    x: 70
+    y: 46
+  - type: BOX
+    x: 74
+    y: 49
+  - type: BOX
+    x: 85
+    y: 52
