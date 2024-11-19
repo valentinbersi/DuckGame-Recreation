@@ -4,7 +4,6 @@
 #include <string>
 
 #include "GameStatus.h"
-#include "Platform.h"
 
 /**
  * Macro for easier event handling
@@ -47,8 +46,8 @@ GameController::GameController(): GameObject(nullptr) {
     connect(eventName(Events::TREE_EXITED),
             eventHandler(&GameController::onTreeExited, GameObject*));
 
-    addChild("Platform", new Platform({0, 600}, 1000, 200));  // This simulated loading a level
-    // addChild("Platform2", new Platform({400, 400}, 50, 200));  // This simulated loading a level
+    // addChild("Platform", new Platform({0, 600}, 1000, 200));  // This simulated loading a level
+    //  addChild("Platform2", new Platform({400, 400}, 50, 200));  // This simulated loading a level
 }
 
 void GameController::start() {}
