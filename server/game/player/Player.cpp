@@ -30,11 +30,16 @@ Player::Player(const DuckID id):
         id(id),
         life(DEFAULT_LIFE),
         flags(DEFAULT_FLAGS),
-        speed(DEFAULT_SPEED) {
+        speed(DEFAULT_SPEED)
+        /* canKeepJumping(false)*/ {
     input.addAction(MOVE_RIGHT);
     input.addAction(MOVE_LEFT);
     input.addAction(CROUCH);
     input.addAction(JUMP);
+//     auto Timer = new GameTimer(1.0f);
+//     Timer->connect("Timeout", eventHandler([](Player* player) {
+//         player->canKeepJumping = false;
+//     }));
 }
 
 void Player::moveRight() { input.pressAction(MOVE_RIGHT); }
@@ -60,6 +65,9 @@ void Player::update([[maybe_unused]] const float delta) {
                         std::to_string(globalPosition().y()) + "\n");
     Debug::cout().flush();
 
+    if (not input.isActionPressed(JUMP) and _velocity.y() < 0){
+        _velocity = _velocity.y(0);
+    }
     _velocity = _velocity.x(0);
     flags = 0;
 
@@ -71,8 +79,8 @@ void Player::update([[maybe_unused]] const float delta) {
     } else if (input.isActionPressed(MOVE_LEFT)) {
         _velocity += Vector2(-speed, 0);
         flags |= DuckData::MOVING_LEFT;
-    } else if (input.isActionPressed(JUMP)) {
-        _velocity += Vector2(0, -100);
+    } else if (input.isActionPressed(JUMP) && _onGround) {
+        _velocity += Vector2(0, -800);
     }
     if(!_onGround){
         flags |= DuckData::IN_AIR;
