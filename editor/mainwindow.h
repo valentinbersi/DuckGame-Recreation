@@ -2,9 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
 #include "MapManager.h"
 #include "levelscene.h"
