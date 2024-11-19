@@ -33,7 +33,7 @@ void PhysicsObject::processCollisions(const float delta) {
         if (const std::shared_ptr<CollisionObject> objectPtr = objectsToCollide[i].lock())
             if (const std::optional<IntersectionInfo> collisionInfo =
                         moveAndCollide(*objectPtr, _velocity, delta))
-                collisionOrder.emplace_back(i, collisionInfo->tHitNear);
+                collisionOrder.emplace_back(i, collisionInfo->contactTime);
 
     std::ranges::sort(collisionOrder,
                       [](const std::pair<int, float>& a, const std::pair<int, float>& b) {
@@ -49,7 +49,7 @@ void PhysicsObject::processCollisions(const float delta) {
                 }
                 _velocity += collisionInfo->contactNormal *
                              Vector2(std::abs(_velocity.x()), std::abs(_velocity.y())) *
-                             (1 - collisionInfo->tHitNear);
+                             (1 - collisionInfo->contactTime);
             }
         }
     }
