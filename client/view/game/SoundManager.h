@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <string>
 #include <iostream>
-#include "GunID.h"
+#include "DuckData.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>

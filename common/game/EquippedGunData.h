@@ -16,7 +16,8 @@ enum class GunID : u8 {
     CowboyPistol = 0x6,
     Magnum = 0x7,
     Shotgun = 0x8,
-    Sniper = 0x9
+    Sniper = 0x9,
+    NONE = 0xA
 };
 
 /**

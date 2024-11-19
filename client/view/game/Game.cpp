@@ -112,6 +112,7 @@ void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr <SpriteManag
     for (auto& duck: ducks) {
         DuckID duckID = duck->duckID;
         Vector2 coords = duck->position;
+        spritesMapping.at(duckID)->updateEquipment(duck->extraData[DuckData::HELMET], duck->extraData[DuckData::ARMOR], duck->gun->gunID);
         spritesMapping.at(duckID)->updatePosition(coords.x() - camera.getViewRect().x, coords.y() - camera.getViewRect().y);
         spritesMapping.at(duckID)->setScale(currentScale);
         spritesMapping.at(duckID)->update(duck->extraData[DuckData::PLAYING_DEAD_INDEX],
@@ -120,7 +121,9 @@ void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr <SpriteManag
                                          duck->extraData[DuckData::FLAPPING_INDEX],
                                          duck->extraData[DuckData::BEING_DAMAGED_INDEX],
                                          duck->extraData[DuckData::MOVING_RIGHT_INDEX],
-                                         duck->extraData[DuckData::MOVING_LEFT_INDEX]);
+                                         duck->extraData[DuckData::MOVING_LEFT_INDEX] /*,
+                                         duck->extraData[DuckData::ARMOR],
+                                         duck->extraData[DuckData::HELMET]*/);
     }
 }
 
