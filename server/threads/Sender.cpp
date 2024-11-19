@@ -1,6 +1,8 @@
 
 #include "Sender.h"
+
 #include <syslog.h>
+
 #include "LibError.h"
 #define ERROR_MSG "UNOWN ERROR DURING RUNTIME."
 #define FORMAT "%s"
@@ -16,9 +18,9 @@ void Sender::run() noexcept {
         }
 
     } catch (const ClosedQueue& err) {
-        //expected 
+        // expected
     } catch (const LibError& err) {
-        //expected
+        // expected
     } catch (...) {
         syslog(LOG_CRIT, ERROR_MSG);
     }
@@ -31,4 +33,4 @@ void Sender::stop() {
     _is_alive = false;
 }
 
-Sender::~Sender() {};
+Sender::~Sender(){};

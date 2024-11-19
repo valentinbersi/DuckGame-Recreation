@@ -5,19 +5,16 @@
 #include "gtest/gtest.h"
 
 #include "ActiveSocket.h"
-#include "ListenerSocket.h"
-
-#include "GameStatus.h"
-#include "ReplyMessage.h"
-#include "GameMessage.h"
-#include "LobbyMessage.h"
-
-#include "DuckData.h"
-#include "Math.h"
-#include "MessageType.h"
-
 #include "ClientRecvProtocol.h"
 #include "ClientSendProtocol.h"
+#include "DuckData.h"
+#include "GameMessage.h"
+#include "GameStatus.h"
+#include "ListenerSocket.h"
+#include "LobbyMessage.h"
+#include "Math.h"
+#include "MessageType.h"
+#include "ReplyMessage.h"
 #include "ServerRecvProtocol.h"
 #include "ServerSendProtocol.h"
 
@@ -33,7 +30,7 @@ std::unique_ptr<GameObjectData> creatDuckData(float x, float y, float rot, DuckI
                                       std::make_unique<EquippedGunData>(gunID), actions);
 }
 
-TEST(ProtocolTest,  LobbyToServerSend) {
+TEST(ProtocolTest, LobbyToServerSend) {
     ListenerSocket skt("8080");
     LobbyMessage lobbyMsg(LobbyRequest::NEWMATCH, 2, "Player1", "Player2", 0);
 
@@ -46,7 +43,7 @@ TEST(ProtocolTest,  LobbyToServerSend) {
     ActiveSocket peer = skt.accept();
     ServerRecvProtocol recvProt(peer);
     LobbyMessage recvMsg = recvProt.receiveLobbyMessage();
-    
+
     ASSERT_TRUE(lobbyMsg == recvMsg);
 
     client.join();
@@ -64,7 +61,7 @@ TEST(ProtocolTest, LobbyToServerMultipleSends) {
     std::thread client([list]() {
         ActiveSocket sktClient("localhost", "8080");
         ClientSendProtocol sendProt(sktClient);
-        for (const auto& msg : list) {
+        for (const auto& msg: list) {
             sendProt.sendMessage(std::make_unique<LobbyMessage>(msg));
         }
     });
@@ -72,7 +69,7 @@ TEST(ProtocolTest, LobbyToServerMultipleSends) {
     ActiveSocket peer = skt.accept();
     ServerRecvProtocol recvProt(peer);
 
-    for (const auto& msg : list) {
+    for (const auto& msg: list) {
         LobbyMessage recvMsg = recvProt.receiveLobbyMessage();
         ASSERT_TRUE(msg == recvMsg);
     }
@@ -120,7 +117,6 @@ TEST(ProtocolTest, ServerToLobbySendReply) {
         ClientRecvProtocol recvProt(sktClient);
         ReplyMessage recvMsg = recvProt.recvReplyMessage();
         ASSERT_TRUE(recvMsg == replyMsg);
-        
     });
 
     ActiveSocket peer = skt.accept();

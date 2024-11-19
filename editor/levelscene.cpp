@@ -13,8 +13,12 @@
 #define DEFAULT_WIDTH 200
 #define DEFAULT_HEIGHT 200
 
-LevelScene::LevelScene(QObject *parent, std::vector<Object>& objects)
-        : QGraphicsScene(parent), selectedItem(nullptr), objects(objects), ducksCount(0), objectTypeToAdd(UNKNOWN) {
+LevelScene::LevelScene(QObject* parent, std::vector<Object>& objects):
+        QGraphicsScene(parent),
+        selectedItem(nullptr),
+        objects(objects),
+        ducksCount(0),
+        objectTypeToAdd(UNKNOWN) {
     gridWidth = DEFAULT_WIDTH * PIXEL_SIZE;
     gridHeight = DEFAULT_HEIGHT * PIXEL_SIZE;
     setSceneRect(0, 0, gridWidth, gridHeight);
@@ -23,18 +27,18 @@ LevelScene::LevelScene(QObject *parent, std::vector<Object>& objects)
 void LevelScene::deleteObjectAt(const QPointF& position) {
     QList<QGraphicsItem*> itemsAtPosition = items(position);
 
-    for (auto* item : itemsAtPosition) {
+    for (auto* item: itemsAtPosition) {
         auto* pixmapItem = dynamic_cast<QGraphicsPixmapItem*>(item);
         if (pixmapItem) {
             QVariant objectData = pixmapItem->data(0);
             if (objectData.isValid()) {
                 Object* object = objectData.value<Object*>();
                 if (object) {
-                    if (object->type == DUCK) ducksCount--;
+                    if (object->type == DUCK)
+                        ducksCount--;
 
-                    auto it = std::find_if(objects.begin(), objects.end(), [object](const Object& obj) {
-                        return object == &obj;
-                    });
+                    auto it = std::find_if(objects.begin(), objects.end(),
+                                           [object](const Object& obj) { return object == &obj; });
                     if (it != objects.end()) {
                         objects.erase(it);
                     }
@@ -48,7 +52,7 @@ void LevelScene::deleteObjectAt(const QPointF& position) {
     }
 }
 
-bool LevelScene::enoughDucks() const { return ducksCount >= 1;}
+bool LevelScene::enoughDucks() const { return ducksCount >= 1; }
 
 void LevelScene::addObjectInMap(Object object) {
     if (object.type == DUCK && ducksCount >= 4)
@@ -74,8 +78,7 @@ void LevelScene::addObjectInMap(Object object) {
         ducksCount++;
 
     QRectF objectRect(item->scenePos(),
-                      QSizeF(object.size.width() * PIXEL_SIZE,
-                             object.size.height() * PIXEL_SIZE));
+                      QSizeF(object.size.width() * PIXEL_SIZE, object.size.height() * PIXEL_SIZE));
     QRectF currentRect = sceneRect();
 
     if (!currentRect.contains(objectRect)) {
@@ -97,7 +100,7 @@ void LevelScene::loadMap(int mapWidth, int mapHeight) {
     setSceneRect(0, 0, mapWidth * PIXEL_SIZE, mapHeight * PIXEL_SIZE);
     gridWidth = mapWidth * PIXEL_SIZE;
     gridHeight = mapHeight * PIXEL_SIZE;
-    for (const auto& object : objects) {
+    for (const auto& object: objects) {
         addObjectInMap(object);
     }
 }
@@ -109,7 +112,7 @@ void LevelScene::addNewObject(ObjectType type, QPointF pos) {
     addObjectInMap(newObject);
     objects.push_back(newObject);
 
-    auto *itemAction = qobject_cast<QAction*>(sender());
+    auto* itemAction = qobject_cast<QAction*>(sender());
     if (itemAction) {
         itemAction->setChecked(false);
     }
@@ -137,7 +140,9 @@ void LevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 void LevelScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
     if (selectedItem) {
-        selectedItem->setPos(event->scenePos() - QPointF(selectedItem->boundingRect().width() / 2, selectedItem->boundingRect().height() / 2));
+        selectedItem->setPos(event->scenePos() -
+                             QPointF(selectedItem->boundingRect().width() / 2,
+                                     selectedItem->boundingRect().height() / 2));
     }
     QGraphicsScene::mouseMoveEvent(event);
 }
@@ -151,9 +156,8 @@ void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
         auto* obj = selectedItem->data(0).value<Object*>();
         if (obj) {
-            QPointF centerPos(
-                    (x + (obj->size.width() * PIXEL_SIZE) / 2) / PIXEL_SIZE,
-                    (y + (obj->size.height() * PIXEL_SIZE) / 2) / PIXEL_SIZE);
+            QPointF centerPos((x + (obj->size.width() * PIXEL_SIZE) / 2) / PIXEL_SIZE,
+                              (y + (obj->size.height() * PIXEL_SIZE) / 2) / PIXEL_SIZE);
             obj->setCenterPosition(centerPos);
         }
 

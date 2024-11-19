@@ -1,6 +1,6 @@
 #include "TextureManager.h"
 
-TextureManager::TextureManager(SDL2pp::Renderer& renderer) : renderer(renderer) {}
+TextureManager::TextureManager(SDL2pp::Renderer& renderer): renderer(renderer) {}
 
 SDL2pp::Texture& TextureManager::getTexture(const std::string& path) {
     auto it = textures.find(path);

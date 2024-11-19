@@ -1,20 +1,20 @@
 #pragma once
 
+#include <QDebug>
 #include <QGraphicsPixmapItem>
+#include <QMetaType>
 #include <QPixmap>
 #include <QString>
 #include <utility>
-#include <QMetaType>
-#include "ObjectConstants.h"
 
-#include <QDebug>
+#include "ObjectConstants.h"
 
 enum ObjectType {
     PLATFORM,
     DUCK,
     ARMAMENT,
     BOX,
-    UNKNOWN // objeto invalido
+    UNKNOWN  // objeto invalido
 };
 
 struct Object {
@@ -23,7 +23,7 @@ struct Object {
     QPointF centerPos;
     QSize size;
 
-    Object(ObjectType type) : type(type) {
+    Object(ObjectType type): type(type) {
         switch (type) {
             case PLATFORM:
                 icon = PLATFORM_ICON;
@@ -49,17 +49,11 @@ struct Object {
         }
     }
 
-    void setCenterPosition(QPointF center) {
-        centerPos = center;
-    }
+    void setCenterPosition(QPointF center) { centerPos = center; }
 
     QRectF getBoundingPos() {
-        return QRectF {
-        centerPos.x() - size.width()/2,
-        centerPos.y() - size.height()/2,
-        static_cast<qreal>(size.width()),
-        static_cast<qreal>(size.height())
-        };
+        return QRectF{centerPos.x() - size.width() / 2, centerPos.y() - size.height() / 2,
+                      static_cast<qreal>(size.width()), static_cast<qreal>(size.height())};
     }
 };
 

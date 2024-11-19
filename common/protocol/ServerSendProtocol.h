@@ -7,7 +7,7 @@
 #include "SendProtocol.h"
 #include "Types.h"
 
-//Forward declaration
+// Forward declaration
 struct ServerMessage;
 
 /**

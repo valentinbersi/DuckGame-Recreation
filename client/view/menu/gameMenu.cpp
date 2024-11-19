@@ -9,8 +9,8 @@
 
 #define BACKGROUND_MENU ":/backgrounds/duck-game.png"
 
-GameMenu::GameMenu(QWidget* parent, Communicator& communicator, bool& twoPlayersLocal)
-        : QMainWindow(parent),
+GameMenu::GameMenu(QWidget* parent, Communicator& communicator, bool& twoPlayersLocal):
+        QMainWindow(parent),
         ui(new Ui::GameMenu),
         communicator(communicator),
         twoPlayersLocal(twoPlayersLocal),
@@ -49,13 +49,9 @@ void GameMenu::setPagesAndConnections() {
     connect(join_game, &matchSetup::backClicked, this, [this]() { changePage(config); });
 }
 
-GameMenu::~GameMenu() {
-    delete ui;
-}
+GameMenu::~GameMenu() { delete ui; }
 
-void GameMenu::changePage(QWidget* page) {
-    ui->stackedWidget->setCurrentWidget(page);
-}
+void GameMenu::changePage(QWidget* page) { ui->stackedWidget->setCurrentWidget(page); }
 
 void GameMenu::showHostWaitingPage() {
     auto* host_waiting_page = new WaitingPage(this, true, communicator, gameInfo);
@@ -78,5 +74,5 @@ void GameMenu::startGameHandler() {
         twoPlayersLocal = true;
     emit startGame();
     close();
-    QCoreApplication::exit(0); // esto es necesario??
+    QCoreApplication::exit(0);  // esto es necesario??
 }

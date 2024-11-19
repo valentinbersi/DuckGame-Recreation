@@ -5,13 +5,10 @@
 #include <SDL2pp/SDL2pp.hh>
 
 // class that renders all... besides ducks
-//class Renderer {
+// class Renderer {
 
-//public:
-    //Renderer();
-
-
-
+// public:
+// Renderer();
 
 
 //};

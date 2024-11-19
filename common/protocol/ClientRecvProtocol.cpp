@@ -30,7 +30,7 @@ std::unique_ptr<GameObjectData> ClientRecvProtocol::recvData() {
 }
 
 GameStatus ClientRecvProtocol::recvGameStatus() {
-    recvByte(); //type
+    recvByte();  // type
     u16 size = recvShort();
     GameStatus status;
     while (size) {
@@ -41,9 +41,9 @@ GameStatus ClientRecvProtocol::recvGameStatus() {
 }
 
 ReplyMessage ClientRecvProtocol::recvReplyMessage() {
-    recvByte(); //type
+    recvByte();  // type
     u16 matchID = recvShort();
     u8 startGame = recvByte();
-    u8 connectedPlayers = recvByte();  
+    u8 connectedPlayers = recvByte();
     return ReplyMessage(matchID, startGame, connectedPlayers);
 }

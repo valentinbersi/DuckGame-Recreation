@@ -1,9 +1,17 @@
 #include "EventHandler.h"
 
-EventHandler::EventHandler(SDL2pp::Window& window, int& window_width, int& window_height, bool& twoPlayersLocal, Communicator& communicator,
-                           std::list<std::unique_ptr<DuckData>>& ducks, Camera& camera, bool& running):
-        window(window), twoPlayersLocal(twoPlayersLocal), communicator(communicator), window_width(window_width), window_height(window_height),
-        ducks(ducks), camera(camera), running(running) {}
+EventHandler::EventHandler(SDL2pp::Window& window, int& window_width, int& window_height,
+                           bool& twoPlayersLocal, Communicator& communicator,
+                           std::list<std::unique_ptr<DuckData>>& ducks, Camera& camera,
+                           bool& running):
+        window(window),
+        twoPlayersLocal(twoPlayersLocal),
+        communicator(communicator),
+        window_width(window_width),
+        window_height(window_height),
+        ducks(ducks),
+        camera(camera),
+        running(running) {}
 
 void EventHandler::handleEvents() {
     SDL_Event event;
@@ -23,7 +31,8 @@ void EventHandler::handleEvents() {
         }
     }
 
-    if (scaleChanged) camera.update(ducks);
+    if (scaleChanged)
+        camera.update(ducks);
 }
 
 void EventHandler::handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown) {
@@ -37,7 +46,8 @@ void EventHandler::handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown) 
     }
 
     if (twoPlayersLocal) {
-        const auto& keyMappingPlayer2 = isKeyDown ? keyMappingPressedPlayer2 : keyMappingReleasedPlayer2;
+        const auto& keyMappingPlayer2 =
+                isKeyDown ? keyMappingPressedPlayer2 : keyMappingReleasedPlayer2;
         auto it2 = keyMappingPlayer2.find(scancode);
         if (it2 != keyMappingPlayer2.end()) {
             InputAction m_key = it2->second;

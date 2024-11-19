@@ -2,8 +2,8 @@
 #include <string>
 
 #include "ActiveSocket.h"
-#include "SenderSocket.h"
 #include "LibError.h"
+#include "SenderSocket.h"
 #include "Types.h"
 
 /**

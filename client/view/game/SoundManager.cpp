@@ -4,12 +4,13 @@
 #define DEFAULT_VOLUME 40
 
 SoundManager::SoundManager() {
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 512) < 0) std::cerr << "Error: " << Mix_GetError() << std::endl;
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 512) < 0)
+        std::cerr << "Error: " << Mix_GetError() << std::endl;
     playMusic();
 }
 
 SoundManager::~SoundManager() {
-    for (auto& sound : soundMap) {
+    for (auto& sound: soundMap) {
         Mix_FreeChunk(sound.second);
     }
 
@@ -25,7 +26,8 @@ void SoundManager::playMusic() {
 
 void SoundManager::playSound(GunID id) {
     auto it = soundMap.find(id);
-    if (it == soundMap.end()) loadSound(id);
+    if (it == soundMap.end())
+        loadSound(id);
     it = soundMap.find(id);
 
     Mix_VolumeChunk(it->second, 20);

@@ -2,9 +2,9 @@
 #include "ActiveSocket.h"
 #include "DuckData.h"
 #include "GameStatus.h"
-#include "ReplyMessage.h"
 #include "Math.h"
 #include "ReceiveProtocol.h"
+#include "ReplyMessage.h"
 #include "Types.h"
 
 /**
@@ -31,7 +31,7 @@ public:
      */
     ReplyMessage recvReplyMessage();
 
-    /** 
+    /**
      *  Receive a GameStatus from the server
      *  @return the GameStatus received
      */

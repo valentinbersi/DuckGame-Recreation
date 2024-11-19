@@ -1,8 +1,8 @@
-#include "GunID.h"
 #include "GameObject.h"
+#include "GunID.h"
 #include "Types.h"
 
-class EquippableWeapon: public GameObject{
+class EquippableWeapon: public GameObject {
 protected:
     GunID id;
 

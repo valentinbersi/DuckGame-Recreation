@@ -1,7 +1,8 @@
 #pragma once
-#include "EquippableWeapon.h"
 #include <unordered_map>
-class WeaponFactory{
+
+#include "EquippableWeapon.h"
+class WeaponFactory {
 
     static std::unordered_map<GunID, std::function<std::unique_ptr<EquippableWeapon>()>> factory;
     static void inicializeFactory();

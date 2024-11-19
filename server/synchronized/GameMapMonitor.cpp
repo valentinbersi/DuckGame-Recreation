@@ -1,7 +1,8 @@
 #include "GameMapMonitor.h"
-#include "ReplyMessage.h"
 
 #include <random>
+
+#include "ReplyMessage.h"
 
 #define PLAYER_COUNT_BEGINING 0
 #define MIN_MATCH_ID 1
@@ -9,7 +10,7 @@
 
 GameMapMonitor::GameMapMonitor() {
     // levels.push_back(Level::load("level1"));
-    // levels.push_back(Level::load("level2"));    
+    // levels.push_back(Level::load("level2"));
     // levels.push_back(Level::load("level3"));
 }
 
@@ -20,15 +21,15 @@ BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGameIfCreated(
 
     if (gameMap.find(matchID) != gameMap.end()) {
         senderQueue->push(std::make_shared<ReplyMessage>(matchID));
-        for(u8 i = PLAYER_COUNT_BEGINING; i < playerCount; i++) {
-            gameMap.at(matchID)->addClient(clientId+i, senderQueue);
+        for (u8 i = PLAYER_COUNT_BEGINING; i < playerCount; i++) {
+            gameMap.at(matchID)->addClient(clientId + i, senderQueue);
         }
         return gameMap.at(matchID)->getQueue();
     }
     senderQueue->push(std::make_shared<ReplyMessage>());
     return nullptr;
 }
- 
+
 BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::startGameIfCreated(u16 matchID) {
     std::lock_guard lock(mutex);
     if (gameMap.find(matchID) != gameMap.end()) {
@@ -53,7 +54,7 @@ u16 GameMapMonitor::creatGameSafe() {
 }
 
 GameMapMonitor::~GameMapMonitor() {
-    for(auto& [key, value] : gameMap) {
+    for (auto& [key, value]: gameMap) {
         value->stop();
         if (value->isJoinable()) {
             value->join();

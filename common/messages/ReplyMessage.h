@@ -3,7 +3,6 @@
 
 struct ReplyMessage: public ServerMessage {
 public:
-
     u16 matchID;
 
     u8 startGame;

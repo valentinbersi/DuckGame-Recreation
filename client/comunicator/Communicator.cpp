@@ -15,9 +15,7 @@ bool Communicator::trysend(std::unique_ptr<ClientMessage> message) {
     return sendQueue.try_push(std::move(message));
 }
 
-std::optional<GameStatus> Communicator::tryrecv() {
-    return recvQueueGame.try_pop();
-}
+std::optional<GameStatus> Communicator::tryrecv() { return recvQueueGame.try_pop(); }
 
 std::optional<GameStatus> Communicator::tryRecvLast() {
     std::queue<GameStatus> queue = recvQueueGame.popAll();
@@ -29,9 +27,7 @@ std::optional<GameStatus> Communicator::tryRecvLast() {
     return message;
 }
 
-std::optional<ReplyMessage> Communicator::tryRecvReply() {
-    return recvQueueLobby.try_pop();
-}
+std::optional<ReplyMessage> Communicator::tryRecvReply() { return recvQueueLobby.try_pop(); }
 
 ReplyMessage Communicator::blockingRecv() { return recvQueueLobby.pop(); }
 

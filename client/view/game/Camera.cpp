@@ -1,13 +1,18 @@
 #include "Camera.h"
 
 Camera::Camera(int& windowWidth, int& windowHeight):
-        windowWidth(windowWidth), windowHeight(windowHeight),
-        backgroundWidth(0), backgroundHeight(0),
+        windowWidth(windowWidth),
+        windowHeight(windowHeight),
+        backgroundWidth(0),
+        backgroundHeight(0),
         x(0),
-        y(0), scale(0), oldScale(0) {}
+        y(0),
+        scale(0),
+        oldScale(0) {}
 
 void Camera::update(std::list<std::unique_ptr<DuckData>>& ducks) {
-    if (ducks.empty()) return;
+    if (ducks.empty())
+        return;
 
     Vector2 center = centerOfDucks(ducks);
     float targetX = center.x();
@@ -40,7 +45,8 @@ void Camera::adjustSpritePositions(std::list<std::unique_ptr<DuckData>>& ducks) 
 
 void Camera::calculateScale(std::list<std::unique_ptr<DuckData>>& ducks) {
     if (ducks.size() == 1) {
-        scale = 4.0f * (windowWidth / 1040);          // Ajustar según el ancho de la ventana         (TEST, SINO DEJAR SOLO 4.0F)
+        scale = 4.0f * (windowWidth / 1040);  // Ajustar según el ancho de la ventana         (TEST,
+                                              // SINO DEJAR SOLO 4.0F)
         auto& duck = ducks.front();
         x = duck->position.x() - windowWidth / 2;
         y = duck->position.y() - windowHeight / 2;
@@ -104,14 +110,8 @@ SDL_Rect Camera::getViewRect() {
     return viewRect;
 }
 
-float Camera::getScale() const {
-    return scale;
-}
+float Camera::getScale() const { return scale; }
 
-int Camera::getBackgroundWidth() const {
-    return backgroundWidth;
-}
+int Camera::getBackgroundWidth() const { return backgroundWidth; }
 
-int Camera::getBackgroundHeight() const {
-    return backgroundHeight;
-}
+int Camera::getBackgroundHeight() const { return backgroundHeight; }

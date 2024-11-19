@@ -28,22 +28,25 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         window(WINDOW_TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width,
                window_height, SDL_WINDOW_RESIZABLE),
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
-        twoPlayersLocal(twoPlayersLocal), camera(window_width, window_height){}
+        twoPlayersLocal(twoPlayersLocal),
+        camera(window_width, window_height) {}
 
 void Game::init() {
     TextureManager textureManager(renderer);
-    //Renderer classRenderer(renderer);
-    //Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-    //Mix_Music* music = Mix_LoadMUS(MUSIC_PATH);
-    //Mix_PlayMusic(music, -1);
+    // Renderer classRenderer(renderer);
+    // Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+    // Mix_Music* music = Mix_LoadMUS(MUSIC_PATH);
+    // Mix_PlayMusic(music, -1);
 
-    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping = createSpritesMapping(textureManager);
+    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping =
+            createSpritesMapping(textureManager);
     SDL sdl(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG);
 
     Texture backgroundTexture = startBackground();
     camera.loadBackgroundSize(backgroundTexture);
-    EventHandler handler(window, window_width, window_height, twoPlayersLocal, communicator, ducks, camera, running);
+    EventHandler handler(window, window_width, window_height, twoPlayersLocal, communicator, ducks,
+                         camera, running);
 
     while (running) {
         getSnapshot();
@@ -54,7 +57,8 @@ void Game::init() {
 
         showBackground(backgroundTexture, currentScale);
         updatePlayers(spritesMapping, currentScale);
-        // updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc (debo hacer un clearObjects aca tambien)
+        // updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
+        // (debo hacer un clearObjects aca tambien)
         renderer.Present();
 
         handler.handleEvents();
@@ -74,59 +78,61 @@ Texture Game::startBackground() {
 
 void Game::getSnapshot() {
     std::optional<GameStatus> snapshot = communicator.tryRecvLast();
-    if (!snapshot.has_value()) return;
+    if (!snapshot.has_value())
+        return;
 
-        clearObjects();
-        for (auto& gameObject: snapshot->gameObjects) {
-            switch (gameObject->objectID) {
-                case GameObjectID::Object2D: {
-                    auto* object2D = dynamic_cast<GameObject2DData*>(gameObject.get());
-                    if (object2D->object2DID == GameObject2DID::Duck) {
-                        ducks.push_back(std::unique_ptr<DuckData>(
-                                dynamic_cast<DuckData*>(gameObject.release())));
+    clearObjects();
+    for (auto& gameObject: snapshot->gameObjects) {
+        switch (gameObject->objectID) {
+            case GameObjectID::Object2D: {
+                auto* object2D = dynamic_cast<GameObject2DData*>(gameObject.get());
+                if (object2D->object2DID == GameObject2DID::Duck) {
+                    ducks.push_back(std::unique_ptr<DuckData>(
+                            dynamic_cast<DuckData*>(gameObject.release())));
 
-                    } //else if (object2D->object2DID == GameObject2DID::Weapon) {
+                }  // else if (object2D->object2DID == GameObject2DID::Weapon) {
 
-                    //} else if (object2D->object2DID == GameObject2DID::Armor) {
+                //} else if (object2D->object2DID == GameObject2DID::Armor) {
 
-                    //}
+                //}
 
-                    // if (timer)
+                // if (timer)
 
-                    else {
-                        // typeOfObject2D(std::unique_ptr<GameObject2DData>(static_cast<GameObject2DData*>(gameObject.release())));
-                    }
-                    break;
+                else {
+                    // typeOfObject2D(std::unique_ptr<GameObject2DData>(static_cast<GameObject2DData*>(gameObject.release())));
                 }
-                default:
-                    break;
+                break;
             }
+            default:
+                break;
         }
+    }
 }
 
 
-void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr <SpriteManager>>& spritesMapping, float currentScale) {
+void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping,
+                         float currentScale) {
     for (auto& duck: ducks) {
         DuckID duckID = duck->duckID;
         Vector2 coords = duck->position;
 
-        DuckState state = {
-            duck->extraData[DuckData::PLAYING_DEAD_INDEX],
-            duck->extraData[DuckData::CROUCHING_INDEX],
-            duck->extraData[DuckData::IN_AIR_INDEX],
-            duck->extraData[DuckData::FLAPPING_INDEX],
-            duck->extraData[DuckData::BEING_DAMAGED_INDEX],
-            duck->extraData[DuckData::MOVING_RIGHT_INDEX],
-            duck->extraData[DuckData::MOVING_LEFT_INDEX],
-            /*duck->extraData[DuckData::HELMET]*/ true,
-            /*duck->extraData[DuckData::ARMOR]*/true,
-            /*duck->extraData[DuckData::IS_SHOOTING]*/true
-        };
-        //if (state.isShooting) soundManager.playSound(/*duck->gun->gunID*/ GunID::CowboyPistol);
-        //falta dibujar el fire
+        DuckState state = {duck->extraData[DuckData::PLAYING_DEAD_INDEX],
+                           duck->extraData[DuckData::CROUCHING_INDEX],
+                           duck->extraData[DuckData::IN_AIR_INDEX],
+                           duck->extraData[DuckData::FLAPPING_INDEX],
+                           duck->extraData[DuckData::BEING_DAMAGED_INDEX],
+                           duck->extraData[DuckData::MOVING_RIGHT_INDEX],
+                           duck->extraData[DuckData::MOVING_LEFT_INDEX],
+                           /*duck->extraData[DuckData::HELMET]*/ true,
+                           /*duck->extraData[DuckData::ARMOR]*/ true,
+                           /*duck->extraData[DuckData::IS_SHOOTING]*/ true};
+        // if (state.isShooting) soundManager.playSound(/*duck->gun->gunID*/ GunID::CowboyPistol);
+        // falta dibujar el fire
 
-        spritesMapping.at(duckID)->updateEquipment(state.hasHelmet, state.hasChestplate/*, duck->gun->gunID*/);
-        spritesMapping.at(duckID)->updatePosition(coords.x() - camera.getViewRect().x, coords.y() - camera.getViewRect().y);
+        spritesMapping.at(duckID)->updateEquipment(state.hasHelmet,
+                                                   state.hasChestplate /*, duck->gun->gunID*/);
+        spritesMapping.at(duckID)->updatePosition(coords.x() - camera.getViewRect().x,
+                                                  coords.y() - camera.getViewRect().y);
         spritesMapping.at(duckID)->setScale(currentScale);
         spritesMapping.at(duckID)->update(state);
     }
@@ -143,20 +149,25 @@ void Game::showBackground(Texture& backgroundTexture, float currentScale) {
     renderer.Copy(backgroundTexture, NullOpt, dstRect);
 }
 
-std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> Game::createSpritesMapping(TextureManager& textureManager) {
+std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> Game::createSpritesMapping(
+        TextureManager& textureManager) {
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping;
 
     spritesMapping.emplace(
             DuckID::White,
-            std::make_unique<SpriteManager>(whiteSheet, whiteFeathers, renderer, textureManager /*, window_width, window_height*/));
+            std::make_unique<SpriteManager>(whiteSheet, whiteFeathers, renderer,
+                                            textureManager /*, window_width, window_height*/));
     spritesMapping.emplace(
             DuckID::Orange,
-            std::make_unique<SpriteManager>(orangeSheet, orangeFeathers, renderer, textureManager /*, window_width, window_height*/));
+            std::make_unique<SpriteManager>(orangeSheet, orangeFeathers, renderer,
+                                            textureManager /*, window_width, window_height*/));
     spritesMapping.emplace(
             DuckID::Yellow,
-            std::make_unique<SpriteManager>(yellowSheet, yellowFeathers, renderer, textureManager /*, window_width, window_height*/));
-    spritesMapping.emplace(DuckID::Grey, std::make_unique<SpriteManager>(greySheet, greyFeathers,
-                                                       renderer, textureManager /*, window_width, window_height*/));
+            std::make_unique<SpriteManager>(yellowSheet, yellowFeathers, renderer,
+                                            textureManager /*, window_width, window_height*/));
+    spritesMapping.emplace(DuckID::Grey, std::make_unique<SpriteManager>(
+                                                 greySheet, greyFeathers, renderer,
+                                                 textureManager /*, window_width, window_height*/));
 
     return spritesMapping;
 }

@@ -33,5 +33,5 @@ public:
 
     BlockingQueue<std::unique_ptr<Command>>* resolveRequest(const LobbyMessage& request);
 
-    ~LobbyResolver() {};
+    ~LobbyResolver(){};
 };

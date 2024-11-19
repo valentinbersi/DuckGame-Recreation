@@ -7,16 +7,17 @@
 #include "BlockingQueue.h"
 #include "Command.h"
 #include "GameController.h"
+#include "Level.h"
 #include "ServerMessage.h"
 #include "Thread.h"
 #include "Timer.h"
-#include "Level.h"
 
 class GameLoop final: public Thread {
     constexpr static std::uint8_t FRAME_TIMES_AMOUNT = 2;
 
     std::vector<Level> levels;
-    std::map<PlayerID, std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>>> clientQueuesMap{};
+    std::map<PlayerID, std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>>>
+            clientQueuesMap{};
     BlockingQueue<std::unique_ptr<Command>> clientCommands;
     std::queue<std::unique_ptr<Command>> currentFrameCommands;
     GameController game;
@@ -35,7 +36,7 @@ class GameLoop final: public Thread {
     /**
      * Broadcast a message to all the clients
      * @param message the std::shared_ptr<Servermessage> to broadcast
-     */  
+     */
     void broadcast(std::shared_ptr<ServerMessage> message);
 
     /**
@@ -43,7 +44,7 @@ class GameLoop final: public Thread {
      * @param
      */
     bool shouldAddQueue(const u16 clientID);
-    
+
 public:
     /**
      * Construct a gameloop with no players
@@ -69,5 +70,4 @@ public:
      * @return the pointer to the gameloop Queue.
      */
     BlockingQueue<std::unique_ptr<Command>>* getQueue();
-
 };

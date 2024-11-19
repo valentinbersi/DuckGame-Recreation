@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ClientSendProtocol.h"
-#include "ClientRecvProtocol.h"
 #include "ActiveSocket.h"
+#include "ClientRecvProtocol.h"
+#include "ClientSendProtocol.h"
 #include "ReplyMessage.h"
 
 class CommunicatorSync {
@@ -19,4 +19,3 @@ public:
 
     ~CommunicatorSync();
 };
-

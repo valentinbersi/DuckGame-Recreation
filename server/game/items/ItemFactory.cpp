@@ -51,7 +51,7 @@
 //                         return std::make_unique<EquippableItem>(
 //                                 GunID::Sniper, nullptr, Vector2(), 0,
 //                                 std::make_unique<Rectangle>(Vector2(), 0, 0), Vector2());
-//                     }});       
+//                     }});
 //     factory.insert({GunID::Helmet, []() {
 //                         return std::make_unique<EquippableItem>(
 //                                 GunID::Helmet, nullptr, Vector2(), 0,

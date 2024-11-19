@@ -21,7 +21,7 @@ private:
 public:
     Acceptor(const std::string& hostname, GameMapMonitor& monitor);
 
-    void run() noexcept override ;
+    void run() noexcept override;
 
     void stop() override;
 

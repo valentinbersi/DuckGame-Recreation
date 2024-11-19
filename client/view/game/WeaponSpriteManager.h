@@ -7,6 +7,4 @@ class WeaponSpriteManager {
 public:
     WeaponSpriteManager();
     void drawWeapon(GunID& id);
-
 };
-

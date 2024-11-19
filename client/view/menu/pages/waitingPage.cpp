@@ -9,13 +9,14 @@
 #include "ui_waitingPage.h"
 
 
-WaitingPage::WaitingPage(QWidget* parent, bool isHost, Communicator& communicator, GameInfo& gameInfo):
+WaitingPage::WaitingPage(QWidget* parent, bool isHost, Communicator& communicator,
+                         GameInfo& gameInfo):
         QWidget(parent),
         ui(new Ui::WaitingPage),
         isHost(isHost),
         communicator(communicator),
         gameInfo(gameInfo),
-        timer(new QTimer(this)){
+        timer(new QTimer(this)) {
     ui->setupUi(this);
 
     ui->labelMatchID->setText(QString("MATCH ID: %1").arg(gameInfo.matchID));
@@ -34,7 +35,8 @@ void WaitingPage::recvServerMessage() {
 
     if (replyMessageOpt.has_value()) {
         ReplyMessage message = replyMessageOpt.value();
-        ui->labelPlayersConnected->setText(QString("PLAYERS CONNECTED: %1 / 4").arg(message.connectedPlayers));
+        ui->labelPlayersConnected->setText(
+                QString("PLAYERS CONNECTED: %1 / 4").arg(message.connectedPlayers));
 
         if (message.startGame == 1) {
             emit startMatch();
@@ -44,20 +46,18 @@ void WaitingPage::recvServerMessage() {
         if (isHost && message.connectedPlayers == 4)
             requestStartGame();
 
-    } else {qDebug() << "replyMessage is NULL";} // esto nose si va
+    } else {
+        qDebug() << "replyMessage is NULL";
+    }  // esto nose si va
 }
 
 void WaitingPage::requestStartGame() {
-    auto message = std::make_unique<LobbyMessage>(
-                    LobbyRequest::STARTMATCH,
-                    gameInfo.playersNumber,
-                    gameInfo.player1Name,
-                    gameInfo.player2Name,
-                    gameInfo.matchID
-                    );
+    auto message = std::make_unique<LobbyMessage>(LobbyRequest::STARTMATCH, gameInfo.playersNumber,
+                                                  gameInfo.player1Name, gameInfo.player2Name,
+                                                  gameInfo.matchID);
 
     communicator.trysend(std::move(message));
-       // tengo que chequear si se envio bien?
+    // tengo que chequear si se envio bien?
     ui->playButton->setEnabled(false);
 }
 

@@ -1,9 +1,9 @@
 
 #include "Acceptor.h"
 
-#include "LibError.h"
-
 #include <syslog.h>
+
+#include "LibError.h"
 
 #define ERROR_MSG "UNOWN ERROR DURING RUNTIME."
 #define FORMAT "%s"
@@ -37,7 +37,7 @@ void Acceptor::run() noexcept {
     } catch (...) {
         syslog(LOG_CRIT, ERROR_MSG);
     }
-    //Just to mantain consistency in the class status
+    // Just to mantain consistency in the class status
     _keep_running = false;
     _is_alive = false;
 }
@@ -49,4 +49,4 @@ void Acceptor::stop() {
     _is_alive = false;
 }
 
-Acceptor::~Acceptor() {} //ALL RAII
+Acceptor::~Acceptor() {}  // ALL RAII

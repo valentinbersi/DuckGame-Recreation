@@ -1,10 +1,11 @@
 
 #include "Receiver.h"
 
-#include "MovementCommand.h"
+#include <syslog.h>
+
 #include "ExitCommand.h"
 #include "LibError.h"
-#include <syslog.h>
+#include "MovementCommand.h"
 
 #define ERROR_MSG "UNOWN ERROR DURING RUNTIME."
 #define FORMAT "%s"
@@ -26,7 +27,8 @@ void Receiver::run() noexcept {
 
         while (_keep_running) {
             GameMessage gameMessage = recvProtocol.receiveGameMessage();
-            gameQueue->push(std::make_unique<MovementCommand>(clientID-1+gameMessage.player, gameMessage.action));
+            gameQueue->push(std::make_unique<MovementCommand>(clientID - 1 + gameMessage.player,
+                                                              gameMessage.action));
         }
 
     } catch (const ClosedQueue& err) {
@@ -34,12 +36,12 @@ void Receiver::run() noexcept {
     } catch (const LibError& err) {
         if (gameQueue != nullptr) {
             gameQueue->push(std::make_unique<ExitCommand>(clientID));
-            gameQueue->push(std::make_unique<ExitCommand>(clientID+1));
+            gameQueue->push(std::make_unique<ExitCommand>(clientID + 1));
         }
     } catch (...) {
         syslog(LOG_CRIT, ERROR_MSG);
     }
-    _keep_running = false; 
+    _keep_running = false;
 }
 
 void Receiver::stop() {
@@ -47,4 +49,4 @@ void Receiver::stop() {
     _is_alive = false;
 }
 
-Receiver::~Receiver() {};
+Receiver::~Receiver(){};

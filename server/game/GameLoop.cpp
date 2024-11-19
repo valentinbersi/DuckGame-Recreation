@@ -24,7 +24,7 @@ void GameLoop::processCurrentFrameCommands() {
     }
 }
 
-GameLoop::GameLoop(std::vector<Level>& levels) : levels(levels) {}    
+GameLoop::GameLoop(std::vector<Level>& levels): levels(levels) {}
 
 #define FPS 30
 
@@ -34,13 +34,15 @@ void GameLoop::run() {
         timer.start();
         game.start();
         // while(_keep_running){
-        while (_keep_running) { //poner game.MatchEnded() y && _keep_running para condicion de corte.
+        while (_keep_running) {  // poner game.MatchEnded() y && _keep_running para condicion de
+                                 // corte.
             const float deltaTime = timer.iterationStartSeconds().count();
             retrieveCurrentFrameCommands();
             processCurrentFrameCommands();
             game.updateInternal(deltaTime);
             game.update(deltaTime);
-            broadcast(std::make_shared<GameStatus>(std::move(game.status()))); //talvez aca ya manda de una gameended
+            broadcast(std::make_shared<GameStatus>(
+                    std::move(game.status())));  // talvez aca ya manda de una gameended
             timer.iterationEnd(FPS);
         }
 
