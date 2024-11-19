@@ -27,6 +27,10 @@
 #define OFFSET_RIGHT 3
 #define OFFSET_LEFT 3
 #define OFFSET_Y 4
+#define LIMIT_FRAMES 5
+
+#define ROW_WEAPON 3
+#define COL_WEAPON 0
 
 SpriteManager::SpriteManager(
         const char* path1, const char* path2,
@@ -91,7 +95,7 @@ void SpriteManager::setFlags(bool air, bool flap, bool right, bool left) {
     if (in_air || moving_right || moving_left) {
         if (!(in_air && frame == 4))
             frame++;
-        if (frame > 5 && !in_air)
+        if (frame > LIMIT_FRAMES && !in_air)
             frame = 0;
     }
     if (flapping) {
@@ -114,8 +118,8 @@ void SpriteManager::draw(int col, int row) {
     drawMainSprite(col, row);
     bool hasWeapon = gunEquipped != GunID::NONE;
 
-    if (gunEquipped != GunID::NONE) drawWeapon();
     drawFeathers(col, row, hasWeapon);
+    if (gunEquipped != GunID::NONE) drawWeapon();
     if (hasChestplate) drawChestplate(col, row);
     if (hasHelmet) drawHelmet();
 }
@@ -127,18 +131,15 @@ void SpriteManager::drawMainSprite(int col, int row) {
 }
 
 void SpriteManager::drawFeathers(int col, int row, bool hasWeapon) {
-
-
-    //LOGICA SI TIENE ARMA
-
-
     if (!flip) {
-        spritesheet->selectSprite(col, row, FEATHER);
+        if (hasWeapon) spritesheet->selectSprite(COL_WEAPON, ROW_WEAPON, FEATHER);
+        else spritesheet->selectSprite(col, row, FEATHER);
         SDL2pp::Rect position = getPosition(FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET);
         spritesheet->drawSelectedSprite(position, flip, FEATHER);
 
     } else if (flip || in_air || flapping) {
-        spritesheet->selectSprite(col, row, FEATHER);
+        if (hasWeapon) spritesheet->selectSprite(COL_WEAPON, ROW_WEAPON, FEATHER);
+        else spritesheet->selectSprite(col, row, FEATHER);
         SDL2pp::Rect position = getPosition(FEATHER, RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET);
         spritesheet->drawSelectedSprite(position, flip, FEATHER);
     }
@@ -157,9 +158,11 @@ void SpriteManager::drawHelmet() {
 }
 
 void SpriteManager::drawWeapon() {
-    //spritesheet->selectSprite(2, 0, NO_FEATHER);
-    //SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, HELMET);
-    //spritesheet->drawHelmet(position, flip);
+    spritesheet->selectSprite(2, 0, NO_FEATHER);
+    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, HELMET);
+
+    std::string path = gunPaths[gunEquipped];
+    spritesheet->drawWeapon(position, flip, path);
 }
 
 void SpriteManager::negateFlag(bool flag, bool& flagToNegate) {

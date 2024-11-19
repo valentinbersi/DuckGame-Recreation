@@ -14,6 +14,7 @@ public:
     void drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool feathers/*, bool isRightFeather*/);
     void drawChestplate(SDL2pp::Rect& playerPosition, bool flip);
     void drawHelmet(SDL2pp::Rect& playerPosition, bool flip);
+    void drawWeapon(SDL2pp::Rect& playerPosition, bool flip, std::string path);
     int getClipWidth() const;
     int getClipHeight() const;
 
@@ -21,10 +22,6 @@ public:
 
 private:
     SDL_Rect m_clip;
-    SDL_Surface* m_spritesheet_image;
-    SDL_Surface* m_spritesheet_feathers;
-    //SDL2pp::Texture* m_texture_image;
-    //SDL2pp::Texture* m_texture_feathers;
     SDL2pp::Renderer& renderer;
     const char* pathPlayer;
     const char* pathFeather;

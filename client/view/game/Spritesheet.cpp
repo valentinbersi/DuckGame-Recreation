@@ -15,10 +15,7 @@
 Spritesheet::Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer& renderer, TextureManager& textureManager):
         renderer(renderer), pathPlayer(path1), pathFeather(path2), textureManager(textureManager) {}
 
-Spritesheet::~Spritesheet() {
-    //delete m_texture_image;
-    //delete m_texture_feathers;
-}
+Spritesheet::~Spritesheet() {}
 
 void Spritesheet::selectSprite(int x, int y, bool feathers) {
     if (feathers) {
@@ -59,6 +56,11 @@ void Spritesheet::drawChestplate(SDL2pp::Rect& playerPosition, bool flip) {
 void Spritesheet::drawHelmet(SDL2pp::Rect& playerPosition, bool flip) {
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     SDL_RenderCopyEx(renderer.Get(), textureManager.getTexture(HELMET_PATH).Get(), &m_clip, &playerPosition, 0.0, nullptr, flipType);
+}
+
+void Spritesheet::drawWeapon(SDL2pp::Rect& playerPosition, bool flip, std::string path) {
+    SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    SDL_RenderCopyEx(renderer.Get(), textureManager.getTexture(path).Get(), &m_clip, &playerPosition, 0.0, nullptr, flipType);
 }
 
 SDL2pp::Texture& Spritesheet::getTexture(bool feathers) {
