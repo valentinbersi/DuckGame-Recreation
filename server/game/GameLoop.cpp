@@ -45,10 +45,9 @@ void GameLoop::run() {
         }
     } catch (const ClosedQueue& err) {
         // Expected when closing server
-    }  // catch (const std::exception& err) {
-       //  throw;
-       //  syslog(LOG_CRIT, "%s", err.what());
-    //}
+    } catch (const std::exception& err) {
+        syslog(LOG_CRIT, "%s", err.what());
+    }
     _keep_running = false;
     _is_alive = false;
 }

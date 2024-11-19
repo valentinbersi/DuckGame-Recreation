@@ -20,15 +20,13 @@ void Thread::join() { thread.join(); }
 bool Thread::isJoinable() const { return thread.joinable(); }
 
 void Thread::main() {
-    this->run();
-    // try {
-
-    //} catch (const std::exception& err) {
-    //    std::cerr << UNEXPECTED_EXCEPTION << err.what() << NEWLINE;
-    //   throw;
-    //} catch (...) {
-    //    std::cerr << UNKNOWN_EXCEPTION;
-    //}
+    try {
+        this->run();
+    } catch (const std::exception& err) {
+        std::cerr << UNEXPECTED_EXCEPTION << err.what() << NEWLINE;
+    } catch (...) {
+        std::cerr << UNKNOWN_EXCEPTION;
+    }
 
     _is_alive = false;
 }
