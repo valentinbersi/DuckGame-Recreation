@@ -15,7 +15,7 @@
 #define DEFAULT_SPEED 500
 
 Player::Player(const DuckID id):
-        PhysicsObject(nullptr, {0, 0}, 1, 2, 2, 3, {0, 0}, Gravity::Enabled),
+        PhysicsObject(nullptr, {0, 0}, 1, 2, 2, 3, Gravity::Enabled),
         id(id),
         life(DEFAULT_LIFE),
         flags(DEFAULT_FLAGS),
@@ -44,16 +44,16 @@ void Player::update([[maybe_unused]] const float delta) {
                         std::to_string(globalPosition().y()) + "\n");
     Debug::cout().flush();
 
-    setVelocity(velocity().x(0));
+    _velocity = _velocity.x(0);
     flags = 0;
 
     if (input.isActionPressed(CROUCH))
         flags |= DuckData::CROUCHING;
     else if (input.isActionPressed(MOVE_RIGHT)) {
-        setVelocity(velocity() + Vector2(speed, 0));
+        _velocity += Vector2(speed, 0);
         flags |= DuckData::MOVING_RIGHT;
     } else if (input.isActionPressed(MOVE_LEFT)) {
-        setVelocity(velocity() + Vector2(-speed, 0));
+        _velocity += Vector2(-speed, 0);
         flags |= DuckData::MOVING_LEFT;
     }
 }

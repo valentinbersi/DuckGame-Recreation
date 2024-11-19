@@ -5,29 +5,34 @@
 
 #define NULL_SHAPE "Shape cannot be null"
 
-CollisionObject::CollisionObject(GameObject* parent, Vector2 position,
+CollisionObject::CollisionObject(GameObject* parent, const Vector2& position,
                                  const std::bitset<LayersCount> layers,
                                  const std::bitset<LayersCount> scannedLayers, const float width,
                                  const float height):
         GameObject2D(parent, position),
         _layers(layers),
         _scannedLayers(scannedLayers),
-        shape(std::move(position), width, height) {}
+        shape(position, width, height) {}
 
 bool CollisionObject::collidesWith(const CollisionObject& other) const {
-    return shape.intersects(other.shape);
+    return shape.overlaps(other.shape);
 }
 
-std::optional<Vector2> CollisionObject::moveAndCollide(const CollisionObject& other,
-                                                       const Vector2& displacement) const {
-    return shape.intersects(other.shape, displacement);
+std::optional<IntersectionInfo> CollisionObject::moveAndCollide(const CollisionObject& other,
+                                                                const Vector2& displacement,
+                                                                const float delta) const {
+    return shape.overlaps(other.shape, displacement, delta);
 }
 
 CollisionObject::~CollisionObject() = default;
 
 void CollisionObject::updateInternal([[maybe_unused]] const float delta) {
     GameObject2D::updateInternal(delta);
-    shape.setCenter(position());
+}
+
+GameObject2D& CollisionObject::setPosition(Vector2 position) noexcept {
+    shape.setCenter(position);
+    return GameObject2D::setPosition(std::move(position));
 }
 
 std::bitset<CollisionObject::LayersCount> CollisionObject::layers() const { return _layers; }
@@ -76,7 +81,7 @@ void CollisionObject::registerCollision(std::weak_ptr<CollisionObject> collision
         throw std::invalid_argument(EXPIRED_COLLISION_OBJECT);
 
     if ((_scannedLayers & collisionObject.lock()->_layers).any())
-        objectsToCollide.push_front(std::move(collisionObject));
+        objectsToCollide.push_back(std::move(collisionObject));
 }
 
 void CollisionObject::resetRegisteredCollisions() { objectsToCollide.clear(); }

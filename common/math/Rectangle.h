@@ -1,135 +1,14 @@
 #pragma once
 
-#include "Segment.h"
-#include <array>
+#include <optional>
+
+#include "IntersectionInfo.h"
+#include "Ray2D.h"
 #include "Vector2.h"
 
-class Line;
-
 class Rectangle final {
-    Vector2 _center;
-    float _width, _height;
-
-    /**
-     * Reset the cached values of the rectangle
-     */
-    void invalidateCachedValues();
-
-    /**
-     * Calculate the vertices of the rectangle and cache them
-     */
-    void calculateVertices();
-
-    /**
-     * Calculate the sides of the rectangle and cache them, this also calculates the vertices
-     */
-    void calculateSides();
-
-    /**
-     * Calculate the axis points of the rectangle and cache them
-     */
-    void calculateAxisPoints();
-
-    /**
-     * Handle the collision when the rectangle is colliding with the north side of the other
-     * rectangle
-     * @param rectangle The other rectangle
-     * @param nextRectangle The next rectangle
-     * @param velocityLine The velocity line
-     * @return The intersection info
-     */
-    [[nodiscard]] std::optional<Vector2> calculateNorthIntersection(
-            const Rectangle& rectangle, const Rectangle& nextRectangle) const;
-
-    /**
-     * Handle the collision when the rectangle is colliding with the south side of the other
-     * rectangle
-     * @param rectangle The other rectangle
-     * @param nextRectangle The next rectangle
-     * @param velocityLine The velocity line
-     * @return The intersection info
-     */
-    [[nodiscard]] std::optional<Vector2> calculateSouthIntersection(
-            const Rectangle& rectangle, const Rectangle& nextRectangle) const;
-
-    /**
-     * Handle the collision when the rectangle is colliding with the east side of the other
-     * rectangle
-     * @param rectangle The other rectangle
-     * @param nextRectangle The next rectangle
-     * @param velocityLine The velocity line
-     * @return The intersection info
-     */
-    [[nodiscard]] std::optional<Vector2> calculateEastIntersection(
-            const Rectangle& rectangle, const Rectangle& nextRectangle) const;
-
-    /**
-     * Handle the collision when the rectangle is colliding with the west side of the other
-     * rectangle
-     * @param rectangle The other rectangle
-     * @param nextRectangle The next rectangle
-     * @param velocityLine The velocity line
-     * @return The intersection info
-     */
-    [[nodiscard]] std::optional<Vector2> calculateWestIntersection(
-            const Rectangle& rectangle, const Rectangle& nextRectangle) const;
-
-    /**
-     * Handle the collision when the rectangle is colliding with the north east side of the other
-     * rectangle
-     * @param rectangle The other rectangle
-     * @param displacement The displacement of the rectangle
-     * @param nextRectangle The next rectangle
-     * @param velocityLine The velocity line
-     * @return The intersection info
-     */
-    [[nodiscard]] std::optional<Vector2> calculateNorthEastIntersection(
-            const Rectangle& rectangle, const Vector2& displacement, const Rectangle& nextRectangle) const;
-
-    /**
-     * Handle the collision when the rectangle is colliding with the north west side of the other
-     * rectangle
-     * @param rectangle The other rectangle
-     * @param displacement The displacement of the rectangle
-     * @param nextRectangle The next rectangle
-     * @param velocityLine The velocity line
-     * @return The intersection info
-     */
-    [[nodiscard]] std::optional<Vector2> calculateNorthWestIntersection(
-            const Rectangle& rectangle, const Vector2& displacement, const Rectangle& nextRectangle) const;
-
-    /**
-     * Handle the collision when the rectangle is colliding with the south east side of the other
-     * rectangle
-     * @param rectangle The other rectangle
-     * @param displacement The displacement of the rectangle
-     * @param nextRectangle The next rectangle
-     * @param velocityLine The velocity line
-     * @return The intersection info
-     */
-    [[nodiscard]] std::optional<Vector2> calculateSouthEastIntersection(
-            const Rectangle& rectangle, const Vector2& displacement, const Rectangle& nextRectangle) const;
-
-    /**
-     * Handle the collision when the rectangle is colliding with the south west side of the other
-     * rectangle
-     * @param rectangle The other rectangle
-     * @param displacement The displacement of the rectangle
-     * @param nextRectangle The next rectangle
-     * @param velocityLine The velocity line
-     * @return The intersection info
-     */
-    [[nodiscard]] std::optional<Vector2> calculateSouthWestIntersection(
-            const Rectangle& rectangle, const Vector2& displacement, const Rectangle& nextRectangle) const;
-
-    /**
-     * Calculate the intersection info when the rectangles are intersecting in the next frame
-     * @param rectangle The other rectangle
-     * @param displacement The displacement of the rectangle
-     * @return The intersection info
-     */
-    [[nodiscard]] std::optional<Vector2> calculateIntersectionIntersectingNextFrame(
-            const Rectangle& rectangle, const Vector2& displacement) const;
+    Vector2 position;
+    Vector2 size;
 
 public:
     Rectangle() = delete;
@@ -145,117 +24,49 @@ public:
      * @param width The width of the rectangle
      * @param height The height of the rectangle
      */
-    Rectangle(Vector2 center, float width, float height);
+    Rectangle(const Vector2& center, float width, float height);
 
     /**
-     * Get the center of the rectangle
-     * @return The center of the rectangle
+     * Construct a rectangle with the given position and size
+     * @param position The position of the rectangle, this is the top left corner
+     * @param size The size of the rectangle
      */
-    [[nodiscard]] const Vector2& center() const;
+    Rectangle(Vector2 position, Vector2 size);
 
     /**
      * Set the center of the rectangle
      * @param center The new center of the rectangle
+     * @return A reference to this rectangle
      */
-    Rectangle& setCenter(Vector2 center);
+    Rectangle& setCenter(const Vector2& center);
 
     /**
-     * Get the width of the rectangle
-     * @return The width and height of the rectangle
-     */
-    [[nodiscard]] float width() const;
-
-    /**
-     * Set the width of the rectangle
-     * @param width The new width of the rectangle
-     * @return The rectangle
-     */
-    Rectangle& setWidth(float width);
-
-    /**
-     * Get the height of the rectangle
-     * @return The height of the rectangle
-     */
-    [[nodiscard]] float height() const;
-
-    /**
-     * Set the height of the rectangle
-     * @param height The new height of the rectangle
-     * @return The rectangle
-     */
-    Rectangle& setHeight(float height);
-
-    enum class Region { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };
-
-    /**
-     * Get in which region of the rectangle a point is
-     * @param point a point
-     * @return The region of the rectangle the point is in
-     * @pre The point is outside the rectangle
-     */
-    [[nodiscard]] Region regionOfPoint(const Vector2& point) const;
-
-    enum Side { North = 0, East = 1, South = 2, West = 3 };
-    constexpr static unsigned char SidesAmount = 4;
-    using Sides = std::array<Segment, SidesAmount>;
-
-    /**
-     * Get the sides of a rectangle as segments.
-     * @return An array of segments representing the sides of the rectangle
-     */
-    [[nodiscard]] const Sides& sides() const;
-
-    enum Vertex { NorthWest = 0, NorthEast = 1, SouthEast = 2, SouthWest = 3 };
-    constexpr static unsigned char VertexAmount = 4;
-    using Vertices = std::array<Vector2, VertexAmount>;
-
-    /**
-     * Get the vertices of the rectangle
-     * @return An array of vectors representing the vertices of the rectangle
-     */
-    [[nodiscard]] const Vertices& vertices() const;
-
-    constexpr static unsigned char AxisPoinstAmount = 4;
-    using AxisPoints = std::array<Vector2, VertexAmount>;
-
-    /**
-     * Get the axis points of the rectangle
-     * @return An array of vectors representing the axis points of the rectangle
-     */
-    [[nodiscard]] const AxisPoints& axisPoints() const;
-
-    /**
-     * Check if a point is inside the rectangle
-     * @param point a point
+     * Check if a point is contained by the rectangle
+     * @param point The point to check
+     * @return true if the point is contained by the rectangle, false otherwise
      */
     [[nodiscard]] bool contains(const Vector2& point) const;
 
     /**
-     * Check if this rectangle touches another rectangle
-     * @param rectangle a rectangle
-     * @return True if the shapes touch, false otherwise
+     * Check if a rectangle overlaps with this rectangle
+     * @param rectangle The rectangle to check
+     * @return true if the rectangles overlap, false otherwise
      */
-    [[nodiscard]] std::optional<Side> touches(const Rectangle& rectangle) const;
+    [[nodiscard]] bool overlaps(const Rectangle& rectangle) const;
 
     /**
-     * Check if this rectangle intersects a rectangle
-     * @param rectangle a rectangle
-     * @return True if the shapes intersect, false otherwise
+     * Check if this rectangle overlaps with another rectangle while moving with a certain velocity
+     * @param rectangle The rectangle to check
+     * @return
      */
-    [[nodiscard]] bool intersects(const Rectangle& rectangle) const;
+    [[nodiscard]] std::optional<IntersectionInfo> overlaps(const Rectangle& rectangle,
+                                                           const Vector2& displacement,
+                                                           float delta) const;
 
     /**
-     * Check if this rectangle intersects with other rectangle when having a displacement
-     * and get the intersection info
-     * @param rectangle a rectangle
-     * @param displacement the displacement of the rectangle
-     * @return The intersection info if the rectangles intersect, std::nullopt otherwise
+     * Check if a segment overlaps with this rectangle
+     * @param ray The segment to check
+     * @return true if the segment overlaps with the rectangle, false otherwise
      */
-    [[nodiscard]] std::optional<Vector2> intersects(const Rectangle& rectangle,
-                                                             const Vector2& displacement) const;
-
-private:
-    std::optional<Sides> cachedSides;
-    std::optional<Vertices> cachedVertices;
-    std::optional<AxisPoints> cachedAxisPoints;
+    [[nodiscard]] std::optional<IntersectionInfo> overlaps(const Ray2D& ray) const;
 };

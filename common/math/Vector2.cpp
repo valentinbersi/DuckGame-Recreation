@@ -113,7 +113,7 @@ bool Vector2::operator!=(const Vector2& v) const noexcept { return !(*this == v)
 
 bool Vector2::isNormalized() const noexcept { return Math::isEqualAprox(lengthSquared(), 1); }
 
-bool Vector2::isZero() const noexcept { return Math::isZeroAprox(_x) && Math::isZeroAprox(_y); }
+bool Vector2::isZero() const noexcept { return _x == 0 and _y == 0; }
 
 float Vector2::length() const noexcept {
     if (isZero())
@@ -168,6 +168,12 @@ Vector2 Vector2::rotated(const float angle) const {
     return {_x * cos + _y * sin, _x * sin - _y * cos};
 }
 
+void Vector2::swap() { std::swap(_x, _y); }
+
+void Vector2::swapX(Vector2& other) { std::swap(_x, other._x); }
+
+void Vector2::swapY(Vector2& other) { std::swap(_y, other._y); }
+
 Vector2 Vector2::operator*(const float scalar) const { return {scalar * _x, scalar * _y}; }
 
 Vector2& Vector2::operator*=(const float scalar) { return *this = *this * scalar; }
@@ -194,6 +200,22 @@ Vector2 Vector2::operator/(const float scalar) const {
 }
 
 Vector2& Vector2::operator/=(const float scalar) { return *this = *this / scalar; }
+
+Vector2 Vector2::operator/(const Vector2& other) const { return {_x / other._x, _y / other._y}; }
+
+Vector2& Vector2::operator/=(const Vector2& other) {
+    _x /= other._x;
+    _y /= other._y;
+    return *this;
+}
+
+Vector2 Vector2::operator*(const Vector2& other) const { return {_x * other._x, _y * other._y}; }
+
+Vector2& Vector2::operator*=(const Vector2& other) {
+    _x *= other._x;
+    _y *= other._y;
+    return *this;
+}
 
 const Vector2& Vector2::operator+() const { return *this; }
 

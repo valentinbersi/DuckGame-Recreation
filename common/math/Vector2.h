@@ -230,6 +230,23 @@ public:
     [[nodiscard]] Vector2 rotated(float angle) const;
 
     /**
+     * Swap the x coordinate with the y coordinate
+     */
+    void swap();
+
+    /**
+     * Swap the x coordinate with the x coordinate of the given vector
+     * @param other The vector to swap
+     */
+    void swapX(Vector2& other);
+
+    /**
+     * Swap the y coordinate with the y coordinate of the given vector
+     * @param other The vector to swap
+     */
+    void swapY(Vector2& other);
+
+    /**
      * Get the result of scaling the vector by the given scalar
      * @param scalar The scalar to multiply the vector by
      * @return The scaled vector
@@ -284,6 +301,38 @@ public:
      * @return A reference to this vector
      */
     Vector2& operator/=(float scalar);
+
+    /**
+     * Get the result of dividing the vector's coordinates by the given vector's coordinates
+     * respectively
+     * @param other The vector to divide by
+     * @return The divided vector
+     */
+    [[nodiscard]] Vector2 operator/(const Vector2& other) const;
+
+    /**
+     * Get the result of dividing the vector's coordinates by the given vector's coordinates and
+     * store it in this vector
+     * @param other The vector to divide by
+     * @return A reference to this vector
+     */
+    Vector2& operator/=(const Vector2& other);
+
+    /**
+     * Get the result of multiplying the vector's coordinates by the given vector's coordinates
+     * respectively
+     * @param other The vector to multiply by
+     * @return The multiplied vector
+     */
+    [[nodiscard]] Vector2 operator*(const Vector2& other) const;
+
+    /**
+     * Get the result of multiplying the vector's coordinates by the given vector's coordinates and
+     * store it in this vector
+     * @param other The vector to multiply by
+     * @return A reference to this vector
+     */
+    Vector2& operator*=(const Vector2& other);
 
     /**
      * Get the same vector. May be useful for improving code readability.
