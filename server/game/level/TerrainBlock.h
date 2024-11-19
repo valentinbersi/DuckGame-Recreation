@@ -4,9 +4,9 @@
 /**
  * A platform in the game
  */
-class Platform final: public StaticObject {
+class TerrainBlock final: public StaticObject {
 public:
-    Platform(Vector2 position, float width, float height);
+    explicit TerrainBlock(Vector2 position);
 
     void start() override;
     void update(float delta) override;
