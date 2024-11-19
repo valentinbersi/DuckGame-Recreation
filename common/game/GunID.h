@@ -13,5 +13,6 @@ enum class GunID : u8 {
     Shotgun = 0x8,
     Sniper = 0x9,
     Helmet = 0xA,
-    Armor = 0x0B
+    Armor = 0x0B,
+    NONE = 0x0C
 };

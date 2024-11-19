@@ -5,6 +5,7 @@
 #include "Spritesheet.h"
 #include "DuckData.h"
 #include "DuckState.h"
+#include "GunID.h"
 #include <SDL2pp/SDL2pp.hh>
 
 class SpriteManager {

@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include "DuckData.h"
+#include "GunID.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
