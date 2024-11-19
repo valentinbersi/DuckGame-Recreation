@@ -13,8 +13,7 @@ private:
     int gridHeight;
     QGraphicsItem* selectedItem;
     std::vector<Object>& objects;
-
-    bool addingObject;
+    int ducksCount;
     ObjectType objectTypeToAdd;
 
 public:
@@ -39,6 +38,7 @@ public:
     void newMap();
     void drawBackground(QPainter* painter, const QRectF& rect) override;
     // void zoom(double factor);
+    bool enoughDucks() const;
 
 signals:
     void addingObjectChanged(ObjectType type);

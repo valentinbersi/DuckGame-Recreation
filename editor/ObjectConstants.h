@@ -9,7 +9,7 @@
 #define PLATFORM_WIDTH 2
 #define DUCK_HEIGHT 3
 #define DUCK_WIDTH 2
-#define ARMAMENT_HEIGHT 3
-#define ARMAMENT_WIDTH 3
+#define ARMAMENT_HEIGHT 2
+#define ARMAMENT_WIDTH 2
 #define BOX_HEIGHT 2
 #define BOX_WIDTH 2

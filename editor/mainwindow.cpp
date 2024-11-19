@@ -26,6 +26,10 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->ClearAll, &QAction::triggered, scene, &LevelScene::clearAll);
 
     connect(ui->actionSaveMap, &QAction::triggered, this, [this](){
+        if (!scene->enoughDucks()) {
+            QMessageBox::warning(this, "Error", "El mapa debe tener al menos un pato antes de guardarlo.");
+            return;
+        }
         MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), mapWidth, mapHeight);
     });
 
@@ -138,9 +142,9 @@ void MainWindow::on_actionEditMap_triggered() {
         scene->clearAll();
 
         bool success = MapManager::importMap(objects, fileName.toStdString(), mapWidth, mapHeight, background);
-        qDebug() << "width importado: " << mapWidth << ", height importado: " << mapHeight;
         if (success) {
             scene->loadMap(mapWidth, mapHeight);
+            ui->lineEditMapName->setText(mapName);
             QMessageBox::information(this, "Mapa Importado", "El mapa se ha importado correctamente.");
         } else {
             QMessageBox::warning(this, "Error", "Hubo un error al importar el mapa.");
