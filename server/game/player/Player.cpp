@@ -9,6 +9,7 @@
 #define MOVE_RIGHT "Move Right"
 #define MOVE_LEFT "Move Left"
 #define CROUCH "Crouch"
+#define JUMP "Jump"
 
 #define DEFAULT_LIFE 10
 #define DEFAULT_FLAGS 0
@@ -23,6 +24,7 @@ Player::Player(const DuckID id):
     input.addAction(MOVE_RIGHT);
     input.addAction(MOVE_LEFT);
     input.addAction(CROUCH);
+    input.addAction(JUMP);
 }
 
 void Player::moveRight() { input.pressAction(MOVE_RIGHT); }
@@ -36,6 +38,10 @@ void Player::stopMoveLeft() { input.releaseAction(MOVE_LEFT); }
 void Player::crouch() { input.pressAction(CROUCH); }
 
 void Player::stopCrouch() { input.releaseAction(CROUCH); }
+
+void Player::jump() { input.pressAction(JUMP); }
+
+void Player::stopJump() { input.releaseAction(JUMP); }
 
 void Player::start() {}
 
@@ -55,6 +61,11 @@ void Player::update([[maybe_unused]] const float delta) {
     } else if (input.isActionPressed(MOVE_LEFT)) {
         _velocity += Vector2(-speed, 0);
         flags |= DuckData::MOVING_LEFT;
+    } else if (input.isActionPressed(JUMP)) {
+        _velocity += Vector2(0, -100);
+    }
+    if(!_onGround){
+        flags |= DuckData::IN_AIR;
     }
 }
 

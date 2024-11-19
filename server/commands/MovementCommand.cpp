@@ -7,29 +7,30 @@ void MovementCommand::execute(GameController& gameController) {
     Player& player = gameController.getPlayer(id);
     switch (action) {
         case InputAction::LEFT_PRESSED:
-            player.moveLeft();
-            break;
+            return player.moveLeft();
+
         case InputAction::RIGHT_PRESSED:
-            player.moveRight();
-            break;
+            return player.moveRight();
 
         case InputAction::LEFT_RELEASED:
-            player.stopMoveLeft();
-            break;
+            return player.stopMoveLeft();
 
         case InputAction::RIGHT_RELEASED:
-            player.stopMoveRight();
-            break;
+            return player.stopMoveRight();
 
         case InputAction::DOWN_PRESSED:
-            player.crouch();
-            break;
+            return player.crouch();
         
         case InputAction::DOWN_RELEASED:
-            player.stopCrouch();
-            break;
+            return player.stopCrouch();
 
+        case InputAction::JUMP_PRESSED:
+            return player.jump();
+
+        case InputAction::JUMP_RELEASED:
+            return player.stopJump();
+        
         default:
-            break;
+            return;
     }
 }

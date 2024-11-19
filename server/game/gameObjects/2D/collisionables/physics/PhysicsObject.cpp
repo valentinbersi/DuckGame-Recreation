@@ -19,6 +19,7 @@ void PhysicsObject::updateInternal(const float delta) {
 }
 
 void PhysicsObject::processCollisions(const float delta) {
+    _onGround = false;
     std::vector<std::pair<int, float>> collisionOrder;
 
     for (size_t i = 0; i < objectsToCollide.size(); ++i)
@@ -36,6 +37,9 @@ void PhysicsObject::processCollisions(const float delta) {
         if (const std::shared_ptr<CollisionObject> objectPtr = objectsToCollide[index].lock()) {
             if (const std::optional<IntersectionInfo> collisionInfo =
                         moveAndCollide(*objectPtr, _velocity, delta)) {
+                if (collisionInfo->contactNormal.y() < 0){
+                    _onGround = true;
+                }
                 _velocity += collisionInfo->contactNormal *
                              Vector2(std::abs(_velocity.x()), std::abs(_velocity.y())) *
                              (1 - collisionInfo->tHitNear);

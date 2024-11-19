@@ -63,4 +63,8 @@ public:
      * Stops the player from crouching
      */
     void stopCrouch();
+
+    void jump();
+
+    void stopJump();
 };

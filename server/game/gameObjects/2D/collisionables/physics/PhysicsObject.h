@@ -12,6 +12,7 @@ private:
 
 protected:
     Vector2 _velocity;
+    bool _onGround;
 
     /**
      * Creates a new physics object

@@ -3,6 +3,6 @@
 #include "Vector2.h"
 
 struct GlobalPhysics {
-    constexpr static float gravityScalar = 9.8f;
+    constexpr static float gravityScalar = 981.0f;
     static const Vector2 gravity;
 };
