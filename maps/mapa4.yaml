@@ -1,0 +1,71 @@
+map_name: mapa4
+background: background_image.png
+map_width: 100
+map_height: 100
+objects:
+  - type: PLATFORM
+    x: 12
+    y: 17
+  - type: PLATFORM
+    x: 14
+    y: 16
+  - type: PLATFORM
+    x: 15
+    y: 16
+  - type: PLATFORM
+    x: 17
+    y: 16
+  - type: PLATFORM
+    x: 21
+    y: 16
+  - type: PLATFORM
+    x: 22
+    y: 16
+  - type: PLATFORM
+    x: 19
+    y: 16
+  - type: PLATFORM
+    x: 22
+    y: 14
+  - type: PLATFORM
+    x: 22
+    y: 12
+  - type: PLATFORM
+    x: 22
+    y: 10
+  - type: PLATFORM
+    x: 22
+    y: 8
+  - type: PLATFORM
+    x: 22
+    y: 4
+  - type: PLATFORM
+    x: 24
+    y: 4
+  - type: PLATFORM
+    x: 26
+    y: 4
+  - type: PLATFORM
+    x: 28
+    y: 4
+  - type: PLATFORM
+    x: 30
+    y: 4
+  - type: DUCK
+    x: 30
+    y: 2
+  - type: DUCK
+    x: 12
+    y: 14
+  - type: ARMAMENT
+    x: 15
+    y: 15
+  - type: ARMAMENT
+    x: 25
+    y: 2
+  - type: BOX
+    x: 18
+    y: 14
+  - type: BOX
+    x: 22
+    y: 2

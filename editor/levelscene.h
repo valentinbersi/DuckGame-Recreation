@@ -36,6 +36,7 @@ public:
     // Se encarga de cargar un mapa del tamaño pasado por parametro.
     // Cargara en el mapa los objetos de la lista objects, que ya se tiene la referencia en esta clase.
     void loadMap(int mapWidth, int mapHeight);
+    void newMap();
     void drawBackground(QPainter* painter, const QRectF& rect) override;
     // void zoom(double factor);
 

@@ -98,9 +98,8 @@ void MainWindow::on_actionNewMap_triggered() {
             return;
         }
     }
-
     scene->clearAll();
-
+    //scene->newMap();
     QMessageBox::information(this, "Nuevo Mapa", "Se ha creado un nuevo mapa.");
 }
 
@@ -128,7 +127,7 @@ void MainWindow::on_actionEditMap_triggered() {
         scene->clearAll();
 
         bool success = MapManager::importMap(objects, fileName.toStdString(), mapWidth, mapHeight, background);
-
+        qDebug() << "width importado: " << mapWidth << ", height importado: " << mapHeight;
         if (success) {
             scene->loadMap(mapWidth, mapHeight);
             QMessageBox::information(this, "Mapa Importado", "El mapa se ha importado correctamente.");

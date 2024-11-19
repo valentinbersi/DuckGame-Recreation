@@ -1,5 +1,4 @@
 #include "levelscene.h"
-#include "ObjectConstants.h"
 
 #include <QAction>
 #include <QDrag>
@@ -80,8 +79,19 @@ void LevelScene::addObjectInMap(Object object) {
     }
 }
 
+void LevelScene::newMap() {
+    clearAll();
+    gridWidth = DEFAULT_WIDTH * PIXEL_SIZE;
+    gridHeight = DEFAULT_HEIGHT * PIXEL_SIZE;
+}
+
 void LevelScene::loadMap(int mapWidth, int mapHeight) {
+    qDebug() << "width loadMap: " << mapWidth << ", height loadMap: " << mapHeight;
     setSceneRect(0, 0, mapWidth * PIXEL_SIZE, mapHeight * PIXEL_SIZE);
+    qDebug() << "width SceneRect: " << sceneRect().width() << ", height lSceneRect: " << sceneRect().height();
+    gridWidth = mapWidth * PIXEL_SIZE;
+    gridHeight = mapHeight * PIXEL_SIZE;
+    qDebug() << "gridWidth: " << gridWidth << ", gridHeight: " << gridHeight;
     for (const auto& object : objects) {
         addObjectInMap(object);
     }
@@ -166,18 +176,6 @@ void LevelScene::drawBackground(QPainter* painter, const QRectF&) {
     painter->restore();
 }
 
-//void LevelScene::toggleAddingObject(ObjectType type) {
-//    if (addingObject && objectTypeToAdd == type){
-//        addingObject = false;
-//        objectTypeToAdd = UNKNOWN;
-//    } else {
-//        addingObject = true;
-//        objectTypeToAdd = type;
-//    }
-//
-//    emit addingObjectChanged(objectTypeToAdd, addingObject);
-//}
-
 void LevelScene::selectObjectType(ObjectType type) {
     if (objectTypeToAdd == type) {
         objectTypeToAdd = UNKNOWN;
@@ -188,7 +186,6 @@ void LevelScene::selectObjectType(ObjectType type) {
 }
 
 void LevelScene::clearAll() {
-    qDebug() << "clearAll";
     clear();
     objects.clear();
 }
