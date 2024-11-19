@@ -2,6 +2,7 @@
 #define LEVELSCENE_H
 
 #include <QGraphicsScene>
+#include <vector>
 
 #include "Object.h"
 

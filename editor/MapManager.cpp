@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <fstream>
+#include <string>
 
 void MapManager::exportMap(const std::vector<Object>& objects, const std::string& mapName,
                            int mapWidth, int mapHeight) {

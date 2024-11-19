@@ -23,7 +23,7 @@ struct Object {
     QPointF centerPos;
     QSize size;
 
-    Object(ObjectType type): type(type) {
+    explicit Object(ObjectType type): type(type) {
         switch (type) {
             case PLATFORM:
                 icon = PLATFORM_ICON;

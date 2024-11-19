@@ -1,4 +1,5 @@
 #include "levelscene.h"
+#include <vector>
 
 #include <QAction>
 #include <QDrag>
@@ -7,7 +8,6 @@
 #include <QGraphicsView>
 #include <QMimeData>
 #include <cmath>
-
 
 #define PIXEL_SIZE 10
 #define DEFAULT_WIDTH 200
