@@ -4,6 +4,9 @@
 #include <string>
 
 #include "GameStatus.h"
+#include "Level.h"
+#include "SpawnPoint.h"
+#include "TerrainBlock.h"
 
 /**
  * Macro for easier event handling
@@ -39,7 +42,7 @@ GameController::AlreadyAddedPlayer::AlreadyAddedPlayer(const PlayerID id):
 GameController::PlayerNotFound::PlayerNotFound(const PlayerID id):
         std::out_of_range(PLAYER_ID + std::to_string(id) + NOT_FOUND) {}
 
-GameController::GameController(): GameObject(nullptr) {
+GameController::GameController(): GameObject(nullptr), level(nullptr) {
     connect(eventName(Events::TREE_ENTERED),
             eventHandler(&GameController::onTreeEntered, GameObject*));
 
@@ -93,6 +96,23 @@ void GameController::removePlayer(const PlayerID playerID) {
 Player& GameController::getPlayer(const PlayerID playerID) const { return *players.at(playerID); }
 
 u8 GameController::playersCount() const { return players.size(); }
+
+void GameController::loadLevel(const Level& level) {
+    if (this->level != nullptr)
+        removeChild("Level");
+
+    this->level = new GameObject();
+
+    for (u64 i = 0; i < level.terrainBlocks.size(); i++)
+        this->level->addChild("TerrainBlock" + std::to_string(i),
+                              std::make_unique<TerrainBlock>(level.terrainBlocks[i]));
+
+    for (u64 i = 0; i < level.duckSpawnPoints.size(); i++)
+        this->level->addChild("SpawnPoint" + std::to_string(i),
+                              std::make_unique<SpawnPoint>(level.duckSpawnPoints[i]));
+
+    addChild("Level", this->level);
+}
 
 GameStatus GameController::status() {
     GameStatus status;

@@ -93,12 +93,23 @@ public:
         explicit ChildNotInTree(const std::string& name);
     };
 
-    GameObject() = delete;
+    GameObject();
     GameObject(const GameObject& other) = delete;
     GameObject& operator=(const GameObject& other) = delete;
     GameObject(GameObject&& other) noexcept = delete;
     GameObject& operator=(GameObject&& other) noexcept = delete;
     ~GameObject() override;
+
+    /**
+     * Does nothing on object
+     */
+    void start() override;
+
+    /**
+     * Does nothing on object
+     * @param delta The time since the last update
+     */
+    void update(float delta) override;
 
     /**
      * Updates the children of the object
@@ -161,7 +172,7 @@ public:
      * Get the status of the object
      * @return The status of the object
      */
-    virtual GameStatus status() = 0;
+    virtual GameStatus status();
 
     /**
      * The events the Object class has

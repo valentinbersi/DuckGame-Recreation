@@ -69,11 +69,17 @@ GameObject::AlreadyAddedChild::AlreadyAddedChild(const std::string& name):
 GameObject::ChildNotInTree::ChildNotInTree(const std::string& name):
         std::out_of_range(CHILD_NAME + name + NOT_IN_TREE) {}
 
+GameObject::GameObject(): _parent(nullptr) {}
+
 #define NO_PARENT "Object has no parent"
 
 GameObject::~GameObject() {
     for (auto& [name, child]: children) delete child;
 }
+
+void GameObject::start() {}
+
+void GameObject::update(float delta) {}
 
 void GameObject::updateInternal(const float delta) {
     for (auto& [name, child]: children) {
@@ -110,6 +116,8 @@ bool GameObject::isParent() const { return not children.empty(); }
 GameObject* GameObject::parent() const { return _parent; }
 
 bool GameObject::isRoot() const { return _parent == nullptr; }
+
+GameStatus GameObject::status() { return {}; }
 
 #define TREE_ADDED_NAME "TreeEntered"
 #define TREE_EXITED_NAME "TreeExited"
