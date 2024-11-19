@@ -7,8 +7,8 @@
 
 SendProtocol::SendProtocol(ActiveSocket& socket): skt(socket) {}
 
-void SendProtocol::sendByte(unsigned char byte) {
-    if (!skt.send(&byte, sizeof(unsigned char))) {
+void SendProtocol::sendByte(u8 byte) {
+    if (!skt.send(&byte, sizeof(uint8_t))) {
         throw LibError(EPIPE, ERR_SEND);
     }
 }

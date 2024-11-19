@@ -6,7 +6,7 @@
  */
 class Platform final: public StaticObject {
 public:
-    Platform();
+    Platform(Vector2 position, float width, float height);
 
     void start() override;
     void update(float delta) override;

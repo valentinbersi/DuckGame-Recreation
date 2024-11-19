@@ -1,6 +1,7 @@
 #include "GameLoop.h"
 
 #include <algorithm>
+#include <iostream>
 #include <memory>
 #include <utility>
 
@@ -32,20 +33,22 @@ void GameLoop::run() {
         broadcast(std::make_shared<ReplyMessage>(0, 1, 0));
         timer.start();
         game.start();
-
-        while (_keep_running) {
+        // while(_keep_running){
+        while (_keep_running) { //poner game.MatchEnded() y && _keep_running para condicion de corte.
             const float deltaTime = timer.iterationStartSeconds().count();
             retrieveCurrentFrameCommands();
             processCurrentFrameCommands();
             game.updateInternal(deltaTime);
             game.update(deltaTime);
-            broadcast(std::make_shared<GameStatus>(std::move(game.status())));
+            broadcast(std::make_shared<GameStatus>(std::move(game.status()))); //talvez aca ya manda de una gameended
             timer.iterationEnd(FPS);
         }
+
+        // }
     } catch (const ClosedQueue& err) {
         // Expected when closing server
-    } catch (...) {
-        syslog(LOG_CRIT, ERROR_MSG);
+    } catch (const std::exception& err) {
+        syslog(LOG_CRIT, "%s", err.what());
     }
     _keep_running = false;
     _is_alive = false;
@@ -57,29 +60,27 @@ void GameLoop::stop() {
     _is_alive = false;
 }
 
-bool GameLoop::shouldAddQueue(const u16 clientID) {
-    return clientID % 2 == 1;
-}
+bool GameLoop::shouldAddQueue(const u16 clientID) { return clientID % 2 == 1; }
 
 void GameLoop::addClient(const u16 clientID,
                          std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue) {
 
     game.addPlayer(clientID);
-    if(shouldAddQueue(clientID)){
+    if (shouldAddQueue(clientID)) {
         clientQueuesMap.insert({clientID, std::move(clientQueue)});
     }
-    broadcast(std::make_shared<ReplyMessage>(0, 0, game.playersCount()));
+    broadcast(std::make_shared<ReplyMessage>(game.playersCount()));
 }
 
 BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCommands; }
 
 void GameLoop::broadcast(std::shared_ptr<ServerMessage> message) {
-    for(auto it = clientQueuesMap.begin(); it != clientQueuesMap.end();){
-        if(it->second.expired()){
+    for (auto it = clientQueuesMap.begin(); it != clientQueuesMap.end();) {
+        if (it->second.expired()) {
             it = clientQueuesMap.erase(it);
         } else {
             bool sucess = it->second.lock()->try_push(message);
             it = sucess ? ++it : clientQueuesMap.erase(it);
         }
-    }   
+    }
 }

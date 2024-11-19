@@ -29,6 +29,7 @@ public:
 
     /**
      * Process all collisions between collisionObjects
+     * @param delta The time since the last frame
      */
-    void processCollisions() const;
+    void processCollisions(float delta) const;
 };

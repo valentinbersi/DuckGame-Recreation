@@ -1,12 +1,13 @@
 #pragma once
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 
 #include "Types.h"
 
 struct Math {
-    constexpr static u32 EPSILON = 10000;
+    constexpr static u16 EPSILON = 10000;
     constexpr static float INVERSE_EPSILON = 1.f / EPSILON;
 
     /**
@@ -89,7 +90,7 @@ struct Math {
      * @param f The float to convert
      * @return The converted integer
      */
-    constexpr static u32 floatToInteger(float f);
+    constexpr static unsigned int floatToInteger(float f);
 
     /**
      * To sum up, it multiplies the integer by a constant and converts it to a float.
@@ -97,16 +98,20 @@ struct Math {
      * @param i The integer to convert
      * @return The converted float
      */
-    constexpr static float integerToFloat(u32 i);
+    constexpr static float integerToFloat(unsigned int i);
+
+    /**
+     * Solves a quadratic equation of the form ax^2 + bx + c = 0.
+     * @param a The coefficient of x^2
+     * @param b The coefficient of x
+     * @param c The constant term
+     * @return An array with the solutions to the equation
+     */
+    constexpr static std::array<float, 2> solveQuadratic(float a, float b, float c);
 };
 
 constexpr bool Math::isEqualAprox(const float a, const float b) noexcept {
-    float tolerance = INVERSE_EPSILON * std::max(std::abs(a), std::abs(b));
-
-    if (tolerance < INVERSE_EPSILON)
-        tolerance = INVERSE_EPSILON;
-
-    return isEqualAprox(a, b, tolerance);
+    return isEqualAprox(a, b, INVERSE_EPSILON);
 }
 
 constexpr bool Math::isEqualAprox(const float a, const float b, const float tolerance) noexcept {
@@ -142,4 +147,17 @@ constexpr u32 Math::floatToInteger(const float f) { return static_cast<u32>(f * 
 
 constexpr float Math::integerToFloat(const u32 i) {
     return static_cast<float>(i) * INVERSE_EPSILON;
+}
+
+constexpr std::array<float, 2> Math::solveQuadratic(const float a, const float b, const float c) {
+    const float discriminant = b * b - 4 * a * c;
+
+    if (discriminant < 0)
+        return {NAN, NAN};
+
+    if (discriminant == 0)
+        return {-b / (2 * a), -b / (2 * a)};
+
+    const float sqrtDiscriminant = std::sqrt(discriminant);
+    return {(-b + sqrtDiscriminant) / (2 * a), (-b - sqrtDiscriminant) / (2 * a)};
 }

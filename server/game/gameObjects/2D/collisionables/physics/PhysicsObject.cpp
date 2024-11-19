@@ -1,17 +1,13 @@
 #include "PhysicsObject.h"
 
 #include "GlobalPhysics.h"
+#include "Math.h"
 
-PhysicsObject::PhysicsObject(GameObject* parent, Vector2 position, const float rotation,
-                             const std::bitset<LAYERS_COUNT> layers,
-                             const std::bitset<LAYERS_COUNT> scannedLayers,
-                             std::unique_ptr<Shape2D> shape, Vector2 initialVelocity,
-                             const Gravity gravity):
-
-        CollisionObject(parent, std::move(position), rotation, layers, scannedLayers,
-                        std::move(shape)),
-        _velocity(std::move(initialVelocity)),
-        gravity(gravity) {}
+PhysicsObject::PhysicsObject(GameObject* parent, const Vector2& position,
+                             const std::bitset<LayersCount> layers,
+                             const std::bitset<LayersCount> scannedLayers, const float width,
+                             const float height, const Gravity gravity):
+        CollisionObject(parent, position, layers, scannedLayers, width, height), gravity(gravity) {}
 
 PhysicsObject::~PhysicsObject() = default;
 
@@ -22,16 +18,36 @@ void PhysicsObject::updateInternal(const float delta) {
     CollisionObject::updateInternal(delta);
 }
 
-void PhysicsObject::processCollisions() {
-    for (const auto& object: objectsToCollide)
-        if (const auto objectPtr = object.lock(); objectPtr != nullptr && collidesWith(*objectPtr))
-            _velocity = Vector2::ZERO;
+void PhysicsObject::processCollisions(const float delta) {
+    _onGround = false;
+    std::vector<std::pair<int, float>> collisionOrder;
 
-    setPosition(position() + _velocity);
+    for (size_t i = 0; i < objectsToCollide.size(); ++i)
+        if (const std::shared_ptr<CollisionObject> objectPtr = objectsToCollide[i].lock())
+            if (const std::optional<IntersectionInfo> collisionInfo =
+                        moveAndCollide(*objectPtr, _velocity, delta))
+                collisionOrder.emplace_back(i, collisionInfo->tHitNear);
+
+    std::ranges::sort(collisionOrder,
+                      [](const std::pair<int, float>& a, const std::pair<int, float>& b) {
+                          return a.second < b.second;
+                      });
+
+    for (const auto& [index, _]: collisionOrder) {
+        if (const std::shared_ptr<CollisionObject> objectPtr = objectsToCollide[index].lock()) {
+            if (const std::optional<IntersectionInfo> collisionInfo =
+                        moveAndCollide(*objectPtr, _velocity, delta)) {
+                if (collisionInfo->contactNormal.y() < 0){
+                    _onGround = true;
+                }
+                _velocity += collisionInfo->contactNormal *
+                             Vector2(std::abs(_velocity.x()), std::abs(_velocity.y())) *
+                             (1 - collisionInfo->tHitNear);
+            }
+        }
+    }
+
+    setPosition(position() + _velocity * delta);
 }
-
-const Vector2& PhysicsObject::velocity() const { return _velocity; }
-
-void PhysicsObject::setVelocity(Vector2 velocity) { _velocity = std::move(velocity); }
 
 void PhysicsObject::setGravity(const Gravity gravity) { this->gravity = gravity; }

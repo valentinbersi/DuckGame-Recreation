@@ -11,6 +11,7 @@ class Player final: public PhysicsObject {
     u16 flags;
     Input input;
     float speed;
+    // bool canKeepJumping;
 
 public:
     explicit Player(DuckID id);
@@ -63,4 +64,8 @@ public:
      * Stops the player from crouching
      */
     void stopCrouch();
+
+    void jump();
+
+    void stopJump();
 };

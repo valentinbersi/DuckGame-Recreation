@@ -28,6 +28,14 @@ public:
      * A vector pointing RIGHT (1, 0)
      */
     static const Vector2 RIGHT;
+    /**
+     * A vector with all its coordinates set to NaN
+     */
+    static const Vector2 NANV;
+    /**
+     * A vector with all its coordinates set to 1
+     */
+    static const Vector2 ONE;
 
     /**
      * Construct a default initialized Vector2 with all coordinates set to 0
@@ -65,16 +73,30 @@ public:
     [[nodiscard]] float y() const;
 
     /**
+     * Get a vector 2 based on this vector with its position set to the given x coordinate
+     * @param value The new x coordinate
+     * @return  A new vector with the x coordinate set to the given value
+     */
+    [[nodiscard]] Vector2 x(float value) const;
+
+    /**
+     * Get a vector 2 based on this vector with its position set to the given y coordinate
+     * @param value The new y coordinate
+     * @return  A new vector with the y coordinate set to the given value
+     */
+    [[nodiscard]] Vector2 y(float value) const;
+
+    /**
      * Set the x coordinate of the vector
      * @param x The new x coordinate
      */
-    void x(float x);
+    void setX(float x);
 
     /**
      * Set the y coordinate of the vector
      * @param y The new y coordinate
      */
-    void y(float y);
+    void setY(float y);
 
     /**
      * Get this vector's angle with respect to the positive X axis, or RIGHT (1, 0)
@@ -208,6 +230,23 @@ public:
     [[nodiscard]] Vector2 rotated(float angle) const;
 
     /**
+     * Swap the x coordinate with the y coordinate
+     */
+    void swap();
+
+    /**
+     * Swap the x coordinate with the x coordinate of the given vector
+     * @param other The vector to swap
+     */
+    void swapX(Vector2& other);
+
+    /**
+     * Swap the y coordinate with the y coordinate of the given vector
+     * @param other The vector to swap
+     */
+    void swapY(Vector2& other);
+
+    /**
      * Get the result of scaling the vector by the given scalar
      * @param scalar The scalar to multiply the vector by
      * @return The scaled vector
@@ -264,6 +303,38 @@ public:
     Vector2& operator/=(float scalar);
 
     /**
+     * Get the result of dividing the vector's coordinates by the given vector's coordinates
+     * respectively
+     * @param other The vector to divide by
+     * @return The divided vector
+     */
+    [[nodiscard]] Vector2 operator/(const Vector2& other) const;
+
+    /**
+     * Get the result of dividing the vector's coordinates by the given vector's coordinates and
+     * store it in this vector
+     * @param other The vector to divide by
+     * @return A reference to this vector
+     */
+    Vector2& operator/=(const Vector2& other);
+
+    /**
+     * Get the result of multiplying the vector's coordinates by the given vector's coordinates
+     * respectively
+     * @param other The vector to multiply by
+     * @return The multiplied vector
+     */
+    [[nodiscard]] Vector2 operator*(const Vector2& other) const;
+
+    /**
+     * Get the result of multiplying the vector's coordinates by the given vector's coordinates and
+     * store it in this vector
+     * @param other The vector to multiply by
+     * @return A reference to this vector
+     */
+    Vector2& operator*=(const Vector2& other);
+
+    /**
      * Get the same vector. May be useful for improving code readability.
      * @return The same vector
      */
@@ -282,4 +353,15 @@ public:
      * @result The scaled vector
      */
     friend Vector2 operator*(float scalar, const Vector2& v);
+
+    enum class Orientation { Collinear, CounterClockwise, Clockwise };
+
+    /**
+     * Get the orientation of the triplet (p, q, r)
+     * @param p The first vector
+     * @param q The second vector
+     * @param r The third vector
+     * @return The orientation of the triplet
+     */
+    static Orientation orientation(const Vector2& p, const Vector2& q, const Vector2& r);
 };

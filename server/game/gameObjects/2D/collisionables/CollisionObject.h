@@ -4,36 +4,36 @@
 #include <memory>
 
 #include "GameObject2D.h"
-#include "Shape2D.h"
+#include "Rectangle.h"
 
 /**
  * An Object that can collide with other collision objects
  */
 class CollisionObject: public GameObject2D {
 public:
-    constexpr static u8 LAYERS_COUNT = 32;
+    constexpr static u8 LayersCount = 32;
 
 private:
-    std::bitset<LAYERS_COUNT> _layers;
-    std::bitset<LAYERS_COUNT> _scannedLayers;
-    Shape2D* shape;
+    std::bitset<LayersCount> _layers;
+    std::bitset<LayersCount> _scannedLayers;
 
 protected:
-    std::forward_list<std::weak_ptr<CollisionObject>> objectsToCollide;
+    Rectangle shape;
+    std::vector<std::weak_ptr<CollisionObject>> objectsToCollide;
 
     /**
      * Construct a CollisionObject with the given parent, position, rotation, layers, scanned
-     * layers, and shape
+     * layers, and a rectangle shape
      * @param parent the parent Object
      * @param position the position of the CollisionObject
-     * @param rotation the rotation of the CollisionObject
      * @param layers the layers that the object is in
      * @param scannedLayers the layers the object scans in search for other collisionObjects
-     * @param shape the shape of the CollisionObject
+     * @param width the width of the CollisionObject
+     * @param height the height of the CollisionObject
      */
-    CollisionObject(GameObject* parent, Vector2 position, float rotation,
-                    std::bitset<LAYERS_COUNT> layers, std::bitset<LAYERS_COUNT> scannedLayers,
-                    std::unique_ptr<Shape2D> shape);
+    CollisionObject(GameObject* parent, const Vector2& position, std::bitset<LayersCount> layers,
+                    std::bitset<LayersCount> scannedLayers, float width, float height);
+
 
     /**
      * Check if the CollisionObject collides with another CollisionObject.\n
@@ -42,6 +42,14 @@ protected:
      * @return true if the CollisionObject collides with the other CollisionObject, false otherwise
      */
     bool collidesWith(const CollisionObject& other) const;
+
+    /**
+     * Move the CollisionObject and check for collisions with another CollisionObject
+     * @param other the other CollisionObject to check collision with
+     * @param displacement the displacement to move the CollisionObject
+     */
+    std::optional<IntersectionInfo> moveAndCollide(const CollisionObject& other,
+                                                   const Vector2& displacement, float delta) const;
 
 public:
     CollisionObject() = delete;
@@ -58,23 +66,30 @@ public:
     void updateInternal(float delta) override;
 
     /**
+     * Set the position of the object
+     * @param position the new position
+     * @return this CollisionObject
+     */
+    GameObject2D& setPosition(Vector2 position) noexcept final;
+
+    /**
      * Get the collision layers of the Object
      * @return the collision layers of the Object
      */
-    std::bitset<LAYERS_COUNT> layers() const;
+    std::bitset<LayersCount> layers() const;
 
     /**
      * Get the layers that this object scans
      * @return the layers that this object scans
      */
-    std::bitset<LAYERS_COUNT> scannedLayers() const;
+    std::bitset<LayersCount> scannedLayers() const;
 
     /**
      * Set the layers of the Object
      * @param layers the collision layers to set
      * @return this CollisionObject
      */
-    CollisionObject& setLayers(std::bitset<LAYERS_COUNT> layers) noexcept;
+    CollisionObject& setLayers(std::bitset<LayersCount> layers) noexcept;
 
     /**
      * Adds the object to the given layer
@@ -99,7 +114,7 @@ public:
      * @param scannedLayers the scanned layers to set
      * @return this CollisionObject
      */
-    CollisionObject& setScannedLayers(std::bitset<LAYERS_COUNT> scannedLayers) noexcept;
+    CollisionObject& setScannedLayers(std::bitset<LayersCount> scannedLayers) noexcept;
 
     /**
      * Add a layer to the scanned layers
@@ -133,6 +148,7 @@ public:
 
     /**
      * Check for collisions with other collision object and perform the collision
+     * @param delta the time since the last update
      */
-    virtual void processCollisions() = 0;
+    virtual void processCollisions(float delta) = 0;
 };
