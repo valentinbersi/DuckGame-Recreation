@@ -132,28 +132,6 @@ void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr <SpriteManag
     }
 }
 
-
-/*void Game::typeOfObject2D(std::unique_ptr<GameObject2DData> gameObject2D) {
-    switch (gameObject2D->id()) {
-        case GameObject2DID::GUN:
-            weapons.push_back(?);
-        break;
-        case GameObject2DID::BULLET:
-            bullets.push_back(?);
-        break;
-        case GameObject2DID::WALL:
-            blocks.push_back(?);
-        break;
-        case GameObject2DID::TIMER:
-            if (gameObject2D.timeToFinish == 0) {
-                running = false;
-                break;
-                default:
-                    break;
-            }
-    }
-}*/
-
 void Game::showBackground(Texture& backgroundTexture, float currentScale) {
     SDL_Rect dstRect;
     dstRect.x = 0;
