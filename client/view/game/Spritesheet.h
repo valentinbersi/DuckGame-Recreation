@@ -13,7 +13,7 @@ public:
     // Destructor.
     ~Spritesheet() = default;
 
-    // Selects the sprite to draw using coordinates of row and column.
+    // Selects the sprite to draw using coordinates of row and column. The boolean value sets the width and height to 32 or 16.
     // It ALSO sets the width and height of the clip.
     void selectSprite(int x, int y, bool feathers);
 
@@ -29,6 +29,9 @@ public:
 
     // Yes
     void drawWeapon(SDL2pp::Rect& playerPosition, bool flip, std::string path);
+
+    // ...
+    void drawEffects(SDL2pp::Rect& playerPosition, bool flip);
 
     // Returns the width of the clip.
     int getClipWidth() const;
