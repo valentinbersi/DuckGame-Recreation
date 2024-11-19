@@ -1,0 +1,37 @@
+#pragma once
+
+#include "GameObject.h"
+
+class GameTimer: public GameObject {
+    float timeout;
+    float timeLeft;
+    bool started;
+
+public:
+    /**
+     * Construct a game timer with the given timeout
+     */
+    explicit GameTimer(float timeout);
+
+    /**
+     * Start the timer
+     */
+    void start() override;
+
+    /**
+     * Update the timer
+     * @param delta time since last update
+     */
+    void update(float delta) override;
+
+    /**
+     * Set the timer to time out. This also resets the timer
+     * @param timeout time to time out
+     */
+    void setTimeout(float timeout);
+
+    /**
+     * Reset the timer
+     */
+    void reset();
+};
