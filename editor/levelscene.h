@@ -42,6 +42,7 @@ public:
 
 signals:
     void addingObjectChanged(ObjectType type);
+    void resizeView();
 };
 
 #endif  // LEVELSCENE_H

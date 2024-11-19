@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     scene = new LevelScene(this, objects);
     ui->graphicsView->setScene(scene);
+    onSceneResize();
 
     setActionButtons();
 
@@ -31,6 +32,8 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->actionNewMap, &QAction::triggered, this, &MainWindow::on_actionNewMap_triggered);
 
     connect(ui->actionEditMap, &QAction::triggered, this, &MainWindow::on_actionEditMap_triggered);
+
+    connect(scene, &LevelScene::resizeView, this, &MainWindow::onSceneResize);
 }
 
 void MainWindow::setActionButtons() {
@@ -59,11 +62,19 @@ void MainWindow::setActionButtons() {
     });
 }
 
-void MainWindow::resizeEvent(QResizeEvent* event) {
-    QMainWindow::resizeEvent(event);
+void MainWindow::onSceneResize() {
     QRectF sceneRect = scene->sceneRect();
-    ui->graphicsView->setSceneRect(0, 0, sceneRect.width() * 2, sceneRect.height() * 2);
+    ui->graphicsView->setSceneRect(0, 0, sceneRect.width() * 4, sceneRect.height() * 4);
+    qDebug() << "GV width: " << sceneRect.width() << ", GC height: " << sceneRect.height();
 }
+
+//void MainWindow::resizeEvent(QResizeEvent* event) {
+//    qDebug() << "resizeEvent";
+//    QMainWindow::resizeEvent(event);
+//    QRectF sceneRect = scene->sceneRect();
+//    ui->graphicsView->setSceneRect(0, 0, sceneRect.width() * 2, sceneRect.height() * 2);
+//    qDebug() << "GV width: " << sceneRect.width() << ", GC height: " << sceneRect.height();
+//}
 
 void MainWindow::wheelEvent(QWheelEvent* event) {
     if (event->modifiers() & Qt::ControlModifier) {

@@ -76,6 +76,7 @@ void LevelScene::addObjectInMap(Object object) {
         setSceneRect(expandedRect);
         gridWidth = expandedRect.width();
         gridHeight = expandedRect.height();
+        emit resizeView();
     }
 }
 
