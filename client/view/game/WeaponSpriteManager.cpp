@@ -2,7 +2,7 @@
 
 WeaponSpriteManager::WeaponSpriteManager() {}
 
-void WeaponSpriteManager::drawWeapon(GunID& id) {
+void WeaponSpriteManager::drawWeapon(const GunID& id) {
     switch (id) {
         case GunID::Grenade:
             // draw pistol

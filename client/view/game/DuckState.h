@@ -1,14 +1,14 @@
 #pragma once
 
 struct DuckState {
-    bool playingDead;
-    bool crouching;
-    bool inAir;
-    bool flapping;
-    bool beingDamaged;
-    bool movingRight;
-    bool movingLeft;
-    bool hasHelmet;
-    bool hasChestplate;
-    bool isShooting;
+    bool playingDead;    // cppcheck-suppress unusedStructMember
+    bool crouching;      // cppcheck-suppress unusedStructMember
+    bool inAir;          // cppcheck-suppress unusedStructMember
+    bool flapping;       // cppcheck-suppress unusedStructMember
+    bool beingDamaged;   // cppcheck-suppress unusedStructMember
+    bool movingRight;    // cppcheck-suppress unusedStructMember
+    bool movingLeft;     // cppcheck-suppress unusedStructMember
+    bool hasHelmet;      // cppcheck-suppress unusedStructMember
+    bool hasChestplate;  // cppcheck-suppress unusedStructMember
+    bool isShooting;     // cppcheck-suppress unusedStructMember
 };

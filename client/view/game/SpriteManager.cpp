@@ -159,7 +159,7 @@ void SpriteManager::drawFeathers(int col, int row, bool hasWeapon) {
                                             NO_WEAPON, NO_EFFECTS);
         spritesheet->drawSelectedSprite(position, flip, FEATHER);
 
-    } else if (flip || inAir || flapping) {
+    } else if (inAir || flapping) {
         if (hasWeapon)
             spritesheet->selectSprite(COL_WEAPON, ROW_WEAPON, FEATHER);
         else

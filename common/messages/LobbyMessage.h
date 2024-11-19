@@ -14,7 +14,7 @@ public:
 
     LobbyMessage();
 
-    LobbyMessage(LobbyRequest request, u8 count, std::string name1, std::string name2, u16 id);
+    LobbyMessage(LobbyRequest request, u8 count, std::string& name1, std::string& name2, u16 id);
 
     void send(ClientSendProtocol& clientProtocol) override;
 

@@ -3,6 +3,7 @@
 #include <map>
 #include <memory>
 #include <queue>
+#include <vector>
 
 #include "BlockingQueue.h"
 #include "Command.h"
@@ -49,7 +50,7 @@ public:
     /**
      * Construct a gameloop with no players
      */
-    GameLoop(std::vector<Level>& levels);
+    explicit GameLoop(std::vector<Level>& levels);
 
     /**
      * Run the gameloop

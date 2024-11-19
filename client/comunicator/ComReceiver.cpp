@@ -1,5 +1,6 @@
 #include "ComReceiver.h"
 
+#include <utility>
 #define ERROR_MSG "UNOWN ERROR DURING RUNTIME."
 
 CommunicatorReceiver::CommunicatorReceiver(ActiveSocket& socket,

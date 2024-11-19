@@ -49,4 +49,4 @@ void Receiver::stop() {
     _is_alive = false;
 }
 
-Receiver::~Receiver(){};
+Receiver::~Receiver() = default;

@@ -1,5 +1,9 @@
 #include "Communicator.h"
 
+#include <memory>
+#include <string>
+#include <utility>
+
 Communicator::Communicator(const std::string& hostname, const std::string& servername):
         skt(hostname.c_str(), servername.c_str()),
         sendQueue(),

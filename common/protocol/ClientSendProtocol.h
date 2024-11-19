@@ -1,4 +1,7 @@
 #pragma once
+#include <memory>
+#include <string>
+
 #include "ActiveSocket.h"
 #include "SendProtocol.h"
 #include "Types.h"
@@ -29,8 +32,8 @@ public:
      *  @param player2Name the name of the second player
      *  @param matchId the id of the match to join, 0 if request is not JoinMatch
      */
-    void sendLobbyMessage(u8 type, u8 request, u8 playerCount, std::string& player1Name,
-                          std::string& player2Name, u16 matchId);
+    void sendLobbyMessage(u8 type, u8 request, u8 playerCount, const std::string& player1Name,
+                          const std::string& player2Name, u16 matchId);
 
     /**
      *  Send a game message to the server

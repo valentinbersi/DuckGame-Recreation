@@ -12,7 +12,7 @@ private:
     std::string readInput();
 
 public:
-    Server(const std::string& hostname);
+    explicit Server(const std::string& hostname);
 
     int run() noexcept;
 

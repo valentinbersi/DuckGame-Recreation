@@ -1,6 +1,8 @@
 
 #include "Sender.h"
 
+#include <memory>
+
 #include <syslog.h>
 
 #include "LibError.h"
@@ -33,4 +35,4 @@ void Sender::stop() {
     _is_alive = false;
 }
 
-Sender::~Sender(){};
+Sender::~Sender() = default;

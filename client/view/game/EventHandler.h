@@ -32,7 +32,7 @@ public:
 private:
     // Handles 'ScreenEvents', having in mid if the game is fullscreen or not.
     // Also, updates the window size variables after the change.
-    void handleScreenEvents(SDL_Event& event, bool isKeyDown, SDL_Scancode& scancode);
+    void handleScreenEvents(const SDL_Event& event, bool isKeyDown, const SDL_Scancode& scancode);
 
     // Handles the key event, sending the message to the server using a GameMessage filled with an
     // InputAction. It works also with two players, sending the message to the server with the

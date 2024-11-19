@@ -6,5 +6,5 @@ class WeaponSpriteManager {
 
 public:
     WeaponSpriteManager();
-    void drawWeapon(GunID& id);
+    void drawWeapon(const GunID& id);
 };
