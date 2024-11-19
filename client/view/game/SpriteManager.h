@@ -1,6 +1,8 @@
 #pragma once
 
+#include <memory>
 #include <string>
+#include <unordered_map>
 
 #include <SDL2pp/SDL2pp.hh>
 
@@ -8,6 +10,7 @@
 #include "DuckState.h"
 #include "GunID.h"
 #include "Spritesheet.h"
+
 
 class SpriteManager {
 
