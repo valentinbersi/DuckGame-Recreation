@@ -24,7 +24,7 @@ void GameLoop::processCurrentFrameCommands() {
     }
 }
 
-GameLoop::GameLoop() = default;
+GameLoop::GameLoop(std::vector<Level>& levels) : levels(levels) {}    
 
 #define FPS 30
 

@@ -7,8 +7,11 @@
 #define MIN_MATCH_ID 1
 #define MAX_MATCH_ID 65535
 
-GameMapMonitor::GameMapMonitor() {}
-
+GameMapMonitor::GameMapMonitor() {
+    // levels.push_back(Level::load("level1"));
+    // levels.push_back(Level::load("level2"));    
+    // levels.push_back(Level::load("level3"));
+}
 
 BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGameIfCreated(
         u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
@@ -45,7 +48,7 @@ u16 GameMapMonitor::creatGameSafe() {
         random_number = dist(gen);
 
     } while (gameMap.contains(random_number));
-    gameMap.insert({random_number, std::make_unique<GameLoop>()});
+    gameMap.insert({random_number, std::make_unique<GameLoop>(levels)});
     return random_number;
 }
 

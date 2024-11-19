@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-
+#include <vector>
 #include "Acceptor.h"
 #include "GameMapMonitor.h"
 

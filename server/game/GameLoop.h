@@ -10,10 +10,12 @@
 #include "ServerMessage.h"
 #include "Thread.h"
 #include "Timer.h"
+#include "Level.h"
 
 class GameLoop final: public Thread {
     constexpr static std::uint8_t FRAME_TIMES_AMOUNT = 2;
 
+    std::vector<Level> levels;
     std::map<PlayerID, std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>>> clientQueuesMap{};
     BlockingQueue<std::unique_ptr<Command>> clientCommands;
     std::queue<std::unique_ptr<Command>> currentFrameCommands;
@@ -46,7 +48,7 @@ public:
     /**
      * Construct a gameloop with no players
      */
-    GameLoop();
+    GameLoop(std::vector<Level>& levels);
 
     /**
      * Run the gameloop

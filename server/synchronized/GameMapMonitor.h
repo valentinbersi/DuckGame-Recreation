@@ -5,12 +5,14 @@
 #include "GameLoop.h"
 #include "ServerMessage.h"
 #include "Types.h"
+#include "Level.h"
 
 class GameMapMonitor {
 private:
     std::mutex mutex;
     std::unordered_map<u16, std::unique_ptr<GameLoop>> gameMap;
-
+    std::vector<Level> levels;
+    
 public:
     GameMapMonitor();
 
