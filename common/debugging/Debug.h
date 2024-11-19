@@ -56,7 +56,7 @@ class Debug {
     /**
      * Create a new Debug instance
      */
-    explicit Debug();
+    Debug();
 
     ~Debug();
 

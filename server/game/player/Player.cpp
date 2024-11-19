@@ -71,9 +71,9 @@ void Player::update([[maybe_unused]] const float delta) {
     _velocity = _velocity.x(0);
     flags = 0;
 
-    if (input.isActionPressed(CROUCH))
+    if (input.isActionPressed(CROUCH)) {
         flags |= DuckData::CROUCHING;
-    else if (input.isActionPressed(MOVE_RIGHT)) {
+    } else if (input.isActionPressed(MOVE_RIGHT)) {
         _velocity += Vector2(speed, 0);
         flags |= DuckData::MOVING_RIGHT;
     } else if (input.isActionPressed(MOVE_LEFT)) {
@@ -82,9 +82,9 @@ void Player::update([[maybe_unused]] const float delta) {
     } else if (input.isActionPressed(JUMP) && _onGround) {
         _velocity += Vector2(0, -800);
     }
-    if (!_onGround) {
+
+    if (!_onGround)
         flags |= DuckData::IN_AIR;
-    }
 }
 
 Player::~Player() = default;

@@ -1,6 +1,8 @@
 #include "Level.h"
 
 #include <filesystem>
+#include <string>
+#include <vector>
 
 #include <yaml-cpp/yaml.h>
 

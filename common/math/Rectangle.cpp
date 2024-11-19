@@ -1,5 +1,8 @@
 #include "Rectangle.h"
 
+#include <algorithm>
+#include <utility>
+
 #include "IntersectionInfo.h"
 #include "Math.h"
 
