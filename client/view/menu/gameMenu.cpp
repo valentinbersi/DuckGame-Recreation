@@ -2,7 +2,6 @@
 
 #include <QDebug>
 #include <QDir>
-#include <QPushButton>
 
 #include "common_init.h"
 #include "ui_gamemenu.h"

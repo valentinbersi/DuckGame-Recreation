@@ -18,7 +18,6 @@ GameLauncher::GameLauncher(int argc, char* argv[], cppstring hostname,
 void GameLauncher::exec() {
     try {
         app.exec();
-
         if (startGame) {
             Game game(communicator, twoPlayersLocal);
             game.init();

@@ -22,7 +22,7 @@ matchSetup::matchSetup(QWidget* parent, MatchMode matchMode, Communicator& commu
     connect(ui->buttonBack, &QPushButton::clicked, this, &matchSetup::backClicked);
 }
 
-bool matchSetup::verificarDatos() {
+bool matchSetup::validateData() {
     bool jugador1Ingresado = !ui->lineEditPlayer1->text().isEmpty();
     bool jugador2Ingresado = true;
     if (gameInfo.playersNumber == 2)
@@ -30,14 +30,14 @@ bool matchSetup::verificarDatos() {
 
     if (matchMode == joinMatch) {
         bool matchIDIngresado = !ui->lineEditMatchID->text().isEmpty();
-        return (matchIDIngresado && jugador1Ingresado && jugador2Ingresado);
+        return matchIDIngresado && jugador1Ingresado && jugador2Ingresado;
     }
 
     return jugador1Ingresado && jugador2Ingresado;
 }
 
 void matchSetup::onPlayClicked() {
-    if (!verificarDatos()) {
+    if (!validateData()) {
         QMessageBox::warning(this, "Datos incompletos",
                              "Por favor, completa todos los datos antes de continuar.");
         return;

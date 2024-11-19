@@ -44,19 +44,21 @@ void WaitingPage::recvServerMessage() {
         if (isHost && message.connectedPlayers == 4)
             requestStartGame();
 
-    } else {qDebug() << "replyMessage is NULL";}
+    } else {qDebug() << "replyMessage is NULL";} // esto nose si va
 }
 
 void WaitingPage::requestStartGame() {
-   auto message = std::make_unique<LobbyMessage>(
-           LobbyRequest::STARTMATCH,
-           gameInfo.playersNumber,
-           gameInfo.player1Name,
-           gameInfo.player2Name,
-           gameInfo.matchID
-           );
-   communicator.trysend(std::move(message));
-   // tengo que chequear si se envio bien?
+    auto message = std::make_unique<LobbyMessage>(
+                    LobbyRequest::STARTMATCH,
+                    gameInfo.playersNumber,
+                    gameInfo.player1Name,
+                    gameInfo.player2Name,
+                    gameInfo.matchID
+                    );
+
+    communicator.trysend(std::move(message));
+       // tengo que chequear si se envio bien?
+    ui->playButton->setEnabled(false);
 }
 
 WaitingPage::~WaitingPage() { delete ui; }

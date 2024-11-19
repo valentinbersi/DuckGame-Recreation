@@ -28,7 +28,7 @@ private:
     Communicator& communicator;
     GameInfo& gameInfo;
 
-    bool verificarDatos();
+    bool validateData();
     void onPlayClicked();
     bool initMatchRequest();
 
