@@ -5,6 +5,7 @@
 
 #include "Debug.h"
 #include "DuckData.h"
+#include "GameTimer.h"
 
 #define MOVE_RIGHT "Move Right"
 #define MOVE_LEFT "Move Left"
@@ -14,6 +15,15 @@
 #define DEFAULT_LIFE 10
 #define DEFAULT_FLAGS 0
 #define DEFAULT_SPEED 500
+
+/**
+ * Macro for easier event handling
+ * @param Function The function to call
+ * @param ... The type of the arguments to pass to the function
+ */
+#define eventHandler(Function, ...)                                                         \
+    std::make_unique<gameObject::EventHandler<Player, __VA_ARGS__>>(getReference<Player>(), \
+                                                                    Function)
 
 Player::Player(const DuckID id):
         PhysicsObject(nullptr, {0, 0}, 1, 2, 2, 3, Gravity::Enabled),
