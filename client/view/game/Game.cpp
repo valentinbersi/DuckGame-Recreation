@@ -17,6 +17,8 @@
 #define whiteFeathers "../assets/player/whiteDuckFeathers.png"
 #define yellowFeathers "../assets/player/yellowDuckFeathers.png"
 
+#define MUSIC_PATH "../assets/sounds/arcade.mp3"
+
 // Here we should just declare the classes that are use in this file. But for now a NOLINT is fine.
 using namespace SDL2pp;  // NOLINT(build/namespaces)
 
@@ -32,6 +34,12 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
 
 void Game::init() {
     TextureManager textureManager(renderer);
+    //Renderer classRenderer(renderer);
+    //SoundManager soundManager();
+    //Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+    //Mix_Music* music = Mix_LoadMUS(MUSIC_PATH);
+    //Mix_PlayMusic(music, -1);
+
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping = createSpritesMapping(textureManager);
     SDL sdl(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG);
@@ -79,7 +87,12 @@ void Game::getSnapshot() {
                     if (object2D->object2DID == GameObject2DID::Duck) {
                         ducks.push_back(std::unique_ptr<DuckData>(
                                 dynamic_cast<DuckData*>(gameObject.release())));
-                    }
+
+                    } //else if (object2D->object2DID == GameObject2DID::Weapon) {
+
+                    //} else if (object2D->object2DID == GameObject2DID::Armor) {
+
+                    //}
 
                     // if (timer)
 
@@ -161,16 +174,6 @@ std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> Game::createSpritesMa
 
     return spritesMapping;
 }
-
-/*void Game::selectLevel() {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(1, 8);
-
-    int randomLevel = dis(gen);
-
-    selectedLevel = levels[randomLevel];
-}*/
 
 void Game::clearObjects() { ducks.clear(); }
 

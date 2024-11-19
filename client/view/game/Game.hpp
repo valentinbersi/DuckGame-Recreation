@@ -58,17 +58,6 @@ private:
     Camera camera;
 
     std::list<std::unique_ptr<DuckData>> ducks;
-    //std::list<std::unique_ptr<GameObjectData>> objects;
-
-    /*std::unordered_map<int, std::string> levels {
-        {1, "background1.png"},
-        {2, "background2.png"},
-        {3, "background3.png"},
-        {4, "background4.png"},
-        {5, "background5.png"},
-        {6, "background6.png"},
-        {7, "background7.png"},
-        {8, "background8.png"},
-    };*/
-
+    std::list<std::unique_ptr<GameObjectData>> weapons;
+    std::list<std::unique_ptr<GameObjectData>> armors;
 };
