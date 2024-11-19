@@ -20,11 +20,13 @@
 #define NO_CHESTPLATE false
 #define NO_HELMET false
 #define NO_WEAPON false
+#define NO_EFFECTS false
 #define FEATHER true
 #define RIGHT_FEATHER true
 #define CHESTPLATE true
 #define HELMET true
 #define WEAPON true
+#define EFFECTS true
 
 #define OFFSET_RIGHT 3
 #define OFFSET_LEFT 3
@@ -48,6 +50,7 @@ SpriteManager::SpriteManager(
         flip(false),
         hasHelmet(true),
         hasChestplate(true),
+        shooting(true),
         gunEquipped(GunID::CowboyPistol),
         spritesheet(std::make_unique<Spritesheet>(path1, path2, renderer, textureManager)),
         frame(0),
@@ -104,11 +107,19 @@ void SpriteManager::setFlags(const DuckState& state) {
     negateFlag(state.movingRight, movingRight);
     negateFlag(state.movingLeft, movingLeft);
     negateFlag(state.crouching, crouching);
+    //negateFlag(state.isShooting, shooting);
 
     if (flapping != state.flapping) {
         flapping = !flapping;
         frame = 0;
         flappingFrame = 0;
+    }
+}
+
+void SpriteManager::negateFlag(bool flag, bool& flagToNegate) {
+    if (flagToNegate != flag) {
+        flagToNegate = !flagToNegate;
+        frame = 0;
     }
 }
 
@@ -119,12 +130,13 @@ void SpriteManager::draw(int col, int row) {
     if (hasChestplate) drawChestplate(col, row);
     if (hasHelmet) drawHelmet();
     if (gunEquipped != GunID::NONE) drawWeapon();
+    if (shooting) drawEffects();
     drawFeathers(col, row, hasWeapon);
 }
 
 void SpriteManager::drawMainSprite(int col, int row) {
     spritesheet->selectSprite(col, row, NO_FEATHER);
-    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET, NO_WEAPON);
+    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET, NO_WEAPON, NO_EFFECTS);
     spritesheet->drawSelectedSprite(position, flip, NO_FEATHER);
 }
 
@@ -132,13 +144,13 @@ void SpriteManager::drawFeathers(int col, int row, bool hasWeapon) {
     if (!flip) {
         if (hasWeapon) spritesheet->selectSprite(COL_WEAPON, ROW_WEAPON, FEATHER);
         else spritesheet->selectSprite(col, row, FEATHER);
-        SDL2pp::Rect position = getPosition(FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET, NO_WEAPON);
+        SDL2pp::Rect position = getPosition(FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET, NO_WEAPON, NO_EFFECTS);
         spritesheet->drawSelectedSprite(position, flip, FEATHER);
 
     } else if (flip || inAir || flapping) {
         if (hasWeapon) spritesheet->selectSprite(COL_WEAPON, ROW_WEAPON, FEATHER);
         else spritesheet->selectSprite(col, row, FEATHER);
-        SDL2pp::Rect position = getPosition(FEATHER, RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET, NO_WEAPON);
+        SDL2pp::Rect position = getPosition(FEATHER, RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET, NO_WEAPON, NO_EFFECTS);
         spritesheet->drawSelectedSprite(position, flip, FEATHER);
     }
 }
@@ -146,39 +158,42 @@ void SpriteManager::drawFeathers(int col, int row, bool hasWeapon) {
 void SpriteManager::drawChestplate(int col, int row) {
     if (crouching) col = 1;
     spritesheet->selectSprite(col, row, NO_FEATHER);
-    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, CHESTPLATE, NO_HELMET, NO_WEAPON);
+    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, CHESTPLATE, NO_HELMET, NO_WEAPON, NO_EFFECTS);
     spritesheet->drawChestplate(position, flip);
 }
 
 void SpriteManager::drawHelmet() {
     spritesheet->selectSprite(2, 0, NO_FEATHER);
-    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, HELMET, NO_WEAPON);
+    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, HELMET, NO_WEAPON, NO_EFFECTS);
     spritesheet->drawHelmet(position, flip);
 }
 
 void SpriteManager::drawWeapon() {
     spritesheet->selectSprite(0, 0, NO_FEATHER);
-    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET, WEAPON);
+    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET, WEAPON, NO_EFFECTS);
 
     std::string path = gunPaths[gunEquipped];
     spritesheet->drawWeapon(position, flip, path);
 }
 
-void SpriteManager::negateFlag(bool flag, bool& flagToNegate) {
-    if (flagToNegate != flag) {
-        flagToNegate = !flagToNegate;
-        frame = 0;
-    }
+void SpriteManager::drawEffects() {
+    spritesheet->selectSprite(0, 0, FEATHER);
+    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET, NO_WEAPON, EFFECTS);
+    spritesheet->drawEffects(position, flip);
 }
 
-SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather, bool isChestplate, bool isHelmet, bool isWeapon) {
+SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather, bool isChestplate, bool isHelmet, bool isWeapon, bool isEffects) {
     SDL2pp::Rect position = calculateBasePosition();
     int spriteHeight = spritesheet->getClipHeight();
 
-    if (isFeather) adjustForFeathers(position, isRightFeather);
-    if (isChestplate) if (frame == 0) position.y += (spriteHeight / 2) * scale / DEFAULT_SCALE;
-    if (isHelmet) adjustForHelmet(position);
-    if (isWeapon) adjustForWeapon(position);
+    if (isFeather) {adjustForFeathers(position, isRightFeather);}
+    else if (isChestplate) {
+        if (frame == 0) {
+            position.y += (spriteHeight / 2) * scale / DEFAULT_SCALE;
+        }
+    } else if (isHelmet) {adjustForHelmet(position);}
+    else if (isWeapon) {adjustForWeapon(position);}
+    else if (isEffects) {adjustForEffects(position);}
 
     return position;
 }
@@ -218,6 +233,13 @@ void SpriteManager::adjustForWeapon(SDL2pp::Rect& position) {
 
     if (crouching) position.y += 20 * scale / DEFAULT_SCALE;
     else position.y += 8 * scale / DEFAULT_SCALE;
+}
+
+void SpriteManager::adjustForEffects(SDL2pp::Rect& position) {
+    if (flip) position.x -= 33 * scale / DEFAULT_SCALE;
+    else position.x += 74 * scale / DEFAULT_SCALE;
+
+    position.y += 8 * scale / DEFAULT_SCALE;
 }
 
 Spritesheet& SpriteManager::getSpritesheet() {return *spritesheet;}
