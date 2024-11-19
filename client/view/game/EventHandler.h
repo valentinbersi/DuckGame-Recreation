@@ -16,17 +16,31 @@
 class EventHandler {
 
 public:
+    // Constructor
     EventHandler(SDL2pp::Window& window, int& window_width, int& window_height, bool& twoPlayersLocal, Communicator& communicator,
                  std::list<std::unique_ptr<DuckData>>& ducks, Camera& camera, bool& running);
+
+    // Destructor
     ~EventHandler() = default;
 
+    // Keeps listening to KEYUP, KEYDOWN, QUIT and REZISED events of the screen.
+    // After that, calls the specific handlers for each case after scanning the key.
     void handleEvents();
 
 private:
+    // Handles 'ScreenEvents', having in mid if the game is fullscreen or not.
+    // Also, updates the window size variables after the change.
     void handleScreenEvents(SDL_Event& event, bool isKeyDown, SDL_Scancode& scancode);
+
+    // Handles the key event, sending the message to the server using a GameMessage filled with an InputAction.
+    // It works also with two players, sending the message to the server with the player number.
     void handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown);
-    void setFullscreen(bool fullscreen);
+
+    // Returns if the game is fullscreen or not using SDL special flags.
     bool isFullscreen();
+
+    // Sets the game to fullscreen if not activated (or viceversa).
+    void setFullscreen(bool fullscreen);
 
     SDL2pp::Window& window;
     bool& twoPlayersLocal;
@@ -38,6 +52,7 @@ private:
     bool& running;
 
     std::unordered_map<SDL_Scancode, bool> keyStates;
+
     std::unordered_map<SDL_Scancode, InputAction> keyMappingPressed = {
         {SDL_SCANCODE_W, InputAction::UP_PRESSED},
         {SDL_SCANCODE_S, InputAction::DOWN_PRESSED},
