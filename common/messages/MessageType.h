@@ -41,6 +41,8 @@ public:
         DOWN_RELEASED = 0x9,
         JUMP_RELEASED = 0xA,
         ACTION_RELEASED = 0xB
+        SHOOT_PRESSED = 0xC,
+        SHOOT_RELEASED = 0xD
     };
 
     // cppcheck-suppress noExplicitConstructor
