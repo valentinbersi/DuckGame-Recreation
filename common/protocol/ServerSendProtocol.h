@@ -7,8 +7,12 @@
 #include "SendProtocol.h"
 #include "Types.h"
 
+//Forward declaration
 struct ServerMessage;
 
+/**
+ *  Dedicated SendProtocol for the server
+ */
 class ServerSendProtocol: public SendProtocol {
 private:
     void sendGameObject2DData(const GameObject2DData* obj2Data);

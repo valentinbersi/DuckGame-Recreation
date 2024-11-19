@@ -33,16 +33,18 @@ void GameLoop::run() {
         broadcast(std::make_shared<ReplyMessage>(0, 1, 0));
         timer.start();
         game.start();
-
-        while (_keep_running) {
+        // while(_keep_running){
+        while (_keep_running) { //poner game.MatchEnded() y && _keep_running para condicion de corte.
             const float deltaTime = timer.iterationStartSeconds().count();
             retrieveCurrentFrameCommands();
             processCurrentFrameCommands();
             game.updateInternal(deltaTime);
             game.update(deltaTime);
-            broadcast(std::make_shared<GameStatus>(std::move(game.status())));
+            broadcast(std::make_shared<GameStatus>(std::move(game.status()))); //talvez aca ya manda de una gameended
             timer.iterationEnd(FPS);
         }
+
+        // }
     } catch (const ClosedQueue& err) {
         // Expected when closing server
     } catch (const std::exception& err) {
@@ -67,7 +69,7 @@ void GameLoop::addClient(const u16 clientID,
     if (shouldAddQueue(clientID)) {
         clientQueuesMap.insert({clientID, std::move(clientQueue)});
     }
-    broadcast(std::make_shared<ReplyMessage>(0, 0, game.playersCount()));
+    broadcast(std::make_shared<ReplyMessage>(game.playersCount()));
 }
 
 BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCommands; }

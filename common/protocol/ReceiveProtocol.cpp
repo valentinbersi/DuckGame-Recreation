@@ -9,7 +9,7 @@
 
 ReceiveProtocol::ReceiveProtocol(ActiveSocket& socket): skt(socket) {}
 
-unsigned char ReceiveProtocol::recv_byte() {
+u8 ReceiveProtocol::recvByte() {
     unsigned char byte;
     if (!skt.receive(&byte, sizeof(unsigned char))) {
         throw LibError(EPIPE, ERR_RECEIVE);
