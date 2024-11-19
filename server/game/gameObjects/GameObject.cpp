@@ -79,7 +79,7 @@ GameObject::~GameObject() {
 
 void GameObject::start() {}
 
-void GameObject::update(float delta) {}
+void GameObject::update([[maybe_unused]] float delta) {}
 
 void GameObject::updateInternal(const float delta) {
     for (auto& [name, child]: children) {
