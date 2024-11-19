@@ -1,7 +1,7 @@
 map_name: mapa1
 background: background_image.png
-map_width: 0
-map_height: 17
+map_width: 50
+map_height: 50
 objects:
   - type: PLATFORM
     x: 17

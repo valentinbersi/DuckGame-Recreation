@@ -28,10 +28,11 @@ private:
     LevelScene* scene;
     std::map<QAction*, ObjectType> actionTypeMap;
 
-    void resizeEvent(QResizeEvent* event) override;
+    //void resizeEvent(QResizeEvent* event) override;
     void wheelEvent(QWheelEvent* event) override;
     void on_actionNewMap_triggered();
     void on_actionEditMap_triggered();
     void setActionButtons();
+    void onSceneResize();
 };
 #endif  // MAINWINDOW_H

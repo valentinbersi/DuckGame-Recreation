@@ -1,0 +1,23 @@
+map_name: pruebaTamaño1
+background: background_image.png
+map_width: 100
+map_height: 100
+objects:
+  - type: PLATFORM
+    x: 49
+    y: 49
+  - type: PLATFORM
+    x: 1
+    y: 1
+  - type: PLATFORM
+    x: 22
+    y: 22
+  - type: PLATFORM
+    x: 98
+    y: 32
+  - type: PLATFORM
+    x: 99
+    y: 40
+  - type: PLATFORM
+    x: 195
+    y: 139
