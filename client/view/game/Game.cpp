@@ -17,8 +17,11 @@
 #define whiteFeathers "../assets/player/whiteDuckFeathers.png"
 #define yellowFeathers "../assets/player/yellowDuckFeathers.png"
 
-// Here we should just declare the classes that are use in this file. But for now a NOLINT is fine.
-using namespace SDL2pp;  // NOLINT(build/namespaces)
+using SDL2pp::NullOpt;
+using SDL2pp::Renderer;
+using SDL2pp::SDL;
+using SDL2pp::Surface;
+using SDL2pp::Texture;
 
 Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         running(true),
@@ -98,9 +101,9 @@ void Game::getSnapshot() {
 
                 // if (timer)
 
-                else {
-                    // typeOfObject2D(std::unique_ptr<GameObject2DData>(static_cast<GameObject2DData*>(gameObject.release())));
-                }
+                // else {
+                //  typeOfObject2D(std::unique_ptr<GameObject2DData>(static_cast<GameObject2DData*>(gameObject.release())));
+                //}
                 break;
             }
             default:
