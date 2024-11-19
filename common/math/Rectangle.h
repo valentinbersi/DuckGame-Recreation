@@ -1,136 +1,72 @@
 #pragma once
 
-#include "Shape2D.h"
-#include "Types.h"
+#include <optional>
+
+#include "IntersectionInfo.h"
+#include "Ray2D.h"
 #include "Vector2.h"
 
-class Rectangle final: public Shape2D {
-    constexpr static u8 VertexAmount = 4;
-
-    float _width, _height;
-
-    /**
-     * Check if the two rectangles overlap on the given axis
-     * @param rect2Vertices The vertices of the second rectangle
-     * @param axis The axis to check
-     * @return True if the rectangles overlap on the axis, false otherwise
-     */
-    [[nodiscard]] bool overlapOnAxis(const std::array<Vector2, VertexAmount>& rect2Vertices,
-                                     const Vector2& axis) const;
-
-    /**
-     * Get the corners of the rectangle
-     * @return The corners of the rectangle
-     */
-    [[nodiscard]] std::array<Vector2, VertexAmount> vertices() const;
+class Rectangle final {
+    Vector2 position;
+    Vector2 size;
 
 public:
-    struct Vertex {
-        enum Value : u8 { TopLeft = 0, TopRight = 1, BottomLeft = 2, BottomRight = 3, Invalid = 4 };
-
-        Vertex() = delete;
-        Vertex(const Vertex& other);
-        Vertex& operator=(const Vertex& other);
-        Vertex(Vertex&& other) noexcept;
-        Vertex& operator=(Vertex&& other) noexcept;
-
-        /**
-         * Construct a vertex with the given value
-         * @param value The value of the vertex
-         */
-        // cppcheck-suppress noExplicitConstructor
-        Vertex(Value value);  // NOLINT(runtime/explicit)
-
-        /**
-         * Compare two vertices
-         * @param other The other vertex to compare
-         * @return True if the vertices are equal, false otherwise
-         */
-        bool operator==(Vertex other) const;
-
-        /**
-         * Compare two vertices
-         * @param other The other vertex to compare
-         * @return True if the vertices are not equal, false otherwise
-         */
-        bool operator!=(Vertex other) const;
-
-        /**
-         * Convert the vertex to a value
-         */
-        // cppcheck-suppress noExplicitConstructor
-        operator Value() const;
-
-        /**
-         * Convert the vertex to a boolean
-         * @return True if the vertex is valid, false otherwise
-         */
-        // cppcheck-suppress noExplicitConstructor
-        operator bool() const;
-
-        /**
-         * Check if the given value is a valid vertex
-         * @param value The value to check
-         * @return True if the value is a valid vertex, false otherwise
-         */
-        static bool isValidValue(u8 value);
-
-    private:
-        Value value;
-    };
-
     Rectangle() = delete;
-    Rectangle(const Rectangle& other);
-    Rectangle& operator=(const Rectangle& other);
-    Rectangle(Rectangle&& other) noexcept;
-    Rectangle& operator=(Rectangle&& other) noexcept;
-    ~Rectangle() override = default;
+    Rectangle(const Rectangle& other) = delete;
+    Rectangle& operator=(const Rectangle& other) = delete;
+    Rectangle(Rectangle&& other) noexcept = delete;
+    Rectangle& operator=(Rectangle&& other) noexcept = delete;
+    ~Rectangle() = default;
 
     /**
      * Construct a rectangle with the given center, width and height
      * @param center The center of the rectangle
-     * @param rotation The rotation of the rectangle
      * @param width The width of the rectangle
      * @param height The height of the rectangle
      */
-    Rectangle(Vector2 center, float rotation, float width, float height);
+    Rectangle(const Vector2& center, float width, float height);
 
     /**
-     * Get the width of the rectangle
-     * @return The width and height of the rectangle
+     * Construct a rectangle with the given position and size
+     * @param position The position of the rectangle, this is the top left corner
+     * @param size The size of the rectangle
      */
-    [[nodiscard]] float width() const;
+    Rectangle(Vector2 position, Vector2 size);
 
     /**
-     * Get the height of the rectangle
-     * @return The height of the rectangle
+     * Set the center of the rectangle
+     * @param center The new center of the rectangle
+     * @return A reference to this rectangle
      */
-    [[nodiscard]] float height() const;
+    Rectangle& setCenter(const Vector2& center);
 
     /**
-     * Check if this rectangle intersects a circle
-     * @param circle a circle
-     * @return True if the shapes intersect, false otherwise
+     * Check if a point is contained by the rectangle
+     * @param point The point to check
+     * @return true if the point is contained by the rectangle, false otherwise
      */
-    [[nodiscard]] bool intersects(const Circle& circle) const override;
+    [[nodiscard]] bool contains(const Vector2& point) const;
 
     /**
-     * Check if this rectangle intersects a rectangle
-     * @param rectangle a rectangle
-     * @return True if the shapes intersect, false otherwise
+     * Check if a rectangle overlaps with this rectangle
+     * @param rectangle The rectangle to check
+     * @return true if the rectangles overlap, false otherwise
      */
-    [[nodiscard]] bool intersects(const Rectangle& rectangle) const override;
+    [[nodiscard]] bool overlaps(const Rectangle& rectangle) const;
 
     /**
-     * Check if this rectangle intersects with a capsule
-     * @param capsule a capsule
-     * @return True if the shapes intersect, false otherwise
+     * Check if this rectangle overlaps with another rectangle while moving with a certain velocity
+     * @param rectangle The rectangle to check
+     * @return
      */
-    [[nodiscard]] bool intersects(const Capsule& capsule) const override;
+    [[nodiscard]] std::optional<IntersectionInfo> overlaps(const Rectangle& rectangle,
+                                                           const Vector2& displacement,
+                                                           float delta) const;
 
     /**
-     * Get a clone of this rectangle
-     * @return A clone of this rectangle
+     * Check if a segment overlaps with this rectangle
+     * @param ray The segment to check
+     * @return true if the segment overlaps with the rectangle, false otherwise
      */
-    [[nodiscard]] std::unique_ptr<Shape2D> clone() const override;
+    [[nodiscard]] std::optional<IntersectionInfo> overlaps(const Ray2D& ray) const;
 };

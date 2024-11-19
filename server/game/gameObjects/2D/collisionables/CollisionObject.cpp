@@ -5,38 +5,43 @@
 
 #define NULL_SHAPE "Shape cannot be null"
 
-CollisionObject::CollisionObject(GameObject* parent, Vector2 position, const float rotation,
-                                 const std::bitset<LAYERS_COUNT> layers,
-                                 const std::bitset<LAYERS_COUNT> scannedLayers,
-                                 std::unique_ptr<Shape2D> shape):
-        GameObject2D(parent, std::move(position), rotation),
+CollisionObject::CollisionObject(GameObject* parent, const Vector2& position,
+                                 const std::bitset<LayersCount> layers,
+                                 const std::bitset<LayersCount> scannedLayers, const float width,
+                                 const float height):
+        GameObject2D(parent, position),
         _layers(layers),
         _scannedLayers(scannedLayers),
-        shape(shape.release()) {
-
-    if (this->shape == nullptr)
-        throw std::invalid_argument(NULL_SHAPE);
-}
+        shape(position, width, height) {}
 
 bool CollisionObject::collidesWith(const CollisionObject& other) const {
-    return shape->intersects(*other.shape);
+    return shape.overlaps(other.shape);
 }
 
-CollisionObject::~CollisionObject() { delete shape; }
+std::optional<IntersectionInfo> CollisionObject::moveAndCollide(const CollisionObject& other,
+                                                                const Vector2& displacement,
+                                                                const float delta) const {
+    return shape.overlaps(other.shape, displacement, delta);
+}
+
+CollisionObject::~CollisionObject() = default;
 
 void CollisionObject::updateInternal([[maybe_unused]] const float delta) {
     GameObject2D::updateInternal(delta);
-    shape->center(position());
-    shape->rotation(rotation());
 }
 
-std::bitset<CollisionObject::LAYERS_COUNT> CollisionObject::layers() const { return _layers; }
+GameObject2D& CollisionObject::setPosition(Vector2 position) noexcept {
+    shape.setCenter(position);
+    return GameObject2D::setPosition(std::move(position));
+}
 
-std::bitset<CollisionObject::LAYERS_COUNT> CollisionObject::scannedLayers() const {
+std::bitset<CollisionObject::LayersCount> CollisionObject::layers() const { return _layers; }
+
+std::bitset<CollisionObject::LayersCount> CollisionObject::scannedLayers() const {
     return _scannedLayers;
 }
 
-CollisionObject& CollisionObject::setLayers(const std::bitset<LAYERS_COUNT> layers) noexcept {
+CollisionObject& CollisionObject::setLayers(const std::bitset<LayersCount> layers) noexcept {
     _layers = layers;
     return *this;
 }
@@ -53,7 +58,7 @@ CollisionObject& CollisionObject::removeFromLayer(const u8 layer) {
 }
 
 CollisionObject& CollisionObject::setScannedLayers(
-        const std::bitset<LAYERS_COUNT> scannedLayers) noexcept {
+        const std::bitset<LayersCount> scannedLayers) noexcept {
 
     _scannedLayers = scannedLayers;
     return *this;
@@ -76,7 +81,7 @@ void CollisionObject::registerCollision(std::weak_ptr<CollisionObject> collision
         throw std::invalid_argument(EXPIRED_COLLISION_OBJECT);
 
     if ((_scannedLayers & collisionObject.lock()->_layers).any())
-        objectsToCollide.push_front(std::move(collisionObject));
+        objectsToCollide.push_back(std::move(collisionObject));
 }
 
 void CollisionObject::resetRegisteredCollisions() { objectsToCollide.clear(); }

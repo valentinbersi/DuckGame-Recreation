@@ -1,10 +1,8 @@
 #include "Platform.h"
 
-#include "Rectangle.h"
+Platform::Platform(Vector2 position, const float width, const float height):
+        StaticObject(nullptr, std::move(position), 2, 0, width, height) {}
 
-Platform::Platform():
-        StaticObject(nullptr, {0, 400}, 0, 2, 0,
-                     std::make_unique<Rectangle>(Vector2(0, 0), 0, 1000, 80)) {}
 void Platform::start() {}
 
 void Platform::update([[maybe_unused]] float delta) {}

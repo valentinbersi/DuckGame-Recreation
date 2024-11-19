@@ -11,13 +11,13 @@ protected:
      * Construct an Area
      * @param parent The parent object
      * @param position The position of the area
-     * @param rotation The rotation of the area
      * @param layers The layers of the area
      * @param scannedLayers The layers that the area will scan
-     * @param shape The shape of the area
+     * @param width The width of the area
+     * @param height The height of the area
      */
-    Area(GameObject* parent, Vector2 position, float rotation, std::bitset<LAYERS_COUNT> layers,
-         std::bitset<LAYERS_COUNT> scannedLayers, std::unique_ptr<Shape2D> shape);
+    Area(GameObject* parent, Vector2 position, std::bitset<LayersCount> layers,
+         std::bitset<LayersCount> scannedLayers, float width, float height);
 
 public:
     Area() = delete;
@@ -53,7 +53,7 @@ public:
      * Process the collisions of the area. This will throw events when colliding with another
      * collision object
      */
-    void processCollisions() override;
+    void processCollisions(float delta) override;
 
     /**
      * Does nothing on area

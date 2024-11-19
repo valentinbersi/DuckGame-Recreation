@@ -8,24 +8,24 @@ public:
     enum class Gravity : u8 { Enabled, Disabled };
 
 private:
-    Vector2 _velocity;
     Gravity gravity;
 
 protected:
+    Vector2 _velocity;
+
     /**
      * Creates a new physics object
      * @param parent The parent object
      * @param position The position of the object
-     * @param rotation The rotation of the object
      * @param layers The layer the object is in
      * @param scannedLayers The layer the object scans for collisions
-     * @param shape The shape of the object
-     * @param initialVelocity The initial velocity of the object
+     * @param width The width of the object
+     * @param height The height of the object
      * @param gravity the gravity configuration for this object
      */
-    PhysicsObject(GameObject* parent, Vector2 position, float rotation,
-                  std::bitset<LAYERS_COUNT> layers, std::bitset<LAYERS_COUNT> scannedLayers,
-                  std::unique_ptr<Shape2D> shape, Vector2 initialVelocity, Gravity gravity);
+    PhysicsObject(GameObject* parent, const Vector2& position, std::bitset<LayersCount> layers,
+                  std::bitset<LayersCount> scannedLayers, float width, float height,
+                  Gravity gravity);
 
 public:
     PhysicsObject() = delete;
@@ -42,21 +42,10 @@ public:
     void updateInternal(float delta) final;
 
     /**
-     * Calculate the new position of the object based on its velocity. If it collides with
+     * Calculate the new position of the object based on its velocity.
+     * @param delta The time since the last update
      */
-    void processCollisions() final;
-
-    /**
-     * Returns the velocity of the object
-     * @return The velocity of the object
-     */
-    [[nodiscard]] const Vector2& velocity() const;
-
-    /**
-     * Sets the velocity of the object
-     * @param velocity The new velocity of the object
-     */
-    void setVelocity(Vector2 velocity);
+    void processCollisions(float delta) final;
 
     /**
      * Sets the gravity configuration for the object

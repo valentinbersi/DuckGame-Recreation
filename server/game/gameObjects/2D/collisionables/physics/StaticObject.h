@@ -12,14 +12,13 @@ protected:
      * Creates a new static object
      * @param parent The parent object
      * @param position The position of the object
-     * @param rotation The rotation of the object
      * @param layers The layers the object is in
      * @param scannedLayers The layers the object scans for collisions
-     * @param shape The shape of the object
+     * @param width The width
+     * @param height The height
      */
-    StaticObject(GameObject* parent, Vector2 position, float rotation,
-                 std::bitset<LAYERS_COUNT> layers, std::bitset<LAYERS_COUNT> scannedLayers,
-                 std::unique_ptr<Shape2D> shape);
+    StaticObject(GameObject* parent, Vector2 position, std::bitset<LayersCount> layers,
+                 std::bitset<LayersCount> scannedLayers, float width, float height);
 
 public:
     StaticObject() = delete;
@@ -42,5 +41,5 @@ public:
     /**
      * Does nothing on StaticObject
      */
-    void processCollisions() final;
+    void processCollisions(float delta) final;
 };

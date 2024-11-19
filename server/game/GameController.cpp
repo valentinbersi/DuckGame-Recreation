@@ -1,6 +1,5 @@
 #include "GameController.h"
 
-#include <iostream>
 #include <memory>
 #include <string>
 
@@ -48,15 +47,13 @@ GameController::GameController(): GameObject(nullptr) {
     connect(eventName(Events::TREE_EXITED),
             eventHandler(&GameController::onTreeExited, GameObject*));
 
-    addChild("Platform", new Platform);  // This simulated loading a level
+    addChild("Platform", new Platform({0, 600}, 1000, 200));  // This simulated loading a level
+    // addChild("Platform2", new Platform({400, 400}, 50, 200));  // This simulated loading a level
 }
 
-void GameController::start() { std::cout << "The game has started" << std::endl; }
+void GameController::start() {}
 
-void GameController::update(const float delta) {
-    collisionManager.processCollisions();
-    std::cout << "The game is running" << delta << std::endl;
-}
+void GameController::update(const float delta) { collisionManager.processCollisions(delta); }
 
 #define FULL_GAME "The game is full"
 
