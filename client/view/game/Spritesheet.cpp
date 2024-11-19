@@ -15,8 +15,6 @@
 Spritesheet::Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer& renderer, TextureManager& textureManager):
         renderer(renderer), pathPlayer(path1), pathFeather(path2), textureManager(textureManager) {}
 
-Spritesheet::~Spritesheet() {}
-
 void Spritesheet::selectSprite(int x, int y, bool feathers) {
     if (feathers) {
         m_clip.w = WIDTH_HEIGHT_FEATHERS;

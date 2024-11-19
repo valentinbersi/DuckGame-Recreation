@@ -7,17 +7,36 @@
 
 class Spritesheet {
 public:
+    // Constructor.
     Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer& renderer, TextureManager& textureManager);
-    ~Spritesheet();
 
+    // Destructor.
+    ~Spritesheet() = default;
+
+    // Selects the sprite to draw using coordinates of row and column.
+    // It ALSO sets the width and height of the clip.
     void selectSprite(int x, int y, bool feathers);
+
+    // Draws the selected sprite, using the textures that 'TextureManagers' has, depending if it's a feather or not.
+    // Works with flipped sprites ;)
     void drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool feathers/*, bool isRightFeather*/);
+
+    // Draws the chestplate of the player... and same logic of the previous method.
     void drawChestplate(SDL2pp::Rect& playerPosition, bool flip);
+
+    // Blah blah blah, same logic of the previous method.
     void drawHelmet(SDL2pp::Rect& playerPosition, bool flip);
+
+    // Yes
     void drawWeapon(SDL2pp::Rect& playerPosition, bool flip, std::string path);
+
+    // Returns the width of the clip.
     int getClipWidth() const;
+
+    // Returns the height of the clip.
     int getClipHeight() const;
 
+    // Returns the texture of the spritesheet, depending if it's a feather or not.
     SDL2pp::Texture& getTexture(bool feathers);
 
 private:

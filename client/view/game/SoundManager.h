@@ -13,16 +13,23 @@
 class SoundManager {
 
 public:
+    // Constructor.
     SoundManager();
+
+    // Destructor.
     ~SoundManager();
 
+    //
     void playSound(GunID id);
 
 private:
+    //
     void playMusic();
+
+    //
     bool loadSound(GunID id);
     std::unordered_map<GunID, Mix_Chunk*> soundMap;
-    std::unordered_map<GunID, const char*> soundMapIDS {
-            {"ID1", ".../etc"}
+    std::unordered_map<GunID, std::string> soundMapIDS {
+        {GunID::CowboyPistol, "../assets/sounds/cowboyPistol.mp3"}
     };
 };
