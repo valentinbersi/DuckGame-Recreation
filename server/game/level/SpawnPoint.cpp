@@ -1,5 +1,3 @@
-//
-// Created by valen on 19/11/2024.
-//
-
 #include "SpawnPoint.h"
+
+SpawnPoint::SpawnPoint(Vector2 position): GameObject2D(nullptr, std::move(position)) {}

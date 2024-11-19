@@ -3,12 +3,15 @@
 #include "CollisionManager.h"
 #include "Player.h"
 
+
+struct Level;
 struct GameStatus;
 typedef u16 PlayerID;
 
 class GameController final: public GameObject {
     HashMap<PlayerID, Player*> players;
     CollisionManager collisionManager;
+    GameObject* level;
 
     /**
      * GameController handler for tree entered event
@@ -90,6 +93,12 @@ public:
      * @return the number of players in the match
      */
     u8 playersCount() const;
+
+    /**
+     * Load the level
+     * @param level the level to load
+     */
+    void loadLevel(const Level& level);
 
     /**
      * Get the status of the game
