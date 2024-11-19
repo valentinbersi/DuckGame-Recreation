@@ -4,6 +4,7 @@
 
 #include "Spritesheet.h"
 #include "DuckData.h"
+#include "DuckState.h"
 #include <SDL2pp/SDL2pp.hh>
 
 class SpriteManager {
@@ -16,9 +17,8 @@ public:
     // Destructor
     ~SpriteManager() = default;
 
-    void update(bool playing_dead, bool crouching, bool in_air, bool flapping, bool being_damaged,
-                bool moving_right, bool moving_left /*, bool armor, bool helmet*/);
-    void updateEquipment(bool helmet, bool chestplate, GunID& gun);
+    void update(const DuckState& state);
+    void updateEquipment(bool helmet, bool chestplate/*, GunID& gun*/);
     void draw(int col, int row);
     void updatePosition(float new_x, float new_y);
     void setScale(float newScale);
@@ -26,24 +26,25 @@ public:
     Spritesheet& getSpritesheet();
 
 private:
-    void setFlags(bool in_air, bool flapping, bool moving_right, bool moving_left);
+    void setFlags(const DuckState& state);
     void negateFlag(bool flag, bool& flagToNegate);
     void drawMainSprite(int col, int row);
     void drawFeathers(int col, int row, bool hasWeapon);
     void drawChestplate(int col, int row);
     void drawHelmet();
     void drawWeapon();
-    SDL2pp::Rect getPosition(bool isFeather, bool isRightFeather, bool isChestPlate, bool isHelmet);
+    SDL2pp::Rect getPosition(bool isFeather, bool isRightFeather, bool isChestPlate, bool isHelmet, bool isWeapon);
     SDL2pp::Rect calculateBasePosition();
     void adjustForFeathers(SDL2pp::Rect& position, bool isRightFeather);
     void adjustForHelmet(SDL2pp::Rect& position);
+    void adjustForWeapon(SDL2pp::Rect& position);
 
     const char* path1;
     const char* path2;
     float scale;
-    bool moving_right;
-    bool moving_left;
-    bool in_air;
+    bool movingRight;
+    bool movingLeft;
+    bool inAir;
     bool flapping;
     bool flip;
     bool hasHelmet;
@@ -56,15 +57,15 @@ private:
     double m_position_y;
 
     std::unordered_map<GunID, std::string> gunPaths = {
-        {GunID::Granade, "path/to/granade.png"},
-        {GunID::Banana, "path/to/banana.png"},
-        {GunID::PewPewLaser, "path/to/pewpewlaser.png"},
-        {GunID::LaserRifle, "path/to/laserrifle.png"},
-        {GunID::Ak47, "path/to/ak47.png"},
-        {GunID::DuelPistol, "path/to/duelpistol.png"},
-        {GunID::CowboyPistol, "path/to/cowboypistol.png"},
-        {GunID::Magnum, "path/to/magnum.png"},
-        {GunID::Shotgun, "path/to/shotgun.png"},
-        {GunID::Sniper, "path/to/sniper.png"},
+        //{GunID::Granade, "../assets/weapons/"},
+        //{GunID::Banana, "../assets/weapons/"},
+        //{GunID::PewPewLaser, "../assets/weapons/"},
+        //{GunID::LaserRifle, "../assets/weapons/"},
+        //{GunID::Ak47, "../assets/weapons/"},
+        //{GunID::DuelPistol, "../assets/weapons/"},
+        {GunID::CowboyPistol, "../assets/weapons/CowboyPistol.png"}
+        //{GunID::Magnum, "../assets/weapons/"},
+        //{GunID::Shotgun, "../assets/weapons/"},
+        //{GunID::Sniper, "../assets/weapons/"},
     };
 };

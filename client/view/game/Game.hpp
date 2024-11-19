@@ -16,7 +16,9 @@
 #include "Camera.h"
 #include "Communicator.h"
 #include "ServerMessage.h"
+#include "SoundManager.h"
 #include "GameStatus.h"
+#include "DuckState.h"
 #include "GameObjectData.h"
 #include "GameObject2DData.h"
 #include "DuckData.h"
@@ -33,13 +35,7 @@ public:
     void init();
 
 private:
-    //void selectLevel();
-    bool isFullscreen(SDL2pp::Window& window);
-    void setFullscreen(bool fullscreen);
     SDL2pp::Texture startBackground();
-    void handleEvents(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping);
-    void handleScreenEvents(SDL_Event& event, bool isKeyDown, SDL_Scancode& scancode, std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping);
-    void handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown);
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping(TextureManager& textureManager);
     void updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping, float currentScale);
     void getSnapshot();
@@ -54,6 +50,7 @@ private:
     Communicator& communicator;
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
+    SoundManager soundManager;
     bool& twoPlayersLocal;
     Camera camera;
 

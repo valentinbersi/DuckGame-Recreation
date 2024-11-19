@@ -17,8 +17,6 @@
 #define whiteFeathers "../assets/player/whiteDuckFeathers.png"
 #define yellowFeathers "../assets/player/yellowDuckFeathers.png"
 
-#define MUSIC_PATH "../assets/sounds/arcade.mp3"
-
 // Here we should just declare the classes that are use in this file. But for now a NOLINT is fine.
 using namespace SDL2pp;  // NOLINT(build/namespaces)
 
@@ -35,7 +33,6 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
 void Game::init() {
     TextureManager textureManager(renderer);
     //Renderer classRenderer(renderer);
-    //SoundManager soundManager();
     //Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
     //Mix_Music* music = Mix_LoadMUS(MUSIC_PATH);
     //Mix_PlayMusic(music, -1);
@@ -112,18 +109,26 @@ void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr <SpriteManag
     for (auto& duck: ducks) {
         DuckID duckID = duck->duckID;
         Vector2 coords = duck->position;
-        spritesMapping.at(duckID)->updateEquipment(duck->extraData[DuckData::HELMET], duck->extraData[DuckData::ARMOR], duck->gun->gunID);
+
+        DuckState state = {
+            duck->extraData[DuckData::PLAYING_DEAD_INDEX],
+            duck->extraData[DuckData::CROUCHING_INDEX],
+            duck->extraData[DuckData::IN_AIR_INDEX],
+            duck->extraData[DuckData::FLAPPING_INDEX],
+            duck->extraData[DuckData::BEING_DAMAGED_INDEX],
+            duck->extraData[DuckData::MOVING_RIGHT_INDEX],
+            duck->extraData[DuckData::MOVING_LEFT_INDEX],
+            /*duck->extraData[DuckData::HELMET]*/ true,
+            /*duck->extraData[DuckData::ARMOR]*/true,
+            /*duck->extraData[DuckData::IS_SHOOTING]*/true
+        };
+        //if (state.isShooting) soundManager.playSound(/*duck->gun->gunID*/ GunID::CowboyPistol);
+        //falta dibujar el fire
+
+        spritesMapping.at(duckID)->updateEquipment(state.hasHelmet, state.hasChestplate/*, duck->gun->gunID*/);
         spritesMapping.at(duckID)->updatePosition(coords.x() - camera.getViewRect().x, coords.y() - camera.getViewRect().y);
         spritesMapping.at(duckID)->setScale(currentScale);
-        spritesMapping.at(duckID)->update(duck->extraData[DuckData::PLAYING_DEAD_INDEX],
-                                         duck->extraData[DuckData::CROUCHING_INDEX],
-                                         duck->extraData[DuckData::IN_AIR_INDEX],
-                                         duck->extraData[DuckData::FLAPPING_INDEX],
-                                         duck->extraData[DuckData::BEING_DAMAGED_INDEX],
-                                         duck->extraData[DuckData::MOVING_RIGHT_INDEX],
-                                         duck->extraData[DuckData::MOVING_LEFT_INDEX] /*,
-                                         duck->extraData[DuckData::ARMOR],
-                                         duck->extraData[DuckData::HELMET]*/);
+        spritesMapping.at(duckID)->update(state);
     }
 }
 
