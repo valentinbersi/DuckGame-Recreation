@@ -25,7 +25,7 @@ Level Level::load(const std::string& path) {
     loadedLevel.width = level["map_width"].as<u64>();
     loadedLevel.height = level["map_height"].as<u64>();
 
-    for (const YAML::Node& object: level["objects"].as<std::vector<YAML::Node>>)
+    for (const YAML::Node& object: level["objects"].as<std::vector<YAML::Node>>())
         if (object["type"].as<std::string>() == "PLATFORM")
             loadedLevel.terrainBlocks.emplace_back(object["x"].as<float>(),
                                                    object["y"].as<float>());
