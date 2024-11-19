@@ -3,6 +3,8 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QTimer>
+#include <memory>
+#include <utility>
 
 #include "LobbyMessage.h"
 #include "ReplyMessage.h"

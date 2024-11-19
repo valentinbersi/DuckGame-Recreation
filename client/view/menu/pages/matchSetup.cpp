@@ -2,6 +2,8 @@
 
 #include <QDebug>
 #include <QMessageBox>
+#include <memory>
+#include <utility>
 
 #include "ReplyMessage.h"
 
