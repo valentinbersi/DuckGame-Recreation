@@ -34,11 +34,13 @@ private:
     void drawChestplate(int col, int row);
     void drawHelmet();
     void drawWeapon();
-    SDL2pp::Rect getPosition(bool isFeather, bool isRightFeather, bool isChestPlate, bool isHelmet, bool isWeapon);
+    void drawEffects();
+    SDL2pp::Rect getPosition(bool isFeather, bool isRightFeather, bool isChestPlate, bool isHelmet, bool isWeapon, bool isEffects);
     SDL2pp::Rect calculateBasePosition();
     void adjustForFeathers(SDL2pp::Rect& position, bool isRightFeather);
     void adjustForHelmet(SDL2pp::Rect& position);
     void adjustForWeapon(SDL2pp::Rect& position);
+    void adjustForEffects(SDL2pp::Rect& position);
 
     const char* path1;
     const char* path2;
@@ -51,6 +53,7 @@ private:
     bool flip;
     bool hasHelmet;
     bool hasChestplate;
+    bool shooting;
     GunID gunEquipped;
     std::unique_ptr<Spritesheet> spritesheet;
     int frame;

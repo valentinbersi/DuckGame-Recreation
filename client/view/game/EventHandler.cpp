@@ -11,7 +11,7 @@ void EventHandler::handleEvents() {
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
             SDL_Scancode scancode = event.key.keysym.scancode;
-            bool isKeyDown = (event.type == SDL_KEYDOWN);
+            bool isKeyDown = event.type == SDL_KEYDOWN;
             handleKeyEvent(scancode, isKeyDown);
             handleScreenEvents(event, isKeyDown, scancode);
 
