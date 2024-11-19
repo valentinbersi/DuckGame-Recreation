@@ -3,13 +3,15 @@
 #include <fstream>
 #include <list>
 
-#include "SpawnPoint.h"
-#include "TerrainBlock.h"
+#include "Types.h"
+#include "Vector2.h"
 
-class Level {
-    std::list<TerrainBlock> terrainBlocks;
-    std::list<SpawnPoint> spawnPoints;
+struct Level {
+    std::list<Vector2> terrainBlocks;
+    std::list<Vector2> duckSpawnPoints;
+    std::list<Vector2> boxes;
+    std::list<Vector2> gunSpawnPoints;
+    u64 width, height;
 
-public:
     static Level load(const std::string& name);
 };
