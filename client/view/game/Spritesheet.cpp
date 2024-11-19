@@ -1,5 +1,7 @@
 #include "Spritesheet.h"
 
+#include <string>
+
 #define N_COL 5
 #define N_ROW 2
 
@@ -35,8 +37,9 @@ void Spritesheet::selectSprite(int x, int y, bool feathers) {
     m_clip.y = y * m_clip.h;
 }
 
-void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool feathers/*,
-                                     bool isRightFeather*/) {
+void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool feathers
+                                     //,bool isRightFeather
+) {
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
     SDL_Texture* texture = feathers ? textureManager.getTexture(pathFeather).Get() :

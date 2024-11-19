@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <utility>
+#include <vector>
 
 #define NULL_SHAPE "Shape cannot be null"
 

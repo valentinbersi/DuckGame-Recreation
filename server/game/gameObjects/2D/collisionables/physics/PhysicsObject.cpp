@@ -1,5 +1,10 @@
 #include "PhysicsObject.h"
 
+#include <algorithm>
+#include <memory>
+#include <utility>
+#include <vector>
+
 #include "GlobalPhysics.h"
 #include "Math.h"
 
@@ -7,7 +12,9 @@ PhysicsObject::PhysicsObject(GameObject* parent, const Vector2& position,
                              const std::bitset<LayersCount> layers,
                              const std::bitset<LayersCount> scannedLayers, const float width,
                              const float height, const Gravity gravity):
-        CollisionObject(parent, position, layers, scannedLayers, width, height), gravity(gravity) {}
+        CollisionObject(parent, position, layers, scannedLayers, width, height),
+        gravity(gravity),
+        _onGround(false) {}
 
 PhysicsObject::~PhysicsObject() = default;
 

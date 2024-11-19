@@ -70,10 +70,10 @@ void SpriteManager::update(const DuckState& state) {
         flip = false;
     setFlags(state);
 
-    if (state.inAir)
+    if (state.inAir) {
         draw(frame, SPRITESHEET_JUMP_ROW);
 
-    else if (state.beingDamaged || state.playingDead || state.crouching) {
+    } else if (state.beingDamaged || state.playingDead || state.crouching) {
         if (state.beingDamaged) {
             draw(SPRITESHEET_DEAD_COL, SPRITESHEET_DEAD_ROW);
             // do something...? how the game is gonna change for this duck and the others?
@@ -84,8 +84,9 @@ void SpriteManager::update(const DuckState& state) {
             draw(SPRITESHEET_CROUCH_COL, SPRITESHEET_CROUCH_ROW);
         }
 
-    } else
+    } else {
         draw(frame, SPRITESHEET_RIGHT_LEFT_ROW);
+    }
 }
 
 void SpriteManager::updateEquipment(bool helmet, bool chestplate /*, GunID& gun*/) {

@@ -1,6 +1,7 @@
 #pragma once
 
-#include <fstream>
+#include <string>
+#include <vector>
 
 #include "Types.h"
 #include "Vector2.h"

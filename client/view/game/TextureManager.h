@@ -7,7 +7,7 @@
 class TextureManager {
 public:
     // Constructor.
-    TextureManager(SDL2pp::Renderer& renderer);
+    explicit TextureManager(SDL2pp::Renderer& renderer);
 
     // Obtains a texture from the path... if it doesn't exist, it creates it inside the unordered
     // map called 'textures'.
