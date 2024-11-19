@@ -6,22 +6,50 @@
 #include "LibError.h"
 #include "Types.h"
 
-
+/**
+ * General Send Protocol
+ */
 class SendProtocol {
 private:
+    /**
+     * Socket only able to send
+     */
     SenderSocket& skt;
 
 protected:
-    explicit SendProtocol(ActiveSocket& skt);
+    /**
+     * Construct a new Send Protocol object
+     * @param skt the ActiveSocket to send data to
+     */
+    explicit SendProtocol(ActiveSocket& socket);
 
-    void sendByte(unsigned char byte);
+    /**
+     * Send a byte through the socket
+     * @param byte the byte to send
+     */
+    void sendByte(u8 byte);
 
+    /**
+     * Send 4 bytes through the socket
+     * @param num the bytes to send
+     */
     void sendInt(u32 num);
 
+    /**
+     * Send 2 bytes through the socket
+     * @param num the bytes to send
+     */
     void sendShort(u16 num);
 
+    /**
+     * Send a string through the socket
+     * @param string the string to send
+     */
     void sendString(const std::string& string);
 
 public:
-    virtual ~SendProtocol() {}
+    /**
+     * Defautl destructor
+     */
+    virtual ~SendProtocol() = default;
 };

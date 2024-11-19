@@ -6,23 +6,49 @@
 #include "LibError.h"
 #include "Types.h"
 /**
- * Clase abstracta de uso para protocolo de recepcion de mensajes en servidor y cliente
+ * General Receive Protocol
  */
 class ReceiveProtocol {
 private:
+    /**
+     * Socket only able to receive
+     */
     ReceiverSocket& skt;
 
 protected:
-    explicit ReceiveProtocol(ActiveSocket&);
+    /**
+     * Construct a new Receive Protocol object
+     * @param skt the ReceiverSocket to receive data from
+     */
+    explicit ReceiveProtocol(ActiveSocket& socket);
 
-    unsigned char recv_byte();
+    /**
+     * Receive a byte from the socket
+     * @return the byte received
+     */
+    u8 recvByte();
 
+    /**
+     * Receive 2 bytes from the socket
+     * @return the bytes received
+     */
     u16 recvShort();
 
+    /**
+     * Receive 4 bytes from the socket
+     * @return the bytes received
+     */
     u32 recvInt();
 
+    /**
+     * Receive a string from the socket
+     * @return the string received
+     */
     std::string recv_string();
 
 public:
-    virtual ~ReceiveProtocol() {}
+    /**
+     * Defautl destructor
+     */
+    virtual ~ReceiveProtocol() = default;
 };
