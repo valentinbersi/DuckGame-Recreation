@@ -50,7 +50,6 @@ ObjectType MapManager::stringToObjectType(const std::string& typeStr) {
     return UNKNOWN;
 }
 
-
 bool MapManager::importMap(std::vector<Object>& objects, const std::string& mapPath, int& mapWidth, int& mapHeight, std::string& background) {
     std::ifstream fin(mapPath);
     if (!fin.is_open()) {

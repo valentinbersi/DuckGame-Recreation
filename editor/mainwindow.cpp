@@ -20,43 +20,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     scene = new LevelScene(this, objects);
     ui->graphicsView->setScene(scene);
 
-    qDebug() << "Current graphicsView:" << ui->graphicsView->sceneRect();
-
-    // ESTO PODRIA PONERLO DIRECTAMENTE EN EL UI CREO
-//    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
-//    ui->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-//    ui->graphicsView->setTransformationAnchor(QGraphicsView::NoAnchor);
-
-    ui->Platform->setIcon(QIcon(PLATFORM_ICON));
-    ui->SpawnDuck->setIcon(QIcon(DUCK_ICON));
-    ui->SpawnGun->setIcon(QIcon(ARMAMENT_ICON));
-    ui->Box->setIcon(QIcon(BOX_ICON));
-
-    connect(ui->Platform, &QAction::triggered, this, [this]() {
-        scene->toggleAddingObject(PLATFORM);
-        qDebug() << "Current graphicsView:" << ui->graphicsView->sceneRect();
-    });
-
-    connect(ui->SpawnDuck, &QAction::triggered, this, [this]() {
-        scene->toggleAddingObject(DUCK);
-    });
-
-    connect(ui->SpawnGun, &QAction::triggered, this, [this]() {
-        scene->toggleAddingObject(ARMAMENT);
-    });
-
-    connect(ui->Box, &QAction::triggered, this, [this]() {
-        scene->toggleAddingObject(BOX);
-    });
-
-    connect(scene, &LevelScene::addingObjectChanged, this, [this](ObjectType type, bool isAdding) {
-        ui->SpawnDuck->setChecked(type == DUCK && isAdding);
-        ui->Platform->setChecked(type == PLATFORM && isAdding);
-        ui->SpawnGun->setChecked(type == ARMAMENT && isAdding);
-        ui->Box->setChecked(type == BOX && isAdding);
-    });
+    setActionButtons();
 
     connect(ui->ClearAll, &QAction::triggered, scene, &LevelScene::clearAll);
 
@@ -69,6 +33,32 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->actionEditMap, &QAction::triggered, this, &MainWindow::on_actionEditMap_triggered);
 }
 
+void MainWindow::setActionButtons() {
+    actionTypeMap = {
+            {ui->Platform, PLATFORM},
+            {ui->SpawnDuck, DUCK},
+            {ui->SpawnGun, ARMAMENT},
+            {ui->Box, BOX}
+    };
+
+    ui->Platform->setIcon(QIcon(PLATFORM_ICON));
+    ui->SpawnDuck->setIcon(QIcon(DUCK_ICON));
+    ui->SpawnGun->setIcon(QIcon(ARMAMENT_ICON));
+    ui->Box->setIcon(QIcon(BOX_ICON));
+
+    for (const auto& [action, type] : actionTypeMap) {
+        connect(action, &QAction::triggered, this, [this, type]() {
+            scene->selectObjectType(type);
+        });
+    }
+
+    connect(scene, &LevelScene::addingObjectChanged, this, [this](ObjectType type) {
+        for (const auto& [action, objType] : actionTypeMap) {
+            action->setChecked(objType == type);
+        }
+    });
+}
+
 void MainWindow::resizeEvent(QResizeEvent* event) {
     QMainWindow::resizeEvent(event);
     QRectF sceneRect = scene->sceneRect();
@@ -76,15 +66,15 @@ void MainWindow::resizeEvent(QResizeEvent* event) {
 }
 
 void MainWindow::wheelEvent(QWheelEvent* event) {
-    if (event->modifiers() & Qt::ControlModifier) { // Si Ctrl está presionado
+    if (event->modifiers() & Qt::ControlModifier) {
         qreal zoomFactor = 1.15;
 
         QPointF viewCenter = ui->graphicsView->mapToScene(ui->graphicsView->viewport()->rect().center());
 
         if (event->angleDelta().y() > 0) {
-            ui->graphicsView->scale(zoomFactor, zoomFactor); // Acercar
+            ui->graphicsView->scale(zoomFactor, zoomFactor);
         } else {
-            ui->graphicsView->scale(1 / zoomFactor, 1 / zoomFactor); // Alejar
+            ui->graphicsView->scale(1 / zoomFactor, 1 / zoomFactor);
         }
 
         QPointF newCenter = ui->graphicsView->mapFromScene(viewCenter);
@@ -95,7 +85,6 @@ void MainWindow::wheelEvent(QWheelEvent* event) {
         QMainWindow::wheelEvent(event);
     }
 }
-
 
 void MainWindow::on_actionNewMap_triggered() {
     if (!objects.empty()) {
@@ -111,7 +100,6 @@ void MainWindow::on_actionNewMap_triggered() {
     }
 
     scene->clearAll();
-    objects.clear();
 
     QMessageBox::information(this, "Nuevo Mapa", "Se ha creado un nuevo mapa.");
 }
@@ -142,7 +130,7 @@ void MainWindow::on_actionEditMap_triggered() {
         bool success = MapManager::importMap(objects, fileName.toStdString(), mapWidth, mapHeight, background);
 
         if (success) {
-            scene->loadMap(objects, mapWidth, mapHeight);
+            scene->loadMap(mapWidth, mapHeight);
             QMessageBox::information(this, "Mapa Importado", "El mapa se ha importado correctamente.");
         } else {
             QMessageBox::warning(this, "Error", "Hubo un error al importar el mapa.");

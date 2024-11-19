@@ -47,67 +47,52 @@ void LevelScene::deleteObjectAt(const QPointF& position) {
     }
 }
 
-void LevelScene::loadMap(const std::vector<Object>& newObjects, int mapWidth, int mapHeight) {
-    setSceneRect(0, 0, mapWidth * PIXEL_SIZE, mapHeight * PIXEL_SIZE);
-    for (const auto& object : newObjects) {
-        QPixmap icon(object.icon);
-        QPixmap iconScaled =
-                icon.scaled(object.size.width() * PIXEL_SIZE, object.size.height() * PIXEL_SIZE,
-                            Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-        auto* item = new QGraphicsPixmapItem(iconScaled);
-        item->setFlag(QGraphicsItem::ItemIsMovable);
-        item->setFlag(QGraphicsItem::ItemIsSelectable);
-
-        QPointF topLeftPos((object.centerPos.x() - (object.size.width() / 2)) * PIXEL_SIZE,
-                           (object.centerPos.y() - (object.size.height() / 2)) * PIXEL_SIZE);
-        int x = (int(topLeftPos.x()) / PIXEL_SIZE) * PIXEL_SIZE;
-        int y = (int(topLeftPos.y()) / PIXEL_SIZE) * PIXEL_SIZE;
-        item->setPos(x, y);
-        addItem(item);
-        item->setData(0, QVariant::fromValue(&objects.back()));
-    }
-}
-
-void LevelScene::addObject(ObjectType type, QPointF pos) {
-    Object newObject(type);
-    QPixmap icon(newObject.icon);
+void LevelScene::addObjectInMap(Object object) {
+    QPixmap icon(object.icon);
     QPixmap iconScaled =
-            icon.scaled(newObject.size.width() * PIXEL_SIZE, newObject.size.height() * PIXEL_SIZE,
+            icon.scaled(object.size.width() * PIXEL_SIZE, object.size.height() * PIXEL_SIZE,
                         Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     auto* item = new QGraphicsPixmapItem(iconScaled);
     item->setFlag(QGraphicsItem::ItemIsMovable);
     item->setFlag(QGraphicsItem::ItemIsSelectable);
 
-    QPointF topLeftPos(pos.x() - (newObject.size.width() / 2) * PIXEL_SIZE,
-                       pos.y() - (newObject.size.height() / 2) * PIXEL_SIZE);
-
+    QPointF topLeftPos((object.centerPos.x() - (object.size.width() / 2)) * PIXEL_SIZE,
+                       (object.centerPos.y() - (object.size.height() / 2)) * PIXEL_SIZE);
     int x = (int(topLeftPos.x()) / PIXEL_SIZE) * PIXEL_SIZE;
     int y = (int(topLeftPos.y()) / PIXEL_SIZE) * PIXEL_SIZE;
     item->setPos(x, y);
 
-    newObject.setCenterPosition(QPointF(x / PIXEL_SIZE + newObject.size.width() / 2,
-                                        y / PIXEL_SIZE + newObject.size.height() / 2));
-
     addItem(item);
-    objects.push_back(newObject);
     item->setData(0, QVariant::fromValue(&objects.back()));
 
+    // esto capaz podria manejarlo en otro lado ¿?
     QRectF objectRect(item->scenePos(),
-                      QSizeF(newObject.size.width() * PIXEL_SIZE,
-                             newObject.size.height() * PIXEL_SIZE));
+                      QSizeF(object.size.width() * PIXEL_SIZE,
+                             object.size.height() * PIXEL_SIZE));
     QRectF currentRect = sceneRect();
 
-    qDebug() << "Current sceneRect:" << currentRect;
-    qDebug() << "Object rect:" << objectRect;
     if (!currentRect.contains(objectRect)) {
         QRectF expandedRect = currentRect.united(objectRect);
         setSceneRect(expandedRect);
         gridWidth = expandedRect.width();
         gridHeight = expandedRect.height();
-        qDebug() << "Expanded rect:" << expandedRect;
     }
+}
+
+void LevelScene::loadMap(int mapWidth, int mapHeight) {
+    setSceneRect(0, 0, mapWidth * PIXEL_SIZE, mapHeight * PIXEL_SIZE);
+    for (const auto& object : objects) {
+        addObjectInMap(object);
+    }
+}
+
+void LevelScene::addNewObject(ObjectType type, QPointF pos) {
+    Object newObject(type);
+    newObject.setCenterPosition(QPointF((int)(pos.x()) / PIXEL_SIZE + newObject.size.width() / 2,
+                                        (int)(pos.y()) / PIXEL_SIZE + newObject.size.height() / 2));
+    addObjectInMap(newObject);
+    objects.push_back(newObject);
 
     auto *itemAction = qobject_cast<QAction*>(sender());
     if (itemAction) {
@@ -116,16 +101,14 @@ void LevelScene::addObject(ObjectType type, QPointF pos) {
 }
 
 void LevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-    qDebug() << "Clic en la escena en: " << event->scenePos();
-
     if (event->button() == Qt::RightButton) {
         deleteObjectAt(event->scenePos());
         return;
     }
 
-    if (addingObject && objectTypeToAdd != UNKNOWN) {
+    if (objectTypeToAdd != UNKNOWN) {
         QPointF pos = event->scenePos();
-        addObject(objectTypeToAdd, pos);
+        addNewObject(objectTypeToAdd, pos);
         return;
     }
 
@@ -145,7 +128,6 @@ void LevelScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-
     if (selectedItem) {
         QPointF pos = selectedItem->pos();
         int x = int(pos.x()) / PIXEL_SIZE * PIXEL_SIZE;
@@ -184,16 +166,25 @@ void LevelScene::drawBackground(QPainter* painter, const QRectF&) {
     painter->restore();
 }
 
-void LevelScene::toggleAddingObject(ObjectType type) {
-    if (addingObject && objectTypeToAdd == type){
-        addingObject = false;
+//void LevelScene::toggleAddingObject(ObjectType type) {
+//    if (addingObject && objectTypeToAdd == type){
+//        addingObject = false;
+//        objectTypeToAdd = UNKNOWN;
+//    } else {
+//        addingObject = true;
+//        objectTypeToAdd = type;
+//    }
+//
+//    emit addingObjectChanged(objectTypeToAdd, addingObject);
+//}
+
+void LevelScene::selectObjectType(ObjectType type) {
+    if (objectTypeToAdd == type) {
         objectTypeToAdd = UNKNOWN;
     } else {
-        addingObject = true;
         objectTypeToAdd = type;
     }
-
-    emit addingObjectChanged(objectTypeToAdd, addingObject);
+    emit addingObjectChanged(objectTypeToAdd);
 }
 
 void LevelScene::clearAll() {

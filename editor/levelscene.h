@@ -20,20 +20,27 @@ private:
 public:
     LevelScene(QObject* parent, std::vector<Object>& objects);
     ~LevelScene() override = default;
+
+    void deleteObjectAt(const QPointF& position);
+    void addNewObject(ObjectType type, QPointF pos);
+    void addObjectInMap(Object object);
+
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
-    static Object createObject(ObjectType type);
-    void addObject(ObjectType type, QPointF pos);
-    void drawBackground(QPainter* painter, const QRectF& rect) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
-    void toggleAddingObject(ObjectType type);
-    void deleteObjectAt(const QPointF& position);
+    //void toggleAddingObject(ObjectType type);
+    void selectObjectType(ObjectType type);
+
+
     void clearAll();
-    void loadMap(const std::vector<Object>& newObjects, int mapWidth, int mapHeight);
+    // Se encarga de cargar un mapa del tamaño pasado por parametro.
+    // Cargara en el mapa los objetos de la lista objects, que ya se tiene la referencia en esta clase.
+    void loadMap(int mapWidth, int mapHeight);
+    void drawBackground(QPainter* painter, const QRectF& rect) override;
     // void zoom(double factor);
 
 signals:
-    void addingObjectChanged(ObjectType type, bool isAdding);
+    void addingObjectChanged(ObjectType type);
 };
 
 #endif  // LEVELSCENE_H
