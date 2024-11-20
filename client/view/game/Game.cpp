@@ -17,7 +17,7 @@
 #define whiteFeathers "assets/player/whiteDuckFeathers.png"
 #define yellowFeathers "assets/player/yellowDuckFeathers.png"
 
-#define ROCK "assets/enviroment/rock16.png"
+#define ROCK "assets/enviroment/rock.png"
 
 using SDL2pp::NullOpt;
 using SDL2pp::Renderer;
@@ -39,7 +39,7 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
 void Game::init() {
     // VOLVERLOS ATRIBUTOS DE LA CLASE
     TextureManager textureManager(renderer);
-    // EnviromentRenderer enviromentRenderer(renderer, textureManager);
+    EnviromentRenderer enviromentRenderer(renderer, textureManager);
     //  VOLVERLOS ATRIBUTOS DE LA CLASE
 
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping =
@@ -49,10 +49,8 @@ void Game::init() {
 
     Texture backgroundTexture = startBackground();
     camera.loadBackgroundSize(backgroundTexture);
-    renderer.Present();
     EventHandler handler(window, window_width, window_height, twoPlayersLocal, communicator, ducks,
                          camera, running);
-    // SDL_Delay(5000);
 
     while (running) {
         getSnapshot();
@@ -63,7 +61,7 @@ void Game::init() {
 
         showBackground(backgroundTexture, currentScale);
         updatePlayers(spritesMapping, currentScale);
-        // updateBlocks(currentScale, enviromentRenderer);
+        updateBlocks(currentScale, enviromentRenderer);
         //  updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
         renderer.Present();
 
@@ -127,7 +125,7 @@ void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManage
 
 void Game::updateBlocks(float currentScale, EnviromentRenderer& enviromentRenderer) {
     for (auto& block: blocks) {
-        SDL2pp::Rect position(block->x(), block->y(), 32 * currentScale, 32 * currentScale);
+        SDL2pp::Rect position(block->x(), block->y(), 16 * currentScale, 16 * currentScale);
         enviromentRenderer.drawEnviroment(position, ROCK);
     }
 }
