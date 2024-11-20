@@ -28,8 +28,6 @@ void Area::processCollisions([[maybe_unused]] const float delta) {
     }
 }
 
-GameStatus Area::status() { return {}; }
-
 #define COLLISION_NAME "Collision"
 
 std::string Area::eventName(const Events eventType) {

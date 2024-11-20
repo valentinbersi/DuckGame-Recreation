@@ -33,10 +33,13 @@ GameStatus& GameStatus::operator=(GameStatus&& other) noexcept {
 }
 
 void GameStatus::send([[maybe_unused]] ServerSendProtocol& serverProtocol) {
-    // TODO: implement if necessary
+    serverProtocol.sendLen(ducks.size());
+    for (const auto& duck: ducks) {
+        serverProtocol.sendDuckData(duck);
+    }
 
-    // serverProtocol.sendLen(gameObjects.size());
-    // for (const auto& object: gameObjects) {
-    //     serverProtocol.sendDuck(*object);
-    // }
+    serverProtocol.sendLen(blockPositions.size());
+    for (const auto& blockPosition: blockPositions) {
+        serverProtocol.sendVector2(blockPosition);
+    }
 }

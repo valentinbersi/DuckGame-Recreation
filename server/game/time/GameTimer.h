@@ -34,9 +34,4 @@ public:
      * Reset the timer
      */
     void reset();
-
-    /**
-     * Does nothing
-     */
-    GameStatus status() override;
 };

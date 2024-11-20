@@ -59,11 +59,6 @@ public:
     void processCollisions(float delta) override;
 
     /**
-     * Does nothing on area
-     */
-    GameStatus status() override;
-
-    /**
      * The events the Area class has
      */
     enum class Events : u8 { COLLISION };
