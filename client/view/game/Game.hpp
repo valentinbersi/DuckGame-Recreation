@@ -26,6 +26,7 @@
 #include "EventHandler.h"
 #include "EnviromentRenderer.h"
 #include "Vector2.h"
+#include "Timer.h"
 
 class Game {
 
@@ -53,6 +54,7 @@ private:
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
     SoundManager soundManager;
+    Timer timer;
     //EnviromentRenderer enviromentRenderer;
     bool& twoPlayersLocal;
     Camera camera;

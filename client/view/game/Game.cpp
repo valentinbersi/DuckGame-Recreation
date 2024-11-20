@@ -53,6 +53,7 @@ void Game::init() {
                          camera, running);
 
     while (running) {
+        timer.iterationStartMilliseconds();
         getSnapshot();
         renderer.Clear();
 
@@ -67,7 +68,8 @@ void Game::init() {
 
         handler.handleEvents();
 
-        SDL_Delay(33);  // 33ms = 30fps
+        timer.iterationEnd(30);
+        //SDL_Delay(33);  // 33ms = 30fps
     }
 
     IMG_Quit();
