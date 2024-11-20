@@ -5,9 +5,8 @@
 #include <utility>
 
 #include "GameStatus.h"
-#include "Level.h"
+#include "LevelData.h"
 #include "SpawnPoint.h"
-#include "TerrainBlock.h"
 
 /**
  * Macro for easier event handling
@@ -98,30 +97,16 @@ Player& GameController::getPlayer(const PlayerID playerID) const { return *playe
 
 u8 GameController::playersCount() const { return players.size(); }
 
-void GameController::loadLevel(const Level& level) {
+void GameController::loadLevel(const LevelData& level) {
     if (this->level != nullptr)
         removeChild("Level");
 
-    this->level = new GameObject();
-
-    for (u64 i = 0; i < level.terrainBlocks.size(); i++)
-        this->level->addChild("TerrainBlock" + std::to_string(i),
-                              std::make_unique<TerrainBlock>(level.terrainBlocks[i]));
-
-    for (u64 i = 0; i < level.duckSpawnPoints.size(); i++)
-        this->level->addChild("SpawnPoint" + std::to_string(i),
-                              std::make_unique<SpawnPoint>(level.duckSpawnPoints[i]));
-
-    addChild("Level", this->level);
+    addChild("Level", new Level(level));
 }
 
-GameStatus GameController::status() {
+GameStatus GameController::status() const {
     GameStatus status;
-
-    forAllChildren([&status](GameObject* child) {
-        status.gameObjects.splice(status.gameObjects.end(),
-                                  std::move(std::move(child->status()).gameObjects));
-    });
-
+    status.blockPositions = std::move(level->status());
+    for (const auto& [_, player]: players) status.ducks.push_back(player->status());
     return status;
 }

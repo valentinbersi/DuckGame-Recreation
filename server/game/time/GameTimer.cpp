@@ -27,5 +27,3 @@ void GameTimer::reset() {
     timeLeft = timeout;
     started = false;
 }
-
-GameStatus GameTimer::status() { return {}; }

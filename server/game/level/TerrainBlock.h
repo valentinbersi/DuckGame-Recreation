@@ -10,5 +10,4 @@ public:
 
     void start() override;
     void update(float delta) override;
-    GameStatus status() override;
 };

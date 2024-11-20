@@ -7,7 +7,7 @@
 #include <QGraphicsView>
 #include <QMimeData>
 #include <cmath>
-
+#include <vector>
 
 #define PIXEL_SIZE 10
 #define DEFAULT_WIDTH 200

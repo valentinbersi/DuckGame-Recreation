@@ -156,7 +156,7 @@ TEST(ProtocolTest, ServerToGameSendOneStatus) {
         ActiveSocket clientSkt("localhost", "8080");
         ClientRecvProtocol recvProtocol(clientSkt);
         GameStatus recvStatus = recvProtocol.recvGameStatus();
-        ASSERT_TRUE(recvStatus.gameObjects.size() == 1);
+        ASSERT_EQ(recvStatus.gameObjects.size(), 1);
     });
 
     ActiveSocket skt = peer.accept();

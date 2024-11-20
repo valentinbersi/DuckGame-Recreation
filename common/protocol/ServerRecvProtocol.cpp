@@ -1,5 +1,7 @@
 #include "ServerRecvProtocol.h"
 
+#include <string>
+
 #include "GameMessage.h"
 #include "LobbyMessage.h"
 

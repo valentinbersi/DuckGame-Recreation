@@ -59,7 +59,8 @@ void EventHandler::handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown) 
     }
 }
 
-void EventHandler::handleScreenEvents(SDL_Event& event, bool isKeyDown, SDL_Scancode& scancode) {
+void EventHandler::handleScreenEvents(const SDL_Event& event, bool isKeyDown,
+                                      const SDL_Scancode& scancode) {
     if (isKeyDown && scancode == SDL_SCANCODE_F11) {
         isFullscreen() ? setFullscreen(false) : setFullscreen(true);
     } else if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED) {

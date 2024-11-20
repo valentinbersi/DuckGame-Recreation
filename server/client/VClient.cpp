@@ -1,5 +1,6 @@
 #include "VClient.h"
 
+#include <utility>
 VirtualClient::VirtualClient(ActiveSocket socket, GameMapMonitor& monitor, u16 clientID):
         skt(std::move(socket)),
         id(clientID),

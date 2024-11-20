@@ -1,17 +1,17 @@
 #pragma once
 
 #include "CollisionManager.h"
+#include "Level.h"
 #include "Player.h"
 
-
-struct Level;
+struct LevelData;
 struct GameStatus;
 typedef u16 PlayerID;
 
 class GameController final: public GameObject {
     HashMap<PlayerID, Player*> players;
     CollisionManager collisionManager;
-    GameObject* level;
+    Level* level;
 
     /**
      * GameController handler for tree entered event
@@ -98,11 +98,11 @@ public:
      * Load the level
      * @param level the level to load
      */
-    void loadLevel(const Level& level);
+    void loadLevel(const LevelData& level);
 
     /**
      * Get the status of the game
      * @return the status of the game
      */
-    GameStatus status() override;
+    GameStatus status() const;
 };

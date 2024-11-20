@@ -169,10 +169,10 @@ public:
     bool isRoot() const;
 
     /**
-     * Get the status of the object
-     * @return The status of the object
+     * Get the root object of the tree
+     * @return A reference to the root object
      */
-    virtual GameStatus status();
+    GameObject* getRoot();
 
     /**
      * The events the Object class has

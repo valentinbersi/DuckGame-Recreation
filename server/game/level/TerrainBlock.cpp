@@ -8,5 +8,3 @@ TerrainBlock::TerrainBlock(Vector2 position):
 void TerrainBlock::start() {}
 
 void TerrainBlock::update([[maybe_unused]] float delta) {}
-
-GameStatus TerrainBlock::status() { return GameStatus{}; }

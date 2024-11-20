@@ -38,3 +38,5 @@ BlockingQueue<std::unique_ptr<Command>>* LobbyResolver::resolveRequest(
         const LobbyMessage& message) {
     return resolveMap.at(message.request)(message);
 }
+
+LobbyResolver::~LobbyResolver() = default;

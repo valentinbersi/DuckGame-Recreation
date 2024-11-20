@@ -1,5 +1,6 @@
 #include "GameMapMonitor.h"
 
+#include <memory>
 #include <random>
 
 #include "ReplyMessage.h"
@@ -54,10 +55,10 @@ u16 GameMapMonitor::creatGameSafe() {
 }
 
 GameMapMonitor::~GameMapMonitor() {
-    for (auto& [key, value]: gameMap) {
-        value->stop();
-        if (value->isJoinable()) {
-            value->join();
+    for (auto& [_, game]: gameMap) {
+        game->stop();
+        if (game->isJoinable()) {
+            game->join();
         }
     }
 }

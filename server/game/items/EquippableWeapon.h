@@ -7,7 +7,7 @@ protected:
     GunID id;
 
 public:
-    EquippableWeapon(GunID id);
+    explicit EquippableWeapon(GunID id);
 
     GunID getID() const;
 

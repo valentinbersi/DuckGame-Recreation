@@ -13,11 +13,7 @@ struct ServerMessage;
 /**
  *  Dedicated SendProtocol for the server
  */
-class ServerSendProtocol: public SendProtocol {
-private:
-    void sendGameObject2DData(const GameObject2DData* obj2Data);
-
-    void sendDuckData(const DuckData* objData);
+class ServerSendProtocol final: public SendProtocol {
 
 public:
     explicit ServerSendProtocol(ActiveSocket& socket);
@@ -26,7 +22,9 @@ public:
 
     void sendLen(u16 len);
 
-    void sendDuck(const GameObjectData& objData);
+    void sendDuckData(const DuckData& objData);
+
+    void sendVector2(const Vector2& vector);
 
     void sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers);
 

@@ -3,11 +3,12 @@
 #include <map>
 #include <memory>
 #include <queue>
+#include <vector>
 
 #include "BlockingQueue.h"
 #include "Command.h"
 #include "GameController.h"
-#include "Level.h"
+#include "LevelData.h"
 #include "ServerMessage.h"
 #include "Thread.h"
 #include "Timer.h"
@@ -15,7 +16,7 @@
 class GameLoop final: public Thread {
     constexpr static std::uint8_t FRAME_TIMES_AMOUNT = 2;
 
-    std::vector<Level> levels;
+    std::vector<LevelData> levels;
     std::map<PlayerID, std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>>>
             clientQueuesMap{};
     BlockingQueue<std::unique_ptr<Command>> clientCommands;
@@ -49,7 +50,7 @@ public:
     /**
      * Construct a gameloop with no players
      */
-    GameLoop(std::vector<Level>& levels);
+    explicit GameLoop(std::vector<LevelData>& levels);
 
     /**
      * Run the gameloop

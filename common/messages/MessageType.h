@@ -5,22 +5,14 @@ public:
     enum Value : unsigned char { Lobby = 0x0, Game = 0x1, Reply = 0x2 };
 
     // cppcheck-suppress noExplicitConstructor
-    MessageType(Value value):
-            _value(value) {}  // Implicit on purpose so it can be used as a common enum
+    MessageType(Value value);  // NOLINT(runtime/explicit)
 
     // cppcheck-suppress noExplicitConstructor
-    MessageType(unsigned char value):
-            _value(static_cast<Value>(value)) {
-    }  // Implicit on purpose so it can be used as a common enum
+    MessageType(unsigned char value);  // NOLINT(runtime/explicit)
 
-
-    [[nodiscard]] operator Value() const { return _value; }
+    [[nodiscard]] operator Value() const;
 
     MessageType() = delete;
-
-    // bool operator==(const MessageType& other) const {return _value == other._value;}
-
-    // bool operator!=(MessageType boxId) const;
 
 private:
     Value _value;
@@ -46,19 +38,14 @@ public:
     };
 
     // cppcheck-suppress noExplicitConstructor
-    InputAction(Value value):
-            _value(value) {}  // Implicit on purpose so it can be used as a common enum
+    InputAction(Value value);  // NOLINT(runtime/explicit)
 
     // cppcheck-suppress noExplicitConstructor
-    InputAction(unsigned char value): _value(static_cast<Value>(value)) {}
+    InputAction(unsigned char value);  // NOLINT(runtime/explicit)
 
-    [[nodiscard]] operator Value() const { return _value; }
+    [[nodiscard]] operator Value() const;
 
     InputAction() = delete;
-
-    // bool operator==(const InputAction& other) const {return _value == other._value;}
-
-    // bool operator!=(InputAction boxId) const;
 
 private:
     Value _value;
@@ -69,19 +56,14 @@ public:
     enum Value : unsigned char { NEWMATCH = 0x0, JOINMATCH = 0x1, STARTMATCH = 0X2 };
 
     // cppcheck-suppress noExplicitConstructor
-    LobbyRequest(Value value):
-            _value(value) {}  // Implicit on purpose so it can be used as a common enum
+    LobbyRequest(Value value);  // NOLINT(runtime/explicit)
 
     // cppcheck-suppress noExplicitConstructor
-    LobbyRequest(unsigned char value): _value(static_cast<Value>(value)) {}
+    LobbyRequest(unsigned char value);  // NOLINT(runtime/explicit)
 
-    [[nodiscard]] operator Value() const { return _value; }
+    [[nodiscard]] operator Value() const;
 
-    LobbyRequest(): _value(NEWMATCH){};
-
-    // bool operator==(const LobbyRequest& other) const {return _value == other._value;}
-
-    // bool operator!=(LobbyRequest boxId) const;
+    LobbyRequest();
 
 private:
     Value _value;

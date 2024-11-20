@@ -9,23 +9,17 @@
 
 ServerSendProtocol::ServerSendProtocol(ActiveSocket& socket): SendProtocol(socket) {}
 
-void ServerSendProtocol::sendGameObject2DData(const GameObject2DData* obj2Data) {
-    // NOTA:DESPUES TALVEZ DEBA MANDAR EL PROPIO ID, POR AHORA NO
-    sendInt(Math::floatToInteger(obj2Data->position.x()));
-    sendInt(Math::floatToInteger(obj2Data->position.y()));
-    sendInt(Math::floatToInteger(obj2Data->rotation));
-}
-void ServerSendProtocol::sendDuckData(const DuckData* duckData) {
-    sendByte(static_cast<unsigned char>(duckData->duckID));
-    sendByte(duckData->life);
-    sendByte(static_cast<unsigned char>(duckData->gun->gunID));
-    sendShort(static_cast<u16>(duckData->extraData.to_ulong()));
+void ServerSendProtocol::sendVector2(const Vector2& vector) {
+    sendInt(Math::floatToInteger(vector.x()));
+    sendInt(Math::floatToInteger(vector.y()));
 }
 
-void ServerSendProtocol::sendDuck(const GameObjectData& objData) {
-    sendByte(static_cast<unsigned char>(objData.objectID));
-    sendGameObject2DData(dynamic_cast<const GameObject2DData*>(&objData));
-    sendDuckData(dynamic_cast<const DuckData*>(&objData));
+void ServerSendProtocol::sendDuckData(const DuckData& duckData) {
+    sendByte(static_cast<unsigned char>(duckData.duckID));
+    sendByte(duckData.life);
+    sendByte(static_cast<unsigned char>(duckData.gunID));
+    sendShort(static_cast<u16>(duckData.extraData.to_ulong()));
+    sendVector2(duckData.position);
 }
 
 void ServerSendProtocol::sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers) {

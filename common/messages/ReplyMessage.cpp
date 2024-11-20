@@ -37,4 +37,4 @@ bool ReplyMessage::operator==(const ReplyMessage& other) const {
            connectedPlayers == other.connectedPlayers;
 }
 
-ReplyMessage::~ReplyMessage() {}
+ReplyMessage::~ReplyMessage() = default;

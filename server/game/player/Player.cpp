@@ -6,6 +6,7 @@
 #include "Debug.h"
 #include "DuckData.h"
 #include "GameTimer.h"
+#include "GunID.h"
 
 #define MOVE_RIGHT "Move Right"
 #define MOVE_LEFT "Move Left"
@@ -87,11 +88,6 @@ void Player::update([[maybe_unused]] const float delta) {
         flags |= DuckData::IN_AIR;
 }
 
-Player::~Player() = default;
+DuckData Player::status() { return {globalPosition(), id, life, GunID::Ak47, flags}; }
 
-GameStatus Player::status() {
-    GameStatus status;
-    status.gameObjects.push_back(std::make_unique<DuckData>(
-            globalPosition(), 0, id, life, std::make_unique<EquippedGunData>(GunID::Ak47), flags));
-    return status;
-}
+Player::~Player() = default;

@@ -4,11 +4,25 @@
 
 #include "Math.h"
 
+DuckData::DuckData(const DuckData& other) = default;
+
+DuckData& DuckData::operator=(const DuckData& other) {
+    if (this == &other)
+        return *this;
+
+    GameObject2DData::operator=(other);
+    duckID = other.duckID;
+    life = other.life;
+    gunID = other.gunID;
+    extraData = other.extraData;
+    return *this;
+}
+
 DuckData::DuckData(DuckData&& other) noexcept:
         GameObject2DData(std::move(other)),
         duckID(other.duckID),
         life(other.life),
-        gun(std::move(other.gun)),
+        gunID(other.gunID),
         extraData(other.extraData) {}
 
 DuckData& DuckData::operator=(DuckData&& other) noexcept {
@@ -18,24 +32,22 @@ DuckData& DuckData::operator=(DuckData&& other) noexcept {
     GameObject2DData::operator=(std::move(other));
     duckID = other.duckID;
     life = other.life;
-    gun = std::move(other.gun);
+    gunID = other.gunID;
     extraData = other.extraData;
     return *this;
 }
 
 DuckData::~DuckData() = default;
 
-DuckData::DuckData(Vector2 position, const float rotation, const DuckID duckID, const u8 life,
-                   std::unique_ptr<EquippedGunData> gun, const DuckFlag extraData):
-        GameObject2DData(GameObject2DID::Duck, std::move(position), rotation),
+DuckData::DuckData(Vector2 position, const DuckID duckID, const u8 life, const GunID gunID,
+                   const DuckFlag extraData):
+        GameObject2DData(std::move(position)),
         duckID(duckID),
         life(life),
-        gun(std::move(gun)),
+        gunID(gunID),
         extraData(extraData) {}
 
 bool DuckData::operator==(const DuckData& other) const {
-    return objectID == other.objectID && object2DID == other.object2DID &&
-           position == other.position && Math::isEqualAprox(rotation, other.rotation) &&
-           duckID == other.duckID && life == other.life && gun->gunID == other.gun->gunID &&
+    return position == other.position && duckID == other.duckID && life == other.life &&
            extraData == other.extraData;
 }

@@ -8,7 +8,7 @@ LobbyMessage::LobbyMessage():
         player2Name(""),
         matchId(0) {}
 
-LobbyMessage::LobbyMessage(LobbyRequest request, u8 count, std::string name1, std::string name2,
+LobbyMessage::LobbyMessage(LobbyRequest request, u8 count, std::string& name1, std::string& name2,
                            u16 id):
         ClientMessage(MessageType::Lobby),
         request(request),
@@ -27,4 +27,4 @@ bool LobbyMessage::operator==(const LobbyMessage& other) const {
            matchId == other.matchId;
 }
 
-LobbyMessage::~LobbyMessage() {}
+LobbyMessage::~LobbyMessage() = default;
