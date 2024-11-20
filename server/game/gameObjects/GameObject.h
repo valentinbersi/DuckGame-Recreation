@@ -169,12 +169,6 @@ public:
     bool isRoot() const;
 
     /**
-     * Get the status of the object
-     * @return The status of the object
-     */
-    virtual GameStatus status();
-
-    /**
      * The events the Object class has
      */
     enum class Events : u8 {

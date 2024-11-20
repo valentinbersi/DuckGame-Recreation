@@ -31,7 +31,7 @@ public:
      * Returns a GameStatus loaded with the player's data
      * @return a GameStatus loaded with the player's data
      */
-    GameStatus status() override;
+    DuckData status();
 
     /**
      * Move the player to the right until stopMoveRight() is called

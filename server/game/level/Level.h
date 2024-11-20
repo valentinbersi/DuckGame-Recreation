@@ -1,25 +1,24 @@
 #pragma once
 
-#include <string>
+#include <list>
 #include <vector>
 
-#include "Types.h"
-#include "Vector2.h"
+#include "GameObject.h"
+#include "LevelData.h"
+#include "TerrainBlock.h"
 
-struct Level {
-    std::vector<Vector2> terrainBlocks;
-    std::vector<Vector2> duckSpawnPoints;
-    std::vector<Vector2> boxes;
-    std::vector<Vector2> gunSpawnPoints;
-    u64 width, height;
+class Level final: public GameObject {
+    std::vector<TerrainBlock*> terrainBlocks;
 
-    static std::vector<Level> loadLevels();
-
-private:
+public:
     /**
-     * Load a level from a file.
-     * @param fileName The name of the file to load.
-     * @return The loaded level.
+     * Create a new Level object
      */
-    static Level load(const std::string& path);
+    explicit Level(const LevelData& level);
+
+    /**
+     * Get the position of all the blocks in the level
+     * @return The positions of all the blocks in the level
+     */
+    std::list<Vector2> status() const;
 };
