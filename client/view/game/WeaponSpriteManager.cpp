@@ -1,9 +1,13 @@
 #include "WeaponSpriteManager.h"
 
+#include "Spritesheet.h"
+
+#define DEFAULT_SCALE 2.5f
+
 WeaponSpriteManager::WeaponSpriteManager() {}
 
-void WeaponSpriteManager::drawWeapon(GunID& id) {
-    switch (id) {
+void WeaponSpriteManager::drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale, const DuckState& state) {
+    switch (state.gunEquipped) {
         case GunID::Grenade:
             // draw pistol
             break;
@@ -23,7 +27,7 @@ void WeaponSpriteManager::drawWeapon(GunID& id) {
             // draw DuelPistol
             break;
         case GunID::CowboyPistol:
-            // draw CowboyPistol
+            drawCowboyPistol(spritesheet, position, flip, scale, state);
             break;
         case GunID::Magnum:
             // draw Magnum
@@ -37,5 +41,32 @@ void WeaponSpriteManager::drawWeapon(GunID& id) {
         default:
             // draw nothing
             break;
+    }
+}
+
+void WeaponSpriteManager::drawCowboyPistol(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale, const DuckState& state) {
+    spritesheet->selectSprite(0, 0, false);
+    if (flip)
+        position.x -= (spritesheet->getClipWidth() / 2) + 2 * scale / DEFAULT_SCALE;
+    else
+        position.x += (spritesheet->getClipHeight() / 2) + 2 * scale / DEFAULT_SCALE;
+
+    if (state.crouching)
+        position.y += 20 * scale / DEFAULT_SCALE;
+    else
+        position.y += 8 * scale / DEFAULT_SCALE;
+
+    std::string path = gunPaths[state.gunEquipped];
+    spritesheet->drawWeapon(position, flip, path);
+
+    if (state.isShooting) {
+        spritesheet->selectSprite(0, 0, true);
+        if (flip)
+            position.x -= 33 * scale / DEFAULT_SCALE;
+        else
+            position.x += 74 * scale / DEFAULT_SCALE;
+
+        position.y += 8 * scale / DEFAULT_SCALE;
+        spritesheet->drawEffects(position, flip);
     }
 }
