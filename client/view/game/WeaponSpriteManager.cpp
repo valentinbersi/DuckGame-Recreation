@@ -16,29 +16,29 @@ void WeaponSpriteManager::drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& pos
         spritesheet->selectSprite(0, 0, true);
 
         switch (state.gunEquipped) {
-            case GunID::CowboyPistol:
-            case GunID::Magnum:
+            case ItemID::CowboyPistol:
+            case ItemID::Magnum:
                 drawEffect1(spritesheet, position, flip, scale);
                 break;
-            case GunID::Ak47:
-            case GunID::Sniper:
-            case GunID::Shotgun:
+            case ItemID::Ak47:
+            case ItemID::Sniper:
+            case ItemID::Shotgun:
                 drawEffect2(spritesheet, position, flip, scale);
                 break;
-            case GunID::LaserRifle:
+            case ItemID::LaserRifle:
                 drawLaserFlare(spritesheet, position, flip, scale);
                 break;
-            case GunID::PewPewLaser:
+            case ItemID::PewPewLaser:
                 drawPlasma(spritesheet, position, flip, scale);
                 break;
 
-            case GunID::Grenade:
+            case ItemID::Grenade:
                 // draw pistol
                     break;
-            case GunID::Banana:
+            case ItemID::Banana:
                 // draw shotgun
                     break;
-            case GunID::DuelPistol:
+            case ItemID::DuelPistol:
                 // draw DuelPistol
                 break;
             default:

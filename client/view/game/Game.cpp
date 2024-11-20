@@ -112,7 +112,7 @@ void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManage
                            /*duck->extraData[DuckData::HELMET]*/ true,
                            /*duck->extraData[DuckData::ARMOR]*/ true,
                            /*duck->extraData[DuckData::IS_SHOOTING]*/ true,
-                           /*duck->gun->gunID*/ GunID::CowboyPistol};
+                           /*duck->gun->gunID*/ ItemID::CowboyPistol};
         // if (state.isShooting) soundManager.playSound(/*duck->gun->gunID*/ GunID::CowboyPistol);
         // falta dibujar el fire
 

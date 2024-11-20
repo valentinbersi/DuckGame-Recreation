@@ -47,7 +47,7 @@ SpriteManager::SpriteManager(
         hasHelmet(true),
         hasChestplate(true),
         shooting(true),
-        gunEquipped(GunID::CowboyPistol),
+        gunEquipped(ItemID::CowboyPistol),
         spritesheet(std::make_unique<Spritesheet>(path1, path2, renderer, textureManager)),
         weaponSpriteManager(std::make_unique<WeaponSpriteManager>()),
         frame(0),
@@ -132,7 +132,7 @@ void SpriteManager::draw(int col, int row, const DuckState& state) {
         drawChestplate(col, row);
     if (hasHelmet)
         drawHelmet();
-    if (gunEquipped != GunID::NONE) {
+    if (gunEquipped != ItemID::NONE) {
         SDL2pp::Rect position = calculateBasePosition();
         weaponSpriteManager->drawWeapon(spritesheet.get(), position, flip, scale, state);
         hasWeapon = true;

@@ -10,7 +10,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "DuckData.h"
-#include "GunID.h"
+#include "ItemID.h"
 
 class SoundManager {
 
@@ -22,15 +22,15 @@ public:
     ~SoundManager();
 
     //
-    void playSound(GunID id);
+    void playSound(ItemID id);
 
 private:
     //
     void playMusic();
 
     //
-    bool loadSound(GunID id);
-    std::unordered_map<GunID, Mix_Chunk*> soundMap;
-    std::unordered_map<GunID, std::string> soundMapIDS{
-            {GunID::CowboyPistol, "../assets/sounds/cowboyPistol.mp3"}};
+    bool loadSound(ItemID id);
+    std::unordered_map<ItemID, Mix_Chunk*> soundMap;
+    std::unordered_map<ItemID, std::string> soundMapIDS{
+            {ItemID::CowboyPistol, "../assets/sounds/cowboyPistol.mp3"}};
 };

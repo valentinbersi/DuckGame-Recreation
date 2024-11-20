@@ -6,7 +6,7 @@
 #include "Debug.h"
 #include "DuckData.h"
 #include "GameTimer.h"
-#include "GunID.h"
+#include "ItemID.h"
 
 #define MOVE_RIGHT "Move Right"
 #define MOVE_LEFT "Move Left"
@@ -88,6 +88,6 @@ void Player::update([[maybe_unused]] const float delta) {
         //flags |= DuckData::IN_AIR;
 }
 
-DuckData Player::status() { return {globalPosition(), id, life, GunID::Ak47, flags}; }
+DuckData Player::status() { return {globalPosition(), id, life, ItemID::Ak47, flags}; }
 
 Player::~Player() = default;

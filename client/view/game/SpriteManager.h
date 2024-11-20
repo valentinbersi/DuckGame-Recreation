@@ -8,7 +8,7 @@
 
 #include "DuckData.h"
 #include "DuckState.h"
-#include "GunID.h"
+#include "ItemID.h"
 #include "Spritesheet.h"
 #include "WeaponSpriteManager.h"
 
@@ -53,7 +53,7 @@ private:
     bool hasHelmet;
     bool hasChestplate;
     bool shooting;
-    GunID gunEquipped;
+    ItemID gunEquipped;
     std::unique_ptr<Spritesheet> spritesheet;
     std::unique_ptr<WeaponSpriteManager> weaponSpriteManager;
     int frame;

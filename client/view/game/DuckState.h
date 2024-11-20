@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GunID.h"
+#include "ItemID.h"
 
 struct DuckState {
     bool playingDead;
@@ -13,5 +13,5 @@ struct DuckState {
     bool hasHelmet;
     bool hasChestplate;
     bool isShooting;
-    GunID gunEquipped;
+    ItemID gunEquipped;
 };

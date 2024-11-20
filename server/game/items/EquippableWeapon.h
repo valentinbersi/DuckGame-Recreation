@@ -1,15 +1,15 @@
 #include "GameObject.h"
-#include "GunID.h"
+#include "ItemID.h"
 #include "Types.h"
 
 class EquippableWeapon: public GameObject {
 protected:
-    GunID id;
+    ItemID id;
 
 public:
-    explicit EquippableWeapon(GunID id);
+    explicit EquippableWeapon(ItemID id);
 
-    GunID getID() const;
+    ItemID getID() const;
 
     virtual void shoot() = 0;
 
