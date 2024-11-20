@@ -99,12 +99,12 @@ void SpriteManager::updateEquipment(bool helmet, bool chestplate /*, GunID& gun*
 void SpriteManager::setFlags(const DuckState& state) {
     if (inAir || movingRight || movingLeft) {
         if (!(inAir && frame == 4))
-            frame++;
+            ++frame;
         if (frame > LIMIT_FRAMES && !inAir)
             frame = 0;
     }
     if (flapping) {
-        flappingFrame++;
+        ++flappingFrame;
         // if (flappingFrame)
     }
 

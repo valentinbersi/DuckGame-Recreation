@@ -26,6 +26,7 @@
 #include "MessageType.h"
 #include "GameMessage.h"
 #include "EventHandler.h"
+#include "EnviromentRenderer.h"
 
 class Game {
 
@@ -52,6 +53,7 @@ private:
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
     SoundManager soundManager;
+    //EnviromentRenderer enviromentRenderer;
     bool& twoPlayersLocal;
     Camera camera;
 

@@ -36,7 +36,7 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
 
 void Game::init() {
     TextureManager textureManager(renderer);
-    // Renderer classRenderer(renderer);
+    //EnviromentRenderer enviromentRenderer(renderer, textureManager);
 
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping =
             createSpritesMapping(textureManager);
