@@ -201,9 +201,9 @@ SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather, boo
 }
 
 SDL2pp::Rect SpriteManager::calculateBasePosition() {
-    int spriteWidth = spritesheet->getClipWidth();
-    int spriteHeight = spritesheet->getClipHeight();
-    return SDL2pp::Rect(m_position_x, m_position_y, spriteWidth * scale, spriteHeight * scale);
+    //int spriteWidth = spritesheet->getClipWidth();
+    //int spriteHeight = spritesheet->getClipHeight();
+    return SDL2pp::Rect((m_position_x * 8 * scale) / DEFAULT_SCALE, (m_position_y * 8 * scale) / DEFAULT_SCALE, 8 * scale, 8 * scale);
 }
 
 void SpriteManager::adjustForFeathers(SDL2pp::Rect& position, bool isRightFeather) {

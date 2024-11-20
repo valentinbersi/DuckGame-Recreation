@@ -125,7 +125,7 @@ void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManage
 
 void Game::updateBlocks(float currentScale, EnviromentRenderer& enviromentRenderer) {
     for (auto& block: blocks) {
-        SDL2pp::Rect position(block->x(), block->y(), 16 * currentScale, 16 * currentScale);
+        SDL2pp::Rect position((block->x() * 8 * currentScale) / SCALE, (block->y() * 8 * currentScale) / SCALE, 8 * currentScale, 8 * currentScale);
         enviromentRenderer.drawEnviroment(position, ROCK);
     }
 }

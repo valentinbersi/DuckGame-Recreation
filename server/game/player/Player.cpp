@@ -15,7 +15,7 @@
 
 #define DEFAULT_LIFE 10
 #define DEFAULT_FLAGS 0
-#define DEFAULT_SPEED 500
+#define DEFAULT_SPEED 20
 
 /**
  * Macro for easier event handling
@@ -81,7 +81,7 @@ void Player::update([[maybe_unused]] const float delta) {
         _velocity += Vector2(-speed, 0);
         flags |= DuckData::MOVING_LEFT;
     } else if (input.isActionPressed(JUMP) && _onGround) {
-        _velocity += Vector2(0, -800);
+        _velocity += Vector2(0, -10);
     }
 
     if (!_onGround)
