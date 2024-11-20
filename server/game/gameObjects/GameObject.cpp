@@ -117,6 +117,13 @@ GameObject* GameObject::parent() const { return _parent; }
 
 bool GameObject::isRoot() const { return _parent == nullptr; }
 
+GameObject* GameObject::getRoot() {
+    if (isRoot())
+        return this;
+
+    return _parent->getRoot();
+}
+
 #define TREE_ADDED_NAME "TreeEntered"
 #define TREE_EXITED_NAME "TreeExited"
 

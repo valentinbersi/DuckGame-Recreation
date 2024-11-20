@@ -169,6 +169,12 @@ public:
     bool isRoot() const;
 
     /**
+     * Get the root object of the tree
+     * @return A reference to the root object
+     */
+    GameObject* getRoot();
+
+    /**
      * The events the Object class has
      */
     enum class Events : u8 {
