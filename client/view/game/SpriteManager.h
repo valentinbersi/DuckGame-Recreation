@@ -10,6 +10,7 @@
 #include "DuckState.h"
 #include "GunID.h"
 #include "Spritesheet.h"
+#include "WeaponSpriteManager.h"
 
 
 class SpriteManager {
@@ -24,11 +25,9 @@ public:
 
     void update(const DuckState& state);
     void updateEquipment(bool helmet, bool chestplate /*, GunID& gun*/);
-    void draw(int col, int row);
+    void draw(int col, int row, const DuckState& state);
     void updatePosition(float new_x, float new_y);
     void setScale(float newScale);
-
-    Spritesheet& getSpritesheet();
 
 private:
     void setFlags(const DuckState& state);
@@ -37,15 +36,10 @@ private:
     void drawFeathers(int col, int row, bool hasWeapon);
     void drawChestplate(int col, int row);
     void drawHelmet();
-    void drawWeapon();
-    void drawEffects();
-    SDL2pp::Rect getPosition(bool isFeather, bool isRightFeather, bool isChestPlate, bool isHelmet,
-                             bool isWeapon, bool isEffects);
+    SDL2pp::Rect getPosition(bool isFeather, bool isRightFeather, bool isChestPlate, bool isHelmet);
     SDL2pp::Rect calculateBasePosition();
     void adjustForFeathers(SDL2pp::Rect& position, bool isRightFeather);
     void adjustForHelmet(SDL2pp::Rect& position);
-    void adjustForWeapon(SDL2pp::Rect& position);
-    void adjustForEffects(SDL2pp::Rect& position);
 
     const char* path1;
     const char* path2;
@@ -61,21 +55,9 @@ private:
     bool shooting;
     GunID gunEquipped;
     std::unique_ptr<Spritesheet> spritesheet;
+    std::unique_ptr<WeaponSpriteManager> weaponSpriteManager;
     int frame;
     int flappingFrame;
     double m_position_x;
     double m_position_y;
-
-    std::unordered_map<GunID, std::string> gunPaths = {
-            //{GunID::Granade, "../assets/weapons/"},
-            //{GunID::Banana, "../assets/weapons/"},
-            //{GunID::PewPewLaser, "../assets/weapons/"},
-            //{GunID::LaserRifle, "../assets/weapons/"},
-            //{GunID::Ak47, "../assets/weapons/"},
-            //{GunID::DuelPistol, "../assets/weapons/"},
-            {GunID::CowboyPistol, "../assets/weapons/CowboyPistol.png"}
-            //{GunID::Magnum, "../assets/weapons/"},
-            //{GunID::Shotgun, "../assets/weapons/"},
-            //{GunID::Sniper, "../assets/weapons/"},
-    };
 };

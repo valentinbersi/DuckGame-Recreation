@@ -37,9 +37,6 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
 void Game::init() {
     TextureManager textureManager(renderer);
     // Renderer classRenderer(renderer);
-    // Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-    // Mix_Music* music = Mix_LoadMUS(MUSIC_PATH);
-    // Mix_PlayMusic(music, -1);
 
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping =
             createSpritesMapping(textureManager);
@@ -128,7 +125,8 @@ void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManage
                            duck->extraData[DuckData::MOVING_LEFT_INDEX],
                            /*duck->extraData[DuckData::HELMET]*/ true,
                            /*duck->extraData[DuckData::ARMOR]*/ true,
-                           /*duck->extraData[DuckData::IS_SHOOTING]*/ true};
+                           /*duck->extraData[DuckData::IS_SHOOTING]*/ true,
+                           /*duck->gun->gunID*/ GunID::CowboyPistol};
         // if (state.isShooting) soundManager.playSound(/*duck->gun->gunID*/ GunID::CowboyPistol);
         // falta dibujar el fire
 

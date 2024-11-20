@@ -85,3 +85,5 @@ SDL2pp::Texture& Spritesheet::getTexture(bool feathers) {
 int Spritesheet::getClipWidth() const { return m_clip.w; }
 
 int Spritesheet::getClipHeight() const { return m_clip.h; }
+
+SDL_Rect& Spritesheet::getClip() { return m_clip; }

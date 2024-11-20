@@ -38,14 +38,16 @@ public:
     // ...
     void drawEffects(SDL2pp::Rect& playerPosition, bool flip);
 
+    // Returns the texture of the spritesheet, depending if it's a feather or not.
+    SDL2pp::Texture& getTexture(bool feathers);
+
     // Returns the width of the clip.
     int getClipWidth() const;
 
     // Returns the height of the clip.
     int getClipHeight() const;
 
-    // Returns the texture of the spritesheet, depending if it's a feather or not.
-    SDL2pp::Texture& getTexture(bool feathers);
+    SDL_Rect& getClip();
 
 private:
     SDL_Rect m_clip;
