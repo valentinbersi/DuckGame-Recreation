@@ -207,18 +207,20 @@ SDL2pp::Rect SpriteManager::calculateBasePosition() {
 }
 
 void SpriteManager::adjustForFeathers(SDL2pp::Rect& position, bool isRightFeather) {
-    int spriteWidth = spritesheet->getClipWidth();
-    int spriteHeight = spritesheet->getClipHeight();
+    //int spriteWidth = spritesheet->getClipWidth();
+    //int spriteHeight = spritesheet->getClipHeight();
 
     if (isRightFeather) {
-        position.x += (spriteWidth * 2 - OFFSET_RIGHT) * scale / DEFAULT_SCALE;
+        //position.x += (spriteWidth * 2 - OFFSET_RIGHT) * scale / DEFAULT_SCALE;
     } else {
-        position.x += (spriteWidth / 2 + OFFSET_LEFT) * scale / DEFAULT_SCALE;
+        //position.x += (spriteWidth / 2 + OFFSET_LEFT) * scale / DEFAULT_SCALE;
     }
     if (crouching)
         position.y += 48 * scale / DEFAULT_SCALE;
-    else
-        position.y += (spriteHeight * 2 + OFFSET_Y) * scale / DEFAULT_SCALE;
+    //else
+        //position.y = (position.y * 8 * scale) / DEFAULT_SCALE;
+            //(spriteHeight * 2 + OFFSET_Y) * scale / DEFAULT_SCALE;
+    position.w = 16 * scale / DEFAULT_SCALE;
 }
 
 void SpriteManager::adjustForHelmet(SDL2pp::Rect& position) {
