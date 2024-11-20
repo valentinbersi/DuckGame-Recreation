@@ -21,7 +21,7 @@ private:
         //{GunID::LaserRifle, "../assets/weapons/"},
         //{GunID::Ak47, "../assets/weapons/"},
         //{GunID::DuelPistol, "../assets/weapons/"},
-        {GunID::CowboyPistol, "../assets/weapons/CowboyPistol.png"}
+        {GunID::CowboyPistol, "assets/weapons/CowboyPistol.png"}
         //{GunID::Magnum, "../assets/weapons/"},
         //{GunID::Shotgun, "../assets/weapons/"},
         //{GunID::Sniper, "../assets/weapons/"},

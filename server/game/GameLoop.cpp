@@ -34,6 +34,7 @@ void GameLoop::run() {
         broadcast(std::make_shared<ReplyMessage>(0, 1, 0));
         timer.start();
         game.start();
+        game.loadLevel(levels[0]);
         // while(_keep_running){
         while (_keep_running) {  // poner game.MatchEnded() y && _keep_running para condicion de
                                  // corte.

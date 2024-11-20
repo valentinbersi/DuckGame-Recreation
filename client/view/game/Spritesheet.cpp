@@ -8,9 +8,9 @@
 #define WIDTH_HEIGHT_FEATHERS 16
 #define WIDTH_HEIGHT_SPRITE 32
 
-#define CHESTPLATE_PATH "../assets/player/chestplate.png"
-#define HELMET_PATH "../assets/player/helmets.png"
-#define FIRE_PATH "../assets/particles/flame.png"
+#define CHESTPLATE_PATH "assets/player/chestplate.png"
+#define HELMET_PATH "assets/player/helmets.png"
+#define FIRE_PATH "assets/particles/flame.png"
 
 #define N_COL_F 5  // Feathers
 #define N_ROW_F 8  // PERO NO LE DARÉ USO A TODAS

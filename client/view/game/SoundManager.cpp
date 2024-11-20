@@ -1,6 +1,6 @@
 #include "SoundManager.h"
 
-#define MUSIC_PATH "../assets/sounds/ost.ogg"
+#define MUSIC_PATH "assets/sounds/ost.ogg"
 #define DEFAULT_VOLUME 40
 
 SoundManager::SoundManager() {
