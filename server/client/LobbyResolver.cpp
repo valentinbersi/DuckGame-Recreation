@@ -23,7 +23,7 @@ BlockingQueue<std::unique_ptr<Command>>* LobbyResolver::resolveNewMatch(
     gameMap.joinGameIfCreated(matchID, senderQueue, clientID, message.playerCount);
     return nullptr;
 }
- 
+
 BlockingQueue<std::unique_ptr<Command>>* LobbyResolver::resolveJoinMatch(
         const LobbyMessage& message) {
     return gameMap.joinGameIfCreated(message.matchId, senderQueue, clientID, message.playerCount);
@@ -38,3 +38,5 @@ BlockingQueue<std::unique_ptr<Command>>* LobbyResolver::resolveRequest(
         const LobbyMessage& message) {
     return resolveMap.at(message.request)(message);
 }
+
+LobbyResolver::~LobbyResolver() = default;

@@ -1,5 +1,8 @@
 #include "Rectangle.h"
 
+#include <algorithm>
+#include <utility>
+
 #include "IntersectionInfo.h"
 #include "Math.h"
 
@@ -42,7 +45,7 @@ std::optional<IntersectionInfo> Rectangle::overlaps(const Rectangle& rectangle,
 
     if (std::optional<IntersectionInfo> intersectionInfo =
                 expandedRectangle.overlaps(Ray2D(position + size / 2, displacement * delta))) {
-        if (intersectionInfo->tHitNear < 1.0f and intersectionInfo->tHitNear >= 0)
+        if (intersectionInfo->contactTime < 1.0f and intersectionInfo->contactTime >= 0)
             return intersectionInfo;
     }
 
@@ -74,7 +77,7 @@ std::optional<IntersectionInfo> Rectangle::overlaps(const Ray2D& ray) const {
     if (const float tHitFar = std::min(tFar.x(), tFar.y()); tHitFar < 0)
         return std::nullopt;
 
-    info.tHitNear = tHitNear;
+    info.contactTime = tHitNear;
     info.contactPoint = ray.origin() + tHitNear * ray.direction();
 
     if (tNear.x() > tNear.y()) {

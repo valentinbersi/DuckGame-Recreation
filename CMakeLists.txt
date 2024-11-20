@@ -68,6 +68,11 @@ set_project_warnings(common ${MAKE_WARNINGS_AS_ERRORS} FALSE)
 # location (so our dependants will not have to explicitly request this)
 target_include_directories(common PUBLIC .)
 
+file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/assets)
+file(COPY ${CMAKE_SOURCE_DIR}/assets/ DESTINATION ${CMAKE_BINARY_DIR}/assets)
+file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/maps)
+file(COPY ${CMAKE_SOURCE_DIR}/maps/ DESTINATION ${CMAKE_BINARY_DIR}/maps)
+
 # Install libSDL2pp (for client or editor)
 if (CLIENT OR EDITOR)
     add_custom_command(

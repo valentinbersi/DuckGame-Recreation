@@ -1,15 +1,16 @@
 #include "SoundManager.h"
 
-#define MUSIC_PATH "../assets/sounds/ost.ogg"
-#define DEFAULT_VOLUME 40
+#define MUSIC_PATH "assets/sounds/ost.ogg"
+#define DEFAULT_VOLUME 10
 
 SoundManager::SoundManager() {
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 512) < 0) std::cerr << "Error: " << Mix_GetError() << std::endl;
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 512) < 0)
+        std::cerr << "Error: " << Mix_GetError() << std::endl;
     playMusic();
 }
 
 SoundManager::~SoundManager() {
-    for (auto& sound : soundMap) {
+    for (auto& sound: soundMap) {
         Mix_FreeChunk(sound.second);
     }
 
@@ -23,16 +24,17 @@ void SoundManager::playMusic() {
     Mix_VolumeMusic(DEFAULT_VOLUME);
 }
 
-void SoundManager::playSound(GunID id) {
+void SoundManager::playSound(ItemID id) {
     auto it = soundMap.find(id);
-    if (it == soundMap.end()) loadSound(id);
+    if (it == soundMap.end())
+        loadSound(id);
     it = soundMap.find(id);
 
     Mix_VolumeChunk(it->second, 20);
     Mix_PlayChannel(-1, it->second, 0);
 }
 
-bool SoundManager::loadSound(GunID id) {
+bool SoundManager::loadSound(ItemID id) {
     std::string path = soundMapIDS[id];
     Mix_Chunk* sound = Mix_LoadWAV(path.c_str());
     if (sound == nullptr) {

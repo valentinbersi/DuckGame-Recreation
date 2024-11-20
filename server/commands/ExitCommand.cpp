@@ -4,9 +4,9 @@
 ExitCommand::ExitCommand(const PlayerID id): Command(id) {}
 
 void ExitCommand::execute(GameController& gameController) {
-    try{
+    try {
         gameController.removePlayer(id);
     } catch (const GameController::PlayerNotFound& err) {
-        //expected
-    } 
+        // expected
+    }
 }

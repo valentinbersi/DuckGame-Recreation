@@ -20,7 +20,7 @@ void MovementCommand::execute(GameController& gameController) {
 
         case InputAction::DOWN_PRESSED:
             return player.crouch();
-        
+
         case InputAction::DOWN_RELEASED:
             return player.stopCrouch();
 
@@ -29,7 +29,7 @@ void MovementCommand::execute(GameController& gameController) {
 
         case InputAction::JUMP_RELEASED:
             return player.stopJump();
-        
+
         default:
             return;
     }

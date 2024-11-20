@@ -6,6 +6,7 @@
 #include "Debug.h"
 #include "DuckData.h"
 #include "GameTimer.h"
+#include "ItemID.h"
 
 #define MOVE_RIGHT "Move Right"
 #define MOVE_LEFT "Move Left"
@@ -14,7 +15,7 @@
 
 #define DEFAULT_LIFE 10
 #define DEFAULT_FLAGS 0
-#define DEFAULT_SPEED 500
+#define DEFAULT_SPEED 300
 
 /**
  * Macro for easier event handling
@@ -26,20 +27,20 @@
                                                                     Function)
 
 Player::Player(const DuckID id):
-        PhysicsObject(nullptr, {0, 0}, 1, 2, 2, 3, Gravity::Enabled),
+        PhysicsObject(nullptr, {700, 450}, 1, 2, 2, 3, Gravity::Disabled),
         id(id),
         life(DEFAULT_LIFE),
         flags(DEFAULT_FLAGS),
         speed(DEFAULT_SPEED)
-        /* canKeepJumping(false)*/ {
+/* canKeepJumping(false)*/ {
     input.addAction(MOVE_RIGHT);
     input.addAction(MOVE_LEFT);
     input.addAction(CROUCH);
     input.addAction(JUMP);
-//     auto Timer = new GameTimer(1.0f);
-//     Timer->connect("Timeout", eventHandler([](Player* player) {
-//         player->canKeepJumping = false;
-//     }));
+    //     auto Timer = new GameTimer(1.0f);
+    //     Timer->connect("Timeout", eventHandler([](Player* player) {
+    //         player->canKeepJumping = false;
+    //     }));
 }
 
 void Player::moveRight() { input.pressAction(MOVE_RIGHT); }
@@ -65,33 +66,28 @@ void Player::update([[maybe_unused]] const float delta) {
                         std::to_string(globalPosition().y()) + "\n");
     Debug::cout().flush();
 
-    if (not input.isActionPressed(JUMP) and _velocity.y() < 0){
+    if (not input.isActionPressed(JUMP) and _velocity.y() < 0) {
         _velocity = _velocity.y(0);
     }
     _velocity = _velocity.x(0);
     flags = 0;
 
-    if (input.isActionPressed(CROUCH))
+    if (input.isActionPressed(CROUCH)) {
         flags |= DuckData::CROUCHING;
-    else if (input.isActionPressed(MOVE_RIGHT)) {
+    } else if (input.isActionPressed(MOVE_RIGHT)) {
         _velocity += Vector2(speed, 0);
         flags |= DuckData::MOVING_RIGHT;
     } else if (input.isActionPressed(MOVE_LEFT)) {
         _velocity += Vector2(-speed, 0);
         flags |= DuckData::MOVING_LEFT;
     } else if (input.isActionPressed(JUMP) && _onGround) {
-        _velocity += Vector2(0, -800);
+        _velocity += Vector2(0, -10);
     }
-    if(!_onGround){
-        flags |= DuckData::IN_AIR;
-    }
+
+    if (!_onGround){}
+        //flags |= DuckData::IN_AIR;
 }
+
+DuckData Player::status() { return {globalPosition(), id, life, ItemID::Ak47, flags}; }
 
 Player::~Player() = default;
-
-GameStatus Player::status() {
-    GameStatus status;
-    status.gameObjects.push_back(std::make_unique<DuckData>(
-            globalPosition(), 0, id, life, std::make_unique<EquippedGunData>(GunID::Ak47), flags));
-    return status;
-}

@@ -8,10 +8,7 @@
 #include "LobbyMessage.h"
 #include "ui_matchSetup.h"
 
-enum MatchMode {
-    newMatch,
-    joinMatch
-};
+enum MatchMode { newMatch, joinMatch };
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -33,7 +30,8 @@ private:
     bool initMatchRequest();
 
 public:
-    matchSetup(QWidget* parent, MatchMode matchMode, Communicator& communicator, GameInfo& gameInfo);
+    matchSetup(QWidget* parent, MatchMode matchMode, Communicator& communicator,
+               GameInfo& gameInfo);
     ~matchSetup() override;
 
 signals:

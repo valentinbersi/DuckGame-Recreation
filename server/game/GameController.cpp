@@ -2,9 +2,11 @@
 
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "GameStatus.h"
-#include "Platform.h"
+#include "LevelData.h"
+#include "SpawnPoint.h"
 
 /**
  * Macro for easier event handling
@@ -40,15 +42,15 @@ GameController::AlreadyAddedPlayer::AlreadyAddedPlayer(const PlayerID id):
 GameController::PlayerNotFound::PlayerNotFound(const PlayerID id):
         std::out_of_range(PLAYER_ID + std::to_string(id) + NOT_FOUND) {}
 
-GameController::GameController(): GameObject(nullptr) {
+GameController::GameController(): GameObject(nullptr), level(nullptr) {
     connect(eventName(Events::TREE_ENTERED),
             eventHandler(&GameController::onTreeEntered, GameObject*));
 
     connect(eventName(Events::TREE_EXITED),
             eventHandler(&GameController::onTreeExited, GameObject*));
 
-    addChild("Platform", new Platform({0, 600}, 1000, 200));  // This simulated loading a level
-    // addChild("Platform2", new Platform({400, 400}, 50, 200));  // This simulated loading a level
+    // addChild("Platform", new Platform({0, 600}, 1000, 200));  // This simulated loading a level
+    //  addChild("Platform2", new Platform({400, 400}, 50, 200));  // This simulated loading a level
 }
 
 void GameController::start() {}
@@ -95,13 +97,23 @@ Player& GameController::getPlayer(const PlayerID playerID) const { return *playe
 
 u8 GameController::playersCount() const { return players.size(); }
 
-GameStatus GameController::status() {
+void GameController::loadLevel(const LevelData& level) {
+    if (this->level != nullptr)
+        removeChild("Level");
+
+    this->level = new Level(level);
+
+    this->level->connect(eventName(Events::TREE_ENTERED),
+                         eventHandler(&GameController::onTreeEntered, GameObject*));
+    this->level->connect(eventName(Events::TREE_EXITED),
+                         eventHandler(&GameController::onTreeExited, GameObject*));
+
+    addChild("Level", this->level);
+}
+
+GameStatus GameController::status() const {
     GameStatus status;
-
-    forAllChildren([&status](GameObject* child) {
-        status.gameObjects.splice(status.gameObjects.end(),
-                                  std::move(std::move(child->status()).gameObjects));
-    });
-
+    status.blockPositions = std::move(level->status());
+    for (const auto& [_, player]: players) status.ducks.push_back(player->status());
     return status;
 }

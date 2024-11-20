@@ -2,10 +2,11 @@
 #define LEVELSCENE_H
 
 #include <QGraphicsScene>
+#include <vector>
 
 #include "Object.h"
 
-class LevelScene : public QGraphicsScene {
+class LevelScene: public QGraphicsScene {
     Q_OBJECT
 
 private:
@@ -13,8 +14,7 @@ private:
     int gridHeight;
     QGraphicsItem* selectedItem;
     std::vector<Object>& objects;
-
-    bool addingObject;
+    int ducksCount;
     ObjectType objectTypeToAdd;
 
 public:
@@ -28,17 +28,19 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
-    //void toggleAddingObject(ObjectType type);
+    // void toggleAddingObject(ObjectType type);
     void selectObjectType(ObjectType type);
 
 
     void clearAll();
     // Se encarga de cargar un mapa del tamaño pasado por parametro.
-    // Cargara en el mapa los objetos de la lista objects, que ya se tiene la referencia en esta clase.
+    // Cargara en el mapa los objetos de la lista objects, que ya se tiene la referencia en esta
+    // clase.
     void loadMap(int mapWidth, int mapHeight);
     void newMap();
     void drawBackground(QPainter* painter, const QRectF& rect) override;
     // void zoom(double factor);
+    bool enoughDucks() const;
 
 signals:
     void addingObjectChanged(ObjectType type);

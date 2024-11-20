@@ -1,5 +1,9 @@
 #include "Area.h"
 
+#include <memory>
+#include <string>
+#include <utility>
+
 Area::Area(GameObject* parent, Vector2 position, const std::bitset<LayersCount> layers,
            const std::bitset<LayersCount> scannedLayers, const float width, const float height):
         CollisionObject(parent, std::move(position), layers, scannedLayers, width, height) {
@@ -23,8 +27,6 @@ void Area::processCollisions([[maybe_unused]] const float delta) {
             fire(eventName(Events::COLLISION), ownedObject.get());
     }
 }
-
-GameStatus Area::status() { return {}; }
 
 #define COLLISION_NAME "Collision"
 

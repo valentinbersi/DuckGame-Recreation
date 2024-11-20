@@ -1,10 +1,14 @@
 #pragma once
+#include <list>
+#include <memory>
+#include <string>
+
 #include "ActiveSocket.h"
 #include "DuckData.h"
 #include "GameStatus.h"
-#include "ReplyMessage.h"
 #include "Math.h"
 #include "ReceiveProtocol.h"
+#include "ReplyMessage.h"
 #include "Types.h"
 
 /**
@@ -12,11 +16,11 @@
  */
 class ClientRecvProtocol: public ReceiveProtocol {
 private:
-    HashMap<GameObjectID, std::function<std::unique_ptr<GameObjectData>()>> idsMap;
+    Vector2 recvVector2();
 
-    std::unique_ptr<GameObjectData> recvData();
+    std::list<DuckData> recvDuckData();
 
-    std::unique_ptr<GameObjectData> recvDuckData();
+    std::list<Vector2> recvBlockPositions();
 
 public:
     /**
@@ -31,7 +35,7 @@ public:
      */
     ReplyMessage recvReplyMessage();
 
-    /** 
+    /**
      *  Receive a GameStatus from the server
      *  @return the GameStatus received
      */

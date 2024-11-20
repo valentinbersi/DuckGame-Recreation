@@ -1,11 +1,12 @@
 #pragma once
 #include <iostream>
+#include <memory>
 #include <queue>
+#include <string>
 
 #include "ActiveSocket.h"
 #include "BlockingQueue.h"
 #include "ClientMessage.h"
-#include "ComSync.h"
 #include "ComReceiver.h"
 #include "ComSender.h"
 #include "GameStatus.h"

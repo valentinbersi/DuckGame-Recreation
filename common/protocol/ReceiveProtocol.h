@@ -2,8 +2,8 @@
 #include <string>
 
 #include "ActiveSocket.h"
-#include "ReceiverSocket.h"
 #include "LibError.h"
+#include "ReceiverSocket.h"
 #include "Types.h"
 /**
  * General Receive Protocol

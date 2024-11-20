@@ -37,11 +37,9 @@
 // std::unique_ptr<EquippableWeapon> WeaponFactory::createItem(GunID id) {
 //     if (factory.empty()) {
 //         inicializeFactory();
-//     } 
+//     }
 //     if (factory.find(id) != factory.end()) {
 //         throw std::invalid_argument("invalid id");
 //     }
 //     return factory.at(id)();
 // }
-
-

@@ -3,7 +3,6 @@
 
 struct ReplyMessage: public ServerMessage {
 public:
-
     u16 matchID;
 
     u8 startGame;
@@ -12,9 +11,9 @@ public:
 
     ReplyMessage();
 
-    ReplyMessage(u16 id);
+    explicit ReplyMessage(u16 id);
 
-    ReplyMessage(u8 connectedPlayers);
+    explicit ReplyMessage(u8 connectedPlayers);
 
     ReplyMessage(u16 id, u8 startGame, u8 connectedPlayers);
 

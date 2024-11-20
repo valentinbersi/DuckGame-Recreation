@@ -1,16 +1,14 @@
 #include "GameLauncher.h"
 
+#include <QDebug>
 #include <iostream>
 
-#include <QDebug>
-
-GameLauncher::GameLauncher(int argc, char* argv[], cppstring hostname,
-                           cppstring servname):
+GameLauncher::GameLauncher(int argc, char* argv[], cppstring hostname, cppstring servname):
         communicator(hostname, servname),
         app(argc, argv),
         twoPlayersLocal(false),
         menu(nullptr, communicator, twoPlayersLocal),
-        startGame(false){
+        startGame(false) {
     connect(&menu, &GameMenu::startGame, this, &GameLauncher::startedSDL);
     menu.show();
 }

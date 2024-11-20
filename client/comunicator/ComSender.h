@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "ActiveSocket.h"
 #include "BlockingQueue.h"
 #include "ClientMessage.h"

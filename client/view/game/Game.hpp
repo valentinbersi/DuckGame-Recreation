@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <string>
 #include <list>
+#include <memory>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -19,12 +20,13 @@
 #include "SoundManager.h"
 #include "GameStatus.h"
 #include "DuckState.h"
-#include "GameObjectData.h"
-#include "GameObject2DData.h"
 #include "DuckData.h"
 #include "MessageType.h"
 #include "GameMessage.h"
 #include "EventHandler.h"
+#include "EnviromentRenderer.h"
+#include "Vector2.h"
+#include "Timer.h"
 
 class Game {
 
@@ -38,6 +40,7 @@ private:
     SDL2pp::Texture startBackground();
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping(TextureManager& textureManager);
     void updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping, float currentScale);
+    void updateBlocks(float currentScale, EnviromentRenderer& enviromentRenderer);
     void getSnapshot();
     void showBackground(SDL2pp::Texture& backgroundTexture, float currentScale);
 
@@ -51,10 +54,11 @@ private:
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
     SoundManager soundManager;
+    Timer timer;
+    //EnviromentRenderer enviromentRenderer;
     bool& twoPlayersLocal;
     Camera camera;
 
     std::list<std::unique_ptr<DuckData>> ducks;
-    std::list<std::unique_ptr<GameObjectData>> weapons;
-    std::list<std::unique_ptr<GameObjectData>> armors;
+    std::list<std::unique_ptr<Vector2>> blocks;
 };

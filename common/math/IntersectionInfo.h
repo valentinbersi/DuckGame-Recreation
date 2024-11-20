@@ -5,5 +5,5 @@
 struct IntersectionInfo {
     Vector2 contactPoint;
     Vector2 contactNormal;
-    float tHitNear;
+    float contactTime;
 };

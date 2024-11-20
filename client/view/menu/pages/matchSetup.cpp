@@ -2,10 +2,13 @@
 
 #include <QDebug>
 #include <QMessageBox>
+#include <memory>
+#include <utility>
 
 #include "ReplyMessage.h"
 
-matchSetup::matchSetup(QWidget* parent, MatchMode matchMode, Communicator& communicator, GameInfo& gameInfo):
+matchSetup::matchSetup(QWidget* parent, MatchMode matchMode, Communicator& communicator,
+                       GameInfo& gameInfo):
         QWidget(parent),
         ui(new Ui::matchSetup),
         matchMode(matchMode),
@@ -43,7 +46,8 @@ void matchSetup::onPlayClicked() {
         return;
     }
     gameInfo.player1Name = ui->lineEditPlayer1->text().toStdString();
-    gameInfo.player2Name = ui->lineEditPlayer2->text().isEmpty() ? " " : ui->lineEditPlayer2->text().toStdString();
+    gameInfo.player2Name =
+            ui->lineEditPlayer2->text().isEmpty() ? " " : ui->lineEditPlayer2->text().toStdString();
 
     if (matchMode == joinMatch) {
         gameInfo.matchID = ui->lineEditMatchID->text().toUShort();
@@ -55,11 +59,11 @@ void matchSetup::onPlayClicked() {
 }
 
 bool matchSetup::initMatchRequest() {
-    LobbyRequest requestType = (matchMode == newMatch) ? LobbyRequest::NEWMATCH : LobbyRequest::JOINMATCH;
+    LobbyRequest requestType =
+            (matchMode == newMatch) ? LobbyRequest::NEWMATCH : LobbyRequest::JOINMATCH;
     auto message = std::make_unique<LobbyMessage>(requestType, gameInfo.playersNumber,
                                                   gameInfo.player1Name, gameInfo.player2Name,
-                                                  gameInfo.matchID
-    );
+                                                  gameInfo.matchID);
 
     if (communicator.trysend(std::move(message))) {
         // chequear si se envio

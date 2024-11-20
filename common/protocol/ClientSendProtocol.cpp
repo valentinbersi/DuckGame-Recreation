@@ -1,13 +1,16 @@
 
 #include "ClientSendProtocol.h"
 
+#include <memory>
+#include <string>
+
 #include "ClientMessage.h"
 
 ClientSendProtocol::ClientSendProtocol(ActiveSocket& socket): SendProtocol(socket) {}
 
 void ClientSendProtocol::sendLobbyMessage(u8 type, u8 request, u8 playerCount,
-                                          std::string& player1Name, std::string& player2Name,
-                                          u16 matchId) {
+                                          const std::string& player1Name,
+                                          const std::string& player2Name, u16 matchId) {
     sendByte(type);
     sendByte(request);
     sendByte(playerCount);

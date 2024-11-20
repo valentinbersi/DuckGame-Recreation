@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+#include <string>
+
 #include "CollisionObject.h"
 
 /**
@@ -54,11 +57,6 @@ public:
      * collision object
      */
     void processCollisions(float delta) override;
-
-    /**
-     * Does nothing on area
-     */
-    GameStatus status() override;
 
     /**
      * The events the Area class has

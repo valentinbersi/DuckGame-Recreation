@@ -2,8 +2,8 @@
 #include "ActiveSocket.h"
 #include "BlockingQueue.h"
 #include "ClientRecvProtocol.h"
-#include "LibError.h"
 #include "GameStatus.h"
+#include "LibError.h"
 #include "Thread.h"
 #include "syslog.h"
 
@@ -12,12 +12,11 @@ private:
     ClientRecvProtocol recvProtocol;
 
     BlockingQueue<ReplyMessage>& recvQueueLobby;
-    
+
     BlockingQueue<GameStatus>& recvQueueGame;
 
 public:
-    explicit CommunicatorReceiver(ActiveSocket& socket,
-                                  BlockingQueue<ReplyMessage>& queueLobby,
+    explicit CommunicatorReceiver(ActiveSocket& socket, BlockingQueue<ReplyMessage>& queueLobby,
                                   BlockingQueue<GameStatus>& queueGame);
 
     void run() override;

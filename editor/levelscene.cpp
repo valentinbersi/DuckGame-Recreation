@@ -7,14 +7,18 @@
 #include <QGraphicsView>
 #include <QMimeData>
 #include <cmath>
+#include <vector>
 
+#define PIXEL_SIZE 10
+#define DEFAULT_WIDTH 200
+#define DEFAULT_HEIGHT 200
 
-#define PIXEL_SIZE 15
-#define DEFAULT_WIDTH 50
-#define DEFAULT_HEIGHT 50
-
-LevelScene::LevelScene(QObject *parent, std::vector<Object>& objects)
-        : QGraphicsScene(parent), selectedItem(nullptr), objects(objects), addingObject(false), objectTypeToAdd(UNKNOWN) {
+LevelScene::LevelScene(QObject* parent, std::vector<Object>& objects):
+        QGraphicsScene(parent),
+        selectedItem(nullptr),
+        objects(objects),
+        ducksCount(0),
+        objectTypeToAdd(UNKNOWN) {
     gridWidth = DEFAULT_WIDTH * PIXEL_SIZE;
     gridHeight = DEFAULT_HEIGHT * PIXEL_SIZE;
     setSceneRect(0, 0, gridWidth, gridHeight);
@@ -23,16 +27,18 @@ LevelScene::LevelScene(QObject *parent, std::vector<Object>& objects)
 void LevelScene::deleteObjectAt(const QPointF& position) {
     QList<QGraphicsItem*> itemsAtPosition = items(position);
 
-    for (auto* item : itemsAtPosition) {
+    for (auto* item: itemsAtPosition) {
         auto* pixmapItem = dynamic_cast<QGraphicsPixmapItem*>(item);
         if (pixmapItem) {
             QVariant objectData = pixmapItem->data(0);
             if (objectData.isValid()) {
                 Object* object = objectData.value<Object*>();
                 if (object) {
-                    auto it = std::find_if(objects.begin(), objects.end(), [object](const Object& obj) {
-                        return object == &obj;
-                    });
+                    if (object->type == DUCK)
+                        ducksCount--;
+
+                    auto it = std::find_if(objects.begin(), objects.end(),
+                                           [object](const Object& obj) { return object == &obj; });
                     if (it != objects.end()) {
                         objects.erase(it);
                     }
@@ -46,7 +52,11 @@ void LevelScene::deleteObjectAt(const QPointF& position) {
     }
 }
 
+bool LevelScene::enoughDucks() const { return ducksCount >= 1; }
+
 void LevelScene::addObjectInMap(Object object) {
+    if (object.type == DUCK && ducksCount >= 4)
+        return;
     QPixmap icon(object.icon);
     QPixmap iconScaled =
             icon.scaled(object.size.width() * PIXEL_SIZE, object.size.height() * PIXEL_SIZE,
@@ -63,12 +73,12 @@ void LevelScene::addObjectInMap(Object object) {
     item->setPos(x, y);
 
     addItem(item);
-    item->setData(0, QVariant::fromValue(&objects.back()));
+    item->setData(0, QVariant::fromValue(&object));
+    if (object.type == DUCK)
+        ducksCount++;
 
-    // esto capaz podria manejarlo en otro lado ¿?
     QRectF objectRect(item->scenePos(),
-                      QSizeF(object.size.width() * PIXEL_SIZE,
-                             object.size.height() * PIXEL_SIZE));
+                      QSizeF(object.size.width() * PIXEL_SIZE, object.size.height() * PIXEL_SIZE));
     QRectF currentRect = sceneRect();
 
     if (!currentRect.contains(objectRect)) {
@@ -87,13 +97,10 @@ void LevelScene::newMap() {
 }
 
 void LevelScene::loadMap(int mapWidth, int mapHeight) {
-    qDebug() << "width loadMap: " << mapWidth << ", height loadMap: " << mapHeight;
     setSceneRect(0, 0, mapWidth * PIXEL_SIZE, mapHeight * PIXEL_SIZE);
-    qDebug() << "width SceneRect: " << sceneRect().width() << ", height lSceneRect: " << sceneRect().height();
     gridWidth = mapWidth * PIXEL_SIZE;
     gridHeight = mapHeight * PIXEL_SIZE;
-    qDebug() << "gridWidth: " << gridWidth << ", gridHeight: " << gridHeight;
-    for (const auto& object : objects) {
+    for (const auto& object: objects) {
         addObjectInMap(object);
     }
 }
@@ -105,7 +112,7 @@ void LevelScene::addNewObject(ObjectType type, QPointF pos) {
     addObjectInMap(newObject);
     objects.push_back(newObject);
 
-    auto *itemAction = qobject_cast<QAction*>(sender());
+    auto* itemAction = qobject_cast<QAction*>(sender());
     if (itemAction) {
         itemAction->setChecked(false);
     }
@@ -133,7 +140,9 @@ void LevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 void LevelScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
     if (selectedItem) {
-        selectedItem->setPos(event->scenePos() - QPointF(selectedItem->boundingRect().width() / 2, selectedItem->boundingRect().height() / 2));
+        selectedItem->setPos(event->scenePos() -
+                             QPointF(selectedItem->boundingRect().width() / 2,
+                                     selectedItem->boundingRect().height() / 2));
     }
     QGraphicsScene::mouseMoveEvent(event);
 }
@@ -147,9 +156,8 @@ void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
         auto* obj = selectedItem->data(0).value<Object*>();
         if (obj) {
-            QPointF centerPos(
-                    (x + (obj->size.width() * PIXEL_SIZE) / 2) / PIXEL_SIZE,
-                    (y + (obj->size.height() * PIXEL_SIZE) / 2) / PIXEL_SIZE);
+            QPointF centerPos((x + (obj->size.width() * PIXEL_SIZE) / 2) / PIXEL_SIZE,
+                              (y + (obj->size.height() * PIXEL_SIZE) / 2) / PIXEL_SIZE);
             obj->setCenterPosition(centerPos);
         }
 

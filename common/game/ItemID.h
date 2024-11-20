@@ -1,8 +1,9 @@
 #pragma once
+
 #include "Types.h"
 
-enum class GunID : u8 {
-    Granade = 0x0,
+enum class ItemID : u8 {
+    Grenade = 0x0,
     Banana = 0x1,
     PewPewLaser = 0x2,
     LaserRifle = 0x3,

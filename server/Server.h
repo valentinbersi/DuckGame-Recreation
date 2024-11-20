@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 #include "Acceptor.h"
 #include "GameMapMonitor.h"
@@ -11,7 +12,7 @@ private:
     std::string readInput();
 
 public:
-    Server(const std::string& hostname);
+    explicit Server(const std::string& hostname);
 
     int run() noexcept;
 

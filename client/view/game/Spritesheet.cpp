@@ -1,18 +1,22 @@
 #include "Spritesheet.h"
 
+#include <string>
+
 #define N_COL 5
 #define N_ROW 2
 
 #define WIDTH_HEIGHT_FEATHERS 16
 #define WIDTH_HEIGHT_SPRITE 32
 
-#define CHESTPLATE_PATH "../assets/player/chestplate.png"
-#define HELMET_PATH "../assets/player/helmets.png"
+#define CHESTPLATE_PATH "assets/player/chestplate.png"
+#define HELMET_PATH "assets/player/helmets.png"
+#define SHOOTING_PATH "assets/particles/flame.png"
 
 #define N_COL_F 5  // Feathers
 #define N_ROW_F 8  // PERO NO LE DARÉ USO A TODAS
 
-Spritesheet::Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer& renderer, TextureManager& textureManager):
+Spritesheet::Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer& renderer,
+                         TextureManager& textureManager):
         renderer(renderer), pathPlayer(path1), pathFeather(path2), textureManager(textureManager) {}
 
 void Spritesheet::selectSprite(int x, int y, bool feathers) {
@@ -33,39 +37,55 @@ void Spritesheet::selectSprite(int x, int y, bool feathers) {
     m_clip.y = y * m_clip.h;
 }
 
-void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool feathers/*,
-                                     bool isRightFeather*/) {
+void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool feathers
+                                     //,bool isRightFeather
+) {
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
-    SDL_Texture* texture = feathers ? textureManager.getTexture(pathFeather).Get() : textureManager.getTexture(pathPlayer).Get();
+    SDL_Texture* texture = feathers ? textureManager.getTexture(pathFeather).Get() :
+                                      textureManager.getTexture(pathPlayer).Get();
 
     if (texture == nullptr) {
         throw std::runtime_error("Texture is null in drawSelectedSprite.");
     }
+
+    //PROBAR USAR SDL_RenderCopy        SIN EX...??? NO HAY PUNTO PIVOTE
 
     SDL_RenderCopyEx(renderer.Get(), texture, &m_clip, &position, 0.0, nullptr, flipType);
 }
 
 void Spritesheet::drawChestplate(SDL2pp::Rect& playerPosition, bool flip) {
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-    SDL_RenderCopyEx(renderer.Get(), textureManager.getTexture(CHESTPLATE_PATH).Get(), &m_clip, &playerPosition, 0.0, nullptr, flipType);
+    SDL_RenderCopyEx(renderer.Get(), textureManager.getTexture(CHESTPLATE_PATH).Get(), &m_clip,
+                     &playerPosition, 0.0, nullptr, flipType);
 }
 
 void Spritesheet::drawHelmet(SDL2pp::Rect& playerPosition, bool flip) {
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-    SDL_RenderCopyEx(renderer.Get(), textureManager.getTexture(HELMET_PATH).Get(), &m_clip, &playerPosition, 0.0, nullptr, flipType);
+    SDL_RenderCopyEx(renderer.Get(), textureManager.getTexture(HELMET_PATH).Get(), &m_clip,
+                     &playerPosition, 0.0, nullptr, flipType);
 }
 
 void Spritesheet::drawWeapon(SDL2pp::Rect& playerPosition, bool flip, std::string path) {
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-    SDL_RenderCopyEx(renderer.Get(), textureManager.getTexture(path).Get(), &m_clip, &playerPosition, 0.0, nullptr, flipType);
+    SDL_RenderCopyEx(renderer.Get(), textureManager.getTexture(path).Get(), &m_clip,
+                     &playerPosition, 0.0, nullptr, flipType);
+}
+
+void Spritesheet::drawEffects(SDL2pp::Rect& playerPosition, bool flip, std::string path) {
+    SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    SDL_RenderCopyEx(renderer.Get(), textureManager.getTexture(path).Get(), &m_clip,
+                     &playerPosition, 0.0, nullptr, flipType);
 }
 
 SDL2pp::Texture& Spritesheet::getTexture(bool feathers) {
-    if (feathers) return textureManager.getTexture(pathFeather);
+    if (feathers)
+        return textureManager.getTexture(pathFeather);
     return textureManager.getTexture(pathPlayer);
 }
 
 int Spritesheet::getClipWidth() const { return m_clip.w; }
 
 int Spritesheet::getClipHeight() const { return m_clip.h; }
+
+SDL_Rect& Spritesheet::getClip() { return m_clip; }

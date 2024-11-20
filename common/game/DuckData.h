@@ -1,13 +1,10 @@
 #pragma once
 
 #include <bitset>
-#include <cstdint>
-#include <memory>
 
-#include "EquippedGunData.h"
 #include "GameObject2DData.h"
-
-using u8 = std::uint8_t;
+#include "ItemID.h"
+#include "Types.h"
 
 enum class DuckID : u8 { White = 0x0, Orange = 0x1, Yellow = 0x2, Grey = 0x3 };
 
@@ -19,12 +16,12 @@ struct DuckData final: GameObject2DData {
 
     DuckID duckID;
     u8 life;
-    std::unique_ptr<EquippedGunData> gun;
+    ItemID gunID;
     std::bitset<NFLAGS> extraData;
 
     DuckData() = delete;
-    DuckData(const DuckData& other) = delete;
-    DuckData& operator=(const DuckData& other) = delete;
+    DuckData(const DuckData& other);
+    DuckData& operator=(const DuckData& other);
     DuckData(DuckData&& other) noexcept;
     DuckData& operator=(DuckData&& other) noexcept;
     ~DuckData() override;
@@ -56,14 +53,12 @@ struct DuckData final: GameObject2DData {
     /**
      * Construct a DuckData object
      * @param position the object's position
-     * @param rotation the object's rotation
      * @param duckID the duck's ID
      * @param life the life of the duck
-     * @param gun the gun of the duck
+     * @param gunID the gun the duck is holding
      * @param extraData actions the duck is performing and armor data
      */
-    DuckData(Vector2 position, float rotation, DuckID duckID, u8 life,
-             std::unique_ptr<EquippedGunData> gun, DuckFlag extraData);
+    DuckData(Vector2 position, DuckID duckID, u8 life, ItemID gunID, DuckFlag extraData);
 
     bool operator==(const DuckData& other) const;
 };

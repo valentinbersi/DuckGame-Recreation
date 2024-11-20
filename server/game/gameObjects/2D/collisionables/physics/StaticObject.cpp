@@ -1,5 +1,8 @@
 #include "StaticObject.h"
 
+#include <memory>
+#include <utility>
+
 StaticObject::StaticObject(GameObject* parent, Vector2 position,
                            const std::bitset<LayersCount> layers,
                            const std::bitset<LayersCount> scannedLayers, const float width,

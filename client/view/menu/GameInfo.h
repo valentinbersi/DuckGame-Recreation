@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "Types.h"
 
 struct GameInfo {
@@ -10,9 +12,5 @@ struct GameInfo {
     std::string selectedMap;
     u16 matchID;
 
-    GameInfo(): playersNumber(0), isNewGame(false), matchID(0) {
-        player1Name = "";
-        player2Name = "";
-        selectedMap = "";
-    }
+    GameInfo(): playersNumber(0), isNewGame(false), matchID(0) {}
 };

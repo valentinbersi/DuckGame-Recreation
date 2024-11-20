@@ -1,5 +1,10 @@
 #include "PhysicsObject.h"
 
+#include <algorithm>
+#include <memory>
+#include <utility>
+#include <vector>
+
 #include "GlobalPhysics.h"
 #include "Math.h"
 
@@ -7,7 +12,9 @@ PhysicsObject::PhysicsObject(GameObject* parent, const Vector2& position,
                              const std::bitset<LayersCount> layers,
                              const std::bitset<LayersCount> scannedLayers, const float width,
                              const float height, const Gravity gravity):
-        CollisionObject(parent, position, layers, scannedLayers, width, height), gravity(gravity) {}
+        CollisionObject(parent, position, layers, scannedLayers, width, height),
+        gravity(gravity),
+        _onGround(false) {}
 
 PhysicsObject::~PhysicsObject() = default;
 
@@ -26,7 +33,7 @@ void PhysicsObject::processCollisions(const float delta) {
         if (const std::shared_ptr<CollisionObject> objectPtr = objectsToCollide[i].lock())
             if (const std::optional<IntersectionInfo> collisionInfo =
                         moveAndCollide(*objectPtr, _velocity, delta))
-                collisionOrder.emplace_back(i, collisionInfo->tHitNear);
+                collisionOrder.emplace_back(i, collisionInfo->contactTime);
 
     std::ranges::sort(collisionOrder,
                       [](const std::pair<int, float>& a, const std::pair<int, float>& b) {
@@ -37,12 +44,12 @@ void PhysicsObject::processCollisions(const float delta) {
         if (const std::shared_ptr<CollisionObject> objectPtr = objectsToCollide[index].lock()) {
             if (const std::optional<IntersectionInfo> collisionInfo =
                         moveAndCollide(*objectPtr, _velocity, delta)) {
-                if (collisionInfo->contactNormal.y() < 0){
+                if (collisionInfo->contactNormal.y() < 0) {
                     _onGround = true;
                 }
                 _velocity += collisionInfo->contactNormal *
                              Vector2(std::abs(_velocity.x()), std::abs(_velocity.y())) *
-                             (1 - collisionInfo->tHitNear);
+                             (1 - collisionInfo->contactTime);
             }
         }
     }

@@ -1,5 +1,6 @@
 #include "VClient.h"
 
+#include <utility>
 VirtualClient::VirtualClient(ActiveSocket socket, GameMapMonitor& monitor, u16 clientID):
         skt(std::move(socket)),
         id(clientID),
@@ -17,11 +18,11 @@ bool VirtualClient::isConnected() { return receiver.is_alive() && sender.is_aliv
 VirtualClient::~VirtualClient() {
     receiver.stop();
     sender.stop();
-    try{
+    try {
         skt.shutdown(Socket::ShutdownOptions::READ_WRITE);
         skt.close();
-    }catch(const LibError& err){
-        //client already shutdown and closed socket
+    } catch (const LibError& err) {
+        // client already shutdown and closed socket
     }
     receiver.join();
     sender.join();

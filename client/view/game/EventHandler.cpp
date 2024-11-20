@@ -1,9 +1,19 @@
 #include "EventHandler.h"
 
-EventHandler::EventHandler(SDL2pp::Window& window, int& window_width, int& window_height, bool& twoPlayersLocal, Communicator& communicator,
-                           std::list<std::unique_ptr<DuckData>>& ducks, Camera& camera, bool& running):
-        window(window), twoPlayersLocal(twoPlayersLocal), communicator(communicator), window_width(window_width), window_height(window_height),
-        ducks(ducks), camera(camera), running(running) {}
+#include <utility>
+
+EventHandler::EventHandler(SDL2pp::Window& window, int& window_width, int& window_height,
+                           bool& twoPlayersLocal, Communicator& communicator,
+                           std::list<std::unique_ptr<DuckData>>& ducks, Camera& camera,
+                           bool& running):
+        window(window),
+        twoPlayersLocal(twoPlayersLocal),
+        communicator(communicator),
+        window_width(window_width),
+        window_height(window_height),
+        ducks(ducks),
+        camera(camera),
+        running(running) {}
 
 void EventHandler::handleEvents() {
     SDL_Event event;
@@ -11,7 +21,7 @@ void EventHandler::handleEvents() {
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
             SDL_Scancode scancode = event.key.keysym.scancode;
-            bool isKeyDown = (event.type == SDL_KEYDOWN);
+            bool isKeyDown = event.type == SDL_KEYDOWN;
             handleKeyEvent(scancode, isKeyDown);
             handleScreenEvents(event, isKeyDown, scancode);
 
@@ -23,7 +33,8 @@ void EventHandler::handleEvents() {
         }
     }
 
-    if (scaleChanged) camera.update(ducks);
+    if (scaleChanged)
+        camera.update(ducks);
 }
 
 void EventHandler::handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown) {
@@ -37,7 +48,8 @@ void EventHandler::handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown) 
     }
 
     if (twoPlayersLocal) {
-        const auto& keyMappingPlayer2 = isKeyDown ? keyMappingPressedPlayer2 : keyMappingReleasedPlayer2;
+        const auto& keyMappingPlayer2 =
+                isKeyDown ? keyMappingPressedPlayer2 : keyMappingReleasedPlayer2;
         auto it2 = keyMappingPlayer2.find(scancode);
         if (it2 != keyMappingPlayer2.end()) {
             InputAction m_key = it2->second;
@@ -47,7 +59,8 @@ void EventHandler::handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown) 
     }
 }
 
-void EventHandler::handleScreenEvents(SDL_Event& event, bool isKeyDown, SDL_Scancode& scancode) {
+void EventHandler::handleScreenEvents(const SDL_Event& event, bool isKeyDown,
+                                      const SDL_Scancode& scancode) {
     if (isKeyDown && scancode == SDL_SCANCODE_F11) {
         isFullscreen() ? setFullscreen(false) : setFullscreen(true);
     } else if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED) {

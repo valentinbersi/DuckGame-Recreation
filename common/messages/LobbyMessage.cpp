@@ -4,11 +4,11 @@ LobbyMessage::LobbyMessage():
         ClientMessage(MessageType::Lobby),
         request(),
         playerCount(0),
-        player1Name(""),
-        player2Name(""),
+        player1Name(" "),
+        player2Name(" "),
         matchId(0) {}
 
-LobbyMessage::LobbyMessage(LobbyRequest request, u8 count, std::string name1, std::string name2,
+LobbyMessage::LobbyMessage(LobbyRequest request, u8 count, std::string& name1, std::string& name2,
                            u16 id):
         ClientMessage(MessageType::Lobby),
         request(request),
@@ -22,12 +22,9 @@ void LobbyMessage::send(ClientSendProtocol& clientProtocol) {
 }
 
 bool LobbyMessage::operator==(const LobbyMessage& other) const {
-    return type == other.type &&
-           request == other.request && 
-           playerCount == other.playerCount &&
-           player1Name == other.player1Name && 
-           player2Name == other.player2Name &&
+    return type == other.type && request == other.request && playerCount == other.playerCount &&
+           player1Name == other.player1Name && player2Name == other.player2Name &&
            matchId == other.matchId;
 }
 
-LobbyMessage::~LobbyMessage() {}
+LobbyMessage::~LobbyMessage() = default;
