@@ -36,7 +36,7 @@ public:
     void drawWeapon(SDL2pp::Rect& playerPosition, bool flip, std::string path);
 
     // ...
-    void drawEffects(SDL2pp::Rect& playerPosition, bool flip);
+    void drawEffects(SDL2pp::Rect& playerPosition, bool flip, std::string path);
 
     // Returns the texture of the spritesheet, depending if it's a feather or not.
     SDL2pp::Texture& getTexture(bool feathers);

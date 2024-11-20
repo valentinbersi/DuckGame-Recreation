@@ -19,6 +19,7 @@ class Camera {
 public:
     Camera(int& windowWidth, int& WindowHeight);
     void update(std::list<std::unique_ptr<DuckData>>& ducks);
+    void calculateScale(std::list<std::unique_ptr<DuckData>>& ducks);
     void loadBackgroundSize(SDL2pp::Texture& backgroundTexture);
     SDL_Rect getViewRect();
     float getScale() const;
@@ -26,7 +27,6 @@ public:
     int getBackgroundHeight() const;
 
 private:
-    void calculateScale(std::list<std::unique_ptr<DuckData>>& ducks);
     float calculateMaxDistance(std::list<std::unique_ptr<DuckData>>& ducks);
     Vector2 centerOfDucks(std::list<std::unique_ptr<DuckData>>& ducks);
     // void adjustSpritePositions(std::list<std::unique_ptr<DuckData>>& ducks);

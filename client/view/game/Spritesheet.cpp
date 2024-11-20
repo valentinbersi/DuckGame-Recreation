@@ -10,7 +10,7 @@
 
 #define CHESTPLATE_PATH "assets/player/chestplate.png"
 #define HELMET_PATH "assets/player/helmets.png"
-#define FIRE_PATH "assets/particles/flame.png"
+#define SHOOTING_PATH "assets/particles/flame.png"
 
 #define N_COL_F 5  // Feathers
 #define N_ROW_F 8  // PERO NO LE DARÉ USO A TODAS
@@ -72,9 +72,9 @@ void Spritesheet::drawWeapon(SDL2pp::Rect& playerPosition, bool flip, std::strin
                      &playerPosition, 0.0, nullptr, flipType);
 }
 
-void Spritesheet::drawEffects(SDL2pp::Rect& playerPosition, bool flip) {
+void Spritesheet::drawEffects(SDL2pp::Rect& playerPosition, bool flip, std::string path) {
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-    SDL_RenderCopyEx(renderer.Get(), textureManager.getTexture(FIRE_PATH).Get(), &m_clip,
+    SDL_RenderCopyEx(renderer.Get(), textureManager.getTexture(path).Get(), &m_clip,
                      &playerPosition, 0.0, nullptr, flipType);
 }
 

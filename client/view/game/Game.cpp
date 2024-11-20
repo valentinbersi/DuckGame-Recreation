@@ -127,7 +127,7 @@ void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManage
 
 void Game::updateBlocks(float currentScale, EnviromentRenderer& enviromentRenderer) {
     for (auto& block: blocks) {
-        SDL2pp::Rect position((block->x() * 8 * currentScale) / SCALE, (block->y() * 8 * currentScale) / SCALE, 8 * currentScale, 8 * currentScale);
+        SDL2pp::Rect position((block->x() * 8 * currentScale / SCALE) - camera.getViewRect().x, (block->y() * 8 * currentScale / SCALE) - camera.getViewRect().y, 8 * currentScale, 8 * currentScale);
         enviromentRenderer.drawEnviroment(position, ROCK);
     }
 }
@@ -155,13 +155,13 @@ std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> Game::createSpritesMa
             DuckID::Orange,
             std::make_unique<SpriteManager>(orangeSheet, orangeFeathers, renderer,
                                             textureManager /*, window_width, window_height*/));
-    spritesMapping.emplace(
+    /*spritesMapping.emplace(
             DuckID::Yellow,
             std::make_unique<SpriteManager>(yellowSheet, yellowFeathers, renderer,
-                                            textureManager /*, window_width, window_height*/));
+                                            textureManager));
     spritesMapping.emplace(DuckID::Grey, std::make_unique<SpriteManager>(
                                                  greySheet, greyFeathers, renderer,
-                                                 textureManager /*, window_width, window_height*/));
+                                                 textureManager));*/
 
     return spritesMapping;
 }
