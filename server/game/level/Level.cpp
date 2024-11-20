@@ -5,11 +5,11 @@
 #include "SpawnPoint.h"
 #include "TerrainBlock.h"
 
-Level::Level(const LevelData& level) {
-    for (u64 i(0); i < level.terrainBlocks.size(); ++i)
+Level::Level(const LevelData& level): GameObject(nullptr) {
+    for (u64 i = 0; i < level.terrainBlocks.size(); ++i)
         addChild("TerrainBlock" + std::to_string(i), new TerrainBlock(level.terrainBlocks[i]));
 
-    for (u64 i(0); i < level.duckSpawnPoints.size(); ++i)
+    for (u64 i = 0; i < level.duckSpawnPoints.size(); ++i)
         addChild("SpawnPoint" + std::to_string(i), new SpawnPoint(level.duckSpawnPoints[i]));
 }
 

@@ -101,7 +101,14 @@ void GameController::loadLevel(const LevelData& level) {
     if (this->level != nullptr)
         removeChild("Level");
 
-    addChild("Level", new Level(level));
+    this->level = new Level(level);
+
+    this->level->connect(eventName(Events::TREE_ENTERED),
+                         eventHandler(&GameController::onTreeEntered, GameObject*));
+    this->level->connect(eventName(Events::TREE_EXITED),
+                         eventHandler(&GameController::onTreeExited, GameObject*));
+
+    addChild("Level", this->level);
 }
 
 GameStatus GameController::status() const {

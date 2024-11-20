@@ -39,8 +39,8 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
 void Game::init() {
     // VOLVERLOS ATRIBUTOS DE LA CLASE
     TextureManager textureManager(renderer);
-    //EnviromentRenderer enviromentRenderer(renderer, textureManager);
-    // VOLVERLOS ATRIBUTOS DE LA CLASE
+    // EnviromentRenderer enviromentRenderer(renderer, textureManager);
+    //  VOLVERLOS ATRIBUTOS DE LA CLASE
 
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping =
             createSpritesMapping(textureManager);
@@ -52,7 +52,7 @@ void Game::init() {
     renderer.Present();
     EventHandler handler(window, window_width, window_height, twoPlayersLocal, communicator, ducks,
                          camera, running);
-    SDL_Delay(5000);
+    // SDL_Delay(5000);
 
     while (running) {
         getSnapshot();
@@ -63,8 +63,8 @@ void Game::init() {
 
         showBackground(backgroundTexture, currentScale);
         updatePlayers(spritesMapping, currentScale);
-        //updateBlocks(currentScale, enviromentRenderer);
-        // updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
+        // updateBlocks(currentScale, enviromentRenderer);
+        //  updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
         renderer.Present();
 
         handler.handleEvents();
@@ -91,7 +91,7 @@ void Game::getSnapshot() {
     for (auto& duck: snapshot->ducks) {
         ducks.push_back(std::make_unique<DuckData>(duck));
     }
-    for (const auto& blockPosition : snapshot->blockPositions) {
+    for (const auto& blockPosition: snapshot->blockPositions) {
         blocks.push_back(std::make_unique<Vector2>(blockPosition));
     }
 }
@@ -126,7 +126,7 @@ void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManage
 }
 
 void Game::updateBlocks(float currentScale, EnviromentRenderer& enviromentRenderer) {
-    for (auto& block : blocks) {
+    for (auto& block: blocks) {
         SDL2pp::Rect position(block->x(), block->y(), 32 * currentScale, 32 * currentScale);
         enviromentRenderer.drawEnviroment(position, ROCK);
     }
@@ -168,7 +168,7 @@ std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> Game::createSpritesMa
 
 void Game::clearObjects() {
     ducks.clear();
-    //no hay que hacer blocks
+    // no hay que hacer blocks
 }
 
 Game::~Game() {

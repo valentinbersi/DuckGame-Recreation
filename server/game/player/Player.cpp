@@ -27,7 +27,7 @@
                                                                     Function)
 
 Player::Player(const DuckID id):
-        PhysicsObject(nullptr, {0, 0}, 1, 2, 2, 3, Gravity::Enabled),
+        PhysicsObject(nullptr, {30, 0}, 1, 2, 2, 3, Gravity::Enabled),
         id(id),
         life(DEFAULT_LIFE),
         flags(DEFAULT_FLAGS),

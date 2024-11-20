@@ -1,7 +1,7 @@
 #include "SoundManager.h"
 
 #define MUSIC_PATH "assets/sounds/ost.ogg"
-#define DEFAULT_VOLUME 40
+#define DEFAULT_VOLUME 10
 
 SoundManager::SoundManager() {
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 512) < 0)
