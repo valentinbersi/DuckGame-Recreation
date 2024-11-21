@@ -79,6 +79,11 @@ protected:
     Ret applyToChild(const std::string& name, const std::function<Ret(GameObject*)>& f);
 
 public:
+    struct Events {
+        static constexpr auto TreeEntered = "TreeEntered";
+        static constexpr auto TreeExited = "TreeExited";
+    };
+
     /**
      * An exception thrown when trying to add a child with a name that is already taken
      */
@@ -173,27 +178,6 @@ public:
      * @return A reference to the root object
      */
     GameObject* getRoot();
-
-    /**
-     * The events the Object class has
-     */
-    enum class Events : u8 {
-        /**
-         * A child entered the tree
-         */
-        TREE_ENTERED,
-        /**
-         * A child exited the tree
-         */
-        TREE_EXITED
-    };
-
-    /**
-     * Get the event name of an event type
-     * @param eventType The event type
-     * @return The event name
-     */
-    static std::string eventName(Events eventType);
 };
 
 template <typename Ret>
