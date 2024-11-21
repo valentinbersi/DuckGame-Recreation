@@ -1,6 +1,7 @@
 #include "GameController.h"
 
 #include <memory>
+#include <ranges>
 #include <string>
 #include <utility>
 
@@ -29,6 +30,16 @@ void GameController::onTreeExited(GameObject* object) {
     if (const auto collisionObject = dynamic_cast<CollisionObject*>(object);
         collisionObject != nullptr)
         collisionManager.removeCollisionObject(collisionObject);
+}
+
+Vector2 GameController::getAvaiableSpawnPoint() {
+    for (auto& [used, spawnPoint]: duckSpawnPoints)
+        if (!used) {
+            used = true;
+            return spawnPoint;
+        }
+
+    throw std::logic_error("No available spawn points");
 }
 
 #define PLAYER_ID "Player with id "
@@ -68,7 +79,6 @@ void GameController::addPlayer(const PlayerID playerID) {
         throw AlreadyAddedPlayer(playerID);
 
     const std::string id = std::to_string(playerID);
-
     if (players.size() >= MAX_PLAYERS)
         throw std::logic_error(FULL_GAME);
 
@@ -84,6 +94,7 @@ void GameController::addPlayer(const PlayerID playerID) {
 
     addChild(PLAYER + id, newPlayer);
     players.emplace(playerID, newPlayer);
+    newPlayer->setPosition(getAvaiableSpawnPoint());
 }
 
 void GameController::removePlayer(const PlayerID playerID) {
@@ -97,23 +108,26 @@ Player& GameController::getPlayer(const PlayerID playerID) const { return *playe
 
 u8 GameController::playersCount() const { return players.size(); }
 
-void GameController::loadLevel(const LevelData& level) {
-    if (this->level != nullptr)
+void GameController::loadLevel(const LevelData& levelData) {
+    if (level != nullptr)
         removeChild("Level");
 
-    this->level = new Level(level);
+    level = new Level(levelData);
 
-    this->level->connect(eventName(Events::TREE_ENTERED),
-                         eventHandler(&GameController::onTreeEntered, GameObject*));
-    this->level->connect(eventName(Events::TREE_EXITED),
-                         eventHandler(&GameController::onTreeExited, GameObject*));
+    level->connect(eventName(Events::TREE_ENTERED),
+                   eventHandler(&GameController::onTreeEntered, GameObject*));
+    level->connect(eventName(Events::TREE_EXITED),
+                   eventHandler(&GameController::onTreeExited, GameObject*));
 
-    addChild("Level", this->level);
+    addChild("Level", level);
+
+    for (const Vector2& spawnPoint: levelData.duckSpawnPoints)
+        duckSpawnPoints.push_back({false, spawnPoint});
 }
 
 GameStatus GameController::status() const {
     GameStatus status;
     status.blockPositions = std::move(level->status());
-    for (const auto& [_, player]: players) status.ducks.push_back(player->status());
+    for (Player* player: players | std::views::values) status.ducks.push_back(player->status());
     return status;
 }

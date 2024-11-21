@@ -11,6 +11,7 @@ typedef u16 PlayerID;
 class GameController final: public GameObject {
     HashMap<PlayerID, Player*> players;
     CollisionManager collisionManager;
+    std::vector<std::pair<bool, Vector2>> duckSpawnPoints;
     Level* level;
 
     /**
@@ -24,6 +25,12 @@ class GameController final: public GameObject {
      * @param object The child that was removed
      */
     void onTreeExited(GameObject* object) override;
+
+    /**
+     * Get a random spawn point for a player
+     * @return a random spawn point for a player
+     */
+    Vector2 getAvaiableSpawnPoint();
 
 public:
     /**
@@ -96,9 +103,9 @@ public:
 
     /**
      * Load the level
-     * @param level the level to load
+     * @param levelData the level to load
      */
-    void loadLevel(const LevelData& level);
+    void loadLevel(const LevelData& levelData);
 
     /**
      * Get the status of the game
