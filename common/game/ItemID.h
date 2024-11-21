@@ -35,6 +35,10 @@ public:
 
     static RandomIntGenerator randomGenerator;
 
+    /**
+     * Generates random ItemID
+     * @return random ItemID
+     */
     static ItemID randomItemID();
 
 private:
