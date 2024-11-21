@@ -11,19 +11,16 @@
  * @param Function The function to call
  * @param ... The type of the arguments to pass to the function
  */
-#define eventHandler(Function, ...)                                      \
-    std::make_unique<gameObject::EventHandler<GameObject, __VA_ARGS__>>( \
-            getReference<GameObject>(), Function)
+#define eventHandler(Function, ...) \
+    gameObject::EventHandler<GameObject, __VA_ARGS__>::create(getReference<GameObject>(), Function)
 
-void GameObject::onTreeEntered(GameObject* object) {
-    fire(eventName(Events::TREE_ENTERED), object);
-}
+void GameObject::onTreeEntered(GameObject* object) { fire(Events::TreeEntered, object); }
 
-void GameObject::onTreeExited(GameObject* object) { fire(eventName(Events::TREE_EXITED), object); }
+void GameObject::onTreeExited(GameObject* object) { fire(Events::TreeExited, object); }
 
 GameObject::GameObject(GameObject* parent): _parent(parent) {
-    registerEvent<GameObject*>(eventName(Events::TREE_ENTERED));
-    registerEvent<GameObject*>(eventName(Events::TREE_EXITED));
+    registerEvent<GameObject*>(Events::TreeEntered);
+    registerEvent<GameObject*>(Events::TreeExited);
 }
 
 #define NULL_CHILD "newChild is nullptr"
@@ -43,20 +40,18 @@ void GameObject::addChild(std::string name, GameObject* newChild) {
     if (children.contains(name))
         throw AlreadyAddedChild(name);
 
-    newChild->connect(eventName(Events::TREE_ENTERED),
-                      eventHandler(&GameObject::onTreeEntered, GameObject*));
-
-    newChild->connect(eventName(Events::TREE_EXITED),
-                      eventHandler(&GameObject::onTreeExited, GameObject*));
+    newChild->connect(Events::TreeEntered, eventHandler(&GameObject::onTreeEntered, GameObject*));
+    newChild->connect(Events::TreeExited, eventHandler(&GameObject::onTreeExited, GameObject*));
 
     children.emplace(std::move(name), newChild);
 
-    fire(eventName(Events::TREE_ENTERED), newChild);
-    for (auto& [name, child]: newChild->children) fire(eventName(Events::TREE_ENTERED), child);
+    fire(Events::TreeEntered, newChild);
+    for (GameObject* child: newChild->children | std::views::values)
+        fire(Events::TreeEntered, child);
 }
 
 void GameObject::forAllChildren(const std::function<void(GameObject*)>& f) {
-    for (const auto& [name, child]: children) f(child);
+    for (GameObject* child: children | std::views::values) f(child);
 }
 
 #define CHILD_NAME "Child with name"
@@ -75,7 +70,7 @@ GameObject::GameObject(): _parent(nullptr) {}
 #define NO_PARENT "Object has no parent"
 
 GameObject::~GameObject() {
-    for (auto& [name, child]: children) delete child;
+    for (const GameObject* child: children | std::views::values) delete child;
 }
 
 void GameObject::start() {}
@@ -83,7 +78,7 @@ void GameObject::start() {}
 void GameObject::update([[maybe_unused]] float delta) {}
 
 void GameObject::updateInternal(const float delta) {
-    for (auto& [name, child]: children) {
+    for (GameObject* child: children | std::views::values) {
         child->update(delta);
         child->updateInternal(delta);
     }
@@ -99,9 +94,8 @@ std::unique_ptr<GameObject> GameObject::removeChild(const std::string& name) {
     if (child.empty())
         throw ChildNotInTree(name);
 
-    fire(eventName(Events::TREE_EXITED), child.mapped());
-    for (GameObject* object: child.mapped()->children | std::views::values)
-        fire(eventName(Events::TREE_EXITED), object);
+    fire(Events::TreeExited, child.mapped());
+    for (GameObject* object: children | std::views::values) fire(Events::TreeExited, object);
 
     child.mapped()->_parent = nullptr;
     return std::unique_ptr<GameObject>(child.mapped());
@@ -124,18 +118,4 @@ GameObject* GameObject::getRoot() {
         return this;
 
     return _parent->getRoot();
-}
-
-#define TREE_ADDED_NAME "TreeEntered"
-#define TREE_EXITED_NAME "TreeExited"
-
-std::string GameObject::eventName(const Events eventType) {
-    switch (eventType) {
-        case Events::TREE_ENTERED:
-            return TREE_ADDED_NAME;
-        case Events::TREE_EXITED:
-            return TREE_EXITED_NAME;
-        default:
-            throw std::invalid_argument(INVALID_EVENT_TYPE);
-    }
 }

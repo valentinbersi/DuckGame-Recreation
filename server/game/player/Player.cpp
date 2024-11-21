@@ -27,9 +27,8 @@
  * @param Function The function to call
  * @param ... The type of the arguments to pass to the function
  */
-#define eventHandler(Function, ...)                                                         \
-    std::make_unique<gameObject::EventHandler<Player, __VA_ARGS__>>(getReference<Player>(), \
-                                                                    Function)
+#define eventHandler(Function, ...) \
+    gameObject::EventHandler<Player, __VA_ARGS__>::create(getReference<Player>(), Function)
 
 Player::Player(const DuckID id): 
         PhysicsObject(nullptr, {700, 450}, Layer::Player, Layer::Wall, PLAYER_DIMENSIONS , Gravity::Disabled),

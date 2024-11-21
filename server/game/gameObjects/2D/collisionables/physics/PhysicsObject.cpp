@@ -1,7 +1,7 @@
 #include "PhysicsObject.h"
 
-#include <algorithm>
 #include <memory>
+#include <ranges>
 #include <utility>
 #include <vector>
 
@@ -29,29 +29,42 @@ void PhysicsObject::processCollisions(const float delta) {
     _onGround = false;
     std::vector<std::pair<int, float>> collisionOrder;
 
-    for (size_t i = 0; i < objectsToCollide.size(); ++i)
-        if (const std::shared_ptr<CollisionObject> objectPtr = objectsToCollide[i].lock())
-            if (const std::optional<IntersectionInfo> collisionInfo =
-                        moveAndCollide(*objectPtr, _velocity, delta))
-                collisionOrder.emplace_back(i, collisionInfo->contactTime);
+    for (size_t i = 0; i < objectsToCollide.size(); ++i) {
+        const std::shared_ptr objectPtr(objectsToCollide[i].lock());
+
+        if (not objectPtr)
+            continue;
+
+        const std::optional collisionInfo(moveAndCollide(*objectPtr, _velocity, delta));
+
+        if (not collisionInfo)
+            continue;
+
+        collisionOrder.emplace_back(i, collisionInfo->contactTime);
+    }
 
     std::ranges::sort(collisionOrder,
                       [](const std::pair<int, float>& a, const std::pair<int, float>& b) {
                           return a.second < b.second;
                       });
 
-    for (const auto& [index, _]: collisionOrder) {
-        if (const std::shared_ptr<CollisionObject> objectPtr = objectsToCollide[index].lock()) {
-            if (const std::optional<IntersectionInfo> collisionInfo =
-                        moveAndCollide(*objectPtr, _velocity, delta)) {
-                if (collisionInfo->contactNormal.y() < 0) {
-                    _onGround = true;
-                }
-                _velocity += collisionInfo->contactNormal *
-                             Vector2(std::abs(_velocity.x()), std::abs(_velocity.y())) *
-                             (1 - collisionInfo->contactTime);
-            }
-        }
+    for (const int index: collisionOrder | std::views::keys) {
+        const std::shared_ptr objectPtr(objectsToCollide[index].lock());
+
+        if (not objectPtr)
+            continue;
+
+        const std::optional collisionInfo(moveAndCollide(*objectPtr, _velocity, delta));
+
+        if (not collisionInfo)
+            continue;
+
+        if (collisionInfo->contactNormal.y() < 0)
+            _onGround = true;
+
+        _velocity += collisionInfo->contactNormal *
+                     Vector2(std::abs(_velocity.x()), std::abs(_velocity.y())) *
+                     (1 - collisionInfo->contactTime);
     }
 
     setPosition(position() + _velocity * delta);
