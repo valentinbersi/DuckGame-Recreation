@@ -12,7 +12,6 @@ Level::Level(const LevelData& level): GameObject(nullptr) {
         addChild("TerrainBlock" + std::to_string(i), block);
     }
 
-
     for (u64 i = 0; i < level.duckSpawnPoints.size(); ++i)
         addChild("SpawnPoint" + std::to_string(i), new SpawnPoint(level.duckSpawnPoints[i]));
 }

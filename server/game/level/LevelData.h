@@ -1,5 +1,6 @@
 #pragma once
 
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -14,7 +15,7 @@ struct LevelData final {
     u64 width, height;
 
     /**
-     * Load all levels from the maps directory.
+     * Load all levels from the maps directory. It guarantees that all levels loaded are valid
      * @return  A vector of all loaded levels.
      */
     static std::vector<LevelData> loadLevels();
@@ -23,7 +24,7 @@ private:
     /**
      * Load a level from a file.
      * @param path The path to the file.
-     * @return The loaded level.
+     * @return The loaded level or std::nullopt if the level is invalid
      */
-    static LevelData load(const std::string& path);
+    static std::optional<LevelData> load(const std::string& path);
 };
