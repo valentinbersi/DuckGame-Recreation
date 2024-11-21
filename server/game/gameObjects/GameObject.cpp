@@ -1,6 +1,7 @@
 #include "GameObject.h"
 
 #include <memory>
+#include <ranges>
 #include <utility>
 
 #include "EventHandler.h"
@@ -98,8 +99,9 @@ std::unique_ptr<GameObject> GameObject::removeChild(const std::string& name) {
     if (child.empty())
         throw ChildNotInTree(name);
 
-    fire(GameObject::eventName(GameObject::Events::TREE_EXITED), child.mapped());
-    for (auto& [name, child]: children) fire(GameObject::eventName(GameObject::Events::TREE_EXITED), child);
+    fire(eventName(Events::TREE_EXITED), child.mapped());
+    for (GameObject* object: child.mapped()->children | std::views::values)
+        fire(eventName(Events::TREE_EXITED), object);
 
     child.mapped()->_parent = nullptr;
     return std::unique_ptr<GameObject>(child.mapped());
