@@ -31,8 +31,8 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWin
                                  "El mapa debe tener al menos un pato antes de guardarlo.");
             return;
         }
-        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), mapWidth,
-                              mapHeight);
+        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), scene->getMapWidth(),
+                              scene->getMapHeight());
     });
 
     connect(ui->actionNewMap, &QAction::triggered, this, &MainWindow::on_actionNewMap_triggered);
@@ -83,8 +83,7 @@ void MainWindow::wheelEvent(QWheelEvent* event) {
     if (event->modifiers() & Qt::ControlModifier) {
         qreal zoomFactor = 1.15;
 
-        QPointF viewCenter =
-                ui->graphicsView->mapToScene(ui->graphicsView->viewport()->rect().center());
+        QPointF viewCenter = ui->graphicsView->mapToScene(ui->graphicsView->viewport()->rect().center());
 
         if (event->angleDelta().y() > 0) {
             ui->graphicsView->scale(zoomFactor, zoomFactor);
@@ -116,7 +115,6 @@ void MainWindow::on_actionNewMap_triggered() {
         }
     }
     scene->clearAll();
-    // scene->newMap();
     QMessageBox::information(this, "Nuevo Mapa", "Se ha creado un nuevo mapa.");
 }
 

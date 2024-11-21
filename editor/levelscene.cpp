@@ -186,6 +186,10 @@ void LevelScene::selectObjectType(ObjectType type) {
     emit addingObjectChanged(objectTypeToAdd);
 }
 
+int LevelScene::getMapWidth() const { return gridWidth / PIXEL_SIZE; }
+
+int LevelScene::getMapHeight() const { return gridHeight / PIXEL_SIZE; }
+
 void LevelScene::clearAll() {
     clear();
     objects.clear();
