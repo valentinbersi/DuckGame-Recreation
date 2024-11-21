@@ -2,12 +2,14 @@
 
 #include <memory>
 #include <random>
+#include <ranges>
 
 #include "ReplyMessage.h"
 
 #define PLAYER_COUNT_BEGINING 0
-#define MIN_MATCH_ID 1
-#define MAX_MATCH_ID 65535
+#define RANGE_MATCH_ID 1, 65535
+
+RandomIntGenerator GameMapMonitor::randomGenerator(RANGE_MATCH_ID);
 
 GameMapMonitor::GameMapMonitor(): levels(LevelData::loadLevels()) {}
 
@@ -40,21 +42,17 @@ u16 GameMapMonitor::creatGameSafe() {
     std::lock_guard lock(mutex);
     u16 random_number;
     do {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<uint16_t> dist(MIN_MATCH_ID, MAX_MATCH_ID);
-        random_number = dist(gen);
-
+        random_number = randomGenerator.generateRandomInt();
     } while (gameMap.contains(random_number));
     gameMap.insert({random_number, std::make_unique<GameLoop>(levels)});
     return random_number;
 }
 
 GameMapMonitor::~GameMapMonitor() {
-    for (auto& [_, game]: gameMap) {
-        game->stop();
-        if (game->isJoinable()) {
-            game->join();
+    for (const auto& gameloop: gameMap | std::views::values) {
+        gameloop->stop();
+        if (gameloop->isJoinable()) {
+            gameloop->join();
         }
     }
 }

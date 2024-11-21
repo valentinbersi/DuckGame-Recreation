@@ -1,8 +1,8 @@
-
+#pragma once
 #include <random>
 
 class RandomFloatGenerator {
-private :
+private:
     std::random_device rd;
     std::mt19937 gen;
     std::uniform_real_distribution<float> dist;
@@ -13,7 +13,7 @@ public:
      * @param min The minimum value for the random float
      * @param max The maximum value for the random float
      */
-    RandomFloatGenerator (float min, float max);
+    RandomFloatGenerator(float min, float max);
 
     /**
      * Generates random values between the given range on construction
@@ -24,7 +24,7 @@ public:
     /**
      * Destructor for RandomFloatGenerator {
      */
-    ~RandomFloatGenerator ();
+    ~RandomFloatGenerator();
 };
 
 class RandomIntGenerator {
@@ -39,7 +39,7 @@ public:
      * @param min The minimum value for the random int
      * @param max The maximum value for the random int
      */
-    RandomIntGenerator (int min, int max);
+    RandomIntGenerator(int min, int max);
 
     /**
      * Generates random values between the given range on construction
@@ -48,7 +48,7 @@ public:
     int generateRandomInt();
 
     /**
-     * Destructor for RandomIntGenerator 
+     * Destructor for RandomIntGenerator
      */
-    ~RandomIntGenerator ();
+    ~RandomIntGenerator();
 };

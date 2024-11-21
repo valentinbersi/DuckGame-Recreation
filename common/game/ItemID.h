@@ -1,23 +1,27 @@
 #pragma once
 
+#include <functional>
+
+#include "RandomGenerator.h"
 #include "Types.h"
 
 class ItemID {
 public:
-    enum Value : unsigned char { 
-    Grenade = 0x0,
-    Banana = 0x1,
-    PewPewLaser = 0x2,
-    LaserRifle = 0x3,
-    Ak47 = 0x4,
-    DuelPistol = 0x5,
-    CowboyPistol = 0x6,
-    Magnum = 0x7,
-    Shotgun = 0x8,
-    Sniper = 0x9,
-    Helmet = 0xA,
-    Armor = 0x0B,
-    NONE = 0x0C };
+    enum Value : unsigned char {
+        Grenade = 0x0,
+        Banana = 0x1,
+        PewPewLaser = 0x2,
+        LaserRifle = 0x3,
+        Ak47 = 0x4,
+        DuelPistol = 0x5,
+        CowboyPistol = 0x6,
+        Magnum = 0x7,
+        Shotgun = 0x8,
+        Sniper = 0x9,
+        Helmet = 0xA,
+        Armor = 0x0B,
+        NONE = 0x0C
+    };
 
     ItemID() = delete;
 
@@ -29,6 +33,8 @@ public:
 
     [[nodiscard]] operator Value() const;
 
+    static RandomIntGenerator randomGenerator;
+
     static ItemID randomItemID();
 
 private:
@@ -39,14 +45,14 @@ private:
     friend struct std::equal_to<ItemID>;
 };
 
-template<>
+template <>
 struct std::hash<ItemID> {
     std::size_t operator()(const ItemID& itemID) const {
         return std::hash<ItemID::Value>()(itemID._value);
     }
 };
 
-template<> 
+template <>
 struct std::equal_to<ItemID> {
     bool operator()(const ItemID& firstID, const ItemID& secondID) const {
         return firstID._value == secondID._value;
