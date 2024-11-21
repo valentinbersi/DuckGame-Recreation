@@ -31,6 +31,9 @@ public:
     // void toggleAddingObject(ObjectType type);
     void selectObjectType(ObjectType type);
 
+    int getMapWidth() const;
+    int getMapHeight() const;
+
 
     void clearAll();
     // Se encarga de cargar un mapa del tamaño pasado por parametro.

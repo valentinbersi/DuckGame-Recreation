@@ -16,7 +16,7 @@ void MapManager::exportMap(const std::vector<Object>& objects, const std::string
     YAML::Node mapNode;
 
     mapNode["map_name"] = mapName;
-    mapNode["background"] = "background_image.png";
+    mapNode["background"] = "forest-night.png";
     mapNode["map_width"] = mapWidth;
     mapNode["map_height"] = mapHeight;
 
