@@ -63,7 +63,7 @@ public:
 
     [[nodiscard]] operator Value() const;
 
-    LobbyRequest();
+    LobbyRequest() = delete;
 
 private:
     Value _value;
