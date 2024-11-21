@@ -77,7 +77,7 @@ TEST(ProtocolTest, LobbyToServerMultipleSends) {
 
 TEST(ProtocolTest, MultiLoobySend) {
     ListenerSocket skt("8080");
-    std::string a = "Player1";  
+    std::string a = "Player1";
     std::string b = "Player2";
     std::string c = "Player3";
     std::string d = "Player4";
@@ -151,7 +151,7 @@ TEST(ProtocolTest, ServerToGameSendOneStatus) {
     ListenerSocket peer("8080");
 
     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
-    status->ducks.emplace_back(Vector2(0,0), DuckID::White, 10, ItemID::CowboyPistol, 0b100);
+    status->ducks.emplace_back(Vector2(0, 0), DuckID::White, 10, ItemID::CowboyPistol, 0b100);
     status->blockPositions.emplace_back(0, 0);
 
     std::thread client([]() {
@@ -194,10 +194,12 @@ TEST(ProtocolTest, ServerToOneGameMultiSend) {
     ListenerSocket peer("8080");
 
     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
-    status->ducks.emplace_back( Vector2(42.6, 5.5134), DuckID::Grey, 8, ItemID::Ak47, 0b1 | 0b10);
-    status->ducks.emplace_back( Vector2(0,0), DuckID::Orange, 1, ItemID::Banana, 0b1);
-    status->ducks.emplace_back( Vector2(0, 5.5134), DuckID::White, 5, ItemID::DuelPistol, 0b1 | 0b10 | 0b100);
-    status->ducks.emplace_back( Vector2(77.90845, 0.654), DuckID::Yellow, 10, ItemID::PewPewLaser, 0b1 | 0b10 | 0b1000);
+    status->ducks.emplace_back(Vector2(42.6, 5.5134), DuckID::Grey, 8, ItemID::Ak47, 0b1 | 0b10);
+    status->ducks.emplace_back(Vector2(0, 0), DuckID::Orange, 1, ItemID::Banana, 0b1);
+    status->ducks.emplace_back(Vector2(0, 5.5134), DuckID::White, 5, ItemID::DuelPistol,
+                               0b1 | 0b10 | 0b100);
+    status->ducks.emplace_back(Vector2(77.90845, 0.654), DuckID::Yellow, 10, ItemID::PewPewLaser,
+                               0b1 | 0b10 | 0b1000);
     status->blockPositions.emplace_back(0, 0);
     status->blockPositions.emplace_back(100, 50);
     status->blockPositions.emplace_back(14.743, 66);

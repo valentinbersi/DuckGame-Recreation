@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Item.h"
 #include "unordered_map"
 
