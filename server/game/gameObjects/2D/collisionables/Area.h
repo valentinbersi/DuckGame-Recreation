@@ -9,7 +9,7 @@
  * A collision object that throws events when colliding with another collision object
  */
 class Area final: public CollisionObject {
-protected:
+public:
     /**
      * Construct an Area
      * @param parent The parent object
@@ -22,7 +22,6 @@ protected:
     Area(GameObject* parent, Vector2 position, std::bitset<LayersCount> layers,
          std::bitset<LayersCount> scannedLayers, float width, float height);
 
-public:
     Area() = delete;
     Area(const Area&) = delete;
     Area& operator=(const Area&) = delete;

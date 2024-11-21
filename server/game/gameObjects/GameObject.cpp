@@ -98,8 +98,8 @@ std::unique_ptr<GameObject> GameObject::removeChild(const std::string& name) {
     if (child.empty())
         throw ChildNotInTree(name);
 
-    fire(eventName(Events::TREE_EXITED), child.mapped());
-    for (auto& [name, child]: children) fire(eventName(Events::TREE_EXITED), child);
+    fire(GameObject::eventName(GameObject::Events::TREE_EXITED), child.mapped());
+    for (auto& [name, child]: children) fire(GameObject::eventName(GameObject::Events::TREE_EXITED), child);
 
     child.mapped()->_parent = nullptr;
     return std::unique_ptr<GameObject>(child.mapped());
