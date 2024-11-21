@@ -6,15 +6,15 @@
 #include "PhysicsObject.h"
 #include <memory>
 
-class Weapon;
+class EquippableWeapon;
 class Player final: public PhysicsObject {
 private:
     DuckID id;
     u8 life;
     u16 flags;
     Input input;
-    // std::unique_ptr<Weapon> weapon; 
     float speed;
+    std::unique_ptr<EquippableWeapon> weapon; 
 
     /**
      * 
@@ -77,4 +77,6 @@ public:
     void jump();
 
     void stopJump();
+
+    void interact();
 };

@@ -4,6 +4,7 @@
 
 class EquippableWeapon: public GameObject {
 protected:
+    u8 ammo;
     ItemID id;
 
 public:
@@ -11,7 +12,9 @@ public:
 
     ItemID getID() const;
 
-    virtual void shoot() = 0;
+    virtual void actionate() = 0;
 
-    virtual ~EquippableWeapon() = default;
+    virtual void deactionate() = 0;
+
+    virtual ~EquippableWeapon();
 };
