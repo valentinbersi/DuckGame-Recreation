@@ -59,6 +59,6 @@ private:
     bool& twoPlayersLocal;
     Camera camera;
 
-    std::list<std::unique_ptr<DuckData>> ducks;
+    std::list<std::unique_ptr<DuckData>> ducks;       //sacar ptr
     std::list<std::unique_ptr<Vector2>> blocks;
 };

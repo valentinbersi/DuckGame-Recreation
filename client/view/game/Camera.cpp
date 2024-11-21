@@ -17,6 +17,7 @@ void Camera::update(std::list<std::unique_ptr<DuckData>>& ducks) {
         return;
 
     calculateScale(ducks);
+    //scale = 1;
 
     Vector2 center = centerOfDucks(ducks);
     float targetX = center.x();
@@ -35,7 +36,6 @@ void Camera::update(std::list<std::unique_ptr<DuckData>>& ducks) {
 
     x = std::max(0.0f, std::min(x, static_cast<float>(backgroundWidth - windowWidth)));
     y = std::max(0.0f, std::min(y, static_cast<float>(backgroundHeight - windowHeight)));
-
 }
 
 
@@ -48,9 +48,11 @@ void Camera::adjustSpritePositions(std::list<std::unique_ptr<DuckData>>& ducks) 
 }*/
 
 void Camera::calculateScale(std::list<std::unique_ptr<DuckData>>& ducks) {
+
+    // limites
     if (ducks.size() == 1) {
         scale = 4.0f * (windowWidth / 1040);  // Ajustar según el ancho de la ventana         (TEST,
-                                              // SINO DEJAR SOLO 4.0F)
+        // SINO DEJAR SOLO 4.0F)
         auto& duck = ducks.front();
         x = duck->position.x() - windowWidth / 2;
         y = duck->position.y() - windowHeight / 2;
@@ -59,7 +61,11 @@ void Camera::calculateScale(std::list<std::unique_ptr<DuckData>>& ducks) {
 
     oldScale = scale;
     float maxDistance = calculateMaxDistance(ducks);
-    float desiredScale = std::clamp(120.0f / (maxDistance / 50.0f), 7.0f, 20.0f);
+
+    // si la max distance es menor, se ajusta la escala
+    // sino al reves
+    // no mover la imgen y despues escalarla
+    float desiredScale = std::clamp(100.0f / (maxDistance / 50.0f), 5.0f, 40.0f);
     desiredScale *= (windowWidth / 1040);  // Escalado relativo a la resolución       (TEST)
 
     if (std::abs(desiredScale - scale) > 0.01f) {
@@ -82,21 +88,17 @@ float Camera::calculateMaxDistance(std::list<std::unique_ptr<DuckData>>& ducks) 
 }
 
 Vector2 Camera::centerOfDucks(std::list<std::unique_ptr<DuckData>>& ducks) {
-    float coordsX = 0.0f;
-    float coordsY = 0.0f;
     size_t duckCount = ducks.size();
+    Vector2 result;
 
     for (auto& duck: ducks) {
-        coordsX += duck->position.x();
-        coordsY += duck->position.y();
+        result += duck->position;
     }
 
     if (duckCount > 0) {
-        coordsX /= static_cast<float>(duckCount);
-        coordsY /= static_cast<float>(duckCount);
+        result /= static_cast<float>(duckCount);
     }
 
-    Vector2 result(coordsX, coordsY);
     return result;
 }
 
