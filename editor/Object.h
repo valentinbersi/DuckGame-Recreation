@@ -7,7 +7,7 @@
 #include <QString>
 #include <utility>
 
-#include "ObjectConstants.h"
+#include "EditorConstants.h"
 
 enum ObjectType {
     PLATFORM,
@@ -19,42 +19,45 @@ enum ObjectType {
 
 struct Object {
     ObjectType type;
-    QString icon;
-    QPointF centerPos;
+    QString iconPath;
     QSize size;
+    QPointF centerPos;
+    QPixmap icon;
 
     explicit Object(ObjectType type): type(type) {
-        switch (type) {
-            case PLATFORM:
-                icon = PLATFORM_ICON;
-                size = QSize(PLATFORM_WIDTH, PLATFORM_HEIGHT);
-                break;
-            case DUCK:
-                icon = DUCK_ICON;
-                size = QSize(DUCK_WIDTH, DUCK_HEIGHT);
-                break;
-            case ARMAMENT:
-                icon = ARMAMENT_ICON;
-                size = QSize(ARMAMENT_WIDTH, ARMAMENT_HEIGHT);
-                break;
-            case BOX:
-                icon = BOX_ICON;
-                size = QSize(BOX_WIDTH, BOX_HEIGHT);
-                break;
-            default:
-                qWarning() << "Tipo de objeto desconocido";
-                icon = "";
-                size = QSize(0, 0);
-                break;
-        }
+        if (type == PLATFORM) {
+            iconPath = PLATFORM_ICON;
+            size = QSize(PLATFORM_WIDTH, PLATFORM_HEIGHT);
+        } else if (type == DUCK) {
+            iconPath = DUCK_ICON;
+            size = QSize(DUCK_WIDTH, DUCK_HEIGHT);
+        } else if (type == ARMAMENT) {
+            iconPath = ARMAMENT_ICON;
+            size = QSize(SPAWN_WIDTH, SPAWN_HEIGHT);
+        } else if (type == BOX) {
+            iconPath = BOX_ICON;
+            size = QSize(BOX_WIDTH, BOX_HEIGHT);
+        } else {
+            qWarning() << "Tipo de objeto desconocido";
+            iconPath = "";
+            size = QSize(0, 0);
+        } // tengo que ver lo de UNKNOWN
+
+        QPixmap i(iconPath);
+        icon = i.scaled(size.width() * PIXEL_SIZE, size.height() * PIXEL_SIZE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    }
+
+    // este constructor lo agrego para que QT tome a la clase Object como un item de QT.
+    Object() : type(UNKNOWN), size(0, 0), centerPos(0, 0) {
+        icon = QPixmap();
     }
 
     void setCenterPosition(QPointF center) { centerPos = center; }
 
-    QRectF getBoundingPos() {
-        return QRectF{centerPos.x() - size.width() / 2, centerPos.y() - size.height() / 2,
-                      static_cast<qreal>(size.width()), static_cast<qreal>(size.height())};
+    QPointF getBoundingPos() const {
+        return QPointF{(centerPos.x()) - size.width() / 2, centerPos.y() - size.height() / 2};
     }
 };
 
+Q_DECLARE_METATYPE(Object)
 Q_DECLARE_METATYPE(Object*)

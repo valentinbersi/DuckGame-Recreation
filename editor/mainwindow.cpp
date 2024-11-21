@@ -9,9 +9,9 @@
 #include <QScrollBar>
 #include <QWheelEvent>
 
+#include "EditorConstants.h"
 #include "MapManager.h"
 #include "Object.h"
-#include "ObjectConstants.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWindow) {

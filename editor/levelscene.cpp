@@ -1,4 +1,5 @@
 #include "levelscene.h"
+#include "EditorConstants.h"
 
 #include <QAction>
 #include <QDrag>
@@ -8,10 +9,6 @@
 #include <QMimeData>
 #include <cmath>
 #include <vector>
-
-#define PIXEL_SIZE 10
-#define DEFAULT_WIDTH 200
-#define DEFAULT_HEIGHT 200
 
 LevelScene::LevelScene(QObject* parent, std::vector<Object>& objects):
         QGraphicsScene(parent),
@@ -54,26 +51,21 @@ void LevelScene::deleteObjectAt(const QPointF& position) {
 
 bool LevelScene::enoughDucks() const { return ducksCount >= 1; }
 
-void LevelScene::addObjectInMap(Object object) {
+void LevelScene::addObjectInMap(const Object& object) {
     if (object.type == DUCK && ducksCount >= 4)
         return;
-    QPixmap icon(object.icon);
-    QPixmap iconScaled =
-            icon.scaled(object.size.width() * PIXEL_SIZE, object.size.height() * PIXEL_SIZE,
-                        Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-    auto* item = new QGraphicsPixmapItem(iconScaled);
+    auto* item = new QGraphicsPixmapItem(object.icon);
     item->setFlag(QGraphicsItem::ItemIsMovable);
     item->setFlag(QGraphicsItem::ItemIsSelectable);
 
-    QPointF topLeftPos((object.centerPos.x() - (object.size.width() / 2)) * PIXEL_SIZE,
-                       (object.centerPos.y() - (object.size.height() / 2)) * PIXEL_SIZE);
-    int x = (int(topLeftPos.x()) / PIXEL_SIZE) * PIXEL_SIZE;
-    int y = (int(topLeftPos.y()) / PIXEL_SIZE) * PIXEL_SIZE;
-    item->setPos(x, y);
-
+    QPointF topLeftPos = object.getBoundingPos();
+    int x_item = (int(topLeftPos.x()) * PIXEL_SIZE);
+    int y_item = (int(topLeftPos.y()) * PIXEL_SIZE);
+    item->setPos(x_item, y_item);
+    qDebug() << item->pixmap().height() << item->pixmap().width();
     addItem(item);
-    item->setData(0, QVariant::fromValue(&object));
+    item->setData(0, QVariant::fromValue(object));
     if (object.type == DUCK)
         ducksCount++;
 

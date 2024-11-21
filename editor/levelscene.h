@@ -23,7 +23,7 @@ public:
 
     void deleteObjectAt(const QPointF& position);
     void addNewObject(ObjectType type, QPointF pos);
-    void addObjectInMap(Object object);
+    void addObjectInMap(const Object& object);
 
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
