@@ -19,5 +19,3 @@ LobbyRequest::LobbyRequest(Value value): _value(value) {}
 LobbyRequest::LobbyRequest(unsigned char value): _value(static_cast<Value>(value)) {}
 
 LobbyRequest::operator Value() const { return _value; }
-
-LobbyRequest::LobbyRequest(): _value(NEWMATCH) {}

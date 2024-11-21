@@ -9,7 +9,7 @@
 #define MIN_MATCH_ID 1
 #define MAX_MATCH_ID 65535
 
-GameMapMonitor::GameMapMonitor() : levels(LevelData::loadLevels()) {}
+GameMapMonitor::GameMapMonitor(): levels(LevelData::loadLevels()) {}
 
 BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGameIfCreated(
         u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
