@@ -6,13 +6,10 @@
 
 #include "../Updatable.h"
 
-#include "GameStatus.h"
 #include "Startable.h"
 #include "Subject.h"
 #include "TrackedReference.h"
 #include "Types.h"
-
-using gameObject::Subject;
 
 /**
  * An object in the game.\n
@@ -23,7 +20,12 @@ using gameObject::Subject;
  * any raw pointer passed as argument inside Objects does not hold ownership of the
  * underlying object.\n
  */
-class GameObject: public Subject, public TrackedReference, public Updatable, public Startable {
+class GameObject:
+        public gameObject::Subject,
+        public TrackedReference,
+        public Updatable,
+        public Startable {
+
     GameObject* _parent;
     HashMap<std::string, GameObject*> children;
 
@@ -80,8 +82,8 @@ protected:
 
 public:
     struct Events {
-        static constexpr auto TreeEntered = "TreeEntered";
-        static constexpr auto TreeExited = "TreeExited";
+        constexpr static auto TreeEntered = "TreeEntered";
+        constexpr static auto TreeExited = "TreeExited";
     };
 
     /**

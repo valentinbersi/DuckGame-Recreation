@@ -22,9 +22,8 @@
  * @param Function The function to call
  * @param ... The type of the arguments to pass to the function
  */
-#define eventHandler(Function, ...)                                                         \
-    std::make_unique<gameObject::EventHandler<Player, __VA_ARGS__>>(getReference<Player>(), \
-                                                                    Function)
+#define eventHandler(Function, ...) \
+    gameObject::EventHandler<Player, __VA_ARGS__>::create(getReference<Player>(), Function)
 
 Player::Player(const DuckID id):
         PhysicsObject(nullptr, {700, 450}, 1, 2, 2, 3, Gravity::Disabled),
@@ -84,8 +83,8 @@ void Player::update([[maybe_unused]] const float delta) {
         _velocity += Vector2(0, -10);
     }
 
-    if (!_onGround){}
-        //flags |= DuckData::IN_AIR;
+    if (!_onGround) {}
+    // flags |= DuckData::IN_AIR;
 }
 
 DuckData Player::status() { return {globalPosition(), id, life, ItemID::Ak47, flags}; }

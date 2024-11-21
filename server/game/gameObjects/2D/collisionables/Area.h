@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <string>
 
 #include "CollisionObject.h"
 
@@ -23,6 +22,10 @@ protected:
          std::bitset<LayersCount> scannedLayers, float width, float height);
 
 public:
+    struct Events {
+        constexpr static auto Collision = "Collision";
+    };
+
     Area() = delete;
     Area(const Area&) = delete;
     Area& operator=(const Area&) = delete;
@@ -57,16 +60,4 @@ public:
      * collision object
      */
     void processCollisions(float delta) override;
-
-    /**
-     * The events the Area class has
-     */
-    enum class Events : u8 { COLLISION };
-
-    /**
-     * Get the event name of an event type
-     * @param eventType The event type
-     * @return The event name
-     */
-    static std::string eventName(Events eventType);
 };
