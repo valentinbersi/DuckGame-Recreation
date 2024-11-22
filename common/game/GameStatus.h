@@ -16,6 +16,7 @@ struct GameStatus final: ServerMessage {
 
     std::list<DuckData> ducks;
     std::list<SizedObjectData> blockPositions;
+    // std::list<SizedObjectData> spawnsPositions;
 
     void send(ServerSendProtocol& serverProtocol) override;
 };
