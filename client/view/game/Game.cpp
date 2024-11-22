@@ -73,7 +73,12 @@ void Game::init() {
 }
 
 Texture Game::startBackground() {
-    SDL_Surface* rawBackgroundSurface = IMG_Load("assets/background/forest-night.png");
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<std::size_t> dis(0, backgrounds.size() - 1);
+
+    std::size_t randomIndex = dis(gen);
+    SDL_Surface* rawBackgroundSurface = IMG_Load(backgrounds[randomIndex].c_str());
     Surface backgroundSurface(rawBackgroundSurface);
     // SDL_FreeSurface(rawBackgroundSurface);
     Texture backgroundTexture(renderer, backgroundSurface);

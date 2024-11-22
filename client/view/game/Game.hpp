@@ -6,6 +6,8 @@
 #include <string>
 #include <list>
 #include <memory>
+#include <vector>
+#include <random>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -64,4 +66,12 @@ private:
     std::list<SizedObjectData> blocksToRender;
     std::list<DuckData> ducks;
     std::list<SizedObjectData> blocks;
+
+    std::vector<std::string> backgrounds = {
+            "assets/background/forest-night.png",
+            "assets/background/city.png",
+            "assets/background/forest-day.png",
+            "assets/background/snowy-peaks.png",
+            "assets/background/desert.png"
+    };
 };
