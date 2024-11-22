@@ -118,8 +118,16 @@ void Game::updatePlayers(
         DuckID duckID = duck.duckID;
         Vector2 coords = duck.position;
 
-        const float xPosition = coords.x() / camera.getViewRect().size().x();
-        const float yPosition = coords.y() / camera.getViewRect().size().y();
+        const float relativePositionX = coords.x() - camera.getViewRect().center().x();
+        const float relativePositionY = coords.y() - camera.getViewRect().center().y();
+        const float positionScaleX =
+                static_cast<float>(window_width) / camera.getViewRect().size().x();
+        const float positionScaleY =
+                static_cast<float>(window_height) / camera.getViewRect().size().y();
+        const float screenPositionX =
+                relativePositionX * positionScaleX + static_cast<float>(window_width) / 2;
+        const float screenPositionY =
+                relativePositionY * positionScaleY + static_cast<float>(window_height) / 2;
 
         DuckState state = {duck.extraData[DuckData::PLAYING_DEAD_INDEX],
                            duck.extraData[DuckData::CROUCHING_INDEX],
@@ -137,22 +145,29 @@ void Game::updatePlayers(
 
         spritesMapping.at(duckID)->updateEquipment(state.hasHelmet,
                                                    state.hasChestplate /*, duck->gun->gunID*/);
-        spritesMapping.at(duckID)->updatePosition(xPosition * window_width,
-                                                  yPosition * window_height);
+        spritesMapping.at(duckID)->updatePosition(screenPositionX, screenPositionY);
         spritesMapping.at(duckID)->setScale(scale);
         spritesMapping.at(duckID)->update(state);
     }
 }
 
 void Game::updateBlocks(EnviromentRenderer& enviromentRenderer) {
-    float objectCameraSize = camera.getViewRect().size().x() / 2;
-    float scale = static_cast<float>(window_width) / objectCameraSize;
+    const float objectCameraSize = camera.getViewRect().size().x() / 2;
+    const float scale = static_cast<float>(window_width) / objectCameraSize;
 
     for (auto& block: blocksToRender) {
-        const float xPosition = block.rectangle.position().x() / camera.getViewRect().size().x();
-        const float yPosition = block.rectangle.position().y() / camera.getViewRect().size().y();
+        const float relativePositionX = block.position.x() - camera.getViewRect().center().x();
+        const float relativePositionY = block.position.y() - camera.getViewRect().center().y();
+        const float positionScaleX =
+                static_cast<float>(window_width) / camera.getViewRect().size().x();
+        const float positionScaleY =
+                static_cast<float>(window_height) / camera.getViewRect().size().y();
+        const float screenPositionX =
+                relativePositionX * positionScaleX + static_cast<float>(window_width) / 2;
+        const float screenPositionY =
+                relativePositionY * positionScaleY + static_cast<float>(window_height) / 2;
 
-        SDL2pp::Rect position(xPosition * window_width, yPosition * window_height,
+        SDL2pp::Rect position(screenPositionX - scale / 2, screenPositionY - scale / 2,
                               static_cast<int>(scale), static_cast<int>(scale));
         enviromentRenderer.drawEnviroment(position, ROCK);
     }
