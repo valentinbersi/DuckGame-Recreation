@@ -197,7 +197,7 @@ SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather, boo
 
 SDL2pp::Rect SpriteManager::calculateBasePosition() {
     return {static_cast<int>(m_position_x - scale / 2), static_cast<int>(m_position_y - scale / 2),
-            static_cast<int>(2 * scale), static_cast<int>(2 * scale)};  // May break
+            static_cast<int>(scale), static_cast<int>(scale)};
 }
 
 void SpriteManager::adjustForFeathers(SDL2pp::Rect& position, bool isRightFeather) {

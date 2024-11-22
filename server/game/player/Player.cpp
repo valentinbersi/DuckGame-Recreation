@@ -33,7 +33,7 @@
 
 
 Player::Player(const DuckID id):
-        PhysicsObject(nullptr, {30, 10}, Layer::Player, Layer::Wall, PLAYER_DIMENSIONS,
+        PhysicsObject(nullptr, {30, 0}, Layer::Player, Layer::Wall, PLAYER_DIMENSIONS,
                       Gravity::Enabled),
         id(id),
         life(DEFAULT_LIFE),
