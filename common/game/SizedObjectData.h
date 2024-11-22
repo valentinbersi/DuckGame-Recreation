@@ -20,5 +20,11 @@ struct SizedObjectData : GameObject2DData {
      * @param height the height
      */
     SizedObjectData(const Vector2& position, float width, float height);
+
+    /**
+     * COnstruct a sized object data with the given rectangle
+     * @param rectangle the rectangle
+     */
+    explicit SizedObjectData(const Rectangle& rectangle);
 };
 

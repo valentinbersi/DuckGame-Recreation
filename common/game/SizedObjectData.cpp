@@ -26,3 +26,5 @@ SizedObjectData::~SizedObjectData() = default;
 
 SizedObjectData::SizedObjectData(const Vector2& position, float width, float height): GameObject2DData(position), rectangle(position, width, height) {}
 
+SizedObjectData::SizedObjectData(const Rectangle& rectangle): GameObject2DData(rectangle.center()), rectangle(rectangle) {}
+
