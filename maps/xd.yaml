@@ -1,5 +1,5 @@
 map_name: xd
-background: background_image.png
+background: forest-night.png
 map_width: 100
 map_height: 80
 objects:
@@ -234,3 +234,9 @@ objects:
   - type: PLATFORM
     x: 64
     y: 29
+  - type: PLATFORM
+    x: 26.899999999999999
+    y: 31.699999999999999
+  - type: PLATFORM
+    x: 40.799999999999997
+    y: 31.300000000000001
