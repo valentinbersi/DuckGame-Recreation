@@ -96,7 +96,7 @@ void Game::getSnapshot() {
 }
 
 void Game::filterObjectsToRender() {
-    Rectangle& viewRect = camera.getViewRect();
+    const Rectangle& viewRect = camera.getViewRect();
 
     for (auto& duck: ducks)
         if (viewRect.overlaps(duck.rectangle))
@@ -111,8 +111,8 @@ void Game::filterObjectsToRender() {
 
 void Game::updatePlayers(
         std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping) {
-    float objectCameraSize = camera.getViewRect().size().x() / DUCK_WIDTH;
-    float scale = static_cast<float>(window_width) / objectCameraSize;
+    const float objectCameraSize = camera.getViewRect().size().x() / DUCK_WIDTH;
+    const float scale = static_cast<float>(window_width) / objectCameraSize;
 
     for (auto& duck: ducksToRender) {
         DuckID duckID = duck.duckID;

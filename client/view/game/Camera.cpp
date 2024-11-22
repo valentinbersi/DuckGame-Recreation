@@ -10,17 +10,17 @@ Camera::Camera(int& windowWidth, int& windowHeight):
 {}
 
 void Camera::update(std::list<DuckData>& ducks) {
-    Vector2 center = centerOfDucks(ducks);
-    Vector2 maxDistance = calculateMaxDistance(ducks);
+    const Vector2 center = centerOfDucks(ducks);
+    const Vector2 maxDistance = calculateMaxDistance(ducks);
 
     updateZoom(center, maxDistance);
 }
 
 void Camera::updateZoom(const Vector2& center, const Vector2& maxDistance) {
-    float aspectRatio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
-    Vector2 rectDimension = maxDistance.x() > maxDistance.y() ?
-                                    Vector2(maxDistance.x(), maxDistance.x() / aspectRatio) :
-                                    Vector2(maxDistance.y() * aspectRatio, maxDistance.y());
+    const float aspectRatio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
+    const Vector2 rectDimension = maxDistance.x() > maxDistance.y() ?
+                                          Vector2(maxDistance.x(), maxDistance.x() / aspectRatio) :
+                                          Vector2(maxDistance.y() * aspectRatio, maxDistance.y());
     viewRect.setSize(rectDimension);
     viewRect.setCenter(center);
 }
@@ -43,9 +43,9 @@ Vector2 Camera::calculateMaxDistance(std::list<DuckData>& ducks) {
     return maxDistance;
 }
 
-Vector2 Camera::centerOfDucks(std::list<DuckData>& ducks) {
+Vector2 Camera::centerOfDucks(const std::list<DuckData>& ducks) {
     Vector2 center;
-    for (auto& duck: ducks) center += duck.position;
+    for (const auto& duck: ducks) center += duck.position;
     if (not ducks.empty())
         center /= static_cast<float>(ducks.size());
     return center;
