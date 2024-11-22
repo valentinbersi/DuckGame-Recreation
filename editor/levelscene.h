@@ -13,6 +13,7 @@ private:
     int gridWidth;
     int gridHeight;
     std::vector<Object>& objects;
+    QMap<QGraphicsItem*, Object*> objectMap;
 
     QGraphicsItem* selectedItem;
     QPointF originalItemPos;
