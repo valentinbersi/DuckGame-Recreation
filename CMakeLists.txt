@@ -102,7 +102,7 @@ if (CLIENT OR EDITOR)
     FetchContent_Declare(
             opusfile
             GIT_REPOSITORY https://github.com/xiph/opusfile.git
-            GIT_TAG v0.12
+            GIT_BRANCH master
     )
 
     FetchContent_MakeAvailable(opusfile)
