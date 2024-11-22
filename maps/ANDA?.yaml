@@ -1,0 +1,158 @@
+map_name: ANDA?
+background: forest-night.png
+map_width: 200
+map_height: 200
+objects:
+  - type: PLATFORM
+    x: 10
+    y: 31
+  - type: PLATFORM
+    x: 37
+    y: 31
+  - type: PLATFORM
+    x: 39
+    y: 31
+  - type: PLATFORM
+    x: 35
+    y: 31
+  - type: PLATFORM
+    x: 8
+    y: 31
+  - type: PLATFORM
+    x: 4
+    y: 27
+  - type: PLATFORM
+    x: 4
+    y: 29
+  - type: PLATFORM
+    x: 6
+    y: 31
+  - type: PLATFORM
+    x: 4
+    y: 25
+  - type: PLATFORM
+    x: 12
+    y: 29
+  - type: PLATFORM
+    x: 12
+    y: 33
+  - type: PLATFORM
+    x: 12
+    y: 35
+  - type: PLATFORM
+    x: 12
+    y: 31
+  - type: PLATFORM
+    x: 12
+    y: 39
+  - type: PLATFORM
+    x: 12
+    y: 41
+  - type: PLATFORM
+    x: 12
+    y: 43
+  - type: PLATFORM
+    x: 14
+    y: 43
+  - type: PLATFORM
+    x: 16
+    y: 43
+  - type: PLATFORM
+    x: 18
+    y: 43
+  - type: PLATFORM
+    x: 20
+    y: 43
+  - type: PLATFORM
+    x: 34
+    y: 43
+  - type: PLATFORM
+    x: 22
+    y: 43
+  - type: PLATFORM
+    x: 24
+    y: 43
+  - type: PLATFORM
+    x: 26
+    y: 43
+  - type: PLATFORM
+    x: 28
+    y: 43
+  - type: PLATFORM
+    x: 30
+    y: 43
+  - type: PLATFORM
+    x: 32
+    y: 43
+  - type: PLATFORM
+    x: 12
+    y: 37
+  - type: DUCK
+    x: 7
+    y: 28
+  - type: PLATFORM
+    x: 35
+    y: 41
+  - type: PLATFORM
+    x: 37
+    y: 40
+  - type: PLATFORM
+    x: 39
+    y: 39
+  - type: PLATFORM
+    x: 41
+    y: 38
+  - type: PLATFORM
+    x: 43
+    y: 38
+  - type: PLATFORM
+    x: 45
+    y: 38
+  - type: PLATFORM
+    x: 47
+    y: 38
+  - type: PLATFORM
+    x: 49
+    y: 38
+  - type: PLATFORM
+    x: 50
+    y: 30
+  - type: PLATFORM
+    x: 51
+    y: 38
+  - type: PLATFORM
+    x: 56
+    y: 30
+  - type: PLATFORM
+    x: 50
+    y: 32
+  - type: PLATFORM
+    x: 50
+    y: 34
+  - type: PLATFORM
+    x: 54
+    y: 30
+  - type: PLATFORM
+    x: 52
+    y: 30
+  - type: PLATFORM
+    x: 50
+    y: 36
+  - type: DUCK
+    x: 54
+    y: 27
+  - type: DUCK
+    x: 37
+    y: 28
+  - type: DUCK
+    x: 25
+    y: 40
+  - type: BOX
+    x: 43
+    y: 36
+  - type: ARMAMENT
+    x: 15
+    y: 39
+  - type: ARMAMENT
+    x: 46
+    y: 33

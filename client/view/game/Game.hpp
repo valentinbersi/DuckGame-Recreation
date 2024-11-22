@@ -6,8 +6,6 @@
 #include <string>
 #include <list>
 #include <memory>
-#include <vector>
-#include <random>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -39,13 +37,12 @@ public:
     void init();
 
 private:
-    void filterObjectsToRender();
     SDL2pp::Texture startBackground();
-    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping();
-    void updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping);
-    void updateBlocks(EnviromentRenderer& enviromentRenderer);
+    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping(TextureManager& textureManager);
+    void updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping, float currentScale);
+    void updateBlocks(float currentScale, EnviromentRenderer& enviromentRenderer);
     void getSnapshot();
-    void showBackground(SDL2pp::Texture& backgroundTexture);
+    void showBackground(SDL2pp::Texture& backgroundTexture, float currentScale);
 
     void clearObjects();
     //void typeOfObject2D(std::unique_ptr<GameObject2DData> gameObject2D);
@@ -62,16 +59,6 @@ private:
     bool& twoPlayersLocal;
     Camera camera;
 
-    std::list<DuckData> ducksToRender;
-    std::list<SizedObjectData> blocksToRender;
-    std::list<DuckData> ducks;
-    std::list<SizedObjectData> blocks;
-
-    std::vector<std::string> backgrounds = {
-            "assets/background/forest-night.png",
-            "assets/background/city.png",
-            "assets/background/forest-day.png",
-            "assets/background/snowy-peaks.png",
-            "assets/background/desert.png"
-    };
+    std::list<std::unique_ptr<DuckData>> ducks;       //sacar ptr
+    std::list<std::unique_ptr<Vector2>> blocks;
 };
