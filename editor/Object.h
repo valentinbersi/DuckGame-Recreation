@@ -65,6 +65,13 @@ struct Object {
     QPointF getBoundingPos() const {
         return QPointF{(centerPos.x()) - size.width() / 2, centerPos.y() - size.height() / 2};
     }
+
+    bool operator==(const Object& other) const {
+        return type == other.type &&
+               iconPath == other.iconPath &&
+               size == other.size &&
+               centerPos == other.centerPos;
+    }
 };
 
 Q_DECLARE_METATYPE(Object)
