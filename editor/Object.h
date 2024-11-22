@@ -52,10 +52,25 @@ struct Object {
         icon = QPixmap();
     }
 
-    void setCenterPosition(QPointF center) { centerPos = center; }
+    // setea la posicion central del objeto.
+    // el parametro booleano determina si la posicion recibida es la central o la de la esquina superior izquierda
+    // si se recibe la de la esquina, se realizan los calculos para obtener la central y setearla correctamente.
+    void setCenterPosition(QPointF pos, bool isTopLeftPos) {
+        if (isTopLeftPos)
+            centerPos = QPointF(pos.x() + size.width()/2, pos.y() + size.height()/2);
+        else
+            centerPos = pos;
+    }
 
     QPointF getBoundingPos() const {
         return QPointF{(centerPos.x()) - size.width() / 2, centerPos.y() - size.height() / 2};
+    }
+
+    bool operator==(const Object& other) const {
+        return type == other.type &&
+               iconPath == other.iconPath &&
+               size == other.size &&
+               centerPos == other.centerPos;
     }
 };
 

@@ -71,25 +71,16 @@ void MainWindow::onSceneResize() {
     qDebug() << "GV width: " << sceneRect.width() << ", GC height: " << sceneRect.height();
 }
 
-// void MainWindow::resizeEvent(QResizeEvent* event) {
-//     qDebug() << "resizeEvent";
-//     QMainWindow::resizeEvent(event);
-//     QRectF sceneRect = scene->sceneRect();
-//     ui->graphicsView->setSceneRect(0, 0, sceneRect.width() * 2, sceneRect.height() * 2);
-//     qDebug() << "GV width: " << sceneRect.width() << ", GC height: " << sceneRect.height();
-// }
-
 void MainWindow::wheelEvent(QWheelEvent* event) {
     if (event->modifiers() & Qt::ControlModifier) {
         qreal zoomFactor = 1.15;
 
         QPointF viewCenter = ui->graphicsView->mapToScene(ui->graphicsView->viewport()->rect().center());
 
-        if (event->angleDelta().y() > 0) {
+        if (event->angleDelta().y() > 0)
             ui->graphicsView->scale(zoomFactor, zoomFactor);
-        } else {
+        else
             ui->graphicsView->scale(1 / zoomFactor, 1 / zoomFactor);
-        }
 
         QPointF newCenter = ui->graphicsView->mapFromScene(viewCenter);
         ui->graphicsView->ensureVisible(newCenter.x(), newCenter.y(), 100, 100, 1.0);
@@ -101,38 +92,30 @@ void MainWindow::wheelEvent(QWheelEvent* event) {
 }
 
 void MainWindow::on_actionNewMap_triggered() {
-    if (!objects.empty()) {
-        QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(
-                this, "Confirmación",
-                "Tenes un mapa abierto. ¿Deseas guardarlo antes de abrir uno nuevo?",
-                QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-        if (reply == QMessageBox::Yes) {
-            MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), mapWidth,
-                                  mapHeight);
-        } else if (reply == QMessageBox::Cancel) {
-            return;
-        }
-    }
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(
+            this, "Confirmación",
+            "Tenes un mapa abierto. ¿Deseas guardarlo antes de abrir uno nuevo?",
+            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+    if (reply == QMessageBox::Cancel)
+        return;
+    else if (reply == QMessageBox::Yes)
+        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), scene->getMapWidth(), scene->getMapHeight());
     scene->clearAll();
     QMessageBox::information(this, "Nuevo Mapa", "Se ha creado un nuevo mapa.");
 }
 
 void MainWindow::on_actionEditMap_triggered() {
-    if (!objects.empty()) {
-        QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(
-                this, "Confirmar",
-                "¿Deseas guardar los cambios del mapa actual antes de importar uno nuevo?",
-                QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(
+            this, "Confirmar",
+            "¿Deseas guardar los cambios del mapa actual antes de importar uno nuevo?",
+            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 
-        if (reply == QMessageBox::Yes) {
-            MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), mapWidth,
-                                  mapHeight);
-        } else if (reply == QMessageBox::Cancel) {
-            return;
-        }
-    }
+    if (reply == QMessageBox::Yes)
+        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), scene->getMapWidth(), scene->getMapHeight());
+    else if (reply == QMessageBox::Cancel)
+        return;
 
     QString fileName = QFileDialog::getOpenFileName(this, "Seleccionar Mapa", "../maps/",
                                                     "Archivos YAML (*.yaml)");
@@ -148,8 +131,7 @@ void MainWindow::on_actionEditMap_triggered() {
         if (success) {
             scene->loadMap(mapWidth, mapHeight);
             ui->lineEditMapName->setText(mapName);
-            QMessageBox::information(this, "Mapa Importado",
-                                     "El mapa se ha importado correctamente.");
+            QMessageBox::information(this, "Mapa Importado", "El mapa se ha importado correctamente.");
         } else {
             QMessageBox::warning(this, "Error", "Hubo un error al importar el mapa.");
         }
