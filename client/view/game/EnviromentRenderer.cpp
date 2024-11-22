@@ -1,7 +1,7 @@
 #include "EnviromentRenderer.h"
 
-EnviromentRenderer::EnviromentRenderer(SDL2pp::Renderer& renderer, TextureManager& textureManager)
-    : renderer(renderer), textureManager(textureManager) {}
+EnviromentRenderer::EnviromentRenderer(SDL2pp::Renderer& renderer)
+    : renderer(renderer){}
 
 //crear posicion con la escala etc
 // tipo
@@ -10,7 +10,7 @@ EnviromentRenderer::EnviromentRenderer(SDL2pp::Renderer& renderer, TextureManage
 // return SDL2pp::Rect(m_position_x, m_position_y, spriteWidth * scale, spriteHeight * scale);
 
 void EnviromentRenderer::drawEnviroment(SDL2pp::Rect& position, const char* path) {
-    SDL_Texture* texture = textureManager.getTexture(path).Get();
+    SDL_Texture* texture = TextureManager::getTexture(path).Get();
     if (texture == nullptr) {
         throw std::runtime_error("Texture is null in drawCube.");
     }

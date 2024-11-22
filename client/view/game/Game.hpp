@@ -37,10 +37,11 @@ public:
     void init();
 
 private:
+    void filterObjectsToRender();
     SDL2pp::Texture startBackground();
-    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping(TextureManager& textureManager);
-    void updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping, float currentScale);
-    void updateBlocks(float currentScale, EnviromentRenderer& enviromentRenderer);
+    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping();
+    void updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping);
+    void updateBlocks(EnviromentRenderer& enviromentRenderer);
     void getSnapshot();
     void showBackground(SDL2pp::Texture& backgroundTexture, float currentScale);
 
@@ -59,6 +60,8 @@ private:
     bool& twoPlayersLocal;
     Camera camera;
 
-    std::list<std::unique_ptr<DuckData>> ducks;
-    std::list<std::unique_ptr<Vector2>> blocks;
+    std::list<DuckData> ducksToRender;
+    std::list<SizedObjectData> blocksToRender;
+    std::list<DuckData> ducks;
+    std::list<SizedObjectData> blocks;
 };

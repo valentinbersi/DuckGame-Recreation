@@ -2,7 +2,7 @@
 
 #include <bitset>
 
-#include "GameObject2DData.h"
+#include "SizedObjectData.h"
 #include "GunID.h"
 #include "Types.h"
 
@@ -11,7 +11,7 @@ enum class DuckID : u8 { White = 0x0, Orange = 0x1, Yellow = 0x2, Grey = 0x3 };
 /**
  * Relevant data for rendering a duck
  */
-struct DuckData final: GameObject2DData {
+struct DuckData final: SizedObjectData {
     constexpr static u8 NFLAGS = 10;
 
     DuckID duckID;
@@ -58,7 +58,7 @@ struct DuckData final: GameObject2DData {
      * @param gunID the gun the duck is holding
      * @param extraData actions the duck is performing and armor data
      */
-    DuckData(Vector2 position, DuckID duckID, u8 life, GunID gunID, DuckFlag extraData);
+    DuckData(const Vector2& position, DuckID duckID, u8 life, GunID gunID, DuckFlag extraData);
 
     bool operator==(const DuckData& other) const;
 };

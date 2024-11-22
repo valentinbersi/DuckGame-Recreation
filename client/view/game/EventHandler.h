@@ -20,7 +20,7 @@ public:
     // Constructor
     EventHandler(SDL2pp::Window& window, int& window_width, int& window_height,
                  bool& twoPlayersLocal, Communicator& communicator,
-                 std::list<std::unique_ptr<DuckData>>& ducks, Camera& camera, bool& running);
+                 std::list<DuckData>& ducks, Camera& camera, bool& running);
 
     // Destructor
     ~EventHandler() = default;
@@ -50,7 +50,7 @@ private:
     Communicator& communicator;
     int& window_width;
     int& window_height;
-    std::list<std::unique_ptr<DuckData>>& ducks;
+    std::list<DuckData>& ducks;
     Camera& camera;
     bool& running;
 

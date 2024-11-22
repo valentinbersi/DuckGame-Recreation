@@ -33,8 +33,7 @@
 #define COL_WEAPON 0
 
 SpriteManager::SpriteManager(
-        const char* path1, const char* path2, SDL2pp::Renderer& renderer,
-        TextureManager& textureManager /*, int& window_width, int& window_height*/):
+        const char* path1, const char* path2, SDL2pp::Renderer& renderer /*, int& window_width, int& window_height*/):
         path1(path1),
         path2(path2),
         scale(DEFAULT_SCALE),
@@ -48,7 +47,7 @@ SpriteManager::SpriteManager(
         hasChestplate(true),
         shooting(true),
         gunEquipped(GunID::CowboyPistol),
-        spritesheet(std::make_unique<Spritesheet>(path1, path2, renderer, textureManager)),
+        spritesheet(std::make_unique<Spritesheet>(path1, path2, renderer)),
         weaponSpriteManager(std::make_unique<WeaponSpriteManager>()),
         frame(0),
         flappingFrame(0),
@@ -198,7 +197,7 @@ SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather, boo
 }
 
 SDL2pp::Rect SpriteManager::calculateBasePosition() {
-    return SDL2pp::Rect(m_position_x /** 8 * scale) / DEFAULT_SCALE*/, m_position_y /** 8 * scale) / DEFAULT_SCALE*/, 8 * scale, 8 * scale);
+    return {static_cast<int>(m_position_x), static_cast<int>(m_position_y), static_cast<int>(2 * scale), static_cast<int>(2.875f * scale)};
 }
 
 void SpriteManager::adjustForFeathers(SDL2pp::Rect& position, bool isRightFeather) {
