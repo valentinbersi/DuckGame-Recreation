@@ -38,11 +38,12 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
 
 void Game::init() {
     // VOLVERLOS ATRIBUTOS DE LA CLASE
-    EnviromentRenderer enviromentRenderer(renderer);
+    TextureManager textureManager(renderer);
+    EnviromentRenderer enviromentRenderer(renderer, textureManager);
     //  VOLVERLOS ATRIBUTOS DE LA CLASE
 
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping =
-            createSpritesMapping();
+            createSpritesMapping(textureManager);
     SDL sdl(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG);
 
@@ -59,9 +60,9 @@ void Game::init() {
         camera.update(ducks);
         filterObjectsToRender();
 
-        float currentScale = camera.getScale();
+        //float currentScale = camera.getScale();
 
-        showBackground(backgroundTexture, currentScale);
+        showBackground(backgroundTexture/*, currentScale*/);
         updatePlayers(spritesMapping);
         updateBlocks(enviromentRenderer);
         //  updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
@@ -98,13 +99,13 @@ void Game::getSnapshot() {
 void Game::filterObjectsToRender() {
     Rectangle& viewRect = camera.getViewRect();
 
-    for (auto duck = ducks.begin(); duck != ducks.end(); ++duck)
-        if (viewRect.overlaps(duck->rectangle))
-            ducksToRender.splice(ducksToRender.end(), ducks, duck);
+    for (auto& duck : ducks)
+        if (viewRect.overlaps(duck.rectangle))
+            ducksToRender.push_back(duck);
 
-    for (auto block = blocks.begin(); block != blocks.end(); ++block)
-        if (viewRect.overlaps(block->rectangle))
-            blocksToRender.splice(blocksToRender.end(), blocks, block);
+    for (auto& block : blocks)
+        if (viewRect.overlaps(block.rectangle))
+            blocksToRender.push_back(block);
 }
 
 #define DUCK_WIDTH 2
@@ -153,26 +154,28 @@ void Game::updateBlocks(EnviromentRenderer& enviromentRenderer) {
     }
 }
 
-void Game::showBackground(Texture& backgroundTexture, float currentScale) {
+void Game::showBackground(Texture& backgroundTexture/*, float currentScale*/) {
     SDL_Rect dstRect;
     dstRect.x = 0;
     dstRect.y = 0;
     SDL_GetWindowSize(window.Get(), &window_width, &window_height);
-    dstRect.w = static_cast<int>(window_width * currentScale);
-    dstRect.h = static_cast<int>(window_height * currentScale);
+    dstRect.w = window_width;
+    dstRect.h = window_height;
+    //dstRect.w = static_cast<int>(window_width * currentScale);
+    //dstRect.h = static_cast<int>(window_height * currentScale);
 
     renderer.Copy(backgroundTexture, NullOpt, dstRect);
 }
 
-std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> Game::createSpritesMapping() {
+std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> Game::createSpritesMapping(TextureManager& textureManager) {
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping;
 
     spritesMapping.emplace(
             DuckID::White,
-            std::make_unique<SpriteManager>(whiteSheet, whiteFeathers, renderer/*, window_width, window_height*/));
+            std::make_unique<SpriteManager>(whiteSheet, whiteFeathers, renderer, textureManager/*, window_width, window_height*/));
     spritesMapping.emplace(
             DuckID::Orange,
-            std::make_unique<SpriteManager>(orangeSheet, orangeFeathers, renderer/*, window_width, window_height*/));
+            std::make_unique<SpriteManager>(orangeSheet, orangeFeathers, renderer, textureManager/*, window_width, window_height*/));
     /*spritesMapping.emplace(
             DuckID::Yellow,
             std::make_unique<SpriteManager>(yellowSheet, yellowFeathers, renderer,

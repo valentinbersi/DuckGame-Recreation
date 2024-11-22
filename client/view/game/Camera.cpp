@@ -5,8 +5,8 @@
 Camera::Camera(int& windowWidth, int& windowHeight):
         windowWidth(windowWidth),
         windowHeight(windowHeight),
-        viewRect(Vector2::ZERO, {0, 0}),
-        zoom(1.0)
+        viewRect(Vector2::ZERO, {0, 0})
+        //zoom(1.0)
         {}
 
 void Camera::update(std::list<DuckData>& ducks) {
@@ -54,6 +54,6 @@ Vector2 Camera::centerOfDucks(std::list<DuckData>& ducks) {
     backgroundHeight = backgroundTexture.GetHeight() * 2.5f;
 }*/
 
-float Camera::getScale() const { return scale; }
+//float Camera::getScale() const { return scale; }
 
 Rectangle& Camera::getViewRect() { return viewRect; }

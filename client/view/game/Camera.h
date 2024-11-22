@@ -21,7 +21,7 @@ public:
     Camera(int& windowWidth, int& windowHeight);
     void update(std::list<DuckData>& ducks);
     //void loadBackgroundSize(SDL2pp::Texture& backgroundTexture);
-    float getScale() const;
+    //float getScale() const;
     Rectangle& getViewRect();
 
 private:
@@ -33,5 +33,5 @@ private:
     int& windowWidth;
     int& windowHeight;
     Rectangle viewRect;
-    float zoom;
+    //float zoom;
 };

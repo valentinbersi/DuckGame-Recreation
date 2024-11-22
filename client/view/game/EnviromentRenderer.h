@@ -10,7 +10,7 @@ class EnviromentRenderer {
 
 public:
     // Constructor.
-    EnviromentRenderer(SDL2pp::Renderer& renderer);
+    EnviromentRenderer(SDL2pp::Renderer& renderer, TextureManager& textureManager);
 
     void drawEnviroment(SDL2pp::Rect& position, const char* path);
 

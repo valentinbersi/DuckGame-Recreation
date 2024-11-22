@@ -39,11 +39,11 @@ public:
 private:
     void filterObjectsToRender();
     SDL2pp::Texture startBackground();
-    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping();
+    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping(TextureManager& textureManager);
     void updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping);
     void updateBlocks(EnviromentRenderer& enviromentRenderer);
     void getSnapshot();
-    void showBackground(SDL2pp::Texture& backgroundTexture, float currentScale);
+    void showBackground(SDL2pp::Texture& backgroundTexture/*, float currentScale*/);
 
     void clearObjects();
     //void typeOfObject2D(std::unique_ptr<GameObject2DData> gameObject2D);
