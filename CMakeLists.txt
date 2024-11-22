@@ -100,14 +100,6 @@ if (CLIENT OR EDITOR)
     FetchContent_MakeAvailable(opus)
 
     FetchContent_Declare(
-            opus
-            GIT_REPOSITORY https://github.com/xiph/opus.git
-            GIT_TAG v1.5.2
-    )
-
-    FetchContent_MakeAvailable(opus)
-
-    FetchContent_Declare(
             opusfile
             GIT_REPOSITORY https://github.com/xiph/opusfile.git
             GIT_TAG v0.12
