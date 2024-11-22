@@ -5,9 +5,7 @@
 Camera::Camera(int& windowWidth, int& windowHeight):
         windowWidth(windowWidth),
         windowHeight(windowHeight),
-        viewRect(Vector2::ZERO, {0, 0})
-// zoom(1.0)
-{}
+        viewRect(Vector2::ZERO, {0, 0}){}
 
 void Camera::update(std::list<DuckData>& ducks) {
     const Vector2 center = centerOfDucks(ducks);
@@ -39,6 +37,8 @@ Vector2 Camera::calculateMaxDistance(std::list<DuckData>& ducks) {
                 maxDistance.setY(difference.y());
         }
     }
+
+    maxDistance.setX(maxDistance.x() + 6);
 
     return maxDistance;
 }

@@ -37,13 +37,11 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         camera(window_width, window_height) {}
 
 void Game::init() {
-    // VOLVERLOS ATRIBUTOS DE LA CLASE
-    TextureManager textureManager(renderer);
-    EnviromentRenderer enviromentRenderer(renderer, textureManager);
-    //  VOLVERLOS ATRIBUTOS DE LA CLASE
+    EnviromentRenderer enviromentRenderer(renderer);
+    //  VOLVERLO ATRIBUTO DE LA CLASE
 
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping =
-            createSpritesMapping(textureManager);
+            createSpritesMapping();
     SDL sdl(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG);
 
@@ -60,9 +58,7 @@ void Game::init() {
         camera.update(ducks);
         filterObjectsToRender();
 
-        // float currentScale = camera.getScale();
-
-        showBackground(backgroundTexture /*, currentScale*/);
+        showBackground(backgroundTexture);
         updatePlayers(spritesMapping);
         updateBlocks(enviromentRenderer);
         //  updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
@@ -71,7 +67,6 @@ void Game::init() {
         handler.handleEvents();
 
         timer.iterationEnd(30);
-        // SDL_Delay(33);  // 33ms = 30fps
     }
 
     IMG_Quit();
@@ -92,7 +87,7 @@ void Game::getSnapshot() {
 
     clearObjects();
     for (auto& duck: snapshot->ducks) ducks.push_back(std::move(duck));
-    for (const auto& block: snapshot->blockPositions) blocks.push_back(std::move(block));
+    for (const auto& block: snapshot->blockPositions) blocks.push_back(block);
 }
 
 void Game::filterObjectsToRender() {
@@ -171,25 +166,20 @@ void Game::showBackground(Texture& backgroundTexture /*, float currentScale*/) {
     renderer.Copy(backgroundTexture, NullOpt, dstRect);
 }
 
-std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> Game::createSpritesMapping(
-        TextureManager& textureManager) {
+std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> Game::createSpritesMapping() {
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping;
 
     spritesMapping.emplace(
             DuckID::White,
-            std::make_unique<SpriteManager>(whiteSheet, whiteFeathers, renderer,
-                                            textureManager /*, window_width, window_height*/));
+            std::make_unique<SpriteManager>(whiteSheet, whiteFeathers, renderer));
     spritesMapping.emplace(
             DuckID::Orange,
-            std::make_unique<SpriteManager>(orangeSheet, orangeFeathers, renderer,
-                                            textureManager /*, window_width, window_height*/));
+            std::make_unique<SpriteManager>(orangeSheet, orangeFeathers, renderer));
     /*spritesMapping.emplace(
             DuckID::Yellow,
-            std::make_unique<SpriteManager>(yellowSheet, yellowFeathers, renderer,
-                                            textureManager));
+            std::make_unique<SpriteManager>(yellowSheet, yellowFeathers, renderer));
     spritesMapping.emplace(DuckID::Grey, std::make_unique<SpriteManager>(
-                                                 greySheet, greyFeathers, renderer,
-                                                 textureManager));*/
+                                                 greySheet, greyFeathers, renderer));*/
 
     return spritesMapping;
 }
@@ -199,7 +189,6 @@ void Game::clearObjects() {
     ducksToRender.clear();
     blocks.clear();
     blocksToRender.clear();
-    // no hay que hacer blocks
 }
 
 Game::~Game() {
