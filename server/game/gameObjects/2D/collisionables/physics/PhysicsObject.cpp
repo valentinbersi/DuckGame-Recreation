@@ -1,5 +1,6 @@
 #include "PhysicsObject.h"
 
+#include <algorithm>
 #include <memory>
 #include <ranges>
 #include <utility>

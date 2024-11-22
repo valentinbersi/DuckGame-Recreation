@@ -1,10 +1,11 @@
 #pragma once
 
+#include <memory>
+
 #include "CollisionObject.h"
 #include "DuckData.h"
 #include "Input.h"
 #include "PhysicsObject.h"
-#include <memory>
 
 class EquippableWeapon;
 class Player final: public PhysicsObject {
@@ -14,10 +15,10 @@ private:
     u16 flags;
     Input input;
     float speed;
-    EquippableWeapon* weapon; 
+    EquippableWeapon* weapon;
 
     /**
-     * 
+     *
      */
     void onItemCollision(CollisionObject* item);
     // bool canKeepJumping;

@@ -17,7 +17,8 @@ Rectangle& Rectangle::operator=(const Rectangle& other) {
     return *this;
 }
 
-Rectangle::Rectangle(Rectangle&& other) noexcept: _position(std::move(other._position)), _size(std::move(other._size)) {}
+Rectangle::Rectangle(Rectangle&& other) noexcept:
+        _position(std::move(other._position)), _size(std::move(other._size)) {}
 
 Rectangle& Rectangle::operator=(Rectangle&& other) noexcept {
     if (this == &other)
@@ -40,27 +41,21 @@ Rectangle::Rectangle(Vector2 position, Vector2 size):
         throw std::invalid_argument("Size must be positive");
 }
 
-Vector2 Rectangle::position() const {
-    return _position;
-}
+Vector2 Rectangle::position() const { return _position; }
 
 Rectangle& Rectangle::setPosition(Vector2 position) {
     _position = std::move(position);
     return *this;
 }
 
-Vector2 Rectangle::size() const {
-    return _size;
-}
+Vector2 Rectangle::size() const { return _size; }
 
 Rectangle& Rectangle::setSize(Vector2 size) {
     _size = std::move(size);
     return *this;
 }
 
-Vector2 Rectangle::center() const {
-    return _position + _size / 2;
-}
+Vector2 Rectangle::center() const { return _position + _size / 2; }
 
 Rectangle& Rectangle::setCenter(const Vector2& center) {
     _position = center - _size / 2;

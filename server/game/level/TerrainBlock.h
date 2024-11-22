@@ -1,4 +1,6 @@
 #pragma once
+
+#include "SizedObjectData.h"
 #include "StaticObject.h"
 
 /**

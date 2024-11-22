@@ -1,3 +1,5 @@
+#pragma once
+
 #include "GameObject.h"
 #include "ItemID.h"
 #include "Types.h"
@@ -11,8 +13,6 @@ protected:
     float dispersion;
 
 public:
-    EquippableWeapon();
-
     explicit EquippableWeapon(ItemID id, u8 ammo, float recoil, float dispersion);
 
     ItemID getID() const;
@@ -20,7 +20,7 @@ public:
     /**
      * @return the recoil for the weapon to change player velocity.
      */
-    virtual float actionate() = 0 ;
+    virtual float actionate() = 0;
 
     virtual void deactionate() = 0;
 

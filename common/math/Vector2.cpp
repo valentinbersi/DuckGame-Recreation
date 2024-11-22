@@ -175,9 +175,7 @@ void Vector2::swapX(Vector2& other) { std::swap(_x, other._x); }
 
 void Vector2::swapY(Vector2& other) { std::swap(_y, other._y); }
 
-Vector2 Vector2::abs() const {
-    return {std::abs(_x), std::abs(_y)};
-}
+Vector2 Vector2::abs() const { return {std::abs(_x), std::abs(_y)}; }
 
 Vector2 Vector2::operator*(const float scalar) const { return {scalar * _x, scalar * _y}; }
 

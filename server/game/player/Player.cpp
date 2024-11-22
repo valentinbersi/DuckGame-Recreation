@@ -3,13 +3,13 @@
 #include <memory>
 #include <string>
 
-#include "EquippableWeapon.h"
+#include "Area.h"
 #include "Debug.h"
 #include "DuckData.h"
+#include "EquippableWeapon.h"
 #include "GameTimer.h"
-#include "ItemID.h"
 #include "Item.h"
-#include "Area.h"
+#include "ItemID.h"
 #include "Layer.h"
 
 #define MOVE_RIGHT "Move Right"
@@ -32,8 +32,9 @@
     gameObject::EventHandler<Player, __VA_ARGS__>::create(getReference<Player>(), Function)
 
 
-Player::Player(const DuckID id): 
-        PhysicsObject(nullptr, {700, 450}, Layer::Player, Layer::Wall, PLAYER_DIMENSIONS , Gravity::Disabled),
+Player::Player(const DuckID id):
+        PhysicsObject(nullptr, {700, 450}, Layer::Player, Layer::Wall, PLAYER_DIMENSIONS,
+                      Gravity::Disabled),
         id(id),
         life(DEFAULT_LIFE),
         flags(DEFAULT_FLAGS),
@@ -52,22 +53,22 @@ Player::Player(const DuckID id):
 }
 
 void Player::onItemCollision(CollisionObject* item) {
-    if (input.isActionPressed(INTERACT) and not weapon){
+    if (input.isActionPressed(INTERACT) and not weapon) {
         Item* itemPtr = dynamic_cast<Item*>(item);
         ItemID id = itemPtr->id();
-        switch(id){
+        switch (id) {
             case ItemID::Helmet:
-                flags |= (flags & DuckData::HELMET)? flags : DuckData::HELMET;
+                flags |= (flags & DuckData::HELMET) ? flags : DuckData::HELMET;
                 return;
             case ItemID::Armor:
-                flags |= (flags & DuckData::ARMOR)? flags : DuckData::ARMOR;
+                flags |= (flags & DuckData::ARMOR) ? flags : DuckData::ARMOR;
                 return;
             default:
                 return;
                 // superfactory Equipable Weapon
         }
         input.releaseAction(INTERACT);
-    }  
+    }
 }
 
 void Player::moveRight() { input.pressAction(MOVE_RIGHT); }
@@ -111,7 +112,7 @@ void Player::update([[maybe_unused]] const float delta) {
         flags |= DuckData::MOVING_LEFT;
     } else if (input.isActionPressed(JUMP) && _onGround) {
         _velocity += Vector2(0, -10);
-    } else if (input.isActionPressed(INTERACT)){
+    } else if (input.isActionPressed(INTERACT)) {
         input.releaseAction(INTERACT);
         // ItemID id = weapon->getID();
         // ItemFactory::createItem(id);

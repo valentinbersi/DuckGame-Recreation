@@ -1,5 +1,7 @@
 #include "Game.hpp"
 
+#include <utility>
+
 #define DEF_WINDOW_WIDTH 1040
 #define DEF_WINDOW_HEIGHT 680
 

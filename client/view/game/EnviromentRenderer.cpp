@@ -1,7 +1,6 @@
 #include "EnviromentRenderer.h"
 
-EnviromentRenderer::EnviromentRenderer(SDL2pp::Renderer& renderer)
-    : renderer(renderer){}
+EnviromentRenderer::EnviromentRenderer(SDL2pp::Renderer& renderer): renderer(renderer) {}
 
 void EnviromentRenderer::drawEnviroment(SDL2pp::Rect& position, const char* path) {
     SDL_Texture* texture = TextureManager::getTexture(path, renderer).Get();

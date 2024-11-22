@@ -1,9 +1,10 @@
+#pragma once
+
 #include "EquippableWeapon.h"
 #include "GameTimer.h"
 
 class LongPistol: public EquippableWeapon {
 public:
-
     explicit LongPistol(ItemID id, float recoil, float dispersion);
 
     float actionate() override;
@@ -17,7 +18,6 @@ public:
 
 class CowboyPistol: public LongPistol {
 public:
-
     explicit CowboyPistol(ItemID id);
 
     ~CowboyPistol() override;
@@ -25,9 +25,7 @@ public:
 
 class Magnum: public LongPistol {
 public:
-
     explicit Magnum(ItemID id);
 
     ~Magnum() override;
 };
-

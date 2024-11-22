@@ -5,8 +5,8 @@
 
 #include "GameObject.h"
 #include "LevelData.h"
-#include "TerrainBlock.h"
 #include "SizedObjectData.h"
+#include "TerrainBlock.h"
 
 class Level final: public GameObject {
     std::vector<TerrainBlock*> terrainBlocks;

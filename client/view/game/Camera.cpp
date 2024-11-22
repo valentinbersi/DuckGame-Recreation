@@ -1,9 +1,7 @@
 #include "Camera.h"
 
 Camera::Camera(int& windowWidth, int& windowHeight):
-        windowWidth(windowWidth),
-        windowHeight(windowHeight),
-        viewRect(Vector2::ZERO, {0, 0}){}
+        windowWidth(windowWidth), windowHeight(windowHeight), viewRect(Vector2::ZERO, {0, 0}) {}
 
 void Camera::update(std::list<DuckData>& ducks) {
     const Vector2 center = centerOfDucks(ducks);
