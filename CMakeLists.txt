@@ -84,6 +84,38 @@ if (CLIENT OR EDITOR)
     add_custom_target(graphics ALL DEPENDS ${CMAKE_BINARY_DIR}/graphics.stamp)
 
     FetchContent_Declare(
+            sdl2
+            GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+            GIT_TAG release-2.30.9
+    )
+
+    FetchContent_MakeAvailable(sdl2)
+
+    FetchContent_Declare(
+            sdl2-mixer
+            GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer.git
+            GIT_TAG release-2.8.0
+    )
+
+    FetchContent_MakeAvailable(sdl2-mixer)
+
+    FetchContent_Declare(
+            sdl2-ttf
+            GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
+            GIT_TAG release-2.22.0
+    )
+
+    FetchContent_MakeAvailable(sdl2-ttf)
+
+    FetchContent_Declare(
+            sdl2-image
+            GIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git
+            GIT_TAG release-2.8.2
+    )
+
+    FetchContent_MakeAvailable(sdl2-image)
+
+    FetchContent_Declare(
             libSDL2pp
             URL https://github.com/libSDL2pp/libSDL2pp/archive/cc198c9a5657048bee67ece82de620b2d5661084.zip
     )
