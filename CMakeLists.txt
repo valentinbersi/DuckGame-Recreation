@@ -91,6 +91,14 @@ if (CLIENT OR EDITOR)
 
     FetchContent_MakeAvailable(sdl2)
 
+    #FetchContent_Declare(
+    #        doxygen
+    #        GIT_REPOSITORY https://github.com/doxygen/doxygen.git
+    #        GIT_TAG Release_1_12_0
+    #)
+
+    #FetchContent_MakeAvailable(doxygen)
+
     FetchContent_Declare(
             ogg
             GIT_REPOSITORY https://github.com/xiph/ogg.git
