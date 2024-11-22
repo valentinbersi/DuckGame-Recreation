@@ -81,15 +81,7 @@ if (CLIENT OR EDITOR)
     #        COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/graphics.stamp
     #)
 
-    add_custom_target(graphics ALL DEPENDS ${CMAKE_BINARY_DIR}/graphics.stamp)
-
-    FetchContent_Declare(
-            sdl2
-            GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-            GIT_TAG release-2.30.9
-    )
-
-    FetchContent_MakeAvailable(sdl2)
+    #add_custom_target(graphics ALL DEPENDS ${CMAKE_BINARY_DIR}/graphics.stamp)
 
     #FetchContent_Declare(
     #        doxygen
@@ -100,20 +92,20 @@ if (CLIENT OR EDITOR)
     #FetchContent_MakeAvailable(doxygen)
 
     FetchContent_Declare(
-            ogg
-            GIT_REPOSITORY https://github.com/xiph/ogg.git
-            GIT_TAG v1.3.5
-    )
-
-    FetchContent_MakeAvailable(ogg)
-
-    FetchContent_Declare(
             opus
             GIT_REPOSITORY https://github.com/xiph/opus.git
             GIT_TAG v1.5.2
     )
 
     FetchContent_MakeAvailable(opus)
+
+    FetchContent_Declare(
+            ogg
+            GIT_REPOSITORY https://github.com/xiph/ogg.git
+            GIT_TAG v1.3.5
+    )
+
+    FetchContent_MakeAvailable(ogg)
 
     FetchContent_Declare(
             opusfile
@@ -123,29 +115,12 @@ if (CLIENT OR EDITOR)
 
     FetchContent_MakeAvailable(opusfile)
 
-    FetchContent_Declare(
-            sdl2-mixer
-            GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer.git
-            GIT_TAG release-2.8.0
-    )
+    find_package(SDL2 REQUIRED)
+    find_package(SDL2_mixer REQUIRED)
+    find_package(SDL2_ttf REQUIRED)
+    find_package(SDL2_image REQUIRED)
 
-    FetchContent_MakeAvailable(sdl2-mixer)
-
-    FetchContent_Declare(
-            sdl2-ttf
-            GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
-            GIT_TAG release-2.22.0
-    )
-
-    FetchContent_MakeAvailable(sdl2-ttf)
-
-    FetchContent_Declare(
-            sdl2-image
-            GIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git
-            GIT_TAG release-2.8.2
-    )
-
-    FetchContent_MakeAvailable(sdl2-image)
+    target_include_directories(common PUBLIC ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_MIXER_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS})
 
     FetchContent_Declare(
             libSDL2pp
@@ -175,7 +150,7 @@ if (CLIENT)
     add_executable(DuckGame)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGame graphics common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    add_dependencies(DuckGame common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(client)
@@ -186,7 +161,7 @@ if (CLIENT)
     target_include_directories(DuckGame PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(DuckGame common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    target_link_libraries(DuckGame common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES})
 
     install(TARGETS DuckGame
             BUNDLE DESTINATION .
@@ -214,7 +189,7 @@ if (EDITOR)
     add_executable(DuckGameLevelEditor)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGameLevelEditor graphics common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    add_dependencies(DuckGameLevelEditor common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(editor)
@@ -225,7 +200,7 @@ if (EDITOR)
     target_include_directories(DuckGameLevelEditor PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(DuckGameLevelEditor common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    target_link_libraries(DuckGameLevelEditor common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES})
 
     install(TARGETS DuckGameLevelEditor
             BUNDLE DESTINATION .
