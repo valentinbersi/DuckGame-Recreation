@@ -75,11 +75,11 @@ file(COPY ${CMAKE_SOURCE_DIR}/maps/ DESTINATION ${CMAKE_BINARY_DIR}/maps)
 
 # Install libSDL2pp (for client or editor)
 if (CLIENT OR EDITOR)
-    add_custom_command(
-            OUTPUT ${CMAKE_BINARY_DIR}/graphics.stamp
-            COMMAND ${CMAKE_COMMAND} -E env bash ${CMAKE_SOURCE_DIR}/install_graphics.sh
-            COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/graphics.stamp
-    )
+    #add_custom_command(
+    #        OUTPUT ${CMAKE_BINARY_DIR}/graphics.stamp
+    #        COMMAND ${CMAKE_COMMAND} -E env bash ${CMAKE_SOURCE_DIR}/install_graphics.sh
+    #        COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/graphics.stamp
+    #)
 
     add_custom_target(graphics ALL DEPENDS ${CMAKE_BINARY_DIR}/graphics.stamp)
 
