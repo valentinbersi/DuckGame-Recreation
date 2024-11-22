@@ -4,13 +4,22 @@
 #include "DuckData.h"
 #include "Input.h"
 #include "PhysicsObject.h"
+#include <memory>
 
+class EquippableWeapon;
 class Player final: public PhysicsObject {
+private:
     DuckID id;
     u8 life;
     u16 flags;
     Input input;
     float speed;
+    EquippableWeapon* weapon; 
+
+    /**
+     * 
+     */
+    void onItemCollision(CollisionObject* item);
     // bool canKeepJumping;
 
 public:
@@ -68,4 +77,6 @@ public:
     void jump();
 
     void stopJump();
+
+    void interact();
 };
