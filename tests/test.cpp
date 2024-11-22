@@ -152,7 +152,7 @@ TEST(ProtocolTest, ServerToGameSendOneStatus) {
 
     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
     status->ducks.emplace_back(Vector2(0,0), DuckID::White, 10, GunID::CowboyPistol, 0b100);
-    status->blockPositions.emplace_back(0, 0);
+    status->blockPositions.emplace_back(Rectangle(Vector2(0,0), Vector2(0,0)));
 
     std::thread client([]() {
         ActiveSocket clientSkt("localhost", "8080");
@@ -174,7 +174,7 @@ TEST(ProtocolTest, ServerToGameCorrectValues) {
 
     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
     status->ducks.emplace_back(Vector2(0, 0), DuckID::White, 10, GunID::CowboyPistol, 0b100);
-    status->blockPositions.emplace_back(0, 0);
+    status->blockPositions.emplace_back(Rectangle(Vector2(0, 0), Vector2(0, 0)));
 
     std::thread client([status]() {
         ActiveSocket clientSkt("localhost", "8080");
@@ -198,9 +198,9 @@ TEST(ProtocolTest, ServerToOneGameMultiSend) {
     status->ducks.emplace_back( Vector2(0,0), DuckID::Orange, 1, GunID::Banana, 0b1);
     status->ducks.emplace_back( Vector2(0, 5.5134), DuckID::White, 5, GunID::DuelPistol, 0b1 | 0b10 | 0b100);
     status->ducks.emplace_back( Vector2(77.90845, 0.654), DuckID::Yellow, 10, GunID::PewPewLaser, 0b1 | 0b10 | 0b1000);
-    status->blockPositions.emplace_back(0, 0);
-    status->blockPositions.emplace_back(100, 50);
-    status->blockPositions.emplace_back(14.743, 66);
+    status->blockPositions.emplace_back(Rectangle(Vector2(0, 0), Vector2(0, 0)));
+    status->blockPositions.emplace_back(Vector2(2,3),100, 50);
+    status->blockPositions.emplace_back(Rectangle(Vector2(13.0, 67.8), Vector2(8, 7)));
 
     std::thread client([status]() {
         ActiveSocket clientSkt("localhost", "8080");
