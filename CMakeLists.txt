@@ -133,7 +133,7 @@ if (CLIENT OR EDITOR)
 
     FetchContent_MakeAvailable(libSDL2pp)
 
-    install(TARGETS SDL2pp::SDL2pp
+    install(TARGETS SDL2pp
             BUNDLE DESTINATION .
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
