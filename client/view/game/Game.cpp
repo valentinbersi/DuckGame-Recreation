@@ -89,10 +89,11 @@ void Game::getSnapshot() {
 
     clearObjects();
     for (auto& duck: snapshot->ducks) {
+        duck.position *= 8;
         ducks.push_back(std::make_unique<DuckData>(duck));
     }
     for (const auto& blockPosition: snapshot->blockPositions) {
-        blocks.push_back(std::make_unique<Vector2>(blockPosition));
+        blocks.push_back(std::make_unique<Vector2>(blockPosition * 8));
     }
 }
 
@@ -118,8 +119,8 @@ void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManage
 
         spritesMapping.at(duckID)->updateEquipment(state.hasHelmet,
                                                    state.hasChestplate /*, duck->gun->gunID*/);
-        spritesMapping.at(duckID)->updatePosition(coords.x() - camera.getViewRect().x,
-                                                  coords.y() - camera.getViewRect().y);
+        spritesMapping.at(duckID)->updatePosition((coords.x() - camera.getViewRect().x),
+                                                  (coords.y() - camera.getViewRect().y));
         spritesMapping.at(duckID)->setScale(currentScale);
         spritesMapping.at(duckID)->update(state);
     }
@@ -127,7 +128,12 @@ void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManage
 
 void Game::updateBlocks(float currentScale, EnviromentRenderer& enviromentRenderer) {
     for (auto& block: blocks) {
-        SDL2pp::Rect position((block->x() * 8 * currentScale / SCALE) - camera.getViewRect().x, (block->y() * 8 * currentScale / SCALE) - camera.getViewRect().y, 8 * currentScale, 8 * currentScale);
+        SDL2pp::Rect position(
+            static_cast<int>((block->x()) - camera.getViewRect().x),
+            static_cast<int>((block->y()) - camera.getViewRect().y),
+            static_cast<int>(4 * currentScale),
+            static_cast<int>(4 * currentScale)
+        );
         enviromentRenderer.drawEnviroment(position, ROCK);
     }
 }

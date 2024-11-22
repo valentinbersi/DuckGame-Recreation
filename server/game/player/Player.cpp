@@ -15,7 +15,7 @@
 
 #define DEFAULT_LIFE 10
 #define DEFAULT_FLAGS 0
-#define DEFAULT_SPEED 300
+#define DEFAULT_SPEED 100
 
 /**
  * Macro for easier event handling
@@ -27,7 +27,7 @@
                                                                     Function)
 
 Player::Player(const DuckID id):
-        PhysicsObject(nullptr, {700, 450}, 1, 2, 2, 3, Gravity::Disabled),
+        PhysicsObject(nullptr, {30, 10}, 1, 2, 2, 3, Gravity::Disabled),
         id(id),
         life(DEFAULT_LIFE),
         flags(DEFAULT_FLAGS),
