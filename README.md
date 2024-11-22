@@ -49,10 +49,11 @@
 
 #### Ejecución release (desde cualquier directorio):
 
-7. Ejecutar el server: $ ./DuckGameDedicatedServer 8080
+7. Ejecutar el server: $ DuckGameDedicatedServer 8080
 
-8. Ejecutar los clients: $ ./DuckGame localhost 8080
+8. Ejecutar los clients: $ DuckGame localhost 8080 (estamos teniendo un problema a la hora de linkear el ejecutable
+   DuckGame con sdl2pp, si el ejecutable se corre desde la carpeta build-release funciona correctamente)
 
-9. Ejecutar el editor: $ ./DuckGameLevelEditor
+9. Ejecutar el editor: $ DuckGameLevelEditor
 
-10. Ejecutar los tests: $ ./DuckGameTests
+10. Ejecutar los tests: $ DuckGameTests
