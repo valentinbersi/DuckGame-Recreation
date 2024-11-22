@@ -17,8 +17,8 @@ Level::Level(const LevelData& level): GameObject(nullptr) {
         addChild("SpawnPoint" + std::to_string(i), new SpawnPoint(level.duckSpawnPoints[i]));
 }
 
-std::list<Vector2> Level::status() const {
-    std::list<Vector2> blockPositions;
-    for (const auto& block: terrainBlocks) blockPositions.push_back(block->position());
+std::list<SizedObjectData> Level::status() const {
+    std::list<SizedObjectData> blockPositions;
+    for (const auto& block: terrainBlocks) blockPositions.push_back(block->status());
     return blockPositions;
 }
