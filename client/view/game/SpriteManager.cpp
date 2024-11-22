@@ -1,7 +1,6 @@
 #include "SpriteManager.h"
 
 #define DEFAULT_SCALE 2.5f
-#define DEFAULT_OFFSET_Y 200
 
 #define SPRITE_IDLE 0
 #define FEATHERS_IDLE1_ROW 0
@@ -28,17 +27,13 @@
 #define WEAPON true
 #define EFFECTS true
 
-#define OFFSET_RIGHT 3
-#define OFFSET_LEFT 3
-#define OFFSET_Y 4
 #define LIMIT_FRAMES 5
 
 #define ROW_WEAPON 3
 #define COL_WEAPON 0
 
 SpriteManager::SpriteManager(
-        const char* path1, const char* path2, SDL2pp::Renderer& renderer,
-        TextureManager& textureManager /*, int& window_width, int& window_height*/):
+        const char* path1, const char* path2, SDL2pp::Renderer& renderer /*, int& window_width, int& window_height*/):
         path1(path1),
         path2(path2),
         scale(DEFAULT_SCALE),
@@ -52,7 +47,7 @@ SpriteManager::SpriteManager(
         hasChestplate(true),
         shooting(true),
         gunEquipped(GunID::CowboyPistol),
-        spritesheet(std::make_unique<Spritesheet>(path1, path2, renderer, textureManager)),
+        spritesheet(std::make_unique<Spritesheet>(path1, path2, renderer)),
         weaponSpriteManager(std::make_unique<WeaponSpriteManager>()),
         frame(0),
         flappingFrame(0),
@@ -130,7 +125,7 @@ void SpriteManager::negateFlag(bool flag, bool& flagToNegate) {
 
 void SpriteManager::draw(int col, int row, const DuckState& state) {
     drawMainSprite(col, row);
-    bool hasWeapon = gunEquipped != GunID::NONE;
+    bool hasWeapon = false;
 
     if (hasChestplate)
         drawChestplate(col, row);
@@ -139,6 +134,7 @@ void SpriteManager::draw(int col, int row, const DuckState& state) {
     if (gunEquipped != GunID::NONE) {
         SDL2pp::Rect position = calculateBasePosition();
         weaponSpriteManager->drawWeapon(spritesheet.get(), position, flip, scale, state);
+        hasWeapon = true;
     }
     drawFeathers(col, row, hasWeapon);
 }
@@ -158,7 +154,7 @@ void SpriteManager::drawFeathers(int col, int row, bool hasWeapon) {
         SDL2pp::Rect position = getPosition(FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET);
         spritesheet->drawSelectedSprite(position, flip, FEATHER);
 
-    } else if (inAir || flapping) {
+    } else if (flip || inAir || flapping) {
         if (hasWeapon)
             spritesheet->selectSprite(COL_WEAPON, ROW_WEAPON, FEATHER);
         else
@@ -192,7 +188,7 @@ SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather, boo
         adjustForFeathers(position, isRightFeather);
     } else if (isChestplate) {
         if (frame == 0) {
-            position.y += (spritesheet->getClipHeight() / 2) * scale / DEFAULT_SCALE;
+            position.y += (4 * scale / DEFAULT_SCALE);
         }
     } else if (isHelmet) {
         adjustForHelmet(position);
@@ -201,37 +197,35 @@ SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather, boo
 }
 
 SDL2pp::Rect SpriteManager::calculateBasePosition() {
-    //int spriteWidth = spritesheet->getClipWidth();
-    //int spriteHeight = spritesheet->getClipHeight();
-    return SDL2pp::Rect((m_position_x * 8 * scale) / DEFAULT_SCALE, (m_position_y * 8 * scale) / DEFAULT_SCALE, 8 * scale, 8 * scale);
+    return {static_cast<int>(m_position_x), static_cast<int>(m_position_y), static_cast<int>(2 * scale), static_cast<int>(2.875f * scale)};
 }
 
 void SpriteManager::adjustForFeathers(SDL2pp::Rect& position, bool isRightFeather) {
-    //int spriteWidth = spritesheet->getClipWidth();
-    //int spriteHeight = spritesheet->getClipHeight();
-
     if (isRightFeather) {
-        //position.x += (spriteWidth * 2 - OFFSET_RIGHT) * scale / DEFAULT_SCALE;
+        position.x += 8 * scale / DEFAULT_SCALE;
     } else {
-        //position.x += (spriteWidth / 2 + OFFSET_LEFT) * scale / DEFAULT_SCALE;
+        position.x += 4 * scale / DEFAULT_SCALE;
     }
     if (crouching)
-        position.y += 48 * scale / DEFAULT_SCALE;
-    //else
-        //position.y = (position.y * 8 * scale) / DEFAULT_SCALE;
-            //(spriteHeight * 2 + OFFSET_Y) * scale / DEFAULT_SCALE;
-    position.w = 16 * scale / DEFAULT_SCALE;
+        position.y += 12 * scale / DEFAULT_SCALE;
+    else
+        position.y += 10 * scale / DEFAULT_SCALE;
+
+    position.w = 8 * scale / DEFAULT_SCALE;
+    position.h = 8 * scale / DEFAULT_SCALE;
 }
 
 void SpriteManager::adjustForHelmet(SDL2pp::Rect& position) {
-    if (flip)
-        position.x -= /*frame*/ 2 * scale / DEFAULT_SCALE;
-    else
-        position.x += /*frame*/ 2 * scale / DEFAULT_SCALE;
-    if (crouching)
-        position.y += 3 * scale / DEFAULT_SCALE;
-    else
-        position.y -= 14 * scale / DEFAULT_SCALE;
+    if (flip) {
+        position.x -= 0.5 * scale / DEFAULT_SCALE;
+    } else {
+        position.x += 0.5 * scale / DEFAULT_SCALE;
+
+    } if (crouching) {
+        position.y += 0.3 * scale / DEFAULT_SCALE;
+    }else {
+        position.y -= 3.5 * scale / DEFAULT_SCALE;
+    }
 }
 
 void SpriteManager::setScale(float newScale) { scale = newScale; }

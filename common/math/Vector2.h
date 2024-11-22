@@ -247,6 +247,12 @@ public:
     void swapY(Vector2& other);
 
     /**
+     * Return the vector with its coordinates set to its absolute values
+     * @return A vector with its coordinates set to its absolute values
+     */
+    Vector2 abs() const;
+
+    /**
      * Get the result of scaling the vector by the given scalar
      * @param scalar The scalar to multiply the vector by
      * @return The scaled vector

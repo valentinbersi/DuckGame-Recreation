@@ -40,6 +40,6 @@ void GameStatus::send([[maybe_unused]] ServerSendProtocol& serverProtocol) {
 
     serverProtocol.sendLen(blockPositions.size());
     for (const auto& blockPosition: blockPositions) {
-        serverProtocol.sendVector2(blockPosition);
+        serverProtocol.sendBlock(blockPosition);
     }
 }

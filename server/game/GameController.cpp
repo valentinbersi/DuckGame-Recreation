@@ -113,7 +113,7 @@ void GameController::loadLevel(const LevelData& level) {
 
 GameStatus GameController::status() const {
     GameStatus status;
-    status.blockPositions = std::move(level->status());
+    status.blockPositions = level->status();
     for (const auto& [_, player]: players) status.ducks.push_back(player->status());
     return status;
 }

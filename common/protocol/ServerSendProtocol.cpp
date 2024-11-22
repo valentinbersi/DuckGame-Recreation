@@ -14,13 +14,20 @@ void ServerSendProtocol::sendVector2(const Vector2& vector) {
     sendInt(Math::floatToInteger(vector.y()));
 }
 
+void ServerSendProtocol::sendRectangle(const Rectangle& rectangle) {
+    sendVector2(rectangle.position());
+    sendVector2(rectangle.size());
+}
+
 void ServerSendProtocol::sendDuckData(const DuckData& duckData) {
     sendByte(static_cast<unsigned char>(duckData.duckID));
     sendByte(duckData.life);
     sendByte(static_cast<unsigned char>(duckData.gunID));
     sendShort(static_cast<u16>(duckData.extraData.to_ulong()));
-    sendVector2(duckData.position);
+    sendVector2(duckData.rectangle.center());
 }
+
+void ServerSendProtocol::sendBlock(const SizedObjectData& objData) { sendRectangle(objData.rectangle); }
 
 void ServerSendProtocol::sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers) {
     sendShort(matchID);

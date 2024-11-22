@@ -15,7 +15,7 @@
 
 #define DEFAULT_LIFE 10
 #define DEFAULT_FLAGS 0
-#define DEFAULT_SPEED 20
+#define DEFAULT_SPEED 300
 
 /**
  * Macro for easier event handling
@@ -27,7 +27,7 @@
                                                                     Function)
 
 Player::Player(const DuckID id):
-        PhysicsObject(nullptr, {30, 0}, 1, 2, 2, 3, Gravity::Enabled),
+        PhysicsObject(nullptr, {700, 450}, 1, 2, 2, 3, Gravity::Disabled),
         id(id),
         life(DEFAULT_LIFE),
         flags(DEFAULT_FLAGS),
@@ -84,8 +84,8 @@ void Player::update([[maybe_unused]] const float delta) {
         _velocity += Vector2(0, -10);
     }
 
-    if (!_onGround)
-        flags |= DuckData::IN_AIR;
+    if (!_onGround){}
+        //flags |= DuckData::IN_AIR;
 }
 
 DuckData Player::status() { return {globalPosition(), id, life, GunID::Ak47, flags}; }

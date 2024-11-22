@@ -17,8 +17,7 @@ class SpriteManager {
 
 public:
     // Constructor
-    SpriteManager(const char* path1, const char* path2, SDL2pp::Renderer& renderer,
-                  TextureManager& textureManager /*, int& window_width, int& window_height*/);
+    SpriteManager(const char* path1, const char* path2, SDL2pp::Renderer& renderer /*, int& window_width, int& window_height*/);
 
     // Destructor
     ~SpriteManager() = default;

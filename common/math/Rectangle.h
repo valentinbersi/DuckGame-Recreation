@@ -7,15 +7,15 @@
 #include "Vector2.h"
 
 class Rectangle final {
-    Vector2 position;
-    Vector2 size;
+    Vector2 _position;
+    Vector2 _size;
 
 public:
     Rectangle() = delete;
-    Rectangle(const Rectangle& other) = delete;
-    Rectangle& operator=(const Rectangle& other) = delete;
-    Rectangle(Rectangle&& other) noexcept = delete;
-    Rectangle& operator=(Rectangle&& other) noexcept = delete;
+    Rectangle(const Rectangle& other);
+    Rectangle& operator=(const Rectangle& other);
+    Rectangle(Rectangle&& other) noexcept;
+    Rectangle& operator=(Rectangle&& other) noexcept;
     ~Rectangle() = default;
 
     /**
@@ -32,6 +32,38 @@ public:
      * @param size The size of the rectangle
      */
     Rectangle(Vector2 position, Vector2 size);
+
+    /**
+     * Get the position of the rectangle
+     * @return the position of the rectangle
+     */
+    Vector2 position() const;
+
+    /**
+     * Set the position of the rectangle
+     * @param position the new position
+     * @return a reference to this rectangle
+     */
+    Rectangle& setPosition(Vector2 position);
+
+    /**
+     * Get the size of the rectangle
+     * @return the size of the rectangle
+     */
+    Vector2 size() const;
+
+    /**
+     * Set the size of the rectangle
+     * @param size the new size
+     * @return a reference to this rectangle
+     */
+    Rectangle& setSize(Vector2 size);
+
+    /**
+     * Get the center of the rectangle
+     * @return the center of the rectangle
+     */
+    Vector2 center() const;
 
     /**
      * Set the center of the rectangle
