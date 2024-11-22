@@ -23,10 +23,10 @@ LevelScene::LevelScene(QObject* parent, std::vector<Object>& objects):
 }
 
 void LevelScene::deleteObjectAt(const QPointF& position) {
-    QList<QGraphicsItem*> itemsAtPosition = items(position);
+    QGraphicsItem* itemAtPosition = items(position).value(0);
 
-    for (auto* item: itemsAtPosition) {
-        auto* pixmapItem = dynamic_cast<QGraphicsPixmapItem*>(item);
+    if (itemAtPosition) {
+        auto* pixmapItem = dynamic_cast<QGraphicsPixmapItem*>(itemAtPosition);
         if (pixmapItem) {
             QVariant objectData = pixmapItem->data(0);
             if (objectData.isValid()) {
@@ -41,12 +41,11 @@ void LevelScene::deleteObjectAt(const QPointF& position) {
 
             removeItem(pixmapItem);
             delete pixmapItem;
-            break;
         }
     }
 }
 
-bool LevelScene::enoughDucks() const { return ducksCount >= 1; }
+bool LevelScene::enoughDucks() const { return ducksCount == MIN_DUCKS; }
 
 bool LevelScene::isEmptyPosition(QRectF itemRect) {
     for (QGraphicsItem* currentItem : items()) {
@@ -54,7 +53,6 @@ bool LevelScene::isEmptyPosition(QRectF itemRect) {
             continue;
 
         QRectF currentItemRect = currentItem->sceneBoundingRect();
-        qDebug() << "Comparo" << itemRect << "con" << currentItemRect;
         // el +- 0.5 es por un borde invisible que el QT agrega en los Pixmap
         if (!(itemRect.right() <= currentItemRect.left() + 0.5 || itemRect.left() >= currentItemRect.right() - 0.5 ||
               itemRect.bottom() <= currentItemRect.top() + 0.5 || itemRect.top() >= currentItemRect.bottom() - 0.5 )) {
@@ -179,10 +177,6 @@ void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
         }
 
         selectedItem->setPos(itemPosAligned);
-
-//        itemPos = selectedItem->pos();
-//        Object objectMoved = selectedItem->data(0).value<Object>();
-//        objectMoved.setCenterPosition(QPointF(int(itemPos.x()) / PIXEL_SIZE, int(itemPos.y()) / PIXEL_SIZE), true);
 
         auto it = objectMap.find(selectedItem);
         if (it != objectMap.end() && it.value()) {
