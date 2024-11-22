@@ -33,8 +33,8 @@
 
 
 Player::Player(const DuckID id):
-        PhysicsObject(nullptr, {700, 450}, Layer::Player, Layer::Wall, PLAYER_DIMENSIONS,
-                      Gravity::Disabled),
+        PhysicsObject(nullptr, {30, 0}, Layer::Player, Layer::Wall, PLAYER_DIMENSIONS,
+                      Gravity::Enabled),
         id(id),
         life(DEFAULT_LIFE),
         flags(DEFAULT_FLAGS),
@@ -46,10 +46,10 @@ Player::Player(const DuckID id):
     input.addAction(CROUCH);
     input.addAction(JUMP);
     input.addAction(INTERACT);
-    Area* itemDetector = new Area(nullptr, Vector2::ZERO, 0, Layer::Item, PLAYER_DIMENSIONS);
+    const auto itemDetector = new Area(nullptr, Vector2::ZERO, 0, Layer::Item, PLAYER_DIMENSIONS);
     itemDetector->connect("Collision", eventHandler(&Player::onItemCollision, CollisionObject*));
     addChild("ItemDetector", itemDetector);
-    addChild("Arma", weapon);
+    // addChild("Arma", weapon);
 }
 
 void Player::onItemCollision(CollisionObject* item) {
