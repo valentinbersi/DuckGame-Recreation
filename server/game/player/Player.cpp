@@ -35,7 +35,8 @@ Player::Player(const DuckID id):
         id(id),
         life(DEFAULT_LIFE),
         flags(DEFAULT_FLAGS),
-        speed(DEFAULT_SPEED)
+        speed(DEFAULT_SPEED),
+        weapon(nullptr)
 /* canKeepJumping(false)*/ {
     input.addAction(MOVE_RIGHT);
     input.addAction(MOVE_LEFT);
@@ -45,6 +46,7 @@ Player::Player(const DuckID id):
     Area* itemDetector = new Area(nullptr, Vector2::ZERO, 0, Layer::Item, PLAYER_DIMENSIONS);
     itemDetector->connect("Collision", eventHandler(&Player::onItemCollision, CollisionObject*));
     addChild("ItemDetector", itemDetector);
+    addChild("Arma", weapon);
 }
 
 void Player::onItemCollision(CollisionObject* item) {

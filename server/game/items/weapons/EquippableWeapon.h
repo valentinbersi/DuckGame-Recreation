@@ -6,13 +6,21 @@ class EquippableWeapon: public GameObject {
 protected:
     u8 ammo;
     ItemID id;
+    bool firing;
+    float recoil;
+    float dispersion;
 
 public:
-    explicit EquippableWeapon(ItemID id);
+    EquippableWeapon();
+
+    explicit EquippableWeapon(ItemID id, u8 ammo, float recoil, float dispersion);
 
     ItemID getID() const;
 
-    virtual void actionate() = 0;
+    /**
+     * @return the recoil for the weapon to change player velocity.
+     */
+    virtual float actionate() = 0 ;
 
     virtual void deactionate() = 0;
 

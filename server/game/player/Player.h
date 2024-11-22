@@ -14,7 +14,7 @@ private:
     u16 flags;
     Input input;
     float speed;
-    std::unique_ptr<EquippableWeapon> weapon; 
+    EquippableWeapon* weapon; 
 
     /**
      * 

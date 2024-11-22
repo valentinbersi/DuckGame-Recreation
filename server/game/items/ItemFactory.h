@@ -18,5 +18,5 @@ public:
      * @param id
      * @return unique pointer to Created Item
      */
-    static std::unique_ptr<Item> createItem(ItemID id);
+    static std::unique_ptr<Item> createItem(const ItemID id);
 };
