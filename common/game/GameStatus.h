@@ -15,7 +15,7 @@ struct GameStatus final: ServerMessage {
     GameStatus& operator=(GameStatus&& other) noexcept;
 
     std::list<DuckData> ducks;
-    std::list<Vector2> blockPositions;
+    std::list<SizedObjectData> blockPositions;
 
     void send(ServerSendProtocol& serverProtocol) override;
 };

@@ -5,7 +5,7 @@
 class GameTimer: public GameObject {
     float timeout;
     float timeLeft;
-    bool started;
+    bool _started;
 
 public:
     /**
@@ -34,4 +34,9 @@ public:
      * Reset the timer
      */
     void reset();
+
+    /**
+     * Check if the timer has started
+     */
+    bool started() const;
 };

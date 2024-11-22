@@ -5,6 +5,7 @@
 
 #include "GameObject.h"
 #include "LevelData.h"
+#include "SizedObjectData.h"
 #include "TerrainBlock.h"
 
 class Level final: public GameObject {
@@ -20,5 +21,5 @@ public:
      * Get the position of all the blocks in the level
      * @return The positions of all the blocks in the level
      */
-    std::list<Vector2> status() const;
+    std::list<SizedObjectData> status() const;
 };

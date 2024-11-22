@@ -1,4 +1,6 @@
 #pragma once
+
+#include "SizedObjectData.h"
 #include "StaticObject.h"
 
 /**
@@ -10,4 +12,6 @@ public:
 
     void start() override;
     void update(float delta) override;
+
+    SizedObjectData status();
 };
