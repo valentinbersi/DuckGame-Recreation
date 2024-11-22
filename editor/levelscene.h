@@ -12,8 +12,11 @@ class LevelScene: public QGraphicsScene {
 private:
     int gridWidth;
     int gridHeight;
-    QGraphicsItem* selectedItem;
     std::vector<Object>& objects;
+
+    QGraphicsItem* selectedItem;
+    QPointF originalItemPos;
+
     int ducksCount;
     ObjectType objectTypeToAdd;
 
@@ -23,8 +26,7 @@ public:
 
     void deleteObjectAt(const QPointF& position);
     void addNewObject(ObjectType type, QPointF pos);
-    void addObjectInMap(const Object& object);
-
+    void addObjectInMap(const Object& object, bool addInList);
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
@@ -44,6 +46,8 @@ public:
     void drawBackground(QPainter* painter, const QRectF& rect) override;
     // void zoom(double factor);
     bool enoughDucks() const;
+    bool isEmptyPosition(QRectF itemRect);
+
 
 signals:
     void addingObjectChanged(ObjectType type);

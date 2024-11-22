@@ -7,13 +7,12 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
 #include <QMimeData>
-#include <cmath>
 #include <vector>
 
 LevelScene::LevelScene(QObject* parent, std::vector<Object>& objects):
         QGraphicsScene(parent),
-        selectedItem(nullptr),
         objects(objects),
+        selectedItem(nullptr),
         ducksCount(0),
         objectTypeToAdd(UNKNOWN) {
     gridWidth = DEFAULT_WIDTH * PIXEL_SIZE;
@@ -29,7 +28,7 @@ void LevelScene::deleteObjectAt(const QPointF& position) {
         if (pixmapItem) {
             QVariant objectData = pixmapItem->data(0);
             if (objectData.isValid()) {
-                Object* object = objectData.value<Object*>();
+                auto* object = objectData.value<Object*>();
                 if (object) {
                     if (object->type == DUCK)
                         ducksCount--;
@@ -51,23 +50,43 @@ void LevelScene::deleteObjectAt(const QPointF& position) {
 
 bool LevelScene::enoughDucks() const { return ducksCount >= 1; }
 
-void LevelScene::addObjectInMap(const Object& object) {
-    if (object.type == DUCK && ducksCount >= 4)
-        return;
+bool LevelScene::isEmptyPosition(QRectF itemRect) {
+    for (QGraphicsItem* currentItem : items()) {
+        if (selectedItem == currentItem)
+            continue;
+        QRectF currentItemRect = currentItem->sceneBoundingRect();
+        qDebug() << "Comparacion de Rectangulos"
+                << "item Movido: " << itemRect
+                << "current item: " << currentItemRect;
+
+                // el +- 0.5 es por un borde invisible que el QT agrega en los Pixmap
+        if (!(itemRect.right() <= currentItemRect.left() + 0.5 || itemRect.left() >= currentItemRect.right() - 0.5 ||
+              itemRect.bottom() <= currentItemRect.top() + 0.5 || itemRect.top() >= currentItemRect.bottom() - 0.5 )) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void LevelScene::addObjectInMap(const Object& object, bool addInList) {
+    if (object.type == DUCK && ducksCount >= 4) return;
+
+    QPointF topLeftPos = object.getBoundingPos();
+    QPointF itemPos(int(topLeftPos.x()) * PIXEL_SIZE, int(topLeftPos.y()) * PIXEL_SIZE);
+    QSizeF itemSize(object.size.width() * PIXEL_SIZE, object.size.height() * PIXEL_SIZE);
+    QRectF itemRect(itemPos, itemSize);
+
+    if (!isEmptyPosition(itemRect)) return;
 
     auto* item = new QGraphicsPixmapItem(object.icon);
     item->setFlag(QGraphicsItem::ItemIsMovable);
     item->setFlag(QGraphicsItem::ItemIsSelectable);
-
-    QPointF topLeftPos = object.getBoundingPos();
-    int x_item = (int(topLeftPos.x()) * PIXEL_SIZE);
-    int y_item = (int(topLeftPos.y()) * PIXEL_SIZE);
-    item->setPos(x_item, y_item);
-    qDebug() << item->pixmap().height() << item->pixmap().width();
+    item->setPos(itemPos);
     addItem(item);
+
     item->setData(0, QVariant::fromValue(object));
-    if (object.type == DUCK)
-        ducksCount++;
+
+    if (addInList) objects.push_back(object);
 
     QRectF objectRect(item->scenePos(),
                       QSizeF(object.size.width() * PIXEL_SIZE, object.size.height() * PIXEL_SIZE));
@@ -76,8 +95,8 @@ void LevelScene::addObjectInMap(const Object& object) {
     if (!currentRect.contains(objectRect)) {
         QRectF expandedRect = currentRect.united(objectRect);
         setSceneRect(expandedRect);
-        gridWidth = expandedRect.width();
-        gridHeight = expandedRect.height();
+        gridWidth = (int)expandedRect.width();
+        gridHeight = (int)expandedRect.height();
         emit resizeView();
     }
 }
@@ -93,16 +112,15 @@ void LevelScene::loadMap(int mapWidth, int mapHeight) {
     gridWidth = mapWidth * PIXEL_SIZE;
     gridHeight = mapHeight * PIXEL_SIZE;
     for (const auto& object: objects) {
-        addObjectInMap(object);
+        addObjectInMap(object, false);
     }
 }
 
 void LevelScene::addNewObject(ObjectType type, QPointF pos) {
     Object newObject(type);
-    newObject.setCenterPosition(QPointF((int)(pos.x()) / PIXEL_SIZE + newObject.size.width() / 2,
-                                        (int)(pos.y()) / PIXEL_SIZE + newObject.size.height() / 2));
-    addObjectInMap(newObject);
-    objects.push_back(newObject);
+    newObject.setCenterPosition(QPointF(pos.x() / PIXEL_SIZE, pos.y() / PIXEL_SIZE), true);
+    addObjectInMap(newObject, true);
+    if (newObject.type == DUCK) ducksCount++;
 
     auto* itemAction = qobject_cast<QAction*>(sender());
     if (itemAction) {
@@ -125,6 +143,8 @@ void LevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     QGraphicsItem* item = itemAt(event->scenePos(), QTransform());
     if (item && item->flags() & QGraphicsItem::ItemIsMovable) {
         selectedItem = item;
+        originalItemPos = selectedItem->pos();
+        qDebug() << "Pos del item seleccionado:" << originalItemPos;
     }
 
     QGraphicsScene::mousePressEvent(event);
@@ -140,18 +160,31 @@ void LevelScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-    if (selectedItem) {
-        QPointF pos = selectedItem->pos();
-        int x = int(pos.x()) / PIXEL_SIZE * PIXEL_SIZE;
-        int y = int(pos.y()) / PIXEL_SIZE * PIXEL_SIZE;
-        selectedItem->setPos(x, y);
 
-        auto* obj = selectedItem->data(0).value<Object*>();
-        if (obj) {
-            QPointF centerPos((x + (obj->size.width() * PIXEL_SIZE) / 2) / PIXEL_SIZE,
-                              (y + (obj->size.height() * PIXEL_SIZE) / 2) / PIXEL_SIZE);
-            obj->setCenterPosition(centerPos);
+    if (selectedItem) {
+        qDebug() << "Mouse soltado en: " << event->scenePos();
+        QPointF itemPos = selectedItem->pos();
+        qDebug() << "itemPos:" << itemPos << " originalItemPos:" << originalItemPos;
+        QPointF itemPosAligned(int(itemPos.x()) / PIXEL_SIZE * PIXEL_SIZE,
+                               int(itemPos.y()) / PIXEL_SIZE * PIXEL_SIZE);
+        QRectF itemRect(itemPosAligned, selectedItem->boundingRect().size() - QSizeF(1,1));
+        qDebug() << "selectedItem->boundingRect:" << selectedItem->boundingRect()
+                 << "selectedItem->sceneBoundingRect:" << selectedItem->sceneBoundingRect();
+        qDebug() << itemRect;
+
+        if (!isEmptyPosition(itemRect)){
+            selectedItem->setPos(originalItemPos);
+            selectedItem = nullptr;
+            return;
         }
+
+        selectedItem->setPos(itemPosAligned);
+        qDebug() << "Pos item: " << selectedItem->pos();
+
+        itemPos = selectedItem->pos();
+        Object objectMoved = selectedItem->data(0).value<Object>();
+        objectMoved.setCenterPosition(QPointF(itemPos.x() / PIXEL_SIZE, itemPos.y() / PIXEL_SIZE), true);
+        qDebug() << "Pos del objeto: " << objectMoved.centerPos;
 
         selectedItem = nullptr;
     }
