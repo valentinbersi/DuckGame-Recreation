@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWin
     connect(ui->actionSaveMap, &QAction::triggered, this, [this]() {
         if (!scene->enoughDucks()) {
             QMessageBox::warning(this, "Error",
-                                 "El mapa debe tener al menos un pato antes de guardarlo.");
+                                 "El mapa debe tener 4 spawn de patos.");
             return;
         }
         MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), scene->getMapWidth(),
@@ -68,7 +68,6 @@ void MainWindow::setActionButtons() {
 void MainWindow::onSceneResize() {
     QRectF sceneRect = scene->sceneRect();
     ui->graphicsView->setSceneRect(0, 0, sceneRect.width() * 4, sceneRect.height() * 4);
-    qDebug() << "GV width: " << sceneRect.width() << ", GC height: " << sceneRect.height();
 }
 
 void MainWindow::wheelEvent(QWheelEvent* event) {
