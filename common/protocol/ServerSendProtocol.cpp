@@ -27,7 +27,9 @@ void ServerSendProtocol::sendDuckData(const DuckData& duckData) {
     sendVector2(duckData.rectangle.center());
 }
 
-void ServerSendProtocol::sendBlock(const SizedObjectData& objData) { sendRectangle(objData.rectangle); }
+void ServerSendProtocol::sendBlock(const SizedObjectData& objData) {
+    sendRectangle(objData.rectangle);
+}
 
 void ServerSendProtocol::sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers) {
     sendShort(matchID);

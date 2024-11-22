@@ -3,7 +3,7 @@
 #include "GameObject2DData.h"
 #include "Rectangle.h"
 
-struct SizedObjectData : GameObject2DData {
+struct SizedObjectData: GameObject2DData {
     Rectangle rectangle;
 
     SizedObjectData() = delete;
@@ -27,4 +27,3 @@ struct SizedObjectData : GameObject2DData {
      */
     explicit SizedObjectData(const Rectangle& rectangle);
 };
-

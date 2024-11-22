@@ -1,7 +1,7 @@
 map_name: xd
-background: background_image.png
-map_width: 21879
-map_height: 1629121392
+background: forest-night.png
+map_width: 100
+map_height: 80
 objects:
   - type: PLATFORM
     x: 22
@@ -219,3 +219,24 @@ objects:
   - type: DUCK
     x: 32
     y: 13
+  - type: PLATFORM
+    x: 66
+    y: 17
+  - type: PLATFORM
+    x: 7
+    y: 17
+  - type: PLATFORM
+    x: 20
+    y: 25
+  - type: PLATFORM
+    x: 41
+    y: 23
+  - type: PLATFORM
+    x: 64
+    y: 29
+  - type: PLATFORM
+    x: 26.899999999999999
+    y: 31.699999999999999
+  - type: PLATFORM
+    x: 40.799999999999997
+    y: 31.300000000000001

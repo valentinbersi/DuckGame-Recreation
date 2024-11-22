@@ -1,5 +1,7 @@
 #include "SizedObjectData.h"
 
+#include <utility>
+
 SizedObjectData::SizedObjectData(const SizedObjectData& other) = default;
 
 SizedObjectData& SizedObjectData::operator=(const SizedObjectData& other) {
@@ -11,7 +13,8 @@ SizedObjectData& SizedObjectData::operator=(const SizedObjectData& other) {
     return *this;
 }
 
-SizedObjectData::SizedObjectData(SizedObjectData&& other) noexcept: GameObject2DData(std::move(other)), rectangle(std::move(other.rectangle)) {}
+SizedObjectData::SizedObjectData(SizedObjectData&& other) noexcept:
+        GameObject2DData(std::move(other)), rectangle(std::move(other.rectangle)) {}
 
 SizedObjectData& SizedObjectData::operator=(SizedObjectData&& other) noexcept {
     if (this == &other)
@@ -24,7 +27,8 @@ SizedObjectData& SizedObjectData::operator=(SizedObjectData&& other) noexcept {
 
 SizedObjectData::~SizedObjectData() = default;
 
-SizedObjectData::SizedObjectData(const Vector2& position, float width, float height): GameObject2DData(position), rectangle(position, width, height) {}
+SizedObjectData::SizedObjectData(const Vector2& position, float width, float height):
+        GameObject2DData(position), rectangle(position, width, height) {}
 
-SizedObjectData::SizedObjectData(const Rectangle& rectangle): GameObject2DData(rectangle.center()), rectangle(rectangle) {}
-
+SizedObjectData::SizedObjectData(const Rectangle& rectangle):
+        GameObject2DData(rectangle.center()), rectangle(rectangle) {}

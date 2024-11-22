@@ -4,11 +4,12 @@
 #include <string>
 #include <unordered_map>
 
+#include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
 #include "DuckData.h"
 #include "DuckState.h"
-#include "GunID.h"
+#include "ItemID.h"
 #include "Spritesheet.h"
 #include "WeaponSpriteManager.h"
 
@@ -17,7 +18,8 @@ class SpriteManager {
 
 public:
     // Constructor
-    SpriteManager(const char* path1, const char* path2, SDL2pp::Renderer& renderer /*, int& window_width, int& window_height*/);
+    SpriteManager(const char* path1, const char* path2,
+                  SDL2pp::Renderer& renderer /*, int& window_width, int& window_height*/);
 
     // Destructor
     ~SpriteManager() = default;
@@ -52,7 +54,7 @@ private:
     bool hasHelmet;
     bool hasChestplate;
     bool shooting;
-    GunID gunEquipped;
+    ItemID gunEquipped;
     std::unique_ptr<Spritesheet> spritesheet;
     std::unique_ptr<WeaponSpriteManager> weaponSpriteManager;
     int frame;

@@ -9,9 +9,9 @@
 #include <QScrollBar>
 #include <QWheelEvent>
 
+#include "EditorConstants.h"
 #include "MapManager.h"
 #include "Object.h"
-#include "ObjectConstants.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -31,8 +31,8 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWin
                                  "El mapa debe tener al menos un pato antes de guardarlo.");
             return;
         }
-        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), mapWidth,
-                              mapHeight);
+        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
+                              scene->getMapWidth(), scene->getMapHeight());
     });
 
     connect(ui->actionNewMap, &QAction::triggered, this, &MainWindow::on_actionNewMap_triggered);
@@ -71,14 +71,6 @@ void MainWindow::onSceneResize() {
     qDebug() << "GV width: " << sceneRect.width() << ", GC height: " << sceneRect.height();
 }
 
-// void MainWindow::resizeEvent(QResizeEvent* event) {
-//     qDebug() << "resizeEvent";
-//     QMainWindow::resizeEvent(event);
-//     QRectF sceneRect = scene->sceneRect();
-//     ui->graphicsView->setSceneRect(0, 0, sceneRect.width() * 2, sceneRect.height() * 2);
-//     qDebug() << "GV width: " << sceneRect.width() << ", GC height: " << sceneRect.height();
-// }
-
 void MainWindow::wheelEvent(QWheelEvent* event) {
     if (event->modifiers() & Qt::ControlModifier) {
         qreal zoomFactor = 1.15;
@@ -86,11 +78,10 @@ void MainWindow::wheelEvent(QWheelEvent* event) {
         QPointF viewCenter =
                 ui->graphicsView->mapToScene(ui->graphicsView->viewport()->rect().center());
 
-        if (event->angleDelta().y() > 0) {
+        if (event->angleDelta().y() > 0)
             ui->graphicsView->scale(zoomFactor, zoomFactor);
-        } else {
+        else
             ui->graphicsView->scale(1 / zoomFactor, 1 / zoomFactor);
-        }
 
         QPointF newCenter = ui->graphicsView->mapFromScene(viewCenter);
         ui->graphicsView->ensureVisible(newCenter.x(), newCenter.y(), 100, 100, 1.0);
@@ -102,39 +93,32 @@ void MainWindow::wheelEvent(QWheelEvent* event) {
 }
 
 void MainWindow::on_actionNewMap_triggered() {
-    if (!objects.empty()) {
-        QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(
-                this, "Confirmación",
-                "Tenes un mapa abierto. ¿Deseas guardarlo antes de abrir uno nuevo?",
-                QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-        if (reply == QMessageBox::Yes) {
-            MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), mapWidth,
-                                  mapHeight);
-        } else if (reply == QMessageBox::Cancel) {
-            return;
-        }
-    }
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(
+            this, "Confirmación",
+            "Tenes un mapa abierto. ¿Deseas guardarlo antes de abrir uno nuevo?",
+            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+    if (reply == QMessageBox::Cancel)
+        return;
+    else if (reply == QMessageBox::Yes)
+        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
+                              scene->getMapWidth(), scene->getMapHeight());
     scene->clearAll();
-    // scene->newMap();
     QMessageBox::information(this, "Nuevo Mapa", "Se ha creado un nuevo mapa.");
 }
 
 void MainWindow::on_actionEditMap_triggered() {
-    if (!objects.empty()) {
-        QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(
-                this, "Confirmar",
-                "¿Deseas guardar los cambios del mapa actual antes de importar uno nuevo?",
-                QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(
+            this, "Confirmar",
+            "¿Deseas guardar los cambios del mapa actual antes de importar uno nuevo?",
+            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 
-        if (reply == QMessageBox::Yes) {
-            MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), mapWidth,
-                                  mapHeight);
-        } else if (reply == QMessageBox::Cancel) {
-            return;
-        }
-    }
+    if (reply == QMessageBox::Yes)
+        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
+                              scene->getMapWidth(), scene->getMapHeight());
+    else if (reply == QMessageBox::Cancel)
+        return;
 
     QString fileName = QFileDialog::getOpenFileName(this, "Seleccionar Mapa", "../maps/",
                                                     "Archivos YAML (*.yaml)");

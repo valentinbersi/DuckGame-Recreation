@@ -1,5 +1,7 @@
 #include "WeaponSpriteManager.h"
 
+#include <string>
+
 #include "Spritesheet.h"
 
 #define DEFAULT_SCALE 2.5f
@@ -9,45 +11,47 @@
 
 WeaponSpriteManager::WeaponSpriteManager() {}
 
-void WeaponSpriteManager::drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale, const DuckState& state) {
+void WeaponSpriteManager::drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip,
+                                     float scale, const DuckState& state) {
     draw(spritesheet, position, flip, scale, state);
 
     if (state.isShooting) {
         spritesheet->selectSprite(0, 0, true);
 
         switch (state.gunEquipped) {
-            case GunID::CowboyPistol:
-            case GunID::Magnum:
+            case ItemID::CowboyPistol:
+            case ItemID::Magnum:
                 drawEffect1(spritesheet, position, flip, scale);
                 break;
-            case GunID::Ak47:
-            case GunID::Sniper:
-            case GunID::Shotgun:
+            case ItemID::Ak47:
+            case ItemID::Sniper:
+            case ItemID::Shotgun:
                 drawEffect2(spritesheet, position, flip, scale);
                 break;
-            case GunID::LaserRifle:
+            case ItemID::LaserRifle:
                 drawLaserFlare(spritesheet, position, flip, scale);
                 break;
-            case GunID::PewPewLaser:
+            case ItemID::PewPewLaser:
                 drawPlasma(spritesheet, position, flip, scale);
                 break;
 
-            case GunID::Grenade:
+            case ItemID::Grenade:
                 // draw pistol
-                    break;
-            case GunID::Banana:
+                break;
+            case ItemID::Banana:
                 // draw shotgun
-                    break;
-            case GunID::DuelPistol:
+                break;
+            case ItemID::DuelPistol:
                 // draw DuelPistol
                 break;
             default:
-                    break;
+                break;
         }
     }
 }
 
-void WeaponSpriteManager::draw(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale, const DuckState& state) {
+void WeaponSpriteManager::draw(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip,
+                               float scale, const DuckState& state) {
     spritesheet->selectSprite(0, 0, false);
     if (flip)
         position.x -= 3 * scale / DEFAULT_SCALE;
@@ -63,7 +67,8 @@ void WeaponSpriteManager::draw(Spritesheet* spritesheet, SDL2pp::Rect& position,
     spritesheet->drawWeapon(position, flip, path);
 }
 
-void WeaponSpriteManager::drawEffect1(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale) {
+void WeaponSpriteManager::drawEffect1(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip,
+                                      float scale) {
     if (flip)
         position.x -= 17 * scale / DEFAULT_SCALE;
     else
@@ -73,7 +78,8 @@ void WeaponSpriteManager::drawEffect1(Spritesheet* spritesheet, SDL2pp::Rect& po
     spritesheet->drawEffects(position, flip, EFFECT_PATH);
 }
 
-void WeaponSpriteManager::drawEffect2(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale) {
+void WeaponSpriteManager::drawEffect2(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip,
+                                      float scale) {
     if (flip)
         position.x -= 19 * scale / DEFAULT_SCALE;
     else
@@ -83,7 +89,8 @@ void WeaponSpriteManager::drawEffect2(Spritesheet* spritesheet, SDL2pp::Rect& po
     spritesheet->drawEffects(position, flip, EFFECT_PATH);
 }
 
-void WeaponSpriteManager::drawLaserFlare(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale) {
+void WeaponSpriteManager::drawLaserFlare(Spritesheet* spritesheet, SDL2pp::Rect& position,
+                                         bool flip, float scale) {
     if (flip)
         position.x -= 17 * scale / DEFAULT_SCALE;
     else
@@ -93,7 +100,8 @@ void WeaponSpriteManager::drawLaserFlare(Spritesheet* spritesheet, SDL2pp::Rect&
     spritesheet->drawEffects(position, flip, LASERFLARE_PATH);
 }
 
-void WeaponSpriteManager::drawPlasma(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale) {
+void WeaponSpriteManager::drawPlasma(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip,
+                                     float scale) {
     if (flip)
         position.x -= 17 * scale / DEFAULT_SCALE;
     else

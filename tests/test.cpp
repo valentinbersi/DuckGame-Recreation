@@ -77,7 +77,7 @@ TEST(ProtocolTest, LobbyToServerMultipleSends) {
 
 TEST(ProtocolTest, MultiLoobySend) {
     ListenerSocket skt("8080");
-    std::string a = "Player1";  
+    std::string a = "Player1";
     std::string b = "Player2";
     std::string c = "Player3";
     std::string d = "Player4";

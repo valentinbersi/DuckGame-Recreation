@@ -2,8 +2,8 @@
 
 #include <bitset>
 
+#include "ItemID.h"
 #include "SizedObjectData.h"
-#include "GunID.h"
 #include "Types.h"
 
 enum class DuckID : u8 { White = 0x0, Orange = 0x1, Yellow = 0x2, Grey = 0x3 };
@@ -16,7 +16,7 @@ struct DuckData final: SizedObjectData {
 
     DuckID duckID;
     u8 life;
-    GunID gunID;
+    ItemID gunID;
     std::bitset<NFLAGS> extraData;
 
     DuckData() = delete;
@@ -58,7 +58,8 @@ struct DuckData final: SizedObjectData {
      * @param gunID the gun the duck is holding
      * @param extraData actions the duck is performing and armor data
      */
-    DuckData(const Vector2& position, DuckID duckID, u8 life, GunID gunID, DuckFlag extraData);
+    DuckData(Vector2 position, DuckID duckID, u8 life, ItemID gunID, DuckFlag extraData);
+
 
     bool operator==(const DuckData& other) const;
 };

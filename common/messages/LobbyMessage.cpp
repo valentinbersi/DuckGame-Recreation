@@ -2,7 +2,7 @@
 
 LobbyMessage::LobbyMessage():
         ClientMessage(MessageType::Lobby),
-        request(),
+        request(LobbyRequest::NEWMATCH),
         playerCount(0),
         player1Name(" "),
         player2Name(" "),

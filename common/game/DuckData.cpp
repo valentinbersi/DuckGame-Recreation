@@ -39,7 +39,7 @@ DuckData& DuckData::operator=(DuckData&& other) noexcept {
 
 DuckData::~DuckData() = default;
 
-DuckData::DuckData(const Vector2& position, const DuckID duckID, const u8 life, const GunID gunID,
+DuckData::DuckData(Vector2 position, const DuckID duckID, const u8 life, const ItemID gunID,
                    const DuckFlag extraData):
         SizedObjectData(position, 2, 2.875f),
         duckID(duckID),
