@@ -1,4 +1,3 @@
-
 #include "Server.h"
 
 #include <iostream>
@@ -15,9 +14,7 @@ std::string Server::readInput() {
 
 int Server::run() noexcept {
     acceptor.start();
-    while (readInput() != CLOSE_SERVER) {
-        continue;
-    }
+    while (readInput() != CLOSE_SERVER) {}
     return EXIT_SUCCESS;
 }
 

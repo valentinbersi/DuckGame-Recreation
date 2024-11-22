@@ -1,0 +1,239 @@
+map_name: CAMARA
+background: forest-night.png
+map_width: 200
+map_height: 200
+objects:
+  - type: PLATFORM
+    x: 12
+    y: 14
+  - type: PLATFORM
+    x: 13
+    y: 16
+  - type: PLATFORM
+    x: 13
+    y: 16
+  - type: PLATFORM
+    x: 12
+    y: 16
+  - type: PLATFORM
+    x: 13
+    y: 18
+  - type: PLATFORM
+    x: 13
+    y: 19
+  - type: PLATFORM
+    x: 13
+    y: 18
+  - type: PLATFORM
+    x: 12
+    y: 18
+  - type: PLATFORM
+    x: 12
+    y: 20
+  - type: PLATFORM
+    x: 12
+    y: 22
+  - type: PLATFORM
+    x: 12
+    y: 24
+  - type: PLATFORM
+    x: 12
+    y: 27
+  - type: PLATFORM
+    x: 12
+    y: 26
+  - type: PLATFORM
+    x: 12
+    y: 28
+  - type: PLATFORM
+    x: 13
+    y: 30
+  - type: PLATFORM
+    x: 13
+    y: 30
+  - type: PLATFORM
+    x: 12
+    y: 30
+  - type: PLATFORM
+    x: 12
+    y: 32
+  - type: PLATFORM
+    x: 15
+    y: 32
+  - type: PLATFORM
+    x: 14
+    y: 32
+  - type: PLATFORM
+    x: 16
+    y: 32
+  - type: PLATFORM
+    x: 18
+    y: 32
+  - type: PLATFORM
+    x: 20
+    y: 32
+  - type: PLATFORM
+    x: 22
+    y: 32
+  - type: PLATFORM
+    x: 24
+    y: 32
+  - type: PLATFORM
+    x: 27
+    y: 32
+  - type: PLATFORM
+    x: 26
+    y: 32
+  - type: PLATFORM
+    x: 28
+    y: 32
+  - type: PLATFORM
+    x: 30
+    y: 32
+  - type: PLATFORM
+    x: 32
+    y: 32
+  - type: PLATFORM
+    x: 35
+    y: 32
+  - type: PLATFORM
+    x: 34
+    y: 32
+  - type: PLATFORM
+    x: 36
+    y: 32
+  - type: PLATFORM
+    x: 38
+    y: 32
+  - type: PLATFORM
+    x: 41
+    y: 32
+  - type: PLATFORM
+    x: 41
+    y: 32
+  - type: PLATFORM
+    x: 40
+    y: 32
+  - type: PLATFORM
+    x: 43
+    y: 32
+  - type: PLATFORM
+    x: 43
+    y: 32
+  - type: PLATFORM
+    x: 42
+    y: 32
+  - type: PLATFORM
+    x: 45
+    y: 32
+  - type: PLATFORM
+    x: 44
+    y: 33
+  - type: PLATFORM
+    x: 44
+    y: 32
+  - type: PLATFORM
+    x: 46
+    y: 32
+  - type: PLATFORM
+    x: 48
+    y: 32
+  - type: PLATFORM
+    x: 51
+    y: 32
+  - type: PLATFORM
+    x: 50
+    y: 32
+  - type: PLATFORM
+    x: 51
+    y: 30
+  - type: PLATFORM
+    x: 50
+    y: 32
+  - type: PLATFORM
+    x: 50
+    y: 30
+  - type: PLATFORM
+    x: 50
+    y: 28
+  - type: PLATFORM
+    x: 50
+    y: 26
+  - type: PLATFORM
+    x: 51
+    y: 24
+  - type: PLATFORM
+    x: 50
+    y: 24
+  - type: PLATFORM
+    x: 50
+    y: 22
+  - type: PLATFORM
+    x: 33
+    y: 30
+  - type: PLATFORM
+    x: 31
+    y: 30
+  - type: PLATFORM
+    x: 29
+    y: 30
+  - type: PLATFORM
+    x: 32
+    y: 28
+  - type: PLATFORM
+    x: 31
+    y: 28
+  - type: PLATFORM
+    x: 37
+    y: 19
+  - type: PLATFORM
+    x: 39
+    y: 27
+  - type: PLATFORM
+    x: 38
+    y: 27
+  - type: PLATFORM
+    x: 39
+    y: 26
+  - type: PLATFORM
+    x: 38
+    y: 25
+  - type: PLATFORM
+    x: 41
+    y: 25
+  - type: PLATFORM
+    x: 40
+    y: 25
+  - type: PLATFORM
+    x: 43
+    y: 25
+  - type: PLATFORM
+    x: 42
+    y: 25
+  - type: PLATFORM
+    x: 45
+    y: 25
+  - type: PLATFORM
+    x: 45
+    y: 25
+  - type: PLATFORM
+    x: 44
+    y: 26
+  - type: PLATFORM
+    x: 45
+    y: 25
+  - type: PLATFORM
+    x: 44
+    y: 25
+  - type: DUCK
+    x: 18
+    y: 12
+  - type: DUCK
+    x: 24
+    y: 12
+  - type: DUCK
+    x: 30
+    y: 12
+  - type: DUCK
+    x: 37
+    y: 13
