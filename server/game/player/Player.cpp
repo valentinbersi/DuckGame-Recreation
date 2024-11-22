@@ -15,7 +15,7 @@
 
 #define DEFAULT_LIFE 10
 #define DEFAULT_FLAGS 0
-#define DEFAULT_SPEED 300
+#define DEFAULT_SPEED 40
 
 /**
  * Macro for easier event handling
@@ -84,8 +84,8 @@ void Player::update([[maybe_unused]] const float delta) {
         _velocity += Vector2(0, -10);
     }
 
-    if (!_onGround){}
-        //flags |= DuckData::IN_AIR;
+    if (!_onGround) {}
+    // flags |= DuckData::IN_AIR;
 }
 
 DuckData Player::status() { return {globalPosition(), id, life, GunID::Ak47, flags}; }
