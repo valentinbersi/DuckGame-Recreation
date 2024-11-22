@@ -96,12 +96,6 @@ void LevelScene::addObjectInMap(const Object& object, bool addInList) {
     }
 }
 
-void LevelScene::newMap() {
-    clearAll();
-    gridWidth = DEFAULT_WIDTH * PIXEL_SIZE;
-    gridHeight = DEFAULT_HEIGHT * PIXEL_SIZE;
-}
-
 void LevelScene::loadMap(int mapWidth, int mapHeight) {
     setSceneRect(0, 0, mapWidth * PIXEL_SIZE, mapHeight * PIXEL_SIZE);
     gridWidth = mapWidth * PIXEL_SIZE;
