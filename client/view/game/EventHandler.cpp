@@ -4,7 +4,7 @@
 
 EventHandler::EventHandler(SDL2pp::Window& window, int& window_width, int& window_height,
                            bool& twoPlayersLocal, Communicator& communicator,
-                           std::list<std::unique_ptr<DuckData>>& ducks, Camera& camera,
+                           std::list<DuckData>& ducks, Camera& camera,
                            bool& running):
         window(window),
         twoPlayersLocal(twoPlayersLocal),

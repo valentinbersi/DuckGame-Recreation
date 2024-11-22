@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 
+#include "EquippableWeapon.h"
 #include "Debug.h"
 #include "DuckData.h"
 #include "GameTimer.h"
@@ -19,7 +20,7 @@
 
 #define DEFAULT_LIFE 10
 #define DEFAULT_FLAGS 0
-#define DEFAULT_SPEED 300
+#define DEFAULT_SPEED 40
 #define PLAYER_DIMENSIONS 2.0f, 2.875f
 
 /**
@@ -29,6 +30,7 @@
  */
 #define eventHandler(Function, ...) \
     gameObject::EventHandler<Player, __VA_ARGS__>::create(getReference<Player>(), Function)
+
 
 Player::Player(const DuckID id): 
         PhysicsObject(nullptr, {700, 450}, Layer::Player, Layer::Wall, PLAYER_DIMENSIONS , Gravity::Disabled),

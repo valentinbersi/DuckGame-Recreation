@@ -18,9 +18,11 @@ class ClientRecvProtocol: public ReceiveProtocol {
 private:
     Vector2 recvVector2();
 
+    Rectangle recvRectangle();
+
     std::list<DuckData> recvDuckData();
 
-    std::list<Vector2> recvBlockPositions();
+    std::list<SizedObjectData> recvBlockPositions();
 
 public:
     /**
