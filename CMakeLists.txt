@@ -157,7 +157,7 @@ if (CLIENT)
     add_executable(DuckGame)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGame common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    add_dependencies(DuckGame common SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(client)
@@ -168,7 +168,7 @@ if (CLIENT)
     target_include_directories(DuckGame PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(DuckGame common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES})
+    target_link_libraries(DuckGame common SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES})
 
     install(TARGETS DuckGame
             BUNDLE DESTINATION .
@@ -196,7 +196,7 @@ if (EDITOR)
     add_executable(DuckGameLevelEditor)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGameLevelEditor common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    add_dependencies(DuckGameLevelEditor common SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(editor)
@@ -207,7 +207,7 @@ if (EDITOR)
     target_include_directories(DuckGameLevelEditor PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(DuckGameLevelEditor common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES})
+    target_link_libraries(DuckGameLevelEditor common SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES})
 
     install(TARGETS DuckGameLevelEditor
             BUNDLE DESTINATION .
