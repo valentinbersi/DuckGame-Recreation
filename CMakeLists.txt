@@ -92,6 +92,14 @@ if (CLIENT OR EDITOR)
     FetchContent_MakeAvailable(sdl2)
 
     FetchContent_Declare(
+            ogg
+            GIT_REPOSITORY https://github.com/xiph/ogg.git
+            GIT_TAG v1.3.5
+    )
+
+    FetchContent_MakeAvailable(ogg)
+
+    FetchContent_Declare(
             opus
             GIT_REPOSITORY https://github.com/xiph/opus.git
             GIT_TAG v1.5.2
