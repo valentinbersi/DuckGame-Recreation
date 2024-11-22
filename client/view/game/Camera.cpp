@@ -1,7 +1,5 @@
 #include "Camera.h"
 
-#define DEFAULT_SCALE 2.5
-
 Camera::Camera(int& windowWidth, int& windowHeight):
         windowWidth(windowWidth),
         windowHeight(windowHeight),
