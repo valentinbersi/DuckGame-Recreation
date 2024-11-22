@@ -113,7 +113,7 @@ void Game::updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManage
     float objectCameraSize = camera.getViewRect().size().x() / DUCK_WIDTH;
     float scale = static_cast<float>(window_width) / objectCameraSize;
 
-    for (auto& duck: ducks) {
+    for (auto& duck: ducksToRender) {
         DuckID duckID = duck.duckID;
         Vector2 coords = duck.rectangle.position();
 
@@ -144,7 +144,7 @@ void Game::updateBlocks(EnviromentRenderer& enviromentRenderer) {
     float objectCameraSize = camera.getViewRect().size().x() / 2;
     float scale = static_cast<float>(window_width) / objectCameraSize;
 
-    for (auto& block: blocks) {
+    for (auto& block: blocksToRender) {
 
         SDL2pp::Rect position(static_cast<int>(block.rectangle.position().x() - camera.getViewRect().position().x()),
                               static_cast<int>(block.rectangle.position().y() - camera.getViewRect().position().y()),
