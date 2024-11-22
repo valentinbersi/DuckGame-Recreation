@@ -1,16 +1,9 @@
 #include "EnviromentRenderer.h"
 
-EnviromentRenderer::EnviromentRenderer(SDL2pp::Renderer& renderer, TextureManager& textureManager)
-    : renderer(renderer), textureManager(textureManager) {}
-
-//crear posicion con la escala etc
-// tipo
-// int spriteWidth = spritesheet->getClipWidth();
-// int spriteHeight = spritesheet->getClipHeight();
-// return SDL2pp::Rect(m_position_x, m_position_y, spriteWidth * scale, spriteHeight * scale);
+EnviromentRenderer::EnviromentRenderer(SDL2pp::Renderer& renderer): renderer(renderer) {}
 
 void EnviromentRenderer::drawEnviroment(SDL2pp::Rect& position, const char* path) {
-    SDL_Texture* texture = textureManager.getTexture(path).Get();
+    SDL_Texture* texture = TextureManager::getTexture(path, renderer).Get();
     if (texture == nullptr) {
         throw std::runtime_error("Texture is null in drawCube.");
     }

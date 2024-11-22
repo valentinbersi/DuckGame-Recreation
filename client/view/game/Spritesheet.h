@@ -11,8 +11,7 @@
 class Spritesheet {
 public:
     // Constructor.
-    Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer& renderer,
-                TextureManager& textureManager);
+    Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer& renderer);
 
     // Destructor.
     ~Spritesheet() = default;
@@ -38,9 +37,6 @@ public:
     // ...
     void drawEffects(SDL2pp::Rect& playerPosition, bool flip, std::string path);
 
-    // Returns the texture of the spritesheet, depending if it's a feather or not.
-    SDL2pp::Texture& getTexture(bool feathers);
-
     // Returns the width of the clip.
     int getClipWidth() const;
 
@@ -54,5 +50,4 @@ private:
     SDL2pp::Renderer& renderer;
     const char* pathPlayer;
     const char* pathFeather;
-    TextureManager& textureManager;
 };

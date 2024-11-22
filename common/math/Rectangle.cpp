@@ -6,33 +6,72 @@
 #include "IntersectionInfo.h"
 #include "Math.h"
 
+Rectangle::Rectangle(const Rectangle& other) = default;
+
+Rectangle& Rectangle::operator=(const Rectangle& other) {
+    if (this == &other)
+        return *this;
+
+    _position = other._position;
+    _size = other._size;
+    return *this;
+}
+
+Rectangle::Rectangle(Rectangle&& other) noexcept:
+        _position(std::move(other._position)), _size(std::move(other._size)) {}
+
+Rectangle& Rectangle::operator=(Rectangle&& other) noexcept {
+    if (this == &other)
+        return *this;
+
+    _position = std::move(other._position);
+    _size = std::move(other._size);
+    return *this;
+}
+
 Rectangle::Rectangle(const Vector2& center, const float width, const float height):
-        position(center - Vector2(width / 2, height / 2)), size(width, height) {
+        _position(center - Vector2(width / 2, height / 2)), _size(width, height) {
     if (width < 0 or height < 0)
         throw std::invalid_argument("Width and height must be positive");
 }
 
 Rectangle::Rectangle(Vector2 position, Vector2 size):
-        position(std::move(position)), size(std::move(size)) {
+        _position(std::move(position)), _size(std::move(size)) {
     if (size.x() < 0 or size.y() < 0)
         throw std::invalid_argument("Size must be positive");
 }
 
+Vector2 Rectangle::position() const { return _position; }
+
+Rectangle& Rectangle::setPosition(Vector2 position) {
+    _position = std::move(position);
+    return *this;
+}
+
+Vector2 Rectangle::size() const { return _size; }
+
+Rectangle& Rectangle::setSize(Vector2 size) {
+    _size = std::move(size);
+    return *this;
+}
+
+Vector2 Rectangle::center() const { return _position + _size / 2; }
+
 Rectangle& Rectangle::setCenter(const Vector2& center) {
-    position = center - size / 2;
+    _position = center - _size / 2;
     return *this;
 }
 
 bool Rectangle::contains(const Vector2& point) const {
-    return point.x() >= position.x() and point.y() >= position.y() and
-           point.x() < position.x() + size.x() and point.y() < position.y() + size.y();
+    return point.x() >= _position.x() and point.y() >= _position.y() and
+           point.x() < _position.x() + _size.x() and point.y() < _position.y() + _size.y();
 }
 
 bool Rectangle::overlaps(const Rectangle& rectangle) const {
-    return position.x() < rectangle.position.x() + rectangle.size.x() and
-           position.x() + size.x() > rectangle.position.x() and
-           position.y() < rectangle.position.y() + rectangle.size.y() and
-           position.y() + size.y() > rectangle.position.y();
+    return _position.x() < rectangle._position.x() + rectangle._size.x() and
+           _position.x() + _size.x() > rectangle._position.x() and
+           _position.y() < rectangle._position.y() + rectangle._size.y() and
+           _position.y() + _size.y() > rectangle._position.y();
 }
 
 std::optional<IntersectionInfo> Rectangle::overlaps(const Rectangle& rectangle,
@@ -41,10 +80,10 @@ std::optional<IntersectionInfo> Rectangle::overlaps(const Rectangle& rectangle,
     if (displacement.isZero())
         return std::nullopt;
 
-    const Rectangle expandedRectangle(rectangle.position - size / 2, rectangle.size + size);
+    const Rectangle expandedRectangle(rectangle._position - _size / 2, rectangle._size + _size);
 
     if (std::optional<IntersectionInfo> intersectionInfo =
-                expandedRectangle.overlaps(Ray2D(position + size / 2, displacement * delta))) {
+                expandedRectangle.overlaps(Ray2D(_position + _size / 2, displacement * delta))) {
         if (intersectionInfo->contactTime < 1.0f and intersectionInfo->contactTime >= 0)
             return intersectionInfo;
     }
@@ -55,8 +94,8 @@ std::optional<IntersectionInfo> Rectangle::overlaps(const Rectangle& rectangle,
 std::optional<IntersectionInfo> Rectangle::overlaps(const Ray2D& ray) const {
     IntersectionInfo info{};
 
-    Vector2 tNear((position - ray.origin()) / ray.direction());
-    Vector2 tFar((position + size - ray.origin()) / ray.direction());
+    Vector2 tNear((_position - ray.origin()) / ray.direction());
+    Vector2 tFar((_position + _size - ray.origin()) / ray.direction());
 
     if (std::isnan(tFar.y()) or std::isnan(tFar.x()))
         return std::nullopt;

@@ -6,6 +6,7 @@
 
 #include "GameLoop.h"
 #include "LevelData.h"
+#include "RandomGenerator.h"
 #include "ServerMessage.h"
 #include "Types.h"
 
@@ -14,6 +15,7 @@ private:
     std::mutex mutex;
     std::unordered_map<u16, std::unique_ptr<GameLoop>> gameMap;
     std::vector<LevelData> levels;
+    static RandomIntGenerator randomGenerator;
 
 public:
     GameMapMonitor();

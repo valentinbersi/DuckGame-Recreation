@@ -6,13 +6,10 @@
 
 #include "../Updatable.h"
 
-#include "GameStatus.h"
 #include "Startable.h"
 #include "Subject.h"
 #include "TrackedReference.h"
 #include "Types.h"
-
-using gameObject::Subject;
 
 /**
  * An object in the game.\n
@@ -23,7 +20,12 @@ using gameObject::Subject;
  * any raw pointer passed as argument inside Objects does not hold ownership of the
  * underlying object.\n
  */
-class GameObject: public Subject, public TrackedReference, public Updatable, public Startable {
+class GameObject:
+        public gameObject::Subject,
+        public TrackedReference,
+        public Updatable,
+        public Startable {
+
     GameObject* _parent;
     HashMap<std::string, GameObject*> children;
 
@@ -79,6 +81,11 @@ protected:
     Ret applyToChild(const std::string& name, const std::function<Ret(GameObject*)>& f);
 
 public:
+    struct Events {
+        constexpr static auto TreeEntered = "TreeEntered";
+        constexpr static auto TreeExited = "TreeExited";
+    };
+
     /**
      * An exception thrown when trying to add a child with a name that is already taken
      */
@@ -173,27 +180,6 @@ public:
      * @return A reference to the root object
      */
     GameObject* getRoot();
-
-    /**
-     * The events the Object class has
-     */
-    enum class Events : u8 {
-        /**
-         * A child entered the tree
-         */
-        TREE_ENTERED,
-        /**
-         * A child exited the tree
-         */
-        TREE_EXITED
-    };
-
-    /**
-     * Get the event name of an event type
-     * @param eventType The event type
-     * @return The event name
-     */
-    static std::string eventName(Events eventType);
 };
 
 template <typename Ret>

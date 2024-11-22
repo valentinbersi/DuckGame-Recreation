@@ -31,8 +31,8 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWin
                                  "El mapa debe tener al menos un pato antes de guardarlo.");
             return;
         }
-        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), scene->getMapWidth(),
-                              scene->getMapHeight());
+        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
+                              scene->getMapWidth(), scene->getMapHeight());
     });
 
     connect(ui->actionNewMap, &QAction::triggered, this, &MainWindow::on_actionNewMap_triggered);
@@ -75,7 +75,8 @@ void MainWindow::wheelEvent(QWheelEvent* event) {
     if (event->modifiers() & Qt::ControlModifier) {
         qreal zoomFactor = 1.15;
 
-        QPointF viewCenter = ui->graphicsView->mapToScene(ui->graphicsView->viewport()->rect().center());
+        QPointF viewCenter =
+                ui->graphicsView->mapToScene(ui->graphicsView->viewport()->rect().center());
 
         if (event->angleDelta().y() > 0)
             ui->graphicsView->scale(zoomFactor, zoomFactor);
@@ -100,7 +101,8 @@ void MainWindow::on_actionNewMap_triggered() {
     if (reply == QMessageBox::Cancel)
         return;
     else if (reply == QMessageBox::Yes)
-        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), scene->getMapWidth(), scene->getMapHeight());
+        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
+                              scene->getMapWidth(), scene->getMapHeight());
     scene->clearAll();
     QMessageBox::information(this, "Nuevo Mapa", "Se ha creado un nuevo mapa.");
 }
@@ -113,7 +115,8 @@ void MainWindow::on_actionEditMap_triggered() {
             QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 
     if (reply == QMessageBox::Yes)
-        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), scene->getMapWidth(), scene->getMapHeight());
+        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
+                              scene->getMapWidth(), scene->getMapHeight());
     else if (reply == QMessageBox::Cancel)
         return;
 
@@ -131,7 +134,8 @@ void MainWindow::on_actionEditMap_triggered() {
         if (success) {
             scene->loadMap(mapWidth, mapHeight);
             ui->lineEditMapName->setText(mapName);
-            QMessageBox::information(this, "Mapa Importado", "El mapa se ha importado correctamente.");
+            QMessageBox::information(this, "Mapa Importado",
+                                     "El mapa se ha importado correctamente.");
         } else {
             QMessageBox::warning(this, "Error", "Hubo un error al importar el mapa.");
         }

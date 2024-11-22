@@ -100,6 +100,13 @@ public:
      * @return true if the object used to instantiate this method is still valid
      */
     [[nodiscard]] bool isValid() const override;
+
+    /**
+     * Function for easier event handler creation
+     * @return a unique pointer to the created event handler
+     */
+    static std::unique_ptr<EventHandler> create(std::weak_ptr<CallerClass> object,
+                                                std::function<void(CallerClass*, Args...)> method);
 };
 
 template <typename CallerClass, typename... Args>
@@ -128,5 +135,11 @@ void EventHandler<CallerClass, Args...>::operator()(Args... args) const {
 template <typename CallerClass, typename... Args>
 bool EventHandler<CallerClass, Args...>::isValid() const {
     return !object.expired();
+}
+
+template <typename CallerClass, typename... Args>
+std::unique_ptr<EventHandler<CallerClass, Args...>> EventHandler<CallerClass, Args...>::create(
+        std::weak_ptr<CallerClass> object, std::function<void(CallerClass*, Args...)> method) {
+    return std::make_unique<EventHandler>(std::move(object), std::move(method));
 }
 }  // namespace gameObject
