@@ -150,9 +150,3 @@ objects:
   - type: BOX
     x: 43
     y: 36
-  - type: ARMAMENT
-    x: 15
-    y: 39
-  - type: ARMAMENT
-    x: 46
-    y: 33
