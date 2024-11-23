@@ -1,5 +1,6 @@
 #include "GameObject.h"
 
+#include <limits>
 #include <memory>
 #include <ranges>
 #include <utility>
@@ -17,6 +18,17 @@
 void GameObject::onTreeEntered(GameObject* object) { fire(Events::TreeEntered, object); }
 
 void GameObject::onTreeExited(GameObject* object) { fire(Events::TreeExited, object); }
+
+std::string GameObject::findAvaiableName(std::string name) const {
+    if (not children.contains(name))
+        return std::move(name);
+
+    for (int i = 0; i < std::numeric_limits<int>::max(); i++)
+        if (std::string newName = name + std::to_string(i); not children.contains(newName))
+            return newName;
+
+    throw NoMoreNamesAvailable(name);
+}
 
 GameObject::GameObject(GameObject* parent): _parent(parent) {
     registerEvent<GameObject*>(Events::TreeEntered);
@@ -37,8 +49,7 @@ void GameObject::addChild(std::string name, GameObject* newChild) {
     if (name.empty())
         throw std::invalid_argument(EMPTY_NAME);
 
-    if (children.contains(name))
-        throw AlreadyAddedChild(name);
+    name = findAvaiableName(name);
 
     newChild->connect(Events::TreeEntered, eventHandler(&GameObject::onTreeEntered, GameObject*));
     newChild->connect(Events::TreeExited, eventHandler(&GameObject::onTreeExited, GameObject*));
@@ -55,10 +66,10 @@ void GameObject::forAllChildren(const std::function<void(GameObject*)>& f) {
 }
 
 #define CHILD_NAME "Child with name"
-#define ALREADY_EXISTS " already exists."
+#define CANNOT_BE_ADDED " cannot be added to tree."
 
-GameObject::AlreadyAddedChild::AlreadyAddedChild(const std::string& name):
-        std::runtime_error(CHILD_NAME + name + ALREADY_EXISTS) {}
+GameObject::NoMoreNamesAvailable::NoMoreNamesAvailable(const std::string& name):
+        std::runtime_error(CHILD_NAME + name + CANNOT_BE_ADDED) {}
 
 #define NOT_IN_TREE " is not in child tree."
 
@@ -102,8 +113,8 @@ std::unique_ptr<GameObject> GameObject::removeChild(const std::string& name) {
     return std::unique_ptr<GameObject>(child.mapped());
 }
 
-void GameObject::transferChild(std::string name, GameObject& parent) {
-    addChild(std::move(name), parent.removeChild(name));
+void GameObject::transferChild(const std::string& name, GameObject& parent) {
+    addChild(name, parent.removeChild(name));
 }
 
 GameObject* GameObject::getChild(const std::string& name) const { return children.at(name); }
