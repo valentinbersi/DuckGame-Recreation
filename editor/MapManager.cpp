@@ -4,6 +4,8 @@
 #include <fstream>
 #include <string>
 
+#include "yaml-cpp/yaml.h"
+
 void MapManager::exportMap(const std::vector<Object>& objects, const std::string& mapName,
                            int mapWidth, int mapHeight) {
     for (const auto& obj: objects) {
