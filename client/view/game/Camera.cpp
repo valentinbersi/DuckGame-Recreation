@@ -3,26 +3,39 @@
 #include "Debug.h"
 
 Camera::Camera(int& windowWidth, int& windowHeight):
-        windowWidth(windowWidth), windowHeight(windowHeight), viewRect(Vector2::ZERO, {0, 0}) {}
+        windowWidth(windowWidth),
+        windowHeight(windowHeight),
+        viewRect(Vector2::ZERO, {0, 0}),
+        ducksArrived(false) {}
 
-void Camera::update(std::list<DuckData>& ducks) {
+void Camera::update(std::list<DuckData>& ducks, const float deltaTime) {
     const float aspectRatio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
     const Vector2 center = centerOfDucks(ducks);
     const Vector2 maxDistance = calculateMaxDistance(ducks, aspectRatio);
 
-    updateZoom(center, maxDistance, aspectRatio);
+    updateZoom(center, maxDistance, aspectRatio, deltaTime);
+
+    if (not ducks.empty())
+        ducksArrived = true;
 }
 
-void Camera::updateZoom(const Vector2& center, const Vector2& maxDistance,
-                        const float aspectRatio) {
+void Camera::updateZoom(const Vector2& center, const Vector2& maxDistance, const float aspectRatio,
+                        const float deltaTime) {
     const Vector2 rectDimension = maxDistance.x() > maxDistance.y() ?
                                           Vector2(maxDistance.x(), maxDistance.x() / aspectRatio) :
                                           Vector2(maxDistance.y() * aspectRatio, maxDistance.y());
-    viewRect.setSize(rectDimension);
-    viewRect.setCenter(center);
+
+    if (not ducksArrived) {
+        viewRect.setSize(rectDimension);
+        viewRect.setCenter(center);
+        return;
+    }
+
+    viewRect.setSize(viewRect.size() + (rectDimension - viewRect.size()) * deltaTime);
+    viewRect.setCenter(viewRect.center() + (center - viewRect.center()) * deltaTime);
 }
 
-Vector2 Camera::calculateMaxDistance(std::list<DuckData>& ducks, float aspectRatio) {
+Vector2 Camera::calculateMaxDistance(std::list<DuckData>& ducks, const float aspectRatio) {
     Vector2 maxDistance;
 
     for (auto it1 = ducks.begin(); it1 != ducks.end(); ++it1) {
