@@ -53,11 +53,11 @@ void Game::init() {
                          camera, running);
 
     while (running) {
-        timer.iterationStartMilliseconds();
+        const float deltaTime = timer.iterationStartSeconds().count();
         getSnapshot();
         renderer.Clear();
 
-        camera.update(ducks);
+        camera.update(ducks, deltaTime);
         filterObjectsToRender();
 
         showBackground(backgroundTexture);
