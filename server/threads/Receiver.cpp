@@ -27,8 +27,7 @@ void Receiver::run() noexcept {
 
         while (_keep_running) {
             GameMessage gameMessage = recvProtocol.receiveGameMessage();
-            gameQueue->push(std::make_unique<MovementCommand>(clientID - 1 + gameMessage.player,
-                                                              gameMessage.action));
+            gameQueue->push(factory.createCommand(gameMessage.action, clientID - 1 + gameMessage.player));
         }
 
     } catch (const ClosedQueue& err) {

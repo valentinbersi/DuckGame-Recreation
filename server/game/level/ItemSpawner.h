@@ -2,12 +2,13 @@
 #include <memory>
 
 #include "GameObject2D.h"
+#include "StaticObject.h"
 #include "GameTimer.h"
 #include "Item.h"
 #include "RandomGenerator.h"
 #include "SizedObjectData.h"
 
-class ItemSpawner: public GameObject2D {
+class ItemSpawner: public StaticObject {
 private:
     std::weak_ptr<Item> spawnedItem;
 

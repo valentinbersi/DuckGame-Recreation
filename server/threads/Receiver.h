@@ -8,6 +8,7 @@
 #include "ServerMessage.h"
 #include "ServerRecvProtocol.h"
 #include "Thread.h"
+#include "CommandFactory.h"
 
 class Receiver: public Thread {
 private:
@@ -15,7 +16,7 @@ private:
     BlockingQueue<std::unique_ptr<Command>>* gameQueue;
     const u16& clientID;
     LobbyResolver lobbyResolver;
-    // CommnadFactory factory;
+    static CommandFactory factory;
 public:
     Receiver(ActiveSocket& socket,
              std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> queueSender,
