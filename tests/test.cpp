@@ -77,7 +77,7 @@ TEST(ProtocolTest, LobbyToServerMultipleSends) {
 
 TEST(ProtocolTest, MultiLoobySend) {
     ListenerSocket skt("8080");
-    std::string a = "Player1";  
+    std::string a = "Player1";
     std::string b = "Player2";
     std::string c = "Player3";
     std::string d = "Player4";
@@ -151,15 +151,15 @@ TEST(ProtocolTest, ServerToGameSendOneStatus) {
     ListenerSocket peer("8080");
 
     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
-    status->ducks.emplace_back(Vector2(0,0), DuckID::White, 10, GunID::CowboyPistol, 0b100);
-    status->blockPositions.emplace_back(0, 0);
+    status->ducks.emplace_back(Vector2(0, 0), DuckID::White, 10, ItemID::CowboyPistol, 0b100);
+    status->blockPositions.emplace_back(Rectangle(Vector2(10, 0), Vector2(0, 0)));
+    status->itemSpawnerPositions.emplace_back(Rectangle(Vector2(0, 0), Vector2(0, 0)));
 
-    std::thread client([]() {
+    std::thread client([status]() {
         ActiveSocket clientSkt("localhost", "8080");
         ClientRecvProtocol recvProtocol(clientSkt);
         GameStatus recvStatus = recvProtocol.recvGameStatus();
-        ASSERT_EQ(recvStatus.ducks.size(), 1);
-        ASSERT_EQ(recvStatus.blockPositions.size(), 1);
+        ASSERT_TRUE(*status == recvStatus);
     });
 
     ActiveSocket skt = peer.accept();
@@ -173,14 +173,15 @@ TEST(ProtocolTest, ServerToGameCorrectValues) {
     ListenerSocket peer("8080");
 
     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
-    status->ducks.emplace_back(Vector2(0, 0), DuckID::White, 10, GunID::CowboyPistol, 0b100);
-    status->blockPositions.emplace_back(0, 0);
+    status->ducks.emplace_back(Vector2(0, 0), DuckID::White, 10, ItemID::CowboyPistol, 0b100);
+    status->blockPositions.emplace_back(Rectangle(Vector2(0, 0), Vector2(0, 0)));
+    status->itemSpawnerPositions.emplace_back(Rectangle(Vector2(23, 4), Vector2(6, 7)));
 
     std::thread client([status]() {
         ActiveSocket clientSkt("localhost", "8080");
         ClientRecvProtocol recvProtocol(clientSkt);
         GameStatus statusRecv = recvProtocol.recvGameStatus();
-        ASSERT_TRUE(statusRecv.ducks == status->ducks);
+        ASSERT_TRUE(*status == statusRecv);
     });
 
     ActiveSocket skt = peer.accept();
@@ -190,31 +191,28 @@ TEST(ProtocolTest, ServerToGameCorrectValues) {
     client.join();
 }
 
-TEST(ProtocolTest, ServerToOneGameMultiSend) {
+TEST(ProtocolTest, ServerToOneGameFillStatus) {
     ListenerSocket peer("8080");
 
     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
-    status->ducks.emplace_back( Vector2(42.6, 5.5134), DuckID::Grey, 8, GunID::Ak47, 0b1 | 0b10);
-    status->ducks.emplace_back( Vector2(0,0), DuckID::Orange, 1, GunID::Banana, 0b1);
-    status->ducks.emplace_back( Vector2(0, 5.5134), DuckID::White, 5, GunID::DuelPistol, 0b1 | 0b10 | 0b100);
-    status->ducks.emplace_back( Vector2(77.90845, 0.654), DuckID::Yellow, 10, GunID::PewPewLaser, 0b1 | 0b10 | 0b1000);
-    status->blockPositions.emplace_back(0, 0);
-    status->blockPositions.emplace_back(100, 50);
-    status->blockPositions.emplace_back(14.743, 66);
+    status->ducks.emplace_back(Vector2(42.6, 5.5134), DuckID::Grey, 8, ItemID::Ak47, 0b1 | 0b10);
+    status->ducks.emplace_back(Vector2(0, 0), DuckID::Orange, 1, ItemID::Banana, 0b1);
+    status->ducks.emplace_back(Vector2(0, 5.5134), DuckID::White, 5, ItemID::DuelPistol,
+                               0b1 | 0b10 | 0b100);
+    status->ducks.emplace_back(Vector2(77.90845, 0.654), DuckID::Yellow, 10, ItemID::PewPewLaser,
+                               0b1 | 0b10 | 0b1000);
+    status->blockPositions.emplace_back(Rectangle(Vector2(0, 0), Vector2(0, 0)));
+    status->blockPositions.emplace_back(Rectangle(Vector2(2, 3), Vector2(100, 50)));
+    status->blockPositions.emplace_back(Rectangle(Vector2(13.0, 67.8), Vector2(8, 7)));
+    status->itemSpawnerPositions.emplace_back(Rectangle(Vector2(33434.78, 123.8), Vector2(3, 4)));
+    status->itemSpawnerPositions.emplace_back(Rectangle(Vector2(3234.49, 343.8), Vector2(7, 8)));
+
 
     std::thread client([status]() {
         ActiveSocket clientSkt("localhost", "8080");
         ClientRecvProtocol recvProtocol(clientSkt);
         GameStatus statusRecv = recvProtocol.recvGameStatus();
-        auto it1 = status->ducks.begin();
-        auto it2 = statusRecv.ducks.begin();
-        while (it1 != status->ducks.end() && it2 != statusRecv.ducks.end()) {
-
-            ASSERT_TRUE(*it1 == *it2);
-
-            it1++;
-            it2++;
-        }
+        ASSERT_TRUE(*status == statusRecv);
     });
 
     ActiveSocket skt = peer.accept();

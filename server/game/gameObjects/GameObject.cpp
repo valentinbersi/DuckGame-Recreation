@@ -1,6 +1,8 @@
 #include "GameObject.h"
 
+#include <limits>
 #include <memory>
+#include <ranges>
 #include <utility>
 
 #include "EventHandler.h"
@@ -10,19 +12,27 @@
  * @param Function The function to call
  * @param ... The type of the arguments to pass to the function
  */
-#define eventHandler(Function, ...)                                      \
-    std::make_unique<gameObject::EventHandler<GameObject, __VA_ARGS__>>( \
-            getReference<GameObject>(), Function)
+#define eventHandler(Function, ...) \
+    gameObject::EventHandler<GameObject, __VA_ARGS__>::create(getReference<GameObject>(), Function)
 
-void GameObject::onTreeEntered(GameObject* object) {
-    fire(eventName(Events::TREE_ENTERED), object);
+void GameObject::onTreeEntered(GameObject* object) { fire(Events::TreeEntered, object); }
+
+void GameObject::onTreeExited(GameObject* object) { fire(Events::TreeExited, object); }
+
+std::string GameObject::findAvaiableName(std::string name) const {
+    if (not children.contains(name))
+        return name;
+
+    for (u64 i = 0; i < std::numeric_limits<u64>::max(); ++i)
+        if (std::string newName = name + std::to_string(i); not children.contains(newName))
+            return newName;
+
+    throw NoMoreNamesAvailable(name);
 }
 
-void GameObject::onTreeExited(GameObject* object) { fire(eventName(Events::TREE_EXITED), object); }
-
 GameObject::GameObject(GameObject* parent): _parent(parent) {
-    registerEvent<GameObject*>(eventName(Events::TREE_ENTERED));
-    registerEvent<GameObject*>(eventName(Events::TREE_EXITED));
+    registerEvent<GameObject*>(Events::TreeEntered);
+    registerEvent<GameObject*>(Events::TreeExited);
 }
 
 #define NULL_CHILD "newChild is nullptr"
@@ -39,30 +49,27 @@ void GameObject::addChild(std::string name, GameObject* newChild) {
     if (name.empty())
         throw std::invalid_argument(EMPTY_NAME);
 
-    if (children.contains(name))
-        throw AlreadyAddedChild(name);
+    name = findAvaiableName(name);
 
-    newChild->connect(eventName(Events::TREE_ENTERED),
-                      eventHandler(&GameObject::onTreeEntered, GameObject*));
-
-    newChild->connect(eventName(Events::TREE_EXITED),
-                      eventHandler(&GameObject::onTreeExited, GameObject*));
+    newChild->connect(Events::TreeEntered, eventHandler(&GameObject::onTreeEntered, GameObject*));
+    newChild->connect(Events::TreeExited, eventHandler(&GameObject::onTreeExited, GameObject*));
 
     children.emplace(std::move(name), newChild);
 
-    fire(eventName(Events::TREE_ENTERED), newChild);
-    for (auto& [name, child]: newChild->children) fire(eventName(Events::TREE_ENTERED), child);
+    fire(Events::TreeEntered, newChild);
+    for (GameObject* child: newChild->children | std::views::values)
+        fire(Events::TreeEntered, child);
 }
 
 void GameObject::forAllChildren(const std::function<void(GameObject*)>& f) {
-    for (const auto& [name, child]: children) f(child);
+    for (GameObject* child: children | std::views::values) f(child);
 }
 
 #define CHILD_NAME "Child with name"
-#define ALREADY_EXISTS " already exists."
+#define CANNOT_BE_ADDED " cannot be added to tree."
 
-GameObject::AlreadyAddedChild::AlreadyAddedChild(const std::string& name):
-        std::runtime_error(CHILD_NAME + name + ALREADY_EXISTS) {}
+GameObject::NoMoreNamesAvailable::NoMoreNamesAvailable(const std::string& name):
+        std::runtime_error(CHILD_NAME + name + CANNOT_BE_ADDED) {}
 
 #define NOT_IN_TREE " is not in child tree."
 
@@ -74,7 +81,7 @@ GameObject::GameObject(): _parent(nullptr) {}
 #define NO_PARENT "Object has no parent"
 
 GameObject::~GameObject() {
-    for (auto& [name, child]: children) delete child;
+    for (const GameObject* child: children | std::views::values) delete child;
 }
 
 void GameObject::start() {}
@@ -82,7 +89,7 @@ void GameObject::start() {}
 void GameObject::update([[maybe_unused]] float delta) {}
 
 void GameObject::updateInternal(const float delta) {
-    for (auto& [name, child]: children) {
+    for (GameObject* child: children | std::views::values) {
         child->update(delta);
         child->updateInternal(delta);
     }
@@ -98,15 +105,16 @@ std::unique_ptr<GameObject> GameObject::removeChild(const std::string& name) {
     if (child.empty())
         throw ChildNotInTree(name);
 
-    fire(eventName(Events::TREE_EXITED), child.mapped());
-    for (auto& [name, child]: children) fire(eventName(Events::TREE_EXITED), child);
+    fire(Events::TreeExited, child.mapped());
+    for (GameObject* object: child.mapped()->children | std::views::values)
+        fire(Events::TreeExited, object);
 
     child.mapped()->_parent = nullptr;
     return std::unique_ptr<GameObject>(child.mapped());
 }
 
-void GameObject::transferChild(std::string name, GameObject& parent) {
-    addChild(std::move(name), parent.removeChild(name));
+void GameObject::transferChild(const std::string& name, GameObject& parent) {
+    addChild(name, parent.removeChild(name));
 }
 
 GameObject* GameObject::getChild(const std::string& name) const { return children.at(name); }
@@ -122,18 +130,4 @@ GameObject* GameObject::getRoot() {
         return this;
 
     return _parent->getRoot();
-}
-
-#define TREE_ADDED_NAME "TreeEntered"
-#define TREE_EXITED_NAME "TreeExited"
-
-std::string GameObject::eventName(const Events eventType) {
-    switch (eventType) {
-        case Events::TREE_ENTERED:
-            return TREE_ADDED_NAME;
-        case Events::TREE_EXITED:
-            return TREE_EXITED_NAME;
-        default:
-            throw std::invalid_argument(INVALID_EVENT_TYPE);
-    }
 }

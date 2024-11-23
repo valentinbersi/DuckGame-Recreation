@@ -247,6 +247,19 @@ public:
     void swapY(Vector2& other);
 
     /**
+     * Checks if two Vector2 Are aproximatly equal
+     * @param other the vecto to compare to this
+     * @return result of the comparison
+     */
+    bool isEqualAprox(const Vector2& other) const;
+
+    /**
+     * Return the vector with its coordinates set to its absolute values
+     * @return A vector with its coordinates set to its absolute values
+     */
+    Vector2 abs() const;
+
+    /**
      * Get the result of scaling the vector by the given scalar
      * @param scalar The scalar to multiply the vector by
      * @return The scaled vector

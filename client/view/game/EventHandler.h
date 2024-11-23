@@ -19,8 +19,8 @@ class EventHandler {
 public:
     // Constructor
     EventHandler(SDL2pp::Window& window, int& window_width, int& window_height,
-                 bool& twoPlayersLocal, Communicator& communicator,
-                 std::list<std::unique_ptr<DuckData>>& ducks, Camera& camera, bool& running);
+                 bool& twoPlayersLocal, Communicator& communicator, std::list<DuckData>& ducks,
+                 Camera& camera, bool& running);
 
     // Destructor
     ~EventHandler() = default;
@@ -50,7 +50,7 @@ private:
     Communicator& communicator;
     int& window_width;
     int& window_height;
-    std::list<std::unique_ptr<DuckData>>& ducks;
+    std::list<DuckData>& ducks;
     Camera& camera;
     bool& running;
 
@@ -70,7 +70,6 @@ private:
             {SDL_SCANCODE_S, InputAction::DOWN_RELEASED},
             {SDL_SCANCODE_A, InputAction::LEFT_RELEASED},
             {SDL_SCANCODE_D, InputAction::RIGHT_RELEASED},
-            {SDL_SCANCODE_E, InputAction::ACTION_RELEASED},
             {SDL_SCANCODE_SPACE, InputAction::JUMP_RELEASED},
             {SDL_SCANCODE_G, InputAction::SHOOT_RELEASED}};
 
@@ -88,7 +87,6 @@ private:
             {SDL_SCANCODE_DOWN, InputAction::DOWN_RELEASED},
             {SDL_SCANCODE_LEFT, InputAction::LEFT_RELEASED},
             {SDL_SCANCODE_RIGHT, InputAction::RIGHT_RELEASED},
-            {SDL_SCANCODE_RCTRL, InputAction::ACTION_RELEASED},
             {SDL_SCANCODE_RSHIFT, InputAction::JUMP_RELEASED},
             {SDL_SCANCODE_DELETE, InputAction::SHOOT_PRESSED}};
 };

@@ -1,74 +1,44 @@
 #include "ItemFactory.h"
-// #define INVALID_ID "Invalid GunID"
 
-// void ItemFactory::inicializeFactory() {
-//     factory.insert({GunID::Granade, []() {
-//                         return std::make_unique<EquippableItem>(
-//                                 GunID::Granade, nullptr, Vector2(), 0,
-//                                 std::make_unique<Rectangle>(Vector2(), 0, 0), Vector2());
-//                     }});
-//     factory.insert({GunID::Banana, []() {
-//                         return std::make_unique<EquippableItem>(
-//                                 GunID::Banana, nullptr, Vector2(), 0,
-//                                 std::make_unique<Rectangle>(Vector2(), 0, 0), Vector2());
-//                     }});
-//     factory.insert({GunID::PewPewLaser, []() {
-//                         return std::make_unique<EquippableItem>(
-//                                 GunID::PewPewLaser, nullptr, Vector2(), 0,
-//                                 std::make_unique<Rectangle>(Vector2(), 0, 0), Vector2());
-//                     }});
-//     factory.insert({GunID::LaserRifle, []() {
-//                         return std::make_unique<EquippableItem>(
-//                                 GunID::LaserRifle, nullptr, Vector2(), 0,
-//                                 std::make_unique<Rectangle>(Vector2(), 0, 0), Vector2());
-//                     }});
-//     factory.insert({GunID::Ak47, []() {
-//                         return std::make_unique<EquippableItem>(
-//                                 GunID::Ak47, nullptr, Vector2(), 0,
-//                                 std::make_unique<Rectangle>(Vector2(), 0, 0), Vector2());
-//                     }});
-//     factory.insert({GunID::DuelPistol, []() {
-//                         return std::make_unique<EquippableItem>(
-//                                 GunID::DuelPistol, nullptr, Vector2(), 0,
-//                                 std::make_unique<Rectangle>(Vector2(), 0, 0), Vector2());
-//                     }});
-//     factory.insert({GunID::CowboyPistol, []() {
-//                         return std::make_unique<EquippableItem>(
-//                                 GunID::CowboyPistol, nullptr, Vector2(), 0,
-//                                 std::make_unique<Rectangle>(Vector2(), 0, 0), Vector2());
-//                     }});
-//     factory.insert({GunID::Magnum, []() {
-//                         return std::make_unique<EquippableItem>(
-//                                 GunID::Magnum, nullptr, Vector2(), 0,
-//                                 std::make_unique<Rectangle>(Vector2(), 0, 0), Vector2());
-//                     }});
-//     factory.insert({GunID::Shotgun, []() {
-//                         return std::make_unique<EquippableItem>(
-//                                 GunID::Shotgun, nullptr, Vector2(), 0,
-//                                 std::make_unique<Rectangle>(Vector2(), 0, 0), Vector2());
-//                     }});
-//     factory.insert({GunID::Sniper, []() {
-//                         return std::make_unique<EquippableItem>(
-//                                 GunID::Sniper, nullptr, Vector2(), 0,
-//                                 std::make_unique<Rectangle>(Vector2(), 0, 0), Vector2());
-//                     }});
-//     factory.insert({GunID::Helmet, []() {
-//                         return std::make_unique<EquippableItem>(
-//                                 GunID::Helmet, nullptr, Vector2(), 0,
-//                                 std::make_unique<Rectangle>(Vector2(), 0, 0), Vector2());
-//                     }});
-//     factory.insert({GunID::Armor, []() {
-//                         return std::make_unique<EquippableItem>(
-//                                 GunID::Armor, nullptr, Vector2(), 0,
-//                                 std::make_unique<Rectangle>(Vector2(), 0, 0), Vector2());
-//                     }});
-// }
-// std::unique_ptr<EquippableItem> ItemFactory::createItem(GunID id) {
-//     if (factory.empty()) {
-//         inicializeFactory();
-//     }
-//     if (factory.find(id) == factory.end()) {
-//         throw std::invalid_argument(INVALID_ID);
-//     }
-//     return factory.at(id)();
-// }
+#define INVALID_ID "Invalid ItemID"
+
+#define GRENADE_DIMENSIONS 1.25, 1.375
+#define BANANA_DIMENSIONS 1.75, 0.875
+#define PEW_PEW_LASER_DIMENSIONS 3.25, 1.25
+#define LASER_RIFLE_DIMENSIONS 2.875, 1.5
+#define AK47_DIMENSIONS 4, 1.375
+#define DUEL_PISTOL_DIMENSIONS 1.5, 1.125
+#define COWBOY_PISTOL_DIMENSIONS 2.75, 1.375
+#define MAGNUM_DIMENSIONS 2.5, 1.375
+#define SHOTGUN_DIMENSIONS 3.375, 1.125
+#define SNIPER_DIMENSIONS 4.125, 1.125
+#define HELMET_DIMENSIONS 1.625, 1.875
+#define ARMOR_DIMENSIONS 1.5, 1.375
+
+std::unordered_map<ItemID, std::function<std::unique_ptr<Item>()>> ItemFactory::factory = {
+        {ItemID::Grenade,
+         [] { return std::make_unique<Item>(GRENADE_DIMENSIONS, ItemID::Grenade); }},
+        {ItemID::Banana, [] { return std::make_unique<Item>(BANANA_DIMENSIONS, ItemID::Banana); }},
+        {ItemID::PewPewLaser,
+         [] { return std::make_unique<Item>(PEW_PEW_LASER_DIMENSIONS, ItemID::PewPewLaser); }},
+        {ItemID::LaserRifle,
+         [] { return std::make_unique<Item>(LASER_RIFLE_DIMENSIONS, ItemID::LaserRifle); }},
+        {ItemID::Ak47, [] { return std::make_unique<Item>(AK47_DIMENSIONS, ItemID::Ak47); }},
+        {ItemID::DuelPistol,
+         [] { return std::make_unique<Item>(DUEL_PISTOL_DIMENSIONS, ItemID::DuelPistol); }},
+        {ItemID::CowboyPistol,
+         [] { return std::make_unique<Item>(COWBOY_PISTOL_DIMENSIONS, ItemID::CowboyPistol); }},
+        {ItemID::Magnum, [] { return std::make_unique<Item>(MAGNUM_DIMENSIONS, ItemID::Magnum); }},
+        {ItemID::Shotgun,
+         [] { return std::make_unique<Item>(SHOTGUN_DIMENSIONS, ItemID::Shotgun); }},
+        {ItemID::Sniper, [] { return std::make_unique<Item>(SNIPER_DIMENSIONS, ItemID::Sniper); }},
+        {ItemID::Helmet, [] { return std::make_unique<Item>(HELMET_DIMENSIONS, ItemID::Helmet); }},
+        {ItemID::Armor, [] { return std::make_unique<Item>(ARMOR_DIMENSIONS, ItemID::Armor); }}};
+
+std::unique_ptr<Item> ItemFactory::createItem(const ItemID id) {
+    const auto function = factory.find(id);
+    if (function == factory.end())
+        throw std::invalid_argument(INVALID_ID);
+
+    return function->second();
+}

@@ -106,9 +106,7 @@ float Vector2::distanceSquared(const Vector2& v) const { return (*this - v).leng
 
 float Vector2::dot(const Vector2& v) const noexcept { return _x * v._x + _y * v._y; }
 
-bool Vector2::operator==(const Vector2& v) const noexcept {
-    return Math::isEqualAprox(_x, v._x) && Math::isEqualAprox(_y, v._y);
-}
+bool Vector2::operator==(const Vector2& v) const noexcept { return _x == v._x and _y == v._y; }
 
 bool Vector2::operator!=(const Vector2& v) const noexcept { return !(*this == v); }
 
@@ -150,7 +148,7 @@ Vector2 Vector2::project(const Vector2& v) const {
     if (isZero())
         return ZERO;
 
-    return (dot(v) / v.lengthSquared()) * v;
+    return dot(v) / v.lengthSquared() * v;
 }
 
 #define REFLECT "Vector2::reflect(const Vector2&)"
@@ -174,6 +172,12 @@ void Vector2::swap() { std::swap(_x, _y); }
 void Vector2::swapX(Vector2& other) { std::swap(_x, other._x); }
 
 void Vector2::swapY(Vector2& other) { std::swap(_y, other._y); }
+
+bool Vector2::isEqualAprox(const Vector2& other) const {
+    return Math::isEqualAprox(this->_x, other._x) && Math::isEqualAprox(this->_y, other._y);
+}
+
+Vector2 Vector2::abs() const { return {std::abs(_x), std::abs(_y)}; }
 
 Vector2 Vector2::operator*(const float scalar) const { return {scalar * _x, scalar * _y}; }
 

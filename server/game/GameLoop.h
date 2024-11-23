@@ -16,7 +16,7 @@
 class GameLoop final: public Thread {
     constexpr static std::uint8_t FRAME_TIMES_AMOUNT = 2;
 
-    std::vector<LevelData> levels;
+    std::vector<LevelData>& levels;
     std::map<PlayerID, std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>>>
             clientQueuesMap{};
     BlockingQueue<std::unique_ptr<Command>> clientCommands;

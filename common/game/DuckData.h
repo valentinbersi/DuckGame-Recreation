@@ -2,8 +2,8 @@
 
 #include <bitset>
 
-#include "GameObject2DData.h"
-#include "GunID.h"
+#include "ItemID.h"
+#include "SizedObjectData.h"
 #include "Types.h"
 
 enum class DuckID : u8 { White = 0x0, Orange = 0x1, Yellow = 0x2, Grey = 0x3 };
@@ -11,12 +11,12 @@ enum class DuckID : u8 { White = 0x0, Orange = 0x1, Yellow = 0x2, Grey = 0x3 };
 /**
  * Relevant data for rendering a duck
  */
-struct DuckData final: GameObject2DData {
+struct DuckData final: SizedObjectData {
     constexpr static u8 NFLAGS = 10;
 
     DuckID duckID;
     u8 life;
-    GunID gunID;
+    ItemID gunID;
     std::bitset<NFLAGS> extraData;
 
     DuckData() = delete;
@@ -38,6 +38,8 @@ struct DuckData final: GameObject2DData {
     constexpr static DuckFlag MOVING_RIGHT = 0b10000000;
     constexpr static DuckFlag MOVING_LEFT = 0b100000000;
     constexpr static DuckFlag LOOKING_UP = 0b1000000000;
+    constexpr static DuckFlag IS_SHOOTING = 0b10000000000;
+
 
     constexpr static u8 ARMOR_INDEX = 0;
     constexpr static u8 HELMET_INDEX = 1;
@@ -58,7 +60,12 @@ struct DuckData final: GameObject2DData {
      * @param gunID the gun the duck is holding
      * @param extraData actions the duck is performing and armor data
      */
-    DuckData(Vector2 position, DuckID duckID, u8 life, GunID gunID, DuckFlag extraData);
+    DuckData(Vector2 position, DuckID duckID, u8 life, ItemID gunID, DuckFlag extraData);
 
+    /**
+     * Check if this DuckData is equal to the other DuckData
+     * @param other the other DuckData
+     * @return true if the DuckData is equal to the other DuckData
+     */
     bool operator==(const DuckData& other) const;
 };

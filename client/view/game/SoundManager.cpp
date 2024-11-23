@@ -24,7 +24,7 @@ void SoundManager::playMusic() {
     Mix_VolumeMusic(DEFAULT_VOLUME);
 }
 
-void SoundManager::playSound(GunID id) {
+void SoundManager::playSound(ItemID id) {
     auto it = soundMap.find(id);
     if (it == soundMap.end())
         loadSound(id);
@@ -34,7 +34,7 @@ void SoundManager::playSound(GunID id) {
     Mix_PlayChannel(-1, it->second, 0);
 }
 
-bool SoundManager::loadSound(GunID id) {
+bool SoundManager::loadSound(ItemID id) {
     std::string path = soundMapIDS[id];
     Mix_Chunk* sound = Mix_LoadWAV(path.c_str());
     if (sound == nullptr) {

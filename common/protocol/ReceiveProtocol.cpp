@@ -10,8 +10,8 @@
 ReceiveProtocol::ReceiveProtocol(ActiveSocket& socket): skt(socket) {}
 
 u8 ReceiveProtocol::recvByte() {
-    unsigned char byte;
-    if (!skt.receive(&byte, sizeof(unsigned char))) {
+    u8 byte;
+    if (!skt.receive(&byte, sizeof(u8))) {
         throw LibError(EPIPE, ERR_RECEIVE);
     }
     return byte;

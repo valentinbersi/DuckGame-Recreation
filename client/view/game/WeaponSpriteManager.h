@@ -1,29 +1,50 @@
 #pragma once
 
-#include "GunID.h"
+#include <string>
+#include <unordered_map>
+
 #include "DuckState.h"
-#include "TextureManager.h"
+#include "ItemID.h"
 #include "Spritesheet.h"
+#include "TextureManager.h"
 
 class WeaponSpriteManager {
 
 public:
+    // Constructor.
     WeaponSpriteManager();
-    void drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale, const DuckState& state);
-    void drawCowboyPistol(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale,
-                          const DuckState& state);
+
+    // Selects the weapon to be drawn and its effects based on the current state.
+    void drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale,
+                    const DuckState& state);
 
 private:
-    std::unordered_map<GunID, std::string> gunPaths = {
-        //{GunID::Granade, "../assets/weapons/"},
-        //{GunID::Banana, "../assets/weapons/"},
-        //{GunID::PewPewLaser, "../assets/weapons/"},
-        //{GunID::LaserRifle, "../assets/weapons/"},
-        //{GunID::Ak47, "../assets/weapons/"},
-        //{GunID::DuelPistol, "../assets/weapons/"},
-        {GunID::CowboyPistol, "assets/weapons/CowboyPistol.png"}
-        //{GunID::Magnum, "../assets/weapons/"},
-        //{GunID::Shotgun, "../assets/weapons/"},
-        //{GunID::Sniper, "../assets/weapons/"},
+    // Draws the main sprite of each weapon.
+    void draw(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale,
+              const DuckState& state);
+
+    // Draws the first type of effect of the weapons.
+    void drawEffect1(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale);
+
+    // Draws the second type of effect of the weapons.
+    void drawEffect2(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale);
+
+    // Draws the laser flare effect for the Laser Rifle.
+    void drawLaserFlare(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale);
+
+    // Draws the plasma effect for the Pew Pew Laser.
+    void drawPlasma(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale);
+
+    std::unordered_map<ItemID, std::string> gunPaths = {
+            {ItemID::Grenade, "assets/weapons/Grenade.png"},
+            {ItemID::Banana, "assets/weapons/Banana.png"},
+            {ItemID::PewPewLaser, "assets/weapons/PewPewLaser.png"},
+            {ItemID::LaserRifle, "assets/weapons/LaserRifle.png"},
+            {ItemID::Ak47, "assets/weapons/Ak47.png"},
+            //{GunID::DuelPistol, "assets/weapons/DuelPistol.png"},
+            {ItemID::CowboyPistol, "assets/weapons/CowboyPistol.png"},
+            {ItemID::Magnum, "assets/weapons/Magnum.png"},
+            {ItemID::Shotgun, "assets/weapons/Shotgun.png"},
+            {ItemID::Sniper, "assets/weapons/Sniper.png"},
     };
 };

@@ -6,13 +6,10 @@
 
 #include "../Updatable.h"
 
-#include "GameStatus.h"
 #include "Startable.h"
 #include "Subject.h"
 #include "TrackedReference.h"
 #include "Types.h"
-
-using gameObject::Subject;
 
 /**
  * An object in the game.\n
@@ -23,7 +20,12 @@ using gameObject::Subject;
  * any raw pointer passed as argument inside Objects does not hold ownership of the
  * underlying object.\n
  */
-class GameObject: public Subject, public TrackedReference, public Updatable, public Startable {
+class GameObject:
+        public gameObject::Subject,
+        public TrackedReference,
+        public Updatable,
+        public Startable {
+
     GameObject* _parent;
     HashMap<std::string, GameObject*> children;
 
@@ -41,6 +43,14 @@ class GameObject: public Subject, public TrackedReference, public Updatable, pub
      */
     virtual void onTreeExited(GameObject* object);
 
+    /**
+     * Checks if there's a child with the same name. If true returns a valid name for that child,
+     * otherwise returns the same name.
+     * @param name The name to check
+     * @return A valid name for the child
+     */
+    std::string findAvaiableName(std::string name) const;
+
 protected:
     constexpr static auto INVALID_EVENT_TYPE = "Invalid event type";
 
@@ -57,7 +67,7 @@ protected:
      * @throws  std::invalid_argument If newChild is nullptr
      * @throws  std::invalid_argument If newChild already has a parent
      * @throws  std::invalid_argument If name is empty
-     * @throws  AlreadyAddedChild If the name is already taken
+     * @throws  NoMoreNamesAvailable If the name is already taken
      */
     void addChild(std::string name, GameObject* newChild);
 
@@ -79,11 +89,16 @@ protected:
     Ret applyToChild(const std::string& name, const std::function<Ret(GameObject*)>& f);
 
 public:
+    struct Events {
+        constexpr static auto TreeEntered = "TreeEntered";
+        constexpr static auto TreeExited = "TreeExited";
+    };
+
     /**
      * An exception thrown when trying to add a child with a name that is already taken
      */
-    struct AlreadyAddedChild final: std::runtime_error {
-        explicit AlreadyAddedChild(const std::string& name);
+    struct NoMoreNamesAvailable final: std::runtime_error {
+        explicit NoMoreNamesAvailable(const std::string& name);
     };
 
     /**
@@ -123,7 +138,7 @@ public:
      * @throws  std::invalid_argument If newChild is nullptr
      * @throws  std::invalid_argument If name is empty
      * @throws std::invalid_argument if newChild already has a parent
-     * @throws  AlreadyAddedChild If the name is already taken
+     * @throws  NoMoreNamesAvailable If the name is already taken
      */
     void addChild(std::string name, std::unique_ptr<GameObject> newChild);
 
@@ -139,7 +154,7 @@ public:
      * @param name The name of the child to transfer
      * @param parent The parent object to transfer the child from
      */
-    void transferChild(std::string name, GameObject& parent);
+    void transferChild(const std::string& name, GameObject& parent);
 
     /**
      * Get a child of the object.
@@ -173,27 +188,6 @@ public:
      * @return A reference to the root object
      */
     GameObject* getRoot();
-
-    /**
-     * The events the Object class has
-     */
-    enum class Events : u8 {
-        /**
-         * A child entered the tree
-         */
-        TREE_ENTERED,
-        /**
-         * A child exited the tree
-         */
-        TREE_EXITED
-    };
-
-    /**
-     * Get the event name of an event type
-     * @param eventType The event type
-     * @return The event name
-     */
-    static std::string eventName(Events eventType);
 };
 
 template <typename Ret>

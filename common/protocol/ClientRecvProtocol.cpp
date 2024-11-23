@@ -10,6 +10,12 @@ Vector2 ClientRecvProtocol::recvVector2() {
     return Vector2(x, y);
 }
 
+Rectangle ClientRecvProtocol::recvRectangle() {
+    Vector2 position = recvVector2();
+    Vector2 size = recvVector2();
+    return Rectangle(position, size);
+}
+
 std::list<DuckData> ClientRecvProtocol::recvDuckData() {
     u16 size = recvShort();
     std::list<DuckData> ducks;
@@ -19,17 +25,17 @@ std::list<DuckData> ClientRecvProtocol::recvDuckData() {
         u8 gunID = recvByte();
         u16 actions = recvShort();
         Vector2 position = recvVector2();
-        ducks.emplace_back(position, static_cast<DuckID>(duckID), life, static_cast<GunID>(gunID),
+        ducks.emplace_back(position, static_cast<DuckID>(duckID), life, static_cast<ItemID>(gunID),
                            actions);
     }
     return ducks;
 }
 
-std::list<Vector2> ClientRecvProtocol::recvBlockPositions() {
+std::list<SizedObjectData> ClientRecvProtocol::recvBlockPositions() {
     u16 size = recvShort();
-    std::list<Vector2> blockPositions;
+    std::list<SizedObjectData> blockPositions;
     for (u16 i(0); i < size; ++i) {
-        blockPositions.emplace_back(recvVector2());
+        blockPositions.emplace_back(recvRectangle());
     }
     return blockPositions;
 }
@@ -39,6 +45,7 @@ GameStatus ClientRecvProtocol::recvGameStatus() {
     recvByte();  // type
     status.ducks = recvDuckData();
     status.blockPositions = recvBlockPositions();
+    status.itemSpawnerPositions = recvBlockPositions();
     return status;
 }
 

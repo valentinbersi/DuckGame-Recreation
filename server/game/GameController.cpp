@@ -1,6 +1,6 @@
 #include "GameController.h"
 
-#include <memory>
+#include <ranges>
 #include <string>
 #include <utility>
 
@@ -13,9 +13,9 @@
  * @param Function The function to call
  * @param ... The type of the arguments to pass to the function
  */
-#define eventHandler(Function, ...)                                          \
-    std::make_unique<gameObject::EventHandler<GameController, __VA_ARGS__>>( \
-            getReference<GameController>(), Function)
+#define eventHandler(Function, ...)                                                               \
+    gameObject::EventHandler<GameController, __VA_ARGS__>::create(getReference<GameController>(), \
+                                                                  Function)
 
 GameController::~GameController() = default;
 
@@ -43,11 +43,9 @@ GameController::PlayerNotFound::PlayerNotFound(const PlayerID id):
         std::out_of_range(PLAYER_ID + std::to_string(id) + NOT_FOUND) {}
 
 GameController::GameController(): GameObject(nullptr), level(nullptr) {
-    connect(eventName(Events::TREE_ENTERED),
-            eventHandler(&GameController::onTreeEntered, GameObject*));
+    connect(Events::TreeEntered, eventHandler(&GameController::onTreeEntered, GameObject*));
 
-    connect(eventName(Events::TREE_EXITED),
-            eventHandler(&GameController::onTreeExited, GameObject*));
+    connect(Events::TreeExited, eventHandler(&GameController::onTreeExited, GameObject*));
 
     // addChild("Platform", new Platform({0, 600}, 1000, 200));  // This simulated loading a level
     //  addChild("Platform2", new Platform({400, 400}, 50, 200));  // This simulated loading a level
@@ -76,10 +74,10 @@ void GameController::addPlayer(const PlayerID playerID) {
 
     const auto newPlayer = new Player(duckID);
 
-    newPlayer->connect(eventName(Events::TREE_ENTERED),
+    newPlayer->connect(Events::TreeEntered,
                        eventHandler(&GameController::onTreeEntered, GameObject*));
 
-    newPlayer->connect(eventName(Events::TREE_EXITED),
+    newPlayer->connect(Events::TreeExited,
                        eventHandler(&GameController::onTreeExited, GameObject*));
 
     addChild(PLAYER + id, newPlayer);
@@ -103,9 +101,9 @@ void GameController::loadLevel(const LevelData& level) {
 
     this->level = new Level(level);
 
-    this->level->connect(eventName(Events::TREE_ENTERED),
+    this->level->connect(Events::TreeEntered,
                          eventHandler(&GameController::onTreeEntered, GameObject*));
-    this->level->connect(eventName(Events::TREE_EXITED),
+    this->level->connect(Events::TreeExited,
                          eventHandler(&GameController::onTreeExited, GameObject*));
 
     addChild("Level", this->level);
@@ -113,7 +111,8 @@ void GameController::loadLevel(const LevelData& level) {
 
 GameStatus GameController::status() const {
     GameStatus status;
-    status.blockPositions = std::move(level->status());
-    for (const auto& [_, player]: players) status.ducks.push_back(player->status());
+    status.blockPositions = level->blockStatus();
+    status.itemSpawnerPositions = level->itemSpawnerStatus();
+    for (Player* player: players | std::views::values) status.ducks.push_back(player->status());
     return status;
 }

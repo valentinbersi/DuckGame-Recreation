@@ -6,6 +6,10 @@
 
 void MapManager::exportMap(const std::vector<Object>& objects, const std::string& mapName,
                            int mapWidth, int mapHeight) {
+    for (const auto& obj: objects) {
+        qDebug() << obj.centerPos;
+    }
+
     std::string path = "../maps/" + mapName + ".yaml";
     std::ofstream fout(path);
     if (!fout.is_open()) {
@@ -16,7 +20,7 @@ void MapManager::exportMap(const std::vector<Object>& objects, const std::string
     YAML::Node mapNode;
 
     mapNode["map_name"] = mapName;
-    mapNode["background"] = "background_image.png";
+    mapNode["background"] = "forest-night.png";
     mapNode["map_width"] = mapWidth;
     mapNode["map_height"] = mapHeight;
 
@@ -26,7 +30,9 @@ void MapManager::exportMap(const std::vector<Object>& objects, const std::string
         objNode["type"] = objectTypeToString(obj.type);
         objNode["x"] = obj.centerPos.x();
         objNode["y"] = obj.centerPos.y();
-
+        qDebug() << "Objeto:" << obj.centerPos;
+        qDebug() << "objeto exportado:" << QString::fromStdString(objNode["type"].as<std::string>())
+                 << "  x: " << objNode["x"].as<int>() << "  y: " << objNode["y"].as<int>();
         objectsNode.push_back(objNode);
     }
 
@@ -89,6 +95,11 @@ bool MapManager::importMap(std::vector<Object>& objects, const std::string& mapP
 
             object.centerPos.setX(objNode["x"].as<int>());
             object.centerPos.setY(objNode["y"].as<int>());
+
+            qDebug() << "Objeto:" << object.centerPos;
+            qDebug() << "objeto importado:"
+                     << QString::fromStdString(objNode["type"].as<std::string>())
+                     << "  x: " << objNode["x"].as<int>() << "  y: " << objNode["y"].as<int>();
 
             objects.push_back(object);
         }

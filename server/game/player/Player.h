@@ -1,16 +1,26 @@
 #pragma once
 
+#include <memory>
+
 #include "CollisionObject.h"
 #include "DuckData.h"
 #include "Input.h"
 #include "PhysicsObject.h"
 
+class EquippableWeapon;
 class Player final: public PhysicsObject {
+private:
     DuckID id;
     u8 life;
     u16 flags;
     Input input;
     float speed;
+    EquippableWeapon* weapon;
+
+    /**
+     *
+     */
+    void onItemCollision(CollisionObject* item);
     // bool canKeepJumping;
 
 public:
@@ -65,7 +75,18 @@ public:
      */
     void stopCrouch();
 
+    /**
+     * Makes the player to jump
+     */
     void jump();
 
+    /**
+     * Stops the player from jumping
+     */
     void stopJump();
+
+    /**
+     * Makes the player interact with the environment
+     */
+    void interact();
 };

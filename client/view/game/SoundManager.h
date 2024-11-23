@@ -10,7 +10,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "DuckData.h"
-#include "GunID.h"
+#include "ItemID.h"
 
 class SoundManager {
 
@@ -21,16 +21,18 @@ public:
     // Destructor.
     ~SoundManager();
 
-    //
-    void playSound(GunID id);
+    // Plays the sound associated with the given ItemID.
+    // also it checks if the sound for the given ItemID is already loaded in the soundMap.
+    void playSound(ItemID id);
 
 private:
-    //
+    // Plays the music in loop.
     void playMusic();
 
-    //
-    bool loadSound(GunID id);
-    std::unordered_map<GunID, Mix_Chunk*> soundMap;
-    std::unordered_map<GunID, std::string> soundMapIDS{
-            {GunID::CowboyPistol, "../assets/sounds/cowboyPistol.mp3"}};
+    // Loads the sound associated with the given ItemID.
+    bool loadSound(ItemID id);
+
+    std::unordered_map<ItemID, Mix_Chunk*> soundMap;
+    std::unordered_map<ItemID, std::string> soundMapIDS{
+            {ItemID::CowboyPistol, "../assets/sounds/cowboyPistol.mp3"}};
 };
