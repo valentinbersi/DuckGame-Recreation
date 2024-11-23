@@ -7,6 +7,16 @@
 - Camilo Sassone Irrazabal - 111135
 - Andrés Eduardo Colina Madrid - 110680
 
+## Problemas Conocidos:
+
+- Cppcheck detecta falsos positivos en todo el proyecto (por ejemplo variables no usadas que claramente estan siendo usadas) y es muy probable que falle, ademas de no poder detectar problemas reales.
+
+## Dudas:
+
+- Las balas deberian ser dibujadas por el cliente o solo el efecto de disparo del arma? Esto es porque al las
+balas ser tan rapidas es muy probable que apenas logren a verse en pantalla, entonces talvez no es conveniente
+cargar a la vista con objetos que apenas se van a ver.
+
 ## Instalación:
 
 1. Instalar git: $ sudo apt install git
