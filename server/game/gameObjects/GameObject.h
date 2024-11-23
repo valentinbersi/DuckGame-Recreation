@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "../Updatable.h"
+#include "Updatable.h"
 
 #include "Startable.h"
 #include "Subject.h"

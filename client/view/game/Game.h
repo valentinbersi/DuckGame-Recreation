@@ -97,6 +97,5 @@ private:
             "assets/background/forest-night.png", "assets/background/city.png",
             "assets/background/forest-day.png",   "assets/background/snowy-peaks.png",
             "assets/background/desert.png",       "assets/background/cascade-cave.png",
-            "assets/background/sunset.png",       "assets/background/dark-cave.png",
-            "assets/background/cave-gem.png"};
+            "assets/background/sunset.png",       "assets/background/dark-cave.png"};
 };
