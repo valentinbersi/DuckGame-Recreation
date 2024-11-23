@@ -12,6 +12,7 @@
 #include "ItemID.h"
 #include "Layer.h"
 #include "WeaponFactory.h"
+#include "ItemFactory.h"
 
 #define MOVE_RIGHT "Move Right"
 #define MOVE_LEFT "Move Left"
@@ -63,8 +64,8 @@ void Player::onItemCollision(CollisionObject* item) {
                 flags |= (flags & DuckData::ARMOR) ? flags : DuckData::ARMOR;
                 return;
             default:
-
-                return;
+                weapon = WeaponFactory::createWeapon(id).release();
+                addChild("Weapon", weapon); 
         }
         input.releaseAction(INTERACT);
     }
@@ -111,17 +112,17 @@ void Player::update([[maybe_unused]] const float delta) {
         flags |= DuckData::MOVING_LEFT;
     } else if (input.isActionPressed(JUMP) && _onGround) {
         _velocity += Vector2(0, -10);
-    } else if (input.isActionPressed(INTERACT)) {
+    } else if (input.isActionPressed(INTERACT) && weapon) {
         input.releaseAction(INTERACT);
-        // ItemID id = weapon->getID();
-        // ItemFactory::createItem(id);
-        // weapon = nullptr;
+        getRoot()->addChild("Weapon", ItemFactory::createItem(weapon->getID()));
+        removeChild("Weapon");
+        weapon = nullptr;
     }
 
     if (!_onGround)
         flags |= DuckData::IN_AIR;
 }
 
-DuckData Player::status() { return {globalPosition(), id, life, ItemID::Ak47, flags}; }
+DuckData Player::status() { return {globalPosition(), id, life, weapon ? weapon->getID() : ItemID(ItemID::NONE), flags}; }
 
 Player::~Player() = default;
