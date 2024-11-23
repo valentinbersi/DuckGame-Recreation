@@ -39,6 +39,7 @@ Vector2 Camera::calculateMaxDistance(std::list<DuckData>& ducks) {
     }
 
     maxDistance.setX(maxDistance.x() + 6);
+    maxDistance.setY(maxDistance.y() + 6);
 
     return maxDistance;
 }

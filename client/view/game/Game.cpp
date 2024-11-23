@@ -111,8 +111,8 @@ void Game::filterObjectsToRender() {
 
 void Game::updatePlayers(
         std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping) {
-    const float objectCameraSize = camera.getViewRect().size().x() / DUCK_WIDTH;
-    const float scale = static_cast<float>(window_width) / objectCameraSize;
+    const float objectCameraCount = camera.getViewRect().size().x() / DUCK_WIDTH;
+    const float scale = static_cast<float>(window_width) / objectCameraCount;
 
     for (auto& duck: ducksToRender) {
         DuckID duckID = duck.duckID;
@@ -137,8 +137,8 @@ void Game::updatePlayers(
                            duck.extraData[DuckData::MOVING_RIGHT_INDEX],
                            duck.extraData[DuckData::MOVING_LEFT_INDEX],
                            /*duck.extraData[DuckData::HELMET]*/ true,
-                           /*duck.extraData[DuckData::ARMOR]*/ true,
-                           /*duck.extraData[DuckData::IS_SHOOTING]*/ true,
+                           /*duck.extraData[DuckData::ARMOR]*/ false,
+                           /*duck.extraData[DuckData::IS_SHOOTING]*/ false,
                            /*duck.gun->gunID*/ ItemID::CowboyPistol};
         // if (state.isShooting) soundManager.playSound(/*duck.gun->gunID*/ GunID::CowboyPistol);
         // falta dibujar el fire
@@ -167,7 +167,8 @@ void Game::updateBlocks(EnviromentRenderer& enviromentRenderer) {
         const float screenPositionY =
                 relativePositionY * positionScaleY + static_cast<float>(window_height) / 2;
 
-        SDL2pp::Rect position(screenPositionX - scale / 2, screenPositionY - scale / 2,
+        SDL2pp::Rect position(static_cast<int>(screenPositionX - scale / 2),
+                              static_cast<int>(screenPositionY - scale / 2),
                               static_cast<int>(scale), static_cast<int>(scale));
         enviromentRenderer.drawEnviroment(position, ROCK);
     }

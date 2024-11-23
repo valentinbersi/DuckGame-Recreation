@@ -46,7 +46,7 @@ SpriteManager::SpriteManager(
         flip(false),
         hasHelmet(true),
         hasChestplate(true),
-        shooting(true),
+        shooting(false),
         gunEquipped(ItemID::CowboyPistol),
         spritesheet(std::make_unique<Spritesheet>(path1, path2, renderer)),
         weaponSpriteManager(std::make_unique<WeaponSpriteManager>()),
@@ -108,7 +108,7 @@ void SpriteManager::setFlags(const DuckState& state) {
     negateFlag(state.movingRight, movingRight);
     negateFlag(state.movingLeft, movingLeft);
     negateFlag(state.crouching, crouching);
-    // negateFlag(state.isShooting, shooting);
+    negateFlag(state.isShooting, shooting);
 
     if (flapping != state.flapping) {
         flapping = !flapping;
@@ -135,7 +135,7 @@ void SpriteManager::draw(int col, int row, const DuckState& state) {
     if (gunEquipped != ItemID::NONE) {
         SDL2pp::Rect position = calculateBasePosition();
         weaponSpriteManager->drawWeapon(spritesheet.get(), position, flip, scale, state);
-        hasWeapon = true;
+        // hasWeapon = true;
     }
     drawFeathers(col, row, hasWeapon);
 }
@@ -187,7 +187,7 @@ SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather, boo
         adjustForFeathers(position, isRightFeather);
     } else if (isChestplate) {
         if (frame == 0) {
-            position.y += (4 * scale / DEFAULT_SCALE);
+            position.y += 15;
         }
     } else if (isHelmet) {
         adjustForHelmet(position);
@@ -196,35 +196,35 @@ SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather, boo
 }
 
 SDL2pp::Rect SpriteManager::calculateBasePosition() {
-    return {static_cast<int>(m_position_x - scale / 2), static_cast<int>(m_position_y - scale / 2),
-            static_cast<int>(scale), static_cast<int>(scale)};
+    return {static_cast<int>(m_position_x - scale), static_cast<int>(m_position_y - scale),
+            static_cast<int>(scale * 2), static_cast<int>(scale * 2)};
 }
 
 void SpriteManager::adjustForFeathers(SDL2pp::Rect& position, bool isRightFeather) {
     if (isRightFeather) {
-        position.x += 8 * scale / DEFAULT_SCALE;
+        position.x += 20;
     } else {
-        position.x += 4 * scale / DEFAULT_SCALE;
+        position.x += 30;
     }
     if (crouching)
-        position.y += 12 * scale / DEFAULT_SCALE;
+        position.y += 50;
     else
-        position.y += 10 * scale / DEFAULT_SCALE;
+        position.y += 60;
 
-    position.w = 8 * scale / DEFAULT_SCALE;
-    position.h = 8 * scale / DEFAULT_SCALE;
+    position.w = scale / 2;
+    position.h = scale / 2;
 }
 
 void SpriteManager::adjustForHelmet(SDL2pp::Rect& position) {
     if (flip) {
-        position.x -= 0.5 * scale / DEFAULT_SCALE;
+        position.x -= 0.04 * scale;
     } else {
-        position.x += 0.5 * scale / DEFAULT_SCALE;
+        position.x += 0.04 * scale;
     }
     if (crouching) {
-        position.y += 0.3 * scale / DEFAULT_SCALE;
+        position.y += 0.19 * scale;
     } else {
-        position.y -= 3.5 * scale / DEFAULT_SCALE;
+        position.y -= 0.19 * scale;
     }
 }
 

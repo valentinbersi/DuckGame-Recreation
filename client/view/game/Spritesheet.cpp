@@ -47,8 +47,6 @@ void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool fea
         throw std::runtime_error("Texture is null in drawSelectedSprite.");
     }
 
-    // PROBAR USAR SDL_RenderCopy        SIN EX...??? NO HAY PUNTO PIVOTE
-
     SDL_RenderCopyEx(renderer.Get(), texture, &m_clip, &position, 0.0, nullptr, flipType);
 }
 
