@@ -91,7 +91,7 @@ void Game::getSnapshot() {
     clearObjects();
     for (auto& duck: snapshot->ducks) ducks.push_back(std::move(duck));
     for (const auto& block: snapshot->blockPositions) blocks.push_back(block);
-    for (const auto& itemSpawner: snapshot->itemSpawnerPositions) blocks.push_back(itemSpawner);
+    for (const auto& itemSpawner: snapshot->itemSpawnerPositions) itemSpawns.push_back(itemSpawner);
     // for (const auto& spawner: snapshot->spawnerPosition) spawners.push_back(spawner);
     // for (const auto& weapon: snapshot->weaponPosition) weapons.push_back(weapon);
 }
@@ -180,9 +180,9 @@ void Game::updateWeaponSpawns(EnviromentRenderer& enviromentRenderer) {
     const float spawnerCameraSize = camera.getViewRect().size().x() / WEAPON_SPAWN_WIDTH;
     const float scale = static_cast<float>(window_width) / spawnerCameraSize;
 
-    for (SizedObjectData& block: blocksToRender) {
-        const float relativePositionX = block.position.x() - camera.getViewRect().center().x();
-        const float relativePositionY = block.position.y() - camera.getViewRect().center().y();
+    for (SizedObjectData& itemSpawn: itemSpawnsToRender) {
+        const float relativePositionX = itemSpawn.position.x() - camera.getViewRect().center().x();
+        const float relativePositionY = itemSpawn.position.y() - camera.getViewRect().center().y();
         const float positionScaleX =
                 static_cast<float>(window_width) / camera.getViewRect().size().x();
         const float positionScaleY =

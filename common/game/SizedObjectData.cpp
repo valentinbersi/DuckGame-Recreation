@@ -27,7 +27,7 @@ SizedObjectData& SizedObjectData::operator=(SizedObjectData&& other) noexcept {
 
 SizedObjectData::~SizedObjectData() = default;
 
-SizedObjectData::SizedObjectData(const Vector2& position, float width, float height):
+SizedObjectData::SizedObjectData(const Vector2& position, const float width, const float height):
         GameObject2DData(position), rectangle(position, width, height) {}
 
 SizedObjectData::SizedObjectData(const Rectangle& rectangle):

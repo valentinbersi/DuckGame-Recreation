@@ -13,5 +13,5 @@ public:
     void start() override;
     void update(float delta) override;
 
-    SizedObjectData status();
+    SizedObjectData status() const;
 };

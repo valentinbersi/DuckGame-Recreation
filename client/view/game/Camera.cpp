@@ -13,7 +13,8 @@ void Camera::update(std::list<DuckData>& ducks) {
     updateZoom(center, maxDistance, aspectRatio);
 }
 
-void Camera::updateZoom(const Vector2& center, const Vector2& maxDistance, float aspectRatio) {
+void Camera::updateZoom(const Vector2& center, const Vector2& maxDistance,
+                        const float aspectRatio) {
     const Vector2 rectDimension = maxDistance.x() > maxDistance.y() ?
                                           Vector2(maxDistance.x(), maxDistance.x() / aspectRatio) :
                                           Vector2(maxDistance.y() * aspectRatio, maxDistance.y());

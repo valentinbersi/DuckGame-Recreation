@@ -11,4 +11,4 @@ void TerrainBlock::start() {}
 
 void TerrainBlock::update([[maybe_unused]] float delta) {}
 
-SizedObjectData TerrainBlock::status() { return {position(), BLOCK_DIMENSIONS}; }
+SizedObjectData TerrainBlock::status() const { return {position(), BLOCK_DIMENSIONS}; }
