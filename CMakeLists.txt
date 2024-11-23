@@ -6,9 +6,6 @@ if (POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif ()
 
-set(CMAKE_C_COMPILER clang)
-set(CMAKE_CXX_COMPILER clang++)
-
 if (NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 20)
 endif ()
@@ -224,6 +221,8 @@ endif ()
 
 if (SERVER)
     add_executable(DuckGameDedicatedServer)
+
+    target_compile_options(DuckGameDedicatedServer PRIVATE -std=c++20)
 
     # Make them depend on taller_common lib
     add_dependencies(DuckGameDedicatedServer common)
