@@ -54,6 +54,8 @@ void GameObject::addChild(std::string name, GameObject* newChild) {
     newChild->connect(Events::TreeEntered, eventHandler(&GameObject::onTreeEntered, GameObject*));
     newChild->connect(Events::TreeExited, eventHandler(&GameObject::onTreeExited, GameObject*));
 
+    newChild->_parent = this;
+
     children.emplace(std::move(name), newChild);
 
     fire(Events::TreeEntered, newChild);
