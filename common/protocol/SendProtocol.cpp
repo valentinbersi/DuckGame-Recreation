@@ -8,32 +8,27 @@
 SendProtocol::SendProtocol(ActiveSocket& socket): skt(socket) {}
 
 void SendProtocol::sendByte(u8 byte) {
-    if (!skt.send(&byte, sizeof(uint8_t))) {
+    if (!skt.send(&byte, sizeof(u8))) {
         throw LibError(EPIPE, ERR_SEND);
     }
 }
 
 void SendProtocol::sendShort(u16 num) {
     u16 bigEndNum = htons(num);
-    if (!skt.send(&bigEndNum, sizeof(uint16_t))) {
+    if (!skt.send(&bigEndNum, sizeof(u16))) {
         throw LibError(EPIPE, ERR_SEND);
     }
 }
 
 void SendProtocol::sendInt(u32 num) {
     u32 bigEndNum = htonl(num);
-    if (!skt.send(&bigEndNum, sizeof(uint32_t))) {
+    if (!skt.send(&bigEndNum, sizeof(u32))) {
         throw LibError(EPIPE, ERR_SEND);
     }
 }
 
 void SendProtocol::sendString(const std::string& string) {
-    uint16_t size = string.size();
-    size = htons(size);
-    if (!skt.send(&size, sizeof(uint16_t))) {
-        throw LibError(EPIPE, ERR_SEND);
-    }
-
+    sendShort(string.size());
     if (!skt.send(string.c_str(), string.size())) {
         throw LibError(EPIPE, ERR_SEND);
     }

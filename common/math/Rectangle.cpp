@@ -133,3 +133,7 @@ std::optional<IntersectionInfo> Rectangle::overlaps(const Ray2D& ray) const {
 
     return info;
 }
+
+bool Rectangle::operator==(const Rectangle& other) const {
+    return _position.isEqualAprox(other._position) && _size.isEqualAprox(other._size);
+}

@@ -43,6 +43,14 @@ class GameObject:
      */
     virtual void onTreeExited(GameObject* object);
 
+    /**
+     * Checks if there's a child with the same name. If true returns a valid name for that child,
+     * otherwise returns the same name.
+     * @param name The name to check
+     * @return A valid name for the child
+     */
+    std::string findAvaiableName(std::string name) const;
+
 protected:
     constexpr static auto INVALID_EVENT_TYPE = "Invalid event type";
 
@@ -59,7 +67,7 @@ protected:
      * @throws  std::invalid_argument If newChild is nullptr
      * @throws  std::invalid_argument If newChild already has a parent
      * @throws  std::invalid_argument If name is empty
-     * @throws  AlreadyAddedChild If the name is already taken
+     * @throws  NoMoreNamesAvailable If the name is already taken
      */
     void addChild(std::string name, GameObject* newChild);
 
@@ -89,8 +97,8 @@ public:
     /**
      * An exception thrown when trying to add a child with a name that is already taken
      */
-    struct AlreadyAddedChild final: std::runtime_error {
-        explicit AlreadyAddedChild(const std::string& name);
+    struct NoMoreNamesAvailable final: std::runtime_error {
+        explicit NoMoreNamesAvailable(const std::string& name);
     };
 
     /**
@@ -130,7 +138,7 @@ public:
      * @throws  std::invalid_argument If newChild is nullptr
      * @throws  std::invalid_argument If name is empty
      * @throws std::invalid_argument if newChild already has a parent
-     * @throws  AlreadyAddedChild If the name is already taken
+     * @throws  NoMoreNamesAvailable If the name is already taken
      */
     void addChild(std::string name, std::unique_ptr<GameObject> newChild);
 
@@ -146,7 +154,7 @@ public:
      * @param name The name of the child to transfer
      * @param parent The parent object to transfer the child from
      */
-    void transferChild(std::string name, GameObject& parent);
+    void transferChild(const std::string& name, GameObject& parent);
 
     /**
      * Get a child of the object.

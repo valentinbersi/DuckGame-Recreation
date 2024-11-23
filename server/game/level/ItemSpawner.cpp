@@ -6,10 +6,11 @@
 #include "ItemFactory.h"
 
 #define SPAWN_TIME_RANGE 5.0f, 20.0f
+#define SPAWNER_DIMENSIONS 2, 2
 
-#define eventHandler(Function,                                                                   \
-                     ...) /*como no se recibe argumentos en este caso quito coma y __VA_ARGS__*/ \
-    std::make_unique<gameObject::EventHandler<ItemSpawner>>(getReference<ItemSpawner>(), Function)
+#define eventHandler(                                                                    \
+        Function) /*como no se recibe argumentos en este caso quito coma y __VA_ARGS__*/ \
+    gameObject::EventHandler<ItemSpawner>::create(getReference<ItemSpawner>(), Function)
 
 RandomFloatGenerator ItemSpawner::randomGenerator(SPAWN_TIME_RANGE);
 
@@ -33,5 +34,7 @@ void ItemSpawner::update([[maybe_unused]] const float delta) {
         timer->start();
     }
 }
+
+SizedObjectData ItemSpawner::status() const { return {position(), SPAWNER_DIMENSIONS}; }
 
 ItemSpawner::~ItemSpawner() = default;

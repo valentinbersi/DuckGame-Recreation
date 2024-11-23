@@ -48,6 +48,6 @@ DuckData::DuckData(Vector2 position, const DuckID duckID, const u8 life, const I
         extraData(extraData) {}
 
 bool DuckData::operator==(const DuckData& other) const {
-    return position == other.position && duckID == other.duckID && life == other.life &&
+    return position.isEqualAprox(other.position) && duckID == other.duckID && life == other.life &&
            extraData == other.extraData;
 }

@@ -45,6 +45,7 @@ GameStatus ClientRecvProtocol::recvGameStatus() {
     recvByte();  // type
     status.ducks = recvDuckData();
     status.blockPositions = recvBlockPositions();
+    status.itemSpawnerPositions = recvBlockPositions();
     return status;
 }
 
