@@ -31,10 +31,8 @@ void MapManager::exportMap(const std::vector<Object>& objects, const std::string
         objNode["x"] = obj.centerPos.x();
         objNode["y"] = obj.centerPos.y();
         qDebug() << "Objeto:" << obj.centerPos;
-        qDebug() << "objeto exportado:"
-                 << QString::fromStdString(objNode["type"].as<std::string>())
-                 << "  x: " << objNode["x"].as<int>()
-                 << "  y: " << objNode["y"].as<int>();
+        qDebug() << "objeto exportado:" << QString::fromStdString(objNode["type"].as<std::string>())
+                 << "  x: " << objNode["x"].as<int>() << "  y: " << objNode["y"].as<int>();
         objectsNode.push_back(objNode);
     }
 
@@ -101,8 +99,7 @@ bool MapManager::importMap(std::vector<Object>& objects, const std::string& mapP
             qDebug() << "Objeto:" << object.centerPos;
             qDebug() << "objeto importado:"
                      << QString::fromStdString(objNode["type"].as<std::string>())
-                     << "  x: " << objNode["x"].as<int>()
-                     << "  y: " << objNode["y"].as<int>();
+                     << "  x: " << objNode["x"].as<int>() << "  y: " << objNode["y"].as<int>();
 
             objects.push_back(object);
         }
