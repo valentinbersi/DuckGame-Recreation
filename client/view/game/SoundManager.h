@@ -34,6 +34,5 @@ private:
 
     std::unordered_map<ItemID, Mix_Chunk*> soundMap;
     std::unordered_map<ItemID, std::string> soundMapIDS{
-            {ItemID::CowboyPistol, "../assets/sounds/cowboyPistol.mp3"}
-    };
+            {ItemID::CowboyPistol, "../assets/sounds/cowboyPistol.mp3"}};
 };

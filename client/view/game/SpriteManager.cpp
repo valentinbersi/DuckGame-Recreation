@@ -201,7 +201,7 @@ SDL2pp::Rect SpriteManager::calculateBasePosition() {
 
 void SpriteManager::adjustForFeathers(SDL2pp::Rect& position, bool isRightFeather) {
     if (isRightFeather) {
-        position.x +=  0.75 * scale;
+        position.x += 0.75 * scale;
     } else {
         position.x += 0.40 * scale;
     }

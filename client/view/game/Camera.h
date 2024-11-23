@@ -30,8 +30,9 @@ public:
     Rectangle& getViewRect();
 
 private:
-    // This method adjusts the size of the view rectangle based on the maximum distance between ducks
-    // and the aspect ratio of the window. It then centers the view rectangle on the provided center point.
+    // This method adjusts the size of the view rectangle based on the maximum distance between
+    // ducks and the aspect ratio of the window. It then centers the view rectangle on the provided
+    // center point.
     void updateZoom(const Vector2& center, const Vector2& maxDistance, float aspectRatio);
 
     // Calculates the maximum distance between any ducks in the list.

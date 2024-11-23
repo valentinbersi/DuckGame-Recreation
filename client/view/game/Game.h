@@ -43,7 +43,8 @@ public:
     void init();
 
 private:
-    // Filters the objects to render, based on the camera view. If the object is not in the camera view, it would not be rendered.
+    // Filters the objects to render, based on the camera view. If the object is not in the camera
+    // view, it would not be rendered.
     void filterObjectsToRender();
 
     // Starts the background randomly.
@@ -53,10 +54,18 @@ private:
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping();
 
     // Updates the positions, states, and scales of the player sprites based on the camera view.
-    void updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping);
+    void updatePlayers(
+            const std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping);
 
     // Updates the positions and scales of the blocks based on the camera view and renders them.
     void updateBlocks(EnviromentRenderer& enviromentRenderer);
+
+
+    /**
+     * Updates the positions and scales of the weapon spawns based on the camera view and renders
+     * @param enviromentRenderer the renderer that draws the enviroment objects
+     */
+    void updateWeaponSpawns(EnviromentRenderer& enviromentRenderer);
 
     // Receives the latest game status snapshot from the server and updates the game objects.
     void getSnapshot();
@@ -78,15 +87,16 @@ private:
     bool& twoPlayersLocal;
     Camera camera;
 
-    std::list<DuckData> ducksToRender;
-    std::list<SizedObjectData> blocksToRender;
-    std::list<DuckData> ducks;
+    std::list<SizedObjectData> itemSpawns;
+    std::list<SizedObjectData> itemSpawnsToRender;
     std::list<SizedObjectData> blocks;
+    std::list<SizedObjectData> blocksToRender;
+    std::list<DuckData> ducks;  // No ducks to render because all ducks should be rendered
 
     std::vector<std::string> backgrounds = {
             "assets/background/forest-night.png", "assets/background/city.png",
-            "assets/background/forest-day.png", "assets/background/snowy-peaks.png",
-            "assets/background/desert.png", "assets/background/cascade-cave.png",
-            "assets/background/sunset.png", "assets/background/dark-cave.png",
+            "assets/background/forest-day.png",   "assets/background/snowy-peaks.png",
+            "assets/background/desert.png",       "assets/background/cascade-cave.png",
+            "assets/background/sunset.png",       "assets/background/dark-cave.png",
             "assets/background/cave-gem.png"};
 };

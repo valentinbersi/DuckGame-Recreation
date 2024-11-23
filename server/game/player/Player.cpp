@@ -9,10 +9,10 @@
 #include "EquippableWeapon.h"
 #include "GameTimer.h"
 #include "Item.h"
+#include "ItemFactory.h"
 #include "ItemID.h"
 #include "Layer.h"
 #include "WeaponFactory.h"
-#include "ItemFactory.h"
 
 #define MOVE_RIGHT "Move Right"
 #define MOVE_LEFT "Move Left"
@@ -65,7 +65,7 @@ void Player::onItemCollision(CollisionObject* item) {
                 return;
             default:
                 weapon = WeaponFactory::createWeapon(id).release();
-                addChild("Weapon", weapon); 
+                addChild("Weapon", weapon);
         }
         input.releaseAction(INTERACT);
     }
@@ -123,6 +123,8 @@ void Player::update([[maybe_unused]] const float delta) {
         flags |= DuckData::IN_AIR;
 }
 
-DuckData Player::status() { return {globalPosition(), id, life, weapon ? weapon->getID() : ItemID(ItemID::NONE), flags}; }
+DuckData Player::status() {
+    return {globalPosition(), id, life, weapon ? weapon->getID() : ItemID(ItemID::NONE), flags};
+}
 
 Player::~Player() = default;
