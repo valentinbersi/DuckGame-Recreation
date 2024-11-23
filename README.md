@@ -67,3 +67,22 @@ cargar a la vista con objetos que apenas se van a ver.
 9. Ejecutar el editor: $ DuckGameLevelEditor
 
 10. Ejecutar los tests: $ DuckGameTests
+
+
+## Controles:
+
+* F11 para fullscreen
+
+#### Jugador 1:
+* Movimiento: WASD
+* Salto: Espacio
+* Interactuar: E
+* Disparo: G
+
+#### Jugador 2:
+* Movimiento: Flechas de dirección
+* Salto: RSHIFT
+* Interactuar: RCTRL
+* Disparo: DELETE (tecla superior al enter, NO supr/del)
+
+
