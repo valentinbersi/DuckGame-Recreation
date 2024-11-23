@@ -12,7 +12,7 @@ void GameTimer::update(const float delta) {
         return;
 
     timeLeft -= delta;
-    if (timeout - timeLeft <= 0) {
+    if (timeLeft <= 0) {
         _started = false;
         fire("Timeout");
     }
