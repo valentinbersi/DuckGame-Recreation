@@ -69,27 +69,6 @@ void MainWindow::onSceneResize() {
     ui->graphicsView->setSceneRect(0, 0, sceneRect.width() * 4, sceneRect.height() * 4);
 }
 
-void MainWindow::wheelEvent(QWheelEvent* event) {
-    if (event->modifiers() & Qt::ControlModifier) {
-        qreal zoomFactor = 1.15;
-
-        QPointF viewCenter =
-                ui->graphicsView->mapToScene(ui->graphicsView->viewport()->rect().center());
-
-        if (event->angleDelta().y() > 0)
-            ui->graphicsView->scale(zoomFactor, zoomFactor);
-        else
-            ui->graphicsView->scale(1 / zoomFactor, 1 / zoomFactor);
-
-        QPointF newCenter = ui->graphicsView->mapFromScene(viewCenter);
-        ui->graphicsView->ensureVisible(newCenter.x(), newCenter.y(), 100, 100, 1.0);
-
-        event->accept();
-    } else {
-        QMainWindow::wheelEvent(event);
-    }
-}
-
 void MainWindow::on_actionNewMap_triggered() {
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(
@@ -127,6 +106,8 @@ void MainWindow::on_actionEditMap_triggered() {
 
         scene->clearAll();
 
+        int mapWidth;
+        int mapHeight;
         bool success = MapManager::importMap(objects, fileName.toStdString(), mapWidth, mapHeight,
                                              background);
         if (success) {
@@ -144,3 +125,26 @@ MainWindow::~MainWindow() {
     delete scene;
     delete ui;
 }
+
+/*
+void MainWindow::wheelEvent(QWheelEvent* event) {
+    if (event->modifiers() & Qt::ControlModifier) {
+        qreal zoomFactor = 1.15;
+
+QPointF viewCenter =
+        ui->graphicsView->mapToScene(ui->graphicsView->viewport()->rect().center());
+
+if (event->angleDelta().y() > 0)
+    ui->graphicsView->scale(zoomFactor, zoomFactor);
+else
+    ui->graphicsView->scale(1 / zoomFactor, 1 / zoomFactor);
+
+QPointF newCenter = ui->graphicsView->mapFromScene(viewCenter);
+ui->graphicsView->ensureVisible(newCenter.x(), newCenter.y(), 100, 100, 1.0);
+
+event->accept();
+} else {
+    QMainWindow::wheelEvent(event);
+}
+}
+*/
