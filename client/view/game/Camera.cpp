@@ -1,7 +1,5 @@
 #include "Camera.h"
 
-#include "Debug.h"
-
 Camera::Camera(int& windowWidth, int& windowHeight):
         windowWidth(windowWidth),
         windowHeight(windowHeight),
