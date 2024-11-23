@@ -38,6 +38,8 @@ struct DuckData final: SizedObjectData {
     constexpr static DuckFlag MOVING_RIGHT = 0b10000000;
     constexpr static DuckFlag MOVING_LEFT = 0b100000000;
     constexpr static DuckFlag LOOKING_UP = 0b1000000000;
+    constexpr static DuckFlag IS_SHOOTING = 0b10000000000;
+
 
     constexpr static u8 ARMOR_INDEX = 0;
     constexpr static u8 HELMET_INDEX = 1;

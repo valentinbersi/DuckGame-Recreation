@@ -54,14 +54,11 @@ void WeaponSpriteManager::draw(Spritesheet* spritesheet, SDL2pp::Rect& position,
                                float scale, const DuckState& state) {
     spritesheet->selectSprite(0, 0, false);
     if (flip)
-        position.x -= 3 * scale / DEFAULT_SCALE;
+        position.x -= 0.30 * scale;
     else
-        position.x += 3 * scale / DEFAULT_SCALE;
+        position.x += 0.30 * scale;
 
-    if (state.crouching)
-        position.y += 4 * scale / DEFAULT_SCALE;
-    else
-        position.y += 2 * scale / DEFAULT_SCALE;
+    position.y -= 0.01 * scale;
 
     std::string path = gunPaths[state.gunEquipped];
     spritesheet->drawWeapon(position, flip, path);
@@ -69,23 +66,24 @@ void WeaponSpriteManager::draw(Spritesheet* spritesheet, SDL2pp::Rect& position,
 
 void WeaponSpriteManager::drawEffect1(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip,
                                       float scale) {
-    if (flip)
-        position.x -= 17 * scale / DEFAULT_SCALE;
-    else
-        position.x += 17 * scale / DEFAULT_SCALE;
+    if (flip) {
+        position.x -= 1.6 * scale;
+    } else {
+        position.x += 1.6 * scale;
+    }
 
-    position.y -= 8 * scale / DEFAULT_SCALE;
+    position.y -= 0.9 * scale;
     spritesheet->drawEffects(position, flip, EFFECT_PATH);
 }
 
 void WeaponSpriteManager::drawEffect2(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip,
                                       float scale) {
-    if (flip)
-        position.x -= 19 * scale / DEFAULT_SCALE;
-    else
-        position.x += 19 * scale / DEFAULT_SCALE;
-
-    position.y -= 9 * scale / DEFAULT_SCALE;
+    if (flip) {
+        position.x -= 2.0 * scale;
+    } else {
+        position.x += 2.0 * scale;
+    }
+    position.y -= 0.9 * scale;
     spritesheet->drawEffects(position, flip, EFFECT_PATH);
 }
 

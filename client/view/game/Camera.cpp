@@ -50,11 +50,4 @@ Vector2 Camera::centerOfDucks(const std::list<DuckData>& ducks) {
     return center;
 }
 
-/*void Camera::loadBackgroundSize(SDL2pp::Texture& backgroundTexture) {
-    backgroundWidth = backgroundTexture.GetWidth() * 2.5f;
-    backgroundHeight = backgroundTexture.GetHeight() * 2.5f;
-}*/
-
-// float Camera::getScale() const { return scale; }
-
 Rectangle& Camera::getViewRect() { return viewRect; }
