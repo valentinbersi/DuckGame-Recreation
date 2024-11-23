@@ -111,8 +111,8 @@ void GameController::loadLevel(const LevelData& level) {
 
 GameStatus GameController::status() const {
     GameStatus status;
-    status.blockPositions = std::move(level->blockStatus());
-    status.itemSpawnerPositions = std::move(level->itemSpawnerStatus());
+    status.blockPositions = level->blockStatus();
+    status.itemSpawnerPositions = level->itemSpawnerStatus();
     for (Player* player: players | std::views::values) status.ducks.push_back(player->status());
     return status;
 }
