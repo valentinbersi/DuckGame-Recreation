@@ -10,7 +10,7 @@ struct LevelData final {
     std::vector<Vector2> terrainBlocks;
     std::vector<Vector2> duckSpawnPoints;
     std::vector<Vector2> boxes;
-    std::vector<Vector2> gunSpawnPoints;
+    std::vector<Vector2> itemSpawnPoints;
     u64 width, height;
 
     /**

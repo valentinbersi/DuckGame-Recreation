@@ -37,7 +37,7 @@ LevelData LevelData::load(const std::string& path) {
         else if (object["type"].as<std::string>() == "BOX")
             loadedLevel.boxes.emplace_back(object["x"].as<float>(), object["y"].as<float>());
         else if (object["type"].as<std::string>() == "ARMAMENT")
-            loadedLevel.gunSpawnPoints.emplace_back(object["x"].as<float>(),
+            loadedLevel.itemSpawnPoints.emplace_back(object["x"].as<float>(),
                                                     object["y"].as<float>());
 
     return loadedLevel;

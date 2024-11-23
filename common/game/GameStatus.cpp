@@ -32,6 +32,12 @@ GameStatus& GameStatus::operator=(GameStatus&& other) noexcept {
     return *this;
 }
 
+bool GameStatus::operator==(const GameStatus& other) const {
+    return ducks == other.ducks &&
+           blockPositions == other.blockPositions &&
+           itemSpawnerPositions == other.itemSpawnerPositions;
+}
+
 void GameStatus::send([[maybe_unused]] ServerSendProtocol& serverProtocol) {
     serverProtocol.sendLen(ducks.size());
     for (const auto& duck: ducks) {
@@ -43,8 +49,8 @@ void GameStatus::send([[maybe_unused]] ServerSendProtocol& serverProtocol) {
         serverProtocol.sendBlock(blockPosition);
     }
 
-    // serverProtocol.sendLen(spawnsPositions.size());
-    // for (const auto& spawnPosition: spawnsPositions) {
-    //     serverProtocol.sendBlock(spawnPosition);
-    // }
+    serverProtocol.sendLen(itemSpawnerPositions.size());
+    for (const auto& spawnPosition: itemSpawnerPositions) {
+        serverProtocol.sendBlock(spawnPosition);
+    }
 }

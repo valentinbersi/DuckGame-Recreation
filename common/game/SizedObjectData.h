@@ -11,6 +11,7 @@ struct SizedObjectData: GameObject2DData {
     SizedObjectData& operator=(const SizedObjectData& other);
     SizedObjectData(SizedObjectData&& other) noexcept;
     SizedObjectData& operator=(SizedObjectData&& other) noexcept;
+    bool operator==(const SizedObjectData& other) const; 
     ~SizedObjectData() override;
 
     /**
