@@ -23,7 +23,7 @@ std::string GameObject::findAvaiableName(std::string name) const {
     if (not children.contains(name))
         return std::move(name);
 
-    for (int i = 0; i < std::numeric_limits<int>::max(); i++)
+    for (int i = 0; i < std::numeric_limits<u64>::max(); i++)
         if (std::string newName = name + std::to_string(i); not children.contains(newName))
             return newName;
 
