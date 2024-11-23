@@ -11,6 +11,8 @@
 
 #include "EditorConstants.h"
 
+#define MIN_DUCKS 4
+
 LevelScene::LevelScene(QObject* parent, std::vector<Object>& objects):
         QGraphicsScene(parent),
         objects(objects),
@@ -65,7 +67,7 @@ bool LevelScene::isEmptyPosition(QRectF itemRect) {
     return true;
 }
 
-void LevelScene::addObjectInMap(const Object& object, bool addInList) {
+void LevelScene::insertObjectInMap(const Object& object, bool addInList) {
     if (object.type == DUCK && ducksCount >= 4)
         return;
 
@@ -95,7 +97,7 @@ void LevelScene::addObjectInMap(const Object& object, bool addInList) {
     }
 
     if (storedObject) {
-        objectMap[item] = storedObject;
+        objectsMap[item] = storedObject;
     } else {
         qDebug() << "Error: no se pudo encontrar el objeto para asociarlo con el item.";
         delete item;  // Limpiar si no se puede asociar correctamente
@@ -123,7 +125,7 @@ void LevelScene::loadMap(int mapWidth, int mapHeight) {
     gridWidth = mapWidth * PIXEL_SIZE;
     gridHeight = mapHeight * PIXEL_SIZE;
     for (const auto& object: objects) {
-        addObjectInMap(object, false);
+        insertObjectInMap(object, false);
     }
 }
 
@@ -132,7 +134,7 @@ void LevelScene::addNewObject(ObjectType type, QPointF pos) {
     Object newObject(type);
     newObject.setCenterPosition(
             QPointF(std::round(pos.x() / PIXEL_SIZE), std::round(pos.y() / PIXEL_SIZE)), true);
-    addObjectInMap(newObject, true);
+    insertObjectInMap(newObject, true);
 
     auto* itemAction = qobject_cast<QAction*>(sender());
     if (itemAction)
@@ -184,8 +186,8 @@ void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
         selectedItem->setPos(itemPosAligned);
 
-        auto it = objectMap.find(selectedItem);
-        if (it != objectMap.end() && it.value()) {
+        auto it = objectsMap.find(selectedItem);
+        if (it != objectsMap.end() && it.value()) {
             Object* objectMoved = it.value();  // Obtener el puntero al objeto asociado
             QPointF newCenterPos(int(itemPosAligned.x()) / PIXEL_SIZE,
                                  int(itemPosAligned.y()) / PIXEL_SIZE);
@@ -231,6 +233,7 @@ int LevelScene::getMapWidth() const { return gridWidth / PIXEL_SIZE; }
 int LevelScene::getMapHeight() const { return gridHeight / PIXEL_SIZE; }
 
 void LevelScene::clearAll() {
+    objectsMap.clear();
     clear();
     objects.clear();
     ducksCount = 0;
