@@ -8,10 +8,11 @@
  */
 class TerrainBlock final: public StaticObject {
 public:
+    /**
+     * Creates a new TerrainBlock
+     * @param position the position of the TerrainBlock
+     */
     explicit TerrainBlock(Vector2 position);
-
-    void start() override;
-    void update(float delta) override;
 
     SizedObjectData status();
 };

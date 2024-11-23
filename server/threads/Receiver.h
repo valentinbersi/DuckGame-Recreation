@@ -18,13 +18,29 @@ private:
     LobbyResolver lobbyResolver;
     static CommandFactory factory;
 public:
+    /**
+     * Create a new Receiver
+     * @param socket The socket to receive messages from
+     * @param queueSender Queue need for connections with the lobby
+     * @param monitor The monitor to resolve the lobby requests to join Games
+     * @param clientID The id of the client
+     */
     Receiver(ActiveSocket& socket,
              std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> queueSender,
              GameMapMonitor& monitor, const u16& clientID);
 
+    /**
+     * Receive messages from the socket and push them to the queue
+     */
     void run() noexcept override;
 
+    /**
+     * Stop the receiver
+     */
     void stop() override;
 
+    /**
+     *  Destroy the Receiver
+     */
     ~Receiver();
 };
