@@ -10,7 +10,7 @@ void MapManager::exportMap(const std::vector<Object>& objects, const std::string
         qDebug() << obj.centerPos;
     }
 
-    std::string path = "../maps/" + mapName + ".yaml";
+    std::string path = "maps/" + mapName + ".yaml";
     std::ofstream fout(path);
     if (!fout.is_open()) {
         qWarning() << "No se pudo abrir el archivo para guardar.";
