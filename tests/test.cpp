@@ -152,7 +152,7 @@ TEST(ProtocolTest, ServerToGameSendOneStatus) {
 
     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
     status->ducks.emplace_back(Vector2(0,0), DuckID::White, 10, ItemID::CowboyPistol, 0b100);
-    status->blockPositions.emplace_back(Rectangle(Vector2(0,0), Vector2(0,0)));
+    status->blockPositions.emplace_back(Rectangle(Vector2(10,0), Vector2(0,0)));
     status->itemSpawnerPositions.emplace_back(Rectangle(Vector2(0,0), Vector2(0,0)));
 
     std::thread client([status]() {
@@ -160,9 +160,6 @@ TEST(ProtocolTest, ServerToGameSendOneStatus) {
         ClientRecvProtocol recvProtocol(clientSkt);
         GameStatus recvStatus = recvProtocol.recvGameStatus();
         ASSERT_TRUE(*status == recvStatus);
-        // ASSERT_EQ(recvStatus.ducks.size(), 1);
-        // ASSERT_EQ(recvStatus.blockPositions.size(), 1);
-        // ASSERT_EQ(recvStatus.itemSpawnerPositions.size(), 1);
     });
 
     ActiveSocket skt = peer.accept();
@@ -185,9 +182,6 @@ TEST(ProtocolTest, ServerToGameCorrectValues) {
         ClientRecvProtocol recvProtocol(clientSkt);
         GameStatus statusRecv = recvProtocol.recvGameStatus();
         ASSERT_TRUE(*status == statusRecv);
-        // ASSERT_TRUE(statusRecv.ducks == status->ducks);
-        // ASSERT_TRUE(statusRecv.blockPositions == status->blockPositions);
-        // ASSERT_TRUE(statusRecv.itemSpawnerPositions == status->itemSpawnerPositions);
     });
 
     ActiveSocket skt = peer.accept();
@@ -209,7 +203,7 @@ TEST(ProtocolTest, ServerToOneGameFillStatus) {
     status->blockPositions.emplace_back(Rectangle(Vector2(2,3), Vector2(100, 50)));
     status->blockPositions.emplace_back(Rectangle(Vector2(13.0, 67.8), Vector2(8, 7)));
     status->itemSpawnerPositions.emplace_back(Rectangle(Vector2(33434.78, 123.8), Vector2(3, 4)));
-    status->itemSpawnerPositions.emplace_back(Rectangle(Vector2(3234.497, 343.8), Vector2(7, 8)));
+    status->itemSpawnerPositions.emplace_back(Rectangle(Vector2(3234.49, 343.8), Vector2(7, 8)));
 
 
     std::thread client([status]() {

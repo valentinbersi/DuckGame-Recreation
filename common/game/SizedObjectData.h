@@ -11,7 +11,6 @@ struct SizedObjectData: GameObject2DData {
     SizedObjectData& operator=(const SizedObjectData& other);
     SizedObjectData(SizedObjectData&& other) noexcept;
     SizedObjectData& operator=(SizedObjectData&& other) noexcept;
-    bool operator==(const SizedObjectData& other) const; 
     ~SizedObjectData() override;
 
     /**
@@ -23,8 +22,15 @@ struct SizedObjectData: GameObject2DData {
     SizedObjectData(const Vector2& position, float width, float height);
 
     /**
-     * COnstruct a sized object data with the given rectangle
+     * Construct a sized object data with the given rectangle
      * @param rectangle the rectangle
      */
     explicit SizedObjectData(const Rectangle& rectangle);
+
+    /**
+     * Check if this sized object data is equal aproximatly to the other sized object data
+     * @param other the other sized object data
+     * @return true if the sized object data is equal aproximatly to the other sized object data
+     */
+    bool operator==(const SizedObjectData& other) const; 
 };

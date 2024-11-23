@@ -111,7 +111,13 @@ struct Math {
 };
 
 constexpr bool Math::isEqualAprox(const float a, const float b) noexcept {
-    return isEqualAprox(a, b, INVERSE_EPSILON);
+    if (a == b) 
+    return true;
+        float tolerance = INVERSE_EPSILON * std::max(std::abs(a), std::abs(b));
+        if (tolerance < INVERSE_EPSILON)
+            tolerance = INVERSE_EPSILON;
+
+        return isEqualAprox(a, b, tolerance);
 }
 
 constexpr bool Math::isEqualAprox(const float a, const float b, const float tolerance) noexcept {

@@ -34,6 +34,5 @@ SizedObjectData::SizedObjectData(const Rectangle& rectangle):
         GameObject2DData(rectangle.center()), rectangle(rectangle) {}
 
 bool SizedObjectData::operator==(const SizedObjectData& other) const {
-    return rectangle.position() == other.rectangle.position() && 
-           rectangle.size() == other.rectangle.size();
+    return rectangle == other.rectangle;
 }

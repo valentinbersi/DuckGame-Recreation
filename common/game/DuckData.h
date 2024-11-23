@@ -60,6 +60,10 @@ struct DuckData final: SizedObjectData {
      */
     DuckData(Vector2 position, DuckID duckID, u8 life, ItemID gunID, DuckFlag extraData);
 
-
+    /**
+     * Check if this DuckData is equal to the other DuckData
+     * @param other the other DuckData
+     * @return true if the DuckData is equal to the other DuckData
+     */
     bool operator==(const DuckData& other) const;
 };
