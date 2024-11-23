@@ -5,8 +5,10 @@
 #include "GameTimer.h"
 #include "Item.h"
 #include "RandomGenerator.h"
+#include "SizedObjectData.h"
+#include "StaticObject.h"
 
-class ItemSpawner: public GameObject2D {
+class ItemSpawner: public StaticObject {
 private:
     std::weak_ptr<Item> spawnedItem;
 
@@ -32,6 +34,11 @@ public:
      * if so, a timer will be started to spawn a new item
      */
     void update(float delta) override;
+
+    /**
+     * Get the positions of the item spawner
+     */
+    SizedObjectData status() const;
 
     /**
      * Destroy the ItemSpawner (default)

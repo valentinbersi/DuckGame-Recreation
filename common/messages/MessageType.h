@@ -1,5 +1,5 @@
 #pragma once
-
+#include <functional>
 class MessageType {
 public:
     enum Value : unsigned char { Lobby = 0x0, Game = 0x1, Reply = 0x2 };
@@ -49,7 +49,26 @@ public:
 
 private:
     Value _value;
+
+    friend struct std::hash<InputAction>;
+
+    friend struct std::equal_to<InputAction>;
 };
+
+template <>
+struct std::hash<InputAction> {
+    std::size_t operator()(const InputAction& InputAction) const {
+        return std::hash<InputAction::Value>()(InputAction._value);
+    }
+};
+
+template <>
+struct std::equal_to<InputAction> {
+    bool operator()(const InputAction& firstID, const InputAction& secondID) const {
+        return firstID._value == secondID._value;
+    }
+};
+
 
 class LobbyRequest {
 public:

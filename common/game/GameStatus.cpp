@@ -7,7 +7,8 @@ GameStatus::GameStatus(): ServerMessage(MessageType::Game) {}  // Luego chequeam
 GameStatus::GameStatus(const GameStatus& other):
         ServerMessage(MessageType::Game),
         ducks(other.ducks),
-        blockPositions(other.blockPositions) {}
+        blockPositions(other.blockPositions),
+        itemSpawnerPositions(other.itemSpawnerPositions) {}
 
 GameStatus& GameStatus::operator=(const GameStatus& other) {
     if (this == &other)
@@ -15,13 +16,15 @@ GameStatus& GameStatus::operator=(const GameStatus& other) {
 
     ducks = other.ducks;
     blockPositions = other.blockPositions;
+    itemSpawnerPositions = other.itemSpawnerPositions;
     return *this;
 }
 
 GameStatus::GameStatus(GameStatus&& other) noexcept:
         ServerMessage(MessageType::Game),
         ducks(std::move(other.ducks)),
-        blockPositions(std::move(other.blockPositions)) {}
+        blockPositions(std::move(other.blockPositions)),
+        itemSpawnerPositions(std::move(other.itemSpawnerPositions)) {}
 
 GameStatus& GameStatus::operator=(GameStatus&& other) noexcept {
     if (this == &other)
@@ -29,7 +32,13 @@ GameStatus& GameStatus::operator=(GameStatus&& other) noexcept {
 
     ducks = std::move(other.ducks);
     blockPositions = std::move(other.blockPositions);
+    itemSpawnerPositions = std::move(other.itemSpawnerPositions);
     return *this;
+}
+
+bool GameStatus::operator==(const GameStatus& other) const {
+    return ducks == other.ducks && blockPositions == other.blockPositions &&
+           itemSpawnerPositions == other.itemSpawnerPositions;
 }
 
 void GameStatus::send([[maybe_unused]] ServerSendProtocol& serverProtocol) {
@@ -41,5 +50,10 @@ void GameStatus::send([[maybe_unused]] ServerSendProtocol& serverProtocol) {
     serverProtocol.sendLen(blockPositions.size());
     for (const auto& blockPosition: blockPositions) {
         serverProtocol.sendBlock(blockPosition);
+    }
+
+    serverProtocol.sendLen(itemSpawnerPositions.size());
+    for (const auto& spawnPosition: itemSpawnerPositions) {
+        serverProtocol.sendBlock(spawnPosition);
     }
 }

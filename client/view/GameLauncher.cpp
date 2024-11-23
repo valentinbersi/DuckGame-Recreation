@@ -3,6 +3,8 @@
 #include <QDebug>
 #include <iostream>
 
+#include "Game.h"
+
 GameLauncher::GameLauncher(int argc, char* argv[], cppstring hostname, cppstring servname):
         communicator(hostname, servname),
         app(argc, argv),

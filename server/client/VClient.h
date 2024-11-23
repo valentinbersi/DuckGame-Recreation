@@ -18,9 +18,21 @@ private:
     Sender sender;
 
 public:
+    /**
+     * Creates a new VirtualClient
+     * @param socket The socket of the client
+     * @param monitor The monitor of the game
+     * @param clientID The id of the client
+     */
     VirtualClient(ActiveSocket socket, GameMapMonitor& monitor, u16 clientID);
 
+    /**
+     * Checks if connection is still active
+     */
     bool isConnected();
 
+    /**
+     * Destroys the VirtualClient
+     */
     ~VirtualClient();
 };

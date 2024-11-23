@@ -9,8 +9,10 @@
 #include "EquippableWeapon.h"
 #include "GameTimer.h"
 #include "Item.h"
+#include "ItemFactory.h"
 #include "ItemID.h"
 #include "Layer.h"
+#include "WeaponFactory.h"
 
 #define MOVE_RIGHT "Move Right"
 #define MOVE_LEFT "Move Left"
@@ -39,8 +41,7 @@ Player::Player(const DuckID id):
         life(DEFAULT_LIFE),
         flags(DEFAULT_FLAGS),
         speed(DEFAULT_SPEED),
-        weapon(nullptr)
-/* canKeepJumping(false)*/ {
+        weapon(nullptr) {
     input.addAction(MOVE_RIGHT);
     input.addAction(MOVE_LEFT);
     input.addAction(CROUCH);
@@ -49,7 +50,6 @@ Player::Player(const DuckID id):
     const auto itemDetector = new Area(nullptr, Vector2::ZERO, 0, Layer::Item, PLAYER_DIMENSIONS);
     itemDetector->connect("Collision", eventHandler(&Player::onItemCollision, CollisionObject*));
     addChild("ItemDetector", itemDetector);
-    // addChild("Arma", weapon);
 }
 
 void Player::onItemCollision(CollisionObject* item) {
@@ -64,8 +64,8 @@ void Player::onItemCollision(CollisionObject* item) {
                 flags |= (flags & DuckData::ARMOR) ? flags : DuckData::ARMOR;
                 return;
             default:
-                return;
-                // superfactory Equipable Weapon
+                weapon = WeaponFactory::createWeapon(id).release();
+                addChild("Weapon", weapon);
         }
         input.releaseAction(INTERACT);
     }
@@ -112,17 +112,19 @@ void Player::update([[maybe_unused]] const float delta) {
         flags |= DuckData::MOVING_LEFT;
     } else if (input.isActionPressed(JUMP) && _onGround) {
         _velocity += Vector2(0, -10);
-    } else if (input.isActionPressed(INTERACT)) {
+    } else if (input.isActionPressed(INTERACT) && weapon) {
         input.releaseAction(INTERACT);
-        // ItemID id = weapon->getID();
-        // ItemFactory::createItem(id);
-        // weapon = nullptr;
+        getRoot()->addChild("Weapon", ItemFactory::createItem(weapon->getID()));
+        removeChild("Weapon");
+        weapon = nullptr;
     }
 
-    if (!_onGround) {}
-    // flags |= DuckData::IN_AIR;
+    if (!_onGround)
+        flags |= DuckData::IN_AIR;
 }
 
-DuckData Player::status() { return {globalPosition(), id, life, ItemID::Ak47, flags}; }
+DuckData Player::status() {
+    return {globalPosition(), id, life, weapon ? weapon->getID() : ItemID(ItemID::NONE), flags};
+}
 
 Player::~Player() = default;

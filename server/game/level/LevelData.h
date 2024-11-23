@@ -1,5 +1,6 @@
 #pragma once
 
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -10,7 +11,7 @@ struct LevelData final {
     std::vector<Vector2> terrainBlocks;
     std::vector<Vector2> duckSpawnPoints;
     std::vector<Vector2> boxes;
-    std::vector<Vector2> gunSpawnPoints;
+    std::vector<Vector2> itemSpawnPoints;
     u64 width, height;
 
     /**
@@ -23,7 +24,7 @@ private:
     /**
      * Load a level from a file.
      * @param path The path to the file.
-     * @return The loaded level.
+     * @return The loaded level, if the level is invalid, returns std::nullopt
      */
-    static LevelData load(const std::string& path);
+    static std::optional<LevelData> load(const std::string& path);
 };

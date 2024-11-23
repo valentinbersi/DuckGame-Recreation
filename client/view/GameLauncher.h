@@ -1,8 +1,6 @@
 #ifndef DUCKGAME_GAMELAUNCHER_H
 #define DUCKGAME_GAMELAUNCHER_H
 
-#include "../game/Game.hpp"
-
 #include "ActiveSocket.h"
 #include "Communicator.h"
 #include "QApplication"

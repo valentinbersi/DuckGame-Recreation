@@ -38,6 +38,8 @@ struct DuckData final: SizedObjectData {
     constexpr static DuckFlag MOVING_RIGHT = 0b10000000;
     constexpr static DuckFlag MOVING_LEFT = 0b100000000;
     constexpr static DuckFlag LOOKING_UP = 0b1000000000;
+    constexpr static DuckFlag IS_SHOOTING = 0b10000000000;
+
 
     constexpr static u8 ARMOR_INDEX = 0;
     constexpr static u8 HELMET_INDEX = 1;
@@ -60,6 +62,10 @@ struct DuckData final: SizedObjectData {
      */
     DuckData(Vector2 position, DuckID duckID, u8 life, ItemID gunID, DuckFlag extraData);
 
-
+    /**
+     * Check if this DuckData is equal to the other DuckData
+     * @param other the other DuckData
+     * @return true if the DuckData is equal to the other DuckData
+     */
     bool operator==(const DuckData& other) const;
 };

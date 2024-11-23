@@ -101,4 +101,11 @@ public:
      * @return true if the segment overlaps with the rectangle, false otherwise
      */
     [[nodiscard]] std::optional<IntersectionInfo> overlaps(const Ray2D& ray) const;
+
+    /**
+     * Checks if two rectangles are equal aproximately
+     * @param other The rectangle to compare to
+     * @return true if the rectangles are equal aproximately, false otherwise
+     */
+    bool operator==(const Rectangle& other) const;
 };
