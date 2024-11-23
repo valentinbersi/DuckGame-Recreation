@@ -1,2 +1,5 @@
 helmet:
-  - x-offset-
+  x-offset-flip: 0.04
+  x-offset: 0.04
+  y-offset-crouching: 0.19
+  y-offset: 0.19

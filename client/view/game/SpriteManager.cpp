@@ -1,5 +1,9 @@
 #include "SpriteManager.h"
 
+#include <fstream>
+
+#include <yaml-cpp/yaml.h>
+
 #define DEFAULT_SCALE 2.5f
 
 #define SPRITE_IDLE 0
@@ -216,16 +220,20 @@ void SpriteManager::adjustForFeathers(SDL2pp::Rect& position, bool isRightFeathe
 }
 
 void SpriteManager::adjustForHelmet(SDL2pp::Rect& position) {
+#ifdef DEBUG
+    YAML::Node config = YAML::LoadFile("config/DuckSprite.yaml");
+
     if (flip) {
-        position.x -= 0.04 * scale;
+        position.x -= static_cast<int>(config["helmet"]["x-offset-flip"].as<float>() * scale);
     } else {
-        position.x += 0.04 * scale;
+        position.x += static_cast<int>(config["helmet"]["x-offset"].as<float>() * scale);
     }
     if (crouching) {
-        position.y += 0.19 * scale;
+        position.y += static_cast<int>(config["helmet"]["y-offset-crouching"].as<float>() * scale);
     } else {
-        position.y -= 0.19 * scale;
+        position.y -= static_cast<int>(config["helmet"]["y-offset"].as<float>() * scale);
     }
+#endif
 }
 
 void SpriteManager::setScale(float newScale) { scale = newScale; }

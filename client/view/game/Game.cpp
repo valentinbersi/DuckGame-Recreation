@@ -38,7 +38,6 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
 
 void Game::init() {
     EnviromentRenderer enviromentRenderer(renderer);
-    //  VOLVERLO ATRIBUTO DE LA CLASE
 
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping =
             createSpritesMapping();
@@ -61,7 +60,7 @@ void Game::init() {
         showBackground(backgroundTexture);
         updatePlayers(spritesMapping);
         updateBlocks(enviromentRenderer);
-        //  updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
+        // updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
         renderer.Present();
 
         handler.handleEvents();
@@ -93,6 +92,7 @@ void Game::getSnapshot() {
     clearObjects();
     for (auto& duck: snapshot->ducks) ducks.push_back(std::move(duck));
     for (const auto& block: snapshot->blockPositions) blocks.push_back(block);
+    // for (const auto& spawner: snapshot->spawnerPosition) spawners.push_back(spawner);
 }
 
 void Game::filterObjectsToRender() {
@@ -141,7 +141,6 @@ void Game::updatePlayers(
                            /*duck.extraData[DuckData::IS_SHOOTING]*/ false,
                            /*duck.gun->gunID*/ ItemID::CowboyPistol};
         // if (state.isShooting) soundManager.playSound(/*duck.gun->gunID*/ GunID::CowboyPistol);
-        // falta dibujar el fire
 
         spritesMapping.at(duckID)->updateEquipment(state.hasHelmet,
                                                    state.hasChestplate /*, duck->gun->gunID*/);
