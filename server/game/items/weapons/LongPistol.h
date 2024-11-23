@@ -13,13 +13,13 @@ public:
      */
     explicit LongPistol(ItemID id, float recoil, float dispersion);
 
-    //To implement
+    // To implement
     float actionate() override;
 
-    //To implement
+    // To implement
     void deactionate() override;
 
-    //To implement
+    // To implement
     void update(float delta) override;
 
     virtual ~LongPistol() override;

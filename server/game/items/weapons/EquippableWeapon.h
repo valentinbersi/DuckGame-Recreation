@@ -19,7 +19,7 @@ public:
      * @param ammo The ammo of the weapon
      * @param recoil The recoil of the weapon
      * @param dispersion The dispersion of the weapon
-     * 
+     *
      */
     explicit EquippableWeapon(ItemID id, u8 ammo, float recoil, float dispersion);
 
@@ -29,7 +29,7 @@ public:
      */
     ItemID getID() const;
 
-    
+
     virtual float actionate() = 0;
 
     virtual void deactionate() = 0;

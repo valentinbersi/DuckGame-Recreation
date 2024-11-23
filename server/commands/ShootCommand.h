@@ -1,7 +1,7 @@
 #pragma once
 #include "Command.h"
 #include "MessageType.h"
-//Not used yet
+// Not used yet
 class ShootCommand: public Command {
 private:
     InputAction action;

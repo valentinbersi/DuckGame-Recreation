@@ -3,12 +3,12 @@
 
 #include "BlockingQueue.h"
 #include "Command.h"
+#include "CommandFactory.h"
 #include "GameMapMonitor.h"
 #include "LobbyResolver.h"
 #include "ServerMessage.h"
 #include "ServerRecvProtocol.h"
 #include "Thread.h"
-#include "CommandFactory.h"
 
 class Receiver: public Thread {
 private:
@@ -17,6 +17,7 @@ private:
     const u16& clientID;
     LobbyResolver lobbyResolver;
     static CommandFactory factory;
+
 public:
     /**
      * Create a new Receiver

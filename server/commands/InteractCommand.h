@@ -1,13 +1,13 @@
 #pragma once
 #include "Command.h"
 
-class InteractCommand : public Command {
+class InteractCommand: public Command {
 public:
     /**
      * Construct a new Interact Command object
      * @param id The id of the player that will interact
      */
-    InteractCommand(PlayerID id);
+    explicit InteractCommand(PlayerID id);
 
     /**
      * Execute the command

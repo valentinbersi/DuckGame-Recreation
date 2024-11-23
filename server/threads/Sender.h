@@ -14,7 +14,7 @@ private:
 
 public:
     /**
-     * Create a new Sender 
+     * Create a new Sender
      * @param socket The socket to send messages to
      * @param queue The queue to read messages from
      */

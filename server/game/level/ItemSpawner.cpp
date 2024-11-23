@@ -7,7 +7,7 @@
 #include "Layer.h"
 
 #define SPAWN_TIME_RANGE 5.0f, 20.0f
-#define SPAWNER_DIMENSIONS 3.5f, 1.5f 
+#define SPAWNER_DIMENSIONS 3.5f, 1.5f
 
 #define eventHandler(                                                                    \
         Function) /*como no se recibe argumentos en este caso quito coma y __VA_ARGS__*/ \
@@ -16,7 +16,9 @@
 RandomFloatGenerator ItemSpawner::randomGenerator(SPAWN_TIME_RANGE);
 
 ItemSpawner::ItemSpawner(Vector2 position):
-        StaticObject(nullptr, position, Layer::Spawner, 0, SPAWNER_DIMENSIONS), spawnedItem(), timer(new GameTimer(0)) {
+        StaticObject(nullptr, position, Layer::Spawner, 0, SPAWNER_DIMENSIONS),
+        spawnedItem(),
+        timer(new GameTimer(0)) {
     timer->connect("Timeout", eventHandler(&ItemSpawner::onTimeout));
     addChild("Timer", timer);
 }

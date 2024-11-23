@@ -1,6 +1,7 @@
+#include <memory>
+
 #include "Command.h"
 #include "MessageType.h"
-#include <memory>
 #include "Types.h"
 
 class CommandFactory {
