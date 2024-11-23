@@ -1,8 +1,8 @@
 #!/bin/bash
 echo "Installing SDL2-image"
 git clone git@github.com:libsdl-org/SDL_image.git
-git checkout release-2.8.2
 cd SDL_image
+git checkout release-2.8.2
 mkdir build
 cd build
 cmake ..

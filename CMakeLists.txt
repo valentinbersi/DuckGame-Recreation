@@ -6,6 +6,9 @@ if (POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif ()
 
+set(CMAKE_C_COMPILER clang)
+set(CMAKE_CXX_COMPILER clang++)
+
 if (NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 20)
 endif ()
@@ -117,7 +120,7 @@ if (CLIENT OR EDITOR)
 
     #FetchContent_MakeAvailable(opusfile)
 
-    find_package(SDL2 REQUIRED)
+    #find_package(SDL2 REQUIRED)
     #find_package(sdl2_mixer REQUIRED)
     #find_package(sdl2_ttf REQUIRED)
     #find_package(sdl2_image REQUIRED)
@@ -156,13 +159,13 @@ if (CLIENT OR EDITOR)
 
     #target_include_directories(common PUBLIC ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_MIXER_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS})
 
-    set(SDL2_MODULES_INCLUDE_DIR "/usr/include/SDL2")
-    set(SDL2_MIXER_LIBRARY "/usr/lib/x86_64-linux-gnu/libSDL2_mixer-2.0.so")
-    set(SDL2_IMAGE_LIBRARY "/usr/lib/x86_64-linux-gnu/libSDL2_image-2.0.so")
-    set(SDL2_TTF_LIBRARY "/usr/lib/x86_64-linux-gnu/libSDL2_ttf-2.0.so")
+    #set(SDL2_MODULES_INCLUDE_DIR "/usr/include/SDL2")
+    #set(SDL2_MIXER_LIBRARY "/usr/lib/x86_64-linux-gnu/libSDL2_mixer-2.0.so")
+    #set(SDL2_IMAGE_LIBRARY "/usr/lib/x86_64-linux-gnu/libSDL2_image-2.0.so")
+    #set(SDL2_TTF_LIBRARY "/usr/lib/x86_64-linux-gnu/libSDL2_ttf-2.0.so")
 
-    target_include_directories(common PUBLIC ${SDL2_MODULES_INCLUDE_DIR})
-    target_link_libraries(common ${SDL2_MIXER_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY})
+    #target_include_directories(common PUBLIC ${SDL2_MODULES_INCLUDE_DIR})
+    #target_link_libraries(common ${SDL2_MIXER_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY})
 
     FetchContent_Declare(
             libSDL2pp
