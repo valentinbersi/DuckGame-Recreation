@@ -75,9 +75,18 @@ public:
      */
     void stopCrouch();
 
+    /**
+     * Makes the player to jump
+     */
     void jump();
 
+    /**
+     * Stops the player from jumping
+     */
     void stopJump();
 
+    /**
+     * Makes the player interact with the environment
+     */
     void interact();
 };
