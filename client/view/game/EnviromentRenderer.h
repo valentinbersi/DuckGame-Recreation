@@ -13,6 +13,7 @@ public:
     // Constructor.
     explicit EnviromentRenderer(SDL2pp::Renderer& renderer);
 
+    // Draws the environment texture at the specified position.
     void drawEnviroment(SDL2pp::Rect& position, const char* path);
 
 private:

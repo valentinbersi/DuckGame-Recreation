@@ -1,5 +1,4 @@
-helmet:
-  x-offset-flip: 0.04
-  x-offset: 0.04
-  y-offset-crouching: 0.19
-  y-offset: 0.19
+weapon1:
+  x-offset-flip: 2.0
+  x-offset: 2.0
+  y-offset: 0.9

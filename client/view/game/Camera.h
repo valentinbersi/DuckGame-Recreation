@@ -18,20 +18,29 @@
 class Camera {
 
 public:
+    // Constructor.
     Camera(int& windowWidth, int& windowHeight);
+
+    // Calculates the aspect ratio of the window, determines the center of all ducks,
+    // and calculates the maximum distance between any two ducks. It then updates the zoom level
+    // and view rectangle of the camera based on these values.
     void update(std::list<DuckData>& ducks);
-    // void loadBackgroundSize(SDL2pp::Texture& backgroundTexture);
-    // float getScale() const;
+
+    // Returns the view rectangle of the camera.
     Rectangle& getViewRect();
 
 private:
+    // This method adjusts the size of the view rectangle based on the maximum distance between ducks
+    // and the aspect ratio of the window. It then centers the view rectangle on the provided center point.
     void updateZoom(const Vector2& center, const Vector2& maxDistance, float aspectRatio);
+
+    // Calculates the maximum distance between any ducks in the list.
     static Vector2 calculateMaxDistance(std::list<DuckData>& ducks, float aspectRatio);
+
+    // Calculates the center point of all ducks in the list.
     static Vector2 centerOfDucks(const std::list<DuckData>& ducks);
-    // void adjustSpritePositions(std::list<std::unique_ptr<DuckData>>& ducks);
 
     int& windowWidth;
     int& windowHeight;
     Rectangle viewRect;
-    // float zoom;
 };

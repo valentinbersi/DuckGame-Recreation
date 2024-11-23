@@ -33,22 +33,39 @@
 class Game {
 
 public:
+    // Constructor.
     Game(Communicator& communicator, bool& twoPlayersLocal);
+
+    // Destructor.
     ~Game();
 
+    // Main loop.
     void init();
 
 private:
+    // Filters the objects to render, based on the camera view. If the object is not in the camera view, it would not be rendered.
     void filterObjectsToRender();
+
+    // Starts the background randomly.
     SDL2pp::Texture startBackground();
+
+    // Creates the mapping of the SpriteManagers for each duck.
     std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping();
+
+    // Updates the positions, states, and scales of the player sprites based on the camera view.
     void updatePlayers(std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping);
+
+    // Updates the positions and scales of the blocks based on the camera view and renders them.
     void updateBlocks(EnviromentRenderer& enviromentRenderer);
+
+    // Receives the latest game status snapshot from the server and updates the game objects.
     void getSnapshot();
+
+    // Shows the background texture.
     void showBackground(SDL2pp::Texture& backgroundTexture);
 
+    // Clears the game objects, expecting to refill them with the next snapshot.
     void clearObjects();
-    // void typeOfObject2D(std::unique_ptr<GameObject2DData> gameObject2D);
 
     bool running;
     int window_width;
@@ -69,5 +86,7 @@ private:
     std::vector<std::string> backgrounds = {
             "assets/background/forest-night.png", "assets/background/city.png",
             "assets/background/forest-day.png", "assets/background/snowy-peaks.png",
-            "assets/background/desert.png"};
+            "assets/background/desert.png", "assets/background/cascade-cave.png",
+            "assets/background/sunset.png", "assets/background/dark-cave.png",
+            "assets/background/cave-gem.png"};
 };
