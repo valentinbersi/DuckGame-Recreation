@@ -193,11 +193,10 @@ std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> Game::createSpritesMa
                            std::make_unique<SpriteManager>(whiteSheet, whiteFeathers, renderer));
     spritesMapping.emplace(DuckID::Orange,
                            std::make_unique<SpriteManager>(orangeSheet, orangeFeathers, renderer));
-    /*spritesMapping.emplace(
-            DuckID::Yellow,
-            std::make_unique<SpriteManager>(yellowSheet, yellowFeathers, renderer));
-    spritesMapping.emplace(DuckID::Grey, std::make_unique<SpriteManager>(
-                                                 greySheet, greyFeathers, renderer));*/
+    spritesMapping.emplace(DuckID::Yellow,
+                           std::make_unique<SpriteManager>(yellowSheet, yellowFeathers, renderer));
+    spritesMapping.emplace(DuckID::Grey,
+                           std::make_unique<SpriteManager>(greySheet, greyFeathers, renderer));
 
     return spritesMapping;
 }

@@ -11,6 +11,7 @@
 #include "Item.h"
 #include "ItemID.h"
 #include "Layer.h"
+#include "WeaponFactory.h"
 
 #define MOVE_RIGHT "Move Right"
 #define MOVE_LEFT "Move Left"
@@ -39,8 +40,7 @@ Player::Player(const DuckID id):
         life(DEFAULT_LIFE),
         flags(DEFAULT_FLAGS),
         speed(DEFAULT_SPEED),
-        weapon(nullptr)
-/* canKeepJumping(false)*/ {
+        weapon(nullptr) {
     input.addAction(MOVE_RIGHT);
     input.addAction(MOVE_LEFT);
     input.addAction(CROUCH);
@@ -49,7 +49,6 @@ Player::Player(const DuckID id):
     const auto itemDetector = new Area(nullptr, Vector2::ZERO, 0, Layer::Item, PLAYER_DIMENSIONS);
     itemDetector->connect("Collision", eventHandler(&Player::onItemCollision, CollisionObject*));
     addChild("ItemDetector", itemDetector);
-    // addChild("Arma", weapon);
 }
 
 void Player::onItemCollision(CollisionObject* item) {
@@ -64,8 +63,8 @@ void Player::onItemCollision(CollisionObject* item) {
                 flags |= (flags & DuckData::ARMOR) ? flags : DuckData::ARMOR;
                 return;
             default:
+
                 return;
-                // superfactory Equipable Weapon
         }
         input.releaseAction(INTERACT);
     }
@@ -119,8 +118,8 @@ void Player::update([[maybe_unused]] const float delta) {
         // weapon = nullptr;
     }
 
-    if (!_onGround) {}
-    // flags |= DuckData::IN_AIR;
+    if (!_onGround)
+        flags |= DuckData::IN_AIR;
 }
 
 DuckData Player::status() { return {globalPosition(), id, life, ItemID::Ak47, flags}; }

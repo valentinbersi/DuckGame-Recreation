@@ -7,17 +7,18 @@ LongPistol::LongPistol(ItemID id, float recoil, float dispersion):
         EquippableWeapon(id, AMMO, recoil, dispersion) {}
 
 float LongPistol::actionate() {
-    if (!firing) {
-        firing = true;
+    // if (!firing) {
+    //     firing = true;
 
-        // getRoot() -> addChild("Bullet", std::make_unique<Bullet>(globalPosition(),
-        // globalDirection(), id));
-        return recoil;
-    }
+    //     // getRoot() -> addChild("Bullet", std::make_unique<Bullet>(globalPosition(),
+    //     // globalDirection(), id));
+    //     return recoil;
+    // }
     return 0.0;  // Se retorna no recoil porque la tecla sigue presionada.
 }
 
-void LongPistol::deactionate() { firing = false; }
+void LongPistol::deactionate() { /*firing = false;*/
+}
 
 void LongPistol::update([[maybe_unused]] float delta) {}
 
