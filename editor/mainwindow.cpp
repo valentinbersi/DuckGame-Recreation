@@ -27,8 +27,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWin
 
     connect(ui->actionSaveMap, &QAction::triggered, this, [this]() {
         if (!scene->enoughDucks()) {
-            QMessageBox::warning(this, "Error",
-                                 "El mapa debe tener 4 spawn de patos.");
+            QMessageBox::warning(this, "Error", "El mapa debe tener 4 spawn de patos.");
             return;
         }
         MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),

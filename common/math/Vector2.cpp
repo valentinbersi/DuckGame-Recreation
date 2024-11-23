@@ -106,9 +106,7 @@ float Vector2::distanceSquared(const Vector2& v) const { return (*this - v).leng
 
 float Vector2::dot(const Vector2& v) const noexcept { return _x * v._x + _y * v._y; }
 
-bool Vector2::operator==(const Vector2& v) const noexcept {
-    return Math::isEqualAprox(_x, v._x) && Math::isEqualAprox(_y, v._y);
-}
+bool Vector2::operator==(const Vector2& v) const noexcept { return _x == v._x and _y == v._y; }
 
 bool Vector2::operator!=(const Vector2& v) const noexcept { return !(*this == v); }
 
@@ -150,7 +148,7 @@ Vector2 Vector2::project(const Vector2& v) const {
     if (isZero())
         return ZERO;
 
-    return (dot(v) / v.lengthSquared()) * v;
+    return dot(v) / v.lengthSquared() * v;
 }
 
 #define REFLECT "Vector2::reflect(const Vector2&)"
