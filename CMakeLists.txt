@@ -93,36 +93,76 @@ if (CLIENT OR EDITOR)
 
     #FetchContent_MakeAvailable(doxygen)
 
-    FetchContent_Declare(
-            opus
-            GIT_REPOSITORY https://github.com/xiph/opus.git
-            GIT_TAG v1.5.2
-    )
+    #FetchContent_Declare(
+    #        opus
+    #        GIT_REPOSITORY https://github.com/xiph/opus.git
+    #        GIT_TAG v1.5.2
+    #)
 
-    FetchContent_MakeAvailable(opus)
+    #FetchContent_MakeAvailable(opus)
 
-    FetchContent_Declare(
-            ogg
-            GIT_REPOSITORY https://github.com/xiph/ogg.git
-            GIT_TAG v1.3.5
-    )
+    #FetchContent_Declare(
+    #        ogg
+    #        GIT_REPOSITORY https://github.com/xiph/ogg.git
+    #        GIT_TAG v1.3.5
+    #)
 
-    FetchContent_MakeAvailable(ogg)
+    #FetchContent_MakeAvailable(ogg)
 
-    FetchContent_Declare(
-            opusfile
-            GIT_REPOSITORY https://github.com/xiph/opusfile.git
-            GIT_BRANCH master
-    )
+    #FetchContent_Declare(
+    #        opusfile
+    #        GIT_REPOSITORY https://github.com/xiph/opusfile.git
+    #        GIT_BRANCH master
+    #)
 
-    FetchContent_MakeAvailable(opusfile)
+    #FetchContent_MakeAvailable(opusfile)
 
     find_package(SDL2 REQUIRED)
-    find_package(SDL2_mixer REQUIRED)
-    find_package(SDL2_ttf REQUIRED)
-    find_package(SDL2_image REQUIRED)
+    #find_package(sdl2_mixer REQUIRED)
+    #find_package(sdl2_ttf REQUIRED)
+    #find_package(sdl2_image REQUIRED)
 
-    target_include_directories(common PUBLIC ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_MIXER_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS})
+    #FetchContent_Declare(
+    #        SDL2
+    #        GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+    #        GIT_BRANCH main
+    #)
+
+    #FetchContent_MakeAvailable(SDL2)
+    
+    #FetchContent_Declare(
+    #        SDL2_image
+    #        GIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git
+    #        GIT_BRANCH main
+    #)
+
+    #FetchContent_MakeAvailable(SDL2_image)
+    
+    #FetchContent_Declare(
+    #        SDL2_mixer
+    #        GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer.git
+    #        GIT_BRANCH main
+    #)
+
+    #FetchContent_MakeAvailable(SDL2_mixer)
+    
+    #FetchContent_Declare(
+    #        SDL2_ttf
+    #        GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
+    #        GIT_BRANCH main
+    #)
+
+    #FetchContent_MakeAvailable(SDL2_ttf)
+
+    #target_include_directories(common PUBLIC ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_MIXER_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS})
+
+    set(SDL2_MODULES_INCLUDE_DIR "/usr/include/SDL2")
+    set(SDL2_MIXER_LIBRARY "/usr/lib/x86_64-linux-gnu/libSDL2_mixer-2.0.so")
+    set(SDL2_IMAGE_LIBRARY "/usr/lib/x86_64-linux-gnu/libSDL2_image-2.0.so")
+    set(SDL2_TTF_LIBRARY "/usr/lib/x86_64-linux-gnu/libSDL2_ttf-2.0.so")
+
+    target_include_directories(common PUBLIC ${SDL2_MODULES_INCLUDE_DIR})
+    target_link_libraries(common ${SDL2_MIXER_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY})
 
     FetchContent_Declare(
             libSDL2pp
