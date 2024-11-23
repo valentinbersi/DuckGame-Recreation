@@ -4,9 +4,9 @@
 #include <vector>
 
 #include "GameObject.h"
+#include "ItemSpawner.h"
 #include "LevelData.h"
 #include "SizedObjectData.h"
-#include "ItemSpawner.h"
 #include "TerrainBlock.h"
 
 class Level final: public GameObject {

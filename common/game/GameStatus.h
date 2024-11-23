@@ -2,9 +2,9 @@
 
 #include <list>
 
+#include "DuckData.h"
 #include "ServerMessage.h"
 #include "SizedObjectData.h"
-#include "DuckData.h"
 
 /**
  * A struct with the current game status.

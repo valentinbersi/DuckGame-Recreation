@@ -32,5 +32,5 @@ struct SizedObjectData: GameObject2DData {
      * @param other the other sized object data
      * @return true if the sized object data is equal aproximatly to the other sized object data
      */
-    bool operator==(const SizedObjectData& other) const; 
+    bool operator==(const SizedObjectData& other) const;
 };

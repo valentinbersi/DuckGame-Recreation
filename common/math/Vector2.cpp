@@ -174,8 +174,7 @@ void Vector2::swapX(Vector2& other) { std::swap(_x, other._x); }
 void Vector2::swapY(Vector2& other) { std::swap(_y, other._y); }
 
 bool Vector2::isEqualAprox(const Vector2& other) const {
-    return Math::isEqualAprox(this->_x, other._x) &&
-           Math::isEqualAprox(this->_y, other._y);
+    return Math::isEqualAprox(this->_x, other._x) && Math::isEqualAprox(this->_y, other._y);
 }
 
 Vector2 Vector2::abs() const { return {std::abs(_x), std::abs(_y)}; }

@@ -251,7 +251,7 @@ public:
      * @param other the vecto to compare to this
      * @return result of the comparison
      */
-    bool isEqualAprox(const Vector2& other)const; 
+    bool isEqualAprox(const Vector2& other) const;
 
     /**
      * Return the vector with its coordinates set to its absolute values

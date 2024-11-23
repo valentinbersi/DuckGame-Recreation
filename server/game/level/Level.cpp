@@ -2,8 +2,8 @@
 
 #include <list>
 
-#include "SpawnPoint.h"
 #include "ItemSpawner.h"
+#include "SpawnPoint.h"
 #include "TerrainBlock.h"
 
 Level::Level(const LevelData& level): GameObject(nullptr) {
@@ -13,7 +13,7 @@ Level::Level(const LevelData& level): GameObject(nullptr) {
         addChild("TerrainBlock" + std::to_string(i), block);
     }
 
-    for (u64 i = 0; i < level.itemSpawnPoints.size(); ++i){
+    for (u64 i = 0; i < level.itemSpawnPoints.size(); ++i) {
         auto item = new ItemSpawner(level.itemSpawnPoints[i]);
         itemSpawner.push_back(item);
         addChild("ItemSpawner" + std::to_string(i), item);
