@@ -25,8 +25,8 @@ public:
     Rectangle& getViewRect();
 
 private:
-    void updateZoom(const Vector2& center, const Vector2& maxDistance);
-    static Vector2 calculateMaxDistance(std::list<DuckData>& ducks);
+    void updateZoom(const Vector2& center, const Vector2& maxDistance, float aspectRatio);
+    static Vector2 calculateMaxDistance(std::list<DuckData>& ducks, float aspectRatio);
     static Vector2 centerOfDucks(const std::list<DuckData>& ducks);
     // void adjustSpritePositions(std::list<std::unique_ptr<DuckData>>& ducks);
 
