@@ -69,52 +69,51 @@ void MainWindow::onSceneResize() {
     ui->graphicsView->setSceneRect(0, 0, sceneRect.width() * 4, sceneRect.height() * 4);
 }
 
-void MainWindow::on_actionNewMap_triggered() {
+bool MainWindow::confirmAndSaveMap() {
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "Confirmation", "Do you want to save the map open?",
                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
     if (reply == QMessageBox::Cancel)
-        return;
+        return false;
     else if (reply == QMessageBox::Yes)
         MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
                               scene->getMapWidth(), scene->getMapHeight());
+    return true;
+}
+
+void MainWindow::on_actionNewMap_triggered() {
+    if(!confirmAndSaveMap()) return;
+
     scene->clearAll();
     ui->lineEditMapName->clear();
     QMessageBox::information(this, "New Map", "A new map was created!");
 }
 
 void MainWindow::on_actionEditMap_triggered() {
-    QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this, "Confirmation", "Do you want to save the map open?",
-                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-
-    if (reply == QMessageBox::Yes)
-        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
-                              scene->getMapWidth(), scene->getMapHeight());
-    else if (reply == QMessageBox::Cancel)
-        return;
+    if(!confirmAndSaveMap()) return;
 
     QString fileName =
             QFileDialog::getOpenFileName(this, "Select Map", "maps/", "Archivos YAML (*.yaml)");
 
-    if (!fileName.isEmpty()) {
-        QFileInfo fileInfo(fileName);
-        QString mapName = fileInfo.baseName();
+    if (fileName.isEmpty()) {
+        QMessageBox::warning(this, "Error", "There was an error importing the map.");
+        return;
+    }
 
-        scene->clearAll();
+    QFileInfo fileInfo(fileName);
+    QString mapName = fileInfo.baseName();
 
-        int mapWidth;
-        int mapHeight;
-        bool success = MapManager::importMap(objects, fileName.toStdString(), mapWidth, mapHeight,
-                                             background);
-        if (success) {
-            scene->loadMap(mapWidth, mapHeight);
-            ui->lineEditMapName->setText(mapName);
-            QMessageBox::information(this, "Imported Map",
-                                     "The map has been imported successfully!");
-        } else {
-            QMessageBox::warning(this, "Error", "There was an error importing the map.");
-        }
+    scene->clearAll();
+
+    int mapWidth;
+    int mapHeight;
+    bool success = MapManager::importMap(objects, fileName.toStdString(), mapWidth, mapHeight,
+                                         background);
+    if (success) {
+        scene->loadMap(mapWidth, mapHeight);
+        ui->lineEditMapName->setText(mapName);
+        QMessageBox::information(this, "Imported Map",
+                                 "The map has been imported successfully!");
     }
 }
 
