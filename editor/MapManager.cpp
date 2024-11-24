@@ -12,7 +12,7 @@ void MapManager::exportMap(const std::vector<Object>& objects, const std::string
         qDebug() << obj.centerPos;
     }
 
-    std::string path = "../maps/" + mapName + ".yaml";
+    std::string path = "maps/" + mapName + ".yaml";
     std::ofstream fout(path);
     if (!fout.is_open()) {
         qWarning() << "No se pudo abrir el archivo para guardar.";
@@ -84,7 +84,7 @@ bool MapManager::importMap(std::vector<Object>& objects, const std::string& mapP
             return false;
         }
 
-        std::string mapNameFromFile = mapNode["map_name"].as<std::string>();
+        auto mapNameFromFile = mapNode["map_name"].as<std::string>();
         mapWidth = mapNode["map_width"].as<int>();
         mapHeight = mapNode["map_height"].as<int>();
 
@@ -92,7 +92,7 @@ bool MapManager::importMap(std::vector<Object>& objects, const std::string& mapP
 
         YAML::Node objectsNode = mapNode["objects"];
         for (const auto& objNode: objectsNode) {
-            std::string typeStr = objNode["type"].as<std::string>();
+            auto typeStr = objNode["type"].as<std::string>();
             Object object(stringToObjectType(typeStr));
 
             object.centerPos.setX(objNode["x"].as<int>());
