@@ -46,7 +46,8 @@ Player::Player(const DuckID id):
     input.addAction(JUMP);
     input.addAction(INTERACT);
     const auto itemDetector = new Area(nullptr, Vector2::ZERO, 0, Layer::Item, PLAYER_DIMENSIONS);
-    itemDetector->connect("Collision", eventHandler(&Player::onItemCollision, CollisionObject*));
+    itemDetector->connect(Area::Events::Collision,
+                          eventHandler(&Player::onItemCollision, CollisionObject*));
     addChild("ItemDetector", itemDetector);
 }
 

@@ -29,10 +29,10 @@ CollisionObject::~CollisionObject() = default;
 
 void CollisionObject::updateInternal([[maybe_unused]] const float delta) {
     GameObject2D::updateInternal(delta);
+    shape.setCenter(globalPosition());
 }
 
 GameObject2D& CollisionObject::setPosition(Vector2 position) noexcept {
-    shape.setCenter(position);
     return GameObject2D::setPosition(std::move(position));
 }
 
