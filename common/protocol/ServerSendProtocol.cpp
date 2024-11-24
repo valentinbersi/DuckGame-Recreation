@@ -27,6 +27,11 @@ void ServerSendProtocol::sendDuckData(const DuckData& duckData) {
     sendVector2(duckData.rectangle.center());
 }
 
+void ServerSendProtocol::sendItemData(const ItemData& objData) {
+    sendByte(static_cast<unsigned char>(objData.id));
+    sendRectangle(objData.rectangle);
+}
+
 void ServerSendProtocol::sendBlock(const SizedObjectData& objData) {
     sendRectangle(objData.rectangle);
 }

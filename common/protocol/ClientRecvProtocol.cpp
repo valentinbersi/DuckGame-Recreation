@@ -31,6 +31,16 @@ std::list<DuckData> ClientRecvProtocol::recvDuckData() {
     return ducks;
 }
 
+std::list<ItemData> ClientRecvProtocol::recvItemData() {
+    u16 size = recvShort();
+    std::list<ItemData> items;
+    for (u16 i(0); i < size; ++i) {
+        u8 id = recvByte();
+        items.emplace_back(static_cast<ItemID>(id), recvRectangle());
+    }
+    return items;
+}
+
 std::list<SizedObjectData> ClientRecvProtocol::recvBlockPositions() {
     u16 size = recvShort();
     std::list<SizedObjectData> blockPositions;
@@ -44,6 +54,7 @@ GameStatus ClientRecvProtocol::recvGameStatus() {
     GameStatus status;
     recvByte();  // type
     status.ducks = recvDuckData();
+    status.itemPositions = recvItemData();
     status.blockPositions = recvBlockPositions();
     status.itemSpawnerPositions = recvBlockPositions();
     return status;

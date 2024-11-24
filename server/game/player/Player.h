@@ -4,10 +4,10 @@
 
 #include "CollisionObject.h"
 #include "DuckData.h"
+#include "EquippableWeapon.h"
 #include "Input.h"
 #include "PhysicsObject.h"
 
-class EquippableWeapon;
 class Player final: public PhysicsObject {
 private:
     DuckID id;
@@ -89,4 +89,10 @@ public:
      * Makes the player interact with the environment
      */
     void interact();
+
+    /**
+     * Clear player's inputs that are just pressed, manains
+     * input that are being pressed.
+     */
+    void clearInputs();
 };

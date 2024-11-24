@@ -4,12 +4,11 @@
 #include <string>
 #include <unordered_map>
 
-#include "Updatable.h"
-
 #include "Startable.h"
 #include "Subject.h"
 #include "TrackedReference.h"
 #include "Types.h"
+#include "Updatable.h"
 
 /**
  * An object in the game.\n
@@ -26,6 +25,7 @@ class GameObject:
         public Updatable,
         public Startable {
 
+    std::string name;
     GameObject* _parent;
     HashMap<std::string, GameObject*> children;
 
@@ -150,11 +150,25 @@ public:
     std::unique_ptr<GameObject> removeChild(const std::string& name);
 
     /**
+     * Remove a child from the object
+     * @param object The child to remove
+     * @return A pointer to the removed child
+     */
+    std::unique_ptr<GameObject> removeChild(const GameObject* object);
+
+    /**
      * Transfer a child from another object to this
      * @param name The name of the child to transfer
      * @param parent The parent object to transfer the child from
      */
     void transferChild(const std::string& name, GameObject& parent);
+
+    /**
+     * Transfer a child from another object to this
+     * @param object The child to transfer
+     * @param parent The parent object to transfer the child from
+     */
+    void transferChild(const GameObject* object, GameObject& parent);
 
     /**
      * Get a child of the object.

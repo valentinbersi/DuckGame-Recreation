@@ -1,14 +1,14 @@
 #pragma once
 
 #include <string>
-
-#include "ThreadSafeHashMap.h"
+#include <utility>
+#include "Types.h"
 
 /**
  * Represents the input of a player
  */
 class Input {
-    HashMap<std::string, bool> inputs;
+    HashMap<std::string, std::pair<bool, bool>> inputs;
 
 public:
     /**
@@ -76,4 +76,17 @@ public:
      * @throws std::out_of_range is the action is not found
      */
     bool isActionPressed(const std::string& action) const;
+
+    /**
+     * Checks if a given action is just pressed
+     * @param action the action to check
+     * @return true if the given action is just pressed, false otherwise
+     * @throws std::out_of_range is the action is not found
+     */
+    bool isActionJustPressed(const std::string& action) const;
+
+    /**
+     * Resets the inputs that are just pressed.
+     */
+    void reset();
 };

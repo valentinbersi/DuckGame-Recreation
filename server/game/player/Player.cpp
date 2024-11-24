@@ -5,7 +5,6 @@
 
 #include "Area.h"
 #include "DuckData.h"
-#include "EquippableWeapon.h"
 #include "GameTimer.h"
 #include "Item.h"
 #include "ItemFactory.h"
@@ -47,26 +46,26 @@ Player::Player(const DuckID id):
     input.addAction(JUMP);
     input.addAction(INTERACT);
     const auto itemDetector = new Area(nullptr, Vector2::ZERO, 0, Layer::Item, PLAYER_DIMENSIONS);
-    itemDetector->connect("Collision", eventHandler(&Player::onItemCollision, CollisionObject*));
+    itemDetector->connect(Area::Events::Collision,
+                          eventHandler(&Player::onItemCollision, CollisionObject*));
     addChild("ItemDetector", itemDetector);
 }
 
 void Player::onItemCollision(CollisionObject* item) {
-    if (input.isActionPressed(INTERACT) and not weapon) {
-        Item* itemPtr = dynamic_cast<Item*>(item);
-        ItemID id = itemPtr->id();
-        switch (id) {
+    if (input.isActionJustPressed(INTERACT) and not weapon) {
+        const auto itemPtr = static_cast<Item*>(item);
+        switch (const ItemID id = itemPtr->id()) {
             case ItemID::Helmet:
-                flags |= (flags & DuckData::HELMET) ? flags : DuckData::HELMET;
+                flags |= flags & DuckData::HELMET ? flags : DuckData::HELMET;
                 return;
             case ItemID::Armor:
-                flags |= (flags & DuckData::ARMOR) ? flags : DuckData::ARMOR;
+                flags |= flags & DuckData::ARMOR ? flags : DuckData::ARMOR;
                 return;
             default:
                 weapon = WeaponFactory::createWeapon(id).release();
                 addChild("Weapon", weapon);
+                getRoot()->removeChild(item);
         }
-        input.releaseAction(INTERACT);
     }
 }
 
@@ -107,9 +106,10 @@ void Player::update([[maybe_unused]] const float delta) {
         flags |= DuckData::MOVING_LEFT;
     } else if (input.isActionPressed(JUMP) && _onGround) {
         _velocity += Vector2(0, -10);
-    } else if (input.isActionPressed(INTERACT) && weapon) {
-        input.releaseAction(INTERACT);
-        getRoot()->addChild("Weapon", ItemFactory::createItem(weapon->getID()));
+    } else if (input.isActionJustPressed(INTERACT) && weapon) {
+        std::unique_ptr<Item> item = ItemFactory::createItem(weapon->getID());
+        item->setPosition(globalPosition());
+        getRoot()->addChild("Weapon", std::move(item));
         removeChild("Weapon");
         weapon = nullptr;
     }
@@ -121,5 +121,7 @@ void Player::update([[maybe_unused]] const float delta) {
 DuckData Player::status() {
     return {globalPosition(), id, life, weapon ? weapon->getID() : ItemID(ItemID::NONE), flags};
 }
+
+void Player::clearInputs() {input.reset();}
 
 Player::~Player() = default;

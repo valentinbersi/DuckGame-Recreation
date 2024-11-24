@@ -3,6 +3,6 @@
         <file alias="platformIcon.png">icons/platformIcon.png</file>
         <file alias="duckIcon.png">icons/duckIcon.png</file>
         <file alias="boxIcon.png">icons/boxIcon.png</file>
-        <file alias="armamentSpawnIcon.png">icons/armamentSpawnIcon.png</file>
+        <file alias="spawner.png">icons/spawner.png</file>
     </qresource>
 </RCC>

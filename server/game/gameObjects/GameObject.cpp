@@ -50,9 +50,12 @@ void GameObject::addChild(std::string name, GameObject* newChild) {
         throw std::invalid_argument(EMPTY_NAME);
 
     name = findAvaiableName(name);
+    newChild->name = name;
 
     newChild->connect(Events::TreeEntered, eventHandler(&GameObject::onTreeEntered, GameObject*));
     newChild->connect(Events::TreeExited, eventHandler(&GameObject::onTreeExited, GameObject*));
+
+    newChild->_parent = this;
 
     children.emplace(std::move(name), newChild);
 
@@ -110,11 +113,20 @@ std::unique_ptr<GameObject> GameObject::removeChild(const std::string& name) {
         fire(Events::TreeExited, object);
 
     child.mapped()->_parent = nullptr;
+    child.mapped()->name = "";
     return std::unique_ptr<GameObject>(child.mapped());
+}
+
+std::unique_ptr<GameObject> GameObject::removeChild(const GameObject* object) {
+    return removeChild(object->name);
 }
 
 void GameObject::transferChild(const std::string& name, GameObject& parent) {
     addChild(name, parent.removeChild(name));
+}
+
+void GameObject::transferChild(const GameObject* object, GameObject& parent) {
+    transferChild(object->name, parent);
 }
 
 GameObject* GameObject::getChild(const std::string& name) const { return children.at(name); }

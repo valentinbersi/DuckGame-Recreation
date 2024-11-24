@@ -6,6 +6,7 @@
 #include "ActiveSocket.h"
 #include "DuckData.h"
 #include "GameStatus.h"
+#include "ItemData.h"
 #include "Math.h"
 #include "ReceiveProtocol.h"
 #include "ReplyMessage.h"
@@ -21,6 +22,8 @@ private:
     Rectangle recvRectangle();
 
     std::list<DuckData> recvDuckData();
+
+    std::list<ItemData> recvItemData();
 
     std::list<SizedObjectData> recvBlockPositions();
 

@@ -6,7 +6,7 @@
 
 #define PLATFORM_ICON ":/icons/platformIcon.png"
 #define DUCK_ICON ":/icons/duckIcon.png"
-#define ARMAMENT_ICON ":/icons/armamentSpawnIcon.png"
+#define ARMAMENT_ICON ":/icons/spawner.png"
 #define BOX_ICON ":/icons/boxIcon.png"
 
 #define PLATFORM_HEIGHT 2
