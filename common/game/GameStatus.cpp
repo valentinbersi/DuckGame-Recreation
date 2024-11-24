@@ -2,11 +2,12 @@
 
 #include <utility>
 
-GameStatus::GameStatus(): ServerMessage(MessageType::Game) {}  // Luego chequeamos.
+GameStatus::GameStatus(): ServerMessage(MessageType::Game) {}  
 
 GameStatus::GameStatus(const GameStatus& other):
         ServerMessage(MessageType::Game),
         ducks(other.ducks),
+        itemPositions(other.itemPositions),
         blockPositions(other.blockPositions),
         itemSpawnerPositions(other.itemSpawnerPositions) {}
 
@@ -15,6 +16,7 @@ GameStatus& GameStatus::operator=(const GameStatus& other) {
         return *this;
 
     ducks = other.ducks;
+    itemPositions = other.itemPositions;
     blockPositions = other.blockPositions;
     itemSpawnerPositions = other.itemSpawnerPositions;
     return *this;
@@ -23,6 +25,7 @@ GameStatus& GameStatus::operator=(const GameStatus& other) {
 GameStatus::GameStatus(GameStatus&& other) noexcept:
         ServerMessage(MessageType::Game),
         ducks(std::move(other.ducks)),
+        itemPositions(std::move(other.itemPositions)),
         blockPositions(std::move(other.blockPositions)),
         itemSpawnerPositions(std::move(other.itemSpawnerPositions)) {}
 
@@ -31,29 +34,30 @@ GameStatus& GameStatus::operator=(GameStatus&& other) noexcept {
         return *this;
 
     ducks = std::move(other.ducks);
+    itemPositions = std::move(other.itemPositions);
     blockPositions = std::move(other.blockPositions);
     itemSpawnerPositions = std::move(other.itemSpawnerPositions);
     return *this;
 }
 
 bool GameStatus::operator==(const GameStatus& other) const {
-    return ducks == other.ducks && blockPositions == other.blockPositions &&
+    return ducks == other.ducks && 
+           itemPositions == other.itemPositions &&
+           blockPositions == other.blockPositions &&
            itemSpawnerPositions == other.itemSpawnerPositions;
 }
 
-void GameStatus::send([[maybe_unused]] ServerSendProtocol& serverProtocol) {
-    serverProtocol.sendLen(ducks.size());
-    for (const auto& duck: ducks) {
-        serverProtocol.sendDuckData(duck);
+template<typename T>
+void GameStatus::sendList(ServerSendProtocol& serverProtocol, const std::list<T>& list, void (ServerSendProtocol::*sendFunc)(const T&)) {
+    serverProtocol.sendLen(list.size());
+    for (const auto& item: list) {
+        (serverProtocol.*sendFunc)(item);
     }
+}
 
-    serverProtocol.sendLen(blockPositions.size());
-    for (const auto& blockPosition: blockPositions) {
-        serverProtocol.sendBlock(blockPosition);
-    }
-
-    serverProtocol.sendLen(itemSpawnerPositions.size());
-    for (const auto& spawnPosition: itemSpawnerPositions) {
-        serverProtocol.sendBlock(spawnPosition);
-    }
+void GameStatus::send(ServerSendProtocol& serverProtocol) {
+    sendList(serverProtocol, ducks, &ServerSendProtocol::sendDuckData);
+    sendList(serverProtocol, itemPositions, &ServerSendProtocol::sendItemData);
+    sendList(serverProtocol, blockPositions, &ServerSendProtocol::sendBlock);
+    sendList(serverProtocol, itemSpawnerPositions, &ServerSendProtocol::sendBlock);
 }

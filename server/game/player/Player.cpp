@@ -5,7 +5,6 @@
 
 #include "Area.h"
 #include "DuckData.h"
-#include "EquippableWeapon.h"
 #include "GameTimer.h"
 #include "Item.h"
 #include "ItemFactory.h"

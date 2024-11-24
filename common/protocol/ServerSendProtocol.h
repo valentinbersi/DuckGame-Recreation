@@ -4,6 +4,7 @@
 
 #include "ActiveSocket.h"
 #include "DuckData.h"
+#include "ItemData.h"
 #include "SendProtocol.h"
 #include "Types.h"
 
@@ -27,6 +28,8 @@ public:
     void sendLen(u16 len);
 
     void sendDuckData(const DuckData& objData);
+
+    void sendItemData(const ItemData& objData);
 
     void sendBlock(const SizedObjectData& objData);
 
