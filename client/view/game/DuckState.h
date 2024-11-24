@@ -8,10 +8,10 @@ struct DuckState {
     bool inAir;
     bool flapping;
     bool beingDamaged;
-    bool movingRight;
-    bool movingLeft;
+    bool moving;
     bool hasHelmet;
     bool hasChestplate;
     bool isShooting;
     ItemID gunEquipped;
+    DuckData::Direction direction;
 };

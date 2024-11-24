@@ -9,23 +9,33 @@
 #include "PhysicsObject.h"
 
 class Player final: public PhysicsObject {
-private:
-    DuckID id;
+    DuckData::Id id;
     u8 life;
-    u16 flags;
+    DuckData::Direction direction;
+    std::bitset<DuckData::FlagCount> flags;
     Input input;
     float speed;
     EquippableWeapon* weapon;
 
     /**
-     *
+     * Event manager for the player colliding with an item
      */
     void onItemCollision(CollisionObject* item);
     // bool canKeepJumping;
 
 public:
-    explicit Player(DuckID id);
+    Player() = delete;
+    Player(const Player& other) = delete;
+    Player(Player&& other) noexcept = delete;
+    Player& operator=(const Player& other) = delete;
+    Player& operator=(Player&& other) noexcept = delete;
     ~Player() override;
+
+    /**
+     * Creates a new player with the given id
+     * @param id the id of the player
+     */
+    explicit Player(DuckData::Id id);
 
     /**
      * Does nothing

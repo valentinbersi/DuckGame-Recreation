@@ -47,7 +47,8 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
 void Game::init() {
     EnviromentRenderer enviromentRenderer(renderer);
 
-    const HashMap<DuckID, std::unique_ptr<SpriteManager>> spritesMapping = createSpritesMapping();
+    const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>> spritesMapping =
+            createSpritesMapping();
     SDL sdl(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG);
 
@@ -120,7 +121,8 @@ void Game::filterObjectsToRender() {
 
 #define DUCK_WIDTH 2
 
-void Game::updatePlayers(const HashMap<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping) {
+void Game::updatePlayers(
+        const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
     const float objectCameraCount = camera.getViewRect().size().x() / DUCK_WIDTH;
     const float scale = static_cast<float>(window_width) / objectCameraCount;
 
@@ -136,17 +138,18 @@ void Game::updatePlayers(const HashMap<DuckID, std::unique_ptr<SpriteManager>>& 
         const float screenPositionY =
                 relativePositionY * positionScaleY + static_cast<float>(window_height) / 2;
 
-        DuckState state = {duck.extraData[DuckData::PLAYING_DEAD_INDEX],
-                           duck.extraData[DuckData::CROUCHING_INDEX],
-                           duck.extraData[DuckData::IN_AIR_INDEX],
-                           duck.extraData[DuckData::FLAPPING_INDEX],
-                           duck.extraData[DuckData::BEING_DAMAGED_INDEX],
-                           duck.extraData[DuckData::MOVING_RIGHT_INDEX],
-                           duck.extraData[DuckData::MOVING_LEFT_INDEX],
-                           duck.extraData[DuckData::HELMET],
-                           duck.extraData[DuckData::ARMOR],
-                           duck.extraData[DuckData::IS_SHOOTING],
-                           duck.gunID};
+
+        DuckState state = {duck.extraData[DuckData::Flag::Index::PlayingDead],
+                           duck.extraData[DuckData::Flag::Index::Crouching],
+                           duck.extraData[DuckData::Flag::Index::InAir],
+                           duck.extraData[DuckData::Flag::Index::Flapping],
+                           duck.extraData[DuckData::Flag::Index::BeingDamaged],
+                           duck.extraData[DuckData::Flag::Index::IsMoving],
+                           duck.extraData[DuckData::Flag::Index::Helmet],
+                           duck.extraData[DuckData::Flag::Index::Armor],
+                           duck.extraData[DuckData::Flag::Index::IsShooting],
+                           duck.gunID,
+                           duck.direction};
 
         if (state.isShooting)
             soundManager.playSound(/*duck.gun->gunID*/ ItemID::CowboyPistol);

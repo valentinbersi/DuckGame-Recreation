@@ -3,6 +3,8 @@
 #include <memory>
 #include <string>
 
+#include "editor/Object.h"
+
 #include "Area.h"
 #include "DuckData.h"
 #include "GameTimer.h"
@@ -33,7 +35,7 @@
     gameObject::EventHandler<Player, __VA_ARGS__>::create(getReference<Player>(), Function)
 
 
-Player::Player(const DuckID id):
+Player::Player(const DuckData::Id id):
         PhysicsObject(nullptr, {30, 0}, Layer::Player, Layer::Wall, PLAYER_DIMENSIONS,
                       Gravity::Enabled),
         id(id),
@@ -58,10 +60,10 @@ void Player::onItemCollision(CollisionObject* item) {
         const auto itemPtr = static_cast<Item*>(item);
         switch (const ItemID id = itemPtr->id()) {
             case ItemID::Helmet:
-                flags |= flags & DuckData::HELMET ? flags : DuckData::HELMET;
+                flags |= flags.test(DuckData::Flag::Index::Helmet) ? flags : DuckData::Flag::Helmet;
                 return;
             case ItemID::Armor:
-                flags |= flags & DuckData::ARMOR ? flags : DuckData::ARMOR;
+                flags |= flags.test(DuckData::Flag::Index::Armor) ? flags : DuckData::Flag::Armor;
                 return;
             default:
                 weapon = WeaponFactory::createWeapon(id).release();
@@ -100,18 +102,22 @@ void Player::update([[maybe_unused]] const float delta) {
         _velocity = _velocity.y(0);
     }
     _velocity = _velocity.x(0);
-    flags &= DuckData::ARMOR | DuckData::HELMET;
+    flags &= DuckData::Flag::Armor | DuckData::Flag::Helmet;
 
     if (input.isActionPressed(CROUCH)) {
-        flags |= DuckData::CROUCHING;
+        flags |= DuckData::Flag::Crouching;
+
     } else if (input.isActionPressed(MOVE_RIGHT)) {
         _velocity += Vector2(speed, 0);
-        flags |= DuckData::MOVING_RIGHT;
+        flags |= DuckData::Flag::IsMoving;
+
     } else if (input.isActionPressed(MOVE_LEFT)) {
         _velocity += Vector2(-speed, 0);
-        flags |= DuckData::MOVING_LEFT;
+        flags |= DuckData::Flag::IsMoving;
+
     } else if (input.isActionPressed(JUMP) && _onGround) {
         _velocity += Vector2(0, -10);
+
     } else if (input.isActionJustPressed(INTERACT) && weapon) {
         std::unique_ptr<Item> item = ItemFactory::createItem(weapon->getID());
         item->setPosition(globalPosition());
@@ -120,12 +126,28 @@ void Player::update([[maybe_unused]] const float delta) {
         weapon = nullptr;
     }
 
+    if (_velocity.x() < 0)
+        direction = DuckData::Direction::Left;
+    else if (_velocity.x() > 0)
+        direction = DuckData::Direction::Right;
+
+    if (weapon)
+        if (input.isActionPressed(SHOOT))
+            weapon->actionate();
+        else
+            weapon->deactionate();
+
     if (!_onGround)
-        flags |= DuckData::IN_AIR;
+        flags |= DuckData::Flag::InAir;
 }
 
 DuckData Player::status() {
-    return {globalPosition(), id, life, weapon ? weapon->getID() : ItemID(ItemID::NONE), flags};
+    return {globalPosition(),
+            id,
+            life,
+            direction,
+            weapon ? weapon->getID() : ItemID(ItemID::NONE),
+            flags};
 }
 
 void Player::clearInputs() { input.reset(); }

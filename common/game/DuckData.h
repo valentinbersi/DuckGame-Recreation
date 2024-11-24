@@ -6,18 +6,20 @@
 #include "SizedObjectData.h"
 #include "Types.h"
 
-enum class DuckID : u8 { White = 0x0, Orange = 0x1, Yellow = 0x2, Grey = 0x3 };
-
 /**
  * Relevant data for rendering a duck
  */
 struct DuckData final: SizedObjectData {
-    constexpr static u8 NFLAGS = 10;
+    constexpr static u8 FlagCount = 10;
 
-    DuckID duckID;
+    enum class Id : u8 { White = 0x0, Orange = 0x1, Yellow = 0x2, Grey = 0x3 };
+    enum class Direction : u8 { Left = 0x0, Right = 0x1 };
+
+    Id duckID;
     u8 life;
+    Direction direction;
     ItemID gunID;
-    std::bitset<NFLAGS> extraData;
+    std::bitset<FlagCount> extraData;
 
     DuckData() = delete;
     DuckData(const DuckData& other);
@@ -26,41 +28,47 @@ struct DuckData final: SizedObjectData {
     DuckData& operator=(DuckData&& other) noexcept;
     ~DuckData() override;
 
-    using DuckFlag = u16;
+    struct Flag {
+        enum Value {
+            Armor = 0b1,
+            Helmet = 0b10,
+            PlayingDead = 0b100,
+            Crouching = 0b1000,
+            InAir = 0b10000,
+            Flapping = 0b100000,
+            BeingDamaged = 0b1000000,
+            IsMoving = 0b10000000,
+            LookingUp = 0b100000000,
+            IsShooting = 0b1000000000
+        };
 
-    constexpr static DuckFlag ARMOR = 0b1;
-    constexpr static DuckFlag HELMET = 0b10;
-    constexpr static DuckFlag PLAYING_DEAD = 0b100;
-    constexpr static DuckFlag CROUCHING = 0b1000;
-    constexpr static DuckFlag IN_AIR = 0b10000;
-    constexpr static DuckFlag FLAPPING = 0b100000;
-    constexpr static DuckFlag BEING_DAMAGED = 0b1000000;
-    constexpr static DuckFlag MOVING_RIGHT = 0b10000000;
-    constexpr static DuckFlag MOVING_LEFT = 0b100000000;
-    constexpr static DuckFlag LOOKING_UP = 0b1000000000;
-    constexpr static DuckFlag IS_SHOOTING = 0b10000000000;
-
-
-    constexpr static u8 ARMOR_INDEX = 0;
-    constexpr static u8 HELMET_INDEX = 1;
-    constexpr static u8 PLAYING_DEAD_INDEX = 2;
-    constexpr static u8 CROUCHING_INDEX = 3;
-    constexpr static u8 IN_AIR_INDEX = 4;
-    constexpr static u8 FLAPPING_INDEX = 5;
-    constexpr static u8 BEING_DAMAGED_INDEX = 6;
-    constexpr static u8 MOVING_RIGHT_INDEX = 7;
-    constexpr static u8 MOVING_LEFT_INDEX = 8;
-    constexpr static u8 LOOKING_UP_INDEX = 9;
+        struct Index {
+            enum Value {
+                Armor = 0,
+                Helmet = 1,
+                PlayingDead = 2,
+                Crouching = 3,
+                InAir = 4,
+                Flapping = 5,
+                BeingDamaged = 6,
+                IsMoving = 7,
+                LookingUp = 8,
+                IsShooting = 9
+            };
+        };
+    };
 
     /**
      * Construct a DuckData object
      * @param position the object's position
-     * @param duckID the duck's ID
+     * @param id the duck's ID
      * @param life the life of the duck
+     * @param direction the direction the duck is facing
      * @param gunID the gun the duck is holding
      * @param extraData actions the duck is performing and armor data
      */
-    DuckData(Vector2 position, DuckID duckID, u8 life, ItemID gunID, DuckFlag extraData);
+    DuckData(const Vector2& position, Id id, u8 life, Direction direction, ItemID gunID,
+             std::bitset<FlagCount> extraData);
 
     /**
      * Check if this DuckData is equal to the other DuckData

@@ -63,9 +63,9 @@ void SpriteManager::updatePosition(float new_x, float new_y) {
 }
 
 void SpriteManager::update(const DuckState& state) {
-    if (state.movingLeft)
+    if (state.moving and state.direction == DuckData::Direction::Left)
         flip = true;
-    else if (state.movingRight)
+    else if (state.moving and state.direction == DuckData::Direction::Right)
         flip = false;
     setFlags(state);
 
