@@ -23,24 +23,42 @@ QT_END_NAMESPACE
 class GameMenu: public QMainWindow {
     Q_OBJECT
 
-
 private:
     Ui::GameMenu* ui;
-    Communicator& communicator;
-    bool& twoPlayersLocal;
-    GameInfo gameInfo;
+    Communicator& communicator; /** Referencia al comunicador, para comunicar el lobby con el server */
+    bool& twoPlayersLocal; /** booleano del Launcher, para que sepa cuantos jugadores hay*/
+    GameInfo gameInfo; /** Struct que guarda informacion importante para el juego */
 
+    /** Punteros a las paginas usadas en el lobby */
     QPointer<mainMenu> menu;
     QPointer<configurationPage> config;
     QPointer<matchSetup> join_game;
     QPointer<matchSetup> new_game;
 
+    /**
+     * Setea los widgets de las paginas y conecta los botones y las acciones para configurar la funcionalidad del lobby.
+     */
     void setPagesAndConnections();
+
+    /**
+     * Handler de la señal para iniciar el juego.
+     * Se encarga de setear el bool twoPlayersLocal
+     * y emitir la señal de que el juego ya empezo para notificar al Launcher
+     */
     void startGameHandler();
+
+    /**
+     * Cambia a la pagina page
+     * @param page pagina a la que quiere cambiar
+     */
     void changePage(QWidget* page);
-    // void sendMessageToServer();
-    void showHostWaitingPage();
-    // void showJoinWaitingPage();
+
+    /**
+     * Ambas funciones se encargan de inicializar las pantallas de carga, definiendo de que tipo es.
+     */
+    void showWaitingPage();
+    void showJoinWaitingPage();
+
 
 signals:
     void startGame();
@@ -48,7 +66,6 @@ signals:
 public:
     GameMenu(QWidget* parent, Communicator& communicator, bool& twoPlayersLocal);
     ~GameMenu() override;
-    void showJoinWaitingPage();
 };
 
 #endif  // MAINWINDOW_H

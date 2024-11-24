@@ -19,7 +19,7 @@ GameObject2D::~GameObject2D() = default;
 
 void GameObject2D::updateInternal([[maybe_unused]] const float delta) {
     if (const auto parent2D = dynamic_cast<GameObject2D*>(parent()); parent2D != nullptr)
-        _globalPosition = parent2D->_globalPosition;
+        _globalPosition = parent2D->_globalPosition + _position;
 
     GameObject::updateInternal(delta);
 }

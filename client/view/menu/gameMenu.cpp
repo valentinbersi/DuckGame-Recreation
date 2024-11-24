@@ -42,7 +42,7 @@ void GameMenu::setPagesAndConnections() {
     connect(config, &configurationPage::newGameClicked, this, [this]() { changePage(new_game); });
     connect(config, &configurationPage::backClicked, this, [this]() { changePage(menu); });
 
-    connect(new_game, &matchSetup::playMatchClicked, this, &GameMenu::showHostWaitingPage);
+    connect(new_game, &matchSetup::playMatchClicked, this, &GameMenu::showWaitingPage);
     connect(new_game, &matchSetup::backClicked, this, [this]() { changePage(config); });
 
     connect(join_game, &matchSetup::playMatchClicked, this, &GameMenu::showJoinWaitingPage);
@@ -53,7 +53,7 @@ GameMenu::~GameMenu() { delete ui; }
 
 void GameMenu::changePage(QWidget* page) { ui->stackedWidget->setCurrentWidget(page); }
 
-void GameMenu::showHostWaitingPage() {
+void GameMenu::showWaitingPage() {
     auto* host_waiting_page = new WaitingPage(this, true, communicator, gameInfo);
     ui->stackedWidget->addWidget(host_waiting_page);
     changePage(host_waiting_page);
@@ -74,5 +74,5 @@ void GameMenu::startGameHandler() {
         twoPlayersLocal = true;
     emit startGame();
     close();
-    QCoreApplication::exit(0);  // esto es necesario??
+    QCoreApplication::exit(0);
 }
