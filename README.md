@@ -17,9 +17,18 @@
 balas ser tan rapidas es muy probable que apenas logren a verse en pantalla, entonces talvez no es conveniente
 cargar a la vista con objetos que apenas se van a ver.
 
+- Al realizar la instación, ¿Cómo podemos acomodar las rutas para que en vez de referenciar assets o mapas en el directorio build-debug o build-release, las referencien en los distintos directorios de instalación?.
+
+## Revisar:
+
+- Guardado de las posiciones de los objetos y como se importan y exportan en el archivo yaml (archivos LevelEditor y MapManager en la carpeta editor)
+
 ## Instalación:
 
-1. Instalar git: $ sudo apt install git
+1. Instalar git:
+    1. $ sudo apt update
+    2. $ sudo apt upgrade  
+    3. $ sudo apt install git
 
 2. Clonar el repo:
     1. $ git clone git@github.com:valentinbersi/TP_DuckGame_Grupo08.git
@@ -57,13 +66,30 @@ cargar a la vista con objetos que apenas se van a ver.
 
 6. Instalar: \$ sudo cmake --install .
 
-#### Ejecución release (desde cualquier directorio):
-
+#### Ejecución release (desde cualquier directorio): (esta feature aún no es funcional porque no sabemos como resolver las rutas)
+ 
 7. Ejecutar el server: $ DuckGameDedicatedServer 8080
 
-8. Ejecutar los clients: $ DuckGame localhost 8080 (estamos teniendo un problema a la hora de linkear el ejecutable
-   DuckGame con sdl2pp, si el ejecutable se corre desde la carpeta build-release funciona correctamente)
+8. Ejecutar los clients: $ DuckGame localhost 8080
 
 9. Ejecutar el editor: $ DuckGameLevelEditor
 
 10. Ejecutar los tests: $ DuckGameTests
+
+## Controles:
+
+* F11 para fullscreen
+
+#### Jugador 1:
+* Movimiento: WASD
+* Salto: Espacio
+* Interactuar: E
+* Disparo: G
+
+#### Jugador 2:
+* Movimiento: Flechas de dirección
+* Salto: RSHIFT
+* Interactuar: RCTRL
+* Disparo: DELETE (tecla superior al enter, NO supr/del)
+
+
