@@ -25,7 +25,7 @@ ItemSpawner::ItemSpawner(Vector2 position):
 
 void ItemSpawner::onTimeout() {
     std::unique_ptr<Item> item = ItemFactory::createItem(ItemID::randomItemID());
-    Vector2 newPosition = Vector2(position().x(), position().y() + item->getShape().size().y());
+    Vector2 newPosition = Vector2(position().x(), position().y() - item->getShape().size().y());
     item->setPosition(newPosition);
     spawnedItem = item->getReference<Item>();
     getRoot()->addChild("Weapon", std::move(item));
