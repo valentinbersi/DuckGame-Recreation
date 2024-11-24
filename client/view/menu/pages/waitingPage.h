@@ -17,10 +17,13 @@ class WaitingPage: public QWidget {
     Q_OBJECT
 
 private:
+    // cppcheck-suppress unusedStructMember
     Ui::WaitingPage* ui;
+    // cppcheck-suppress unusedStructMember
     bool isHost;
     Communicator& communicator;
     GameInfo& gameInfo;
+    // cppcheck-suppress unusedStructMember
     QTimer* timer;
 
     void requestStartGame();

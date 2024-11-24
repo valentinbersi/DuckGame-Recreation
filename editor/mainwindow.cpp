@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWin
 
     connect(ui->actionSaveMap, &QAction::triggered, this, [this]() {
         if (!scene->enoughDucks()) {
-            QMessageBox::warning(this, "Error", "El mapa debe tener 4 spawn de patos.");
+            QMessageBox::warning(this, "Error", "The map should have 4 duck spawns.");
             return;
         }
         MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
@@ -71,25 +71,22 @@ void MainWindow::onSceneResize() {
 
 void MainWindow::on_actionNewMap_triggered() {
     QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(
-            this, "Confirmación",
-            "Tenes un mapa abierto. ¿Deseas guardarlo antes de abrir uno nuevo?",
-            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+    reply = QMessageBox::question(this, "Confirmation", "Do you want to save the map open?",
+                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
     if (reply == QMessageBox::Cancel)
         return;
     else if (reply == QMessageBox::Yes)
         MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
                               scene->getMapWidth(), scene->getMapHeight());
     scene->clearAll();
-    QMessageBox::information(this, "Nuevo Mapa", "Se ha creado un nuevo mapa.");
+    ui->lineEditMapName->clear();
+    QMessageBox::information(this, "New Map", "A new map was created!");
 }
 
 void MainWindow::on_actionEditMap_triggered() {
     QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(
-            this, "Confirmar",
-            "¿Deseas guardar los cambios del mapa actual antes de importar uno nuevo?",
-            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+    reply = QMessageBox::question(this, "Confirmation", "Do you want to save the map open?",
+                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 
     if (reply == QMessageBox::Yes)
         MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
@@ -97,8 +94,8 @@ void MainWindow::on_actionEditMap_triggered() {
     else if (reply == QMessageBox::Cancel)
         return;
 
-    QString fileName = QFileDialog::getOpenFileName(this, "Seleccionar Mapa", "../maps/",
-                                                    "Archivos YAML (*.yaml)");
+    QString fileName =
+            QFileDialog::getOpenFileName(this, "Select Map", "maps/", "Archivos YAML (*.yaml)");
 
     if (!fileName.isEmpty()) {
         QFileInfo fileInfo(fileName);
@@ -113,10 +110,10 @@ void MainWindow::on_actionEditMap_triggered() {
         if (success) {
             scene->loadMap(mapWidth, mapHeight);
             ui->lineEditMapName->setText(mapName);
-            QMessageBox::information(this, "Mapa Importado",
-                                     "El mapa se ha importado correctamente.");
+            QMessageBox::information(this, "Imported Map",
+                                     "The map has been imported successfully!");
         } else {
-            QMessageBox::warning(this, "Error", "Hubo un error al importar el mapa.");
+            QMessageBox::warning(this, "Error", "There was an error importing the map.");
         }
     }
 }
