@@ -109,7 +109,9 @@ void Player::update([[maybe_unused]] const float delta) {
         _velocity += Vector2(0, -10);
     } else if (input.isActionPressed(INTERACT) && weapon) {
         input.releaseAction(INTERACT);
-        getRoot()->addChild("Weapon", ItemFactory::createItem(weapon->getID()));
+        std::unique_ptr<Item> item = ItemFactory::createItem(weapon->getID());
+        item->setPosition(globalPosition());
+        getRoot()->addChild("Weapon", std::move(item));
         removeChild("Weapon");
         weapon = nullptr;
     }
