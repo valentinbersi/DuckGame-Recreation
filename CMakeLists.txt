@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.13)
 
 add_compile_options(-Wno-error=zero-as-null-pointer-constant -Wno-error=deprecated-declarations)
 
+set(CMAKE_C_COMPILER gcc-11)
+set(CMAKE_CXX_COMPILER g++-11)
+
 if (POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif ()
@@ -75,112 +78,17 @@ file(COPY ${CMAKE_SOURCE_DIR}/maps/ DESTINATION ${CMAKE_BINARY_DIR}/maps)
 file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/config)
 file(COPY ${CMAKE_SOURCE_DIR}/config/ DESTINATION ${CMAKE_BINARY_DIR}/config)
 
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/assets/ DESTINATION /var/local/DuckGame/assets)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/maps/ DESTINATION /etc/DuckGame/maps)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/config/ DESTINATION /etc/DuckGame/config)
+
 # Install libSDL2pp (for client or editor)
 if (CLIENT OR EDITOR)
-    #add_custom_command(
-    #        OUTPUT ${CMAKE_BINARY_DIR}/graphics.stamp
-    #        COMMAND ${CMAKE_COMMAND} -E env bash ${CMAKE_SOURCE_DIR}/install_graphics.sh
-    #        COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/graphics.stamp
-    #)
-
-    #add_custom_target(graphics ALL DEPENDS ${CMAKE_BINARY_DIR}/graphics.stamp)
-
-    #FetchContent_Declare(
-    #        doxygen
-    #        GIT_REPOSITORY https://github.com/doxygen/doxygen.git
-    #        GIT_TAG Release_1_12_0
-    #)
-
-    #FetchContent_MakeAvailable(doxygen)
-
-    #FetchContent_Declare(
-    #        opus
-    #        GIT_REPOSITORY https://github.com/xiph/opus.git
-    #        GIT_TAG v1.5.2
-    #)
-
-    #FetchContent_MakeAvailable(opus)
-
-    #FetchContent_Declare(
-    #        ogg
-    #        GIT_REPOSITORY https://github.com/xiph/ogg.git
-    #        GIT_TAG v1.3.5
-    #)
-
-    #FetchContent_MakeAvailable(ogg)
-
-    #FetchContent_Declare(
-    #        opusfile
-    #        GIT_REPOSITORY https://github.com/xiph/opusfile.git
-    #        GIT_BRANCH master
-    #)
-
-    #FetchContent_MakeAvailable(opusfile)
-
-    #find_package(SDL2 REQUIRED)
-    #find_package(sdl2_mixer REQUIRED)
-    #find_package(sdl2_ttf REQUIRED)
-    #find_package(sdl2_image REQUIRED)
-
-    #FetchContent_Declare(
-    #        SDL2
-    #        GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-    #        GIT_BRANCH main
-    #)
-
-    #FetchContent_MakeAvailable(SDL2)
-    
-    #FetchContent_Declare(
-    #        SDL2_image
-    #        GIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git
-    #        GIT_BRANCH main
-    #)
-
-    #FetchContent_MakeAvailable(SDL2_image)
-    
-    #FetchContent_Declare(
-    #        SDL2_mixer
-    #        GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer.git
-    #        GIT_BRANCH main
-    #)
-
-    #FetchContent_MakeAvailable(SDL2_mixer)
-    
-    #FetchContent_Declare(
-    #        SDL2_ttf
-    #        GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
-    #        GIT_BRANCH main
-    #)
-
-    #FetchContent_MakeAvailable(SDL2_ttf)
-
-    #target_include_directories(common PUBLIC ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_MIXER_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS})
-
-    #set(SDL2_MODULES_INCLUDE_DIR "/usr/include/SDL2")
-    #set(SDL2_MIXER_LIBRARY "/usr/lib/x86_64-linux-gnu/libSDL2_mixer-2.0.so")
-    #set(SDL2_IMAGE_LIBRARY "/usr/lib/x86_64-linux-gnu/libSDL2_image-2.0.so")
-    #set(SDL2_TTF_LIBRARY "/usr/lib/x86_64-linux-gnu/libSDL2_ttf-2.0.so")
-
-    #target_include_directories(common PUBLIC ${SDL2_MODULES_INCLUDE_DIR})
-    #target_link_libraries(common ${SDL2_MIXER_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY})
-
-    FetchContent_Declare(
-            libSDL2pp
-            URL https://github.com/libSDL2pp/libSDL2pp/archive/cc198c9a5657048bee67ece82de620b2d5661084.zip
-    )
-
     set(SDL2PP_WITH_IMAGE ON CACHE BOOL "" FORCE)
     set(SDL2PP_WITH_TTF ON CACHE BOOL "" FORCE)
     set(SDL2PP_WITH_MIXER ON CACHE BOOL "" FORCE)
 
-    FetchContent_MakeAvailable(libSDL2pp)
-
-    install(TARGETS SDL2pp
-            BUNDLE DESTINATION .
-            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    )
+    find_package(SDL2pp REQUIRED)
 
     include(GNUInstallDirs)
 
@@ -199,7 +107,7 @@ if (CLIENT)
     add_executable(DuckGame)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGame common SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    add_dependencies(DuckGame common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(client)
@@ -210,7 +118,7 @@ if (CLIENT)
     target_include_directories(DuckGame PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(DuckGame common SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES})
+    target_link_libraries(DuckGame common pthread SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     install(TARGETS DuckGame
             BUNDLE DESTINATION .
@@ -222,8 +130,6 @@ endif ()
 if (SERVER)
     add_executable(DuckGameDedicatedServer)
 
-    target_compile_options(DuckGameDedicatedServer PRIVATE -std=c++20)
-
     # Make them depend on taller_common lib
     add_dependencies(DuckGameDedicatedServer common)
 
@@ -233,14 +139,20 @@ if (SERVER)
     set_project_warnings(DuckGameDedicatedServer ${MAKE_WARNINGS_AS_ERRORS} FALSE)
 
     # Link the taller_common lib target
-    target_link_libraries(DuckGameDedicatedServer common)
+    target_link_libraries(DuckGameDedicatedServer common pthread)
+    
+    install(TARGETS DuckGameDedicatedServer
+            BUNDLE DESTINATION .
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
 endif ()
 
 if (EDITOR)
     add_executable(DuckGameLevelEditor)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGameLevelEditor common SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    add_dependencies(DuckGameLevelEditor common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(editor)
@@ -251,7 +163,7 @@ if (EDITOR)
     target_include_directories(DuckGameLevelEditor PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(DuckGameLevelEditor common SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES})
+    target_link_libraries(DuckGameLevelEditor common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES})
 
     install(TARGETS DuckGameLevelEditor
             BUNDLE DESTINATION .
@@ -304,5 +216,6 @@ if (TESTS)
     target_link_libraries(DuckGameTests
             common
             GTest::gtest_main
+            pthread
     )
 endif ()
