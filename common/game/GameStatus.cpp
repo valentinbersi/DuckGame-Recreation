@@ -2,11 +2,12 @@
 
 #include <utility>
 
-GameStatus::GameStatus(): ServerMessage(MessageType::Game) {}  // Luego chequeamos.
+GameStatus::GameStatus(): ServerMessage(MessageType::Game) {}  
 
 GameStatus::GameStatus(const GameStatus& other):
         ServerMessage(MessageType::Game),
         ducks(other.ducks),
+        itemPositions(other.itemPositions),
         blockPositions(other.blockPositions),
         itemSpawnerPositions(other.itemSpawnerPositions) {}
 
@@ -15,6 +16,7 @@ GameStatus& GameStatus::operator=(const GameStatus& other) {
         return *this;
 
     ducks = other.ducks;
+    itemPositions = other.itemPositions;
     blockPositions = other.blockPositions;
     itemSpawnerPositions = other.itemSpawnerPositions;
     return *this;
@@ -23,6 +25,7 @@ GameStatus& GameStatus::operator=(const GameStatus& other) {
 GameStatus::GameStatus(GameStatus&& other) noexcept:
         ServerMessage(MessageType::Game),
         ducks(std::move(other.ducks)),
+        itemPositions(std::move(other.itemPositions)),
         blockPositions(std::move(other.blockPositions)),
         itemSpawnerPositions(std::move(other.itemSpawnerPositions)) {}
 
@@ -31,6 +34,7 @@ GameStatus& GameStatus::operator=(GameStatus&& other) noexcept {
         return *this;
 
     ducks = std::move(other.ducks);
+    itemPositions = std::move(other.itemPositions);
     blockPositions = std::move(other.blockPositions);
     itemSpawnerPositions = std::move(other.itemSpawnerPositions);
     return *this;
