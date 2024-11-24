@@ -10,6 +10,7 @@ void ShootCommand::execute(GameController& gameController) {
         case InputAction::SHOOT_RELEASED:
             return player.stopShoot();
         default:
+            return;
     }
 }
 
