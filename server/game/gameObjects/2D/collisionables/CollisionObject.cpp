@@ -86,3 +86,5 @@ void CollisionObject::registerCollision(std::weak_ptr<CollisionObject> collision
 }
 
 void CollisionObject::resetRegisteredCollisions() { objectsToCollide.clear(); }
+
+Rectangle CollisionObject::getShape() const { return shape; }

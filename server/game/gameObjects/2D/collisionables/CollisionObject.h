@@ -152,4 +152,10 @@ public:
      * @param delta the time since the last update
      */
     virtual void processCollisions(float delta) = 0;
+
+    /**
+     * Get the shape of the CollisionObject
+     * @return the shape of the CollisionObject
+     */
+    Rectangle getShape() const;
 };
