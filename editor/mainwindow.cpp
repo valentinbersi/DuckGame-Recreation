@@ -79,6 +79,7 @@ void MainWindow::on_actionNewMap_triggered() {
         MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
                               scene->getMapWidth(), scene->getMapHeight());
     scene->clearAll();
+    ui->lineEditMapName->clear();
     QMessageBox::information(this, "New Map", "A new map was created!");
 }
 
