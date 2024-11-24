@@ -62,7 +62,10 @@ GameController::GameController(): GameObject(nullptr), level(nullptr) {
 
 void GameController::start() {}
 
-void GameController::update(const float delta) { collisionManager.processCollisions(delta); }
+void GameController::update(const float delta) { 
+    collisionManager.processCollisions(delta); 
+    for (Player* player: players | std::views::values) player->clearInputs();
+}
 
 #define FULL_GAME "The game is full"
 

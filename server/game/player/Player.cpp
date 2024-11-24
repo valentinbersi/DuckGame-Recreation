@@ -52,7 +52,7 @@ Player::Player(const DuckID id):
 }
 
 void Player::onItemCollision(CollisionObject* item) {
-    if (input.isActionPressed(INTERACT) and not weapon) {
+    if (input.isActionJustPressed(INTERACT) and not weapon) {
         const auto itemPtr = static_cast<Item*>(item);
         switch (const ItemID id = itemPtr->id()) {
             case ItemID::Helmet:
@@ -66,7 +66,6 @@ void Player::onItemCollision(CollisionObject* item) {
                 addChild("Weapon", weapon);
                 getRoot()->removeChild(item);
         }
-        input.releaseAction(INTERACT);
     }
 }
 
@@ -107,8 +106,7 @@ void Player::update([[maybe_unused]] const float delta) {
         flags |= DuckData::MOVING_LEFT;
     } else if (input.isActionPressed(JUMP) && _onGround) {
         _velocity += Vector2(0, -10);
-    } else if (input.isActionPressed(INTERACT) && weapon) {
-        input.releaseAction(INTERACT);
+    } else if (input.isActionJustPressed(INTERACT) && weapon) {
         std::unique_ptr<Item> item = ItemFactory::createItem(weapon->getID());
         item->setPosition(globalPosition());
         getRoot()->addChild("Weapon", std::move(item));
@@ -123,5 +121,7 @@ void Player::update([[maybe_unused]] const float delta) {
 DuckData Player::status() {
     return {globalPosition(), id, life, weapon ? weapon->getID() : ItemID(ItemID::NONE), flags};
 }
+
+void Player::clearInputs() {input.reset();}
 
 Player::~Player() = default;

@@ -89,4 +89,10 @@ public:
      * Makes the player interact with the environment
      */
     void interact();
+
+    /**
+     * Clear player's inputs that are just pressed, manains
+     * input that are being pressed.
+     */
+    void clearInputs();
 };

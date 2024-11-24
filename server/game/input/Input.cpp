@@ -39,7 +39,7 @@ Input& Input::addAction(std::string action) {
     if (inputs.contains(action))
         throw AlreadyAddedAction(action);
 
-    inputs.emplace(std::move(action), false);
+    inputs.emplace(std::move(action), std::make_pair(false, false));
     return *this;
 }
 
@@ -51,13 +51,27 @@ Input& Input::removeAction(const std::string& action) {
 }
 
 Input& Input::pressAction(const std::string& action) {
-    inputs.at(action) = true;
+    inputs.at(action).first = true;
+    inputs.at(action).second = true;
     return *this;
 }
 
 Input& Input::releaseAction(const std::string& action) {
-    inputs.at(action) = false;
+    inputs.at(action).first = false;
+    inputs.at(action).second = false;
     return *this;
 }
 
-bool Input::isActionPressed(const std::string& action) const { return inputs.at(action); }
+bool Input::isActionPressed(const std::string& action) const { 
+    return inputs.at(action).first;
+}
+
+bool Input::isActionJustPressed(const std::string& action) const{
+    return inputs.at(action).second;
+}
+
+void Input::reset(){
+    for (auto& [_, value] : inputs) {
+        value.second = false;
+    }
+}
