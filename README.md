@@ -11,15 +11,24 @@
 
 - Cppcheck detecta falsos positivos en todo el proyecto (por ejemplo variables no usadas que claramente estan siendo usadas) y es muy probable que falle, ademas de no poder detectar problemas reales.
 
+- El proyecto no compila para la versión Ubuntu 20.04.4 LTS (Focal Fossa) debido a una incompatibilidad entre el compilador de C++ de esa distribución y la versión usada en el proyecto.
+
 ## Dudas:
 
 - Las balas deberian ser dibujadas por el cliente o solo el efecto de disparo del arma? Esto es porque al las
 balas ser tan rapidas es muy probable que apenas logren a verse en pantalla, entonces talvez no es conveniente
 cargar a la vista con objetos que apenas se van a ver.
 
+## Revisar:
+
+- Guardado de las posiciones de los objetos y como se importan y exportan en el archivo yaml (archivos LevelEditor y MapManager en la carpeta editor)
+
 ## Instalación:
 
-1. Instalar git: $ sudo apt install git
+1. Instalar git:
+    1. $ sudo apt update
+    2. $ sudo apt upgrade  
+    3. $ sudo apt install git
 
 2. Clonar el repo:
     1. $ git clone git@github.com:valentinbersi/TP_DuckGame_Grupo08.git
