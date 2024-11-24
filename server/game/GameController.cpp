@@ -32,8 +32,12 @@ void GameController::onTreeEntered(GameObject* object) {
 
 void GameController::onTreeExited(GameObject* object) {
     if (const auto collisionObject = dynamic_cast<CollisionObject*>(object);
-        collisionObject != nullptr)
+        collisionObject != nullptr) {
+        if (collisionObject->layers().test(Layer::Index::Item))
+            items.remove(static_cast<Item*>(collisionObject));
+
         collisionManager.removeCollisionObject(collisionObject);
+    }
 }
 
 #define PLAYER_ID "Player with id "

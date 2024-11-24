@@ -53,18 +53,18 @@ Player::Player(const DuckID id):
 
 void Player::onItemCollision(CollisionObject* item) {
     if (input.isActionPressed(INTERACT) and not weapon) {
-        Item* itemPtr = dynamic_cast<Item*>(item);
-        ItemID id = itemPtr->id();
-        switch (id) {
+        const auto itemPtr = static_cast<Item*>(item);
+        switch (const ItemID id = itemPtr->id()) {
             case ItemID::Helmet:
-                flags |= (flags & DuckData::HELMET) ? flags : DuckData::HELMET;
+                flags |= flags & DuckData::HELMET ? flags : DuckData::HELMET;
                 return;
             case ItemID::Armor:
-                flags |= (flags & DuckData::ARMOR) ? flags : DuckData::ARMOR;
+                flags |= flags & DuckData::ARMOR ? flags : DuckData::ARMOR;
                 return;
             default:
                 weapon = WeaponFactory::createWeapon(id).release();
                 addChild("Weapon", weapon);
+                getRoot()->removeChild(item);
         }
         input.releaseAction(INTERACT);
     }
