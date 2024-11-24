@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ItemID.h"
+#include "DuckData.h"
 
 struct DuckState {
     bool playingDead;

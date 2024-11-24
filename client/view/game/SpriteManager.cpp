@@ -40,8 +40,7 @@ SpriteManager::SpriteManager(
         path1(path1),
         path2(path2),
         scale(DEFAULT_SCALE),
-        movingRight(false),
-        movingLeft(false),
+        isMoving(false),
         inAir(false),
         crouching(false),
         flapping(false),
@@ -63,10 +62,6 @@ void SpriteManager::updatePosition(float new_x, float new_y) {
 }
 
 void SpriteManager::update(const DuckState& state) {
-    if (state.moving and state.direction == DuckData::Direction::Left)
-        flip = true;
-    else if (state.moving and state.direction == DuckData::Direction::Right)
-        flip = false;
     setFlags(state);
 
     if (state.inAir) {
@@ -95,7 +90,7 @@ void SpriteManager::updateEquipment(bool helmet, bool chestplate, ItemID& gun) {
 }
 
 void SpriteManager::setFlags(const DuckState& state) {
-    if (inAir || movingRight || movingLeft) {
+    if (inAir || isMoving) {
         if (!(inAir && frame == 4))
             ++frame;
         if (frame > LIMIT_FRAMES && !inAir)
@@ -106,8 +101,8 @@ void SpriteManager::setFlags(const DuckState& state) {
     }
 
     negateFlag(state.inAir, inAir);
-    negateFlag(state.movingRight, movingRight);
-    negateFlag(state.movingLeft, movingLeft);
+    negateFlag(state.moving, isMoving);
+    negateFlag(state.direction == DuckData::Direction::Left, flip);
     negateFlag(state.crouching, crouching);
     negateFlag(state.isShooting, shooting);
 

@@ -195,16 +195,16 @@ void Game::showBackground(Texture& backgroundTexture) {
     renderer.Copy(backgroundTexture, NullOpt, dstRect);
 }
 
-std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> Game::createSpritesMapping() {
-    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping;
+std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>> Game::createSpritesMapping() {
+    std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>> spritesMapping;
 
-    spritesMapping.emplace(DuckID::White,
+    spritesMapping.emplace(DuckData::Id::White,
                            std::make_unique<SpriteManager>(whiteSheet, whiteFeathers, renderer));
-    spritesMapping.emplace(DuckID::Orange,
+    spritesMapping.emplace(DuckData::Id::Orange,
                            std::make_unique<SpriteManager>(orangeSheet, orangeFeathers, renderer));
-    spritesMapping.emplace(DuckID::Yellow,
+    spritesMapping.emplace(DuckData::Id::Yellow,
                            std::make_unique<SpriteManager>(yellowSheet, yellowFeathers, renderer));
-    spritesMapping.emplace(DuckID::Grey,
+    spritesMapping.emplace(DuckData::Id::Grey,
                            std::make_unique<SpriteManager>(greySheet, greyFeathers, renderer));
 
     return spritesMapping;
