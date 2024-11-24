@@ -2,6 +2,7 @@
 
 #include "ItemID.h"
 #include "PhysicsObject.h"
+#include "ItemData.h"
 
 class Item final: public PhysicsObject {
     ItemID _id;
@@ -19,13 +20,19 @@ public:
      * @param height the heigth of the item
      * @param id the id of the item
      */
-    explicit Item(float width, float height, ItemID id);
+    Item(float width, float height, ItemID id);
 
     /**
      * Get the id of the item
      * @return ItemId related to the Item
      */
     ItemID id() const noexcept;
+
+    /**
+     * Gives Data related to the Item;
+     * @return ItemData related to the Item
+     */
+    ItemData status() const;
 
     ~Item() override;
 };

@@ -41,19 +41,17 @@ bool GameStatus::operator==(const GameStatus& other) const {
            itemSpawnerPositions == other.itemSpawnerPositions;
 }
 
-void GameStatus::send([[maybe_unused]] ServerSendProtocol& serverProtocol) {
-    serverProtocol.sendLen(ducks.size());
-    for (const auto& duck: ducks) {
-        serverProtocol.sendDuckData(duck);
+template<typename T>
+void GameStatus::sendList(ServerSendProtocol& serverProtocol, const std::list<T>& list, void (ServerSendProtocol::*sendFunc)(const T&)) {
+    serverProtocol.sendLen(list.size());
+    for (const auto& item: list) {
+        (serverProtocol.*sendFunc)(item);
     }
+}
 
-    serverProtocol.sendLen(blockPositions.size());
-    for (const auto& blockPosition: blockPositions) {
-        serverProtocol.sendBlock(blockPosition);
-    }
-
-    serverProtocol.sendLen(itemSpawnerPositions.size());
-    for (const auto& spawnPosition: itemSpawnerPositions) {
-        serverProtocol.sendBlock(spawnPosition);
-    }
+void GameStatus::send(ServerSendProtocol& serverProtocol) {
+    sendList(serverProtocol, ducks, &ServerSendProtocol::sendDuckData);
+    sendList(serverProtocol, itemPositions, &ServerSendProtocol::sendItemData);
+    sendList(serverProtocol, blockPositions, &ServerSendProtocol::sendBlock);
+    sendList(serverProtocol, itemSpawnerPositions, &ServerSendProtocol::sendBlock);
 }

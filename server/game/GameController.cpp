@@ -118,6 +118,7 @@ GameStatus GameController::status() const {
     GameStatus status;
     status.blockPositions = level->blockStatus();
     status.itemSpawnerPositions = level->itemSpawnerStatus();
+    for (const auto& item: items) status.itemPositions.push_back(item->status());
     for (Player* player: players | std::views::values) status.ducks.push_back(player->status());
     return status;
 }

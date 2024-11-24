@@ -13,4 +13,6 @@ Item::Item(const float width, const float height, const ItemID id):
 
 ItemID Item::id() const noexcept { return _id; }
 
+ItemData Item::status() const { return {_id, shape}; }
+
 Item::~Item() = default;
