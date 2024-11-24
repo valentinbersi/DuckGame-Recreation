@@ -91,6 +91,16 @@ public:
     void interact();
 
     /**
+     * Makes the player shoot
+     */
+    void shoot();
+
+    /**
+     * Makes the player stop shooting
+     */
+    void stopShoot();
+
+    /**
      * Clear player's inputs that are just pressed, manains
      * input that are being pressed.
      */

@@ -18,7 +18,7 @@ void EventHandler::handleEvents() {
     SDL_Event event;
     bool scaleChanged = false;
     while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
+        if ((event.type == SDL_KEYDOWN and event.key.repeat == 0) || event.type == SDL_KEYUP) {
             SDL_Scancode scancode = event.key.keysym.scancode;
             bool isKeyDown = event.type == SDL_KEYDOWN;
             handleKeyEvent(scancode, isKeyDown);

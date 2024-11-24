@@ -1,5 +1,6 @@
 #include "Input.h"
 
+#include <ranges>
 #include <utility>
 
 #define ACTION "Action "
@@ -62,16 +63,12 @@ Input& Input::releaseAction(const std::string& action) {
     return *this;
 }
 
-bool Input::isActionPressed(const std::string& action) const { 
-    return inputs.at(action).first;
-}
+bool Input::isActionPressed(const std::string& action) const { return inputs.at(action).first; }
 
-bool Input::isActionJustPressed(const std::string& action) const{
+bool Input::isActionJustPressed(const std::string& action) const {
     return inputs.at(action).second;
 }
 
-void Input::reset(){
-    for (auto& [_, value] : inputs) {
-        value.second = false;
-    }
+void Input::reset() {
+    for (auto& [_, justPressed]: inputs | std::views::values) justPressed = false;
 }

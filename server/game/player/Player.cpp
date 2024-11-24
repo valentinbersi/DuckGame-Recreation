@@ -17,6 +17,7 @@
 #define CROUCH "Crouch"
 #define JUMP "Jump"
 #define INTERACT "Interact"
+#define SHOOT "Shoot"
 
 #define DEFAULT_LIFE 10
 #define DEFAULT_FLAGS 0
@@ -45,6 +46,7 @@ Player::Player(const DuckID id):
     input.addAction(CROUCH);
     input.addAction(JUMP);
     input.addAction(INTERACT);
+    input.addAction(SHOOT);
     const auto itemDetector = new Area(nullptr, Vector2::ZERO, 0, Layer::Item, PLAYER_DIMENSIONS);
     itemDetector->connect(Area::Events::Collision,
                           eventHandler(&Player::onItemCollision, CollisionObject*));
@@ -87,6 +89,10 @@ void Player::stopJump() { input.releaseAction(JUMP); }
 
 void Player::interact() { input.pressAction(INTERACT); }
 
+void Player::shoot() { input.pressAction(SHOOT); }
+
+void Player::stopShoot() { input.releaseAction(SHOOT); }
+
 void Player::start() {}
 
 void Player::update([[maybe_unused]] const float delta) {
@@ -122,6 +128,6 @@ DuckData Player::status() {
     return {globalPosition(), id, life, weapon ? weapon->getID() : ItemID(ItemID::NONE), flags};
 }
 
-void Player::clearInputs() {input.reset();}
+void Player::clearInputs() { input.reset(); }
 
 Player::~Player() = default;
