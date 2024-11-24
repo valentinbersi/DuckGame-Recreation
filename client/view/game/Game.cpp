@@ -27,6 +27,10 @@ using SDL2pp::SDL;
 using SDL2pp::Surface;
 using SDL2pp::Texture;
 
+const HashMap<ItemID, cppstring> Game::weaponSprites = {
+        {ItemID::Magnum, "assets/weapons/Magnum.png"},
+        {ItemID::CowboyPistol, "assets/weapons/CowboyPistol.png"}};
+
 Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         running(true),
         window_width(DEF_WINDOW_WIDTH),
@@ -63,7 +67,7 @@ void Game::init() {
         showBackground(backgroundTexture);
         updatePlayers(spritesMapping);
         updateBlocks(enviromentRenderer);
-        updateWeaponSpawns(enviromentRenderer);
+        updateItemSpawns(enviromentRenderer);
         // updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
         renderer.Present();
 
@@ -92,6 +96,7 @@ void Game::getSnapshot() {
     for (auto& duck: snapshot->ducks) ducks.push_back(std::move(duck));
     for (const auto& block: snapshot->blockPositions) blocks.push_back(block);
     for (const auto& itemSpawner: snapshot->itemSpawnerPositions) itemSpawns.push_back(itemSpawner);
+    for (const auto& item: snapshot->itemPositions) items.push_back(item);
     // for (const auto& spawner: snapshot->spawnerPosition) spawners.push_back(spawner);
     // for (const auto& weapon: snapshot->weaponPosition) weapons.push_back(weapon);
 }
@@ -106,6 +111,10 @@ void Game::filterObjectsToRender() {
     for (SizedObjectData& itemSpawn: itemSpawns)
         if (viewRect.overlaps(itemSpawn.rectangle))
             itemSpawnsToRender.push_back(std::move(itemSpawn));
+
+    for (ItemData& item: items)
+        if (viewRect.overlaps(item.rectangle))
+            itemsToRender.push_back(std::move(item));
 }
 
 #define DUCK_WIDTH 2
@@ -149,53 +158,25 @@ void Game::updatePlayers(const HashMap<DuckID, std::unique_ptr<SpriteManager>>& 
     }
 }
 
-#define BLOCK_WIDTH 2
-
 void Game::updateBlocks(EnviromentRenderer& enviromentRenderer) {
-    const float objectCameraSize = camera.getViewRect().size().x() / BLOCK_WIDTH;
-    const float scale = static_cast<float>(window_width) / objectCameraSize;
-
-    for (auto& block: blocksToRender) {
-        const float relativePositionX = block.position.x() - camera.getViewRect().center().x();
-        const float relativePositionY = block.position.y() - camera.getViewRect().center().y();
-        const float positionScaleX =
-                static_cast<float>(window_width) / camera.getViewRect().size().x();
-        const float positionScaleY =
-                static_cast<float>(window_height) / camera.getViewRect().size().y();
-        const float screenPositionX =
-                relativePositionX * positionScaleX + static_cast<float>(window_width) / 2;
-        const float screenPositionY =
-                relativePositionY * positionScaleY + static_cast<float>(window_height) / 2;
-
-        Rect position(static_cast<int>(screenPositionX - scale / 2),
-                      static_cast<int>(screenPositionY - scale / 2), static_cast<int>(scale),
-                      static_cast<int>(scale));
-        enviromentRenderer.drawEnviroment(position, ROCK);
-    }
+    for (Rect& block: calculateObjectsPositionsAndSize(blocksToRender))
+        enviromentRenderer.drawEnviroment(block, ROCK);
 }
 
-#define WEAPON_SPAWN_WIDTH 3.5
+void Game::updateItemSpawns(EnviromentRenderer& enviromentRenderer) {
+    for (Rect& itemSpawn: calculateObjectsPositionsAndSize(itemSpawnsToRender))
+        enviromentRenderer.drawEnviroment(itemSpawn, WEAPON_SPAWNER);
+}
 
-void Game::updateWeaponSpawns(EnviromentRenderer& enviromentRenderer) {
-    const float spawnerCameraSize = camera.getViewRect().size().x() / WEAPON_SPAWN_WIDTH;
-    const float scale = static_cast<float>(window_width) / spawnerCameraSize;
+void Game::updateItems(EnviromentRenderer& enviromentRenderer) {
+    std::list<Rect> rectsToDraw = calculateObjectsPositionsAndSize(itemsToRender);
+    auto rectsIt = rectsToDraw.begin();
+    auto itemsIt = itemsToRender.begin();
 
-    for (SizedObjectData& itemSpawn: itemSpawnsToRender) {
-        const float relativePositionX = itemSpawn.position.x() - camera.getViewRect().center().x();
-        const float relativePositionY = itemSpawn.position.y() - camera.getViewRect().center().y();
-        const float positionScaleX =
-                static_cast<float>(window_width) / camera.getViewRect().size().x();
-        const float positionScaleY =
-                static_cast<float>(window_height) / camera.getViewRect().size().y();
-        const float screenPositionX =
-                relativePositionX * positionScaleX + static_cast<float>(window_width) / 2;
-        const float screenPositionY =
-                relativePositionY * positionScaleY + static_cast<float>(window_height) / 2;
-
-        Rect position(static_cast<int>(screenPositionX - scale / 2),
-                      static_cast<int>(screenPositionY - scale / 2), static_cast<int>(scale),
-                      static_cast<int>(scale));
-        enviromentRenderer.drawEnviroment(position, WEAPON_SPAWNER);
+    while (rectsIt != rectsToDraw.end() && itemsIt != itemsToRender.end()) {
+        enviromentRenderer.drawEnviroment(*rectsIt, weaponSprites.at(itemsIt->id));
+        ++rectsIt;
+        ++itemsIt;
     }
 }
 
@@ -231,6 +212,8 @@ void Game::clearObjects() {
     blocksToRender.clear();
     itemSpawns.clear();
     itemSpawnsToRender.clear();
+    items.clear();
+    itemsToRender.clear();
 }
 
 Game::~Game() {
