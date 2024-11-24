@@ -22,6 +22,8 @@ void Camera::forceUpdate(std::list<DuckData>& ducks) {
         ducksArrived = true;
 }
 
+#define CAMERA_SPEED 2
+
 void Camera::updateZoom(const Vector2& center, const Vector2& maxDistance, const float aspectRatio,
                         const float deltaTime, const Force force) {
     const Vector2 rectDimension = maxDistance.x() > maxDistance.y() ?
@@ -37,9 +39,10 @@ void Camera::updateZoom(const Vector2& center, const Vector2& maxDistance, const
     if (force == Force::Yes)
         viewRect.setSize(rectDimension);
     else
-        viewRect.setSize(viewRect.size() + (rectDimension - viewRect.size()) * deltaTime);
+        viewRect.setSize(viewRect.size() +
+                         (rectDimension - viewRect.size()) * CAMERA_SPEED * deltaTime);
 
-    viewRect.setCenter(viewRect.center() + (center - viewRect.center()) * deltaTime);
+    viewRect.setCenter(viewRect.center() + (center - viewRect.center()) * CAMERA_SPEED * deltaTime);
 }
 
 Camera::UpdateInfo Camera::updateInfo(std::list<DuckData>& ducks) const {
