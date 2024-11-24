@@ -37,7 +37,9 @@ GameStatus& GameStatus::operator=(GameStatus&& other) noexcept {
 }
 
 bool GameStatus::operator==(const GameStatus& other) const {
-    return ducks == other.ducks && blockPositions == other.blockPositions &&
+    return ducks == other.ducks && 
+           itemPositions == other.itemPositions &&
+           blockPositions == other.blockPositions &&
            itemSpawnerPositions == other.itemSpawnerPositions;
 }
 
