@@ -78,25 +78,17 @@ file(COPY ${CMAKE_SOURCE_DIR}/maps/ DESTINATION ${CMAKE_BINARY_DIR}/maps)
 file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/config)
 file(COPY ${CMAKE_SOURCE_DIR}/config/ DESTINATION ${CMAKE_BINARY_DIR}/config)
 
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/assets/ DESTINATION /var/local/DuckGame/assets)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/maps/ DESTINATION /etc/DuckGame/maps)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/config/ DESTINATION /etc/DuckGame/config)
+
 # Install libSDL2pp (for client or editor)
 if (CLIENT OR EDITOR)
-    FetchContent_Declare(
-            libSDL2pp
-            URL https://github.com/libSDL2pp/libSDL2pp/archive/cc198c9a5657048bee67ece82de620b2d5661084.zip
-    )
-
     set(SDL2PP_WITH_IMAGE ON CACHE BOOL "" FORCE)
     set(SDL2PP_WITH_TTF ON CACHE BOOL "" FORCE)
     set(SDL2PP_WITH_MIXER ON CACHE BOOL "" FORCE)
 
-    FetchContent_MakeAvailable(libSDL2pp)
-
-    install(TARGETS SDL2pp
-            BUNDLE DESTINATION .
-            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    )
+    find_package(SDL2pp REQUIRED)
 
     include(GNUInstallDirs)
 
@@ -115,7 +107,7 @@ if (CLIENT)
     add_executable(DuckGame)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGame common SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    add_dependencies(DuckGame common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(client)
@@ -126,7 +118,7 @@ if (CLIENT)
     target_include_directories(DuckGame PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(DuckGame common pthread SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    target_link_libraries(DuckGame common pthread SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     install(TARGETS DuckGame
             BUNDLE DESTINATION .
@@ -148,13 +140,19 @@ if (SERVER)
 
     # Link the taller_common lib target
     target_link_libraries(DuckGameDedicatedServer common pthread)
+    
+    install(TARGETS DuckGameDedicatedServer
+            BUNDLE DESTINATION .
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
 endif ()
 
 if (EDITOR)
     add_executable(DuckGameLevelEditor)
 
     # Make them depend on taller_common lib
-    add_dependencies(DuckGameLevelEditor common SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
+    add_dependencies(DuckGameLevelEditor common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui)
 
     # Add source files and enable warnings
     add_subdirectory(editor)
@@ -165,7 +163,7 @@ if (EDITOR)
     target_include_directories(DuckGameLevelEditor PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(DuckGameLevelEditor common SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES})
+    target_link_libraries(DuckGameLevelEditor common SDL2pp::SDL2pp Qt5::Widgets Qt5::Core Qt5::Gui ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES})
 
     install(TARGETS DuckGameLevelEditor
             BUNDLE DESTINATION .
