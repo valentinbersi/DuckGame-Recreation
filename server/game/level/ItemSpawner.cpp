@@ -33,12 +33,11 @@ void ItemSpawner::onTimeout() {
     item->setPosition(newPosition);
     spawnedItem = item->getReference<Item>();
     getRoot()->addChild("Weapon", std::move(item));
-    timer->reset();
+    timer->setTimeout(randomGenerator.generateRandomFloat());
 }
 
 void ItemSpawner::update([[maybe_unused]] const float delta) {
     if (spawnedItem.expired() && !timer->started()) {
-        timer->setTimeout(randomGenerator.generateRandomFloat());
         timer->start();
     }
 }
