@@ -10,3 +10,5 @@ void ExitCommand::execute(GameController& gameController) {
         // expected
     }
 }
+
+ExitCommand::~ExitCommand() = default;

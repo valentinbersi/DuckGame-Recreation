@@ -3,13 +3,14 @@
 ShootCommand::ShootCommand(const PlayerID id, InputAction action): Command(id), action(action) {}
 
 void ShootCommand::execute(GameController& gameController) {
-    [[maybe_unused]] Player& player = gameController.getPlayer(id);
+    Player& player = gameController.getPlayer(id);
     switch (id) {
         case InputAction::SHOOT_PRESSED:
-            // return player.shoot();
+            return player.shoot();
         case InputAction::SHOOT_RELEASED:
-            // return player.stopShooting();
+            return player.stopShoot();
         default:
-            return;
     }
 }
+
+ShootCommand::~ShootCommand() = default;

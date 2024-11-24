@@ -31,6 +31,7 @@ void MovementCommand::execute(GameController& gameController) {
             return player.stopJump();
 
         default:
-            return;
     }
 }
+
+MovementCommand::~MovementCommand() = default;
