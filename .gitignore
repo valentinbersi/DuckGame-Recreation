@@ -98,5 +98,8 @@ CMakeLists.txt.user*
 *.Debug
 *.Release
 
+# Installer
+dependencies/
+
 # Python byte code
 *.pyc

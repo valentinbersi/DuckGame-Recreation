@@ -4,7 +4,6 @@
 #include <string>
 
 #include "Area.h"
-#include "Debug.h"
 #include "DuckData.h"
 #include "EquippableWeapon.h"
 #include "GameTimer.h"
@@ -92,10 +91,6 @@ void Player::interact() { input.pressAction(INTERACT); }
 void Player::start() {}
 
 void Player::update([[maybe_unused]] const float delta) {
-    Debug::cout().print("Position: " + std::to_string(globalPosition().x()) + ", " +
-                        std::to_string(globalPosition().y()) + "\n");
-    Debug::cout().flush();
-
     if (not input.isActionPressed(JUMP) and _velocity.y() < 0) {
         _velocity = _velocity.y(0);
     }
