@@ -62,8 +62,8 @@ GameController::GameController(): GameObject(nullptr), level(nullptr) {
 
 void GameController::start() {}
 
-void GameController::update(const float delta) { 
-    collisionManager.processCollisions(delta); 
+void GameController::update(const float delta) {
+    collisionManager.processCollisions(delta);
     for (Player* player: players | std::views::values) player->clearInputs();
 }
 
@@ -82,7 +82,7 @@ void GameController::addPlayer(const PlayerID playerID) {
     if (players.size() >= MAX_PLAYERS)
         throw std::logic_error(FULL_GAME);
 
-    const auto duckID = static_cast<DuckID>(players.size());
+    const auto duckID = static_cast<DuckData::Id>(players.size());
 
     const auto newPlayer = new Player(duckID);
 

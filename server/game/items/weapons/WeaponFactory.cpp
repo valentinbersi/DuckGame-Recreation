@@ -6,9 +6,8 @@
 
 std::unordered_map<ItemID, std::function<std::unique_ptr<EquippableWeapon>()>>
         WeaponFactory::factory = {
-                {ItemID::CowboyPistol,
-                 []() { return std::make_unique<CowboyPistol>(ItemID::CowboyPistol); }},
-                {ItemID::Magnum, []() { return std::make_unique<Magnum>(ItemID::Magnum); }},
+                {ItemID::CowboyPistol, []() { return std::make_unique<CowboyPistol>(); }},
+                {ItemID::Magnum, []() { return std::make_unique<Magnum>(); }},
 };
 
 std::unique_ptr<EquippableWeapon> WeaponFactory::createWeapon(const ItemID id) {

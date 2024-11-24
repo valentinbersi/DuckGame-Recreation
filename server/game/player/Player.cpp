@@ -3,8 +3,6 @@
 #include <memory>
 #include <string>
 
-#include "editor/Object.h"
-
 #include "Area.h"
 #include "DuckData.h"
 #include "GameTimer.h"
@@ -131,11 +129,13 @@ void Player::update([[maybe_unused]] const float delta) {
     else if (_velocity.x() > 0)
         direction = DuckData::Direction::Right;
 
-    if (weapon)
+    if (weapon) {
         if (input.isActionPressed(SHOOT))
             weapon->actionate();
         else
             weapon->deactionate();
+    }
+
 
     if (!_onGround)
         flags |= DuckData::Flag::InAir;
