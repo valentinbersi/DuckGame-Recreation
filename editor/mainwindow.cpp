@@ -94,7 +94,7 @@ void MainWindow::on_actionEditMap_triggered() {
         return;
 
     QString fileName =
-            QFileDialog::getOpenFileName(this, "Select Map", "maps/", "Archivos YAML (*.yaml)");
+            QFileDialog::getOpenFileName(this, "Select Map", "../maps/", "Archivos YAML (*.yaml)");
 
     if (!fileName.isEmpty()) {
         QFileInfo fileInfo(fileName);
