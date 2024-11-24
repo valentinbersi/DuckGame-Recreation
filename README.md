@@ -11,8 +11,6 @@
 
 - Cppcheck detecta falsos positivos en todo el proyecto (por ejemplo variables no usadas que claramente estan siendo usadas) y es muy probable que falle, ademas de no poder detectar problemas reales.
 
-- El proyecto no compila para la versión Ubuntu 20.04.4 LTS (Focal Fossa) debido a una incompatibilidad entre el compilador de C++ de esa distribución y la versión usada en el proyecto.
-
 ## Dudas:
 
 - Las balas deberian ser dibujadas por el cliente o solo el efecto de disparo del arma? Esto es porque al las
