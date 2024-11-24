@@ -7,18 +7,23 @@ Camera::Camera(int& windowWidth, int& windowHeight):
         ducksArrived(false) {}
 
 void Camera::update(std::list<DuckData>& ducks, const float deltaTime) {
-    const float aspectRatio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
-    const Vector2 center = centerOfDucks(ducks);
-    const Vector2 maxDistance = calculateMaxDistance(ducks, aspectRatio);
-
+    auto [center, maxDistance, aspectRatio] = updateInfo(ducks);
     updateZoom(center, maxDistance, aspectRatio, deltaTime);
 
     if (not ducks.empty())
         ducksArrived = true;
 }
 
+void Camera::forceUpdate(std::list<DuckData>& ducks) {
+    auto [center, maxDistance, aspectRatio] = updateInfo(ducks);
+    updateZoom(center, maxDistance, aspectRatio, 1, Force::Yes);
+
+    if (not ducks.empty())
+        ducksArrived = true;
+}
+
 void Camera::updateZoom(const Vector2& center, const Vector2& maxDistance, const float aspectRatio,
-                        const float deltaTime) {
+                        const float deltaTime, const Force force) {
     const Vector2 rectDimension = maxDistance.x() > maxDistance.y() ?
                                           Vector2(maxDistance.x(), maxDistance.x() / aspectRatio) :
                                           Vector2(maxDistance.y() * aspectRatio, maxDistance.y());
@@ -29,8 +34,20 @@ void Camera::updateZoom(const Vector2& center, const Vector2& maxDistance, const
         return;
     }
 
-    viewRect.setSize(viewRect.size() + (rectDimension - viewRect.size()) * deltaTime);
+    if (force == Force::Yes)
+        viewRect.setSize(rectDimension);
+    else
+        viewRect.setSize(viewRect.size() + (rectDimension - viewRect.size()) * deltaTime);
+
     viewRect.setCenter(viewRect.center() + (center - viewRect.center()) * deltaTime);
+}
+
+Camera::UpdateInfo Camera::updateInfo(std::list<DuckData>& ducks) const {
+    UpdateInfo info;
+    info.aspectRatio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
+    info.center = centerOfDucks(ducks);
+    info.maxDistance = calculateMaxDistance(ducks, info.aspectRatio);
+    return info;
 }
 
 Vector2 Camera::calculateMaxDistance(std::list<DuckData>& ducks, const float aspectRatio) {

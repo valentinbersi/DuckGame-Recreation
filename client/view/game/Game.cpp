@@ -68,6 +68,7 @@ void Game::init() {
         updatePlayers(spritesMapping);
         updateBlocks(enviromentRenderer);
         updateItemSpawns(enviromentRenderer);
+        updateItems(enviromentRenderer);
         // updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
         renderer.Present();
 
