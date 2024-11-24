@@ -22,7 +22,8 @@ void ServerSendProtocol::sendRectangle(const Rectangle& rectangle) {
 void ServerSendProtocol::sendDuckData(const DuckData& duckData) {
     sendByte(static_cast<unsigned char>(duckData.duckID));
     sendByte(duckData.life);
-    sendByte(static_cast<unsigned char>(duckData.gunID));
+    sendByte(static_cast<u8>(duckData.direction));
+    sendByte(static_cast<u8>(duckData.gunID));
     sendShort(static_cast<u16>(duckData.extraData.to_ulong()));
     sendVector2(duckData.rectangle.center());
 }
