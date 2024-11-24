@@ -76,7 +76,7 @@ cargar a la vista con objetos que apenas se van a ver.
 
 10. Ejecutar los tests: $ DuckGameTests
 
-## Controles:
+## Controles del Juego:
 
 * F11 para fullscreen
 
@@ -93,3 +93,10 @@ cargar a la vista con objetos que apenas se van a ver.
 * Disparo: DELETE (tecla superior al enter, NO supr/del)
 
 
+## Controles del Editor:
+* Seleccionar/Deseleccionar objeto para agregar: Botones de número (1, 2, 3 y 4) o click en la barra lateral derecha.
+* Agregar objeto seleccionado al mapa: Click izquierdo
+* Eliminar objeto del mapa: Click derecho
+* Nuevo Mapa: CTRL+N
+* Guardar Mapa: CTRL+S
+* Cargar/Editar Mapa: CTRL+E
