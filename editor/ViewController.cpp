@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "ViewController.h"
 
 #include <QAbstractButton>
 #include <QAction>
@@ -12,9 +12,9 @@
 #include "EditorConstants.h"
 #include "MapManager.h"
 #include "Object.h"
-#include "ui_mainwindow.h"
+#include "ui_viewcontroller.h"
 
-MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWindow) {
+ViewController::ViewController(QWidget* parent): QMainWindow(parent), ui(new Ui::ViewController) {
     ui->setupUi(this);
 
     scene = new LevelScene(this, objects);
@@ -34,14 +34,14 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWin
                               scene->getMapWidth(), scene->getMapHeight());
     });
 
-    connect(ui->actionNewMap, &QAction::triggered, this, &MainWindow::on_actionNewMap_triggered);
+    connect(ui->actionNewMap, &QAction::triggered, this, &ViewController::on_actionNewMap_triggered);
 
-    connect(ui->actionEditMap, &QAction::triggered, this, &MainWindow::on_actionEditMap_triggered);
+    connect(ui->actionEditMap, &QAction::triggered, this, &ViewController::on_actionEditMap_triggered);
 
-    connect(scene, &LevelScene::resizeView, this, &MainWindow::onSceneResize);
+    connect(scene, &LevelScene::resizeView, this, &ViewController::onSceneResize);
 }
 
-void MainWindow::setActionButtons() {
+void ViewController::setActionButtons() {
     actionTypeMap = {{ui->Platform, PLATFORM},
                      {ui->SpawnDuck, DUCK},
                      {ui->SpawnGun, ARMAMENT},
@@ -64,14 +64,13 @@ void MainWindow::setActionButtons() {
     });
 }
 
-void MainWindow::onSceneResize() {
+void ViewController::onSceneResize() {
     QRectF sceneRect = scene->sceneRect();
     ui->graphicsView->setSceneRect(0, 0, sceneRect.width() * 4, sceneRect.height() * 4);
 }
 
-bool MainWindow::confirmAndSaveMap() {
-    QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this, "Confirmation", "Do you want to save the map open?",
+bool ViewController::confirmAndSaveMap() {
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirmation", "Do you want to save the map open?",
                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
     if (reply == QMessageBox::Cancel)
         return false;
@@ -81,7 +80,7 @@ bool MainWindow::confirmAndSaveMap() {
     return true;
 }
 
-void MainWindow::on_actionNewMap_triggered() {
+void ViewController::on_actionNewMap_triggered() {
     if(!confirmAndSaveMap()) return;
 
     scene->clearAll();
@@ -89,7 +88,7 @@ void MainWindow::on_actionNewMap_triggered() {
     QMessageBox::information(this, "New Map", "A new map was created!");
 }
 
-void MainWindow::on_actionEditMap_triggered() {
+void ViewController::on_actionEditMap_triggered() {
     if(!confirmAndSaveMap()) return;
 
     QString fileName =
@@ -112,12 +111,11 @@ void MainWindow::on_actionEditMap_triggered() {
     if (success) {
         scene->loadMap(mapWidth, mapHeight);
         ui->lineEditMapName->setText(mapName);
-        QMessageBox::information(this, "Imported Map",
-                                 "The map has been imported successfully!");
+        QMessageBox::information(this, "Imported Map","The map has been imported successfully!");
     }
 }
 
-MainWindow::~MainWindow() {
+ViewController::~ViewController() {
     delete scene;
     delete ui;
 }

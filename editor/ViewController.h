@@ -10,19 +10,19 @@
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class MainWindow;
+class ViewController;
 }
 QT_END_NAMESPACE
 
-class MainWindow: public QMainWindow {
+class ViewController: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget* parent = nullptr);
-    ~MainWindow() override;
+    explicit ViewController(QWidget* parent = nullptr);
+    ~ViewController() override;
 
 private:
-    Ui::MainWindow* ui;
+    Ui::ViewController* ui;
     std::string background;
     std::vector<Object> objects;
     LevelScene* scene;

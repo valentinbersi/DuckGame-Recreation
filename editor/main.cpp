@@ -1,7 +1,7 @@
 #include <QApplication>
 
 #include "Object.h"
-#include "mainwindow.h"
+#include "ViewController.h"
 
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
     qRegisterMetaType<Object*>("Object*");
     qRegisterMetaType<Object*>("Object&");
     qRegisterMetaType<const Object*>("const Object*");
-    MainWindow w;
+    ViewController w;
     w.show();
     return a.exec();
 }
