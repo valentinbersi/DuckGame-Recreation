@@ -5,6 +5,7 @@
 #include <utility>
 
 #include "GameStatus.h"
+#include "Layer.h"
 #include "LevelData.h"
 #include "SpawnPoint.h"
 
@@ -21,8 +22,12 @@ GameController::~GameController() = default;
 
 void GameController::onTreeEntered(GameObject* object) {
     if (const auto collisionObject = dynamic_cast<CollisionObject*>(object);
-        collisionObject != nullptr)
+        collisionObject != nullptr) {
+        if (collisionObject->layers().test(Layer::Index::Item))
+            items.push_back(static_cast<Item*>(collisionObject));
+
         collisionManager.addCollisionObject(collisionObject);
+    }
 }
 
 void GameController::onTreeExited(GameObject* object) {

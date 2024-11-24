@@ -4,10 +4,10 @@
 
 #include "CollisionObject.h"
 #include "DuckData.h"
+#include "EquippableWeapon.h"
 #include "Input.h"
 #include "PhysicsObject.h"
 
-class EquippableWeapon;
 class Player final: public PhysicsObject {
 private:
     DuckID id;

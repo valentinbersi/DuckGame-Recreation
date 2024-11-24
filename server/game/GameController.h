@@ -12,6 +12,7 @@ class GameController final: public GameObject {
     HashMap<PlayerID, Player*> players;
     CollisionManager collisionManager;
     Level* level;
+    std::list<Item*> items;
 
     /**
      * GameController handler for tree entered event
