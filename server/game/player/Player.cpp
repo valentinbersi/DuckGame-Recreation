@@ -114,7 +114,11 @@ void Player::update([[maybe_unused]] const float delta) {
         flags |= DuckData::Flag::IsMoving;
 
     } else if (input.isActionPressed(JUMP) && _onGround) {
-        _velocity += Vector2(0, -10);
+        _velocity += Vector2(0, -20);
+    
+    } else if (input.isActionJustPressed(JUMP) && !_onGround) {
+        _velocity += Vector2(0, -3);
+        flags |= DuckData::Flag::Flapping;
 
     } else if (input.isActionJustPressed(INTERACT) && weapon) {
         std::unique_ptr<Item> item = ItemFactory::createItem(weapon->getID());
