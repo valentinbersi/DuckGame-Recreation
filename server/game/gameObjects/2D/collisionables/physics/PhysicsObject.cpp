@@ -79,7 +79,8 @@ void PhysicsObject::processCollisions(const float delta) {
                 // TODO: implement
                 break;
 
-            default:;
+            default:
+                break;
         }
 
         fire(Events::Collision, objectPtr.get());
