@@ -16,9 +16,9 @@ EventHandler::EventHandler(SDL2pp::Window& window, int& window_width, int& windo
 
 void EventHandler::handleEvents() {
     SDL_Event event;
-    // bool scaleChanged = false;
+    bool scaleChanged = false;
     while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
+        if ((event.type == SDL_KEYDOWN and event.key.repeat == 0) || event.type == SDL_KEYUP) {
             SDL_Scancode scancode = event.key.keysym.scancode;
             bool isKeyDown = event.type == SDL_KEYDOWN;
             handleKeyEvent(scancode, isKeyDown);
@@ -28,12 +28,12 @@ void EventHandler::handleEvents() {
             running = false;
 
         } else if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED) {
-            // scaleChanged = true;
+            scaleChanged = true;
         }
     }
 
-    // if (scaleChanged)
-    //     camera.update(ducks);
+    if (scaleChanged)
+        camera.forceUpdate(ducks);
 }
 
 void EventHandler::handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown) {

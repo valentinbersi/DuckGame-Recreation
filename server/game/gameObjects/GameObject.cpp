@@ -30,11 +30,6 @@ std::string GameObject::findAvaiableName(std::string name) const {
     throw NoMoreNamesAvailable(name);
 }
 
-GameObject::GameObject(GameObject* parent): _parent(parent) {
-    registerEvent<GameObject*>(Events::TreeEntered);
-    registerEvent<GameObject*>(Events::TreeExited);
-}
-
 #define NULL_CHILD "newChild is nullptr"
 #define CHILD_HAS_PARENT "newChild already has a parent"
 #define EMPTY_NAME "name is empty"
@@ -50,6 +45,7 @@ void GameObject::addChild(std::string name, GameObject* newChild) {
         throw std::invalid_argument(EMPTY_NAME);
 
     name = findAvaiableName(name);
+    newChild->name = name;
 
     newChild->connect(Events::TreeEntered, eventHandler(&GameObject::onTreeEntered, GameObject*));
     newChild->connect(Events::TreeExited, eventHandler(&GameObject::onTreeExited, GameObject*));
@@ -78,7 +74,10 @@ GameObject::NoMoreNamesAvailable::NoMoreNamesAvailable(const std::string& name):
 GameObject::ChildNotInTree::ChildNotInTree(const std::string& name):
         std::out_of_range(CHILD_NAME + name + NOT_IN_TREE) {}
 
-GameObject::GameObject(): _parent(nullptr) {}
+GameObject::GameObject(): _parent(nullptr) {
+    registerEvent<GameObject*>(Events::TreeEntered);
+    registerEvent<GameObject*>(Events::TreeExited);
+}
 
 #define NO_PARENT "Object has no parent"
 
@@ -112,24 +111,22 @@ std::unique_ptr<GameObject> GameObject::removeChild(const std::string& name) {
         fire(Events::TreeExited, object);
 
     child.mapped()->_parent = nullptr;
+    child.mapped()->name = "";
     return std::unique_ptr<GameObject>(child.mapped());
+}
+
+std::unique_ptr<GameObject> GameObject::removeChild(const GameObject* object) {
+    return removeChild(object->name);
 }
 
 void GameObject::transferChild(const std::string& name, GameObject& parent) {
     addChild(name, parent.removeChild(name));
 }
 
-GameObject* GameObject::getChild(const std::string& name) const { return children.at(name); }
+void GameObject::transferChild(const GameObject* object, GameObject& parent) {
+    transferChild(object->name, parent);
+}
 
 bool GameObject::isParent() const { return not children.empty(); }
 
-GameObject* GameObject::parent() const { return _parent; }
-
 bool GameObject::isRoot() const { return _parent == nullptr; }
-
-GameObject* GameObject::getRoot() {
-    if (isRoot())
-        return this;
-
-    return _parent->getRoot();
-}

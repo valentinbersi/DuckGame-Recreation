@@ -51,11 +51,11 @@ private:
     SDL2pp::Texture startBackground();
 
     // Creates the mapping of the SpriteManagers for each duck.
-    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping();
+    std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>> createSpritesMapping();
 
     // Updates the positions, states, and scales of the player sprites based on the camera view.
     void updatePlayers(
-            const std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping);
+            const std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
 
     /**
      * Updates the positions and scales of the objects given objects in the game

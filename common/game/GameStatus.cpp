@@ -2,7 +2,7 @@
 
 #include <utility>
 
-GameStatus::GameStatus(): ServerMessage(MessageType::Game) {}  
+GameStatus::GameStatus(): ServerMessage(MessageType::Game) {}
 
 GameStatus::GameStatus(const GameStatus& other):
         ServerMessage(MessageType::Game),
@@ -41,14 +41,14 @@ GameStatus& GameStatus::operator=(GameStatus&& other) noexcept {
 }
 
 bool GameStatus::operator==(const GameStatus& other) const {
-    return ducks == other.ducks && 
-           itemPositions == other.itemPositions &&
+    return ducks == other.ducks && itemPositions == other.itemPositions &&
            blockPositions == other.blockPositions &&
            itemSpawnerPositions == other.itemSpawnerPositions;
 }
 
-template<typename T>
-void GameStatus::sendList(ServerSendProtocol& serverProtocol, const std::list<T>& list, void (ServerSendProtocol::*sendFunc)(const T&)) {
+template <typename T>
+void GameStatus::sendList(ServerSendProtocol& serverProtocol, const std::list<T>& list,
+                          void (ServerSendProtocol::*sendFunc)(const T&)) {
     serverProtocol.sendLen(list.size());
     for (const auto& item: list) {
         (serverProtocol.*sendFunc)(item);

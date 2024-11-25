@@ -85,8 +85,7 @@ private:
     const char* path1;
     const char* path2;
     float scale;
-    bool movingRight;
-    bool movingLeft;
+    bool isMoving;
     bool inAir;
     bool crouching;
     bool flapping;

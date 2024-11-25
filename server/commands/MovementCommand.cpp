@@ -34,3 +34,5 @@ void MovementCommand::execute(GameController& gameController) {
             return;
     }
 }
+
+MovementCommand::~MovementCommand() = default;

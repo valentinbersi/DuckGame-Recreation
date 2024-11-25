@@ -16,24 +16,26 @@
 RandomFloatGenerator ItemSpawner::randomGenerator(SPAWN_TIME_RANGE);
 
 ItemSpawner::ItemSpawner(Vector2 position):
-        StaticObject(nullptr, position, Layer::Spawner, 0, SPAWNER_DIMENSIONS),
-        spawnedItem(),
-        timer(new GameTimer(0)) {
-    timer->connect("Timeout", eventHandler(&ItemSpawner::onTimeout));
+        StaticObject(position, Layer::Spawner, 0, SPAWNER_DIMENSIONS), timer(new GameTimer(0)) {
+    timer->connect(GameTimer::Events::Timeout, eventHandler(&ItemSpawner::onTimeout));
     addChild("Timer", timer);
 }
 
 void ItemSpawner::onTimeout() {
     std::unique_ptr<Item> item = ItemFactory::createItem(ItemID::randomItemID());
-    item->setPosition(position());
+
+    const float itemHalfHeight = item->getShape().size().y() / 2;
+    const float spawnerHalfHeight = getShape().size().y() / 2;
+
+    const Vector2 newPosition = position() + Vector2::UP * (itemHalfHeight + spawnerHalfHeight);
+    item->setPosition(newPosition);
     spawnedItem = item->getReference<Item>();
     getRoot()->addChild("Weapon", std::move(item));
-    timer->reset();
+    timer->setTimeout(randomGenerator.generateRandomFloat());
 }
 
 void ItemSpawner::update([[maybe_unused]] const float delta) {
     if (spawnedItem.expired() && !timer->started()) {
-        timer->setTimeout(randomGenerator.generateRandomFloat());
         timer->start();
     }
 }

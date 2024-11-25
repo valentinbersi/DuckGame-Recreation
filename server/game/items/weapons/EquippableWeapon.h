@@ -3,16 +3,25 @@
 #include "GameObject.h"
 #include "ItemID.h"
 #include "Types.h"
+#include "Vector2.h"
 
 class EquippableWeapon: public GameObject {
 protected:
     u8 ammo;
     ItemID id;
     bool firing;
-    float recoil;
+    Vector2 recoil;
     float dispersion;
 
 public:
+    constexpr static u8 INeedMoreBullets = 0;
+
+    EquippableWeapon() = delete;
+    EquippableWeapon(const EquippableWeapon& other) = delete;
+    EquippableWeapon(EquippableWeapon&& other) noexcept = delete;
+    EquippableWeapon& operator=(const EquippableWeapon& other) = delete;
+    EquippableWeapon& operator=(EquippableWeapon&& other) noexcept = delete;
+
     /**
      * Creates a new EquippableWeapon
      * @param id The id of the weapon
@@ -21,7 +30,7 @@ public:
      * @param dispersion The dispersion of the weapon
      *
      */
-    explicit EquippableWeapon(ItemID id, u8 ammo, float recoil, float dispersion);
+    explicit EquippableWeapon(ItemID id, u8 ammo, Vector2 recoil, float dispersion);
 
     /**
      * Get the id of the weapon
@@ -29,10 +38,22 @@ public:
      */
     ItemID getID() const;
 
+    /**
+     * Actionate the weapon
+     * @return The recoil of the weapon
+     */
+    virtual void actionate() = 0;
 
-    virtual float actionate() = 0;
-
+    /**
+     * Actionate the weapon
+     * @return The recoil of the weapon
+     */
     virtual void deactionate() = 0;
 
-    virtual ~EquippableWeapon();
+    struct Events {
+        constexpr static auto Fired = "Fired";
+        constexpr static auto NoMoreBullets = "NoMoreBullets";
+    };
+
+    ~EquippableWeapon() override;
 };

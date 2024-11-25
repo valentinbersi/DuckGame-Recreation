@@ -1,8 +1,8 @@
 #pragma once
-#include "SizedObjectData.h"
 #include "ItemID.h"
+#include "SizedObjectData.h"
 
-struct ItemData: public SizedObjectData{
+struct ItemData: public SizedObjectData {
     ItemID id;
 
     ItemData() = delete;
@@ -34,5 +34,4 @@ struct ItemData: public SizedObjectData{
      * @return true if the item data is equal aproximatly to the other item data
      */
     bool operator==(const ItemData& other) const;
-
 };

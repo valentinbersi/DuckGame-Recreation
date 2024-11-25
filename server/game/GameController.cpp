@@ -2,12 +2,10 @@
 
 #include <ranges>
 #include <string>
-#include <utility>
 
 #include "GameStatus.h"
 #include "Layer.h"
 #include "LevelData.h"
-#include "SpawnPoint.h"
 
 /**
  * Macro for easier event handling
@@ -32,8 +30,12 @@ void GameController::onTreeEntered(GameObject* object) {
 
 void GameController::onTreeExited(GameObject* object) {
     if (const auto collisionObject = dynamic_cast<CollisionObject*>(object);
-        collisionObject != nullptr)
+        collisionObject != nullptr) {
+        if (collisionObject->layers().test(Layer::Index::Item))
+            items.remove(static_cast<Item*>(collisionObject));
+
         collisionManager.removeCollisionObject(collisionObject);
+    }
 }
 
 #define PLAYER_ID "Player with id "
@@ -47,7 +49,7 @@ GameController::AlreadyAddedPlayer::AlreadyAddedPlayer(const PlayerID id):
 GameController::PlayerNotFound::PlayerNotFound(const PlayerID id):
         std::out_of_range(PLAYER_ID + std::to_string(id) + NOT_FOUND) {}
 
-GameController::GameController(): GameObject(nullptr), level(nullptr) {
+GameController::GameController(): level(nullptr) {
     connect(Events::TreeEntered, eventHandler(&GameController::onTreeEntered, GameObject*));
 
     connect(Events::TreeExited, eventHandler(&GameController::onTreeExited, GameObject*));
@@ -58,7 +60,10 @@ GameController::GameController(): GameObject(nullptr), level(nullptr) {
 
 void GameController::start() {}
 
-void GameController::update(const float delta) { collisionManager.processCollisions(delta); }
+void GameController::update(const float delta) {
+    collisionManager.processCollisions(delta);
+    for (Player* player: players | std::views::values) player->clearInputs();
+}
 
 #define FULL_GAME "The game is full"
 
@@ -75,7 +80,7 @@ void GameController::addPlayer(const PlayerID playerID) {
     if (players.size() >= MAX_PLAYERS)
         throw std::logic_error(FULL_GAME);
 
-    const auto duckID = static_cast<DuckID>(players.size());
+    const auto duckID = static_cast<DuckData::Id>(players.size());
 
     const auto newPlayer = new Player(duckID);
 

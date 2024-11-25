@@ -22,16 +22,11 @@ Vector2::Vector2(const Vector2& other) noexcept = default;
 
 Vector2& Vector2::operator=(const Vector2& other) noexcept = default;
 
-Vector2::Vector2(Vector2&& other) noexcept: _x(other._x), _y(other._y) {
-    other._x = 0;
-    other._y = 0;
-}
+Vector2::Vector2(Vector2&& other) noexcept: _x(other._x), _y(other._y) {}
 
 Vector2& Vector2::operator=(Vector2&& other) noexcept {
     _x = other._x;
     _y = other._y;
-    other._x = 0;
-    other._y = 0;
     return *this;
 }
 

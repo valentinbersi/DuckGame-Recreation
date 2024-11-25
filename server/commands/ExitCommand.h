@@ -18,5 +18,5 @@ public:
     /**
      * Destroys the command
      */
-    ~ExitCommand() = default;
+    ~ExitCommand() override;
 };

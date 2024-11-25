@@ -1,30 +1,21 @@
 #pragma once
 
-#include <memory>
-
 #include "CollisionObject.h"
 
 /**
  * A collision object that throws events when colliding with another collision object
  */
-class Area final: public CollisionObject {
-public:
+struct Area: CollisionObject {
     /**
      * Construct an Area
-     * @param parent The parent object
      * @param position The position of the area
      * @param layers The layers of the area
      * @param scannedLayers The layers that the area will scan
      * @param width The width of the area
      * @param height The height of the area
      */
-    Area(GameObject* parent, Vector2 position, std::bitset<LayersCount> layers,
+    Area(const Vector2& position, std::bitset<LayersCount> layers,
          std::bitset<LayersCount> scannedLayers, float width, float height);
-
-public:
-    struct Events {
-        constexpr static auto Collision = "Collision";
-    };
 
     Area() = delete;
     Area(const Area&) = delete;
@@ -48,12 +39,6 @@ public:
      * @param delta The time since the last update
      */
     void updateInternal(float delta) override;
-
-    /**
-     * Register a collision object to be checked for collisions
-     * @param collisionObject The collision object to check for collisions
-     */
-    void registerCollision(std::weak_ptr<CollisionObject> collisionObject) override;
 
     /**
      * Process the collisions of the area. This will throw events when colliding with another
