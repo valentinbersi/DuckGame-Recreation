@@ -39,4 +39,8 @@ public:
      * Check if the timer has started
      */
     bool started() const;
+
+    struct Events {
+        constexpr static auto Timeout = "Timeout";
+    };
 };
