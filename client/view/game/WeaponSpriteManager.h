@@ -41,7 +41,7 @@ private:
             {ItemID::PewPewLaser, "assets/weapons/PewPewLaser.png"},
             {ItemID::LaserRifle, "assets/weapons/LaserRifle.png"},
             {ItemID::Ak47, "assets/weapons/Ak47.png"},
-            //{GunID::DuelPistol, "assets/weapons/DuelPistol.png"},
+            {ItemID::DuelPistol, "assets/weapons/DuelPistol.png"},
             {ItemID::CowboyPistol, "assets/weapons/CowboyPistol.png"},
             {ItemID::Magnum, "assets/weapons/Magnum.png"},
             {ItemID::Shotgun, "assets/weapons/Shotgun.png"},

@@ -30,6 +30,7 @@
 #define EFFECTS true
 
 #define LIMIT_FRAMES 5
+#define DEFAULT_FLAPPING 2
 
 #define ROW_WEAPON 3
 #define COL_WEAPON 0
@@ -91,14 +92,17 @@ void SpriteManager::updateEquipment(bool helmet, bool chestplate, ItemID& gun) {
 
 void SpriteManager::setFlags(const DuckState& state) {
     if (inAir || isMoving) {
-        if (!(inAir && frame == 4))
+        if (!(inAir && frame == 3))
             ++frame;
         if (frame > LIMIT_FRAMES && !inAir)
             frame = 0;
     }
-    if (flapping) {
-        ++flappingFrame;
+    if (inAir) {
+        if (flapping == true) {
+            ++flappingFrame;
+        } else flapping = true;
     }
+
 
     negateFlag(state.inAir, inAir);
     negateFlag(state.moving, isMoving);
@@ -106,11 +110,11 @@ void SpriteManager::setFlags(const DuckState& state) {
     negateFlag(state.crouching, crouching);
     negateFlag(state.isShooting, shooting);
 
-    if (flapping != state.flapping) {
+    /*if (flapping != state.flapping) {
         flapping = !flapping;
         frame = 0;
-        flappingFrame = 0;
-    }
+        flappingFrame = DEFAULT_FLAPPING;
+    }*/
 }
 
 void SpriteManager::negateFlag(bool flag, bool& flagToNegate) {
@@ -138,49 +142,94 @@ void SpriteManager::draw(int col, int row, const DuckState& state) {
 
 void SpriteManager::drawMainSprite(int col, int row) {
     spritesheet->selectSprite(col, row, NO_FEATHER);
-    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET);
+    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_CHESTPLATE, NO_HELMET);
     spritesheet->drawSelectedSprite(position, flip, NO_FEATHER);
 }
 
 void SpriteManager::drawFeathers(int col, int row, bool hasWeapon) {
-    if (!flip) {
-        if (hasWeapon)
-            spritesheet->selectSprite(COL_WEAPON, ROW_WEAPON, FEATHER);
-        else
-            spritesheet->selectSprite(col, row, FEATHER);
-        SDL2pp::Rect position = getPosition(FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET);
-        spritesheet->drawSelectedSprite(position, flip, FEATHER);
+    SDL2pp::Rect position;
+    if (flapping) {
+        if (flappingFrame > 2) {
+            flappingFrame = 0;
+        }
+        drawFlapping(hasWeapon);
 
-    } else if (flip || inAir || flapping) {
-        if (hasWeapon)
+        /*if (flappingFrame == 0) {
+            spritesheet->selectSprite(2 , 2, FEATHER);
+            position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
+            spritesheet->drawSelectedSprite(position, flip, FEATHER);
+            flip = true;
+            position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
+            spritesheet->drawSelectedSprite(position, flip, FEATHER);
+            flip = false;
+        } else if (flappingFrame == 1) {
+            spritesheet->selectSprite(3 , 2, FEATHER);
+            position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
+            spritesheet->drawSelectedSprite(position, flip, FEATHER);
+            flip = true;
+            position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
+            spritesheet->drawSelectedSprite(position, flip, FEATHER);
+            flip = false;
+        } else if (flappingFrame == 2) {
+            spritesheet->selectSprite(4 , 2, FEATHER);
+            position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
+            spritesheet->drawSelectedSprite(position, flip, FEATHER);
+            flip = true;
+            position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
+            spritesheet->drawSelectedSprite(position, flip, FEATHER);
+            flip = false;
+        }*/
+    }
+
+
+    else if (hasWeapon) {
             spritesheet->selectSprite(COL_WEAPON, ROW_WEAPON, FEATHER);
-        else
+        } else {
             spritesheet->selectSprite(col, row, FEATHER);
-        SDL2pp::Rect position = getPosition(FEATHER, RIGHT_FEATHER, NO_CHESTPLATE, NO_HELMET);
+        }
+        position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
         spritesheet->drawSelectedSprite(position, flip, FEATHER);
     }
+
+
+void SpriteManager::drawFlapping(bool hasWeapon) {
+    spritesheet->selectSprite(flappingFrame + 2, 2, FEATHER);
+    if (!hasWeapon) {
+        SDL2pp::Rect position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
+        spritesheet->drawSelectedSprite(position, flip, FEATHER);
+        flip = !flip;
+        position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
+        spritesheet->drawSelectedSprite(position, flip, FEATHER);
+        flip = !flip;
+    } else {
+        flip = !flip;
+        SDL2pp::Rect position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
+        spritesheet->drawSelectedSprite(position, flip, FEATHER);
+        flip = !flip;
+    }
 }
+
 
 void SpriteManager::drawChestplate(int col, int row) {
     if (crouching)
         col = 1;
     spritesheet->selectSprite(col, row, NO_FEATHER);
-    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, CHESTPLATE, NO_HELMET);
+    SDL2pp::Rect position = getPosition(NO_FEATHER, CHESTPLATE, NO_HELMET);
     spritesheet->drawChestplate(position, flip);
 }
 
 void SpriteManager::drawHelmet() {
     spritesheet->selectSprite(2, 0, NO_FEATHER);
-    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_RIGHT_FEATHER, NO_CHESTPLATE, HELMET);
+    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_CHESTPLATE, HELMET);
     spritesheet->drawHelmet(position, flip);
 }
 
-SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isRightFeather, bool isChestplate,
+SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isChestplate,
                                         bool isHelmet) {
     SDL2pp::Rect position = calculateBasePosition();
 
     if (isFeather) {
-        adjustForFeathers(position, isRightFeather);
+        adjustForFeathers(position, flip);
     } else if (isChestplate) {
         adjustForChestplate(position);
     } else if (isHelmet) {
@@ -194,8 +243,8 @@ SDL2pp::Rect SpriteManager::calculateBasePosition() {
             static_cast<int>(scale * 2), static_cast<int>(scale * 2)};
 }
 
-void SpriteManager::adjustForFeathers(SDL2pp::Rect& position, bool isRightFeather) {
-    if (isRightFeather) {
+void SpriteManager::adjustForFeathers(SDL2pp::Rect& position, bool flip) {
+    if (flip) {
         position.x += 0.75 * scale;
     } else {
         position.x += 0.40 * scale;

@@ -57,6 +57,8 @@ private:
     // weapon equipped. Also it checks a lot of other flags.
     void drawFeathers(int col, int row, bool hasWeapon);
 
+    void drawFlapping(bool hasWeapon);
+
     // Draws the chestplate based on the provided column and row indices.
     // Also it checks other flags.
     void drawChestplate(int col, int row);
@@ -66,14 +68,14 @@ private:
     void drawHelmet();
 
     // Returns the position of the sprite based on the provided flags.
-    SDL2pp::Rect getPosition(bool isFeather, bool isRightFeather, bool isChestPlate, bool isHelmet);
+    SDL2pp::Rect getPosition(bool isFeather, bool isChestPlate, bool isHelmet);
 
     // Returns the base position of the sprite based on the current position of the duck.
     // Meaning... this is the position of the duck and only the duck.
     SDL2pp::Rect calculateBasePosition();
 
     // Adjusts the position of the sprite for the feathers.
-    void adjustForFeathers(SDL2pp::Rect& position, bool isRightFeather);
+    void adjustForFeathers(SDL2pp::Rect& position, bool flip);
 
     // Adjusts the position of the sprite for the helmet.
     void adjustForHelmet(SDL2pp::Rect& position);
