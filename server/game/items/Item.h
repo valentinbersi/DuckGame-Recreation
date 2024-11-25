@@ -1,8 +1,8 @@
 #pragma once
 
+#include "ItemData.h"
 #include "ItemID.h"
 #include "PhysicsObject.h"
-#include "ItemData.h"
 
 class Item final: public PhysicsObject {
     ItemID _id;
