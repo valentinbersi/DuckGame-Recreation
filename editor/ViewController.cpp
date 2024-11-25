@@ -14,7 +14,7 @@
 #include "Object.h"
 #include "ui_viewcontroller.h"
 
-ViewController::ViewController(QWidget* parent): QMainWindow(parent), ui(new Ui::ViewController) {
+ViewController::ViewController(QWidget* parent): QMainWindow(parent), ui(new Ui::ViewController), backgroundBrush(Qt::white) {
     ui->setupUi(this);
 
     scene = new LevelScene(this, objects);
@@ -32,6 +32,7 @@ ViewController::ViewController(QWidget* parent): QMainWindow(parent), ui(new Ui:
         }
         MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
                               scene->getMapWidth(), scene->getMapHeight());
+        QMessageBox::information(this, "Save Map", "El mapa se guardo correctamente!");
     });
 
     connect(ui->actionNewMap, &QAction::triggered, this, &ViewController::on_actionNewMap_triggered);
@@ -39,6 +40,8 @@ ViewController::ViewController(QWidget* parent): QMainWindow(parent), ui(new Ui:
     connect(ui->actionEditMap, &QAction::triggered, this, &ViewController::on_actionEditMap_triggered);
 
     connect(scene, &LevelScene::resizeView, this, &ViewController::onSceneResize);
+
+    connect(ui->ChangeBackground, &QAction::triggered, this, &ViewController::changeBackground);
 }
 
 void ViewController::setActionButtons() {
@@ -80,6 +83,22 @@ bool ViewController::confirmAndSaveMap() {
     return true;
 }
 
+void ViewController::changeBackground() {
+    QString filePath = QFileDialog::getOpenFileName(this, "Select Backgrounds", "assets/background/", "Images (*.png)");
+    if (filePath.isEmpty()) {
+        QMessageBox::information(this, "No Background Selected", "Please select an image from the assets folder.");
+        return;
+    }
+
+    QPixmap pixmap(filePath);
+    if (pixmap.isNull()) {
+        QMessageBox::warning(this, "Error", "The selected file is not a valid image.");
+        return;
+    }
+    backgroundBrush = QBrush(pixmap);
+    update();
+}
+
 void ViewController::on_actionNewMap_triggered() {
     if(!confirmAndSaveMap()) return;
 
@@ -106,18 +125,30 @@ void ViewController::on_actionEditMap_triggered() {
 
     int mapWidth;
     int mapHeight;
-    bool success = MapManager::importMap(objects, fileName.toStdString(), mapWidth, mapHeight,
-                                         background);
-    if (success) {
-        scene->loadMap(mapWidth, mapHeight);
-        ui->lineEditMapName->setText(mapName);
-        QMessageBox::information(this, "Imported Map","The map has been imported successfully!");
-    }
+    bool success = MapManager::importMap(objects, fileName.toStdString(),
+                                         mapWidth, mapHeight,background);
+    if (!success) return;
+
+    scene->loadMap(mapWidth, mapHeight);
+    ui->lineEditMapName->setText(mapName);
+    QMessageBox::information(this, "Imported Map",
+                             "The map has been imported successfully!");
 }
 
 ViewController::~ViewController() {
     delete scene;
     delete ui;
+}
+
+void ViewController::paintEvent(QPaintEvent* event) {
+    Q_UNUSED(event);
+    QPainter painter(this);
+    painter.save();
+
+    painter.setBrush(backgroundBrush);
+    painter.drawRect(this->rect());
+
+    painter.restore();
 }
 
 /*

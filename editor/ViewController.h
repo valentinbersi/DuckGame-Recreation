@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "levelscene.h"
+#include "LevelScene.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,6 +27,8 @@ private:
     std::vector<Object> objects;
     LevelScene* scene;
     std::map<QAction*, ObjectType> actionTypeMap;
+
+    QBrush backgroundBrush;
 
     // void wheelEvent(QWheelEvent* event) override;
     /**
@@ -71,5 +73,8 @@ private:
      * En caso de querer guardar, el mapa se exporta mediante MapManager.
      */
     bool confirmAndSaveMap();
+
+    void changeBackground();
+    void paintEvent(QPaintEvent *event) override;
 };
 #endif  // MAINWINDOW_H

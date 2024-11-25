@@ -13,14 +13,13 @@ private:
     int gridWidth;                            /** ancho de la grilla (no del mapa) */
     int gridHeight;                           /** alto de la grilla (no del mapa) */
     std::vector<Object>& objects;             /** referencia a la lista de objetos del editor */
-    QMap<QGraphicsItem*, Object*> objectsMap; /** */
+    QMap<QGraphicsPixmapItem*, Object*> objectsMap; /** */
 
-    QGraphicsItem* selectedItem; /** */
+    QGraphicsPixmapItem* selectedItem; /** */
     QPointF originalItemPos;     /** */
 
     int ducksCount;             /** */
     ObjectType objectTypeToAdd; /** */
-
 
     /**
      * Elimina el elemento en la posicion recibida.
