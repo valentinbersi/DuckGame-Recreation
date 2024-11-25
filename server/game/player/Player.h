@@ -24,6 +24,11 @@ class Player final: public PhysicsObject {
     void onItemCollision(CollisionObject* item);
 
     /**
+     * Event manager for the player colliding with an object
+     */
+    void onCollision(CollisionObject* item);
+
+    /**
      * Event manager for the player firing a weapon
      * @param recoil The recoil of the weapon
      */
@@ -64,7 +69,7 @@ public:
      * Damages the player
      * @param damage the amount of damage to deal
      */
-    bool damage(u8 damage);
+    void damage(i8 damage);
 
     /**
      * Makes the player shoot

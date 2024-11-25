@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Area.h"
+#include "Bullet.h"
 #include "DuckData.h"
 #include "GameTimer.h"
 #include "Item.h"
@@ -19,7 +20,7 @@
 #define INTERACT "Interact"
 #define SHOOT "Shoot"
 
-#define DEFAULT_LIFE 10
+#define DEFAULT_LIFE 30
 #define DEFAULT_FLAGS 0
 #define DEFAULT_SPEED 40
 #define PLAYER_DIMENSIONS 2.0f, 2.875f
@@ -34,10 +35,11 @@
 
 
 Player::Player(const DuckData::Id id):
-        PhysicsObject(nullptr, {30, 0}, Layer::Player, Layer::Wall, PLAYER_DIMENSIONS,
-                      Gravity::Enabled),
+        PhysicsObject({30, 0}, Layer::Player, Layer::Wall, PLAYER_DIMENSIONS, Gravity::Enabled,
+                      Vector2::ZERO, CollisionType::Slide),
         id(id),
         life(DEFAULT_LIFE),
+        _direction(DuckData::Direction::Right),
         flags(DEFAULT_FLAGS),
         speed(DEFAULT_SPEED),
         weapon(nullptr),
@@ -48,15 +50,18 @@ Player::Player(const DuckData::Id id):
     input.addAction(JUMP);
     input.addAction(INTERACT);
     input.addAction(SHOOT);
-    const auto itemDetector = new Area(nullptr, Vector2::ZERO, 0, Layer::Item, PLAYER_DIMENSIONS);
-    itemDetector->connect(Area::Events::Collision,
+
+    connect(Events::Collision, eventHandler(&Player::onCollision, CollisionObject*));
+
+    const auto itemDetector = new Area(Vector2::ZERO, 0, Layer::Item, PLAYER_DIMENSIONS);
+    itemDetector->connect(Events::Collision,
                           eventHandler(&Player::onItemCollision, CollisionObject*));
     addChild("ItemDetector", itemDetector);
 }
 
 void Player::onItemCollision(CollisionObject* item) {
     if (input.isActionJustPressed(INTERACT) and not weapon) {
-        const auto itemPtr = static_cast<Item*>(item);
+        const auto itemPtr = static_cast<Item*>(item);  // Static cast is safe
         switch (const ItemID id = itemPtr->id()) {
             case ItemID::Helmet:
                 flags |= flags.test(DuckData::Flag::Index::Helmet) ? flags : DuckData::Flag::Helmet;
@@ -70,6 +75,14 @@ void Player::onItemCollision(CollisionObject* item) {
                 getRoot()->removeChild(item);
         }
     }
+}
+
+void Player::onCollision(CollisionObject* item) {
+    if (item->layers().test(Layer::Index::DeathZone))
+        return (void)setPosition({30, 0});
+
+    if (item->layers().test(Layer::Index::Bullet))  // So static cast is safe
+        return damage(static_cast<Bullet*>(item)->damage());
 }
 
 void Player::onWeaponFired(const Vector2& recoil) {
@@ -153,12 +166,13 @@ void Player::update([[maybe_unused]] const float delta) {
         flags |= DuckData::Flag::InAir;
 }
 
-bool Player::damage(const u8 damage) {
+void Player::damage(const i8 damage) {
     if (isDead)
-        return false;
+        return;
 
     life -= damage;
-    return true;
+    if (life < 0)
+        removeFromLayer(Layer::Player);
 }
 
 void Player::makeShoot() { flags |= DuckData::Flag::IsShooting; }
