@@ -15,7 +15,7 @@ class Bullet final: public PhysicsObject {
      *  Called when the bullet collides with an object
      *  @param object The object the bullet collided with
      */
-    void onCollision(CollisionObject* object);
+    void onCollision(CollisionObject* object) const;
 
 public:
     Bullet() = delete;

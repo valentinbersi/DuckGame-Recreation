@@ -10,12 +10,13 @@
 
 class Player final: public PhysicsObject {
     DuckData::Id id;
-    u8 life;
+    i8 life;
     DuckData::Direction direction;
     std::bitset<DuckData::FlagCount> flags;
     Input input;
     float speed;
     EquippableWeapon* weapon;
+    bool isDead;
 
     /**
      * Event manager for the player colliding with an item
@@ -46,6 +47,12 @@ public:
      * Updates the player's position based on the input
      */
     void update(float delta) override;
+
+    /**
+     * Damages the player
+     * @param damage the amount of damage to deal
+     */
+    bool damage(u8 damage);
 
     /**
      * Returns a GameStatus loaded with the player's data

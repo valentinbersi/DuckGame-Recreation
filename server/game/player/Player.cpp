@@ -40,7 +40,8 @@ Player::Player(const DuckData::Id id):
         life(DEFAULT_LIFE),
         flags(DEFAULT_FLAGS),
         speed(DEFAULT_SPEED),
-        weapon(nullptr) {
+        weapon(nullptr),
+        isDead(false) {
     input.addAction(MOVE_RIGHT);
     input.addAction(MOVE_LEFT);
     input.addAction(CROUCH);
@@ -115,7 +116,7 @@ void Player::update([[maybe_unused]] const float delta) {
 
     } else if (input.isActionPressed(JUMP) && _onGround) {
         _velocity += Vector2(0, -20);
-    
+
     } else if (input.isActionJustPressed(JUMP) && !_onGround) {
         _velocity += Vector2(0, -3);
         flags |= DuckData::Flag::Flapping;
@@ -143,6 +144,14 @@ void Player::update([[maybe_unused]] const float delta) {
 
     if (!_onGround)
         flags |= DuckData::Flag::InAir;
+}
+
+bool Player::damage(const u8 damage) {
+    if (isDead)
+        return false;
+
+    life -= damage;
+    return true;
 }
 
 DuckData Player::status() {
