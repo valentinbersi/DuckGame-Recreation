@@ -55,12 +55,6 @@ protected:
     constexpr static auto INVALID_EVENT_TYPE = "Invalid event type";
 
     /**
-     * A constructor for derived classes.
-     * Initializes the signals
-     */
-    explicit GameObject(GameObject* parent);
-
-    /**
      * Add a child to the object
      * @param name The name of the child. If the name is already taken, an exception is thrown.
      * @param newChild The child to add.
@@ -176,7 +170,8 @@ public:
      * @return A reference to the child
      * @throws std::out_of_range If the child is not found
      */
-    GameObject* getChild(const std::string& name) const;
+    template <typename ObjectType = GameObject>
+    ObjectType* getChild(const std::string& name) const;
 
     /**
      * Check if the object has children
@@ -189,7 +184,8 @@ public:
      * @return A reference to the parent
      * @throws RootObject If the object has no parent
      */
-    GameObject* parent() const;
+    template <typename ObjectType = GameObject>
+    ObjectType* parent() const;
 
     /**
      * Check if the object is the root object
@@ -201,10 +197,35 @@ public:
      * Get the root object of the tree
      * @return A reference to the root object
      */
-    GameObject* getRoot();
+    template <typename ObjectType = GameObject>
+    ObjectType* getRoot();
 };
 
 template <typename Ret>
 Ret GameObject::applyToChild(const std::string& name, const std::function<Ret(GameObject*)>& f) {
     return f(children.at(name));
+}
+
+template <typename ObjectType>
+ObjectType* GameObject::getChild(const std::string& name) const {
+    static_assert(std::is_base_of_v<GameObject, ObjectType>,
+                  "Cannot get child of something that is not a GameObject");
+
+    return dynamic_cast<ObjectType*>(children.at(name));
+}
+
+template <typename ObjectType>
+ObjectType* GameObject::parent() const {
+    static_assert(std::is_base_of_v<GameObject, ObjectType>,
+                  "Cannot get child of something that is not a GameObject");
+
+    return dynamic_cast<ObjectType*>(_parent);
+}
+
+template <typename ObjectType>
+ObjectType* GameObject::getRoot() {
+    if (isRoot())
+        return dynamic_cast<ObjectType*>(this);
+
+    return _parent->getRoot<ObjectType>();
 }
