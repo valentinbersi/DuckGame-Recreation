@@ -3,10 +3,8 @@
 #include "PhysicsObject.h"
 #include "Types.h"
 
-class ItemID;
-
 class Bullet final: public PhysicsObject {
-    u8 damage;
+    i8 _damage;
     u8 tiles;
 
     /**
@@ -29,6 +27,11 @@ public:
      * @param tiles The tiles the bullet can travel
      */
     Bullet(u8 damage, Vector2 velocity, u8 tiles);
+
+    /**
+     * Get the damage of the bullet
+     */
+    u8 damage() const;
 
     ~Bullet() override;
 };
