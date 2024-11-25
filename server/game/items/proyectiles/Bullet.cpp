@@ -17,7 +17,7 @@
 void Bullet::onCollision(CollisionObject* object) const {
     bool impact = true;
 
-    switch (object->layers()) {
+    switch (object->layers().to_ulong()) {
         case Layer::Player:
             impact = static_cast<Player*>(object)->damage(damage);
             break;
@@ -45,3 +45,5 @@ Bullet::Bullet(const u8 damage, Vector2 velocity, const u8 tiles):
                                  eventHandler(&Bullet::onCollision, CollisionObject*));
     addChild("EntityDetectionArea", entityDetectionArea);
 }
+
+Bullet::~Bullet() = default;

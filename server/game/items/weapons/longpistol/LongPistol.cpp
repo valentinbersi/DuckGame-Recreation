@@ -17,7 +17,7 @@ LongPistol::LongPistol(const ItemID id, Vector2 recoil, const float dispersion):
 void LongPistol::actionate() {
     static RandomFloatGenerator randomGenerator(-dispersion, dispersion);
 
-    auto parent = static_cast<Player*>(parent());
+    auto parent = dynamic_cast<Player*>(this->parent());
 
     if (firing)
         return;

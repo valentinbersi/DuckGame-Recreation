@@ -42,7 +42,7 @@ DuckData::~DuckData() = default;
 
 #define DUCK_DIMENSIONS 2, 2.875f
 
-DuckData::DuckData(const Vector2& position, const Id id, const u8 life, const Direction direction,
+DuckData::DuckData(const Vector2& position, const Id id, const i8 life, const Direction direction,
                    const ItemID gunID, const std::bitset<FlagCount> extraData):
         SizedObjectData(position, DUCK_DIMENSIONS),
         duckID(id),
