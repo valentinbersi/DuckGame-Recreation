@@ -2,20 +2,10 @@
 
 #include <utility>
 
-GameObject2D::GameObject2D(GameObject* parent, Vector2 position):
-        GameObject(parent), _position(std::move(position)) {
-
-    const auto parent2D = dynamic_cast<GameObject2D*>(parent);
-
-    if (parent2D == nullptr) {
-        _globalPosition = _position;
-        return;
-    }
-
-    _globalPosition = _position + parent2D->_globalPosition;
-}
-
 GameObject2D::~GameObject2D() = default;
+
+GameObject2D::GameObject2D(Vector2 position):
+        _globalPosition(std::move(position)), _position(_globalPosition) {}
 
 void GameObject2D::updateInternal([[maybe_unused]] const float delta) {
     if (const auto parent2D = dynamic_cast<GameObject2D*>(parent()); parent2D != nullptr)
