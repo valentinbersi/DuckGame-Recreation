@@ -14,14 +14,27 @@
 #include "Object.h"
 #include "ui_viewcontroller.h"
 
+#define BUTTONS_STYLE R"(
+QPushButton {
+    background-color: transparent;
+    border: none;
+    border-radius: 10px;
+}
+
+QPushButton:checked {
+    background-color: rgb(165, 29, 45);
+}
+)"
+
 ViewController::ViewController(QWidget* parent): QMainWindow(parent), ui(new Ui::ViewController), backgroundBrush(Qt::white) {
     ui->setupUi(this);
 
+    ui->graphicsView->setBackgroundBrush(Qt::NoBrush);
     scene = new LevelScene(this, objects);
     ui->graphicsView->setScene(scene);
     onSceneResize();
 
-    setActionButtons();
+    setupToolBar();
 
     connect(ui->ClearAll, &QAction::triggered, scene, &LevelScene::clearAll);
 
@@ -44,24 +57,32 @@ ViewController::ViewController(QWidget* parent): QMainWindow(parent), ui(new Ui:
     connect(ui->ChangeBackground, &QAction::triggered, this, &ViewController::changeBackground);
 }
 
-void ViewController::setActionButtons() {
-    actionTypeMap = {{ui->Platform, PLATFORM},
-                     {ui->SpawnDuck, DUCK},
-                     {ui->SpawnGun, ARMAMENT},
-                     {ui->Box, BOX}};
+void ViewController::setupToolBar() {
+    QPushButton* platformButton = new QPushButton(QIcon(PLATFORM_ICON), "", this);
+    QPushButton* spawnDuckButton = new QPushButton(QIcon(DUCK_ICON), "", this);
+    QPushButton* spawnArmamentButton = new QPushButton(QIcon(ARMAMENT_ICON), "", this);
+    QPushButton* boxButton = new QPushButton(QIcon(BOX_ICON), "", this);
 
-    ui->Platform->setIcon(QIcon(PLATFORM_ICON));
-    ui->SpawnDuck->setIcon(QIcon(DUCK_ICON));
-    ui->SpawnGun->setIcon(QIcon(ARMAMENT_ICON));
-    ui->Box->setIcon(QIcon(BOX_ICON));
+    ui->toolBar->addWidget(platformButton);
+    ui->toolBar->addWidget(spawnDuckButton);
+    ui->toolBar->addWidget(spawnArmamentButton);
+    ui->toolBar->addWidget(boxButton);
 
-    for (const auto& [action, type]: actionTypeMap) {
-        connect(action, &QAction::triggered, this,
+    buttonTypeMap = {{platformButton, PLATFORM},
+                     {spawnDuckButton, DUCK},
+                     {spawnArmamentButton, ARMAMENT},
+                     {boxButton, BOX}};
+
+    for (const auto& [button, type]: buttonTypeMap) {
+        button->setCheckable(true);
+        button->setIconSize(QSize(64,64));
+        button->setStyleSheet(BUTTONS_STYLE);
+        connect(button, &QPushButton::clicked, this,
                 [this, type]() { scene->selectObjectType(type); });
     }
 
     connect(scene, &LevelScene::addingObjectChanged, this, [this](ObjectType type) {
-        for (const auto& [action, objType]: actionTypeMap) {
+        for (const auto& [action, objType]: buttonTypeMap) {
             action->setChecked(objType == type);
         }
     });

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPushButton>
 #include <map>
 #include <string>
 #include <vector>
@@ -26,7 +27,7 @@ private:
     std::string background;
     std::vector<Object> objects;
     LevelScene* scene;
-    std::map<QAction*, ObjectType> actionTypeMap;
+    std::map<QPushButton*, ObjectType> buttonTypeMap;
 
     QBrush backgroundBrush;
 
@@ -76,5 +77,6 @@ private:
 
     void changeBackground();
     void paintEvent(QPaintEvent *event) override;
+    void setupToolBar();
 };
 #endif  // MAINWINDOW_H

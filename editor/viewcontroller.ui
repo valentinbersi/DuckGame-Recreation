@@ -79,33 +79,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QToolBar" name="toolBar">
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color:rgb(229, 165, 10);</string>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>64</width>
-     <height>64</height>
-    </size>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>RightToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-   <addaction name="Platform"/>
-   <addaction name="SpawnDuck"/>
-   <addaction name="SpawnGun"/>
-   <addaction name="Box"/>
-   <addaction name="separator"/>
-   <addaction name="ClearAll"/>
-   <addaction name="ChangeBackground"/>
-  </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
@@ -127,85 +100,46 @@ color: white;
     <addaction name="actionNewMap"/>
     <addaction name="actionSaveMap"/>
     <addaction name="actionEditMap"/>
+    <addaction name="ChangeBackground"/>
+    <addaction name="ClearAll"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
-  <action name="Platform">
-   <property name="checkable">
-    <bool>true</bool>
+  <widget class="QToolBar" name="toolBar">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
-   <property name="text">
-    <string>Platform</string>
+   <property name="windowTitle">
+    <string/>
    </property>
-   <property name="toolTip">
-    <string>platform</string>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgb(229, 165, 10);</string>
    </property>
-   <property name="shortcut">
-    <string>1</string>
+   <property name="allowedAreas">
+    <set>Qt::AllToolBarAreas</set>
    </property>
-  </action>
-  <action name="SpawnDuck">
-   <property name="text">
-    <string>SpawnDuck</string>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
    </property>
-   <property name="toolTip">
-    <string>SpawnDuck</string>
+   <property name="iconSize">
+    <size>
+     <width>64</width>
+     <height>64</height>
+    </size>
    </property>
-   <property name="shortcut">
-    <string>2</string>
-   </property>
-  </action>
-  <action name="SpawnGun">
-   <property name="text">
-    <string>SpawnGun</string>
-   </property>
-   <property name="toolTip">
-    <string>SpawnGun</string>
-   </property>
-   <property name="shortcut">
-    <string>3</string>
-   </property>
-  </action>
-  <action name="Box">
-   <property name="text">
-    <string>Box</string>
-   </property>
-   <property name="toolTip">
-    <string>Box</string>
-   </property>
-   <property name="shortcut">
-    <string>4</string>
-   </property>
-  </action>
-  <action name="ClearAll">
-   <property name="text">
-    <string>Clear All</string>
-   </property>
-   <property name="toolTip">
-    <string>Clear All</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+B</string>
-   </property>
-  </action>
+   <attribute name="toolBarArea">
+    <enum>RightToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
   <action name="actionFILE">
    <property name="text">
     <string>FILE</string>
-   </property>
-  </action>
-  <action name="actionLoad_Map">
-   <property name="text">
-    <string>Load Map</string>
-   </property>
-  </action>
-  <action name="actionSave_Map">
-   <property name="text">
-    <string>Save Map</string>
-   </property>
-  </action>
-  <action name="actionChange_Name">
-   <property name="text">
-    <string>Change Name</string>
    </property>
   </action>
   <action name="actionNewMap">
@@ -232,18 +166,23 @@ color: white;
     <string>Ctrl+E</string>
    </property>
   </action>
-  <action name="ChangeBackground">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
+  <action name="ClearAll">
    <property name="text">
-    <string>Change Background</string>
+    <string>ClearAll</string>
    </property>
    <property name="toolTip">
-    <string>Change Map Background</string>
+    <string>ClearAll</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+G</string>
+    <string>Ctrl+B</string>
+   </property>
+  </action>
+  <action name="ChangeBackground">
+   <property name="text">
+    <string>ChangeBackground</string>
+   </property>
+   <property name="toolTip">
+    <string>ChangeBackground</string>
    </property>
   </action>
  </widget>
