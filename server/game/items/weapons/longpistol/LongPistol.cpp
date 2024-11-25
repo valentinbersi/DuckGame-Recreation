@@ -17,8 +17,6 @@ LongPistol::LongPistol(const ItemID id, Vector2 recoil, const float dispersion):
 void LongPistol::actionate() {
     static RandomFloatGenerator randomGenerator(-dispersion, dispersion);
 
-    auto parent = dynamic_cast<Player*>(this->parent());
-
     if (firing)
         return;
 
@@ -29,13 +27,13 @@ void LongPistol::actionate() {
     --ammo;
 
     const Vector2 direction =
-            parent->direction() == DuckData::Direction::Right ?
+            parent<Player>()->direction() == DuckData::Direction::Right ?
                     Vector2::RIGHT.rotated(randomGenerator.generateRandomFloat()) :
                     Vector2::LEFT.rotated(randomGenerator.generateRandomFloat());
 
     auto bullet = std::make_unique<Bullet>(BULLET_DAMAGE, direction * BULLET_SPEED, BULLET_TILES);
-    bullet->setGlobalPosition(parent->globalPosition() +
-                              (parent->direction() == DuckData::Direction::Right ?
+    bullet->setGlobalPosition(parent<Player>()->globalPosition() +
+                              (parent<Player>()->direction() == DuckData::Direction::Right ?
                                        Vector2::RIGHT * 2 :
                                        Vector2::LEFT * 2));
     getRoot()->addChild("Bullet", std::move(bullet));
