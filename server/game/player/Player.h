@@ -11,7 +11,7 @@
 class Player final: public PhysicsObject {
     DuckData::Id id;
     i8 life;
-    DuckData::Direction direction;
+    DuckData::Direction _direction;
     std::bitset<DuckData::FlagCount> flags;
     Input input;
     float speed;
@@ -22,6 +22,18 @@ class Player final: public PhysicsObject {
      * Event manager for the player colliding with an item
      */
     void onItemCollision(CollisionObject* item);
+
+    /**
+     * Event manager for the player firing a weapon
+     * @param recoil The recoil of the weapon
+     */
+    void onWeaponFired(const Vector2& recoil);
+
+    /**
+     * Event manager for the player running out of bullets
+     */
+    void onWeaponNoMoreBullets();
+
     // bool canKeepJumping;
 
 public:
@@ -53,6 +65,22 @@ public:
      * @param damage the amount of damage to deal
      */
     bool damage(u8 damage);
+
+    /**
+     * Makes the player shoot
+     */
+    void makeShoot();
+
+    /**
+     * Tell the player that it has no more bullets
+     */
+    void notMoreBullets();
+
+    /**
+     * Get the player's direction
+     * @return the player's direction
+     */
+    DuckData::Direction direction() const;
 
     /**
      * Returns a GameStatus loaded with the player's data

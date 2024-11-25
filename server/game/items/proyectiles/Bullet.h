@@ -6,8 +6,6 @@
 class ItemID;
 
 class Bullet final: public PhysicsObject {
-    constexpr static u8 INeedMoreBullets = 0;
-
     u8 damage;
     u8 tiles;
 

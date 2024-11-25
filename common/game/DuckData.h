@@ -10,13 +10,13 @@
  * Relevant data for rendering a duck
  */
 struct DuckData final: SizedObjectData {
-    constexpr static u8 FlagCount = 10;
+    constexpr static u8 FlagCount = 11;
 
     enum class Id : u8 { White = 0x0, Orange = 0x1, Yellow = 0x2, Grey = 0x3 };
     enum class Direction : u8 { Left = 0x0, Right = 0x1 };
 
     Id duckID;
-    u8 life;
+    i8 life;
     Direction direction;
     ItemID gunID;
     std::bitset<FlagCount> extraData;
@@ -39,7 +39,8 @@ struct DuckData final: SizedObjectData {
             BeingDamaged = 0b1000000,
             IsMoving = 0b10000000,
             LookingUp = 0b100000000,
-            IsShooting = 0b1000000000
+            IsShooting = 0b1000000000,
+            NoMoreBullets = 0b10000000000
         };
 
         struct Index {
@@ -53,7 +54,8 @@ struct DuckData final: SizedObjectData {
                 BeingDamaged = 6,
                 IsMoving = 7,
                 LookingUp = 8,
-                IsShooting = 9
+                IsShooting = 9,
+                NoMoreBullets = 10
             };
         };
     };
@@ -67,7 +69,7 @@ struct DuckData final: SizedObjectData {
      * @param gunID the gun the duck is holding
      * @param extraData actions the duck is performing and armor data
      */
-    DuckData(const Vector2& position, Id id, u8 life, Direction direction, ItemID gunID,
+    DuckData(const Vector2& position, Id id, i8 life, Direction direction, ItemID gunID,
              std::bitset<FlagCount> extraData);
 
     /**

@@ -7,7 +7,10 @@ EquippableWeapon::EquippableWeapon(const ItemID id, const u8 ammo, Vector2 recoi
         id(id),
         firing(false),
         recoil(std::move(recoil)),
-        dispersion(dispersion) {}
+        dispersion(dispersion) {
+    registerEvent<const Vector2&>(Events::Fired);
+    registerEvent(Events::NoMoreBullets);
+}
 
 ItemID EquippableWeapon::getID() const { return id; }
 

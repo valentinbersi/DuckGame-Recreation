@@ -72,6 +72,14 @@ void Player::onItemCollision(CollisionObject* item) {
     }
 }
 
+void Player::onWeaponFired(const Vector2& recoil) {
+    _velocity.setX(0);
+    _velocity += recoil;
+    flags |= DuckData::Flag::IsShooting;
+}
+
+void Player::onWeaponNoMoreBullets() { flags |= DuckData::Flag::NoMoreBullets; }
+
 void Player::moveRight() { input.pressAction(MOVE_RIGHT); }
 
 void Player::stopMoveRight() { input.releaseAction(MOVE_RIGHT); }
@@ -97,9 +105,9 @@ void Player::stopShoot() { input.releaseAction(SHOOT); }
 void Player::start() {}
 
 void Player::update([[maybe_unused]] const float delta) {
-    if (not input.isActionPressed(JUMP) and _velocity.y() < 0) {
+    if (not input.isActionPressed(JUMP) and _velocity.y() < 0)
         _velocity = _velocity.y(0);
-    }
+
     _velocity = _velocity.x(0);
     flags &= DuckData::Flag::Armor | DuckData::Flag::Helmet;
 
@@ -130,9 +138,9 @@ void Player::update([[maybe_unused]] const float delta) {
     }
 
     if (_velocity.x() < 0)
-        direction = DuckData::Direction::Left;
+        _direction = DuckData::Direction::Left;
     else if (_velocity.x() > 0)
-        direction = DuckData::Direction::Right;
+        _direction = DuckData::Direction::Right;
 
     if (weapon) {
         if (input.isActionPressed(SHOOT))
@@ -140,7 +148,6 @@ void Player::update([[maybe_unused]] const float delta) {
         else
             weapon->deactionate();
     }
-
 
     if (!_onGround)
         flags |= DuckData::Flag::InAir;
@@ -154,11 +161,17 @@ bool Player::damage(const u8 damage) {
     return true;
 }
 
+void Player::makeShoot() { flags |= DuckData::Flag::IsShooting; }
+
+void Player::notMoreBullets() { flags |= DuckData::Flag::NoMoreBullets; }
+
+DuckData::Direction Player::direction() const { return _direction; }
+
 DuckData Player::status() {
     return {globalPosition(),
             id,
             life,
-            direction,
+            _direction,
             weapon ? weapon->getID() : ItemID(ItemID::NONE),
             flags};
 }
