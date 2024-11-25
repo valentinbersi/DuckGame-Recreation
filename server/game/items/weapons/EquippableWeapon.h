@@ -40,13 +40,13 @@ public:
      * Actionate the weapon
      * @return The recoil of the weapon
      */
-    virtual Vector2 actionate() = 0;
+    virtual void actionate() = 0;
 
     /**
      * Actionate the weapon
      * @return The recoil of the weapon
      */
-    virtual Vector2 deactionate() = 0;
+    virtual void deactionate() = 0;
 
     ~EquippableWeapon() override;
 };
