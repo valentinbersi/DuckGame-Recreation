@@ -2,7 +2,6 @@
 
 #include <memory>
 #include <string>
-#include <utility>
 
 Area::Area(const Vector2& position, const std::bitset<LayersCount> layers,
            const std::bitset<LayersCount> scannedLayers, const float width, const float height):
@@ -11,8 +10,6 @@ Area::Area(const Vector2& position, const std::bitset<LayersCount> layers,
 void Area::start() {}
 
 void Area::update([[maybe_unused]] float delta) {}
-
-void Area::updateInternal(const float delta) { CollisionObject::updateInternal(delta); }
 
 void Area::processCollisions([[maybe_unused]] const float delta) {
     for (auto& object: objectsToCollide) {

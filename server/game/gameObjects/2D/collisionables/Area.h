@@ -35,12 +35,6 @@ struct Area: CollisionObject {
     void update(float delta) override;
 
     /**
-     * Update the area, does nothing on Area
-     * @param delta The time since the last update
-     */
-    void updateInternal(float delta) override;
-
-    /**
      * Process the collisions of the area. This will throw events when colliding with another
      * collision object
      */

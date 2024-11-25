@@ -27,11 +27,9 @@ void ActiveSocket::chk_skt_or_fail() const {
     }
 }
 
-ActiveSocket::ActiveSocket(const cppstring hostname, const cppstring servname) {
+ActiveSocket::ActiveSocket(const cppstring hostname, const cppstring servname):
+        skt(INVALID_SOCKET), closed(true) {
     Resolver resolver(hostname, servname, false);
-
-    int skt = INVALID_SOCKET;
-    this->closed = true;
 
     while (resolver.has_next()) {
         const addrinfo* addr = resolver.next();
@@ -47,9 +45,7 @@ ActiveSocket::ActiveSocket(const cppstring hostname, const cppstring servname) {
         if (const int error = connect(skt, addr->ai_addr, addr->ai_addrlen); error == CONNECT_ERROR)
             continue;
 
-
         this->closed = false;
-        this->skt = skt;
         return;
     }
 
