@@ -1,5 +1,7 @@
-
 #include "LongPistol.h"
+
+#include <memory>
+#include <utility>
 
 #include "Bullet.h"
 #include "Math.h"
