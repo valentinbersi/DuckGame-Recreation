@@ -1,5 +1,7 @@
 #pragma once
 
+#include <list>
+
 #include "CollisionManager.h"
 #include "Level.h"
 #include "Player.h"

@@ -2,12 +2,10 @@
 
 #include <ranges>
 #include <string>
-#include <utility>
 
 #include "GameStatus.h"
 #include "Layer.h"
 #include "LevelData.h"
-#include "SpawnPoint.h"
 
 /**
  * Macro for easier event handling
