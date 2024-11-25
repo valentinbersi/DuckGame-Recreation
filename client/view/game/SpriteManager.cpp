@@ -31,6 +31,7 @@
 
 #define LIMIT_FRAMES 5
 #define DEFAULT_FLAPPING 2
+#define LIMIT_FLAPPING_FRAMES 4
 
 #define ROW_WEAPON 3
 #define COL_WEAPON 0
@@ -53,7 +54,7 @@ SpriteManager::SpriteManager(
         spritesheet(std::make_unique<Spritesheet>(path1, path2, renderer)),
         weaponSpriteManager(std::make_unique<WeaponSpriteManager>()),
         frame(0),
-        flappingFrame(0),
+        flappingFrame(DEFAULT_FLAPPING),
         m_position_x(0),
         m_position_y(0) {}
 
@@ -92,29 +93,25 @@ void SpriteManager::updateEquipment(bool helmet, bool chestplate, ItemID& gun) {
 
 void SpriteManager::setFlags(const DuckState& state) {
     if (inAir || isMoving) {
-        if (!(inAir && frame == 3))
-            ++frame;
-        if (frame > LIMIT_FRAMES && !inAir)
-            frame = 0;
+        if (!(inAir && frame == 3)) ++frame;
+        if (frame > LIMIT_FRAMES && !inAir) frame = 0;
     }
     if (inAir) {
         if (flapping == true) {
             ++flappingFrame;
         } else flapping = true;
     }
-
-
+    
     negateFlag(state.inAir, inAir);
     negateFlag(state.moving, isMoving);
     negateFlag(state.direction == DuckData::Direction::Left, flip);
     negateFlag(state.crouching, crouching);
     negateFlag(state.isShooting, shooting);
 
-    /*if (flapping != state.flapping) {
+    if (flapping != state.flapping) {
         flapping = !flapping;
-        frame = 0;
         flappingFrame = DEFAULT_FLAPPING;
-    }*/
+    }
 }
 
 void SpriteManager::negateFlag(bool flag, bool& flagToNegate) {
@@ -148,65 +145,30 @@ void SpriteManager::drawMainSprite(int col, int row) {
 
 void SpriteManager::drawFeathers(int col, int row, bool hasWeapon) {
     SDL2pp::Rect position;
-    if (flapping) {
-        if (flappingFrame > 2) {
-            flappingFrame = 0;
-        }
-        drawFlapping(hasWeapon);
 
-        /*if (flappingFrame == 0) {
-            spritesheet->selectSprite(2 , 2, FEATHER);
-            position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
-            spritesheet->drawSelectedSprite(position, flip, FEATHER);
-            flip = true;
-            position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
-            spritesheet->drawSelectedSprite(position, flip, FEATHER);
-            flip = false;
-        } else if (flappingFrame == 1) {
-            spritesheet->selectSprite(3 , 2, FEATHER);
-            position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
-            spritesheet->drawSelectedSprite(position, flip, FEATHER);
-            flip = true;
-            position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
-            spritesheet->drawSelectedSprite(position, flip, FEATHER);
-            flip = false;
-        } else if (flappingFrame == 2) {
-            spritesheet->selectSprite(4 , 2, FEATHER);
-            position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
-            spritesheet->drawSelectedSprite(position, flip, FEATHER);
-            flip = true;
-            position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
-            spritesheet->drawSelectedSprite(position, flip, FEATHER);
-            flip = false;
-        }*/
+    if (hasWeapon) spritesheet->selectSprite(COL_WEAPON, ROW_WEAPON, FEATHER);
+
+    if (flapping && !hasWeapon) {
+        if (flappingFrame > LIMIT_FLAPPING_FRAMES) flappingFrame = DEFAULT_FLAPPING;
+        drawFlapping();
+        return;
     }
 
+    if (!hasWeapon) spritesheet->selectSprite(col, row, FEATHER);
 
-    else if (hasWeapon) {
-            spritesheet->selectSprite(COL_WEAPON, ROW_WEAPON, FEATHER);
-        } else {
-            spritesheet->selectSprite(col, row, FEATHER);
-        }
-        position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
-        spritesheet->drawSelectedSprite(position, flip, FEATHER);
-    }
+    position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
+    spritesheet->drawSelectedSprite(position, flip, FEATHER);
+}
 
 
-void SpriteManager::drawFlapping(bool hasWeapon) {
-    spritesheet->selectSprite(flappingFrame + 2, 2, FEATHER);
-    if (!hasWeapon) {
-        SDL2pp::Rect position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
-        spritesheet->drawSelectedSprite(position, flip, FEATHER);
-        flip = !flip;
-        position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
-        spritesheet->drawSelectedSprite(position, flip, FEATHER);
-        flip = !flip;
-    } else {
-        flip = !flip;
-        SDL2pp::Rect position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
-        spritesheet->drawSelectedSprite(position, flip, FEATHER);
-        flip = !flip;
-    }
+void SpriteManager::drawFlapping() {
+    spritesheet->selectSprite(flappingFrame, 2, FEATHER);
+    SDL2pp::Rect position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
+    spritesheet->drawSelectedSprite(position, flip, FEATHER);
+    flip = !flip;
+    position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
+    spritesheet->drawSelectedSprite(position, flip, FEATHER);
+    flip = !flip;
 }
 
 

@@ -57,7 +57,7 @@ private:
     // weapon equipped. Also it checks a lot of other flags.
     void drawFeathers(int col, int row, bool hasWeapon);
 
-    void drawFlapping(bool hasWeapon);
+    void drawFlapping();
 
     // Draws the chestplate based on the provided column and row indices.
     // Also it checks other flags.
