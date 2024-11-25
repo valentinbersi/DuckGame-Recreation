@@ -6,20 +6,21 @@
 
 #define NULL_SHAPE "Shape cannot be null"
 
-CollisionObject::CollisionObject(GameObject* parent, const Vector2& position,
-                                 const std::bitset<LayersCount> layers,
+CollisionObject::CollisionObject(const Vector2& position, const std::bitset<LayersCount> layers,
                                  const std::bitset<LayersCount> scannedLayers, const float width,
                                  const float height):
-        GameObject2D(parent, position),
+        GameObject2D(position),
         _layers(layers),
         _scannedLayers(scannedLayers),
-        shape(position, width, height) {}
+        shape(position, width, height) {
+    registerEvent<CollisionObject*>(Events::Collision);
+}
 
 bool CollisionObject::collidesWith(const CollisionObject& other) const {
     return shape.overlaps(other.shape);
 }
 
-std::optional<IntersectionInfo> CollisionObject::moveAndCollide(const CollisionObject& other,
+std::optional<IntersectionInfo> CollisionObject::moveAndCollide(CollisionObject& other,
                                                                 const Vector2& displacement,
                                                                 const float delta) const {
     return shape.overlaps(other.shape, displacement, delta);
