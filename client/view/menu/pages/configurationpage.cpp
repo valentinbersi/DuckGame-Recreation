@@ -24,8 +24,8 @@ int configurationPage::getSelectedPlayers() const { return CantidadPlayersGroup-
 
 void configurationPage::handlerJoinGame() {
     if (ui->lineEditMatchID->text().isEmpty()) {
-        QMessageBox::warning(this, "No se ingreso un Match ID",
-                             "Por favor, ingresa un Match ID antes de continuar.");
+        QMessageBox::warning(this, "A Match ID was not entered",
+                             "Please enter a Match ID before continuing.");
         return;
     }
     gameInfo.playersNumber = getSelectedPlayers();
@@ -53,8 +53,14 @@ bool configurationPage::initMatchRequest(LobbyRequest& request) {
     if (communicator.trysend(std::move(message))) {
         // chequear si se envio ¿?
         ReplyMessage replyMessage = communicator.blockingRecv();
-        /** chequear si se recibio bien (chequear colores y string de error) */
+        if (replyMessage.matchID == 0) {
+            QMessageBox::warning(this, "Error", QString::fromStdString(replyMessage.error));
+            return false;
+        }
+
         gameInfo.matchID = replyMessage.matchID;
+        gameInfo.Duck1Color = replyMessage.color1;
+        gameInfo.Duck2Color = replyMessage.color2;
         return true;
     } else {
         qDebug() << "no se envio PLAY";  // deberia mostrarle un mensaje al usuario
