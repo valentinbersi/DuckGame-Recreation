@@ -20,6 +20,7 @@
 #define JUMP "Jump"
 #define INTERACT "Interact"
 #define SHOOT "Shoot"
+#define LOOK_UP "Look Up"
 
 #define DEFAULT_LIFE 30
 #define DEFAULT_FLAGS 0
@@ -51,6 +52,7 @@ Player::Player(const DuckData::Id id):
     input.addAction(JUMP);
     input.addAction(INTERACT);
     input.addAction(SHOOT);
+    input.addAction(LOOK_UP);
 
     connect(Events::Collision, eventHandler(&Player::onCollision, CollisionObject*));
 
@@ -116,6 +118,10 @@ void Player::shoot() { input.pressAction(SHOOT); }
 
 void Player::stopShoot() { input.releaseAction(SHOOT); }
 
+void Player::lookUp() { input.pressAction(LOOK_UP); }
+
+void Player::stopLookUp() { input.releaseAction(LOOK_UP); }
+
 void Player::start() {}
 
 void Player::update([[maybe_unused]] const float delta) {
@@ -162,6 +168,10 @@ void Player::update([[maybe_unused]] const float delta) {
         else
             weapon->deactionate();
     }
+
+    if (input.isActionPressed(LOOK_UP))
+        flags |= DuckData::Flag::LookingUp;
+        //logica de apuntado para arriba, talvez direction es up??
 
     if (!_onGround)
         flags |= DuckData::Flag::InAir;

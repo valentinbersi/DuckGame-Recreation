@@ -151,6 +151,16 @@ public:
     void stopShoot();
 
     /**
+     * Makes the player look up
+     */
+    void lookUp();
+
+    /**
+     * Makes the player stop looking up
+     */
+    void stopLookUp();
+    
+    /**
      * Clear player's inputs that are just pressed, manains
      * input that are being pressed.
      */
