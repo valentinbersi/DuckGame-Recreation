@@ -13,7 +13,7 @@
 #define SPRITESHEET_CROUCH_COL 5
 #define SPRITESHEET_RIGHT_LEFT_ROW 0
 #define SPRITESHEET_DEAD_ROW 2
-#define SPRITESHEET_PLAYING_DEAD_COL 0
+#define SPRITESHEET_PLAYING_DEAD_COL 1
 #define SPRITESHEET_DEAD_COL 1
 
 #define NO_FEATHER false
@@ -36,6 +36,10 @@
 #define ROW_WEAPON 3
 #define COL_WEAPON 0
 
+#define DEFAULT_ANGLE 0.0
+#define UP_ANGLE_RIGHT -90.0
+#define UP_ANGLE_LEFT 90.0
+
 SpriteManager::SpriteManager(
         const char* path1, const char* path2,
         SDL2pp::Renderer& renderer /*, int& window_width, int& window_height*/):
@@ -50,6 +54,7 @@ SpriteManager::SpriteManager(
         hasHelmet(false),
         hasChestplate(false),
         shooting(false),
+        lookingUp(false),
         gunEquipped(ItemID::CowboyPistol),
         spritesheet(std::make_unique<Spritesheet>(path1, path2, renderer)),
         weaponSpriteManager(std::make_unique<WeaponSpriteManager>()),
@@ -66,23 +71,19 @@ void SpriteManager::updatePosition(float new_x, float new_y) {
 void SpriteManager::update(const DuckState& state) {
     setFlags(state);
 
+    if (state.beingDamaged) spritesheet->damageEffects(m_position_x, m_position_y);      //estirar frames?
+
     if (state.inAir) {
         draw(frame, SPRITESHEET_JUMP_ROW, state);
-
-    } else if (state.beingDamaged || state.playingDead || state.crouching) {
-        if (state.beingDamaged) {
-            draw(SPRITESHEET_DEAD_COL, SPRITESHEET_DEAD_ROW, state);
-            // do something...? how the game is gonna change for this duck and the others?
-
-        } else if (state.playingDead) {
-            draw(SPRITESHEET_PLAYING_DEAD_COL, SPRITESHEET_DEAD_ROW, state);
-        } else {
-            draw(SPRITESHEET_CROUCH_COL, SPRITESHEET_CROUCH_ROW, state);
-        }
+    } else if (state.playingDead || state.crouching) {
+        if (state.playingDead) draw(SPRITESHEET_PLAYING_DEAD_COL, SPRITESHEET_DEAD_ROW, state);        //debo borrar feathers. ojos abiertos es banana
+        else draw(SPRITESHEET_CROUCH_COL, SPRITESHEET_CROUCH_ROW, state);
 
     } else {
         draw(frame, SPRITESHEET_RIGHT_LEFT_ROW, state);
     }
+
+    spritesheet->resetDamageEffects();
 }
 
 void SpriteManager::updateEquipment(bool helmet, bool chestplate, ItemID& gun) {
@@ -101,12 +102,22 @@ void SpriteManager::setFlags(const DuckState& state) {
             ++flappingFrame;
         } else flapping = true;
     }
+
+    if (state.lookingUp != lookingUp) weaponSpriteManager->setUp();
     
     negateFlag(state.inAir, inAir);
     negateFlag(state.moving, isMoving);
     negateFlag(state.direction == DuckData::Direction::Left, flip);
     negateFlag(state.crouching, crouching);
     negateFlag(state.isShooting, shooting);
+    negateFlag(state.lookingUp, lookingUp);
+
+    if (lookingUp) {
+        if (!flip) spritesheet->setAngle(UP_ANGLE_RIGHT);
+        else spritesheet->setAngle(UP_ANGLE_LEFT);
+    }
+    else spritesheet->setAngle(DEFAULT_ANGLE);
+
 
     if (flapping != state.flapping) {
         flapping = !flapping;
@@ -206,16 +217,23 @@ SDL2pp::Rect SpriteManager::calculateBasePosition() {
 }
 
 void SpriteManager::adjustForFeathers(SDL2pp::Rect& position, bool flip) {
-    if (flip) {
-        position.x += 0.75 * scale;
+    if (!lookingUp) {
+        if (flip)
+            position.x += 0.75 * scale;
+         else
+            position.x += 0.40 * scale;
+
     } else {
-        position.x += 0.40 * scale;
+        if (flip)
+            position.x += 0.50 * scale;
+        else
+            position.x += 0.60 * scale;
     }
-    if (crouching) {
+
+    if (crouching)
         position.y += 0.80 * scale;
-    } else {
+    else
         position.y += 0.70 * scale;
-    }
 
     position.w = 0.9 * scale;
     position.h = 0.9 * scale;

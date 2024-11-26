@@ -95,6 +95,7 @@ private:
     bool hasHelmet;
     bool hasChestplate;
     bool shooting;
+    bool lookingUp;
     ItemID gunEquipped;
     std::unique_ptr<Spritesheet> spritesheet;
     std::unique_ptr<WeaponSpriteManager> weaponSpriteManager;
