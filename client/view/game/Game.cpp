@@ -149,9 +149,9 @@ void Game::updatePlayers(
                            duck.extraData[DuckData::Flag::Index::IsMoving],
                            duck.extraData[DuckData::Flag::Index::Helmet],
                            duck.extraData[DuckData::Flag::Index::Armor],
-                           /*duck.extraData[DuckData::Flag::Index::IsShooting]*/ true,
-                            /*duck.extraData[DuckData::Flag::Index::LookingUp]*/ true,
-                            flipped, /*duck.gunID*/ ItemID::PewPewLaser, duck.direction};
+                           duck.extraData[DuckData::Flag::Index::IsShooting],
+                            duck.extraData[DuckData::Flag::Index::LookingUp],
+                            flipped, duck.gunID, duck.direction};
 
         if (state.isShooting)
             soundManager.playSound(/*duck.gun->gunID*/ ItemID::CowboyPistol);
