@@ -65,5 +65,6 @@ ReplyMessage ClientRecvProtocol::recvReplyMessage() {
     u16 matchID = recvShort();
     u8 startGame = recvByte();
     u8 connectedPlayers = recvByte();
-    return ReplyMessage(matchID, startGame, connectedPlayers);
+    u8 couldPickColor = recvByte();
+    return ReplyMessage(matchID, startGame, connectedPlayers, couldPickColor);
 }

@@ -33,7 +33,7 @@ public:
 
     void sendBlock(const SizedObjectData& objData);
 
-    void sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers);
+    void sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers, u8 couldPickColor);
 
     ~ServerSendProtocol() = default;
 };

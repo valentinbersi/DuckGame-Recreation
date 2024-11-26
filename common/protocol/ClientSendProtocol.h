@@ -5,6 +5,7 @@
 #include "ActiveSocket.h"
 #include "SendProtocol.h"
 #include "Types.h"
+#include "DuckData.h"
 
 // Forward declaration
 struct ClientMessage;
@@ -28,12 +29,10 @@ public:
      *  @param type the type of the message (LobbyRequest)
      *  @param request the request of the message (NewMatch, JoinMatch, StartMatch)
      *  @param playerCount the amount of players connected locally
-     *  @param player1Name the name of the first player
-     *  @param player2Name the name of the second player
      *  @param matchId the id of the match to join, 0 if request is not JoinMatch
+     *  @param color the color of the player
      */
-    void sendLobbyMessage(u8 type, u8 request, u8 playerCount, const std::string& player1Name,
-                          const std::string& player2Name, u16 matchId);
+    void sendLobbyMessage(u8 type, u8 request, u8 playerCount, u16 matchId, u8 color);
 
     /**
      *  Send a game message to the server

@@ -37,10 +37,11 @@ void ServerSendProtocol::sendBlock(const SizedObjectData& objData) {
     sendRectangle(objData.rectangle);
 }
 
-void ServerSendProtocol::sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers) {
+void ServerSendProtocol::sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers, u8 couldPickColor) {
     sendShort(matchID);
     sendByte(startGame);
     sendByte(connectedPlayers);
+    sendByte(couldPickColor);
 }
 
 void ServerSendProtocol::sendLen(u16 len) { sendShort(len); }

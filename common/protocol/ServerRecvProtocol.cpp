@@ -18,8 +18,8 @@ LobbyMessage ServerRecvProtocol::receiveLobbyMessage() {
     recvByte();  // el type
     LobbyRequest request = recvByte();
     u8 playerCount = recvByte();
-    std::string name1 = recv_string();
-    std::string name2 = recv_string();
     u16 matchID = recvShort();
-    return LobbyMessage(request, playerCount, name1, name2, matchID);
+    DuckData::Id color = static_cast<DuckData::Id>(recvByte());
+
+    return LobbyMessage(request, playerCount, matchID, color);
 }

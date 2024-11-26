@@ -4,27 +4,26 @@ LobbyMessage::LobbyMessage():
         ClientMessage(MessageType::Lobby),
         request(LobbyRequest::NEWMATCH),
         playerCount(0),
-        player1Name(" "),
-        player2Name(" "),
-        matchId(0) {}
+        matchId(0),
+        color() {}
 
-LobbyMessage::LobbyMessage(LobbyRequest request, u8 count, std::string& name1, std::string& name2,
-                           u16 id):
+LobbyMessage::LobbyMessage(LobbyRequest request, u8 count, u16 id, DuckData::Id color):
         ClientMessage(MessageType::Lobby),
         request(request),
         playerCount(count),
-        player1Name(name1),
-        player2Name(name2),
-        matchId(id) {}
+        matchId(id),
+        color(color) {}
 
 void LobbyMessage::send(ClientSendProtocol& clientProtocol) {
-    clientProtocol.sendLobbyMessage(type, request, playerCount, player1Name, player2Name, matchId);
+    clientProtocol.sendLobbyMessage(type, request, playerCount, matchId, static_cast<u8> (color));
 }
 
 bool LobbyMessage::operator==(const LobbyMessage& other) const {
-    return type == other.type && request == other.request && playerCount == other.playerCount &&
-           player1Name == other.player1Name && player2Name == other.player2Name &&
-           matchId == other.matchId;
+    return type == other.type && 
+           request == other.request && 
+           playerCount == other.playerCount &&
+           matchId == other.matchId &&
+           color == other.color;
 }
 
 LobbyMessage::~LobbyMessage() = default;

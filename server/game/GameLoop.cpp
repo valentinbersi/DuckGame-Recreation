@@ -31,7 +31,7 @@ GameLoop::GameLoop(std::vector<LevelData>& levels): levels(levels) {}
 
 void GameLoop::run() {
     try {
-        broadcast(std::make_shared<ReplyMessage>(0, 1, 0));
+        broadcast(std::make_shared<ReplyMessage>(0, 1, 0, 0));
         timer.start();
         game.start();
         game.loadLevel(levels[0]);
