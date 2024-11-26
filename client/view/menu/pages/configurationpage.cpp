@@ -19,6 +19,7 @@ configurationPage::configurationPage(QWidget* parent, GameInfo& gameInfo, Commun
     connect(ui->btnVolver, &QPushButton::clicked, this, &configurationPage::backClicked);
 }
 
+
 int configurationPage::getSelectedPlayers() const { return CantidadPlayersGroup->checkedId(); }
 
 void configurationPage::handlerJoinGame() {
