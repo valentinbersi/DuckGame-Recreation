@@ -23,7 +23,6 @@ private:
     GameInfo& gameInfo;
     Communicator& communicator;
 
-
     void handlerJoinGame(); // ¿?
     void handlerNewGame();  // ¿?
 

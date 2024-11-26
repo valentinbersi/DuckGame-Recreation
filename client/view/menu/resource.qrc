@@ -6,6 +6,9 @@
         <file alias="Jersey10-Regular.ttf">resources/fonts/Jersey10-Regular.ttf</file>
     </qresource>
     <qresource prefix="/ducks">
-        <file alias="duckWhite">resources/ducks/duckIcon.png</file>
+        <file alias="whiteDuck">resources/ducks/whiteDuckIcon.png</file>
+        <file alias="greyDuck">resources/ducks/greyDuckIcon.png</file>
+        <file alias="orangeDuck">resources/ducks/orangeDuckIcon.png</file>
+        <file alias="yellowDuck">resources/ducks/yellowDuckIcon.png</file>
     </qresource>
 </RCC>
