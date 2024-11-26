@@ -12,14 +12,6 @@
 
 WeaponSpriteManager::WeaponSpriteManager() {}
 
-
-
-
-// CAMBIAR FLIP POR EL USO DE STATE
-
-
-
-
 void WeaponSpriteManager::drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& position,
                                      float scale, const DuckState& state) {
     draw(spritesheet, position, scale, state);
@@ -46,8 +38,10 @@ void WeaponSpriteManager::drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& pos
                 break;
 
             case ItemID::Grenade:
+                /* if(state.ammo > 0) draw */
                 break;
             case ItemID::Banana:
+                /* if(state.ammo > 0) draw */
                 break;
             default:
                 break;
