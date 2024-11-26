@@ -13,7 +13,7 @@
 #define SPRITESHEET_CROUCH_COL 5
 #define SPRITESHEET_RIGHT_LEFT_ROW 0
 #define SPRITESHEET_DEAD_ROW 2
-#define SPRITESHEET_PLAYING_DEAD_COL 1
+#define SPRITESHEET_PLAYING_DEAD_COL 0
 #define SPRITESHEET_DEAD_COL 1
 
 #define NO_FEATHER false
@@ -66,13 +66,12 @@ void SpriteManager::update(const DuckState& newState) {
     state = newState;
     setFlags();
 
-    if (state.beingDamaged) spritesheet->damageEffects(m_position_x, m_position_y);      //estirar frames?
+    if (state.beingDamaged) spritesheet->damageEffects(m_position_x, m_position_y);
 
     if (state.inAir) {
         draw(frame, SPRITESHEET_JUMP_ROW);
     } else if (state.playingDead || state.crouching) {
-        if (state.playingDead) draw(SPRITESHEET_PLAYING_DEAD_COL, SPRITESHEET_DEAD_ROW);        //debo borrar feathers. ojos abiertos es banana
-        else draw(SPRITESHEET_CROUCH_COL, SPRITESHEET_CROUCH_ROW);
+        draw(SPRITESHEET_PLAYING_DEAD_COL, SPRITESHEET_DEAD_ROW);
 
     } else {
         draw(frame, SPRITESHEET_RIGHT_LEFT_ROW);
@@ -89,6 +88,8 @@ void SpriteManager::setFlags() {
 
     negateFlag(state.inAir, inAir);
     negateFlag(state.moving, isMoving);
+
+    if (state.crouching || state.playingDead) state.lookingUp = true;
 
     if (state.lookingUp) {
         if (!state.flipped) spritesheet->setAngle(UP_ANGLE_RIGHT);
@@ -133,15 +134,16 @@ void SpriteManager::drawMainSprite(int col, int row) {
 void SpriteManager::drawFeathers(int col, int row) {
     SDL2pp::Rect position;
 
-    if (state.gunEquipped != ItemID::NONE) spritesheet->selectSprite(COL_WEAPON, ROW_WEAPON, FEATHER);
+    if (state.hasGun) spritesheet->selectSprite(COL_WEAPON, ROW_WEAPON, FEATHER);
 
-    if (state.flapping && state.gunEquipped == ItemID::NONE) {
+    else if (state.flapping && !state.hasGun) {
         if (flappingFrame > LIMIT_FLAPPING_FRAMES) flappingFrame = DEFAULT_FLAPPING;
         drawFlapping();
         return;
     }
 
-    if (state.gunEquipped == ItemID::NONE) spritesheet->selectSprite(col, row, FEATHER);
+    else if (!state.hasGun && !state.crouching) spritesheet->selectSprite(col, row, FEATHER);
+    else return;
 
     position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
     spritesheet->drawSelectedSprite(position, state.flipped, FEATHER);

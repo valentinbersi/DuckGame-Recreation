@@ -140,6 +140,7 @@ void Game::updatePlayers(
 
 
         bool flipped = duck.direction == DuckData::Direction::Left;
+        bool hasGun = duck.gunID != ItemID::NONE;
         DuckState state = {duck.extraData[DuckData::Flag::Index::PlayingDead],
                            duck.extraData[DuckData::Flag::Index::Crouching],
                            duck.extraData[DuckData::Flag::Index::InAir],
@@ -150,7 +151,7 @@ void Game::updatePlayers(
                            duck.extraData[DuckData::Flag::Index::Armor],
                            duck.extraData[DuckData::Flag::Index::IsShooting],
                             duck.extraData[DuckData::Flag::Index::LookingUp],
-                            flipped,
+                            flipped, hasGun,
             duck.extraData[DuckData::Flag::Index::NoMoreBullets],
                             duck.gunID, duck.direction};
 
