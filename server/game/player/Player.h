@@ -8,15 +8,25 @@
 #include "Input.h"
 #include "PhysicsObject.h"
 
+
+class GameTimer;
 class Player final: public PhysicsObject {
     DuckData::Id id;
     i8 life;
-    DuckData::Direction _direction;
+    DuckData::Direction _movementDirection;
+    DuckData::Direction _viewDirection;
+    DuckData::Direction _lastViewDirection;
     std::bitset<DuckData::FlagCount> flags;
     Input input;
-    float speed;
+    float acceleration;
+    float airAcceleration;
     EquippableWeapon* weapon;
-    bool isDead;
+    bool isJumping;
+    bool interactWithItem;
+    bool actionateWeapon;
+    bool canKeepJumping;
+    GameTimer* jumpTimer;
+    float jumpTime;
 
     /**
      * Event manager for the player colliding with an item
@@ -39,7 +49,45 @@ class Player final: public PhysicsObject {
      */
     void onWeaponNoMoreBullets();
 
-    // bool canKeepJumping;
+    /*
+     * Event manager for the player's jump timer's timeouts
+     */
+    void onJumpTimerTimeout();
+
+    /**
+     * Reset the state of the player for a new frame
+     */
+    void resetState();
+    /**
+     * Manages the player's movement
+     */
+    void manageCrouch();
+
+    /**
+     * Manages the player's input
+     */
+    void manageInput();
+
+    /**
+     * Move the player
+     */
+    void move(float delta, float movementAcceleration);
+
+    /**
+     * Perform the actions of the player in the air
+     */
+    void performActionsInAir(float delta);
+
+    /**
+     * Perform the actions of the player in the ground
+     * @param delta  The time since the last frame
+     */
+    void performActionsInGround(float delta);
+
+    /**
+     * Move the player, make him jump and interact with the environment
+     */
+    void performActions(float delta);
 
 public:
     Player() = delete;
@@ -159,7 +207,7 @@ public:
      * Makes the player stop looking up
      */
     void stopLookUp();
-    
+
     /**
      * Clear player's inputs that are just pressed, manains
      * input that are being pressed.
