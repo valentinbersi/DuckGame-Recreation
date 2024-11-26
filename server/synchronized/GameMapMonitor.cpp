@@ -8,6 +8,7 @@
 
 #define PLAYER_COUNT_BEGINING 0
 #define RANGE_MATCH_ID 1, 65535
+#define MAX_PLAYERS_LOCAL 2
 #define P1 0
 #define P2 1
 
@@ -24,7 +25,7 @@ GameMapMonitor::GameMapMonitor(): levels(LevelData::loadLevels()) {}
 BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGame(
         u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
         u16 clientId, u8 playerCount) {
-    std::vector<DuckData::Id> colors(playerCount);
+    std::vector<DuckData::Id> colors(playerCount, DuckData::Id::None);
     
     auto& game = gameMap.at(matchID); 
     if (!game->canJoinGame(playerCount)) {
@@ -39,8 +40,12 @@ BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGame(
     for (u8 i = PLAYER_COUNT_BEGINING; i < playerCount; i++) {
         colors[i] = game->addClient(clientId + i, senderQueue);
     }
+    if (playerCount == MAX_PLAYERS_LOCAL){
+        senderQueue->push(std::make_unique<ReplyMessage>(matchID, colors[P1], colors[P2]));
+    } else {
+        senderQueue->push(std::make_unique<ReplyMessage>(matchID, colors[P1], DuckData::Id::None));
+    }
 
-    senderQueue->push(std::make_unique<ReplyMessage>(matchID, colors[P1], colors[P2]));
     game->JoinTransactionCompleted(); 
     return game->getQueue();
 }
