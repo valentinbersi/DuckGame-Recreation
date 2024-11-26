@@ -44,7 +44,7 @@ void GameMenu::changePage(QWidget* page) { ui->stackedWidget->setCurrentWidget(p
 
 void GameMenu::showWaitingPage() {
     WaitingPage* waitingPage;
-    if (gameInfo.matchID == 0)
+    if (gameInfo.isNewGame)
         waitingPage = new WaitingPage(this, true, communicator, gameInfo);
     else
         waitingPage = new WaitingPage(this, false, communicator, gameInfo);

@@ -19,8 +19,6 @@ class WaitingPage: public QWidget {
 private:
     // cppcheck-suppress unusedStructMember
     Ui::WaitingPage* ui;
-    // cppcheck-suppress unusedStructMember
-    bool isHost;
     Communicator& communicator;
     GameInfo& gameInfo;
     // cppcheck-suppress unusedStructMember
@@ -30,7 +28,7 @@ private:
     void recvServerMessage();
 
 public:
-    WaitingPage(QWidget* parent, bool isHost, Communicator& communicator, GameInfo& gameInfo);
+    WaitingPage(QWidget* parent, Communicator& communicator, GameInfo& gameInfo);
     ~WaitingPage() override;
 
 signals:

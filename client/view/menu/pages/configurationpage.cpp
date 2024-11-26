@@ -42,6 +42,8 @@ void configurationPage::handlerNewGame() {
 }
 
 bool configurationPage::initMatchRequest(LobbyRequest& request) {
+    gameInfo.player1Name = "hola";
+    gameInfo.player2Name = "hola";
     auto message = std::make_unique<LobbyMessage>(request, gameInfo.playersNumber,
                                                   gameInfo.player1Name, gameInfo.player2Name,
                                                   gameInfo.matchID);
@@ -51,7 +53,7 @@ bool configurationPage::initMatchRequest(LobbyRequest& request) {
         ReplyMessage replyMessage = communicator.blockingRecv();
         // chequear si se recibio bien
         gameInfo.matchID = replyMessage.matchID;
-        qDebug() << "se recibe reply, mathID:" << gameInfo.matchID;
+        gameInfo.isNewGame = true;
         return true;
     } else {
         qDebug() << "no se envio PLAY";  // deberia mostrarle un mensaje al usuario

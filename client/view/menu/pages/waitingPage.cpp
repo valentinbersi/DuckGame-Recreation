@@ -11,11 +11,10 @@
 #include "ui_waitingPage.h"
 
 
-WaitingPage::WaitingPage(QWidget* parent, bool isHost, Communicator& communicator,
+WaitingPage::WaitingPage(QWidget* parent, Communicator& communicator,
                          GameInfo& gameInfo):
         QWidget(parent),
         ui(new Ui::WaitingPage),
-        isHost(isHost),
         communicator(communicator),
         gameInfo(gameInfo),
         timer(new QTimer(this)) {
@@ -26,7 +25,7 @@ WaitingPage::WaitingPage(QWidget* parent, bool isHost, Communicator& communicato
     connect(timer, &QTimer::timeout, this, &WaitingPage::recvServerMessage);
     timer->start(1000);
 
-    if (!isHost)
+    if (!gameInfo.isNewGame)
         ui->playButton->setVisible(false);
     else
         connect(ui->playButton, &QPushButton::clicked, this, &WaitingPage::requestStartGame);
@@ -45,8 +44,8 @@ void WaitingPage::recvServerMessage() {
             timer->stop();
         }
 
-        if (isHost && message.connectedPlayers == 4)
-            requestStartGame();
+//        if (gameInfo.isNewGame && message.connectedPlayers == 4)
+//            requestStartGame();
 
     } else {
         qDebug() << "replyMessage is NULL";
