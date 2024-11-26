@@ -9,7 +9,7 @@
 #define LASERFLARE_PATH "assets/particles/LaserFlare.png"
 #define PLASMA_PATH "assets/particles/Plasma.png"
 
-WeaponSpriteManager::WeaponSpriteManager() {}
+WeaponSpriteManager::WeaponSpriteManager() : lookingUp(false) {}
 
 void WeaponSpriteManager::drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip,
                                      float scale, const DuckState& state) {
@@ -49,12 +49,20 @@ void WeaponSpriteManager::drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& pos
 void WeaponSpriteManager::draw(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip,
                                float scale, const DuckState& state) {
     spritesheet->selectSprite(0, 0, false);
-    if (flip)
-        position.x -= 0.30 * scale;
-    else
-        position.x += 0.30 * scale;
+    if (!lookingUp) {
+        if (flip)
+            position.x -= 0.30 * scale;
+        else
+            position.x += 0.30 * scale;
+        position.y -= 0.01 * scale;
 
-    position.y -= 0.01 * scale;
+    } else {
+        if (flip)
+            position.x += 0.30 * scale;
+        else
+            position.x -= 0.30 * scale;
+        position.y -= 0.40 * scale;
+    }
 
     std::string path = gunPaths[state.gunEquipped];
     spritesheet->drawWeapon(position, flip, path);
@@ -104,3 +112,5 @@ void WeaponSpriteManager::drawPlasma(Spritesheet* spritesheet, SDL2pp::Rect& pos
     position.y -= 0.3 * scale;
     spritesheet->drawEffects(position, flip, PLASMA_PATH);
 }
+
+void WeaponSpriteManager::setUp() {lookingUp = !lookingUp;}

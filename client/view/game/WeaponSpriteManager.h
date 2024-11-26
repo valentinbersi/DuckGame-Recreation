@@ -18,6 +18,8 @@ public:
     void drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale,
                     const DuckState& state);
 
+    void setUp();
+
 private:
     // Draws the main sprite of each weapon.
     void draw(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale,
@@ -47,4 +49,6 @@ private:
             {ItemID::Shotgun, "assets/weapons/Shotgun.png"},
             {ItemID::Sniper, "assets/weapons/Sniper.png"},
     };
+
+    bool lookingUp;
 };
