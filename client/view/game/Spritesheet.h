@@ -20,6 +20,10 @@ public:
     // width and height to 32 or 16. It ALSO sets the width and height of the clip.
     void selectSprite(int x, int y, bool feathers);
 
+    void damageEffects(double& m_x, double& m_y);
+
+    void resetDamageEffects();
+
     // Draws the selected sprite, using the textures that 'TextureManagers' has, depending if it's a
     // feather or not. Works with flipped sprites ;)
     void drawSelectedSprite(SDL2pp::Rect& position, bool flip,
@@ -45,9 +49,12 @@ public:
 
     SDL_Rect& getClip();
 
+    void setAngle(float newAngle);
+
 private:
     SDL_Rect m_clip;
     SDL2pp::Renderer& renderer;
     const char* pathPlayer;
     const char* pathFeather;
+    float angle;
 };

@@ -28,14 +28,10 @@ public:
     // playing dead, crouching, or moving. This is done by calling the different draw methods.
     void update(const DuckState& state);
 
-    // updates the state of the duck's helmet, chestplate and weapon based on the provided
-    // parameters
-    void updateEquipment(bool helmet, bool chestplate, ItemID& gun);
-
     // Ddraws the main sprite using the provided column and row indices.
     //  It then checks if the duck has a chestplate, helmet, or weapon equipped and draws them
     //  accordingly. Finally, it draws the feathers based on whether the duck has a weapon equipped.
-    void draw(int col, int row, const DuckState& state);
+    void draw(int col, int row);
 
     // Updates the position of the duck.
     void updatePosition(float new_x, float new_y);
@@ -45,7 +41,7 @@ public:
 
 private:
     // Updates the internal flags of the SpriteManager based on the current state of the duck.
-    void setFlags(const DuckState& state);
+    void setFlags();
 
     // Negates the flagToNegate if it is different from the flag.
     void negateFlag(bool flag, bool& flagToNegate);
@@ -55,7 +51,9 @@ private:
 
     // Draws the feathers based on the provided column and row indices and whether the duck has a
     // weapon equipped. Also it checks a lot of other flags.
-    void drawFeathers(int col, int row, bool hasWeapon);
+    void drawFeathers(int col, int row);
+
+    void drawFlapping();
 
     // Draws the chestplate based on the provided column and row indices.
     // Also it checks other flags.
@@ -66,14 +64,14 @@ private:
     void drawHelmet();
 
     // Returns the position of the sprite based on the provided flags.
-    SDL2pp::Rect getPosition(bool isFeather, bool isRightFeather, bool isChestPlate, bool isHelmet);
+    SDL2pp::Rect getPosition(bool isFeather, bool isChestPlate, bool isHelmet);
 
     // Returns the base position of the sprite based on the current position of the duck.
     // Meaning... this is the position of the duck and only the duck.
     SDL2pp::Rect calculateBasePosition();
 
     // Adjusts the position of the sprite for the feathers.
-    void adjustForFeathers(SDL2pp::Rect& position, bool isRightFeather);
+    void adjustForFeathers(SDL2pp::Rect& position);
 
     // Adjusts the position of the sprite for the helmet.
     void adjustForHelmet(SDL2pp::Rect& position);
@@ -87,15 +85,10 @@ private:
     float scale;
     bool isMoving;
     bool inAir;
-    bool crouching;
     bool flapping;
-    bool flip;
-    bool hasHelmet;
-    bool hasChestplate;
-    bool shooting;
-    ItemID gunEquipped;
     std::unique_ptr<Spritesheet> spritesheet;
     std::unique_ptr<WeaponSpriteManager> weaponSpriteManager;
+    DuckState state;
     int frame;
     int flappingFrame;
     double m_position_x;
