@@ -32,8 +32,6 @@ private:
     /** Punteros a las paginas usadas en el lobby */
     QPointer<mainMenu> menu;
     QPointer<configurationPage> config;
-    QPointer<matchSetup> join_game;
-    QPointer<matchSetup> new_game;
 
     /**
      * Setea los widgets de las paginas y conecta los botones y las acciones para configurar la funcionalidad del lobby.
@@ -54,10 +52,9 @@ private:
     void changePage(QWidget* page);
 
     /**
-     * Ambas funciones se encargan de inicializar las pantallas de carga, definiendo de que tipo es.
+     * Se encarga de inicializar las pantallas de carga, ya sea la del host o la del join.
      */
     void showWaitingPage();
-    void showJoinWaitingPage();
 
 
 signals:

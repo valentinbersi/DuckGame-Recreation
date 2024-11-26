@@ -26,10 +26,15 @@ matchSetup::matchSetup(QWidget* parent, MatchMode matchMode, Communicator& commu
 }
 
 bool matchSetup::validateData() {
+/*
     bool jugador1Ingresado = !ui->lineEditPlayer1->text().isEmpty();
     bool jugador2Ingresado = true;
     if (gameInfo.playersNumber == 2)
         jugador2Ingresado = !ui->lineEditPlayer2->text().isEmpty();
+*/
+
+    bool jugador1Ingresado = true;
+    bool jugador2Ingresado = true;
 
     if (matchMode == joinMatch) {
         bool matchIDIngresado = !ui->lineEditMatchID->text().isEmpty();
@@ -45,9 +50,14 @@ void matchSetup::onPlayClicked() {
                              "Por favor, completa todos los datos antes de continuar.");
         return;
     }
+/*
     gameInfo.player1Name = ui->lineEditPlayer1->text().toStdString();
     gameInfo.player2Name =
             ui->lineEditPlayer2->text().isEmpty() ? " " : ui->lineEditPlayer2->text().toStdString();
+*/
+
+    gameInfo.player1Name = "";
+    gameInfo.player2Name = "";
 
     if (matchMode == joinMatch) {
         gameInfo.matchID = ui->lineEditMatchID->text().toUShort();
