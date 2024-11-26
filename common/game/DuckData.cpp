@@ -2,6 +2,46 @@
 
 #include <utility>
 
+DuckData::Direction::Direction(const Direction& other): value(other.value) {}
+
+DuckData::Direction::Direction(Direction&& other) noexcept: value(other.value) {}
+
+DuckData::Direction& DuckData::Direction::operator=(const Direction& other) {
+    if (this == &other)
+        return *this;
+
+    value = other.value;
+    return *this;
+}
+
+DuckData::Direction& DuckData::Direction::operator=(Direction&& other) noexcept {
+    if (this == &other)
+        return *this;
+
+    value = other.value;
+    return *this;
+}
+
+DuckData::Direction::Direction(const Value value): value(value) {}
+
+DuckData::Direction::Direction(u8 value): value(static_cast<Value>(value)) {}
+
+DuckData::Direction::operator Value() const { return value; }
+
+void DuckData::Direction::pushRight() {
+    if (value == Left)
+        value = Center;
+    else
+        value = Right;
+}
+
+void DuckData::Direction::pushLeft() {
+    if (value == Right)
+        value = Center;
+    else
+        value = Left;
+}
+
 DuckData::DuckData(const DuckData& other) = default;
 
 DuckData& DuckData::operator=(const DuckData& other) {
