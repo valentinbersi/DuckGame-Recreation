@@ -74,7 +74,7 @@ public:
      * @param playerID the id of the player to add
      * @throw AlreadyAddedPlayer if the player is already in the match
      */
-    void addPlayer(PlayerID playerID);
+    DuckData::Id addPlayer(PlayerID playerID);
 
     /**
      * Remove a player from the match

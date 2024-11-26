@@ -71,7 +71,7 @@ public:
      * @param clientID the id of the client to add
      * @param clientQueue the queue of the client to add
      */
-    void addClient(u16 clientID,
+    DuckData::Id addClient(u16 clientID,
                    std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue);
 
     /**
