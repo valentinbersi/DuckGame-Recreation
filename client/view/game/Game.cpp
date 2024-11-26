@@ -54,7 +54,6 @@ void Game::init() {
     IMG_Init(IMG_INIT_PNG);
 
     Texture backgroundTexture = startBackground();
-    // camera.loadBackgroundSize(backgroundTexture);
     EventHandler handler(window, window_width, window_height, twoPlayersLocal, communicator, ducks,
                          camera, running);
 
@@ -141,8 +140,7 @@ void Game::updatePlayers(
 
 
         bool flipped = duck.direction == DuckData::Direction::Left;
-
-        DuckState state = {/*duck.extraData[DuckData::Flag::Index::PlayingDead]*/ false,
+        DuckState state = {duck.extraData[DuckData::Flag::Index::PlayingDead],
                            duck.extraData[DuckData::Flag::Index::Crouching],
                            duck.extraData[DuckData::Flag::Index::InAir],
                            duck.extraData[DuckData::Flag::Index::Flapping],
