@@ -71,7 +71,7 @@ void GameController::update(const float delta) {
 
 #define PLAYER "Player "
 
-void GameController::addPlayer(const PlayerID playerID) {
+DuckData::Id GameController::addPlayer(const PlayerID playerID) {
     if (players.contains(playerID))
         throw AlreadyAddedPlayer(playerID);
 
@@ -92,6 +92,7 @@ void GameController::addPlayer(const PlayerID playerID) {
 
     addChild(PLAYER + id, newPlayer);
     players.emplace(playerID, newPlayer);
+    return duckID;
 }
 
 void GameController::removePlayer(const PlayerID playerID) {

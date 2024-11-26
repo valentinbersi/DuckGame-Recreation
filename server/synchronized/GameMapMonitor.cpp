@@ -37,12 +37,10 @@ BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGame(
         throw MatchEnded(matchID);
     }
     for (u8 i = PLAYER_COUNT_BEGINING; i < playerCount; i++) {
-        // colors[i] = game->addClient(clientId + i, senderQueue);
-        game->addClient(clientId + i, senderQueue);
+        colors[i] = game->addClient(clientId + i, senderQueue);
     }
 
-    // senderQueue->push(std::make_unique<ReplyMessage>(matchID, colors[P1], colors[P2]));
-    senderQueue->push(std::make_unique<ReplyMessage>(matchID, DuckData::Id::None, DuckData::Id::None));  
+    senderQueue->push(std::make_unique<ReplyMessage>(matchID, colors[P1], colors[P2]));
     game->JoinTransactionCompleted(); 
     return game->getQueue();
 }

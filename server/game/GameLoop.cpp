@@ -70,13 +70,13 @@ bool GameLoop::canJoinGame(const u8 playerAmount) {
     return !game.exceedsPlayerMax(playerAmount);
 }
 
-void GameLoop::addClient(const u16 clientID,
+DuckData::Id GameLoop::addClient(const u16 clientID,
                          std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue) {
 
-    game.addPlayer(clientID);
     if (shouldAddQueue(clientID)) {
         clientQueuesMap.insert({clientID, std::move(clientQueue)});
     }
+    return game.addPlayer(clientID);
 }
 
 BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCommands; }
