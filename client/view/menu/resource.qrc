@@ -1,8 +1,11 @@
 <RCC>
     <qresource prefix="/backgrounds">
-        <file>duck-game.png</file>
+        <file alias="duck-game.png">resources/backgrounds/duck-game.png</file>
     </qresource>
     <qresource prefix="/fonts">
-        <file>Jersey10-Regular.ttf</file>
+        <file alias="Jersey10-Regular.ttf">resources/fonts/Jersey10-Regular.ttf</file>
+    </qresource>
+    <qresource prefix="/ducks">
+        <file alias="duckWhite">resources/ducks/duckIcon.png</file>
     </qresource>
 </RCC>
