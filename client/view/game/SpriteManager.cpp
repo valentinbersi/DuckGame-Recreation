@@ -102,8 +102,6 @@ void SpriteManager::setFlags(const DuckState& state) {
             ++flappingFrame;
         } else flapping = true;
     }
-
-    if (state.lookingUp != lookingUp) weaponSpriteManager->setUp();
     
     negateFlag(state.inAir, inAir);
     negateFlag(state.moving, isMoving);

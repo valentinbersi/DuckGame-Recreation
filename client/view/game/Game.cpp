@@ -138,18 +138,19 @@ void Game::updatePlayers(
         const float screenPositionY =
                 relativePositionY * positionScaleY + static_cast<float>(window_height) / 2;
 
+        bool flipped = duck.direction == DuckData::Direction::Left;
 
         DuckState state = {duck.extraData[DuckData::Flag::Index::PlayingDead],
                            duck.extraData[DuckData::Flag::Index::Crouching],
                            duck.extraData[DuckData::Flag::Index::InAir],
                            duck.extraData[DuckData::Flag::Index::Flapping],
-                           /*duck.extraData[DuckData::Flag::Index::BeingDamaged]*/ true,
+                           duck.extraData[DuckData::Flag::Index::BeingDamaged],
                            duck.extraData[DuckData::Flag::Index::IsMoving],
                            duck.extraData[DuckData::Flag::Index::Helmet],
                            duck.extraData[DuckData::Flag::Index::Armor],
-                           duck.extraData[DuckData::Flag::Index::IsShooting],
-                            /*duck.extraData[DuckData::Flag::Index::LookingUp]*/ false,
-                           duck.gunID, duck.direction};
+                           /*duck.extraData[DuckData::Flag::Index::IsShooting]*/ true,
+                            /*duck.extraData[DuckData::Flag::Index::LookingUp]*/ true,
+                            flipped,duck.gunID, duck.direction};
 
         if (state.isShooting)
             soundManager.playSound(/*duck.gun->gunID*/ ItemID::CowboyPistol);

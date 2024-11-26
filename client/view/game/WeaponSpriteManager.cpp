@@ -9,11 +9,19 @@
 #define LASERFLARE_PATH "assets/particles/LaserFlare.png"
 #define PLASMA_PATH "assets/particles/Plasma.png"
 
-WeaponSpriteManager::WeaponSpriteManager() : lookingUp(false) {}
+WeaponSpriteManager::WeaponSpriteManager() {}
+
+
+
+
+// CAMBIAR FLIP POR EL USO DE STATE
+
+
+
 
 void WeaponSpriteManager::drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip,
                                      float scale, const DuckState& state) {
-    draw(spritesheet, position, flip, scale, state);
+    draw(spritesheet, position, scale, state);
 
     if (state.isShooting) {
         spritesheet->selectSprite(0, 0, true);
@@ -22,18 +30,18 @@ void WeaponSpriteManager::drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& pos
             case ItemID::CowboyPistol:
             case ItemID::Magnum:
             case ItemID::DuelPistol:
-                drawEffect1(spritesheet, position, flip, scale);
+                drawEffect1(spritesheet, position, flip, scale, state);
                 break;
             case ItemID::Ak47:
             case ItemID::Sniper:
             case ItemID::Shotgun:
-                drawEffect2(spritesheet, position, flip, scale);
+                drawEffect2(spritesheet, position, flip, scale, state);
                 break;
             case ItemID::LaserRifle:
-                drawLaserFlare(spritesheet, position, flip, scale);
+                drawLaserFlare(spritesheet, position, flip, scale, state);
                 break;
             case ItemID::PewPewLaser:
-                drawPlasma(spritesheet, position, flip, scale);
+                drawPlasma(spritesheet, position, flip, scale, state);
                 break;
 
             case ItemID::Grenade:
@@ -46,18 +54,18 @@ void WeaponSpriteManager::drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& pos
     }
 }
 
-void WeaponSpriteManager::draw(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip,
+void WeaponSpriteManager::draw(Spritesheet* spritesheet, SDL2pp::Rect& position,
                                float scale, const DuckState& state) {
     spritesheet->selectSprite(0, 0, false);
-    if (!lookingUp) {
-        if (flip)
+    if (!state.lookingUp) {
+        if (state.flipped)
             position.x -= 0.30 * scale;
         else
             position.x += 0.30 * scale;
         position.y -= 0.01 * scale;
 
     } else {
-        if (flip)
+        if (state.flipped)
             position.x += 0.30 * scale;
         else
             position.x -= 0.30 * scale;
@@ -65,52 +73,82 @@ void WeaponSpriteManager::draw(Spritesheet* spritesheet, SDL2pp::Rect& position,
     }
 
     std::string path = gunPaths[state.gunEquipped];
-    spritesheet->drawWeapon(position, flip, path);
+    spritesheet->drawWeapon(position, state.flipped, path);
 }
 
 void WeaponSpriteManager::drawEffect1(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip,
-                                      float scale) {
-    if (flip)
-        position.x -= 1.6 * scale;
-    else
-        position.x += 1.6 * scale;
+                                      float scale, const DuckState& state) {
+    if (!state.lookingUp) {
+        if (flip)
+            position.x -= 1.6 * scale;
+        else
+            position.x += 1.6 * scale;
+        position.y -= 0.9 * scale;
 
-
-    position.y -= 0.9 * scale;
+    } else {
+        if (flip)
+            position.x -= 1.6 * scale;
+        else
+            position.x += 1.6 * scale;
+        position.y -= 1.0 * scale;
+    }
     spritesheet->drawEffects(position, flip, EFFECT_PATH);
 }
 
 void WeaponSpriteManager::drawEffect2(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip,
-                                      float scale) {
-    if (flip)
-        position.x -= 2.0 * scale;
-     else
-        position.x += 2.0 * scale;
+                                      float scale, const DuckState& state) {
+    if (!state.lookingUp) {
+        if (flip)
+            position.x -= 2.0 * scale;
+        else
+            position.x += 2.0 * scale;
+        position.y -= 0.9 * scale;
 
-    position.y -= 0.9 * scale;
+    } else {
+        if (flip)
+            position.x -= 2.0 * scale;
+        else
+            position.x += 2.0 * scale;
+        position.y -= 1.0 * scale;
+    }
     spritesheet->drawEffects(position, flip, EFFECT_PATH);
 }
 
 void WeaponSpriteManager::drawLaserFlare(Spritesheet* spritesheet, SDL2pp::Rect& position,
-                                         bool flip, float scale) {
-    if (flip)
-        position.x -= 1.6 * scale;
-    else
-        position.x += 1.6 * scale;
+                                         bool flip, float scale, const DuckState& state) {
+    if (!state.lookingUp) {
+        if (flip)
+            position.x -= 1.6 * scale;
+        else
+            position.x += 1.6 * scale;
+        position.y -= 0.25 * scale;
 
-    position.y -= 0.25 * scale;
+    } else {
+        if (flip)
+            position.x -= 1.6 * scale;
+        else
+            position.x += 1.6 * scale;
+        position.y -= 0.20 * scale;
+    }
+
     spritesheet->drawEffects(position, flip, LASERFLARE_PATH);
 }
 
 void WeaponSpriteManager::drawPlasma(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip,
-                                     float scale) {
-    if (flip)
-        position.x -= 1.8 * scale;
-    else
-        position.x += 1.8 * scale;
+                                     float scale, const DuckState& state) {
+    if (state.lookingUp) {
+        if (flip)
+            position.x -= 1.8 * scale;
+        else
+            position.x += 1.8 * scale;
+        position.y -= 0.3 * scale;
 
-    position.y -= 0.3 * scale;
+    } else {
+        if (flip)
+            position.x -= 1.8 * scale;
+        else
+            position.x += 1.8 * scale;
+        position.y -= 1.0 * scale;
+    }
     spritesheet->drawEffects(position, flip, PLASMA_PATH);
 }
-
-void WeaponSpriteManager::setUp() {lookingUp = !lookingUp;}

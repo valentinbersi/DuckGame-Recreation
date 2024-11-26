@@ -18,24 +18,22 @@ public:
     void drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale,
                     const DuckState& state);
 
-    void setUp();
-
 private:
     // Draws the main sprite of each weapon.
-    void draw(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale,
+    void draw(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
               const DuckState& state);
 
     // Draws the first type of effect of the weapons.
-    void drawEffect1(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale);
+    void drawEffect1(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale, const DuckState& state);
 
     // Draws the second type of effect of the weapons.
-    void drawEffect2(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale);
+    void drawEffect2(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale, const DuckState& state);
 
     // Draws the laser flare effect for the Laser Rifle.
-    void drawLaserFlare(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale);
+    void drawLaserFlare(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale, const DuckState& state);
 
     // Draws the plasma effect for the Pew Pew Laser.
-    void drawPlasma(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale);
+    void drawPlasma(Spritesheet* spritesheet, SDL2pp::Rect& position, bool flip, float scale, const DuckState& state);
 
     std::unordered_map<ItemID, std::string> gunPaths = {
             {ItemID::Grenade, "assets/weapons/Grenade.png"},
@@ -49,6 +47,4 @@ private:
             {ItemID::Shotgun, "assets/weapons/Shotgun.png"},
             {ItemID::Sniper, "assets/weapons/Sniper.png"},
     };
-
-    bool lookingUp;
 };

@@ -14,6 +14,7 @@ struct DuckState {
     bool hasChestplate;
     bool isShooting;
     bool lookingUp;
+    bool flipped;
     ItemID gunEquipped;
     DuckData::Direction direction;
 };
