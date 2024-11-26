@@ -1,6 +1,6 @@
 #pragma once
 
-#define PIXEL_SIZE 10
+#define PIXEL_SIZE 20
 #define DEFAULT_WIDTH 200
 #define DEFAULT_HEIGHT 200
 

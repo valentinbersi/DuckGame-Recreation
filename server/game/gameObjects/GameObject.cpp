@@ -30,11 +30,6 @@ std::string GameObject::findAvaiableName(std::string name) const {
     throw NoMoreNamesAvailable(name);
 }
 
-GameObject::GameObject(GameObject* parent): _parent(parent) {
-    registerEvent<GameObject*>(Events::TreeEntered);
-    registerEvent<GameObject*>(Events::TreeExited);
-}
-
 #define NULL_CHILD "newChild is nullptr"
 #define CHILD_HAS_PARENT "newChild already has a parent"
 #define EMPTY_NAME "name is empty"
@@ -79,7 +74,10 @@ GameObject::NoMoreNamesAvailable::NoMoreNamesAvailable(const std::string& name):
 GameObject::ChildNotInTree::ChildNotInTree(const std::string& name):
         std::out_of_range(CHILD_NAME + name + NOT_IN_TREE) {}
 
-GameObject::GameObject(): _parent(nullptr) {}
+GameObject::GameObject(): _parent(nullptr) {
+    registerEvent<GameObject*>(Events::TreeEntered);
+    registerEvent<GameObject*>(Events::TreeExited);
+}
 
 #define NO_PARENT "Object has no parent"
 
@@ -129,17 +127,6 @@ void GameObject::transferChild(const GameObject* object, GameObject& parent) {
     transferChild(object->name, parent);
 }
 
-GameObject* GameObject::getChild(const std::string& name) const { return children.at(name); }
-
 bool GameObject::isParent() const { return not children.empty(); }
 
-GameObject* GameObject::parent() const { return _parent; }
-
 bool GameObject::isRoot() const { return _parent == nullptr; }
-
-GameObject* GameObject::getRoot() {
-    if (isRoot())
-        return this;
-
-    return _parent->getRoot();
-}

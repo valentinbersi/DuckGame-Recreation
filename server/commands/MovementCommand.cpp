@@ -30,6 +30,12 @@ void MovementCommand::execute(GameController& gameController) {
         case InputAction::JUMP_RELEASED:
             return player.stopJump();
 
+        case InputAction::UP_PRESSED:
+            return player.lookUp();
+        
+        case InputAction::UP_RELEASED:
+            return player.stopLookUp();
+
         default:
             return;
     }

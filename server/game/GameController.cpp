@@ -2,12 +2,10 @@
 
 #include <ranges>
 #include <string>
-#include <utility>
 
 #include "GameStatus.h"
 #include "Layer.h"
 #include "LevelData.h"
-#include "SpawnPoint.h"
 
 /**
  * Macro for easier event handling
@@ -51,7 +49,7 @@ GameController::AlreadyAddedPlayer::AlreadyAddedPlayer(const PlayerID id):
 GameController::PlayerNotFound::PlayerNotFound(const PlayerID id):
         std::out_of_range(PLAYER_ID + std::to_string(id) + NOT_FOUND) {}
 
-GameController::GameController(): GameObject(nullptr), level(nullptr) {
+GameController::GameController(): level(nullptr) {
     connect(Events::TreeEntered, eventHandler(&GameController::onTreeEntered, GameObject*));
 
     connect(Events::TreeExited, eventHandler(&GameController::onTreeExited, GameObject*));

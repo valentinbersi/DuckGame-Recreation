@@ -21,13 +21,13 @@ struct LongPistol: EquippableWeapon {
      * Actionates the weapon
      * @return The recoil of the weapon
      */
-    Vector2 actionate() override;
+    void actionate() override;
 
     /**
      * Deactionates the weapon
      * @return The recoil of the weapon
      */
-    Vector2 deactionate() override;
+    void deactionate() override;
 
     /**
      * Updates the weapon

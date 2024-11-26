@@ -14,6 +14,8 @@ protected:
     float dispersion;
 
 public:
+    constexpr static u8 INeedMoreBullets = 0;
+
     EquippableWeapon() = delete;
     EquippableWeapon(const EquippableWeapon& other) = delete;
     EquippableWeapon(EquippableWeapon&& other) noexcept = delete;
@@ -40,13 +42,18 @@ public:
      * Actionate the weapon
      * @return The recoil of the weapon
      */
-    virtual Vector2 actionate() = 0;
+    virtual void actionate() = 0;
 
     /**
      * Actionate the weapon
      * @return The recoil of the weapon
      */
-    virtual Vector2 deactionate() = 0;
+    virtual void deactionate() = 0;
+
+    struct Events {
+        constexpr static auto Fired = "Fired";
+        constexpr static auto NoMoreBullets = "NoMoreBullets";
+    };
 
     ~EquippableWeapon() override;
 };

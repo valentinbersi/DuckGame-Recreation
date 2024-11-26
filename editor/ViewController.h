@@ -2,31 +2,34 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPushButton>
 #include <map>
 #include <string>
 #include <vector>
 
-#include "levelscene.h"
+#include "LevelScene.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class MainWindow;
+class ViewController;
 }
 QT_END_NAMESPACE
 
-class MainWindow: public QMainWindow {
+class ViewController: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget* parent = nullptr);
-    ~MainWindow() override;
+    explicit ViewController(QWidget* parent = nullptr);
+    ~ViewController() override;
 
 private:
-    Ui::MainWindow* ui;
+    Ui::ViewController* ui;
     std::string background;
     std::vector<Object> objects;
     LevelScene* scene;
-    std::map<QAction*, ObjectType> actionTypeMap;
+    std::map<QPushButton*, ObjectType> buttonTypeMap;
+
+    QBrush backgroundBrush;
 
     // void wheelEvent(QWheelEvent* event) override;
     /**
@@ -63,5 +66,17 @@ private:
      * usuario asi lo desea.
      */
     void onSceneResize();
+
+    /**
+     * Genera un mensaje emergente, preguntandole al usuario si quiere guardar el mapa actual antes de cerrarlo.
+     * El usuario tiene 3 opciones: Cancelar la acción, No guardar o Guardar.
+     * @return false si se cancela la accion y true si no se cancela.
+     * En caso de querer guardar, el mapa se exporta mediante MapManager.
+     */
+    bool confirmAndSaveMap();
+
+    void changeBackground();
+    void paintEvent(QPaintEvent *event) override;
+    void setupToolBar();
 };
 #endif  // MAINWINDOW_H

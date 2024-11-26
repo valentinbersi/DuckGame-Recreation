@@ -3,9 +3,9 @@
 #include <list>
 
 #include "DuckData.h"
+#include "ItemData.h"
 #include "ServerMessage.h"
 #include "SizedObjectData.h"
-#include "ItemData.h"
 
 /**
  * A struct with the current game status.
@@ -36,6 +36,7 @@ private:
      * @param list the list to send.
      * @param sendFunc the function of the serverProtocol to send the specific type of list.
      */
-    template<typename T>   
-    void sendList(ServerSendProtocol& serverProtocol, const std::list<T>& list, void (ServerSendProtocol::*sendFunc)(const T&));
+    template <typename T>
+    void sendList(ServerSendProtocol& serverProtocol, const std::list<T>& list,
+                  void (ServerSendProtocol::*sendFunc)(const T&));
 };

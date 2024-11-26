@@ -21,7 +21,7 @@ std::list<DuckData> ClientRecvProtocol::recvDuckData() {
     std::list<DuckData> ducks;
     for (u16 i(0); i < size; ++i) {
         DuckData::Id duckID = static_cast<DuckData::Id>(recvByte());
-        u8 life = recvByte();
+        i8 life = recvByte();
         DuckData::Direction direction = static_cast<DuckData::Direction>(recvByte());
         u8 gunID = static_cast<ItemID>(recvByte());
         u16 actions = recvShort();

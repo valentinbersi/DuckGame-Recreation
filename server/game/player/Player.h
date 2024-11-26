@@ -10,17 +10,35 @@
 
 class Player final: public PhysicsObject {
     DuckData::Id id;
-    u8 life;
-    DuckData::Direction direction;
+    i8 life;
+    DuckData::Direction _direction;
     std::bitset<DuckData::FlagCount> flags;
     Input input;
     float speed;
     EquippableWeapon* weapon;
+    bool isDead;
 
     /**
      * Event manager for the player colliding with an item
      */
     void onItemCollision(CollisionObject* item);
+
+    /**
+     * Event manager for the player colliding with an object
+     */
+    void onCollision(CollisionObject* item);
+
+    /**
+     * Event manager for the player firing a weapon
+     * @param recoil The recoil of the weapon
+     */
+    void onWeaponFired(const Vector2& recoil);
+
+    /**
+     * Event manager for the player running out of bullets
+     */
+    void onWeaponNoMoreBullets();
+
     // bool canKeepJumping;
 
 public:
@@ -46,6 +64,28 @@ public:
      * Updates the player's position based on the input
      */
     void update(float delta) override;
+
+    /**
+     * Damages the player
+     * @param damage the amount of damage to deal
+     */
+    void damage(i8 damage);
+
+    /**
+     * Makes the player shoot
+     */
+    void makeShoot();
+
+    /**
+     * Tell the player that it has no more bullets
+     */
+    void notMoreBullets();
+
+    /**
+     * Get the player's direction
+     * @return the player's direction
+     */
+    DuckData::Direction direction() const;
 
     /**
      * Returns a GameStatus loaded with the player's data
@@ -110,6 +150,16 @@ public:
      */
     void stopShoot();
 
+    /**
+     * Makes the player look up
+     */
+    void lookUp();
+
+    /**
+     * Makes the player stop looking up
+     */
+    void stopLookUp();
+    
     /**
      * Clear player's inputs that are just pressed, manains
      * input that are being pressed.
