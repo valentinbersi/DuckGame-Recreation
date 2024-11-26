@@ -1,5 +1,4 @@
-#ifndef LEVELSCENE_H
-#define LEVELSCENE_H
+#pragma once
 
 #include <QGraphicsScene>
 #include <vector>
@@ -11,17 +10,16 @@ class LevelScene: public QGraphicsScene {
     Q_OBJECT
 
 private:
-    int gridWidth; /** ancho de la grilla (no del mapa) */
-    int gridHeight; /** alto de la grilla (no del mapa) */
-    std::vector<Object>& objects; /** referencia a la lista de objetos del editor */
-    QMap<QGraphicsItem*, Object*> objectsMap; /** */
+    int gridWidth;                            /** ancho de la grilla (no del mapa) */
+    int gridHeight;                           /** alto de la grilla (no del mapa) */
+    std::vector<Object>& objects;             /** referencia a la lista de objetos del editor */
+    QMap<QGraphicsPixmapItem*, Object*> objectsMap; /** */
 
-    QGraphicsItem* selectedItem; /** */
-    QPointF originalItemPos; /** */
+    QGraphicsPixmapItem* selectedItem; /** */
+    QPointF originalItemPos;     /** */
 
-    int ducksCount; /** */
+    int ducksCount;             /** */
     ObjectType objectTypeToAdd; /** */
-
 
     /**
      * Elimina el elemento en la posicion recibida.
@@ -62,7 +60,8 @@ private:
      * Hay 3 opciones:
      *  1) si se presiona el boton derecho sobre un elemento/objeto, lo elimina
      *  2) si se tiene seleccionado algun objeto, se agrega en el mapa donde se presiona.
-     *  3) si se presiona sobre un item, este es seleccionado para moverlo (debera mantener apretado el click izquierdo)
+     *  3) si se presiona sobre un item, este es seleccionado para moverlo (debera mantener apretado
+     * el click izquierdo)
      * @param event evento del mouse de QT
      */
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
@@ -112,7 +111,8 @@ public:
 
     /**
      * Se encarga de cargar un mapa del tamaño pasado por parametro.
-     * Cargara en el mapa los objetos de la lista objects, que ya se tiene la referencia en esta clase.
+     * Cargara en el mapa los objetos de la lista objects, que ya se tiene la referencia en esta
+     * clase.
      * @param mapWidth ancho del mapa
      * @param mapHeight alto del mapa
      * ambos parametros se multiplicaran por el PIXEL_SIZE para obtener el tamaño de la grilla.
@@ -135,5 +135,3 @@ signals:
     void addingObjectChanged(ObjectType type);
     void resizeView();
 };
-
-#endif  // LEVELSCENE_H

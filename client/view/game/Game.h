@@ -51,21 +51,35 @@ private:
     SDL2pp::Texture startBackground();
 
     // Creates the mapping of the SpriteManagers for each duck.
-    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> createSpritesMapping();
+    std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>> createSpritesMapping();
 
     // Updates the positions, states, and scales of the player sprites based on the camera view.
     void updatePlayers(
-            const std::unordered_map<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping);
+            const std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
+
+    /**
+     * Updates the positions and scales of the objects given objects in the game
+     * @param objects the objects to update
+     * @tparam SizedObject the type of the objects, must me a SizedObject or a subclass of it
+     * @return a list of the positions and sizes of the objects
+     */
+    template <typename SizedObject>
+    std::list<SDL2pp::Rect> calculateObjectsPositionsAndSize(std::list<SizedObject> objects);
 
     // Updates the positions and scales of the blocks based on the camera view and renders them.
     void updateBlocks(EnviromentRenderer& enviromentRenderer);
-
 
     /**
      * Updates the positions and scales of the weapon spawns based on the camera view and renders
      * @param enviromentRenderer the renderer that draws the enviroment objects
      */
-    void updateWeaponSpawns(EnviromentRenderer& enviromentRenderer);
+    void updateItemSpawns(EnviromentRenderer& enviromentRenderer);
+
+    /**
+     * Updates the positions and scales of the items based on the camera view and renders
+     * @param enviromentRenderer the renderer that draws the enviroment objects
+     */
+    void updateItems(EnviromentRenderer& enviromentRenderer);
 
     // Receives the latest game status snapshot from the server and updates the game objects.
     void getSnapshot();
@@ -86,9 +100,12 @@ private:
     Timer timer;
     bool& twoPlayersLocal;
     Camera camera;
+    static const HashMap<ItemID, cppstring> weaponSprites;
 
     std::list<SizedObjectData> itemSpawns;
     std::list<SizedObjectData> itemSpawnsToRender;
+    std::list<ItemData> items;
+    std::list<ItemData> itemsToRender;
     std::list<SizedObjectData> blocks;
     std::list<SizedObjectData> blocksToRender;
     std::list<DuckData> ducks;  // No ducks to render because all ducks should be rendered
@@ -99,3 +116,33 @@ private:
             "assets/background/desert.png",       "assets/background/cascade-cave.png",
             "assets/background/sunset.png",       "assets/background/dark-cave.png"};
 };
+
+template <typename SizedObject>
+std::list<SDL2pp::Rect> Game::calculateObjectsPositionsAndSize(std::list<SizedObject> objects) {
+    static_assert(std::is_base_of_v<SizedObjectData, SizedObject>,
+                  "SizedObject must be a subclass of SizedObjectData");
+
+    std::list<SDL2pp::Rect> rectsToDraw;
+
+    for (SizedObjectData& object: objects) {
+        const float objectCameraSize =
+                camera.getViewRect().size().x() / object.rectangle.size().x();
+        const float scale = static_cast<float>(window_width) / objectCameraSize;
+        const float relativePositionX = object.position.x() - camera.getViewRect().center().x();
+        const float relativePositionY = object.position.y() - camera.getViewRect().center().y();
+        const float positionScaleX =
+                static_cast<float>(window_width) / camera.getViewRect().size().x();
+        const float positionScaleY =
+                static_cast<float>(window_height) / camera.getViewRect().size().y();
+        const float screenPositionX =
+                relativePositionX * positionScaleX + static_cast<float>(window_width) / 2;
+        const float screenPositionY =
+                relativePositionY * positionScaleY + static_cast<float>(window_height) / 2;
+
+        rectsToDraw.emplace_back(static_cast<i32>(screenPositionX - scale / 2),
+                                 static_cast<i32>(screenPositionY - scale / 2),
+                                 static_cast<i32>(scale), static_cast<i32>(scale));
+    }
+
+    return rectsToDraw;
+}

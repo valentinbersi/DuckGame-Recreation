@@ -60,6 +60,13 @@ public:
     void stop() override;
 
     /**
+     * Checks if player can join the game.
+     * @param playerCount the number of players that will play the game locally
+     * @return true if player can join the game, false otherwise.     
+    */
+    bool canJoinGame(const u8 playerCount);
+
+    /**
      * Add a client queue to the list of client queues
      * @param clientID the id of the client to add
      * @param clientQueue the queue of the client to add
@@ -71,4 +78,11 @@ public:
      * @return the pointer to the gameloop Queue.
      */
     BlockingQueue<std::unique_ptr<Command>>* getQueue();
+
+    /**
+     * Indicates end of the transaction of joining the game.
+     * Indicates to all clients that player/s has joined
+     */
+    void JoinTransactionCompleted();
+
 };

@@ -8,26 +8,23 @@
  * A collision Object that physics do not affect.\n
  * It's intended for creating objects not affected by physics that physics object can collide with
  */
-class StaticObject: public CollisionObject {
-protected:
+struct StaticObject: CollisionObject {
+    StaticObject() = delete;
+    StaticObject(const StaticObject&) = delete;
+    StaticObject& operator=(const StaticObject&) = delete;
+    StaticObject(StaticObject&&) = delete;
+    StaticObject& operator=(StaticObject&&) = delete;
+
     /**
      * Creates a new static object
-     * @param parent The parent object
      * @param position The position of the object
      * @param layers The layers the object is in
      * @param scannedLayers The layers the object scans for collisions
      * @param width The width
      * @param height The height
      */
-    StaticObject(GameObject* parent, Vector2 position, std::bitset<LayersCount> layers,
+    StaticObject(Vector2 position, std::bitset<LayersCount> layers,
                  std::bitset<LayersCount> scannedLayers, float width, float height);
-
-public:
-    StaticObject() = delete;
-    StaticObject(const StaticObject&) = delete;
-    StaticObject& operator=(const StaticObject&) = delete;
-    StaticObject(StaticObject&&) = delete;
-    StaticObject& operator=(StaticObject&&) = delete;
 
     /**
      * Update the object's internal state

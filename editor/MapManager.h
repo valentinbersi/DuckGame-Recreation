@@ -3,8 +3,6 @@
 #include <string>
 #include <vector>
 
-#include "yaml-cpp/yaml.h"
-
 #include "Object.h"
 
 class MapManager {

@@ -20,21 +20,31 @@ void ServerSendProtocol::sendRectangle(const Rectangle& rectangle) {
 }
 
 void ServerSendProtocol::sendDuckData(const DuckData& duckData) {
-    sendByte(static_cast<unsigned char>(duckData.duckID));
-    sendByte(duckData.life);
-    sendByte(static_cast<unsigned char>(duckData.gunID));
+    sendByte(static_cast<u8>(duckData.duckID));
+    sendByte((u8)duckData.life);
+    sendByte(static_cast<u8>(duckData.direction));
+    sendByte(static_cast<u8>(duckData.gunID));
     sendShort(static_cast<u16>(duckData.extraData.to_ulong()));
     sendVector2(duckData.rectangle.center());
+}
+
+void ServerSendProtocol::sendItemData(const ItemData& objData) {
+    sendByte(static_cast<unsigned char>(objData.id));
+    sendRectangle(objData.rectangle);
 }
 
 void ServerSendProtocol::sendBlock(const SizedObjectData& objData) {
     sendRectangle(objData.rectangle);
 }
 
-void ServerSendProtocol::sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers) {
+void ServerSendProtocol::sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers, DuckData::Id color1,
+                                          DuckData::Id color2, std::string& error) {
     sendShort(matchID);
     sendByte(startGame);
     sendByte(connectedPlayers);
+    sendByte(static_cast<u8>(color1));
+    sendByte(static_cast<u8>(color2));
+    sendString(error);
 }
 
 void ServerSendProtocol::sendLen(u16 len) { sendShort(len); }

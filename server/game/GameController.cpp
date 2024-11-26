@@ -2,11 +2,10 @@
 
 #include <ranges>
 #include <string>
-#include <utility>
 
 #include "GameStatus.h"
+#include "Layer.h"
 #include "LevelData.h"
-#include "SpawnPoint.h"
 
 /**
  * Macro for easier event handling
@@ -21,14 +20,22 @@ GameController::~GameController() = default;
 
 void GameController::onTreeEntered(GameObject* object) {
     if (const auto collisionObject = dynamic_cast<CollisionObject*>(object);
-        collisionObject != nullptr)
+        collisionObject != nullptr) {
+        if (collisionObject->layers().test(Layer::Index::Item))
+            items.push_back(static_cast<Item*>(collisionObject));
+
         collisionManager.addCollisionObject(collisionObject);
+    }
 }
 
 void GameController::onTreeExited(GameObject* object) {
     if (const auto collisionObject = dynamic_cast<CollisionObject*>(object);
-        collisionObject != nullptr)
+        collisionObject != nullptr) {
+        if (collisionObject->layers().test(Layer::Index::Item))
+            items.remove(static_cast<Item*>(collisionObject));
+
         collisionManager.removeCollisionObject(collisionObject);
+    }
 }
 
 #define PLAYER_ID "Player with id "
@@ -42,7 +49,7 @@ GameController::AlreadyAddedPlayer::AlreadyAddedPlayer(const PlayerID id):
 GameController::PlayerNotFound::PlayerNotFound(const PlayerID id):
         std::out_of_range(PLAYER_ID + std::to_string(id) + NOT_FOUND) {}
 
-GameController::GameController(): GameObject(nullptr), level(nullptr) {
+GameController::GameController(): level(nullptr) {
     connect(Events::TreeEntered, eventHandler(&GameController::onTreeEntered, GameObject*));
 
     connect(Events::TreeExited, eventHandler(&GameController::onTreeExited, GameObject*));
@@ -53,7 +60,10 @@ GameController::GameController(): GameObject(nullptr), level(nullptr) {
 
 void GameController::start() {}
 
-void GameController::update(const float delta) { collisionManager.processCollisions(delta); }
+void GameController::update(const float delta) {
+    collisionManager.processCollisions(delta);
+    for (Player* player: players | std::views::values) player->clearInputs();
+}
 
 #define FULL_GAME "The game is full"
 
@@ -70,7 +80,7 @@ void GameController::addPlayer(const PlayerID playerID) {
     if (players.size() >= MAX_PLAYERS)
         throw std::logic_error(FULL_GAME);
 
-    const auto duckID = static_cast<DuckID>(players.size());
+    const auto duckID = static_cast<DuckData::Id>(players.size());
 
     const auto newPlayer = new Player(duckID);
 
@@ -95,6 +105,9 @@ Player& GameController::getPlayer(const PlayerID playerID) const { return *playe
 
 u8 GameController::playersCount() const { return players.size(); }
 
+bool GameController::exceedsPlayerMax(const u8 playerAmount) 
+{ return players.size() + playerAmount > MAX_PLAYERS; }
+
 void GameController::loadLevel(const LevelData& level) {
     if (this->level != nullptr)
         removeChild("Level");
@@ -113,6 +126,7 @@ GameStatus GameController::status() const {
     GameStatus status;
     status.blockPositions = level->blockStatus();
     status.itemSpawnerPositions = level->itemSpawnerStatus();
+    for (const auto& item: items) status.itemPositions.push_back(item->status());
     for (Player* player: players | std::views::values) status.ducks.push_back(player->status());
     return status;
 }

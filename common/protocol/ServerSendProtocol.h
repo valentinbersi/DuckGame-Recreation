@@ -4,6 +4,7 @@
 
 #include "ActiveSocket.h"
 #include "DuckData.h"
+#include "ItemData.h"
 #include "SendProtocol.h"
 #include "Types.h"
 
@@ -28,9 +29,11 @@ public:
 
     void sendDuckData(const DuckData& objData);
 
+    void sendItemData(const ItemData& objData);
+
     void sendBlock(const SizedObjectData& objData);
 
-    void sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers);
+    void sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers, DuckData::Id color1, DuckData::Id color2, std::string& error);
 
     ~ServerSendProtocol() = default;
 };

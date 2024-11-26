@@ -2,8 +2,6 @@
 
 #include <utility>
 
-#include "Math.h"
-
 DuckData::DuckData(const DuckData& other) = default;
 
 DuckData& DuckData::operator=(const DuckData& other) {
@@ -13,6 +11,7 @@ DuckData& DuckData::operator=(const DuckData& other) {
     GameObject2DData::operator=(other);
     duckID = other.duckID;
     life = other.life;
+    direction = other.direction;
     gunID = other.gunID;
     extraData = other.extraData;
     return *this;
@@ -22,6 +21,7 @@ DuckData::DuckData(DuckData&& other) noexcept:
         SizedObjectData(std::move(other)),
         duckID(other.duckID),
         life(other.life),
+        direction(other.direction),
         gunID(other.gunID),
         extraData(other.extraData) {}
 
@@ -32,6 +32,7 @@ DuckData& DuckData::operator=(DuckData&& other) noexcept {
     GameObject2DData::operator=(std::move(other));
     duckID = other.duckID;
     life = other.life;
+    direction = other.direction;
     gunID = other.gunID;
     extraData = other.extraData;
     return *this;
@@ -39,15 +40,18 @@ DuckData& DuckData::operator=(DuckData&& other) noexcept {
 
 DuckData::~DuckData() = default;
 
-DuckData::DuckData(Vector2 position, const DuckID duckID, const u8 life, const ItemID gunID,
-                   const DuckFlag extraData):
-        SizedObjectData(position, 2, 2.875f),
-        duckID(duckID),
+#define DUCK_DIMENSIONS 2, 2.875f
+
+DuckData::DuckData(const Vector2& position, const Id id, const i8 life, const Direction direction,
+                   const ItemID gunID, const std::bitset<FlagCount> extraData):
+        SizedObjectData(position, DUCK_DIMENSIONS),
+        duckID(id),
         life(life),
+        direction(direction),
         gunID(gunID),
         extraData(extraData) {}
 
 bool DuckData::operator==(const DuckData& other) const {
     return position.isEqualAprox(other.position) && duckID == other.duckID && life == other.life &&
-           extraData == other.extraData;
+           gunID == other.gunID && direction == other.direction && extraData == other.extraData;
 }

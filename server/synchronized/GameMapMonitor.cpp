@@ -8,44 +8,74 @@
 
 #define PLAYER_COUNT_BEGINING 0
 #define RANGE_MATCH_ID 1, 65535
+#define P1 0
+#define P2 1
 
 RandomIntGenerator GameMapMonitor::randomGenerator(RANGE_MATCH_ID);
 
+GameMapMonitor::NoSpaceLeft::NoSpaceLeft(u16 MatchID): std::logic_error("Match " + std::to_string(MatchID) + " is full") {}
+
+GameMapMonitor::AlreadyStarted::AlreadyStarted(u16 MatchID): std::logic_error("Match " + std::to_string(MatchID) + " was already started") {}
+
+GameMapMonitor::MatchEnded::MatchEnded(u16 MatchID): std::logic_error("Match " + std::to_string(MatchID) + " ended") {}
+
 GameMapMonitor::GameMapMonitor(): levels(LevelData::loadLevels()) {}
 
-BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGameIfCreated(
+BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGame(
+        u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
+        u16 clientId, u8 playerCount) {
+    std::vector<DuckData::Id> colors(playerCount);
+    
+    auto& game = gameMap.at(matchID); 
+    if (!game->canJoinGame(playerCount)) {
+        throw NoSpaceLeft(matchID);
+    }
+    if (game->is_alive()) {
+        throw AlreadyStarted(matchID);
+    }
+    if (game->isJoinable()){
+        throw MatchEnded(matchID);
+    }
+    for (u8 i = PLAYER_COUNT_BEGINING; i < playerCount; i++) {
+        // colors[i] = game->addClient(clientId + i, senderQueue);
+        game->addClient(clientId + i, senderQueue);
+    }
+
+    // senderQueue->push(std::make_unique<ReplyMessage>(matchID, colors[P1], colors[P2]));
+    senderQueue->push(std::make_unique<ReplyMessage>(matchID, DuckData::Id::None, DuckData::Id::None));  
+    game->JoinTransactionCompleted(); 
+    return game->getQueue();
+}
+
+BlockingQueue <std::unique_ptr<Command>>* GameMapMonitor::joinGameSafe(
         u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
         u16 clientId, u8 playerCount) {
     std::lock_guard lock(mutex);
-
-    if (gameMap.find(matchID) != gameMap.end()) {
-        senderQueue->push(std::make_shared<ReplyMessage>(matchID));
-        for (u8 i = PLAYER_COUNT_BEGINING; i < playerCount; i++) {
-            gameMap.at(matchID)->addClient(clientId + i, senderQueue);
-        }
-        return gameMap.at(matchID)->getQueue();
-    }
-    senderQueue->push(std::make_shared<ReplyMessage>());
-    return nullptr;
+    return joinGame(matchID, senderQueue, clientId, playerCount);
 }
-
-BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::startGameIfCreated(u16 matchID) {
+BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::startGameSafe(u16 matchID) {
     std::lock_guard lock(mutex);
-    if (gameMap.find(matchID) != gameMap.end()) {
-        gameMap.at(matchID)->start();
-        return gameMap.at(matchID)->getQueue();
+    
+    auto& game = gameMap.at(matchID);
+    if(game->is_alive()) {
+        throw AlreadyStarted(matchID);
     }
-    return nullptr;
+    if(game->isJoinable()){
+        throw MatchEnded(matchID);
+    }
+    game->start();
+    return game->getQueue();
 }
 
-u16 GameMapMonitor::creatGameSafe() {
+void GameMapMonitor::createGameAndJoinSafe(std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
+            u16 clientId, u8 playerCount) {
     std::lock_guard lock(mutex);
     u16 random_number;
     do {
         random_number = randomGenerator.generateRandomInt();
     } while (gameMap.contains(random_number));
     gameMap.insert({random_number, std::make_unique<GameLoop>(levels)});
-    return random_number;
+    joinGame(random_number, senderQueue, clientId, playerCount);
 }
 
 GameMapMonitor::~GameMapMonitor() {

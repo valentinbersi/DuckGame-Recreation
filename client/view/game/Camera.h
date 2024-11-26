@@ -25,15 +25,36 @@ public:
     // and view rectangle of the camera based on these values.
     void update(std::list<DuckData>& ducks, float deltaTime);
 
+    /**
+     * Forces the camera to update its position and size to the center of ducks and the max distance
+     * of them
+     */
+    void forceUpdate(std::list<DuckData>& ducks);
+
     // Returns the view rectangle of the camera.
     Rectangle& getViewRect();
 
 private:
+    enum class Force { Yes, No };
+
     // This method adjusts the size of the view rectangle based on the maximum distance between
     // ducks and the aspect ratio of the window. It then centers the view rectangle on the provided
     // center point.
     void updateZoom(const Vector2& center, const Vector2& maxDistance, float aspectRatio,
-                    float deltaTime);
+                    float deltaTime, Force = Force::No);
+
+    /**
+     * Returns the aspect ratio, center and max distance of the ducks
+     * @param ducks the list of ducks
+     * @return the aspect ratio, center and max distance of the ducks
+     */
+    struct UpdateInfo {
+        Vector2 center;
+        Vector2 maxDistance;
+        float aspectRatio;
+    };
+
+    UpdateInfo updateInfo(std::list<DuckData>& ducks) const;
 
     // Calculates the maximum distance between any ducks in the list.
     static Vector2 calculateMaxDistance(std::list<DuckData>& ducks, float aspectRatio);

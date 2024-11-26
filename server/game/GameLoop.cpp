@@ -31,7 +31,7 @@ GameLoop::GameLoop(std::vector<LevelData>& levels): levels(levels) {}
 
 void GameLoop::run() {
     try {
-        broadcast(std::make_shared<ReplyMessage>(0, 1, 0));
+        broadcast(std::make_shared<ReplyMessage>(ReplyMessage::startGameInstance));
         timer.start();
         game.start();
         game.loadLevel(levels[0]);
@@ -66,6 +66,10 @@ void GameLoop::stop() {
 
 bool GameLoop::shouldAddQueue(const u16 clientID) { return clientID % 2 == 1; }
 
+bool GameLoop::canJoinGame(const u8 playerAmount) { 
+    return !game.exceedsPlayerMax(playerAmount);
+}
+
 void GameLoop::addClient(const u16 clientID,
                          std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue) {
 
@@ -73,10 +77,13 @@ void GameLoop::addClient(const u16 clientID,
     if (shouldAddQueue(clientID)) {
         clientQueuesMap.insert({clientID, std::move(clientQueue)});
     }
-    broadcast(std::make_shared<ReplyMessage>(game.playersCount()));
 }
 
 BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCommands; }
+
+void GameLoop::JoinTransactionCompleted(){
+    broadcast(std::make_shared<ReplyMessage>(game.playersCount()));
+}
 
 void GameLoop::broadcast(std::shared_ptr<ServerMessage> message) {
     for (auto it = clientQueuesMap.begin(); it != clientQueuesMap.end();) {

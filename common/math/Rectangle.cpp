@@ -74,9 +74,9 @@ bool Rectangle::overlaps(const Rectangle& rectangle) const {
            _position.y() + _size.y() > rectangle._position.y();
 }
 
-std::optional<IntersectionInfo> Rectangle::overlaps(const Rectangle& rectangle,
-                                                    const Vector2& displacement,
-                                                    const float delta) const {
+std::optional<IntersectionInfo> Rectangle::moveAndOverlap(const Rectangle& rectangle,
+                                                          const Vector2& displacement,
+                                                          const float delta) const {
     if (displacement.isZero())
         return std::nullopt;
 
@@ -89,6 +89,30 @@ std::optional<IntersectionInfo> Rectangle::overlaps(const Rectangle& rectangle,
     }
 
     return std::nullopt;
+}
+
+std::optional<IntersectionInfo> Rectangle::overlaps(Rectangle& rectangle,
+                                                    const Vector2& displacement,
+                                                    const float delta) const {
+    std::optional<IntersectionInfo> intersectionInfo =
+            moveAndOverlap(rectangle, displacement, delta);
+
+    if (not intersectionInfo)
+        return std::nullopt;
+
+    if (intersectionInfo->contactNormal.y() > 0)
+        intersectionInfo->contact[0] = &rectangle;
+
+    if (intersectionInfo->contactNormal.x() < 0)
+        intersectionInfo->contact[1] = &rectangle;
+
+    if (intersectionInfo->contactNormal.y() < 0)
+        intersectionInfo->contact[2] = &rectangle;
+
+    if (intersectionInfo->contactNormal.x() > 0)
+        intersectionInfo->contact[3] = &rectangle;
+
+    return intersectionInfo;
 }
 
 std::optional<IntersectionInfo> Rectangle::overlaps(const Ray2D& ray) const {

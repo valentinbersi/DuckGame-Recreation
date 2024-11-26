@@ -1,4 +1,10 @@
 #include "LobbyResolver.h"
+#include <syslog.h>
+#include <string>
+#define CREATE_ERROR "Error creating game. Uknonwn cause."
+#define JOIN_ERROR "Error joining game. Unknown cause."
+#define START_ERROR "Error starting game. Unknown cause."
+#define NO_MATCH "Match Requested does not exist."
 
 LobbyResolver::LobbyResolver(
         GameMapMonitor& gameMap,
@@ -16,25 +22,50 @@ LobbyResolver::LobbyResolver(
 }
 
 
-BlockingQueue<std::unique_ptr<Command>>* LobbyResolver::resolveNewMatch(
+std::optional<BlockingQueue<std::unique_ptr<Command>>*> LobbyResolver::resolveNewMatch(
         const LobbyMessage& message) {
-    u16 matchID = gameMap.creatGameSafe();
-    // senderQueue->push(std::make_shared<ReplyMessage>(matchID));
-    gameMap.joinGameIfCreated(matchID, senderQueue, clientID, message.playerCount);
-    return nullptr;
+    try{
+        gameMap.createGameAndJoinSafe(senderQueue, clientID, message.playerCount);
+    } catch(...){
+        senderQueue->push(std::make_unique<ReplyMessage>(CREATE_ERROR));
+        syslog(LOG_CRIT, CREATE_ERROR);
+    }
+    return std::nullopt;
 }
 
-BlockingQueue<std::unique_ptr<Command>>* LobbyResolver::resolveJoinMatch(
+std::optional<BlockingQueue<std::unique_ptr<Command>>*> LobbyResolver::resolveJoinMatch(
         const LobbyMessage& message) {
-    return gameMap.joinGameIfCreated(message.matchId, senderQueue, clientID, message.playerCount);
+    std::string error;
+    try{
+        return gameMap.joinGameSafe(message.matchId, senderQueue, clientID, message.playerCount);
+    } catch (const std::out_of_range& err) {
+        error = NO_MATCH;
+    } catch (const std::logic_error& err) {
+        error = err.what();
+    } catch (...){
+        syslog(LOG_CRIT, JOIN_ERROR);
+    }
+    senderQueue->push(std::make_unique<ReplyMessage>(error));
+    return std::nullopt;
 }
 
-BlockingQueue<std::unique_ptr<Command>>* LobbyResolver::resolveStartMatch(
+std::optional<BlockingQueue<std::unique_ptr<Command>>*> LobbyResolver::resolveStartMatch(
         const LobbyMessage& message) {
-    return gameMap.startGameIfCreated(message.matchId);
+    std::string error;
+    try{
+        return gameMap.startGameSafe(message.matchId);
+    } catch (const std::out_of_range& err) {
+        error = NO_MATCH;
+    } catch (const std::logic_error& err) {
+        error = err.what();
+    } catch (...) {
+        syslog(LOG_CRIT, START_ERROR);
+    }
+    senderQueue->push(std::make_unique<ReplyMessage>(error));
+    return std::nullopt;
 }
 
-BlockingQueue<std::unique_ptr<Command>>* LobbyResolver::resolveRequest(
+std::optional<BlockingQueue<std::unique_ptr<Command>>*> LobbyResolver::resolveRequest(
         const LobbyMessage& message) {
     return resolveMap.at(message.request)(message);
 }

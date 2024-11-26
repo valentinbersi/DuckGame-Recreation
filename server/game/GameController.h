@@ -1,5 +1,7 @@
 #pragma once
 
+#include <list>
+
 #include "CollisionManager.h"
 #include "Level.h"
 #include "Player.h"
@@ -12,6 +14,7 @@ class GameController final: public GameObject {
     HashMap<PlayerID, Player*> players;
     CollisionManager collisionManager;
     Level* level;
+    std::list<Item*> items;
 
     /**
      * GameController handler for tree entered event
@@ -93,6 +96,13 @@ public:
      * @return the number of players in the match
      */
     u8 playersCount() const;
+
+    /**
+     * Check if adding a amount of players exceeds the maximum amount of players
+     * @param playerAmount the amount of player to add/check
+     * @return true if It exceeds the maximum amount of players, false otherwise
+     */
+    bool exceedsPlayerMax(const u8 playerAmount);
 
     /**
      * Load the level

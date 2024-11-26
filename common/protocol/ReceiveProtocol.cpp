@@ -33,7 +33,7 @@ u32 ReceiveProtocol::recvInt() {
     return ntohl(num);
 }
 
-std::string ReceiveProtocol::recv_string() {
+std::string ReceiveProtocol::recvString() {
     uint16_t size = recvShort();
     std::vector<char> buffer(size);
     if (!skt.receive(buffer.data(), size)) {

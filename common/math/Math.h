@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <numbers>
 
 #include "Types.h"
 
@@ -145,9 +146,13 @@ constexpr bool Math::isGreaterOrEqualAprox(const float a, const float b) noexcep
 
 constexpr bool Math::isZeroAprox(const float a) noexcept { return std::abs(a) < INVERSE_EPSILON; }
 
-constexpr float Math::toDegrees(const float angle) noexcept { return angle * 180.0f / M_PIf; }
+constexpr float Math::toDegrees(const float angle) noexcept {
+    return angle * 180.0f / std::numbers::pi_v<float>;
+}
 
-constexpr float Math::toRadians(const float angle) noexcept { return angle * M_PIf / 180.0f; }
+constexpr float Math::toRadians(const float angle) noexcept {
+    return angle * std::numbers::pi_v<float> / 180.0f;
+}
 
 constexpr u32 Math::floatToInteger(const float f) { return static_cast<u32>(f * EPSILON); }
 

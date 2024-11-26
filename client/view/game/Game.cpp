@@ -27,6 +27,10 @@ using SDL2pp::SDL;
 using SDL2pp::Surface;
 using SDL2pp::Texture;
 
+const HashMap<ItemID, cppstring> Game::weaponSprites = {
+        {ItemID::Magnum, "assets/weapons/Magnum.png"},
+        {ItemID::CowboyPistol, "assets/weapons/CowboyPistol.png"}};
+
 Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         running(true),
         window_width(DEF_WINDOW_WIDTH),
@@ -43,7 +47,8 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
 void Game::init() {
     EnviromentRenderer enviromentRenderer(renderer);
 
-    const HashMap<DuckID, std::unique_ptr<SpriteManager>> spritesMapping = createSpritesMapping();
+    const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>> spritesMapping =
+            createSpritesMapping();
     SDL sdl(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG);
 
@@ -63,7 +68,8 @@ void Game::init() {
         showBackground(backgroundTexture);
         updatePlayers(spritesMapping);
         updateBlocks(enviromentRenderer);
-        updateWeaponSpawns(enviromentRenderer);
+        updateItemSpawns(enviromentRenderer);
+        updateItems(enviromentRenderer);
         // updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
         renderer.Present();
 
@@ -92,6 +98,7 @@ void Game::getSnapshot() {
     for (auto& duck: snapshot->ducks) ducks.push_back(std::move(duck));
     for (const auto& block: snapshot->blockPositions) blocks.push_back(block);
     for (const auto& itemSpawner: snapshot->itemSpawnerPositions) itemSpawns.push_back(itemSpawner);
+    for (const auto& item: snapshot->itemPositions) items.push_back(item);
     // for (const auto& spawner: snapshot->spawnerPosition) spawners.push_back(spawner);
     // for (const auto& weapon: snapshot->weaponPosition) weapons.push_back(weapon);
 }
@@ -106,11 +113,16 @@ void Game::filterObjectsToRender() {
     for (SizedObjectData& itemSpawn: itemSpawns)
         if (viewRect.overlaps(itemSpawn.rectangle))
             itemSpawnsToRender.push_back(std::move(itemSpawn));
+
+    for (ItemData& item: items)
+        if (viewRect.overlaps(item.rectangle))
+            itemsToRender.push_back(std::move(item));
 }
 
 #define DUCK_WIDTH 2
 
-void Game::updatePlayers(const HashMap<DuckID, std::unique_ptr<SpriteManager>>& spritesMapping) {
+void Game::updatePlayers(
+        const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
     const float objectCameraCount = camera.getViewRect().size().x() / DUCK_WIDTH;
     const float scale = static_cast<float>(window_width) / objectCameraCount;
 
@@ -126,17 +138,18 @@ void Game::updatePlayers(const HashMap<DuckID, std::unique_ptr<SpriteManager>>& 
         const float screenPositionY =
                 relativePositionY * positionScaleY + static_cast<float>(window_height) / 2;
 
-        DuckState state = {duck.extraData[DuckData::PLAYING_DEAD_INDEX],
-                           duck.extraData[DuckData::CROUCHING_INDEX],
-                           duck.extraData[DuckData::IN_AIR_INDEX],
-                           duck.extraData[DuckData::FLAPPING_INDEX],
-                           duck.extraData[DuckData::BEING_DAMAGED_INDEX],
-                           duck.extraData[DuckData::MOVING_RIGHT_INDEX],
-                           duck.extraData[DuckData::MOVING_LEFT_INDEX],
-                           duck.extraData[DuckData::HELMET],
-                           duck.extraData[DuckData::ARMOR],
-                           duck.extraData[DuckData::IS_SHOOTING],
-                           duck.gunID};
+
+        DuckState state = {duck.extraData[DuckData::Flag::Index::PlayingDead],
+                           duck.extraData[DuckData::Flag::Index::Crouching],
+                           duck.extraData[DuckData::Flag::Index::InAir],
+                           duck.extraData[DuckData::Flag::Index::Flapping],
+                           duck.extraData[DuckData::Flag::Index::BeingDamaged],
+                           duck.extraData[DuckData::Flag::Index::IsMoving],
+                           duck.extraData[DuckData::Flag::Index::Helmet],
+                           duck.extraData[DuckData::Flag::Index::Armor],
+                           duck.extraData[DuckData::Flag::Index::IsShooting],
+                           duck.gunID,
+                           duck.direction};
 
         if (state.isShooting)
             soundManager.playSound(/*duck.gun->gunID*/ ItemID::CowboyPistol);
@@ -149,53 +162,25 @@ void Game::updatePlayers(const HashMap<DuckID, std::unique_ptr<SpriteManager>>& 
     }
 }
 
-#define BLOCK_WIDTH 2
-
 void Game::updateBlocks(EnviromentRenderer& enviromentRenderer) {
-    const float objectCameraSize = camera.getViewRect().size().x() / BLOCK_WIDTH;
-    const float scale = static_cast<float>(window_width) / objectCameraSize;
-
-    for (auto& block: blocksToRender) {
-        const float relativePositionX = block.position.x() - camera.getViewRect().center().x();
-        const float relativePositionY = block.position.y() - camera.getViewRect().center().y();
-        const float positionScaleX =
-                static_cast<float>(window_width) / camera.getViewRect().size().x();
-        const float positionScaleY =
-                static_cast<float>(window_height) / camera.getViewRect().size().y();
-        const float screenPositionX =
-                relativePositionX * positionScaleX + static_cast<float>(window_width) / 2;
-        const float screenPositionY =
-                relativePositionY * positionScaleY + static_cast<float>(window_height) / 2;
-
-        Rect position(static_cast<int>(screenPositionX - scale / 2),
-                      static_cast<int>(screenPositionY - scale / 2), static_cast<int>(scale),
-                      static_cast<int>(scale));
-        enviromentRenderer.drawEnviroment(position, ROCK);
-    }
+    for (Rect& block: calculateObjectsPositionsAndSize(blocksToRender))
+        enviromentRenderer.drawEnviroment(block, ROCK);
 }
 
-#define WEAPON_SPAWN_WIDTH 3.5
+void Game::updateItemSpawns(EnviromentRenderer& enviromentRenderer) {
+    for (Rect& itemSpawn: calculateObjectsPositionsAndSize(itemSpawnsToRender))
+        enviromentRenderer.drawEnviroment(itemSpawn, WEAPON_SPAWNER);
+}
 
-void Game::updateWeaponSpawns(EnviromentRenderer& enviromentRenderer) {
-    const float spawnerCameraSize = camera.getViewRect().size().x() / WEAPON_SPAWN_WIDTH;
-    const float scale = static_cast<float>(window_width) / spawnerCameraSize;
+void Game::updateItems(EnviromentRenderer& enviromentRenderer) {
+    std::list<Rect> rectsToDraw = calculateObjectsPositionsAndSize(itemsToRender);
+    auto rectsIt = rectsToDraw.begin();
+    auto itemsIt = itemsToRender.begin();
 
-    for (SizedObjectData& itemSpawn: itemSpawnsToRender) {
-        const float relativePositionX = itemSpawn.position.x() - camera.getViewRect().center().x();
-        const float relativePositionY = itemSpawn.position.y() - camera.getViewRect().center().y();
-        const float positionScaleX =
-                static_cast<float>(window_width) / camera.getViewRect().size().x();
-        const float positionScaleY =
-                static_cast<float>(window_height) / camera.getViewRect().size().y();
-        const float screenPositionX =
-                relativePositionX * positionScaleX + static_cast<float>(window_width) / 2;
-        const float screenPositionY =
-                relativePositionY * positionScaleY + static_cast<float>(window_height) / 2;
-
-        Rect position(static_cast<int>(screenPositionX - scale / 2),
-                      static_cast<int>(screenPositionY - scale / 2), static_cast<int>(scale),
-                      static_cast<int>(scale));
-        enviromentRenderer.drawEnviroment(position, WEAPON_SPAWNER);
+    while (rectsIt != rectsToDraw.end() && itemsIt != itemsToRender.end()) {
+        enviromentRenderer.drawEnviroment(*rectsIt, weaponSprites.at(itemsIt->id));
+        ++rectsIt;
+        ++itemsIt;
     }
 }
 
@@ -210,16 +195,16 @@ void Game::showBackground(Texture& backgroundTexture) {
     renderer.Copy(backgroundTexture, NullOpt, dstRect);
 }
 
-std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> Game::createSpritesMapping() {
-    std::unordered_map<DuckID, std::unique_ptr<SpriteManager>> spritesMapping;
+std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>> Game::createSpritesMapping() {
+    std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>> spritesMapping;
 
-    spritesMapping.emplace(DuckID::White,
+    spritesMapping.emplace(DuckData::Id::White,
                            std::make_unique<SpriteManager>(whiteSheet, whiteFeathers, renderer));
-    spritesMapping.emplace(DuckID::Orange,
+    spritesMapping.emplace(DuckData::Id::Orange,
                            std::make_unique<SpriteManager>(orangeSheet, orangeFeathers, renderer));
-    spritesMapping.emplace(DuckID::Yellow,
+    spritesMapping.emplace(DuckData::Id::Yellow,
                            std::make_unique<SpriteManager>(yellowSheet, yellowFeathers, renderer));
-    spritesMapping.emplace(DuckID::Grey,
+    spritesMapping.emplace(DuckData::Id::Grey,
                            std::make_unique<SpriteManager>(greySheet, greyFeathers, renderer));
 
     return spritesMapping;
@@ -231,6 +216,8 @@ void Game::clearObjects() {
     blocksToRender.clear();
     itemSpawns.clear();
     itemSpawnsToRender.clear();
+    items.clear();
+    itemsToRender.clear();
 }
 
 Game::~Game() {
