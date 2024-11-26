@@ -20,7 +20,7 @@ void ServerSendProtocol::sendRectangle(const Rectangle& rectangle) {
 }
 
 void ServerSendProtocol::sendDuckData(const DuckData& duckData) {
-    sendByte(static_cast<unsigned char>(duckData.duckID));
+    sendByte(static_cast<u8>(duckData.duckID));
     sendByte((u8)duckData.life);
     sendByte(static_cast<u8>(duckData.direction));
     sendByte(static_cast<u8>(duckData.gunID));
@@ -37,11 +37,14 @@ void ServerSendProtocol::sendBlock(const SizedObjectData& objData) {
     sendRectangle(objData.rectangle);
 }
 
-void ServerSendProtocol::sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers, u8 couldPickColor) {
+void ServerSendProtocol::sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers, DuckData::Id color1,
+                                          DuckData::Id color2, std::string& error) {
     sendShort(matchID);
     sendByte(startGame);
     sendByte(connectedPlayers);
-    sendByte(couldPickColor);
+    sendByte(static_cast<u8>(color1));
+    sendByte(static_cast<u8>(color2));
+    sendString(error);
 }
 
 void ServerSendProtocol::sendLen(u16 len) { sendShort(len); }

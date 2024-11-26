@@ -16,7 +16,7 @@ private:
     GameMapMonitor& gameMap;
     std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue;
     const u16& clientID;
-    std::unordered_map<LobbyRequest::Value, std::function<BlockingQueue<std::unique_ptr<Command>>*(
+    std::unordered_map<LobbyRequest::Value, std::function<std::optional<BlockingQueue<std::unique_ptr<Command>>*>(
                                                     const LobbyMessage& request)>>
             resolveMap;
 
@@ -25,21 +25,22 @@ private:
      * @param request The request
      * @return The queue to the GameLoop
      */
-    BlockingQueue<std::unique_ptr<Command>>* resolveNewMatch(const LobbyMessage& request);
+    std::optional<BlockingQueue<std::unique_ptr<Command>>*> resolveNewMatch(const LobbyMessage& request);
 
     /**
      * Resolves a join match request
      * @param request The request
      * @return The queue to the GameLoop
      */
-    BlockingQueue<std::unique_ptr<Command>>* resolveJoinMatch(const LobbyMessage& request);
+    std::optional<BlockingQueue<std::unique_ptr<Command>>*> resolveJoinMatch(const LobbyMessage& request);
 
     /**
      * Resolves a start match request
      * @param request The request
      * @return The queue to the GameLoop
      */
-    BlockingQueue<std::unique_ptr<Command>>* resolveStartMatch(const LobbyMessage& request);
+    std::optional<BlockingQueue<std::unique_ptr<Command>>*> resolveStartMatch(const LobbyMessage& request);
+
 
 public:
     /**
@@ -58,7 +59,7 @@ public:
      * @param request The request
      * @return The queue to the GameLoop
      */
-    BlockingQueue<std::unique_ptr<Command>>* resolveRequest(const LobbyMessage& request);
+    std::optional<BlockingQueue<std::unique_ptr<Command>>*> resolveRequest(const LobbyMessage& request);
 
     ~LobbyResolver();
 };

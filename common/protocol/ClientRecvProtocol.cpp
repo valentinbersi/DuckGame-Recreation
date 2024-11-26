@@ -65,6 +65,9 @@ ReplyMessage ClientRecvProtocol::recvReplyMessage() {
     u16 matchID = recvShort();
     u8 startGame = recvByte();
     u8 connectedPlayers = recvByte();
-    u8 couldPickColor = recvByte();
-    return ReplyMessage(matchID, startGame, connectedPlayers, couldPickColor);
+    DuckData::Id color1 = static_cast<DuckData::Id>(recvByte());
+    DuckData::Id color2 = static_cast<DuckData::Id>(recvByte());
+    std::string error = recvString();
+
+    return ReplyMessage(matchID, startGame, connectedPlayers, color1, color2, error);
 }

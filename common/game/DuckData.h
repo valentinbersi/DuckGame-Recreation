@@ -12,7 +12,7 @@
 struct DuckData final: SizedObjectData {
     constexpr static u8 FlagCount = 11;
 
-    enum class Id : u8 { White = 0x0, Orange = 0x1, Yellow = 0x2, Grey = 0x3 };
+    enum class Id : u8 { White = 0x0, Orange = 0x1, Yellow = 0x2, Grey = 0x3, None = 0x4 };
     enum class Direction : u8 { Left = 0x0, Right = 0x1 };
 
     Id duckID;

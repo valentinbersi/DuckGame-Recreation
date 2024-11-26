@@ -10,11 +10,10 @@ public:
     LobbyRequest request;
     u8 playerCount;
     u16 matchId;
-    DuckData::Id color;
 
     LobbyMessage();
 
-    LobbyMessage(LobbyRequest request, u8 count, u16 id, DuckData::Id color);
+    LobbyMessage(LobbyRequest request, u8 count, u16 id);
 
     void send(ClientSendProtocol& clientProtocol) override;
 

@@ -30,9 +30,8 @@ public:
      *  @param request the request of the message (NewMatch, JoinMatch, StartMatch)
      *  @param playerCount the amount of players connected locally
      *  @param matchId the id of the match to join, 0 if request is not JoinMatch
-     *  @param color the color of the player
      */
-    void sendLobbyMessage(u8 type, u8 request, u8 playerCount, u16 matchId, u8 color);
+    void sendLobbyMessage(u8 type, u8 request, u8 playerCount, u16 matchId);
 
     /**
      *  Send a game message to the server

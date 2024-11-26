@@ -98,6 +98,13 @@ public:
     u8 playersCount() const;
 
     /**
+     * Check if adding a amount of players exceeds the maximum amount of players
+     * @param playerAmount the amount of player to add/check
+     * @return true if It exceeds the maximum amount of players, false otherwise
+     */
+    bool exceedsPlayerMax(const u8 playerAmount);
+
+    /**
      * Load the level
      * @param level the level to load
      */
