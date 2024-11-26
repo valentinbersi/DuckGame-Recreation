@@ -70,7 +70,7 @@ void SpriteManager::update(const DuckState& newState) {
 
     if (state.inAir) {
         draw(frame, SPRITESHEET_JUMP_ROW);
-    } else if (state.playingDead || state.crouching) {
+    } else if (state.playingDead) {
         draw(SPRITESHEET_PLAYING_DEAD_COL, SPRITESHEET_DEAD_ROW);
 
     } else {
@@ -89,7 +89,7 @@ void SpriteManager::setFlags() {
     negateFlag(state.inAir, inAir);
     negateFlag(state.moving, isMoving);
 
-    if (state.crouching || state.playingDead) state.lookingUp = true;
+    if (state.playingDead) state.lookingUp = true;
 
     if (state.lookingUp) {
         if (!state.flipped) spritesheet->setAngle(UP_ANGLE_RIGHT);
@@ -142,7 +142,7 @@ void SpriteManager::drawFeathers(int col, int row) {
         return;
     }
 
-    else if (!state.hasGun && !state.crouching) spritesheet->selectSprite(col, row, FEATHER);
+    else if (!state.hasGun && !state.playingDead) spritesheet->selectSprite(col, row, FEATHER);
     else return;
 
     position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
@@ -163,7 +163,7 @@ void SpriteManager::drawFlapping() {
 
 
 void SpriteManager::drawChestplate(int col, int row) {
-    if (state.crouching)
+    if (state.playingDead)
         col = 1;
     spritesheet->selectSprite(col, row, NO_FEATHER);
     SDL2pp::Rect position = getPosition(NO_FEATHER, CHESTPLATE, NO_HELMET);
@@ -209,7 +209,7 @@ void SpriteManager::adjustForFeathers(SDL2pp::Rect& position) {
             position.x += 0.60 * scale;
     }
 
-    if (state.crouching)
+    if (state.playingDead)
         position.y += 0.80 * scale;
     else
         position.y += 0.70 * scale;
@@ -219,29 +219,32 @@ void SpriteManager::adjustForFeathers(SDL2pp::Rect& position) {
 }
 
 void SpriteManager::adjustForHelmet(SDL2pp::Rect& position) {
-    if (state.flipped) {
-        position.x -= 0.10 * scale;
-    } else {
-        position.x += 0.10 * scale;
-    }
-    if (state.crouching) {
-        position.y -= 0.25 * scale;
-    } else {
+    if (!state.playingDead) {
+        if (state.flipped) {
+            position.x -= 0.10 * scale;
+        } else {
+            position.x += 0.10 * scale;
+        }
         position.y -= 0.55 * scale;
+
+    } else {
+        if (state.flipped) {
+            position.x += 0.5 * scale;
+        } else {
+            position.x -= 0.5 * scale;
+        }
+        position.y += 0.3 * scale;
     }
 }
 
 void SpriteManager::adjustForChestplate(SDL2pp::Rect& position) {
-    if (state.flipped) {
+    if (state.flipped)
         position.x -= 0.10 * scale;
-    } else {
+    else
         position.x += 0.10 * scale;
-    }
-    if (frame == 0) {
-        position.y += 0.14 * scale;
-    } else {
-        position.y -= 0.20 * scale;
-    }
+
+    if (frame == 0 && !state.playingDead) position.y += 0.14 * scale;
+    else position.y -= 0.20 * scale;
 }
 
 void SpriteManager::setScale(float newScale) { scale = newScale; }

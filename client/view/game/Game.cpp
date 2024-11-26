@@ -142,7 +142,6 @@ void Game::updatePlayers(
         bool flipped = duck.direction == DuckData::Direction::Left;
         bool hasGun = duck.gunID != ItemID::NONE;
         DuckState state = {duck.extraData[DuckData::Flag::Index::PlayingDead],
-                           duck.extraData[DuckData::Flag::Index::Crouching],
                            duck.extraData[DuckData::Flag::Index::InAir],
                            duck.extraData[DuckData::Flag::Index::Flapping],
                            duck.extraData[DuckData::Flag::Index::BeingDamaged],
@@ -154,7 +153,7 @@ void Game::updatePlayers(
                             flipped, hasGun,
             duck.extraData[DuckData::Flag::Index::NoMoreBullets],
                             duck.gunID, duck.direction};
-
+        
         soundManager.checkSounds(state);
 
         spritesMapping.at(duck.duckID)->updatePosition(screenPositionX, screenPositionY);
