@@ -51,16 +51,14 @@ HashMap<InputAction, std::function<std::unique_ptr<Command>(PlayerID id)>> Comma
          [](PlayerID id) { return std::make_unique<InteractCommand>(id); }},
         {InputAction::ACTION_RELEASED,
          [](PlayerID id) { return std::make_unique<InteractCommand>(id); }},
-         
+
         {InputAction::SHOOT_PRESSED,
          [](PlayerID id) {
              return std::make_unique<ShootCommand>(id, InputAction::SHOOT_PRESSED);
          }},
-        {InputAction::SHOOT_RELEASED,
-         [](PlayerID id) {
+        {InputAction::SHOOT_RELEASED, [](PlayerID id) {
              return std::make_unique<ShootCommand>(id, InputAction::SHOOT_RELEASED);
-         }}  
-};
+         }}};
 
 std::unique_ptr<Command> CommandFactory::createCommand(const InputAction input,
                                                        const PlayerID PlayerID) {

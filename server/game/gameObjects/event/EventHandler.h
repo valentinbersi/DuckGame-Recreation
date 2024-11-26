@@ -121,8 +121,8 @@ template <typename CallerClass, typename... Args>
 void EventHandler<CallerClass, Args...>::operator()(Args... args) const {
     const std::shared_ptr<GameObject> ownedObject = object.lock();
 
-    if (ownedObject == nullptr)
-        throw std::runtime_error(INVALID_CALL);
+    // if (ownedObject == nullptr)
+    //     throw std::runtime_error(INVALID_CALL);
 
     auto castedObject = dynamic_cast<CallerClass*>(ownedObject.get());
 

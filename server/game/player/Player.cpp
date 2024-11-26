@@ -171,7 +171,7 @@ void Player::update([[maybe_unused]] const float delta) {
 
     if (input.isActionPressed(LOOK_UP))
         flags |= DuckData::Flag::LookingUp;
-        //logica de apuntado para arriba, talvez direction es up??
+    // logica de apuntado para arriba, talvez direction es up??
 
     if (!_onGround)
         flags |= DuckData::Flag::InAir;

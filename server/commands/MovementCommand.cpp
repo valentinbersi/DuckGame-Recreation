@@ -32,7 +32,7 @@ void MovementCommand::execute(GameController& gameController) {
 
         case InputAction::UP_PRESSED:
             return player.lookUp();
-        
+
         case InputAction::UP_RELEASED:
             return player.stopLookUp();
 

@@ -23,8 +23,8 @@ private:
     GameInfo& gameInfo;
     Communicator& communicator;
 
-    void handlerJoinGame(); // ¿?
-    void handlerNewGame();  // ¿?
+    void handlerJoinGame();  // ¿?
+    void handlerNewGame();   // ¿?
 
     bool initMatchRequest(LobbyRequest& request);
 

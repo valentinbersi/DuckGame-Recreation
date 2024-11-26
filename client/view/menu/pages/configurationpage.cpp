@@ -1,12 +1,16 @@
 #include "configurationpage.h"
 
 #include <QButtonGroup>
-#include <QMessageBox>
 #include <QDebug>
+#include <QMessageBox>
 
 
-configurationPage::configurationPage(QWidget* parent, GameInfo& gameInfo, Communicator& communicator):
-        QWidget(parent), ui(new Ui::configurationPage), gameInfo(gameInfo), communicator(communicator) {
+configurationPage::configurationPage(QWidget* parent, GameInfo& gameInfo,
+                                     Communicator& communicator):
+        QWidget(parent),
+        ui(new Ui::configurationPage),
+        gameInfo(gameInfo),
+        communicator(communicator) {
     ui->setupUi(this);
 
     CantidadPlayersGroup = new QButtonGroup(this);
@@ -63,8 +67,8 @@ QString getColor(DuckData::Id id) {
 }
 
 bool configurationPage::initMatchRequest(LobbyRequest& request) {
-    auto message = std::make_unique<LobbyMessage>(request, gameInfo.playersNumber,
-                                                  gameInfo.matchID);
+    auto message =
+            std::make_unique<LobbyMessage>(request, gameInfo.playersNumber, gameInfo.matchID);
     qDebug() << message->request << message->playerCount << message->matchId;
     if (communicator.trysend(std::move(message))) {
         // chequear si se envio ¿?
@@ -77,7 +81,8 @@ bool configurationPage::initMatchRequest(LobbyRequest& request) {
         gameInfo.matchID = replyMessage.matchID;
         gameInfo.Duck1Color = replyMessage.color1;
         gameInfo.Duck2Color = replyMessage.color2;
-        qDebug() << "color 1:" << getColor(gameInfo.Duck1Color) << "color 2:" << getColor(gameInfo.Duck2Color);
+        qDebug() << "color 1:" << getColor(gameInfo.Duck1Color)
+                 << "color 2:" << getColor(gameInfo.Duck2Color);
         return true;
     } else {
         qDebug() << "no se envio PLAY";  // deberia mostrarle un mensaje al usuario

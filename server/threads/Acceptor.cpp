@@ -20,7 +20,9 @@ bool Acceptor::removeIfNotConnected(VirtualClient& client) { return !client.isCo
 
 void Acceptor::reapDead() {
     clientes.remove_if([this](VirtualClient& client) { return removeIfNotConnected(client); });
+    gamesMonitor.clearGames();
 }
+
 
 void Acceptor::run() noexcept {
     try {
@@ -28,8 +30,8 @@ void Acceptor::run() noexcept {
         while (_keep_running) {
             clientID += MAX_LOCAL_PLAYERS;
             ActiveSocket peer = acceptorSocket.accept();
+            reapDead();  // to have more probability of taking out threads and old games.
             clientes.emplace_back(std::move(peer), gamesMonitor, clientID);
-            reapDead();
         }
     } catch (const LibError& err) {
         if (is_alive()) {

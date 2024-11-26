@@ -23,7 +23,7 @@ void Receiver::run() noexcept {
         while (gameQueue == nullptr) {
             LobbyMessage lobbyMessage = recvProtocol.receiveLobbyMessage();
             auto possibleQueue = lobbyResolver.resolveRequest(lobbyMessage);
-            if(possibleQueue.has_value()) {
+            if (possibleQueue.has_value()) {
                 gameQueue = possibleQueue.value();
             }
         }

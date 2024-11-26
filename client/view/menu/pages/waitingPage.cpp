@@ -11,8 +11,7 @@
 #include "ui_waitingPage.h"
 
 
-WaitingPage::WaitingPage(QWidget* parent, Communicator& communicator,
-                         GameInfo& gameInfo):
+WaitingPage::WaitingPage(QWidget* parent, Communicator& communicator, GameInfo& gameInfo):
         QWidget(parent),
         ui(new Ui::WaitingPage),
         communicator(communicator),
@@ -64,8 +63,8 @@ void WaitingPage::recvServerMessage() {
             timer->stop();
         }
 
-//        if (gameInfo.isNewGame && message.connectedPlayers == 4)
-//            requestStartGame();
+        //        if (gameInfo.isNewGame && message.connectedPlayers == 4)
+        //            requestStartGame();
 
     } else {
         qDebug() << "replyMessage is NULL";

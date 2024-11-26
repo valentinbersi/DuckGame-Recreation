@@ -10,13 +10,13 @@ class LevelScene: public QGraphicsScene {
     Q_OBJECT
 
 private:
-    int gridWidth;                            /** ancho de la grilla (no del mapa) */
-    int gridHeight;                           /** alto de la grilla (no del mapa) */
-    std::vector<Object>& objects;             /** referencia a la lista de objetos del editor */
+    int gridWidth;                /** ancho de la grilla (no del mapa) */
+    int gridHeight;               /** alto de la grilla (no del mapa) */
+    std::vector<Object>& objects; /** referencia a la lista de objetos del editor */
     QMap<QGraphicsPixmapItem*, Object*> objectsMap; /** */
 
     QGraphicsPixmapItem* selectedItem; /** */
-    QPointF originalItemPos;     /** */
+    QPointF originalItemPos;           /** */
 
     int ducksCount;             /** */
     ObjectType objectTypeToAdd; /** */

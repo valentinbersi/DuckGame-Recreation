@@ -17,7 +17,7 @@ private:
     std::vector<LevelData> levels;
     static RandomIntGenerator randomGenerator;
 
-   /**
+    /**
      * Create a Game and return the matchID
      * @param matchID the id map to a certain Game
      * @param senderQueue the queue to send messages to the clients
@@ -27,27 +27,27 @@ private:
      * @throws NoSpaceLeft if the game is full
      * @throws AlreadyStarted if the game was already started
      * @throws MatchEnded if the game ended
-    */ 
+     */
     BlockingQueue<std::unique_ptr<Command>>* joinGame(
             u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
             u16 clientId, u8 playerCount);
 
 public:
-    struct NoSpaceLeft final: std::logic_error{
+    struct NoSpaceLeft final: std::logic_error {
         /**
          * @param MatchID the id of the match that was full
          */
         explicit NoSpaceLeft(u16 MatchID);
     };
 
-    struct AlreadyStarted final: std::logic_error{
+    struct AlreadyStarted final: std::logic_error {
         /**
          * @param MatchID the id of the match that was already started
          */
         explicit AlreadyStarted(u16 MatchID);
     };
 
-    struct MatchEnded final: std::logic_error{
+    struct MatchEnded final: std::logic_error {
         /**
          * @param MatchID the id of the match that ended
          */
@@ -69,7 +69,7 @@ public:
      * @throws NoSpaceLeft if the game is full
      * @throws AlreadyStarted if the game was already started
      * @throws MatchEnded if the game ended
-    */ 
+     */
     BlockingQueue<std::unique_ptr<Command>>* joinGameSafe(
             u16 matchID, std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
             u16 clientId, u8 playerCount);
@@ -91,11 +91,18 @@ public:
      * @param clientID the id of the client requesting to join the game
      * @param playerCount the number of players that will play the game locally
      */
-    void createGameAndJoinSafe(std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
+    void createGameAndJoinSafe(
+            std::shared_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> senderQueue,
             u16 clientId, u8 playerCount);
 
     /**
-     * Get the level data of the game with the given matchID
+     * Eliminates and Join from map all Gameloops that are joinable
+     */
+    void clearGames();
+
+    /**
+     * Stop and Joins all Gameloops that
+     * are joinable.
      */
     ~GameMapMonitor();
 };
