@@ -21,6 +21,7 @@ GameMenu::GameMenu(QWidget* parent, Communicator& communicator, bool& twoPlayers
 
     menu = new mainMenu(this);
     config = new configurationPage(this, gameInfo, communicator);
+    waitingPage = nullptr;
 
     setPagesAndConnections();
 }
@@ -38,37 +39,25 @@ void GameMenu::setPagesAndConnections() {
     connect(config, &configurationPage::backClicked, this, [this]() { changePage(menu); });
 }
 
-GameMenu::~GameMenu() { delete ui; }
+GameMenu::~GameMenu() {
+    delete ui;
+    delete menu;
+    delete config;
+    delete waitingPage;
+}
 
 void GameMenu::changePage(QWidget* page) { ui->stackedWidget->setCurrentWidget(page); }
 
 void GameMenu::showWaitingPage() {
-    WaitingPage* waitingPage;
     if (gameInfo.isNewGame)
-        waitingPage = new WaitingPage(this, true, communicator, gameInfo);
+        waitingPage = new WaitingPage(this, communicator, gameInfo);
     else
-        waitingPage = new WaitingPage(this, false, communicator, gameInfo);
+        waitingPage = new WaitingPage(this, communicator, gameInfo);
     ui->stackedWidget->addWidget(waitingPage);
     changePage(waitingPage);
     QApplication::processEvents();
     connect(waitingPage, &WaitingPage::startMatch, this, &GameMenu::startGameHandler);
 }
-
-//void GameMenu::showWaitingPage() {
-//    auto* host_waiting_page = new WaitingPage(this, true, communicator, gameInfo);
-//    ui->stackedWidget->addWidget(host_waiting_page);
-//    changePage(host_waiting_page);
-//
-//    connect(host_waiting_page, &WaitingPage::startMatch, this, &GameMenu::startGameHandler);
-//}
-//
-//void GameMenu::showJoinWaitingPage() {
-//    auto* join_waiting_page = new WaitingPage(this, false, communicator, gameInfo);
-//    ui->stackedWidget->addWidget(join_waiting_page);
-//    changePage(join_waiting_page);
-//    QApplication::processEvents();
-//    connect(join_waiting_page, &WaitingPage::startMatch, this, &GameMenu::startGameHandler);
-//}
 
 void GameMenu::startGameHandler() {
     twoPlayersLocal = (gameInfo.playersNumber == 2);

@@ -11,7 +11,6 @@
 #include "LobbyMessage.h"
 #include "configurationpage.h"
 #include "mainmenu.h"
-#include "matchSetup.h"
 #include "waitingPage.h"
 
 QT_BEGIN_NAMESPACE
@@ -32,6 +31,7 @@ private:
     /** Punteros a las paginas usadas en el lobby */
     QPointer<mainMenu> menu;
     QPointer<configurationPage> config;
+    QPointer<WaitingPage> waitingPage;
 
     /**
      * Setea los widgets de las paginas y conecta los botones y las acciones para configurar la funcionalidad del lobby.

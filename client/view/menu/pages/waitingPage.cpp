@@ -54,7 +54,6 @@ void WaitingPage::recvServerMessage() {
 
 void WaitingPage::requestStartGame() {
     auto message = std::make_unique<LobbyMessage>(LobbyRequest::STARTMATCH, gameInfo.playersNumber,
-                                                  gameInfo.player1Name, gameInfo.player2Name,
                                                   gameInfo.matchID);
 
     communicator.trysend(std::move(message));
@@ -62,4 +61,7 @@ void WaitingPage::requestStartGame() {
     ui->playButton->setEnabled(false);
 }
 
-WaitingPage::~WaitingPage() { delete ui; }
+WaitingPage::~WaitingPage() {
+    delete ui;
+    delete timer;
+}

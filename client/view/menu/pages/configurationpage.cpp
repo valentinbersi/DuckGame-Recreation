@@ -30,30 +30,30 @@ void configurationPage::handlerJoinGame() {
     gameInfo.playersNumber = getSelectedPlayers();
     gameInfo.matchID = ui->lineEditMatchID->text().toUShort();
     LobbyRequest request(LobbyRequest::JOINMATCH);
-    if (initMatchRequest(request))
+    if (initMatchRequest(request)) {
+        gameInfo.isNewGame = false;
         emit playMatchClicked();
+    }
 }
 
 void configurationPage::handlerNewGame() {
     gameInfo.playersNumber = getSelectedPlayers();
     LobbyRequest request(LobbyRequest::NEWMATCH);
-    if (initMatchRequest(request))
+    if (initMatchRequest(request)) {
+        gameInfo.isNewGame = true;
         emit playMatchClicked();
+    }
 }
 
 bool configurationPage::initMatchRequest(LobbyRequest& request) {
-    gameInfo.player1Name = "hola";
-    gameInfo.player2Name = "hola";
     auto message = std::make_unique<LobbyMessage>(request, gameInfo.playersNumber,
-                                                  gameInfo.player1Name, gameInfo.player2Name,
                                                   gameInfo.matchID);
     qDebug() << message->request << message->playerCount << message->matchId;
     if (communicator.trysend(std::move(message))) {
-        // chequear si se envio
+        // chequear si se envio ¿?
         ReplyMessage replyMessage = communicator.blockingRecv();
-        // chequear si se recibio bien
+        /** chequear si se recibio bien (chequear colores y string de error) */
         gameInfo.matchID = replyMessage.matchID;
-        gameInfo.isNewGame = true;
         return true;
     } else {
         qDebug() << "no se envio PLAY";  // deberia mostrarle un mensaje al usuario
