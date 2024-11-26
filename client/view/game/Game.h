@@ -18,6 +18,7 @@
 #include "Camera.h"
 #include "Communicator.h"
 #include "DuckData.h"
+#include "HudManager.h"
 #include "DuckState.h"
 #include "EnviromentRenderer.h"
 #include "EventHandler.h"
@@ -53,7 +54,10 @@ private:
     // Creates the mapping of the SpriteManagers for each duck.
     std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>> createSpritesMapping();
 
-    // Updates the positions, states, and scales of the player sprites based on the camera view.
+    /**
+    * Updates the positions, states, and scales of the player sprites based on the camera view.
+    * @param spritesMapping the mapping of the SpriteManager for each duck
+    */
     void updatePlayers(
             const std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
 
@@ -66,7 +70,11 @@ private:
     template <typename SizedObject>
     std::list<SDL2pp::Rect> calculateObjectsPositionsAndSize(std::list<SizedObject> objects);
 
-    // Updates the positions and scales of the blocks based on the camera view and renders them.
+    /**
+     * Updates the positions and scales of the blocks based on the camera view and renders them.
+     * @param enviromentRenderer the renderer that draws the enviroment objects
+     * @return
+     */
     void updateBlocks(EnviromentRenderer& enviromentRenderer);
 
     /**
@@ -84,11 +92,16 @@ private:
     // Receives the latest game status snapshot from the server and updates the game objects.
     void getSnapshot();
 
-    // Shows the background texture.
+    /**
+    * Shows the background texture
+    * @param backgroundTexture the background texture to show
+    */
     void showBackground(SDL2pp::Texture& backgroundTexture);
 
     // Clears the game objects, expecting to refill them with the next snapshot.
     void clearObjects();
+
+    void finishedSet();
 
     bool running;
     int window_width;

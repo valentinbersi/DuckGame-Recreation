@@ -46,6 +46,7 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
 
 void Game::init() {
     EnviromentRenderer enviromentRenderer(renderer);
+    HudManager hudManager(window_width, window_height, renderer);
 
     const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>> spritesMapping =
             createSpritesMapping();
@@ -70,7 +71,9 @@ void Game::init() {
         updateBlocks(enviromentRenderer);
         updateItemSpawns(enviromentRenderer);
         updateItems(enviromentRenderer);
-        // updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
+
+        //hudManager.finishedSet(ducks, spritesMapping);
+
         renderer.Present();
 
         handler.handleEvents();
@@ -99,8 +102,6 @@ void Game::getSnapshot() {
     for (const auto& block: snapshot->blockPositions) blocks.push_back(block);
     for (const auto& itemSpawner: snapshot->itemSpawnerPositions) itemSpawns.push_back(itemSpawner);
     for (const auto& item: snapshot->itemPositions) items.push_back(item);
-    // for (const auto& spawner: snapshot->spawnerPosition) spawners.push_back(spawner);
-    // for (const auto& weapon: snapshot->weaponPosition) weapons.push_back(weapon);
 }
 
 void Game::filterObjectsToRender() {
@@ -141,7 +142,7 @@ void Game::updatePlayers(
 
         bool flipped = duck.direction == DuckData::Direction::Left;
 
-        DuckState state = {/*duck.extraData[DuckData::Flag::Index::PlayingDead]*/ true,
+        DuckState state = {/*duck.extraData[DuckData::Flag::Index::PlayingDead]*/ false,
                            duck.extraData[DuckData::Flag::Index::Crouching],
                            duck.extraData[DuckData::Flag::Index::InAir],
                            duck.extraData[DuckData::Flag::Index::Flapping],

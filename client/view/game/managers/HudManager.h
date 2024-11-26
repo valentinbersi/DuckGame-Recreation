@@ -1,0 +1,25 @@
+#pragma once
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2pp/SDL2pp.hh>
+
+#include <list>
+#include <memory>
+#include "SpriteManager.h"
+#include "DuckData.h"
+
+class HudManager {
+
+public:
+    HudManager(int& windowWidth, int& windowHeight, SDL2pp::Renderer& renderer);
+    ~HudManager() = default;
+    void finishedSet(std::list<DuckData>& ducks, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
+    void showPoints(std::list<DuckData>& ducks, SDL2pp::Rect& tableRect, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
+
+private:
+    int& windowWidth;
+    int& windowHeight;
+    SDL2pp::Renderer& renderer;
+};

@@ -39,6 +39,8 @@ public:
     // Sets the scale of the sprite.
     void setScale(float newScale);
 
+    DuckState& getState();
+
 private:
     // Updates the internal flags of the SpriteManager based on the current state of the duck.
     void setFlags();

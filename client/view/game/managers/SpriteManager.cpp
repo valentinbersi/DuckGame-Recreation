@@ -243,3 +243,7 @@ void SpriteManager::adjustForChestplate(SDL2pp::Rect& position) {
 }
 
 void SpriteManager::setScale(float newScale) { scale = newScale; }
+
+DuckState& SpriteManager::getState() {
+    return state;
+}
