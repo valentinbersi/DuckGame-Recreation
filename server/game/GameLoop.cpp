@@ -27,6 +27,17 @@ void GameLoop::processCurrentFrameCommands() {
 
 GameLoop::GameLoop(std::vector<LevelData>& levels): levels(levels) {}
 
+void GameLoop::broadcast(std::shared_ptr<ServerMessage> message) {
+    for (auto it = clientQueuesMap.begin(); it != clientQueuesMap.end();) {
+        if (it->second.expired()) {
+            it = clientQueuesMap.erase(it);
+        } else {
+            bool sucess = it->second.lock()->try_push(message);
+            it = sucess ? ++it : clientQueuesMap.erase(it);
+        }
+    }
+}
+
 #define FPS 30
 
 void GameLoop::run() {
@@ -36,15 +47,14 @@ void GameLoop::run() {
         game.start();
         game.loadLevel(levels[0]);
         // while(_keep_running){
-        while (_keep_running) {  // poner game.MatchEnded() y && _keep_running para condicion de
-                                 // corte.
+        while (!game.gameEnded() && _keep_running) {
             const float deltaTime = timer.iterationStartSeconds().count();
             retrieveCurrentFrameCommands();
             processCurrentFrameCommands();
             game.updateInternal(deltaTime);
             game.update(deltaTime);
             broadcast(std::make_shared<GameStatus>(
-                    std::move(game.status())));  // talvez aca ya manda de una gameended
+                    std::move(game.status()))); 
             timer.iterationEnd(FPS);
         }
 
@@ -85,13 +95,4 @@ void GameLoop::JoinTransactionCompleted(){
     broadcast(std::make_shared<ReplyMessage>(game.playersCount()));
 }
 
-void GameLoop::broadcast(std::shared_ptr<ServerMessage> message) {
-    for (auto it = clientQueuesMap.begin(); it != clientQueuesMap.end();) {
-        if (it->second.expired()) {
-            it = clientQueuesMap.erase(it);
-        } else {
-            bool sucess = it->second.lock()->try_push(message);
-            it = sucess ? ++it : clientQueuesMap.erase(it);
-        }
-    }
-}
+

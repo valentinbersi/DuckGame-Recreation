@@ -15,6 +15,7 @@ class GameController final: public GameObject {
     CollisionManager collisionManager;
     Level* level;
     std::list<Item*> items;
+    bool _gameEnded;
 
     /**
      * GameController handler for tree entered event
@@ -115,4 +116,12 @@ public:
      * @return the status of the game
      */
     GameStatus status() const;
+
+    /**
+     * Check if the game has ended, that is, 
+     * if a player has enough rounds won.
+     * 
+     * @return true if the game has ended, false otherwise
+     */
+    bool gameEnded() const;
 };

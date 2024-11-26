@@ -58,7 +58,9 @@ GameController::GameController(): level(nullptr) {
     //  addChild("Platform2", new Platform({400, 400}, 50, 200));  // This simulated loading a level
 }
 
-void GameController::start() {}
+void GameController::start() {
+    loadLevel(LevelData());
+}
 
 void GameController::update(const float delta) {
     collisionManager.processCollisions(delta);
@@ -131,3 +133,5 @@ GameStatus GameController::status() const {
     for (Player* player: players | std::views::values) status.ducks.push_back(player->status());
     return status;
 }
+
+bool GameController::gameEnded() const { return _gameEnded; }
