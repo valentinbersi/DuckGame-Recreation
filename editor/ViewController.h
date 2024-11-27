@@ -27,6 +27,11 @@ private:
     std::string background;
     std::vector<Object> objects;
     LevelScene* scene;
+
+    QPushButton* platformButton;
+    QPushButton* spawnDuckButton;
+    QPushButton* spawnArmamentButton;
+    QPushButton* boxButton;
     std::map<QPushButton*, ObjectType> buttonTypeMap;
 
     QBrush backgroundBrush;
@@ -52,6 +57,9 @@ private:
      * error.
      */
     void on_actionEditMap_triggered();
+
+    void on_actionSaveMap_triggered();
+
 
     /**
      * Setea los botones de accion de la barra de opciones.

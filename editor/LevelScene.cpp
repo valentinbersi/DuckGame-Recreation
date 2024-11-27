@@ -26,15 +26,20 @@ LevelScene::LevelScene(QObject* parent, std::vector<Object>& objects):
 }
 
 void LevelScene::deleteObjectAt(const QPointF& position) {
+    qDebug() << "posicion clickeada:" << position;
     QGraphicsPixmapItem* itemAtPosition = (QGraphicsPixmapItem*)items(position).value(0);
 
     auto a = items(position);
     qDebug() << "cant objetos en la posicion:" << a.size();
     if (itemAtPosition) {
         auto* object = objectsMap[itemAtPosition];
-        qDebug() << "tipo del objeto:" << object->type;
-        if (object->type == DUCK)
+        qDebug() << "tipo del objeto:" << object->type << "pos del objecto:" << object->centerPos;
+//        if (object->type == DUCK)
+//            ducksCount--;
+        if (object->type == DUCK) {
             ducksCount--;
+            qDebug() << "ducksCount--    valor:" << ducksCount;
+        }
 
         auto it = std::find_if(objects.begin(), objects.end(),
                                [object](const Object& obj) { return *object == obj; });
@@ -109,9 +114,16 @@ void LevelScene::insertObjectInMap(const Object& object, bool addInList) {
 //        return;
 //    }
     objectsMap[item] = storedObject;
+    qDebug() << "item pos:" << item->pos() << "storedObject pos:" << objectsMap[item]->getBoundingPos() << "object posta pos:" << object.getBoundingPos();
+    /** ACA PARECIERA ESTAR FUNCIONANDO BIEN ! */
+    //if (object.type == DUCK) ducksCount++;
 
-    if (object.type == DUCK) ducksCount++;
+    if (object.type == DUCK) {
+        ducksCount++;
+        qDebug() << "ducksCount++    valor:" << ducksCount;
+    }
 
+    /** ESTO CAPAZ PODRIA HACERLO APARTE */
     QRectF objectRect(item->scenePos(),
                       QSizeF(object.size.width() * PIXEL_SIZE, object.size.height() * PIXEL_SIZE));
     QRectF currentRect = sceneRect();
@@ -179,7 +191,7 @@ void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
     if (selectedItem) {
         QPointF itemPos = selectedItem->pos();
 
-        // Alineacion de la posicion a la grilla ¿podria tener un metodo para esto?
+        /** Alineacion de la posicion a la grilla ¿podria tener un metodo para esto? */
         qreal alignedX = std::round(itemPos.x() / PIXEL_SIZE) * PIXEL_SIZE;
         qreal alignedY = std::round(itemPos.y() / PIXEL_SIZE) * PIXEL_SIZE;
         if (itemPos.x() < alignedX - PIXEL_SIZE / 2) alignedX -= PIXEL_SIZE;
@@ -198,16 +210,22 @@ void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
         selectedItem->setPos(itemPosAligned);
         qDebug() << "selectedItemPos ya seteada:" << selectedItem->pos() << "selectedItemRect:" << selectedItem->sceneBoundingRect();
 
-        auto it = objectsMap.find(selectedItem);
-        if (it != objectsMap.end() && it.value()) {
-            Object* objectMoved = it.value();
-            QPointF newCenterPos(int(itemPosAligned.x()) / PIXEL_SIZE,
-                                 int(itemPosAligned.y()) / PIXEL_SIZE);
-            objectMoved->setCenterPosition(newCenterPos, true);
-            qDebug() << "pos del objecto izq-arr y central:" << objectMoved->getBoundingPos() << objectMoved->centerPos;
-        } else {
-            qDebug() << "Error: no se encontró el objeto asociado al item.";
-        }
+        Object* obj = objectsMap[selectedItem];
+        QPointF newPos(int(itemPosAligned.x()) / PIXEL_SIZE,
+                             int(itemPosAligned.y()) / PIXEL_SIZE);
+        obj->setCenterPosition(newPos, true);
+        qDebug() << "pos del objecto izq-arr y central:" << obj->getBoundingPos() << obj->centerPos;
+
+//        auto it = objectsMap.find(selectedItem);
+//        if (it != objectsMap.end() && it.value()) {
+//            Object* objectMoved = it.value();
+//            QPointF newCenterPos(int(itemPosAligned.x()) / PIXEL_SIZE,
+//                                 int(itemPosAligned.y()) / PIXEL_SIZE);
+//            objectMoved->setCenterPosition(newCenterPos, true);
+//            qDebug() << "pos del objecto izq-arr y central:" << objectMoved->getBoundingPos() << objectMoved->centerPos;
+//        } else {
+//            qDebug() << "Error: no se encontró el objeto asociado al item.";
+//        }
 
         selectedItem = nullptr;
     }
