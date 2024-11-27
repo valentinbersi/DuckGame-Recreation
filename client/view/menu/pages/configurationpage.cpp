@@ -1,12 +1,16 @@
 #include "configurationpage.h"
 
 #include <QButtonGroup>
-#include <QMessageBox>
 #include <QDebug>
+#include <QMessageBox>
 
 
-configurationPage::configurationPage(QWidget* parent, GameInfo& gameInfo, Communicator& communicator):
-        QWidget(parent), ui(new Ui::configurationPage), gameInfo(gameInfo), communicator(communicator) {
+configurationPage::configurationPage(QWidget* parent, GameInfo& gameInfo,
+                                     Communicator& communicator):
+        QWidget(parent),
+        ui(new Ui::configurationPage),
+        gameInfo(gameInfo),
+        communicator(communicator) {
     ui->setupUi(this);
 
     CantidadPlayersGroup = new QButtonGroup(this);
@@ -24,8 +28,8 @@ int configurationPage::getSelectedPlayers() const { return CantidadPlayersGroup-
 
 void configurationPage::handlerJoinGame() {
     if (ui->lineEditMatchID->text().isEmpty()) {
-        QMessageBox::warning(this, "No se ingreso un Match ID",
-                             "Por favor, ingresa un Match ID antes de continuar.");
+        QMessageBox::warning(this, "A Match ID was not entered",
+                             "Please enter a Match ID before continuing.");
         return;
     }
     gameInfo.playersNumber = getSelectedPlayers();
@@ -46,15 +50,39 @@ void configurationPage::handlerNewGame() {
     }
 }
 
+QString getColor(DuckData::Id id) {
+    switch (id) {
+        case DuckData::Id::White:
+            return {"white"};
+        case DuckData::Id::Grey:
+            return {"grey"};
+        case DuckData::Id::Orange:
+            return {"orange"};
+        case DuckData::Id::Yellow:
+            return {"yellow"};
+        case DuckData::Id::None:
+            return {"none"};
+    }
+    return {"vacio"};
+}
+
 bool configurationPage::initMatchRequest(LobbyRequest& request) {
-    auto message = std::make_unique<LobbyMessage>(request, gameInfo.playersNumber,
-                                                  gameInfo.matchID);
+    auto message =
+            std::make_unique<LobbyMessage>(request, gameInfo.playersNumber, gameInfo.matchID);
     qDebug() << message->request << message->playerCount << message->matchId;
     if (communicator.trysend(std::move(message))) {
         // chequear si se envio ¿?
         ReplyMessage replyMessage = communicator.blockingRecv();
-        /** chequear si se recibio bien (chequear colores y string de error) */
+        if (replyMessage.matchID == 0) {
+            QMessageBox::warning(this, "Error", QString::fromStdString(replyMessage.error));
+            return false;
+        }
+
         gameInfo.matchID = replyMessage.matchID;
+        gameInfo.Duck1Color = replyMessage.color1;
+        gameInfo.Duck2Color = replyMessage.color2;
+        qDebug() << "color 1:" << getColor(gameInfo.Duck1Color)
+                 << "color 2:" << getColor(gameInfo.Duck2Color);
         return true;
     } else {
         qDebug() << "no se envio PLAY";  // deberia mostrarle un mensaje al usuario

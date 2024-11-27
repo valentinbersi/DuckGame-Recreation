@@ -50,10 +50,13 @@ void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool fea
     SDL_Texture* texture = feathers ? TextureManager::getTexture(pathFeather, renderer).Get() :
                                       TextureManager::getTexture(pathPlayer, renderer).Get();
 
-    if (texture == nullptr) throw std::runtime_error("Texture is null in drawSelectedSprite.");
+    if (texture == nullptr)
+        throw std::runtime_error("Texture is null in drawSelectedSprite.");
 
-    if (feathers) SDL_RenderCopyEx(renderer.Get(), texture, &m_clip, &position, angle, nullptr, flipType);
-    else SDL_RenderCopyEx(renderer.Get(), texture, &m_clip, &position, 0.0, nullptr, flipType);
+    if (feathers)
+        SDL_RenderCopyEx(renderer.Get(), texture, &m_clip, &position, angle, nullptr, flipType);
+    else
+        SDL_RenderCopyEx(renderer.Get(), texture, &m_clip, &position, 0.0, nullptr, flipType);
 }
 
 void Spritesheet::drawChestplate(SDL2pp::Rect& playerPosition, bool flip) {

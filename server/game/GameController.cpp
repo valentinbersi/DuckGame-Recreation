@@ -108,8 +108,9 @@ Player& GameController::getPlayer(const PlayerID playerID) const { return *playe
 
 u8 GameController::playersCount() const { return players.size(); }
 
-bool GameController::exceedsPlayerMax(const u8 playerAmount) 
-{ return players.size() + playerAmount > MAX_PLAYERS; }
+bool GameController::exceedsPlayerMax(const u8 playerAmount) {
+    return players.size() + playerAmount > MAX_PLAYERS;
+}
 
 void GameController::loadLevel(const LevelData& level) {
     if (this->level != nullptr)

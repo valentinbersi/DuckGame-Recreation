@@ -62,8 +62,8 @@ public:
     /**
      * Checks if player can join the game.
      * @param playerCount the number of players that will play the game locally
-     * @return true if player can join the game, false otherwise.     
-    */
+     * @return true if player can join the game, false otherwise.
+     */
     bool canJoinGame(const u8 playerCount);
 
     /**
@@ -71,8 +71,8 @@ public:
      * @param clientID the id of the client to add
      * @param clientQueue the queue of the client to add
      */
-    DuckData::Id addClient(u16 clientID,
-                   std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue);
+    DuckData::Id addClient(
+            u16 clientID, std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue);
 
     /**
      * @return the pointer to the gameloop Queue.
@@ -84,5 +84,4 @@ public:
      * Indicates to all clients that player/s has joined
      */
     void JoinTransactionCompleted();
-
 };

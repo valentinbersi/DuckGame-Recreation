@@ -76,12 +76,11 @@ void GameLoop::stop() {
 
 bool GameLoop::shouldAddQueue(const u16 clientID) { return clientID % 2 == 1; }
 
-bool GameLoop::canJoinGame(const u8 playerAmount) { 
-    return !game.exceedsPlayerMax(playerAmount);
-}
+bool GameLoop::canJoinGame(const u8 playerAmount) { return !game.exceedsPlayerMax(playerAmount); }
 
-DuckData::Id GameLoop::addClient(const u16 clientID,
-                         std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue) {
+DuckData::Id GameLoop::addClient(
+        const u16 clientID,
+        std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue) {
 
     if (shouldAddQueue(clientID)) {
         clientQueuesMap.insert({clientID, std::move(clientQueue)});
@@ -91,7 +90,7 @@ DuckData::Id GameLoop::addClient(const u16 clientID,
 
 BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCommands; }
 
-void GameLoop::JoinTransactionCompleted(){
+void GameLoop::JoinTransactionCompleted() {
     broadcast(std::make_shared<ReplyMessage>(game.playersCount()));
 }
 

@@ -66,13 +66,17 @@ void SpriteManager::update(const DuckState& newState) {
     state = newState;
     setFlags();
 
-    if (state.beingDamaged) spritesheet->damageEffects(m_position_x, m_position_y);      //estirar frames?
+    if (state.beingDamaged)
+        spritesheet->damageEffects(m_position_x, m_position_y);  // estirar frames?
 
     if (state.inAir) {
         draw(frame, SPRITESHEET_JUMP_ROW);
     } else if (state.playingDead || state.crouching) {
-        if (state.playingDead) draw(SPRITESHEET_PLAYING_DEAD_COL, SPRITESHEET_DEAD_ROW);        //debo borrar feathers. ojos abiertos es banana
-        else draw(SPRITESHEET_CROUCH_COL, SPRITESHEET_CROUCH_ROW);
+        if (state.playingDead)
+            draw(SPRITESHEET_PLAYING_DEAD_COL,
+                 SPRITESHEET_DEAD_ROW);  // debo borrar feathers. ojos abiertos es banana
+        else
+            draw(SPRITESHEET_CROUCH_COL, SPRITESHEET_CROUCH_ROW);
 
     } else {
         draw(frame, SPRITESHEET_RIGHT_LEFT_ROW);
@@ -83,18 +87,22 @@ void SpriteManager::update(const DuckState& newState) {
 
 void SpriteManager::setFlags() {
     if (state.inAir || state.moving) {
-        if (!(state.inAir && frame == 3)) ++frame;
-        if (frame > LIMIT_FRAMES && !state.inAir) frame = 0;
+        if (!(state.inAir && frame == 3))
+            ++frame;
+        if (frame > LIMIT_FRAMES && !state.inAir)
+            frame = 0;
     }
 
     negateFlag(state.inAir, inAir);
     negateFlag(state.moving, isMoving);
 
     if (state.lookingUp) {
-        if (!state.flipped) spritesheet->setAngle(UP_ANGLE_RIGHT);
-        else spritesheet->setAngle(UP_ANGLE_LEFT);
-    }
-    else spritesheet->setAngle(DEFAULT_ANGLE);
+        if (!state.flipped)
+            spritesheet->setAngle(UP_ANGLE_RIGHT);
+        else
+            spritesheet->setAngle(UP_ANGLE_LEFT);
+    } else
+        spritesheet->setAngle(DEFAULT_ANGLE);
 
 
     if (flapping != state.flapping) {
@@ -133,15 +141,18 @@ void SpriteManager::drawMainSprite(int col, int row) {
 void SpriteManager::drawFeathers(int col, int row) {
     SDL2pp::Rect position;
 
-    if (state.gunEquipped != ItemID::NONE) spritesheet->selectSprite(COL_WEAPON, ROW_WEAPON, FEATHER);
+    if (state.gunEquipped != ItemID::NONE)
+        spritesheet->selectSprite(COL_WEAPON, ROW_WEAPON, FEATHER);
 
     if (state.flapping && state.gunEquipped == ItemID::NONE) {
-        if (flappingFrame > LIMIT_FLAPPING_FRAMES) flappingFrame = DEFAULT_FLAPPING;
+        if (flappingFrame > LIMIT_FLAPPING_FRAMES)
+            flappingFrame = DEFAULT_FLAPPING;
         drawFlapping();
         return;
     }
 
-    if (state.gunEquipped == ItemID::NONE) spritesheet->selectSprite(col, row, FEATHER);
+    if (state.gunEquipped == ItemID::NONE)
+        spritesheet->selectSprite(col, row, FEATHER);
 
     position = getPosition(FEATHER, NO_CHESTPLATE, NO_HELMET);
     spritesheet->drawSelectedSprite(position, state.flipped, FEATHER);
@@ -174,8 +185,7 @@ void SpriteManager::drawHelmet() {
     spritesheet->drawHelmet(position, state.flipped);
 }
 
-SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isChestplate,
-                                        bool isHelmet) {
+SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isChestplate, bool isHelmet) {
     SDL2pp::Rect position = calculateBasePosition();
 
     if (isFeather) {
@@ -197,7 +207,7 @@ void SpriteManager::adjustForFeathers(SDL2pp::Rect& position) {
     if (!state.lookingUp) {
         if (state.flipped)
             position.x += 0.75 * scale;
-         else
+        else
             position.x += 0.40 * scale;
 
     } else {

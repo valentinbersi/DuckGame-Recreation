@@ -14,7 +14,8 @@
 #include "Object.h"
 #include "ui_viewcontroller.h"
 
-#define BUTTONS_STYLE R"(
+#define BUTTONS_STYLE \
+    R"(
 QPushButton {
     background-color: transparent;
     border: none;
@@ -26,7 +27,8 @@ QPushButton:checked {
 }
 )"
 
-ViewController::ViewController(QWidget* parent): QMainWindow(parent), ui(new Ui::ViewController), backgroundBrush(Qt::white) {
+ViewController::ViewController(QWidget* parent):
+        QMainWindow(parent), ui(new Ui::ViewController), backgroundBrush(Qt::white) {
     ui->setupUi(this);
 
     ui->graphicsView->setBackgroundBrush(Qt::NoBrush);
@@ -48,9 +50,11 @@ ViewController::ViewController(QWidget* parent): QMainWindow(parent), ui(new Ui:
         QMessageBox::information(this, "Save Map", "El mapa se guardo correctamente!");
     });
 
-    connect(ui->actionNewMap, &QAction::triggered, this, &ViewController::on_actionNewMap_triggered);
+    connect(ui->actionNewMap, &QAction::triggered, this,
+            &ViewController::on_actionNewMap_triggered);
 
-    connect(ui->actionEditMap, &QAction::triggered, this, &ViewController::on_actionEditMap_triggered);
+    connect(ui->actionEditMap, &QAction::triggered, this,
+            &ViewController::on_actionEditMap_triggered);
 
     connect(scene, &LevelScene::resizeView, this, &ViewController::onSceneResize);
 
@@ -75,7 +79,7 @@ void ViewController::setupToolBar() {
 
     for (const auto& [button, type]: buttonTypeMap) {
         button->setCheckable(true);
-        button->setIconSize(QSize(64,64));
+        button->setIconSize(QSize(64, 64));
         button->setStyleSheet(BUTTONS_STYLE);
         connect(button, &QPushButton::clicked, this,
                 [this, type]() { scene->selectObjectType(type); });
@@ -94,7 +98,8 @@ void ViewController::onSceneResize() {
 }
 
 bool ViewController::confirmAndSaveMap() {
-    QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirmation", "Do you want to save the map open?",
+    QMessageBox::StandardButton reply =
+            QMessageBox::question(this, "Confirmation", "Do you want to save the map open?",
                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
     if (reply == QMessageBox::Cancel)
         return false;
@@ -105,9 +110,11 @@ bool ViewController::confirmAndSaveMap() {
 }
 
 void ViewController::changeBackground() {
-    QString filePath = QFileDialog::getOpenFileName(this, "Select Backgrounds", "assets/background/", "Images (*.png)");
+    QString filePath = QFileDialog::getOpenFileName(this, "Select Backgrounds",
+                                                    "assets/background/", "Images (*.png)");
     if (filePath.isEmpty()) {
-        QMessageBox::information(this, "No Background Selected", "Please select an image from the assets folder.");
+        QMessageBox::information(this, "No Background Selected",
+                                 "Please select an image from the assets folder.");
         return;
     }
 
@@ -121,7 +128,8 @@ void ViewController::changeBackground() {
 }
 
 void ViewController::on_actionNewMap_triggered() {
-    if(!confirmAndSaveMap()) return;
+    if (!confirmAndSaveMap())
+        return;
 
     scene->clearAll();
     ui->lineEditMapName->clear();
@@ -129,7 +137,8 @@ void ViewController::on_actionNewMap_triggered() {
 }
 
 void ViewController::on_actionEditMap_triggered() {
-    if(!confirmAndSaveMap()) return;
+    if (!confirmAndSaveMap())
+        return;
 
     QString fileName =
             QFileDialog::getOpenFileName(this, "Select Map", "maps/", "Archivos YAML (*.yaml)");
@@ -146,14 +155,14 @@ void ViewController::on_actionEditMap_triggered() {
 
     int mapWidth;
     int mapHeight;
-    bool success = MapManager::importMap(objects, fileName.toStdString(),
-                                         mapWidth, mapHeight,background);
-    if (!success) return;
+    bool success =
+            MapManager::importMap(objects, fileName.toStdString(), mapWidth, mapHeight, background);
+    if (!success)
+        return;
 
     scene->loadMap(mapWidth, mapHeight);
     ui->lineEditMapName->setText(mapName);
-    QMessageBox::information(this, "Imported Map",
-                             "The map has been imported successfully!");
+    QMessageBox::information(this, "Imported Map", "The map has been imported successfully!");
 }
 
 ViewController::~ViewController() {

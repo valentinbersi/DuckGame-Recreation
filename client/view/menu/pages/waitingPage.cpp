@@ -11,8 +11,7 @@
 #include "ui_waitingPage.h"
 
 
-WaitingPage::WaitingPage(QWidget* parent, Communicator& communicator,
-                         GameInfo& gameInfo):
+WaitingPage::WaitingPage(QWidget* parent, Communicator& communicator, GameInfo& gameInfo):
         QWidget(parent),
         ui(new Ui::WaitingPage),
         communicator(communicator),
@@ -29,6 +28,26 @@ WaitingPage::WaitingPage(QWidget* parent, Communicator& communicator,
         ui->playButton->setVisible(false);
     else
         connect(ui->playButton, &QPushButton::clicked, this, &WaitingPage::requestStartGame);
+
+    ui->Duck1->setPixmap(QPixmap(getDuckIconPath(gameInfo.Duck1Color)));
+    ui->Duck2->setPixmap(QPixmap(getDuckIconPath(gameInfo.Duck2Color)));
+}
+
+QString WaitingPage::getDuckIconPath(DuckData::Id id) {
+    switch (id) {
+        case DuckData::Id::White:
+            return ":/ducks/whiteDuck";
+        case DuckData::Id::Grey:
+            return ":/ducks/greyDuck";
+        case DuckData::Id::Orange:
+            return ":/ducks/orangeDuck";
+        case DuckData::Id::Yellow:
+            return ":/ducks/yellowDuck";
+        case DuckData::Id::None:
+            return "";
+    }
+
+    return "";
 }
 
 void WaitingPage::recvServerMessage() {
@@ -44,8 +63,8 @@ void WaitingPage::recvServerMessage() {
             timer->stop();
         }
 
-//        if (gameInfo.isNewGame && message.connectedPlayers == 4)
-//            requestStartGame();
+        //        if (gameInfo.isNewGame && message.connectedPlayers == 4)
+        //            requestStartGame();
 
     } else {
         qDebug() << "replyMessage is NULL";

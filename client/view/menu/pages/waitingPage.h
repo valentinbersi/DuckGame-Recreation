@@ -4,8 +4,8 @@
 #include <QWidget>
 
 #include "Communicator.h"
+#include "DuckData.h"
 #include "GameInfo.h"
-
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -24,8 +24,15 @@ private:
     // cppcheck-suppress unusedStructMember
     QTimer* timer;
 
+    //    std::unordered_map<DuckData::Id, QPixmap> mapDuckIcons =
+    //            {{DuckData::Id::White, QPixmap(":/ducks/whiteDuck")},
+    //             {DuckData::Id::Grey, QPixmap(":/ducks/greyDuck")},
+    //             {DuckData::Id::Orange, QPixmap(":/ducks/orangeDuck")},
+    //             {DuckData::Id::Yellow, QPixmap(":/ducks/yellowDuck")}};
+
     void requestStartGame();
     void recvServerMessage();
+    static QString getDuckIconPath(DuckData::Id id);
 
 public:
     WaitingPage(QWidget* parent, Communicator& communicator, GameInfo& gameInfo);

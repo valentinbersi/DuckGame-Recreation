@@ -3,9 +3,9 @@
 #include <string>
 
 #include "ActiveSocket.h"
+#include "DuckData.h"
 #include "SendProtocol.h"
 #include "Types.h"
-#include "DuckData.h"
 
 // Forward declaration
 struct ClientMessage;
