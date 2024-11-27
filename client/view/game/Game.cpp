@@ -108,9 +108,6 @@ void Game::getSnapshot() {
     for (const auto& block: snapshot->blockPositions) blocks.push_back(block);
     for (const auto& itemSpawner: snapshot->itemSpawnerPositions) itemSpawns.push_back(itemSpawner);
     for (const auto& item: snapshot->itemPositions) items.push_back(item);
-
-    //gameMessage con input action = nextRound    (para roundOver y setOver)
-
 }
 
 void Game::filterObjectsToRender() {

@@ -1,6 +1,7 @@
 #include "HudManager.h"
 
 #define SET_FINISHED "assets/hud/set.PNG"
+#define LOADING_IMAGE "assets/hud/loading.png"
 
 using SDL2pp::NullOpt;
 using SDL2pp::Rect;
@@ -53,6 +54,19 @@ void HudManager::finishedRound() {
     }
     SDL_SetRenderDrawColor(renderer.Get(), 0, 0, 0, 255);
     SDL_RenderClear(renderer.Get());
+
+    Texture& imageTexture = TextureManager::getTexture(LOADING_IMAGE, renderer);
+
+    int imageWidth = imageTexture.GetWidth();
+    int imageHeight = imageTexture.GetHeight();
+    Rect imageRect;
+    imageRect.x = centerX - imageWidth / 2;
+    imageRect.y = centerY - imageHeight / 2;
+    imageRect.w = imageWidth;
+    imageRect.h = imageHeight;
+    
+    renderer.Copy(imageTexture, NullOpt, imageRect);
+
     renderer.Present();
     SDL_Delay(2000);
 
@@ -60,14 +74,7 @@ void HudManager::finishedRound() {
 }
 
 void HudManager::finishedSet(std::list<DuckData>& ducks, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
-    SDL_Surface* rawSetSurface = IMG_Load(SET_FINISHED);
-    if (!rawSetSurface) {
-        std::cerr << "Error al cargar la imagen set.png: " << IMG_GetError() << std::endl;
-        return;
-    }
-
-    Surface setSurface(rawSetSurface);
-    Texture setTexture(renderer, setSurface);
+    Texture& setTexture = TextureManager::getTexture(SET_FINISHED, renderer);
 
     int newSize = std::min(windowWidth, windowHeight) / 2;
 
