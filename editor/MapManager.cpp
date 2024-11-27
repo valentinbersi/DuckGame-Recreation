@@ -6,7 +6,7 @@
 
 #include "yaml-cpp/yaml.h"
 
-void MapManager::exportMap(const std::vector<Object>& objects, const std::string& mapName,
+void MapManager::exportMap(const std::list<Object>& objects, const std::string& mapName,
                            int mapWidth, int mapHeight) {
     for (const auto& obj: objects) {
         qDebug() << obj.centerPos;
@@ -68,7 +68,7 @@ ObjectType MapManager::stringToObjectType(const std::string& typeStr) {
     return UNKNOWN;
 }
 
-bool MapManager::importMap(std::vector<Object>& objects, const std::string& mapPath, int& mapWidth,
+bool MapManager::importMap(std::list<Object>& objects, const std::string& mapPath, int& mapWidth,
                            int& mapHeight, std::string& background) {
     std::ifstream fin(mapPath);
     if (!fin.is_open()) {

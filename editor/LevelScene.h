@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QGraphicsScene>
+#include <QGraphicsView>
 #include <vector>
 
 #include "Object.h"
@@ -12,7 +13,7 @@ class LevelScene: public QGraphicsScene {
 private:
     int gridWidth;                            /** ancho de la grilla (no del mapa) */
     int gridHeight;                           /** alto de la grilla (no del mapa) */
-    std::vector<Object>& objects;             /** referencia a la lista de objetos del editor */
+    std::list<Object>& objects;             /** referencia a la lista de objetos del editor */
     QMap<QGraphicsPixmapItem*, Object*> objectsMap; /** */
 
     QGraphicsPixmapItem* selectedItem; /** */
@@ -20,6 +21,7 @@ private:
 
     int ducksCount;             /** */
     ObjectType objectTypeToAdd; /** */
+    bool isAddingObject = false;
 
     /**
      * Elimina el elemento en la posicion recibida.
@@ -82,7 +84,7 @@ private:
 
 
 public:
-    LevelScene(QObject* parent, std::vector<Object>& objects);
+    LevelScene(QObject* parent, std::list<Object>& objects);
     ~LevelScene() override = default;
 
     /**
@@ -134,4 +136,5 @@ public:
 signals:
     void addingObjectChanged(ObjectType type);
     void resizeView();
+    void requestDragModeChange(QGraphicsView::DragMode);
 };

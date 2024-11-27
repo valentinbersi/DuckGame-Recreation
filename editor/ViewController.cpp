@@ -27,11 +27,14 @@
 ViewController::ViewController(QWidget* parent): QMainWindow(parent), ui(new Ui::ViewController), backgroundBrush(Qt::white) {
     ui->setupUi(this);
 
+    ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
     ui->graphicsView->setBackgroundBrush(Qt::NoBrush);
     scene = new LevelScene(this, objects);
     ui->graphicsView->setScene(scene);
     onSceneResize();
     setupToolBar();
+
+    connect(scene, &LevelScene::requestDragModeChange, ui->graphicsView, &QGraphicsView::setDragMode);
 
     connect(ui->actionSaveMap, &QAction::triggered, this, &ViewController::on_actionSaveMap_triggered);
     connect(ui->actionNewMap, &QAction::triggered, this, &ViewController::on_actionNewMap_triggered);

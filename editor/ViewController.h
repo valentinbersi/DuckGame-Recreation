@@ -25,7 +25,7 @@ public:
 private:
     Ui::ViewController* ui;
     std::string background;
-    std::vector<Object> objects;
+    std::list<Object> objects;
     LevelScene* scene;
 
     QPushButton* platformButton;

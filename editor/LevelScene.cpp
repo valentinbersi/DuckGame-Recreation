@@ -13,7 +13,7 @@
 
 #define MIN_DUCKS 4
 
-LevelScene::LevelScene(QObject* parent, std::vector<Object>& objects):
+LevelScene::LevelScene(QObject* parent, std::list<Object>& objects):
         QGraphicsScene(parent),
         objects(objects),
         selectedItem(nullptr),
@@ -163,9 +163,11 @@ void LevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
         return;
     }
 
-    if (objectTypeToAdd != UNKNOWN) {
+    if (event->button() == Qt::LeftButton && objectTypeToAdd != UNKNOWN) {
+        isAddingObject = true;
         QPointF pos = event->scenePos();
         addNewObject(objectTypeToAdd, pos);
+        emit requestDragModeChange(QGraphicsView::NoDrag);
         return;
     }
 
@@ -179,6 +181,18 @@ void LevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void LevelScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+    if (isAddingObject && objectTypeToAdd != UNKNOWN && event->buttons() & Qt::LeftButton) {
+        QPointF pos = event->scenePos();
+
+        qreal alignedX = std::round(pos.x() / PIXEL_SIZE) * PIXEL_SIZE;
+        qreal alignedY = std::round(pos.y() / PIXEL_SIZE) * PIXEL_SIZE;
+        QPointF alignedPos(alignedX, alignedY);
+
+        QRectF itemRect(alignedPos, QSizeF(PIXEL_SIZE, PIXEL_SIZE));
+        if (isEmptyPosition(itemRect)) {
+            addNewObject(objectTypeToAdd, alignedPos);
+        }
+    }
     if (selectedItem) {
         selectedItem->setPos(event->scenePos() -
                              QPointF(selectedItem->boundingRect().width() / 2,
@@ -188,14 +202,19 @@ void LevelScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+    if (event->button() == Qt::LeftButton) {
+        isAddingObject = false;
+        emit requestDragModeChange(QGraphicsView::ScrollHandDrag);
+    }
+
     if (selectedItem) {
         QPointF itemPos = selectedItem->pos();
 
         /** Alineacion de la posicion a la grilla ¿podria tener un metodo para esto? */
         qreal alignedX = std::round(itemPos.x() / PIXEL_SIZE) * PIXEL_SIZE;
         qreal alignedY = std::round(itemPos.y() / PIXEL_SIZE) * PIXEL_SIZE;
-        if (itemPos.x() < alignedX - PIXEL_SIZE / 2) alignedX -= PIXEL_SIZE;
-        if (itemPos.y() < alignedY - PIXEL_SIZE / 2) alignedY -= PIXEL_SIZE;
+        if (itemPos.x() < alignedX - PIXEL_SIZE / 2.0) alignedX -= PIXEL_SIZE;
+        if (itemPos.y() < alignedY - PIXEL_SIZE / 2.0) alignedY -= PIXEL_SIZE;
 
         QPointF itemPosAligned(alignedX, alignedY);
         qDebug() << "itemPos:" << itemPos << "EventPos:" << event->scenePos() << "itemPosAligned:" << itemPosAligned;
@@ -261,9 +280,9 @@ void LevelScene::selectObjectType(ObjectType type) {
     emit addingObjectChanged(objectTypeToAdd);
 }
 
-int LevelScene::getMapWidth() const { return gridWidth / PIXEL_SIZE; }
+int LevelScene::getMapWidth() const { return gridWidth / (int)PIXEL_SIZE; }
 
-int LevelScene::getMapHeight() const { return gridHeight / PIXEL_SIZE; }
+int LevelScene::getMapHeight() const { return gridHeight / (int)PIXEL_SIZE; }
 
 void LevelScene::clearAll() {
     objectsMap.clear();
