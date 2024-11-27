@@ -9,12 +9,55 @@ using SDL2pp::SDL;
 using SDL2pp::Surface;
 using SDL2pp::Texture;
 
-HudManager::HudManager(int &windowWidth, int &windowHeight, Renderer &renderer) : windowWidth(windowWidth),
+HudManager::HudManager(int &windowWidth, int &windowHeight, Renderer &renderer, bool& transition) : windowWidth(windowWidth),
                                                                                            windowHeight(windowHeight),
-                                                                                           renderer(renderer) {}
+                                                                                           renderer(renderer), transition(transition) {}
 
 // FALTA DIBUJAR UN + 1 CON UNA FONT AMARILLA EN LA CABEZA DEL PATO CUANDO FINALIZA LA RONDA (CUANDO LA GANA)
 
+
+void HudManager::check(bool& roundFinished, bool& setFinished, bool& gameFinished,
+                    std::list<DuckData>& ducks, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
+    if (roundFinished) {
+        finishedRound();
+        roundFinished = false;
+    } else if (setFinished) {
+        finishedSet(ducks, spritesMapping);
+        setFinished = false;
+    } else if (gameFinished) {
+        //finishedGame();
+    }
+}
+
+void HudManager::finishedRound() {
+    int centerX = windowWidth / 2;
+    int centerY = windowHeight / 2;
+    int size = 10;
+
+    int maxSize = std::max(windowWidth, windowHeight);
+    int increment = maxSize / 100;
+
+    while (size < maxSize) {
+        Rect rect;
+        rect.x = centerX - size / 2;
+        rect.y = centerY - size / 2;
+        rect.w = size;
+        rect.h = size;
+
+        SDL_SetRenderDrawColor(renderer.Get(), 0, 0, 0, 255);
+        SDL_RenderFillRect(renderer.Get(), &rect);
+        renderer.Present();
+
+        SDL_Delay(10);
+        size += increment;
+    }
+    SDL_SetRenderDrawColor(renderer.Get(), 0, 0, 0, 255);
+    SDL_RenderClear(renderer.Get());
+    renderer.Present();
+    SDL_Delay(2000);
+
+    transition = true;
+}
 
 void HudManager::finishedSet(std::list<DuckData>& ducks, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
     SDL_Surface* rawSetSurface = IMG_Load(SET_FINISHED);
@@ -55,9 +98,11 @@ void HudManager::finishedSet(std::list<DuckData>& ducks, const HashMap<DuckData:
     SDL_SetRenderDrawColor(renderer.Get(), 50, 50, 50, 255);
     SDL_RenderFillRect(renderer.Get(), &tableRect);
 
-    // falta meter un delay
-
     showPoints(ducks, tableRect, spritesMapping);
+    renderer.Present();
+    SDL_Delay(5000);
+
+    finishedRound();               // effect of round end
 }
 
 std::string duckIDToString(DuckData::Id id) {

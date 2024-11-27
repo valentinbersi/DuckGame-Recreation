@@ -32,7 +32,7 @@ const HashMap<ItemID, cppstring> Game::weaponSprites = {
         {ItemID::CowboyPistol, "assets/weapons/CowboyPistol.png"}};
 
 Game::Game(Communicator& communicator, bool& twoPlayersLocal):
-        running(true),
+        running(true), roundFinished(false), setFinished(false), gameFinished(false), transition(false),
         window_width(DEF_WINDOW_WIDTH),
         window_height(DEF_WINDOW_HEIGHT),
         communicator(communicator),
@@ -46,7 +46,7 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
 
 void Game::init() {
     EnviromentRenderer enviromentRenderer(renderer);
-    HudManager hudManager(window_width, window_height, renderer);
+    HudManager hudManager(window_width, window_height, renderer, transition);
 
     const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>> spritesMapping =
             createSpritesMapping();
@@ -60,6 +60,7 @@ void Game::init() {
     while (running) {
         const float deltaTime = timer.iterationStartSeconds().count();
         getSnapshot();
+
         renderer.Clear();
 
         camera.update(ducks, deltaTime);
@@ -71,9 +72,12 @@ void Game::init() {
         updateItemSpawns(enviromentRenderer);
         updateItems(enviromentRenderer);
 
-        //hudManager.finishedSet(ducks, spritesMapping);
-
-        renderer.Present();
+        setFinished = true;
+        hudManager.check(roundFinished, setFinished, gameFinished, ducks, spritesMapping);
+        if (transition) {
+            transition = false;
+            //comm.send
+        } else renderer.Present();         // the renderer is presented inside the hudManager if the round/set/game is finished. in other case...
 
         handler.handleEvents();
 
@@ -97,10 +101,16 @@ void Game::getSnapshot() {
         return;
 
     clearObjects();
+    // roundOver, setOver, gameOver
+    // corroboro gameover, setover y luego roundover
+
     for (auto& duck: snapshot->ducks) ducks.push_back(std::move(duck));
     for (const auto& block: snapshot->blockPositions) blocks.push_back(block);
     for (const auto& itemSpawner: snapshot->itemSpawnerPositions) itemSpawns.push_back(itemSpawner);
     for (const auto& item: snapshot->itemPositions) items.push_back(item);
+
+    //gameMessage con input action = nextRound    (para roundOver y setOver)
+
 }
 
 void Game::filterObjectsToRender() {
@@ -153,7 +163,7 @@ void Game::updatePlayers(
                             flipped, hasGun,
             duck.extraData[DuckData::Flag::Index::NoMoreBullets],
                             duck.gunID, duck.direction};
-        
+
         soundManager.checkSounds(state);
 
         spritesMapping.at(duck.duckID)->updatePosition(screenPositionX, screenPositionY);

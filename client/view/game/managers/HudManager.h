@@ -11,15 +11,17 @@
 #include "DuckData.h"
 
 class HudManager {
-
 public:
-    HudManager(int& windowWidth, int& windowHeight, SDL2pp::Renderer& renderer);
+    HudManager(int& windowWidth, int& windowHeight, SDL2pp::Renderer& renderer, bool& transition);
     ~HudManager() = default;
-    void finishedSet(std::list<DuckData>& ducks, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
-    void showPoints(std::list<DuckData>& ducks, SDL2pp::Rect& tableRect, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
+    void check(bool& roundFinished, bool& setFinished, bool& gameFinished, std::list<DuckData>& ducks, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
+    void finishedRound();
 
 private:
+    void finishedSet(std::list<DuckData>& ducks, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
+    void showPoints(std::list<DuckData>& ducks, SDL2pp::Rect& tableRect, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
     int& windowWidth;
     int& windowHeight;
     SDL2pp::Renderer& renderer;
+    bool& transition;
 };
