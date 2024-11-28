@@ -25,9 +25,10 @@ class GameMenu: public QMainWindow {
 
 private:
     Ui::GameMenu* ui;
-    Communicator& communicator; /** Referencia al comunicador, para comunicar el lobby con el server */
+    Communicator&
+            communicator;  /** Referencia al comunicador, para comunicar el lobby con el server */
     bool& twoPlayersLocal; /** booleano del Launcher, para que sepa cuantos jugadores hay*/
-    GameInfo gameInfo; /** Struct que guarda informacion importante para el juego */
+    GameInfo gameInfo;     /** Struct que guarda informacion importante para el juego */
 
     /** Punteros a las paginas usadas en el lobby */
     QPointer<mainMenu> menu;
@@ -36,7 +37,8 @@ private:
     QPointer<matchSetup> new_game;
 
     /**
-     * Setea los widgets de las paginas y conecta los botones y las acciones para configurar la funcionalidad del lobby.
+     * Setea los widgets de las paginas y conecta los botones y las acciones para configurar la
+     * funcionalidad del lobby.
      */
     void setPagesAndConnections();
 

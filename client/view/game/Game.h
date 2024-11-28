@@ -18,12 +18,12 @@
 #include "Camera.h"
 #include "Communicator.h"
 #include "DuckData.h"
-#include "HudManager.h"
 #include "DuckState.h"
 #include "EnviromentRenderer.h"
 #include "EventHandler.h"
 #include "GameMessage.h"
 #include "GameStatus.h"
+#include "HudManager.h"
 #include "MessageType.h"
 #include "ServerMessage.h"
 #include "SoundManager.h"
@@ -55,9 +55,9 @@ private:
     std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>> createSpritesMapping();
 
     /**
-    * Updates the positions, states, and scales of the player sprites based on the camera view.
-    * @param spritesMapping the mapping of the SpriteManager for each duck
-    */
+     * Updates the positions, states, and scales of the player sprites based on the camera view.
+     * @param spritesMapping the mapping of the SpriteManager for each duck
+     */
     void updatePlayers(
             const std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
 
@@ -93,9 +93,9 @@ private:
     void getSnapshot();
 
     /**
-    * Shows the background texture
-    * @param backgroundTexture the background texture to show
-    */
+     * Shows the background texture
+     * @param backgroundTexture the background texture to show
+     */
     void showBackground(SDL2pp::Texture& backgroundTexture);
 
     // Clears the game objects, expecting to refill them with the next snapshot.

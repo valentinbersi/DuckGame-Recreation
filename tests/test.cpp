@@ -8,9 +8,9 @@
 #include "ClientRecvProtocol.h"
 #include "ClientSendProtocol.h"
 #include "DuckData.h"
-#include "ItemData.h"
 #include "GameMessage.h"
 #include "GameStatus.h"
+#include "ItemData.h"
 #include "ListenerSocket.h"
 #include "LobbyMessage.h"
 #include "Math.h"
@@ -153,7 +153,8 @@ TEST(ProtocolTest, ServerToGameCorrectValues) {
 
     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
     status->ducks.emplace_back(Vector2(0, 0), DuckID::White, 10, ItemID::CowboyPistol, 0b100);
-    status->itemPositions.emplace_back(ItemData(ItemID::Banana, Rectangle(Vector2(134, 4.7), Vector2(0, 3.124))));
+    status->itemPositions.emplace_back(
+            ItemData(ItemID::Banana, Rectangle(Vector2(134, 4.7), Vector2(0, 3.124))));
     status->blockPositions.emplace_back(Rectangle(Vector2(0, 0), Vector2(0, 0)));
     status->itemSpawnerPositions.emplace_back(Rectangle(Vector2(23, 4), Vector2(6, 7)));
 
@@ -182,14 +183,17 @@ TEST(ProtocolTest, ServerToOneGameFillStatus) {
     status->ducks.emplace_back(Vector2(77.90845, 0.654), DuckID::Yellow, 10, ItemID::PewPewLaser,
                                0b1 | 0b10 | 0b1000);
 
-    status->itemPositions.emplace_back(ItemData(ItemID::Banana, Rectangle(Vector2(134, 4.7), Vector2(0, 3.124))));
-    status->itemPositions.emplace_back(ItemData(ItemID::CowboyPistol, Rectangle(Vector2(0, 0), Vector2(0, 0))));
-    status->itemPositions.emplace_back(ItemData(ItemID::DuelPistol, Rectangle(Vector2(2, 3), Vector2(100, 50))));
+    status->itemPositions.emplace_back(
+            ItemData(ItemID::Banana, Rectangle(Vector2(134, 4.7), Vector2(0, 3.124))));
+    status->itemPositions.emplace_back(
+            ItemData(ItemID::CowboyPistol, Rectangle(Vector2(0, 0), Vector2(0, 0))));
+    status->itemPositions.emplace_back(
+            ItemData(ItemID::DuelPistol, Rectangle(Vector2(2, 3), Vector2(100, 50))));
 
     status->blockPositions.emplace_back(Rectangle(Vector2(0, 0), Vector2(0, 0)));
     status->blockPositions.emplace_back(Rectangle(Vector2(2, 3), Vector2(100, 50)));
     status->blockPositions.emplace_back(Rectangle(Vector2(13.0, 67.8), Vector2(8, 7)));
-    
+
     status->itemSpawnerPositions.emplace_back(Rectangle(Vector2(33434.78, 123.8), Vector2(3, 4)));
     status->itemSpawnerPositions.emplace_back(Rectangle(Vector2(3234.49, 343.8), Vector2(7, 8)));
 

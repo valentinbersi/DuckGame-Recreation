@@ -60,8 +60,11 @@ void SoundManager::playEffect(const std::string& path) {
 }
 
 void SoundManager::checkSounds(DuckState& state) {
-    if (state.isShooting) playSound(state.gunEquipped);
-    if (state.beingDamaged) playEffect(CUACK);
-    if (state.noMoreBullets) playEffect(NO_MORE_BULLETS);
+    if (state.isShooting)
+        playSound(state.gunEquipped);
+    if (state.beingDamaged)
+        playEffect(CUACK);
+    if (state.noMoreBullets)
+        playEffect(NO_MORE_BULLETS);
     // faltan sonidos de fin de ronda, fin de partida y muerte
 }

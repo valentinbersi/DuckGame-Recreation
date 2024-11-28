@@ -24,16 +24,20 @@ private:
               const DuckState& state);
 
     // Draws the first type of effect of the weapons.
-    void drawEffect1(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale, const DuckState& state);
+    void drawEffect1(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
+                     const DuckState& state);
 
     // Draws the second type of effect of the weapons.
-    void drawEffect2(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale, const DuckState& state);
+    void drawEffect2(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
+                     const DuckState& state);
 
     // Draws the laser flare effect for the Laser Rifle.
-    void drawLaserFlare(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale, const DuckState& state);
+    void drawLaserFlare(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
+                        const DuckState& state);
 
     // Draws the plasma effect for the Pew Pew Laser.
-    void drawPlasma(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale, const DuckState& state);
+    void drawPlasma(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
+                    const DuckState& state);
 
     std::unordered_map<ItemID, std::string> gunPaths = {
             {ItemID::Grenade, "assets/weapons/Grenade.png"},
