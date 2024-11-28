@@ -1,8 +1,55 @@
+#include <iostream>
+
+#include "GlobalConfig.h"
 #include "Server.h"
-int main(int argc, char const* argv[]) {
-    if (argc != 2) {
+
+int main(const int argc, char* argv[]) {
+    int opt;
+
+    while ((opt = getopt(argc, argv, "hc:m:")) != -1) {
+        switch (opt) {
+            case 'h':
+                std::cout << "Usage: " << argv[0]
+                          << " [-h] [-c config_directory] [-m maps_directory] [port]" << std::endl;
+                return 0;
+            case 'c': {
+                std::string configPath(optarg);
+                if (configPath.back() != '/')
+                    configPath += '/';
+                GlobalConfig::setConfigPath(std::move(configPath));
+            } break;
+            case 'm': {
+                std::string mapsPath(optarg);
+                if (mapsPath.back() != '/')
+                    mapsPath += '/';
+                GlobalConfig::setMapsDirectory(std::move(mapsPath));
+            } break;
+            default:
+                std::cerr << "Usage: " << argv[0]
+                          << " [-h] [-c config_directory] [-m maps_directory] [port]" << std::endl;
+                return -1;
+        }
+    }
+
+    std::string port;
+
+    if (optind < argc)
+        port = argv[optind];
+    else
+        port = "8080";
+
+    try {
+        GlobalConfig::load();
+    } catch (const GlobalConfig::BadConfigFile& e) {
+        std::cerr << e.what() << std::endl;
         return -1;
     }
-    Server server(argv[1]);
-    return server.run();
+
+    try {
+        Server server(port);
+        return server.run();
+    } catch (const std::runtime_error& e) {
+        std::cerr << e.what() << std::endl;
+        return -1;
+    }
 }

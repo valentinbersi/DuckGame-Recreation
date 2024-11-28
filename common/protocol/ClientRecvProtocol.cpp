@@ -25,8 +25,9 @@ std::list<DuckData> ClientRecvProtocol::recvDuckData() {
         DuckData::Direction direction = static_cast<DuckData::Direction>(recvByte());
         u8 gunID = static_cast<ItemID>(recvByte());
         u16 actions = recvShort();
+        u32 roundsWon = recvInt();
         Vector2 position = recvVector2();
-        ducks.emplace_back(position, duckID, life, direction, gunID, actions);
+        ducks.emplace_back(position, duckID, life, direction, gunID, actions, roundsWon);
     }
     return ducks;
 }

@@ -1,0 +1,7 @@
+ammo: 3
+reach: 64
+dispersion: 0
+recoil:
+  x: 0
+  y: 0
+reload time: 1

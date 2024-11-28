@@ -7,4 +7,4 @@
 TerrainBlock::TerrainBlock(Vector2 position):
         StaticObject(std::move(position), 2, 0, BLOCK_DIMENSIONS) {}
 
-SizedObjectData TerrainBlock::status() { return {position(), BLOCK_DIMENSIONS}; }
+SizedObjectData TerrainBlock::status() const { return {position(), BLOCK_DIMENSIONS}; }

@@ -11,7 +11,7 @@
 
 class Level final: public GameObject {
     std::vector<TerrainBlock*> terrainBlocks;
-    std::vector<ItemSpawner*> itemSpawner;
+    std::vector<ItemSpawner*> itemSpawners;
 
 public:
     /**

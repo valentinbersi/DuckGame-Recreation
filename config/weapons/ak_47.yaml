@@ -1,0 +1,9 @@
+ammo: 30
+reach: 13
+recoil:
+  x: 4
+  y: 0
+time between shots: 0.1
+min dispersion: 10
+mid dispersion: 33
+max dispersion: 45
