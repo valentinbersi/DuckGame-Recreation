@@ -4,7 +4,7 @@ ShootCommand::ShootCommand(const PlayerID id, InputAction action): Command(id), 
 
 void ShootCommand::execute(GameController& gameController) {
     Player& player = gameController.getPlayer(id);
-    switch (id) {
+    switch (action) {
         case InputAction::SHOOT_PRESSED:
             return player.shoot();
         case InputAction::SHOOT_RELEASED:

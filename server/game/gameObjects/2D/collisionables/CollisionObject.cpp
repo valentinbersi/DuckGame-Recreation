@@ -34,7 +34,9 @@ void CollisionObject::updateInternal([[maybe_unused]] const float delta) {
 }
 
 GameObject2D& CollisionObject::setPosition(Vector2 position) noexcept {
-    return GameObject2D::setPosition(std::move(position));
+    GameObject2D::setPosition(std::move(position));
+    // shape.setCenter(globalPosition());
+    return *this;
 }
 
 std::bitset<CollisionObject::LayersCount> CollisionObject::layers() const { return _layers; }

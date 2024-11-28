@@ -10,15 +10,14 @@
 #define AMMO 6
 
 LongPistol::LongPistol(const ItemID id, Vector2 recoil, const float dispersion):
-        EquippableWeapon(id, AMMO, std::move(recoil), dispersion) {}
+        EquippableWeapon(id, AMMO, std::move(recoil), dispersion),
+        randomGenerator(dispersion == 0 ? dispersion : -dispersion, dispersion) {}
 
 #define BULLET_TILES 20
 #define BULLET_SPEED 400
 #define BULLET_DAMAGE 10
 
 void LongPistol::actionate() {
-    static RandomFloatGenerator randomGenerator(-dispersion, dispersion);
-
     if (firing)
         return;
 

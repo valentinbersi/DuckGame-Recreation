@@ -1,5 +1,6 @@
 #include "Player.h"
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
@@ -298,6 +299,8 @@ void Player::update(const float delta) {
 }
 
 void Player::kill() {
+    std::cout << "I DIED" << std::endl;
+
     if (flags.test(DuckData::Flag::Index::IsDead))
         return;
 
@@ -309,7 +312,7 @@ void Player::makeShoot() { flags |= DuckData::Flag::IsShooting; }
 
 void Player::notMoreBullets() { flags |= DuckData::Flag::NoMoreBullets; }
 
-DuckData::Direction Player::viewDirection() const { return _movementDirection; }
+DuckData::Direction Player::viewDirection() const { return _lastViewDirection; }
 
 u32 Player::roundsWon() const { return wonRounds; }
 

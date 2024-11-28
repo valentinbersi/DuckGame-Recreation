@@ -9,6 +9,8 @@ struct LongPistol: EquippableWeapon {
     LongPistol& operator=(const LongPistol& other) = delete;
     LongPistol& operator=(LongPistol&& other) noexcept = delete;
 
+    RandomFloatGenerator randomGenerator;
+
     /**
      * Creates a new LongPistol
      * @param id The id of the weapon
