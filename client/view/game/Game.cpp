@@ -59,25 +59,29 @@ void Game::init() {
 
     while (running) {
         const float deltaTime = timer.iterationStartSeconds().count();
-        getSnapshot();
 
-        renderer.Clear();
+        if (!transition) {
+            getSnapshot();
 
-        camera.update(ducks, deltaTime);
-        filterObjectsToRender();
+            renderer.Clear();
 
-        showBackground(backgroundTexture);
-        updatePlayers(spritesMapping);
-        updateBlocks(enviromentRenderer);
-        updateItemSpawns(enviromentRenderer);
-        updateItems(enviromentRenderer);
+            camera.update(ducks, deltaTime);
+            filterObjectsToRender();
 
-        setFinished = true;
-        hudManager.check(roundFinished, setFinished, gameFinished, ducks, spritesMapping);
-        if (transition) {
-            transition = false;
+            showBackground(backgroundTexture);
+            updatePlayers(spritesMapping);
+            updateBlocks(enviromentRenderer);
+            updateItemSpawns(enviromentRenderer);
+            updateItems(enviromentRenderer);
+            renderer.Present();
+
+            roundFinished = true;
+            hudManager.check(roundFinished, setFinished, gameFinished, ducks, spritesMapping, deltaTime);
+
+        } else {
+            hudManager.check(roundFinished, setFinished, gameFinished, ducks, spritesMapping, deltaTime);
             //comm.send
-        } else renderer.Present();         // the renderer is presented inside the hudManager if the round/set/game is finished. in other case...
+        }
 
         handler.handleEvents();
 

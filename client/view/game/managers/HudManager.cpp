@@ -12,33 +12,42 @@ using SDL2pp::Texture;
 
 HudManager::HudManager(int &windowWidth, int &windowHeight, Renderer &renderer, bool& transition) : windowWidth(windowWidth),
                                                                                            windowHeight(windowHeight),
-                                                                                           renderer(renderer), transition(transition) {}
+                                                                                           renderer(renderer), transition(transition),
+                                                                                            imageDisplayed(false), timeElapsed(0), size(10) {}
 
 // FALTA DIBUJAR UN + 1 CON UNA FONT AMARILLA EN LA CABEZA DEL PATO CUANDO FINALIZA LA RONDA (CUANDO LA GANA)
 
 
 void HudManager::check(bool& roundFinished, bool& setFinished, bool& gameFinished,
-                    std::list<DuckData>& ducks, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
+                    std::list<DuckData>& ducks, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping, float delta) {
     if (roundFinished) {
-        finishedRound();
-        roundFinished = false;
+        finishedRound(delta);
+        transition = true;
+        //roundFinished = false;
     } else if (setFinished) {
-        finishedSet(ducks, spritesMapping);
-        setFinished = false;
+        finishedSet(ducks, spritesMapping, delta);
+        transition = true;
+        //setFinished = false;
     } else if (gameFinished) {
         //finishedGame();
     }
 }
 
-void HudManager::finishedRound() {
+void HudManager::defaultValues() {
+    timeElapsed = 0;
+    imageDisplayed = false;
+    transition = false;
+    size = 10;
+}
+
+void HudManager::finishedRound(float delta) {
     int centerX = windowWidth / 2;
     int centerY = windowHeight / 2;
-    int size = 10;
 
     int maxSize = std::max(windowWidth, windowHeight);
-    int increment = maxSize / 100;
+    int increment = maxSize / 50;
 
-    while (size < maxSize) {
+    if (size < maxSize) {
         Rect rect;
         rect.x = centerX - size / 2;
         rect.y = centerY - size / 2;
@@ -46,34 +55,37 @@ void HudManager::finishedRound() {
         rect.h = size;
 
         SDL_SetRenderDrawColor(renderer.Get(), 0, 0, 0, 255);
+        SDL_RenderClear(renderer.Get());
         SDL_RenderFillRect(renderer.Get(), &rect);
         renderer.Present();
 
-        SDL_Delay(10);
         size += increment;
+
+    } else if (!imageDisplayed) {
+        SDL_SetRenderDrawColor(renderer.Get(), 0, 0, 0, 255);
+        SDL_RenderClear(renderer.Get());
+
+        Texture& imageTexture = TextureManager::getTexture(LOADING_IMAGE, renderer);
+
+        int imageWidth = imageTexture.GetWidth();
+        int imageHeight = imageTexture.GetHeight();
+        Rect imageRect;
+        imageRect.x = centerX - imageWidth / 2;
+        imageRect.y = centerY - imageHeight / 2;
+        imageRect.w = imageWidth;
+        imageRect.h = imageHeight;
+
+        renderer.Copy(imageTexture, NullOpt, imageRect);
+        renderer.Present();
+        imageDisplayed = true;
+
+    } else {
+        if (timeElapsed < 2) timeElapsed += delta;
+        else {defaultValues();}
     }
-    SDL_SetRenderDrawColor(renderer.Get(), 0, 0, 0, 255);
-    SDL_RenderClear(renderer.Get());
-
-    Texture& imageTexture = TextureManager::getTexture(LOADING_IMAGE, renderer);
-
-    int imageWidth = imageTexture.GetWidth();
-    int imageHeight = imageTexture.GetHeight();
-    Rect imageRect;
-    imageRect.x = centerX - imageWidth / 2;
-    imageRect.y = centerY - imageHeight / 2;
-    imageRect.w = imageWidth;
-    imageRect.h = imageHeight;
-    
-    renderer.Copy(imageTexture, NullOpt, imageRect);
-
-    renderer.Present();
-    SDL_Delay(2000);
-
-    transition = true;
 }
 
-void HudManager::finishedSet(std::list<DuckData>& ducks, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
+void HudManager::finishedSet(std::list<DuckData>& ducks, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping, float delta) {
     Texture& setTexture = TextureManager::getTexture(SET_FINISHED, renderer);
 
     int newSize = std::min(windowWidth, windowHeight) / 2;
@@ -109,7 +121,7 @@ void HudManager::finishedSet(std::list<DuckData>& ducks, const HashMap<DuckData:
     renderer.Present();
     SDL_Delay(5000);
 
-    finishedRound();               // effect of round end
+    finishedRound(delta);               // effect of round end
 }
 
 std::string duckIDToString(DuckData::Id id) {
