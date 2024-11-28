@@ -7,7 +7,6 @@ struct DuckState {
     bool playingDead;
     bool inAir;
     bool flapping;
-    bool beingDamaged;
     bool moving;
     bool hasHelmet;
     bool hasChestplate;
@@ -16,6 +15,7 @@ struct DuckState {
     bool flipped;
     bool hasGun;
     bool noMoreBullets;
+    bool isDead;
     ItemID gunEquipped;
     DuckData::Direction direction;
 
@@ -23,7 +23,6 @@ struct DuckState {
             playingDead(false),
             inAir(false),
             flapping(false),
-            beingDamaged(false),
             moving(false),
             hasHelmet(false),
             hasChestplate(false),
@@ -32,18 +31,18 @@ struct DuckState {
             flipped(false),
             hasGun(false),
             noMoreBullets(false),
+            isDead(false),
             gunEquipped(ItemID::NONE),
             direction(DuckData::Direction::Right) {}
 
-    DuckState(bool playingDead, bool inAir, bool flapping, bool beingDamaged, bool moving,
+    DuckState(bool playingDead, bool inAir, bool flapping, bool moving,
               bool hasHelmet, bool hasChestplate, bool isShooting, bool lookingUp, bool flipped,
-              bool hasGun, bool noMoreBullets, ItemID gunEquipped, DuckData::Direction direction)
+              bool hasGun, bool noMoreBullets, bool isDead, ItemID gunEquipped, DuckData::Direction direction)
 
             :
             playingDead(playingDead),
             inAir(inAir),
             flapping(flapping),
-            beingDamaged(beingDamaged),
             moving(moving),
             hasHelmet(hasHelmet),
             hasChestplate(hasChestplate),
@@ -52,6 +51,7 @@ struct DuckState {
             flipped(flipped),
             hasGun(hasGun),
             noMoreBullets(noMoreBullets),
+            isDead(isDead),
             gunEquipped(gunEquipped),
             direction(direction) {}
 };

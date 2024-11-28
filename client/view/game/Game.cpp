@@ -167,13 +167,12 @@ void Game::updatePlayers(
         DuckState state = {duck.extraData[DuckData::Flag::Index::PlayingDead],
                            duck.extraData[DuckData::Flag::Index::InAir],
                            duck.extraData[DuckData::Flag::Index::Flapping],
-                           duck.extraData[DuckData::Flag::Index::BeingDamaged],
                            duck.extraData[DuckData::Flag::Index::IsMoving],
                            duck.extraData[DuckData::Flag::Index::Helmet],
                            duck.extraData[DuckData::Flag::Index::Armor],
                            duck.extraData[DuckData::Flag::Index::IsShooting],
                            duck.extraData[DuckData::Flag::Index::LookingUp],
-                           flipped, hasGun, duck.extraData[DuckData::Flag::Index::NoMoreBullets],
+                           flipped, hasGun, duck.extraData[DuckData::Flag::Index::NoMoreBullets], duck.extraData[DuckData::Flag::Index::IsDead],
                            duck.gunID, duck.direction};
 
         soundManager.checkSounds(state);
