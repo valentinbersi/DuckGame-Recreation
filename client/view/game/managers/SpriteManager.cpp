@@ -49,6 +49,7 @@ SpriteManager::SpriteManager(
         isMoving(false),
         inAir(false),
         flapping(false),
+        dead(false),
         spritesheet(std::make_unique<Spritesheet>(path1, path2, renderer)),
         weaponSpriteManager(std::make_unique<WeaponSpriteManager>()),
         state(),
@@ -66,11 +67,12 @@ void SpriteManager::update(const DuckState& newState) {
     state = newState;
     setFlags();
 
-    if (state.beingDamaged)
-        spritesheet->damageEffects(m_position_x, m_position_y);
+    if (dead) {
+        draw(SPRITESHEET_DEAD_COL, SPRITESHEET_DEAD_ROW);
 
-    if (state.inAir) {
+    } else if (state.inAir) {
         draw(frame, SPRITESHEET_JUMP_ROW);
+
     } else if (state.playingDead) {
         draw(SPRITESHEET_PLAYING_DEAD_COL, SPRITESHEET_DEAD_ROW);
 
@@ -109,6 +111,11 @@ void SpriteManager::setFlags() {
     if (flapping != state.flapping) {
         flapping = !flapping;
         flappingFrame = DEFAULT_FLAPPING;
+    }
+
+    if (state.isDead != dead) {
+        dead = !dead;
+        spritesheet->damageEffects(m_position_x, m_position_y);
     }
 }
 
