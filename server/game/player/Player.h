@@ -13,7 +13,6 @@ class GameTimer;
 
 class Player final: public PhysicsObject {
     DuckData::Id id;
-    i8 life;
     DuckData::Direction _movementDirection;
     DuckData::Direction _viewDirection;
     DuckData::Direction _lastViewDirection;
@@ -38,7 +37,7 @@ class Player final: public PhysicsObject {
     /**
      * Event manager for the player colliding with an object
      */
-    void onCollision(CollisionObject* item);
+    void onCollision(const CollisionObject* object);
 
     /**
      * Event manager for the player firing a weapon
@@ -117,10 +116,9 @@ public:
     void update(float delta) override;
 
     /**
-     * Damages the player
-     * @param damage the amount of damage to deal
+     * Kill the player
      */
-    void damage(i8 damage);
+    void kill();
 
     /**
      * Makes the player shoot

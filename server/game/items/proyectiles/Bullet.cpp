@@ -17,19 +17,17 @@
 
 void Bullet::onCollision(CollisionObject* object) const {
     if (object->layers().test(Layer::Index::Player))
-        static_cast<Player*>(object)->damage(_damage);
+        static_cast<Player*>(object)->kill();
 
     parent()->removeChild(this);
 }
 
-Bullet::Bullet(const u8 damage, Vector2 velocity, const u8 tiles):
-        PhysicsObject(Vector2::ZERO, Layer::None, Layer::None, BULLET_DIMENSIONS, Gravity::Disabled,
-                      std::move(velocity), CollisionType::Stop),
-        _damage(damage),
+Bullet::Bullet(Vector2 velocity, const u8 tiles):
+        PhysicsObject(Vector2::ZERO, Layer::None, Layer::Player | Layer::Wall | Layer::Box,
+                      BULLET_DIMENSIONS, Gravity::Disabled, std::move(velocity),
+                      CollisionType::Stop),
         tiles(tiles) {
     connect(Events::Collision, eventHandler(&Bullet::onCollision, CollisionObject*));
 }
-
-u8 Bullet::damage() const { return _damage; }
 
 Bullet::~Bullet() = default;

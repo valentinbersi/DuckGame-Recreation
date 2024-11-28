@@ -29,11 +29,11 @@ void LongPistol::actionate() {
     --ammo;
 
     const Vector2 direction =
-            parent<Player>()->viewDirection() == DuckData::Direction::Right ?
-                    Vector2::RIGHT.rotated(randomGenerator.generateRandomFloat()) :
-                    Vector2::LEFT.rotated(randomGenerator.generateRandomFloat());
+            (parent<Player>()->viewDirection() == DuckData::Direction::Right ? Vector2::RIGHT :
+                                                                               Vector2::LEFT)
+                    .rotated(randomGenerator());
 
-    auto bullet = std::make_unique<Bullet>(BULLET_DAMAGE, direction * BULLET_SPEED, BULLET_TILES);
+    auto bullet = std::make_unique<Bullet>(direction * BULLET_SPEED, BULLET_TILES);
     bullet->setGlobalPosition(parent<Player>()->globalPosition() +
                               (parent<Player>()->viewDirection() == DuckData::Direction::Right ?
                                        Vector2::RIGHT * 2 :
