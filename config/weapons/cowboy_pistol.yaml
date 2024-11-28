@@ -1,0 +1,6 @@
+ammo: 6
+reach: 20
+dispersion: 0
+recoil:
+  x: 0
+  y: 0

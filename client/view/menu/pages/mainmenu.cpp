@@ -1,5 +1,6 @@
 #include "mainmenu.h"
 
+#include <QDebug>
 #include <QMessageBox>
 
 mainMenu::mainMenu(QWidget* parent): QWidget(parent), ui(new Ui::mainMenu) {
@@ -15,6 +16,7 @@ void mainMenu::handleExit() {
                                   QMessageBox::Yes | QMessageBox::No);
 
     if (reply == QMessageBox::Yes) {
+        qDebug() << "se emite exitGameRequested";  // ---------------------------
         emit exitGameRequested();
     }
 }

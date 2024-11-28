@@ -14,58 +14,48 @@
 #include "Object.h"
 #include "ui_viewcontroller.h"
 
-#define BUTTONS_STYLE \
-    R"(
-QPushButton {
-    background-color: transparent;
-    border: none;
-    border-radius: 10px;
-}
+//#define BUTTONS_STYLE R"(
+// QPushButton {
+//    background-color: rgb(229, 165, 10);
+//    border-radius: 5px;
+//}
+// QPushButton:checked {
+//    background-color: rgb(165, 29, 45);
+//})"
 
-QPushButton:checked {
-    background-color: rgb(165, 29, 45);
-}
-)"
 
 ViewController::ViewController(QWidget* parent):
         QMainWindow(parent), ui(new Ui::ViewController), backgroundBrush(Qt::white) {
     ui->setupUi(this);
 
+    ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
     ui->graphicsView->setBackgroundBrush(Qt::NoBrush);
     scene = new LevelScene(this, objects);
     ui->graphicsView->setScene(scene);
     onSceneResize();
-
     setupToolBar();
 
-    connect(ui->ClearAll, &QAction::triggered, scene, &LevelScene::clearAll);
+    connect(scene, &LevelScene::requestDragModeChange, ui->graphicsView,
+            &QGraphicsView::setDragMode);
 
-    connect(ui->actionSaveMap, &QAction::triggered, this, [this]() {
-        if (!scene->enoughDucks()) {
-            QMessageBox::warning(this, "Error", "The map should have 4 duck spawns.");
-            return;
-        }
-        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
-                              scene->getMapWidth(), scene->getMapHeight());
-        QMessageBox::information(this, "Save Map", "El mapa se guardo correctamente!");
-    });
-
+    connect(ui->actionSaveMap, &QAction::triggered, this,
+            &ViewController::on_actionSaveMap_triggered);
     connect(ui->actionNewMap, &QAction::triggered, this,
             &ViewController::on_actionNewMap_triggered);
-
     connect(ui->actionEditMap, &QAction::triggered, this,
             &ViewController::on_actionEditMap_triggered);
 
-    connect(scene, &LevelScene::resizeView, this, &ViewController::onSceneResize);
+    connect(ui->ClearAll, &QAction::triggered, scene, &LevelScene::clearAll);
+    connect(ui->ChangeBackground, &QAction::triggered, this, &ViewController::selectBackground);
 
-    connect(ui->ChangeBackground, &QAction::triggered, this, &ViewController::changeBackground);
+    connect(scene, &LevelScene::resizeView, this, &ViewController::onSceneResize);
 }
 
 void ViewController::setupToolBar() {
-    QPushButton* platformButton = new QPushButton(QIcon(PLATFORM_ICON), "", this);
-    QPushButton* spawnDuckButton = new QPushButton(QIcon(DUCK_ICON), "", this);
-    QPushButton* spawnArmamentButton = new QPushButton(QIcon(ARMAMENT_ICON), "", this);
-    QPushButton* boxButton = new QPushButton(QIcon(BOX_ICON), "", this);
+    platformButton = new QPushButton(QIcon(PLATFORM_ICON), "", this);
+    spawnDuckButton = new QPushButton(QIcon(DUCK_ICON), "", this);
+    spawnArmamentButton = new QPushButton(QIcon(ARMAMENT_ICON), "", this);
+    boxButton = new QPushButton(QIcon(BOX_ICON), "", this);
 
     ui->toolBar->addWidget(platformButton);
     ui->toolBar->addWidget(spawnDuckButton);
@@ -80,7 +70,7 @@ void ViewController::setupToolBar() {
     for (const auto& [button, type]: buttonTypeMap) {
         button->setCheckable(true);
         button->setIconSize(QSize(64, 64));
-        button->setStyleSheet(BUTTONS_STYLE);
+        // button->setStyleSheet(QString(BUTTONS_STYLE));
         connect(button, &QPushButton::clicked, this,
                 [this, type]() { scene->selectObjectType(type); });
     }
@@ -97,19 +87,18 @@ void ViewController::onSceneResize() {
     ui->graphicsView->setSceneRect(0, 0, sceneRect.width() * 4, sceneRect.height() * 4);
 }
 
-bool ViewController::confirmAndSaveMap() {
-    QMessageBox::StandardButton reply =
-            QMessageBox::question(this, "Confirmation", "Do you want to save the map open?",
-                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-    if (reply == QMessageBox::Cancel)
-        return false;
-    else if (reply == QMessageBox::Yes)
-        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
-                              scene->getMapWidth(), scene->getMapHeight());
-    return true;
+void ViewController::changeBackgroundBrush() {
+    QString _background = QString::fromStdString(background);
+    QPixmap pixmap(_background);
+    if (pixmap.isNull()) {
+        QMessageBox::warning(this, "Error", "The selected file is not a valid image.");
+        return;
+    }
+    backgroundBrush = QBrush(pixmap);
+    update();
 }
 
-void ViewController::changeBackground() {
+void ViewController::selectBackground() {
     QString filePath = QFileDialog::getOpenFileName(this, "Select Backgrounds",
                                                     "assets/background/", "Images (*.png)");
     if (filePath.isEmpty()) {
@@ -118,13 +107,30 @@ void ViewController::changeBackground() {
         return;
     }
 
-    QPixmap pixmap(filePath);
-    if (pixmap.isNull()) {
-        QMessageBox::warning(this, "Error", "The selected file is not a valid image.");
+    background = filePath.toStdString();
+    changeBackgroundBrush();
+}
+
+void ViewController::on_actionSaveMap_triggered() {
+    if (!scene->enoughDucks()) {
+        QMessageBox::warning(this, "Error", "The map should have 4 duck spawns.");
         return;
     }
-    backgroundBrush = QBrush(pixmap);
-    update();
+    MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), scene->getMapWidth(),
+                          scene->getMapHeight(), background);
+    QMessageBox::information(this, "Save Map", "The map was saved successfully!");
+}
+
+bool ViewController::confirmAndSaveMap() {
+    QMessageBox::StandardButton reply =
+            QMessageBox::question(this, "Confirmation", "Do you want to save the map open?",
+                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+    if (reply == QMessageBox::Cancel)
+        return false;
+    else if (reply == QMessageBox::Yes)
+        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
+                              scene->getMapWidth(), scene->getMapHeight(), background);
+    return true;
 }
 
 void ViewController::on_actionNewMap_triggered() {
@@ -135,6 +141,29 @@ void ViewController::on_actionNewMap_triggered() {
     ui->lineEditMapName->clear();
     QMessageBox::information(this, "New Map", "A new map was created!");
 }
+
+/*
+void MainWindow::wheelEvent(QWheelEvent* event) {
+    if (event->modifiers() & Qt::ControlModifier) {
+        qreal zoomFactor = 1.15;
+
+QPointF viewCenter =
+        ui->graphicsView->mapToScene(ui->graphicsView->viewport()->rect().center());
+
+if (event->angleDelta().y() > 0)
+    ui->graphicsView->scale(zoomFactor, zoomFactor);
+else
+    ui->graphicsView->scale(1 / zoomFactor, 1 / zoomFactor);
+
+QPointF newCenter = ui->graphicsView->mapFromScene(viewCenter);
+ui->graphicsView->ensureVisible(newCenter.x(), newCenter.y(), 100, 100, 1.0);
+
+event->accept();
+} else {
+    QMainWindow::wheelEvent(event);
+}
+}
+*/
 
 void ViewController::on_actionEditMap_triggered() {
     if (!confirmAndSaveMap())
@@ -161,13 +190,9 @@ void ViewController::on_actionEditMap_triggered() {
         return;
 
     scene->loadMap(mapWidth, mapHeight);
+    changeBackgroundBrush();
     ui->lineEditMapName->setText(mapName);
     QMessageBox::information(this, "Imported Map", "The map has been imported successfully!");
-}
-
-ViewController::~ViewController() {
-    delete scene;
-    delete ui;
 }
 
 void ViewController::paintEvent(QPaintEvent* event) {
@@ -181,25 +206,11 @@ void ViewController::paintEvent(QPaintEvent* event) {
     painter.restore();
 }
 
-/*
-void MainWindow::wheelEvent(QWheelEvent* event) {
-    if (event->modifiers() & Qt::ControlModifier) {
-        qreal zoomFactor = 1.15;
-
-QPointF viewCenter =
-        ui->graphicsView->mapToScene(ui->graphicsView->viewport()->rect().center());
-
-if (event->angleDelta().y() > 0)
-    ui->graphicsView->scale(zoomFactor, zoomFactor);
-else
-    ui->graphicsView->scale(1 / zoomFactor, 1 / zoomFactor);
-
-QPointF newCenter = ui->graphicsView->mapFromScene(viewCenter);
-ui->graphicsView->ensureVisible(newCenter.x(), newCenter.y(), 100, 100, 1.0);
-
-event->accept();
-} else {
-    QMainWindow::wheelEvent(event);
+ViewController::~ViewController() {
+    delete scene;
+    delete ui;
+    delete platformButton;
+    delete spawnDuckButton;
+    delete spawnArmamentButton;
+    delete boxButton;
 }
-}
-*/

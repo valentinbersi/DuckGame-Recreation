@@ -107,7 +107,7 @@ color: white;
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="sizePolicy">
-    <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
@@ -116,7 +116,16 @@ color: white;
     <string/>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color:rgb(229, 165, 10);</string>
+    <string notr="true">background-color:rgb(229, 165, 10);
+
+QPushButton {
+    background-color: rgb(229, 165, 10);
+    border-radius: 5px;
+}
+
+QPushButton:checked {
+    background-color: rgb(165, 29, 45);
+}</string>
    </property>
    <property name="allowedAreas">
     <set>Qt::AllToolBarAreas</set>

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <utility>
 
 #include "CollisionObject.h"
 #include "DuckData.h"
@@ -8,15 +9,26 @@
 #include "Input.h"
 #include "PhysicsObject.h"
 
+class GameTimer;
+
 class Player final: public PhysicsObject {
     DuckData::Id id;
     i8 life;
-    DuckData::Direction _direction;
+    DuckData::Direction _movementDirection;
+    DuckData::Direction _viewDirection;
+    DuckData::Direction _lastViewDirection;
     std::bitset<DuckData::FlagCount> flags;
     Input input;
-    float speed;
+    float acceleration;
+    float airAcceleration;
     EquippableWeapon* weapon;
-    bool isDead;
+    bool isJumping;
+    bool interactWithItem;
+    bool actionateWeapon;
+    bool canKeepJumping;
+    GameTimer* jumpTimer;
+    float jumpTime;
+    u32 wonRounds;
 
     /**
      * Event manager for the player colliding with an item
@@ -39,7 +51,46 @@ class Player final: public PhysicsObject {
      */
     void onWeaponNoMoreBullets();
 
-    // bool canKeepJumping;
+    /*
+     * Event manager for the player's jump timer's timeouts
+     */
+    void onJumpTimerTimeout();
+
+    /**
+     * Reset the state of the player for a new frame
+     */
+    void resetState();
+
+    /**
+     * Manages the player's movement
+     */
+    void manageCrouch();
+
+    /**
+     * Manages the player's input
+     */
+    void manageInput();
+
+    /**
+     * Move the player
+     */
+    void move(float delta, float movementAcceleration);
+
+    /**
+     * Perform the actions of the player in the air
+     */
+    void performActionsInAir(float delta);
+
+    /**
+     * Perform the actions of the player in the ground
+     * @param delta  The time since the last frame
+     */
+    void performActionsInGround(float delta);
+
+    /**
+     * Move the player, make him jump and interact with the environment
+     */
+    void performActions(float delta);
 
 public:
     Player() = delete;
@@ -82,10 +133,21 @@ public:
     void notMoreBullets();
 
     /**
-     * Get the player's direction
-     * @return the player's direction
+     * Get the player's view direction
+     * @return the player's view direction
      */
-    DuckData::Direction direction() const;
+    DuckData::Direction viewDirection() const;
+
+    /**
+     * Get the won rounds of the player
+     * @return  the won rounds of the player
+     */
+    u32 roundsWon() const;
+
+    /**
+     * Makes the player win a round
+     */
+    void winRound();
 
     /**
      * Returns a GameStatus loaded with the player's data

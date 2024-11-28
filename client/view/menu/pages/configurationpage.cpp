@@ -3,6 +3,8 @@
 #include <QButtonGroup>
 #include <QDebug>
 #include <QMessageBox>
+#include <memory>
+#include <utility>
 
 
 configurationPage::configurationPage(QWidget* parent, GameInfo& gameInfo,

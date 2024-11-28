@@ -58,6 +58,8 @@ private:
      */
     void showWaitingPage();
 
+    void closeEvent(QCloseEvent* event) override;
+    void exitGame();
 
 signals:
     void startGame();
