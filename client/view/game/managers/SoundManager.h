@@ -37,6 +37,8 @@ private:
     // Loads the sound associated with the given ItemID.
     bool loadSound(ItemID id);
 
+    bool firstFrameDead;
+
     std::unordered_map<ItemID, Mix_Chunk*> soundMap;
     std::unordered_map<ItemID, std::string> soundMapIDS{
             {ItemID::CowboyPistol, "assets/sounds/cowboyPistol.mp3"},
