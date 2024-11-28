@@ -62,6 +62,7 @@ struct DuckData final: SizedObjectData {
     Direction direction;
     ItemID gunID;
     std::bitset<FlagCount> extraData;
+    u32 wonRounds;
 
     DuckData() = delete;
     DuckData(const DuckData& other);
@@ -126,9 +127,10 @@ struct DuckData final: SizedObjectData {
      * @param direction the direction the duck is facing
      * @param gunID the gun the duck is holding
      * @param extraData actions the duck is performing and armor data
+     * @param wonRounds the number of rounds the duck has won
      */
     DuckData(const Vector2& position, Id id, i8 life, Direction direction, ItemID gunID,
-             std::bitset<FlagCount> extraData);
+             std::bitset<FlagCount> extraData, u32 wonRounds);
 
     /**
      * Check if this DuckData is equal to the other DuckData

@@ -8,8 +8,8 @@
 #include "Input.h"
 #include "PhysicsObject.h"
 
-
 class GameTimer;
+
 class Player final: public PhysicsObject {
     DuckData::Id id;
     i8 life;
@@ -27,6 +27,7 @@ class Player final: public PhysicsObject {
     bool canKeepJumping;
     GameTimer* jumpTimer;
     float jumpTime;
+    u32 wonRounds;
 
     /**
      * Event manager for the player colliding with an item
@@ -58,6 +59,7 @@ class Player final: public PhysicsObject {
      * Reset the state of the player for a new frame
      */
     void resetState();
+
     /**
      * Manages the player's movement
      */
@@ -130,10 +132,21 @@ public:
     void notMoreBullets();
 
     /**
-     * Get the player's direction
-     * @return the player's direction
+     * Get the player's view direction
+     * @return the player's view direction
      */
-    DuckData::Direction direction() const;
+    DuckData::Direction viewDirection() const;
+
+    /**
+     * Get the won rounds of the player
+     * @return  the won rounds of the player
+     */
+    u32 roundsWon() const;
+
+    /**
+     * Makes the player win a round
+     */
+    void winRound();
 
     /**
      * Returns a GameStatus loaded with the player's data

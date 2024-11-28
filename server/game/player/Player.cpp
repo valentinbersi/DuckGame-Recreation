@@ -309,7 +309,11 @@ void Player::makeShoot() { flags |= DuckData::Flag::IsShooting; }
 
 void Player::notMoreBullets() { flags |= DuckData::Flag::NoMoreBullets; }
 
-DuckData::Direction Player::direction() const { return _movementDirection; }
+DuckData::Direction Player::viewDirection() const { return _movementDirection; }
+
+u32 Player::roundsWon() const { return wonRounds; }
+
+void Player::winRound() { ++wonRounds; }
 
 DuckData Player::status() {
     return {globalPosition(),
@@ -317,7 +321,8 @@ DuckData Player::status() {
             life,
             _lastViewDirection,
             weapon ? weapon->getID() : ItemID(ItemID::NONE),
-            flags};
+            flags,
+            wonRounds};
 }
 
 void Player::clearInputs() { input.reset(); }
