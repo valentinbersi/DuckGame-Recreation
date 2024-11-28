@@ -93,7 +93,9 @@ void ViewController::changeBackgroundBrush() {
         QMessageBox::warning(this, "Error", "The selected file is not a valid image.");
         return;
     }
-    backgroundBrush = QBrush(pixmap);
+
+    QPixmap scaledPixmap = pixmap.scaled(ui->centralwidget->size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+    backgroundBrush = QBrush(scaledPixmap);
     update();
 }
 

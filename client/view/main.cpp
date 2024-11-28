@@ -11,6 +11,5 @@ int main(int argc, char* argv[]) {
         syslog(LOG_CRIT, "%s", libError.what());
         return -1;
     }
-    printf("main final");
     return 0;
 }
