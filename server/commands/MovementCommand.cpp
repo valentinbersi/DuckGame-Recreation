@@ -3,7 +3,9 @@
 MovementCommand::MovementCommand(PlayerID id, InputAction action): Command(id), action(action) {}
 
 void MovementCommand::execute(GameController& gameController) {
-
+    if(!gameController.roundInProgress()){
+        return;
+    }
     Player& player = gameController.getPlayer(id);
     switch (action) {
         case InputAction::LEFT_PRESSED:

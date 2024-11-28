@@ -13,8 +13,11 @@ typedef u16 PlayerID;
 class GameController final: public GameObject {
     HashMap<PlayerID, Player*> players;
     CollisionManager collisionManager;
+    std::vector<LevelData>& levelsData;
     Level* level;
     std::list<Item*> items;
+    bool roundEnded;
+    bool setEnded;
     bool _gameEnded;
 
     /**
@@ -28,6 +31,23 @@ class GameController final: public GameObject {
      * @param object The child that was removed
      */
     void onTreeExited(GameObject* object) override;
+
+     /**
+     * Load the level
+     * @param level the level to load
+     */
+    void loadLevel(const LevelData& level);
+
+    /**
+     * Updates if the round has ended, the set has ended
+     * or if the game has ended.
+     */
+    void roundUpdate();
+
+    /**
+     * Clears the actual state of the game
+     */
+    void clearState();
 
 public:
     /**
@@ -52,7 +72,7 @@ public:
         explicit PlayerNotFound(PlayerID id);
     };
 
-    GameController();
+    GameController(std::vector<LevelData>& levelsData);
     GameController(const GameController&) = delete;
     GameController& operator=(const GameController&) = delete;
     GameController(GameController&&) noexcept = delete;
@@ -106,12 +126,6 @@ public:
     bool exceedsPlayerMax(const u8 playerAmount);
 
     /**
-     * Load the level
-     * @param level the level to load
-     */
-    void loadLevel(const LevelData& level);
-
-    /**
      * Get the status of the game
      * @return the status of the game
      */
@@ -123,5 +137,22 @@ public:
      * 
      * @return true if the game has ended, false otherwise
      */
-    bool gameEnded() const;
+    inline bool gameEnded() const;
+
+    /**
+     * Checks a round is in progress
+     * @return 
+     */
+    inline bool roundInProgress() const;
+
+    /**
+     * Sets the round as in progress
+     */
+    void startNewRound();
+
+    /**
+     * Clears previous State and loads a new one
+     */
+    void loadNewState();
+
 };

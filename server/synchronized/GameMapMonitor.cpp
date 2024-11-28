@@ -31,12 +31,14 @@ BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGame(
     std::vector<DuckData::Id> colors(MAX_PLAYERS_LOCAL, DuckData::Id::None);
 
     auto& game = gameMap.at(matchID);
-    if (game->isJoinable()) {
-        throw MatchEnded(matchID);
-    }
     if (game->is_alive()) {
         throw AlreadyStarted(matchID);
     }
+    
+    if (game->isJoinable()) {
+        throw MatchEnded(matchID);
+    }
+    
     if (!game->canJoinGame(playerCount)) {
         throw NoSpaceLeft(matchID);
     }

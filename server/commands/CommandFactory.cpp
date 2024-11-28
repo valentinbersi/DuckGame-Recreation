@@ -4,6 +4,7 @@
 #include "InteractCommand.h"
 #include "MovementCommand.h"
 #include "ShootCommand.h"
+#include "NextRoundCommand.h"
 
 
 HashMap<InputAction, std::function<std::unique_ptr<Command>(PlayerID id)>> CommandFactory::factory{
@@ -58,7 +59,10 @@ HashMap<InputAction, std::function<std::unique_ptr<Command>(PlayerID id)>> Comma
          }},
         {InputAction::SHOOT_RELEASED, [](PlayerID id) {
              return std::make_unique<ShootCommand>(id, InputAction::SHOOT_RELEASED);
-         }}};
+         }},
+
+        {InputAction::NEXT_ROUND,
+         [](PlayerID id) { return std::make_unique<NextRoundCommand>(id); }}};
 
 std::unique_ptr<Command> CommandFactory::createCommand(const InputAction input,
                                                        const PlayerID PlayerID) {

@@ -38,6 +38,35 @@ void GameController::onTreeExited(GameObject* object) {
     }
 }
 
+void GameController::loadLevel(const LevelData& level) {
+    if (this->level != nullptr)
+        removeChild("Level");
+
+    this->level = new Level(level);
+
+    this->level->connect(Events::TreeEntered,
+                         eventHandler(&GameController::onTreeEntered, GameObject*));
+    this->level->connect(Events::TreeExited,
+                         eventHandler(&GameController::onTreeExited, GameObject*));
+
+    addChild("Level", this->level);
+}
+
+void GameController::roundUpdate() {
+    /**
+     * if cantidad de players vivos == 1:
+     *     player->roundsWon++
+     *     globalrounds++
+     *     roundEnded = true
+     *     if globalrounds % 5 == 0
+     *          
+     */
+}
+
+void GameController::clearState() {
+    removeChild(level);
+}
+
 #define PLAYER_ID "Player with id "
 #define ALREADY_ADDED " already added"
 
@@ -49,22 +78,24 @@ GameController::AlreadyAddedPlayer::AlreadyAddedPlayer(const PlayerID id):
 GameController::PlayerNotFound::PlayerNotFound(const PlayerID id):
         std::out_of_range(PLAYER_ID + std::to_string(id) + NOT_FOUND) {}
 
-GameController::GameController(): level(nullptr) {
+GameController::GameController(std::vector<LevelData>& levelsData): levelsData(levelsData) {
     connect(Events::TreeEntered, eventHandler(&GameController::onTreeEntered, GameObject*));
 
     connect(Events::TreeExited, eventHandler(&GameController::onTreeExited, GameObject*));
-
-    // addChild("Platform", new Platform({0, 600}, 1000, 200));  // This simulated loading a level
-    //  addChild("Platform2", new Platform({400, 400}, 50, 200));  // This simulated loading a level
 }
 
 void GameController::start() {
-    loadLevel(LevelData());
+    loadLevel(levelsData[0]); //seria random entre el size del map
 }
 
 void GameController::update(const float delta) {
     collisionManager.processCollisions(delta);
-    for (Player* player: players | std::views::values) player->clearInputs();
+    u8 playersAlive = 0;
+    for (Player* player: players | std::views::values){
+        // if (player->isAlive()) playersAlive++;
+        player->clearInputs();
+    }
+    roundUpdate();
 }
 
 #define FULL_GAME "The game is full"
@@ -112,20 +143,6 @@ bool GameController::exceedsPlayerMax(const u8 playerAmount) {
     return players.size() + playerAmount > MAX_PLAYERS;
 }
 
-void GameController::loadLevel(const LevelData& level) {
-    if (this->level != nullptr)
-        removeChild("Level");
-
-    this->level = new Level(level);
-
-    this->level->connect(Events::TreeEntered,
-                         eventHandler(&GameController::onTreeEntered, GameObject*));
-    this->level->connect(Events::TreeExited,
-                         eventHandler(&GameController::onTreeExited, GameObject*));
-
-    addChild("Level", this->level);
-}
-
 GameStatus GameController::status() const {
     GameStatus status;
     status.blockPositions = level->blockStatus();
@@ -136,3 +153,14 @@ GameStatus GameController::status() const {
 }
 
 bool GameController::gameEnded() const { return _gameEnded; }
+
+bool GameController::roundInProgress() const { return roundEnded; }
+
+void GameController::startNewRound() {
+    roundEnded = false;
+}
+
+void GameController::loadNewState() {
+    clearState();
+    loadLevel(levelsData[0]);
+}
