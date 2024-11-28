@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <yaml-cpp/yaml.h>
 
 #include "ItemID.h"
@@ -526,7 +528,7 @@ inline float GlobalConfig::Weapons::Sniper::reach() { return reach_; }
 inline float GlobalConfig::Weapons::Sniper::dispersion() { return dispersion_; }
 inline Vector2 GlobalConfig::Weapons::Sniper::recoil() { return recoil_; }
 inline float GlobalConfig::Weapons::Sniper::reloadTime() { return reloadTime_; }
-inline u8 GlobalConfig::Armor::armor() { return armor_; };
+inline u8 GlobalConfig::Armor::armor() { return armor_; }
 inline u8 GlobalConfig::Armor::helmet() { return helmet_; }
 inline u8 GlobalConfig::Match::rounds() { return rounds_; }
 inline u8 GlobalConfig::Match::pointsToWin() { return pointsToWin_; }

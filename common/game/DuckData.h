@@ -27,12 +27,13 @@ struct DuckData final: SizedObjectData {
          * @param value the value to construct the direction from
          */
         // cppcheck-suppress noExplicitConstructor
-        Direction(Value value);
+        Direction(Value value);  // NOLINT (runtime/explicit)
         /**
          * Construct a direction from a value
          * @param value the value to construct the direction from
          */
-        Direction(u8 value);
+        // cppcheck-suppress noExplicitConstructor
+        Direction(u8 value);  // NOLINT (runtime/explicit)
 
         /**
          * Convert the direction to a value
@@ -62,7 +63,7 @@ struct DuckData final: SizedObjectData {
     Direction direction;
     ItemID gunID;
     std::bitset<FlagCount> extraData;
-    u32 wonRounds;
+    u32 roundsWon;
 
     DuckData() = delete;
     DuckData(const DuckData& other);
@@ -127,10 +128,10 @@ struct DuckData final: SizedObjectData {
      * @param direction the direction the duck is facing
      * @param gunID the gun the duck is holding
      * @param extraData actions the duck is performing and armor data
-     * @param wonRounds the number of rounds the duck has won
+     * @param roundsWon the number of rounds the duck has won
      */
     DuckData(const Vector2& position, Id id, i8 life, Direction direction, ItemID gunID,
-             std::bitset<FlagCount> extraData, u32 wonRounds);
+             std::bitset<FlagCount> extraData, u32 roundsWon);
 
     /**
      * Check if this DuckData is equal to the other DuckData

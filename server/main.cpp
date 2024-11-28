@@ -14,13 +14,13 @@ int main(const int argc, char* argv[]) {
                 return 0;
             case 'c': {
                 std::string configPath(optarg);
-                if (configPath.back() != '/' and configPath != "")
+                if (configPath.back() != '/')
                     configPath += '/';
                 GlobalConfig::setConfigPath(std::move(configPath));
             } break;
             case 'm': {
                 std::string mapsPath(optarg);
-                if (mapsPath.back() != '/' and mapsPath != "")
+                if (mapsPath.back() != '/')
                     mapsPath += '/';
                 GlobalConfig::setMapsDirectory(std::move(mapsPath));
             } break;

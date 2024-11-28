@@ -1,5 +1,8 @@
 #include "GlobalConfig.h"
 
+#include <limits>
+#include <utility>
+
 #define GRENADE "grenade"
 #define BANANA "banana"
 #define PEW_PEW_LASER "pew pew laser"
@@ -28,8 +31,8 @@ const HashMap<std::string, ItemID> GlobalConfig::itemIDs = {{GRENADE, ItemID::Gr
                                                             {ARMOR, ItemID::Armor},
                                                             {NOTHING, ItemID::NONE}};
 
-std::string GlobalConfig::configDirectory{"/etc/DuckGame/"};
-std::string GlobalConfig::mapsDirectory_{"/etc/DuckGame/maps"};
+std::string GlobalConfig::configDirectory{"/etc/DuckGame/"};     // NOLINT(runtime/string)
+std::string GlobalConfig::mapsDirectory_{"/etc/DuckGame/maps"};  // NOLINT(runtime/string)
 
 float GlobalConfig::Duck::jumpTime_{};
 float GlobalConfig::Duck::acceleration_{};
@@ -395,10 +398,10 @@ void GlobalConfig::Weapons::Grenade::load() {
     }
 
     try {
-        const int ammo = config[AMMO].as<int>();
-        if (ammo < std::numeric_limits<u8>::min() or ammo > std::numeric_limits<u8>::max())
+        const int _ammo = config[AMMO].as<int>();
+        if (_ammo < std::numeric_limits<u8>::min() or _ammo > std::numeric_limits<u8>::max())
             throw YAML::TypedBadConversion<u8>(YAML::Mark::null_mark());
-        ammo_ = ammo;
+        ammo_ = _ammo;
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(GRENADE_AMMO_ERROR);
     }
@@ -447,10 +450,10 @@ void GlobalConfig::Weapons::Banana::load() {
     }
 
     try {
-        const int ammo = config[AMMO].as<int>();
-        if (ammo < std::numeric_limits<u8>::min() or ammo > std::numeric_limits<u8>::max())
+        const int _ammo = config[AMMO].as<int>();
+        if (_ammo < std::numeric_limits<u8>::min() or _ammo > std::numeric_limits<u8>::max())
             throw YAML::TypedBadConversion<u8>(YAML::Mark::null_mark());
-        ammo_ = ammo;
+        ammo_ = _ammo;
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(BANANA_AMMO_ERROR);
     }
@@ -505,10 +508,10 @@ void GlobalConfig::Weapons::PewPewLaser::load() {
     }
 
     try {
-        const int ammo = config[AMMO].as<int>();
-        if (ammo < std::numeric_limits<u8>::min() or ammo > std::numeric_limits<u8>::max())
+        const int _ammo = config[AMMO].as<int>();
+        if (_ammo < std::numeric_limits<u8>::min() or _ammo > std::numeric_limits<u8>::max())
             throw YAML::TypedBadConversion<u8>(YAML::Mark::null_mark());
-        ammo_ = ammo;
+        ammo_ = _ammo;
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(PEW_PEW_LASER_AMMO_ERROR);
     }
@@ -546,11 +549,11 @@ void GlobalConfig::Weapons::PewPewLaser::load() {
     }
 
     try {
-        const int raysPerShot = config[RAYS_PER_SHOT].as<int>();
-        if (raysPerShot < std::numeric_limits<u8>::min() or
-            raysPerShot > std::numeric_limits<u8>::max())
+        const int _raysPerShot = config[RAYS_PER_SHOT].as<int>();
+        if (_raysPerShot < std::numeric_limits<u8>::min() or
+            _raysPerShot > std::numeric_limits<u8>::max())
             throw YAML::TypedBadConversion<u8>(YAML::Mark::null_mark());
-        raysPerShot_ = raysPerShot;
+        raysPerShot_ = _raysPerShot;
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(PEW_PEW_LASER_RAYS_PER_SHOT_ERROR);
     }
@@ -595,10 +598,10 @@ void GlobalConfig::Weapons::LaserRifle::load() {
     }
 
     try {
-        const int ammo = config[AMMO].as<int>();
-        if (ammo < std::numeric_limits<u8>::min() or ammo > std::numeric_limits<u8>::max())
+        const int _ammo = config[AMMO].as<int>();
+        if (_ammo < std::numeric_limits<u8>::min() or _ammo > std::numeric_limits<u8>::max())
             throw YAML::TypedBadConversion<u8>(YAML::Mark::null_mark());
-        ammo_ = ammo;
+        ammo_ = _ammo;
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(LASER_RIFLE_AMMO_ERROR);
     }
@@ -644,10 +647,10 @@ void GlobalConfig::Weapons::LaserRifle::load() {
     }
 
     try {
-        const int bounces = config[BOUNCES].as<int>();
-        if (bounces < std::numeric_limits<u8>::min() or bounces > std::numeric_limits<u8>::max())
+        const int _bounces = config[BOUNCES].as<int>();
+        if (_bounces < std::numeric_limits<u8>::min() or _bounces > std::numeric_limits<u8>::max())
             throw YAML::TypedBadConversion<u8>(YAML::Mark::null_mark());
-        bounces_ = bounces;
+        bounces_ = _bounces;
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(LASER_RIFLE_BOUNCES_ERROR);
     }
@@ -689,10 +692,10 @@ void GlobalConfig::Weapons::Ak47::load() {
     }
 
     try {
-        const int ammo = config[AMMO].as<int>();
-        if (ammo < std::numeric_limits<u8>::min() or ammo > std::numeric_limits<u8>::max())
+        const int _ammo = config[AMMO].as<int>();
+        if (_ammo < std::numeric_limits<u8>::min() or _ammo > std::numeric_limits<u8>::max())
             throw YAML::TypedBadConversion<u8>(YAML::Mark::null_mark());
-        ammo_ = ammo;
+        ammo_ = _ammo;
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(AK_47_AMMO_ERROR);
     }
@@ -771,10 +774,10 @@ void GlobalConfig::Weapons::DuelPistol::load() {
     }
 
     try {
-        const int ammo = config[AMMO].as<int>();
-        if (ammo < std::numeric_limits<u8>::min() or ammo > std::numeric_limits<u8>::max())
+        const int _ammo = config[AMMO].as<int>();
+        if (_ammo < std::numeric_limits<u8>::min() or _ammo > std::numeric_limits<u8>::max())
             throw YAML::TypedBadConversion<u8>(YAML::Mark::null_mark());
-        ammo_ = ammo;
+        ammo_ = _ammo;
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(DUEL_PISTOL_AMMO_ERROR);
     }
@@ -830,10 +833,10 @@ void GlobalConfig::Weapons::CowboyPistol::load() {
     }
 
     try {
-        const int ammo = config[AMMO].as<int>();
-        if (ammo < std::numeric_limits<u8>::min() or ammo > std::numeric_limits<u8>::max())
+        const int _ammo = config[AMMO].as<int>();
+        if (_ammo < std::numeric_limits<u8>::min() or _ammo > std::numeric_limits<u8>::max())
             throw YAML::TypedBadConversion<u8>(YAML::Mark::null_mark());
-        ammo_ = ammo;
+        ammo_ = _ammo;
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(COWBOY_PISTOL_AMMO_ERROR);
     }
@@ -886,10 +889,10 @@ void GlobalConfig::Weapons::Magnum::load() {
     }
 
     try {
-        const int ammo = config[AMMO].as<int>();
-        if (ammo < std::numeric_limits<u8>::min() or ammo > std::numeric_limits<u8>::max())
+        const int _ammo = config[AMMO].as<int>();
+        if (_ammo < std::numeric_limits<u8>::min() or _ammo > std::numeric_limits<u8>::max())
             throw YAML::TypedBadConversion<u8>(YAML::Mark::null_mark());
-        ammo_ = ammo;
+        ammo_ = _ammo;
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(MAGNUM_AMMO_ERROR);
     }
@@ -952,10 +955,10 @@ void GlobalConfig::Weapons::Shotgun::load() {
     }
 
     try {
-        const int ammo = config[AMMO].as<int>();
-        if (ammo < std::numeric_limits<u8>::min() or ammo > std::numeric_limits<u8>::max())
+        const int _ammo = config[AMMO].as<int>();
+        if (_ammo < std::numeric_limits<u8>::min() or _ammo > std::numeric_limits<u8>::max())
             throw YAML::TypedBadConversion<u8>(YAML::Mark::null_mark());
-        ammo_ = ammo;
+        ammo_ = _ammo;
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(SHOTGUN_AMMO_ERROR);
     }
@@ -1035,10 +1038,10 @@ void GlobalConfig::Weapons::Sniper::load() {
     }
 
     try {
-        const int ammo = config[AMMO].as<int>();
-        if (ammo < std::numeric_limits<u8>::min() or ammo > std::numeric_limits<u8>::max())
+        const int _ammo = config[AMMO].as<int>();
+        if (_ammo < std::numeric_limits<u8>::min() or _ammo > std::numeric_limits<u8>::max())
             throw YAML::TypedBadConversion<u8>(YAML::Mark::null_mark());
-        ammo_ = ammo;
+        ammo_ = _ammo;
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(SNIPER_AMMO_ERROR);
     }
@@ -1098,19 +1101,19 @@ void GlobalConfig::Armor::load() {
     }
 
     try {
-        const int armor = config[ARMOR].as<int>();
-        if (armor < 0)
+        const int _armor = config[ARMOR].as<int>();
+        if (_armor < 0)
             throw BadConfigFile(ARMOR_BAD_VALUE);
-        armor_ = armor;
+        armor_ = _armor;
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(ARMOR_ERROR);
     }
 
     try {
-        const int helmet = config[HELMET].as<int>();
-        if (helmet < 0)
+        const int _helmet = config[HELMET].as<int>();
+        if (_helmet < 0)
             throw BadConfigFile(HELMET_BAD_VALUE);
-        helmet_ = helmet;
+        helmet_ = _helmet;
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(HELMET_ERROR);
     }
@@ -1140,20 +1143,20 @@ void GlobalConfig::Match::load() {
     }
 
     try {
-        const int rounds = config[ROUNDS].as<int>();
-        if (rounds < std::numeric_limits<u8>::min() or rounds > std::numeric_limits<u8>::max())
+        const int _rounds = config[ROUNDS].as<int>();
+        if (_rounds < std::numeric_limits<u8>::min() or _rounds > std::numeric_limits<u8>::max())
             throw YAML::TypedBadConversion<u8>(YAML::Mark::null_mark());
-        rounds_ = rounds;
+        rounds_ = _rounds;
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(ROUNDS_ERROR);
     }
 
     try {
-        const int pointsToWin = config[POINTS_TO_WIN].as<int>();
-        if (pointsToWin < std::numeric_limits<u8>::min() or
-            pointsToWin > std::numeric_limits<u8>::max())
+        const int _pointsToWin = config[POINTS_TO_WIN].as<int>();
+        if (_pointsToWin < std::numeric_limits<u8>::min() or
+            _pointsToWin > std::numeric_limits<u8>::max())
             throw YAML::TypedBadConversion<u8>(YAML::Mark::null_mark());
-        pointsToWin_ = pointsToWin;
+        pointsToWin_ = _pointsToWin;
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(POINTS_TO_WIN_ERROR);
     }
