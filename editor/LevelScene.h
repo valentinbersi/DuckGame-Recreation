@@ -22,6 +22,7 @@ private:
     int ducksCount;             /** */
     ObjectType objectTypeToAdd; /** */
     bool isAddingObject = false;
+    bool isDeletingObject = false;
 
     /**
      * Elimina el elemento en la posicion recibida.

@@ -159,14 +159,15 @@ void LevelScene::addNewObject(ObjectType type, QPointF pos) {
 
 void LevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     if (event->button() == Qt::RightButton) {
+        isDeletingObject = true;
         deleteObjectAt(event->scenePos());
+        emit requestDragModeChange(QGraphicsView::NoDrag);
         return;
     }
 
     if (event->button() == Qt::LeftButton && objectTypeToAdd != UNKNOWN) {
         isAddingObject = true;
-        QPointF pos = event->scenePos();
-        addNewObject(objectTypeToAdd, pos);
+        addNewObject(objectTypeToAdd, event->scenePos());
         emit requestDragModeChange(QGraphicsView::NoDrag);
         return;
     }
@@ -181,18 +182,12 @@ void LevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void LevelScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-    if (isAddingObject && objectTypeToAdd != UNKNOWN && event->buttons() & Qt::LeftButton) {
-        QPointF pos = event->scenePos();
+    if (isAddingObject && objectTypeToAdd != UNKNOWN && event->buttons() & Qt::LeftButton)
+        addNewObject(objectTypeToAdd, event->scenePos());
 
-        qreal alignedX = std::round(pos.x() / PIXEL_SIZE) * PIXEL_SIZE;
-        qreal alignedY = std::round(pos.y() / PIXEL_SIZE) * PIXEL_SIZE;
-        QPointF alignedPos(alignedX, alignedY);
+    if (isDeletingObject && event->buttons() & Qt::RightButton)
+        deleteObjectAt(event->scenePos());
 
-        QRectF itemRect(alignedPos, QSizeF(PIXEL_SIZE, PIXEL_SIZE));
-        if (isEmptyPosition(itemRect)) {
-            addNewObject(objectTypeToAdd, alignedPos);
-        }
-    }
     if (selectedItem) {
         selectedItem->setPos(event->scenePos() -
                              QPointF(selectedItem->boundingRect().width() / 2,
@@ -204,6 +199,10 @@ void LevelScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         isAddingObject = false;
+        emit requestDragModeChange(QGraphicsView::ScrollHandDrag);
+    }
+    if (event->button() == Qt::RightButton) {
+        isDeletingObject = false;
         emit requestDragModeChange(QGraphicsView::ScrollHandDrag);
     }
 
