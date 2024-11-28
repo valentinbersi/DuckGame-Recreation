@@ -6,8 +6,8 @@
 
 #include "yaml-cpp/yaml.h"
 
-void MapManager::exportMap(const std::vector<Object>& objects, const std::string& mapName,
-                           int mapWidth, int mapHeight) {
+void MapManager::exportMap(const std::list<Object>& objects, const std::string& mapName,
+                           int mapWidth, int mapHeight, std::string& background) {
     for (const auto& obj: objects) {
         qDebug() << obj.centerPos;
     }
@@ -22,7 +22,7 @@ void MapManager::exportMap(const std::vector<Object>& objects, const std::string
     YAML::Node mapNode;
 
     mapNode["map_name"] = mapName;
-    mapNode["background"] = "forest-night.png";
+    mapNode["background"] = background;
     mapNode["map_width"] = mapWidth;
     mapNode["map_height"] = mapHeight;
 
@@ -68,7 +68,7 @@ ObjectType MapManager::stringToObjectType(const std::string& typeStr) {
     return UNKNOWN;
 }
 
-bool MapManager::importMap(std::vector<Object>& objects, const std::string& mapPath, int& mapWidth,
+bool MapManager::importMap(std::list<Object>& objects, const std::string& mapPath, int& mapWidth,
                            int& mapHeight, std::string& background) {
     std::ifstream fin(mapPath);
     if (!fin.is_open()) {
@@ -87,7 +87,6 @@ bool MapManager::importMap(std::vector<Object>& objects, const std::string& mapP
         auto mapNameFromFile = mapNode["map_name"].as<std::string>();
         mapWidth = mapNode["map_width"].as<int>();
         mapHeight = mapNode["map_height"].as<int>();
-
         background = mapNode["background"].as<std::string>();
 
         YAML::Node objectsNode = mapNode["objects"];

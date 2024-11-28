@@ -13,8 +13,8 @@ private:
 public:
     MapManager() = default;
 
-    static void exportMap(const std::vector<Object>& objects, const std::string& mapName,
-                          int mapWidth, int mapHeight);
-    static bool importMap(std::vector<Object>& objects, const std::string& mapName, int& mapWidth,
+    static void exportMap(const std::list<Object>& objects, const std::string& mapName,
+                          int mapWidth, int mapHeight, std::string& background);
+    static bool importMap(std::list<Object>& objects, const std::string& mapName, int& mapWidth,
                           int& mapHeight, std::string& background);
 };
