@@ -1,0 +1,8 @@
+ammo: 12
+dispersion: 20
+recoil:
+  x: 0
+  y: 0
+min reach: 35
+max reach: 38
+rays per shot: 3

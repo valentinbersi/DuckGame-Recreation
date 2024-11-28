@@ -1,0 +1,9 @@
+ammo: 10
+reach: 30
+dispersion: 10
+recoil:
+  x: 0
+  y: 0
+time between shots: 1
+ray angle: 45
+bounces: 5
