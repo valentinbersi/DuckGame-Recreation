@@ -10,27 +10,33 @@ using SDL2pp::SDL;
 using SDL2pp::Surface;
 using SDL2pp::Texture;
 
-HudManager::HudManager(int &windowWidth, int &windowHeight, Renderer &renderer, bool& transition) : windowWidth(windowWidth),
+HudManager::HudManager(int &windowWidth, int &windowHeight, Renderer &renderer, bool& transition, bool& roundFinished, bool& setFinished, bool& gameFinished) :
+                                                                                            windowWidth(windowWidth),
                                                                                            windowHeight(windowHeight),
-                                                                                           renderer(renderer), transition(transition) {}
+                                                                                           renderer(renderer), transition(transition),
+                                                                                            roundFinished(roundFinished),
+                                                                                        setFinished(setFinished), gameFinished(gameFinished) {}
 
 // FALTA DIBUJAR UN + 1 CON UNA FONT AMARILLA EN LA CABEZA DEL PATO CUANDO FINALIZA LA RONDA (CUANDO LA GANA)
 
 
-void HudManager::check(bool& roundFinished, bool& setFinished, bool& gameFinished,
-                    std::list<DuckData>& ducks, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
+void HudManager::check(std::list<DuckData>& ducks, std::list<DuckData> ducksToRender, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
     if (roundFinished) {
-        finishedRound();
+        finishedRound(ducks, spritesMapping);
         roundFinished = false;
     } else if (setFinished) {
         finishedSet(ducks, spritesMapping);
+        finishedRound(ducksToRender, spritesMapping);
         setFinished = false;
     } else if (gameFinished) {
         //finishedGame();
     }
 }
 
-void HudManager::finishedRound() {
+void HudManager::finishedRound(std::list<DuckData>& ducksToRender, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
+    auto& winner = ducksToRender.front();
+    spritesMapping.at(winner.duckID)->drawWin();
+    /*
     int centerX = windowWidth / 2;
     int centerY = windowHeight / 2;
     int size = 10;
@@ -52,6 +58,7 @@ void HudManager::finishedRound() {
         SDL_Delay(10);
         size += increment;
     }
+
     SDL_SetRenderDrawColor(renderer.Get(), 0, 0, 0, 255);
     SDL_RenderClear(renderer.Get());
 
@@ -66,7 +73,7 @@ void HudManager::finishedRound() {
     imageRect.h = imageHeight;
     
     renderer.Copy(imageTexture, NullOpt, imageRect);
-
+*/
     renderer.Present();
     SDL_Delay(2000);
 
@@ -108,8 +115,6 @@ void HudManager::finishedSet(std::list<DuckData>& ducks, const HashMap<DuckData:
     showPoints(ducks, tableRect, spritesMapping);
     renderer.Present();
     SDL_Delay(5000);
-
-    finishedRound();               // effect of round end
 }
 
 std::string duckIDToString(DuckData::Id id) {

@@ -176,6 +176,17 @@ void SpriteManager::drawHelmet() {
     spritesheet->drawHelmet(position, state.flipped);
 }
 
+void SpriteManager::drawWin() {
+    spritesheet->selectSprite(0, 0, NO_FEATHER);
+    SDL2pp::Rect position = getPosition(NO_FEATHER, NO_CHESTPLATE, HELMET);
+
+    position.y -= 0.1 * scale;
+    position.x += 0.4 * scale;
+    position.w = 0.8 * scale;
+    position.h = 0.8 * scale;
+    spritesheet->drawWin(position, state.flipped);
+}
+
 SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isChestplate,
                                         bool isHelmet) {
     SDL2pp::Rect position = calculateBasePosition();

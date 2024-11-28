@@ -12,10 +12,10 @@
 
 class HudManager {
 public:
-    HudManager(int& windowWidth, int& windowHeight, SDL2pp::Renderer& renderer, bool& transition);
+    HudManager(int& windowWidth, int& windowHeight, SDL2pp::Renderer& renderer, bool& transition, bool& roundFinished, bool& setFinished, bool& gameFinished);
     ~HudManager() = default;
-    void check(bool& roundFinished, bool& setFinished, bool& gameFinished, std::list<DuckData>& ducks, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
-    void finishedRound();
+    void check(std::list<DuckData>& ducks, std::list<DuckData> ducksToRender, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
+    void finishedRound(std::list<DuckData>& ducksToRender, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
 
 private:
     void finishedSet(std::list<DuckData>& ducks, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
@@ -24,4 +24,7 @@ private:
     int& windowHeight;
     SDL2pp::Renderer& renderer;
     bool& transition;
+    bool& roundFinished;
+    bool& setFinished;
+    bool& gameFinished;
 };

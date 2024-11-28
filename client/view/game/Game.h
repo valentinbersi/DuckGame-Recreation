@@ -125,7 +125,8 @@ private:
     std::list<ItemData> itemsToRender;
     std::list<SizedObjectData> blocks;
     std::list<SizedObjectData> blocksToRender;
-    std::list<DuckData> ducks;  // No ducks to render because all ducks should be rendered
+    std::list<DuckData> ducks;
+    std::list<DuckData> ducksToRender;
 
     std::vector<std::string> backgrounds = {
             "assets/background/forest-night.png", "assets/background/city.png",

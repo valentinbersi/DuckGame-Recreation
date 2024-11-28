@@ -33,6 +33,8 @@ public:
     //  accordingly. Finally, it draws the feathers based on whether the duck has a weapon equipped.
     void draw(int col, int row);
 
+    void drawWin();
+
     // Updates the position of the duck.
     void updatePosition(float new_x, float new_y);
 

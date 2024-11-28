@@ -46,7 +46,7 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
 
 void Game::init() {
     EnviromentRenderer enviromentRenderer(renderer);
-    HudManager hudManager(window_width, window_height, renderer, transition);
+    HudManager hudManager(window_width, window_height, renderer, transition, roundFinished, setFinished, gameFinished);
 
     const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>> spritesMapping =
             createSpritesMapping();
@@ -72,8 +72,8 @@ void Game::init() {
         updateItemSpawns(enviromentRenderer);
         updateItems(enviromentRenderer);
 
-        setFinished = true;
-        hudManager.check(roundFinished, setFinished, gameFinished, ducks, spritesMapping);
+        roundFinished = true;
+        hudManager.check(ducks, ducksToRender, spritesMapping);
         if (transition) {
             transition = false;
             auto message = std::make_unique<GameMessage>(InputAction::NEXT_ROUND, 1);
@@ -103,11 +103,16 @@ void Game::getSnapshot() {
         return;
 
     clearObjects();
-    roundFinished = snapshot->roundOver;
-    setFinished = snapshot->setOver;
-    gameFinished = snapshot->gameOver;
+    //roundFinished = snapshot->roundOver;
+    //setFinished = snapshot->setOver;
+    //gameFinished = snapshot->gameOver;
 
     for (auto& duck: snapshot->ducks) ducks.push_back(std::move(duck));
+    /*for (auto& duck: snapshot->ducks) {
+        if (duck.extraData[DuckData::Flag::Index::IsDead]) {
+            ducksToRender.push_back(std::move(duck));
+        }
+    }*/
     for (const auto& block: snapshot->blockPositions) blocks.push_back(block);
     for (const auto& itemSpawner: snapshot->itemSpawnerPositions) itemSpawns.push_back(itemSpawner);
     for (const auto& item: snapshot->itemPositions) items.push_back(item);
@@ -149,7 +154,7 @@ void Game::updatePlayers(
                 relativePositionY * positionScaleY + static_cast<float>(window_height) / 2;
 
 
-        bool flipped = duck.direction == DuckData::Direction::Left;
+        //bool flipped = duck.direction == DuckData::Direction::Left;
         bool hasGun = duck.gunID != ItemID::NONE;
         DuckState state = {duck.extraData[DuckData::Flag::Index::PlayingDead],
                            duck.extraData[DuckData::Flag::Index::InAir],
@@ -160,7 +165,7 @@ void Game::updatePlayers(
                            duck.extraData[DuckData::Flag::Index::Armor],
                            duck.extraData[DuckData::Flag::Index::IsShooting],
                             duck.extraData[DuckData::Flag::Index::LookingUp],
-                            flipped, hasGun,
+                            true, hasGun,
             duck.extraData[DuckData::Flag::Index::NoMoreBullets],
                             duck.gunID, duck.direction};
 
