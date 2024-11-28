@@ -29,7 +29,6 @@ ViewController::ViewController(QWidget* parent):
     ui->setupUi(this);
 
     ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
-    ui->graphicsView->setBackgroundBrush(Qt::NoBrush);
     scene = new LevelScene(this, objects);
     ui->graphicsView->setScene(scene);
     onSceneResize();

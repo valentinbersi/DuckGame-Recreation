@@ -70,7 +70,7 @@ ObjectType MapManager::stringToObjectType(const std::string& typeStr) {
 }
 
 bool MapManager::importMap(std::list<Object>& objects, const std::string& mapPath, int& mapWidth,
-                           int& mapHeight, const std::string& background) {
+                           int& mapHeight, std::string& background) {
     std::ifstream fin(mapPath);
     if (!fin.is_open()) {
         qWarning() << "No se pudo abrir el archivo para cargar el mapa.";
