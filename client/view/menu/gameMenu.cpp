@@ -33,7 +33,7 @@ void GameMenu::setPagesAndConnections() {
     ui->stackedWidget->setCurrentWidget(menu);
 
     connect(menu, &mainMenu::play, this, [this]() { changePage(config); });
-    connect(menu, &mainMenu::exitGameRequested, this, &QApplication::quit);
+    connect(menu, &mainMenu::exitGameRequested, this, &GameMenu::exitGame);
 
     connect(config, &configurationPage::playMatchClicked, this, &GameMenu::showWaitingPage);
     connect(config, &configurationPage::backClicked, this, [this]() { changePage(menu); });
@@ -62,6 +62,21 @@ void GameMenu::showWaitingPage() {
 void GameMenu::startGameHandler() {
     twoPlayersLocal = (gameInfo.playersNumber == 2);
     emit startGame();
+    //    close();
+    //    QCoreApplication::exit(0);
+    exitGame();
+}
+
+void GameMenu::exitGame() {
+    qDebug() << "se entra a exitGame()";
     close();
-    QCoreApplication::exit(0);
+    // QCoreApplication::exit(0);
+    QApplication::quit();
+}
+
+void GameMenu::closeEvent(QCloseEvent* event) {
+    Q_UNUSED(event);
+    close();
+    QApplication::quit();
+    // QCoreApplication::exit(0);
 }

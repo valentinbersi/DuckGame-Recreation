@@ -1,7 +1,7 @@
 #pragma once
 
+#include <list>
 #include <string>
-#include <vector>
 
 #include "Object.h"
 
@@ -14,7 +14,7 @@ public:
     MapManager() = default;
 
     static void exportMap(const std::list<Object>& objects, const std::string& mapName,
-                          int mapWidth, int mapHeight, std::string& background);
+                          int mapWidth, int mapHeight, const std::string& background);
     static bool importMap(std::list<Object>& objects, const std::string& mapName, int& mapWidth,
-                          int& mapHeight, std::string& background);
+                          int& mapHeight, const std::string& background);
 };

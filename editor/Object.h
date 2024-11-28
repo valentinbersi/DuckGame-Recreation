@@ -49,7 +49,7 @@ struct Object {
     }
 
     // este constructor lo agrego para que QT tome a la clase Object como un item de QT.
-    Object(): type(UNKNOWN), size(0, 0), centerPos(0, 0) { icon = QPixmap(); }
+    Object(): type(UNKNOWN), size(0, 0), centerPos(0, 0), icon(QPixmap()) {}
 
     // setea la posicion central del objeto.
     // el parametro booleano determina si la posicion recibida es la central o la de la esquina

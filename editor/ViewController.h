@@ -3,9 +3,9 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <list>
 #include <map>
 #include <string>
-#include <vector>
 
 #include "LevelScene.h"
 
@@ -76,8 +76,8 @@ private:
     void onSceneResize();
 
     /**
-     * Genera un mensaje emergente, preguntandole al usuario si quiere guardar el mapa actual antes de cerrarlo.
-     * El usuario tiene 3 opciones: Cancelar la acción, No guardar o Guardar.
+     * Genera un mensaje emergente, preguntandole al usuario si quiere guardar el mapa actual antes
+     * de cerrarlo. El usuario tiene 3 opciones: Cancelar la acción, No guardar o Guardar.
      * @return false si se cancela la accion y true si no se cancela.
      * En caso de querer guardar, el mapa se exporta mediante MapManager.
      */
@@ -85,7 +85,7 @@ private:
 
     void selectBackground();
     void changeBackgroundBrush();
-    void paintEvent(QPaintEvent *event) override;
+    void paintEvent(QPaintEvent* event) override;
     void setupToolBar();
 };
 #endif  // MAINWINDOW_H
