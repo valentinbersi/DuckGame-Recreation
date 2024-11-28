@@ -111,16 +111,16 @@ void Game::getSnapshot() {
         return;
 
     clearObjects();
-    // roundFinished = snapshot->roundOver;
-    // setFinished = snapshot->setOver;
+    //roundFinished = snapshot->roundOver;
+    //setFinished = snapshot->setOver;
     // gameFinished = snapshot->gameOver;
 
     for (auto& duck: snapshot->ducks) ducks.push_back(std::move(duck));
-    /*for (auto& duck: snapshot->ducks) {
-        if (duck.extraData[DuckData::Flag::Index::IsDead]) {
+    for (auto& duck: snapshot->ducks) {
+        if (!duck.extraData[DuckData::Flag::Index::IsDead]) {
             ducksToRender.push_back(std::move(duck));
         }
-    }*/
+    }
     for (const auto& block: snapshot->blockPositions) blocks.push_back(block);
     for (const auto& itemSpawner: snapshot->itemSpawnerPositions) itemSpawns.push_back(itemSpawner);
     for (const auto& item: snapshot->itemPositions) items.push_back(item);
@@ -162,7 +162,7 @@ void Game::updatePlayers(
                 relativePositionY * positionScaleY + static_cast<float>(window_height) / 2;
 
 
-        // bool flipped = duck.direction == DuckData::Direction::Left;
+        bool flipped = duck.direction == DuckData::Direction::Left;
         bool hasGun = duck.gunID != ItemID::NONE;
         DuckState state = {duck.extraData[DuckData::Flag::Index::PlayingDead],
                            duck.extraData[DuckData::Flag::Index::InAir],
@@ -173,9 +173,8 @@ void Game::updatePlayers(
                            duck.extraData[DuckData::Flag::Index::Armor],
                            duck.extraData[DuckData::Flag::Index::IsShooting],
                            duck.extraData[DuckData::Flag::Index::LookingUp],
-                           flipped,
-                           duck.gunID,
-                           duck.direction};
+                           flipped, hasGun, duck.extraData[DuckData::Flag::Index::NoMoreBullets],
+                           duck.gunID, duck.direction};
 
         soundManager.checkSounds(state);
 

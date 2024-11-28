@@ -47,7 +47,10 @@ void HudManager::finishedRound(
         const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
     auto& winner = ducksToRender.front();
     spritesMapping.at(winner.duckID)->drawWin();
-    /*
+    renderer.Present();
+
+    SDL_Delay(1000);
+
     int centerX = windowWidth / 2;
     int centerY = windowHeight / 2;
     int size = 10;
@@ -84,7 +87,7 @@ void HudManager::finishedRound(
     imageRect.h = imageHeight;
 
     renderer.Copy(imageTexture, NullOpt, imageRect);
-*/
+
     renderer.Present();
     SDL_Delay(2000);
 
