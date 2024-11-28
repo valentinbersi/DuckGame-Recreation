@@ -76,7 +76,9 @@ void Game::init() {
         hudManager.check(roundFinished, setFinished, gameFinished, ducks, spritesMapping);
         if (transition) {
             transition = false;
-            //comm.send
+            auto message = std::make_unique<GameMessage>(InputAction::NEXT_ROUND, 1);
+            communicator.trysend(std::move(message));
+
         } else renderer.Present();         // the renderer is presented inside the hudManager if the round/set/game is finished. in other case...
 
         handler.handleEvents();
@@ -101,8 +103,9 @@ void Game::getSnapshot() {
         return;
 
     clearObjects();
-    // roundOver, setOver, gameOver
-    // corroboro gameover, setover y luego roundover
+    roundFinished = snapshot->roundOver;
+    setFinished = snapshot->setOver;
+    gameFinished = snapshot->gameOver;
 
     for (auto& duck: snapshot->ducks) ducks.push_back(std::move(duck));
     for (const auto& block: snapshot->blockPositions) blocks.push_back(block);
