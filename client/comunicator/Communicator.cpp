@@ -38,6 +38,7 @@ ReplyMessage Communicator::blockingRecv() { return recvQueueLobby.pop(); }
 Communicator::~Communicator() {
     sender.stop();
     receiver.stop();
+    skt.shutdown(Socket::ShutdownOptions::READ_WRITE);
     skt.close();
     sendQueue.close();
     recvQueueGame.close();

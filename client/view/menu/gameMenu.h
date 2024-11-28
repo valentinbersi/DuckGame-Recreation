@@ -58,8 +58,10 @@ private:
      */
     void showWaitingPage();
 
-    void closeEvent(QCloseEvent* event) override;
-    void exitGame();
+    /**
+     * Se cierra el menu, cerrando la aplicacion de Qt correctamente.
+     */
+    void closeMenu();
 
 signals:
     void startGame();

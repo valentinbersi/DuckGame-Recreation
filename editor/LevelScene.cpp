@@ -78,6 +78,7 @@ bool LevelScene::isEmptyPosition(QRectF itemRect) {
 void LevelScene::insertObjectInMap(const Object& object, bool addInList) {
 
     QPointF topLeftPos = object.getBoundingPos();
+    qDebug() << "topLeftPos:" << topLeftPos;
     QPointF itemPos(int(topLeftPos.x()) * PIXEL_SIZE, int(topLeftPos.y()) * PIXEL_SIZE);
     QSizeF itemSize(object.size.width() * PIXEL_SIZE, object.size.height() * PIXEL_SIZE);
     QRectF itemRect(itemPos, itemSize);
@@ -115,8 +116,9 @@ void LevelScene::insertObjectInMap(const Object& object, bool addInList) {
     //    }
     objectsMap[item] = storedObject;
     qDebug() << "item pos:" << item->pos()
-             << "storedObject pos:" << objectsMap[item]->getBoundingPos()
-             << "object posta pos:" << object.getBoundingPos();
+             << "storedObject posLeft:" << objectsMap[item]->getBoundingPos()
+             << "object posta posLeft:" << object.getBoundingPos()
+                                           << "object posta centerPos:" << object.centerPos;
     /** ACA PARECIERA ESTAR FUNCIONANDO BIEN ! */
     // if (object.type == DUCK) ducksCount++;
 
@@ -150,9 +152,12 @@ void LevelScene::loadMap(int mapWidth, int mapHeight) {
 
 
 void LevelScene::addNewObject(ObjectType type, QPointF pos) {
+    QPointF centerPos(std::round(pos.x() / PIXEL_SIZE), std::round(pos.y() / PIXEL_SIZE));
+    if (centerPos.x() < 1 || centerPos.y() < 1)
+        return;
     Object newObject(type);
-    newObject.setCenterPosition(
-            QPointF(std::round(pos.x() / PIXEL_SIZE), std::round(pos.y() / PIXEL_SIZE)), true);
+    newObject.setCenterPosition(centerPos, false);
+    qDebug() << "scenePos:" << pos << "newObject.centerPos:" << newObject.centerPos;
     insertObjectInMap(newObject, true);
 
     auto* itemAction = qobject_cast<QAction*>(sender());
@@ -239,18 +244,6 @@ void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
         QPointF newPos(int(itemPosAligned.x()) / PIXEL_SIZE, int(itemPosAligned.y()) / PIXEL_SIZE);
         obj->setCenterPosition(newPos, true);
         qDebug() << "pos del objecto izq-arr y central:" << obj->getBoundingPos() << obj->centerPos;
-
-        //        auto it = objectsMap.find(selectedItem);
-        //        if (it != objectsMap.end() && it.value()) {
-        //            Object* objectMoved = it.value();
-        //            QPointF newCenterPos(int(itemPosAligned.x()) / PIXEL_SIZE,
-        //                                 int(itemPosAligned.y()) / PIXEL_SIZE);
-        //            objectMoved->setCenterPosition(newCenterPos, true);
-        //            qDebug() << "pos del objecto izq-arr y central:" <<
-        //            objectMoved->getBoundingPos() << objectMoved->centerPos;
-        //        } else {
-        //            qDebug() << "Error: no se encontró el objeto asociado al item.";
-        //        }
 
         selectedItem = nullptr;
     }

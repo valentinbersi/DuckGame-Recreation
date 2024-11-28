@@ -9,14 +9,10 @@
 
 void MapManager::exportMap(const std::list<Object>& objects, const std::string& mapName,
                            int mapWidth, int mapHeight, const std::string& background) {
-    for (const auto& obj: objects) {
-        qDebug() << obj.centerPos;
-    }
-
     std::string path = "maps/" + mapName + ".yaml";
     std::ofstream fout(path);
     if (!fout.is_open()) {
-        qWarning() << "No se pudo abrir el archivo para guardar.";
+        qWarning() << "Could not open save file";
         return;
     }
 
@@ -33,9 +29,6 @@ void MapManager::exportMap(const std::list<Object>& objects, const std::string& 
         objNode["type"] = objectTypeToString(obj.type);
         objNode["x"] = obj.centerPos.x();
         objNode["y"] = obj.centerPos.y();
-        qDebug() << "Objeto:" << obj.centerPos;
-        qDebug() << "objeto exportado:" << QString::fromStdString(objNode["type"].as<std::string>())
-                 << "  x: " << objNode["x"].as<int>() << "  y: " << objNode["y"].as<int>();
         objectsNode.push_back(objNode);
     }
 
@@ -70,10 +63,10 @@ ObjectType MapManager::stringToObjectType(const std::string& typeStr) {
 }
 
 bool MapManager::importMap(std::list<Object>& objects, const std::string& mapPath, int& mapWidth,
-                           int& mapHeight, const std::string& background) {
+                           int& mapHeight, std::string& background) {
     std::ifstream fin(mapPath);
     if (!fin.is_open()) {
-        qWarning() << "No se pudo abrir el archivo para cargar el mapa.";
+        qWarning() << "Could not open the file to load the map.";
         return false;
     }
 
@@ -81,7 +74,7 @@ bool MapManager::importMap(std::list<Object>& objects, const std::string& mapPat
         YAML::Node mapNode = YAML::Load(fin);
         if (!mapNode["map_name"] || !mapNode["background"] || !mapNode["map_width"] ||
             !mapNode["map_height"] || !mapNode["objects"]) {
-            qWarning() << "El archivo de mapa no tiene el formato esperado.";
+            qWarning() << "The map file is not in the expected format.";
             return false;
         }
 
@@ -98,15 +91,10 @@ bool MapManager::importMap(std::list<Object>& objects, const std::string& mapPat
             object.centerPos.setX(objNode["x"].as<int>());
             object.centerPos.setY(objNode["y"].as<int>());
 
-            qDebug() << "Objeto:" << object.centerPos;
-            qDebug() << "objeto importado:"
-                     << QString::fromStdString(objNode["type"].as<std::string>())
-                     << "  x: " << objNode["x"].as<int>() << "  y: " << objNode["y"].as<int>();
-
             objects.push_back(object);
         }
     } catch (const YAML::Exception& e) {
-        qWarning() << "Error al leer el archivo YAML: " << e.what();
+        qWarning() << "Error reading YAML file: " << e.what();
     }
 
     fin.close();
