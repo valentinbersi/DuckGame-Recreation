@@ -3,9 +3,9 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <list>
 #include <map>
 #include <string>
-#include <vector>
 
 #include "LevelScene.h"
 
@@ -25,8 +25,13 @@ public:
 private:
     Ui::ViewController* ui;
     std::string background;
-    std::vector<Object> objects;
+    std::list<Object> objects;
     LevelScene* scene;
+
+    QPushButton* platformButton;
+    QPushButton* spawnDuckButton;
+    QPushButton* spawnArmamentButton;
+    QPushButton* boxButton;
     std::map<QPushButton*, ObjectType> buttonTypeMap;
 
     QBrush backgroundBrush;
@@ -53,6 +58,9 @@ private:
      */
     void on_actionEditMap_triggered();
 
+    void on_actionSaveMap_triggered();
+
+
     /**
      * Setea los botones de accion de la barra de opciones.
      * Setea el actionTypeMap, asociando cada boton con el tipo de objeto correspondiente.
@@ -75,7 +83,8 @@ private:
      */
     bool confirmAndSaveMap();
 
-    void changeBackground();
+    void selectBackground();
+    void changeBackgroundBrush();
     void paintEvent(QPaintEvent* event) override;
     void setupToolBar();
 };

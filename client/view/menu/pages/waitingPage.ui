@@ -20,16 +20,16 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>100</y>
+     <y>50</y>
      <width>661</width>
-     <height>281</height>
+     <height>411</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">QFrame #frame {
-background-color: rgba(229, 165, 10, 0.95);
-border-radius: 30px;
-}</string>
+                    background-color: rgba(229, 165, 10, 0.95);
+                    border-radius: 30px;
+                    }</string>
    </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
@@ -43,7 +43,7 @@ border-radius: 30px;
       <x>10</x>
       <y>30</y>
       <width>641</width>
-      <height>221</height>
+      <height>141</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -51,7 +51,7 @@ border-radius: 30px;
       <widget class="QLabel" name="labelWaitingMsg">
        <property name="styleSheet">
         <string notr="true">color: rgb(165, 29, 45);
-</string>
+                                </string>
        </property>
        <property name="text">
         <string>WAITING FOR PLAYER TO JOIN</string>
@@ -68,7 +68,7 @@ border-radius: 30px;
       <widget class="QLabel" name="labelMatchID">
        <property name="styleSheet">
         <string notr="true">color: rgb(165, 29, 45);
-</string>
+                                </string>
        </property>
        <property name="text">
         <string>MATCH ID: 11111</string>
@@ -96,22 +96,97 @@ border-radius: 30px;
      </item>
     </layout>
    </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>200</y>
+      <width>251</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>20</number>
+     </property>
+     <item>
+      <layout class="QVBoxLayout" name="layoutDuck1" stretch="1,4">
+       <item>
+        <widget class="QLabel" name="Duck1Label">
+         <property name="styleSheet">
+          <string notr="true">color:  rgb(165, 29, 45);</string>
+         </property>
+         <property name="text">
+          <string>Duck 1</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="Duck1">
+         <property name="pixmap">
+          <pixmap>../resources/ducks/whiteDuckIcon.png</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="layoutDuck2" stretch="1,4">
+       <item>
+        <widget class="QLabel" name="Duck2Label">
+         <property name="styleSheet">
+          <string notr="true">color:  rgb(165, 29, 45);</string>
+         </property>
+         <property name="text">
+          <string>Duck 2</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="Duck2">
+         <property name="pixmap">
+          <pixmap>../resources/ducks/whiteDuckIcon.png</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QPushButton" name="playButton">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>400</y>
+     <x>280</x>
+     <y>480</y>
      <width>201</width>
      <height>81</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">color: white;
-background-color: rgb(165, 29, 45);
-padding: 10px;
-border-radius: 10px;
-margin: 5px;</string>
+                    background-color: rgb(165, 29, 45);
+                    padding: 10px;
+                    border-radius: 10px;
+                    margin: 5px;</string>
    </property>
    <property name="text">
     <string>START GAME</string>

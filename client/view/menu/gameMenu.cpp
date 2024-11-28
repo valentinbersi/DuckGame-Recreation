@@ -20,9 +20,8 @@ GameMenu::GameMenu(QWidget* parent, Communicator& communicator, bool& twoPlayers
     common_init(this, BACKGROUND_MENU);
 
     menu = new mainMenu(this);
-    config = new configurationPage(this, gameInfo);
-    join_game = new matchSetup(this, joinMatch, communicator, gameInfo);
-    new_game = new matchSetup(this, newMatch, communicator, gameInfo);
+    config = new configurationPage(this, gameInfo, communicator);
+    waitingPage = nullptr;
 
     setPagesAndConnections();
 }
@@ -30,49 +29,54 @@ GameMenu::GameMenu(QWidget* parent, Communicator& communicator, bool& twoPlayers
 void GameMenu::setPagesAndConnections() {
     ui->stackedWidget->addWidget(menu);
     ui->stackedWidget->addWidget(config);
-    ui->stackedWidget->addWidget(join_game);
-    ui->stackedWidget->addWidget(new_game);
 
     ui->stackedWidget->setCurrentWidget(menu);
 
     connect(menu, &mainMenu::play, this, [this]() { changePage(config); });
-    connect(menu, &mainMenu::exitGameRequested, this, &QApplication::quit);
+    connect(menu, &mainMenu::exitGameRequested, this, &GameMenu::exitGame);
 
-    connect(config, &configurationPage::joinGameClicked, this, [this]() { changePage(join_game); });
-    connect(config, &configurationPage::newGameClicked, this, [this]() { changePage(new_game); });
+    connect(config, &configurationPage::playMatchClicked, this, &GameMenu::showWaitingPage);
     connect(config, &configurationPage::backClicked, this, [this]() { changePage(menu); });
-
-    connect(new_game, &matchSetup::playMatchClicked, this, &GameMenu::showWaitingPage);
-    connect(new_game, &matchSetup::backClicked, this, [this]() { changePage(config); });
-
-    connect(join_game, &matchSetup::playMatchClicked, this, &GameMenu::showJoinWaitingPage);
-    connect(join_game, &matchSetup::backClicked, this, [this]() { changePage(config); });
 }
 
-GameMenu::~GameMenu() { delete ui; }
+GameMenu::~GameMenu() {
+    delete ui;
+    delete menu;
+    delete config;
+    delete waitingPage;
+}
 
 void GameMenu::changePage(QWidget* page) { ui->stackedWidget->setCurrentWidget(page); }
 
 void GameMenu::showWaitingPage() {
-    auto* host_waiting_page = new WaitingPage(this, true, communicator, gameInfo);
-    ui->stackedWidget->addWidget(host_waiting_page);
-    changePage(host_waiting_page);
-
-    connect(host_waiting_page, &WaitingPage::startMatch, this, &GameMenu::startGameHandler);
-}
-
-void GameMenu::showJoinWaitingPage() {
-    auto* join_waiting_page = new WaitingPage(this, false, communicator, gameInfo);
-    ui->stackedWidget->addWidget(join_waiting_page);
-    changePage(join_waiting_page);
+    if (gameInfo.isNewGame)
+        waitingPage = new WaitingPage(this, communicator, gameInfo);
+    else
+        waitingPage = new WaitingPage(this, communicator, gameInfo);
+    ui->stackedWidget->addWidget(waitingPage);
+    changePage(waitingPage);
     QApplication::processEvents();
-    connect(join_waiting_page, &WaitingPage::startMatch, this, &GameMenu::startGameHandler);
+    connect(waitingPage, &WaitingPage::startMatch, this, &GameMenu::startGameHandler);
 }
 
 void GameMenu::startGameHandler() {
-    if (gameInfo.playersNumber == 2)
-        twoPlayersLocal = true;
+    twoPlayersLocal = (gameInfo.playersNumber == 2);
     emit startGame();
+    //    close();
+    //    QCoreApplication::exit(0);
+    exitGame();
+}
+
+void GameMenu::exitGame() {
+    qDebug() << "se entra a exitGame()";
     close();
-    QCoreApplication::exit(0);
+    // QCoreApplication::exit(0);
+    QApplication::quit();
+}
+
+void GameMenu::closeEvent(QCloseEvent* event) {
+    Q_UNUSED(event);
+    close();
+    QApplication::quit();
+    // QCoreApplication::exit(0);
 }

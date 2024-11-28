@@ -73,7 +73,12 @@ struct std::equal_to<InputAction> {
 
 class LobbyRequest {
 public:
-    enum Value : unsigned char { NEWMATCH = 0x0, JOINMATCH = 0x1, STARTMATCH = 0X2 };
+    enum Value : unsigned char {
+        NEWMATCH = 0x0,
+        JOINMATCH = 0x1,
+        CHOOSECOLOR = 0X2,
+        STARTMATCH = 0X3
+    };
 
     // cppcheck-suppress noExplicitConstructor
     LobbyRequest(Value value);  // NOLINT(runtime/explicit)

@@ -173,9 +173,7 @@ void Game::updatePlayers(
                            duck.extraData[DuckData::Flag::Index::Armor],
                            duck.extraData[DuckData::Flag::Index::IsShooting],
                            duck.extraData[DuckData::Flag::Index::LookingUp],
-                           true,
-                           hasGun,
-                           duck.extraData[DuckData::Flag::Index::NoMoreBullets],
+                           flipped,
                            duck.gunID,
                            duck.direction};
 

@@ -25,8 +25,9 @@ std::list<DuckData> ClientRecvProtocol::recvDuckData() {
         DuckData::Direction direction = static_cast<DuckData::Direction>(recvByte());
         u8 gunID = static_cast<ItemID>(recvByte());
         u16 actions = recvShort();
+        u32 roundsWon = recvInt();
         Vector2 position = recvVector2();
-        ducks.emplace_back(position, duckID, life, direction, gunID, actions);
+        ducks.emplace_back(position, duckID, life, direction, gunID, actions, roundsWon);
     }
     return ducks;
 }
@@ -65,5 +66,9 @@ ReplyMessage ClientRecvProtocol::recvReplyMessage() {
     u16 matchID = recvShort();
     u8 startGame = recvByte();
     u8 connectedPlayers = recvByte();
-    return ReplyMessage(matchID, startGame, connectedPlayers);
+    DuckData::Id color1 = static_cast<DuckData::Id>(recvByte());
+    DuckData::Id color2 = static_cast<DuckData::Id>(recvByte());
+    std::string error = recvString();
+
+    return ReplyMessage(matchID, startGame, connectedPlayers, color1, color2, error);
 }

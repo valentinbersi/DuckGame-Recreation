@@ -1,0 +1,9 @@
+jump time: 0.2
+acceleration: 100
+air acceleration: 40
+min speed: 0
+max speed: 30
+jump speed: 10
+default hand item: "nothing"
+default armor: false
+default helmet: false

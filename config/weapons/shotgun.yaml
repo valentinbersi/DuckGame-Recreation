@@ -1,0 +1,9 @@
+ammo: 2
+dispersion: 45
+recoil:
+  x: 0
+  y: 0
+min reach: 7
+max reach: 9
+pellets per shot: 6
+reload time: 3

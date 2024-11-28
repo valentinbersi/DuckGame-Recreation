@@ -74,7 +74,7 @@ public:
      * @param playerID the id of the player to add
      * @throw AlreadyAddedPlayer if the player is already in the match
      */
-    void addPlayer(PlayerID playerID);
+    DuckData::Id addPlayer(PlayerID playerID);
 
     /**
      * Remove a player from the match
@@ -96,6 +96,13 @@ public:
      * @return the number of players in the match
      */
     u8 playersCount() const;
+
+    /**
+     * Check if adding a amount of players exceeds the maximum amount of players
+     * @param playerAmount the amount of player to add/check
+     * @return true if It exceeds the maximum amount of players, false otherwise
+     */
+    bool exceedsPlayerMax(const u8 playerAmount);
 
     /**
      * Load the level

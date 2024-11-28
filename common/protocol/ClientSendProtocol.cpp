@@ -8,14 +8,10 @@
 
 ClientSendProtocol::ClientSendProtocol(ActiveSocket& socket): SendProtocol(socket) {}
 
-void ClientSendProtocol::sendLobbyMessage(u8 type, u8 request, u8 playerCount,
-                                          const std::string& player1Name,
-                                          const std::string& player2Name, u16 matchId) {
+void ClientSendProtocol::sendLobbyMessage(u8 type, u8 request, u8 playerCount, u16 matchId) {
     sendByte(type);
     sendByte(request);
     sendByte(playerCount);
-    sendString(player1Name);
-    sendString(player2Name);
     sendShort(matchId);
 }
 

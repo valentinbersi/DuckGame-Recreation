@@ -6,11 +6,10 @@
 
 struct GameInfo {
     u8 playersNumber;
-    std::string player1Name;
-    std::string player2Name;
     bool isNewGame;
-    std::string selectedMap;
     u16 matchID;
+    DuckData::Id Duck1Color = DuckData::Id::None;
+    DuckData::Id Duck2Color = DuckData::Id::None;
 
     GameInfo(): playersNumber(0), isNewGame(false), matchID(0) {}
 };

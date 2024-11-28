@@ -71,7 +71,7 @@ void GameController::update(const float delta) {
 
 #define PLAYER "Player "
 
-void GameController::addPlayer(const PlayerID playerID) {
+DuckData::Id GameController::addPlayer(const PlayerID playerID) {
     if (players.contains(playerID))
         throw AlreadyAddedPlayer(playerID);
 
@@ -92,6 +92,7 @@ void GameController::addPlayer(const PlayerID playerID) {
 
     addChild(PLAYER + id, newPlayer);
     players.emplace(playerID, newPlayer);
+    return duckID;
 }
 
 void GameController::removePlayer(const PlayerID playerID) {
@@ -104,6 +105,10 @@ void GameController::removePlayer(const PlayerID playerID) {
 Player& GameController::getPlayer(const PlayerID playerID) const { return *players.at(playerID); }
 
 u8 GameController::playersCount() const { return players.size(); }
+
+bool GameController::exceedsPlayerMax(const u8 playerAmount) {
+    return players.size() + playerAmount > MAX_PLAYERS;
+}
 
 void GameController::loadLevel(const LevelData& level) {
     if (this->level != nullptr)

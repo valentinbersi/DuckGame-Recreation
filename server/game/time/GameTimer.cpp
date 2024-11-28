@@ -11,6 +11,7 @@ void GameTimer::update(const float delta) {
         return;
 
     timeLeft -= delta;
+
     if (timeLeft <= 0) {
         _started = false;
         fire(Events::Timeout);
