@@ -41,7 +41,7 @@ ViewController::ViewController(QWidget* parent): QMainWindow(parent), ui(new Ui:
     connect(ui->actionEditMap, &QAction::triggered, this, &ViewController::on_actionEditMap_triggered);
 
     connect(ui->ClearAll, &QAction::triggered, scene, &LevelScene::clearAll);
-    connect(ui->ChangeBackground, &QAction::triggered, this, &ViewController::changeBackground);
+    connect(ui->ChangeBackground, &QAction::triggered, this, &ViewController::selectBackground);
 
     connect(scene, &LevelScene::resizeView, this, &ViewController::onSceneResize);
 }
@@ -82,14 +82,9 @@ void ViewController::onSceneResize() {
     ui->graphicsView->setSceneRect(0, 0, sceneRect.width() * 4, sceneRect.height() * 4);
 }
 
-void ViewController::changeBackground() {
-    QString filePath = QFileDialog::getOpenFileName(this, "Select Backgrounds", "assets/background/", "Images (*.png)");
-    if (filePath.isEmpty()) {
-        QMessageBox::information(this, "No Background Selected", "Please select an image from the assets folder.");
-        return;
-    }
-
-    QPixmap pixmap(filePath);
+void ViewController::changeBackgroundBrush() {
+    QString _background = QString::fromStdString(background);
+    QPixmap pixmap(_background);
     if (pixmap.isNull()) {
         QMessageBox::warning(this, "Error", "The selected file is not a valid image.");
         return;
@@ -98,13 +93,24 @@ void ViewController::changeBackground() {
     update();
 }
 
+void ViewController::selectBackground() {
+    QString filePath = QFileDialog::getOpenFileName(this, "Select Backgrounds", "assets/background/", "Images (*.png)");
+    if (filePath.isEmpty()) {
+        QMessageBox::information(this, "No Background Selected", "Please select an image from the assets folder.");
+        return;
+    }
+
+    background = filePath.toStdString();
+    changeBackgroundBrush();
+}
+
 void ViewController::on_actionSaveMap_triggered() {
     if (!scene->enoughDucks()) {
         QMessageBox::warning(this, "Error", "The map should have 4 duck spawns.");
         return;
     }
     MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
-                          scene->getMapWidth(), scene->getMapHeight());
+                          scene->getMapWidth(), scene->getMapHeight(), background);
     QMessageBox::information(this, "Save Map", "The map was saved successfully!");
 }
 
@@ -115,7 +121,7 @@ bool ViewController::confirmAndSaveMap() {
         return false;
     else if (reply == QMessageBox::Yes)
         MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
-                              scene->getMapWidth(), scene->getMapHeight());
+                              scene->getMapWidth(), scene->getMapHeight(), background);
     return true;
 }
 
@@ -173,6 +179,7 @@ void ViewController::on_actionEditMap_triggered() {
     if (!success) return;
 
     scene->loadMap(mapWidth, mapHeight);
+    changeBackgroundBrush();
     ui->lineEditMapName->setText(mapName);
     QMessageBox::information(this, "Imported Map",
                              "The map has been imported successfully!");

@@ -7,7 +7,7 @@
 #include "yaml-cpp/yaml.h"
 
 void MapManager::exportMap(const std::list<Object>& objects, const std::string& mapName,
-                           int mapWidth, int mapHeight) {
+                           int mapWidth, int mapHeight, std::string& background) {
     for (const auto& obj: objects) {
         qDebug() << obj.centerPos;
     }
@@ -22,7 +22,7 @@ void MapManager::exportMap(const std::list<Object>& objects, const std::string& 
     YAML::Node mapNode;
 
     mapNode["map_name"] = mapName;
-    mapNode["background"] = "forest-night.png";
+    mapNode["background"] = background;
     mapNode["map_width"] = mapWidth;
     mapNode["map_height"] = mapHeight;
 
@@ -87,7 +87,6 @@ bool MapManager::importMap(std::list<Object>& objects, const std::string& mapPat
         auto mapNameFromFile = mapNode["map_name"].as<std::string>();
         mapWidth = mapNode["map_width"].as<int>();
         mapHeight = mapNode["map_height"].as<int>();
-
         background = mapNode["background"].as<std::string>();
 
         YAML::Node objectsNode = mapNode["objects"];

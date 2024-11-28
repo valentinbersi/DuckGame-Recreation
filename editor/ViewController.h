@@ -83,7 +83,8 @@ private:
      */
     bool confirmAndSaveMap();
 
-    void changeBackground();
+    void selectBackground();
+    void changeBackgroundBrush();
     void paintEvent(QPaintEvent *event) override;
     void setupToolBar();
 };
