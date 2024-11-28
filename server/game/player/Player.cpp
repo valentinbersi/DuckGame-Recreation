@@ -206,7 +206,8 @@ void Player::move(const float delta, const float movementAcceleration) {
 
 void Player::performActionsInAir(const float delta) {
     move(delta, airAcceleration);
-    jumpTimer->start();
+    if (not jumpTimer->started())
+        jumpTimer->start();
 }
 
 void Player::performActionsInGround(const float delta) {
