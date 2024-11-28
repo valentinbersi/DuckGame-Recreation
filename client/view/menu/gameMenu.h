@@ -58,6 +58,9 @@ private:
      */
     void showWaitingPage();
 
+    /**
+     * Se cierra el menu, cerrando la aplicacion de Qt correctamente.
+     */
     void closeMenu();
 
 signals:
