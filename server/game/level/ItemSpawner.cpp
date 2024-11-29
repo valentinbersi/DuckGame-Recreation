@@ -2,17 +2,18 @@
 
 #include <utility>
 
+#include "Config.h"
 #include "ItemFactory.h"
 #include "Layer.h"
 
-#define SPAWN_TIME_RANGE 5.0f, 20.0f
 #define SPAWNER_DIMENSIONS 3.5f, 1.5f
 
 #define eventHandler(                                                                    \
         Function) /*como no se recibe argumentos en este caso quito coma y __VA_ARGS__*/ \
     gameObject::EventHandler<ItemSpawner>::create(getReference<ItemSpawner>(), Function)
 
-RandomFloatGenerator ItemSpawner::randomGenerator(SPAWN_TIME_RANGE);
+RandomFloatGenerator ItemSpawner::randomGenerator(Config::Weapons::minSpawnTime(),
+                                                  Config::Weapons::maxSpawnTime());
 
 ItemSpawner::ItemSpawner(Vector2 position):
         StaticObject(position, Layer::Spawner, 0, SPAWNER_DIMENSIONS), timer(new GameTimer(0)) {
