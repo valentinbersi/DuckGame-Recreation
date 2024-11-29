@@ -311,7 +311,7 @@ void Player::kill() {
         return;
 
     flags.set(DuckData::Flag::Index::IsDead);
-    removeFromLayer(Layer::Player);
+    removeFromLayer(Layer::Index::Player);
 }
 
 void Player::makeShoot() { flags |= DuckData::Flag::IsShooting; }
