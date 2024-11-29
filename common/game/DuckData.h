@@ -57,7 +57,6 @@ struct DuckData final: SizedObjectData {
     };
 
     Id duckID;
-    i8 life;
     Direction direction;
     ItemID gunID;
     std::bitset<FlagCount> extraData;
@@ -128,7 +127,7 @@ struct DuckData final: SizedObjectData {
      * @param extraData actions the duck is performing and armor data
      * @param roundsWon the number of rounds the duck has won
      */
-    DuckData(const Vector2& position, Id id, i8 life, Direction direction, ItemID gunID,
+    DuckData(const Vector2& position, Id id, Direction direction, ItemID gunID,
              std::bitset<FlagCount> extraData, u32 roundsWon);
 
     /**

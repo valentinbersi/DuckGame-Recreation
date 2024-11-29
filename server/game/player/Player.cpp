@@ -1,5 +1,6 @@
 #include "Player.h"
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
@@ -42,7 +43,6 @@ Player::Player(const DuckData::Id id):
         PhysicsObject({30, 0}, Layer::Player, Layer::Wall, PLAYER_DIMENSIONS, Gravity::Enabled,
                       Vector2::ZERO, CollisionType::Slide),
         id(id),
-        life(DEFAULT_LIFE),
         _movementDirection(DuckData::Direction::Center),
         _viewDirection(DuckData::Direction::Right),
         _lastViewDirection(DuckData::Direction::Right),
@@ -88,27 +88,29 @@ void Player::onItemCollision(CollisionObject* item) {
                 return;
             default:
                 weapon = WeaponFactory::createWeapon(id).release();
+                weapon->connect(EquippableWeapon::Events::Fired,
+                                eventHandler(&Player::onWeaponFired, , const Vector2&));
                 addChild(WEAPON, weapon);
                 getRoot()->removeChild(item);
         }
     }
 }
 
-void Player::onCollision(CollisionObject* item) {
-    if (item->layers().test(Layer::Index::DeathZone))
+void Player::onCollision(const CollisionObject* object) {
+    if (object->layers().test(Layer::Index::DeathZone))
         return (void)setPosition({30, 0});
 
-    if (item->layers().test(Layer::Index::Bullet))  // So static cast is safe
-        return damage(static_cast<Bullet*>(item)->damage());
+    if (object->layers().test(Layer::Index::Bullet))
+        return kill();
 }
 
 void Player::onWeaponFired(const Vector2& recoil) {
     _velocity.setX(0);
     _velocity += recoil;
-    flags |= DuckData::Flag::IsShooting;
+    flags.set(DuckData::Flag::Index::IsShooting);
 }
 
-void Player::onWeaponNoMoreBullets() { flags |= DuckData::Flag::NoMoreBullets; }
+void Player::onWeaponNoMoreBullets() { flags.set(DuckData::Flag::Index::NoMoreBullets); }
 
 void Player::onJumpTimerTimeout() { canKeepJumping = false; }
 
@@ -120,7 +122,7 @@ void Player::resetState() {
 }
 
 void Player::manageCrouch() {
-    flags.set(DuckData::Flag::Index::Crouching);
+    flags.set(DuckData::Flag::Index::PlayingDead);
 
     if (input.isActionPressed(MOVE_LEFT))
         _viewDirection.pushLeft();
@@ -216,7 +218,7 @@ void Player::performActionsInGround(const float delta) {
     canKeepJumping = true;
 }
 
-#define JUMP_SPEED 80
+#define JUMP_SPEED 20
 
 void Player::performActions(const float delta) {
     if (not _onGround)
@@ -258,6 +260,8 @@ void Player::start() {}
 
 void Player::update(const float delta) {
     resetState();
+    if (flags.test(DuckData::Flag::Index::IsDead))
+        return;
     manageInput();
     performActions(delta);
 
@@ -270,6 +274,7 @@ void Player::update(const float delta) {
         flags |= DuckData::Flag::Flapping;
 
     } else if (input.isActionJustPressed(INTERACT) && weapon) {
+        input.releaseAction(INTERACT);
         std::unique_ptr<Item> item = ItemFactory::createItem(weapon->getID());
         item->setPosition(globalPosition());
         getRoot()->addChild(WEAPON, std::move(item));
@@ -296,20 +301,21 @@ void Player::update(const float delta) {
         flags |= DuckData::Flag::InAir;
 }
 
-void Player::damage(const i8 damage) {
+void Player::kill() {
+    std::cout << "I DIED" << std::endl;
+
     if (flags.test(DuckData::Flag::Index::IsDead))
         return;
 
-    life -= damage;
-    if (life < 0)
-        removeFromLayer(Layer::Player);
+    flags.set(DuckData::Flag::Index::IsDead);
+    removeFromLayer(Layer::Player);
 }
 
 void Player::makeShoot() { flags |= DuckData::Flag::IsShooting; }
 
 void Player::notMoreBullets() { flags |= DuckData::Flag::NoMoreBullets; }
 
-DuckData::Direction Player::viewDirection() const { return _movementDirection; }
+DuckData::Direction Player::viewDirection() const { return _lastViewDirection; }
 
 u32 Player::roundsWon() const { return wonRounds; }
 
@@ -318,7 +324,6 @@ void Player::winRound() { ++wonRounds; }
 DuckData Player::status() {
     return {globalPosition(),
             id,
-            life,
             _lastViewDirection,
             weapon ? weapon->getID() : ItemID(ItemID::NONE),
             flags,

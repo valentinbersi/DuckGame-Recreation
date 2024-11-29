@@ -14,7 +14,8 @@ void GameObject2D::updateInternal([[maybe_unused]] const float delta) {
     GameObject::updateInternal(delta);
 }
 
-GameObject2D& GameObject2D::setGlobalPosition(Vector2 globalPosition) noexcept {
+GameObject2D& GameObject2D::setGlobalPosition(Vector2 globalPosition,
+                                              [[maybe_unused]] const Force force) noexcept {
     _globalPosition = std::move(globalPosition);
 
     const auto parent2D = dynamic_cast<GameObject2D*>(parent());
@@ -30,7 +31,8 @@ GameObject2D& GameObject2D::setGlobalPosition(Vector2 globalPosition) noexcept {
 
 const Vector2& GameObject2D::globalPosition() const noexcept { return _globalPosition; }
 
-GameObject2D& GameObject2D::setPosition(Vector2 position) noexcept {
+GameObject2D& GameObject2D::setPosition(Vector2 position,
+                                        [[maybe_unused]] const Force force) noexcept {
     _position = std::move(position);
 
     const auto parent2D = dynamic_cast<GameObject2D*>(parent());

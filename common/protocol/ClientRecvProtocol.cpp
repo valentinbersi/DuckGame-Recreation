@@ -21,13 +21,12 @@ std::list<DuckData> ClientRecvProtocol::recvDuckData() {
     std::list<DuckData> ducks;
     for (u16 i(0); i < size; ++i) {
         DuckData::Id duckID = static_cast<DuckData::Id>(recvByte());
-        i8 life = recvByte();
         DuckData::Direction direction = static_cast<DuckData::Direction>(recvByte());
         u8 gunID = static_cast<ItemID>(recvByte());
         u16 actions = recvShort();
         u32 roundsWon = recvInt();
         Vector2 position = recvVector2();
-        ducks.emplace_back(position, duckID, life, direction, gunID, actions, roundsWon);
+        ducks.emplace_back(position, duckID, direction, gunID, actions, roundsWon);
     }
     return ducks;
 }

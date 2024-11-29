@@ -7,7 +7,7 @@ class PhysicsObject: public CollisionObject {
 public:
     enum class Gravity : u8 { Enabled, Disabled };
 
-    enum class CollisionType : u8 { Stop, Slide, Bounce };
+    enum class CollisionType : u8 { Stop, Slide, Bounce, Destroy };
 
 private:
     Gravity gravity;
@@ -50,7 +50,7 @@ public:
      * Calculate the new position of the object based on its velocity.
      * @param delta The time since the last update
      */
-    void processCollisions(float delta) final;
+    bool processCollisions(float delta) final;
 
     /**
      * Sets the gravity configuration for the object

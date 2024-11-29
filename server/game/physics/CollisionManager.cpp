@@ -22,8 +22,7 @@ void CollisionManager::processCollisions(const float delta) const {
                 collisionObject->registerCollision(
                         otherCollisionObject->getReference<CollisionObject>());
 
-    for (CollisionObject* collisionObject: collisionObjects) {
-        collisionObject->processCollisions(delta);
-        collisionObject->resetRegisteredCollisions();
-    }
+    for (CollisionObject* collisionObject: collisionObjects)
+        if (not collisionObject->processCollisions(delta))
+            collisionObject->resetRegisteredCollisions();
 }

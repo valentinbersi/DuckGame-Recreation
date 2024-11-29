@@ -12,4 +12,4 @@ void StaticObject::updateInternal(const float delta) { CollisionObject::updateIn
 void StaticObject::registerCollision(
         [[maybe_unused]] std::weak_ptr<CollisionObject> collisionObject) {}
 
-void StaticObject::processCollisions([[maybe_unused]] const float delta) {}
+bool StaticObject::processCollisions([[maybe_unused]] const float delta) { return false; }

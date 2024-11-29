@@ -10,6 +10,7 @@
 
 #include "Camera.h"
 #include "DuckData.h"
+#include "Force.h"
 #include "Rectangle.h"
 #include "SpriteManager.h"
 #include "Spritesheet.h"
@@ -35,8 +36,6 @@ public:
     Rectangle& getViewRect();
 
 private:
-    enum class Force { Yes, No };
-
     // This method adjusts the size of the view rectangle based on the maximum distance between
     // ducks and the aspect ratio of the window. It then centers the view rectangle on the provided
     // center point

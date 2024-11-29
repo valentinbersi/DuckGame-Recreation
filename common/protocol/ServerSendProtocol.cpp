@@ -27,7 +27,6 @@ void ServerSendProtocol::sendRoundData(bool roundEnded, bool setEnded, bool game
 
 void ServerSendProtocol::sendDuckData(const DuckData& duckData) {
     sendByte(static_cast<u8>(duckData.duckID));
-    sendByte((u8)duckData.life);
     sendByte(static_cast<u8>(duckData.direction));
     sendByte(static_cast<u8>(duckData.gunID));
     sendShort(static_cast<u16>(duckData.extraData.to_ulong()));

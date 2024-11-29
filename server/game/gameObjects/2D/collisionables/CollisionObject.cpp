@@ -33,8 +33,19 @@ void CollisionObject::updateInternal([[maybe_unused]] const float delta) {
     shape.setCenter(globalPosition());
 }
 
-GameObject2D& CollisionObject::setPosition(Vector2 position) noexcept {
-    return GameObject2D::setPosition(std::move(position));
+GameObject2D& CollisionObject::setGlobalPosition(Vector2 globalPosition,
+                                                 const Force force) noexcept {
+    GameObject2D::setGlobalPosition(globalPosition);
+    if (force == Force::Yes)
+        shape.setCenter(this->globalPosition());
+    return *this;
+}
+
+GameObject2D& CollisionObject::setPosition(Vector2 position, const Force force) noexcept {
+    GameObject2D::setPosition(std::move(position));
+    if (force == Force::Yes)
+        shape.setCenter(globalPosition());
+    return *this;
 }
 
 std::bitset<CollisionObject::LayersCount> CollisionObject::layers() const { return _layers; }

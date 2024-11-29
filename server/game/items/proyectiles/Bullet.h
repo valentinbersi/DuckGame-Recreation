@@ -4,7 +4,6 @@
 #include "Types.h"
 
 class Bullet final: public PhysicsObject {
-    i8 _damage;
     u8 tiles;
 
     /**
@@ -26,12 +25,7 @@ public:
      * @param velocity The velocity of the bullet
      * @param tiles The tiles the bullet can travel
      */
-    Bullet(u8 damage, Vector2 velocity, u8 tiles);
-
-    /**
-     * Get the damage of the bullet
-     */
-    u8 damage() const;
+    Bullet(Vector2 velocity, u8 tiles);
 
     ~Bullet() override;
 };
