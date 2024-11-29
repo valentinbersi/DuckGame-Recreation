@@ -4,6 +4,7 @@
 
 #include "ItemFactory.h"
 #include "Layer.h"
+#include "GameController.h"
 
 #define SPAWN_TIME_RANGE 5.0f, 20.0f
 #define SPAWNER_DIMENSIONS 3.5f, 1.5f
@@ -29,10 +30,11 @@ void ItemSpawner::onTimeout() {
     const Vector2 newPosition = position() + Vector2::UP * (itemHalfHeight + spawnerHalfHeight);
     item->setPosition(newPosition);
     spawnedItem = item->getReference<Item>();
-    getRoot()->addChild("Weapon", std::move(item));
+    // getRoot()->addChild("Weapon", std::move(item));
+    static_cast<GameController*>(getRoot())->addToLevel("Weapon", std::move(item));
     timer->setTimeout(randomGenerator.generateRandomFloat());
 }
-
+ 
 void ItemSpawner::update([[maybe_unused]] const float delta) {
     if (spawnedItem.expired() && !timer->started()) {
         timer->start();

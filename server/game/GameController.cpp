@@ -71,9 +71,9 @@ void GameController::roundUpdate(u8 playerAlive, PlayerID playerID) {
                 tie = true;
             }
         }
-        setEnded = (roundsPlayed%5==0) ? true : false; 
-        _gameEnded = (setEnded && !tie)? true : false;
     }
+    setEnded = (roundsPlayed%5==0 && roundsPlayed) ? true : false; 
+    _gameEnded = (setEnded && !tie)? true : false;
 }
 
 void GameController::clearState() {
@@ -98,7 +98,7 @@ GameController::GameController(std::vector<LevelData>& levelsData): levelsData(l
 }
 
 void GameController::start() {
-    loadLevel(levelsData[0]); //seria random entre el size del map
+    loadLevel(levelsData[1]); //seria random entre el size del map
     roundEnded = false;
 }
 
@@ -159,6 +159,14 @@ u8 GameController::playersCount() const { return players.size(); }
 
 bool GameController::exceedsPlayerMax(const u8 playerAmount) {
     return players.size() + playerAmount > MAX_PLAYERS;
+}
+
+void GameController::addToLevel(const std::string& nodeName, std::unique_ptr<CollisionObject> physicObject) {
+    level->addChild(nodeName, std::move(physicObject));
+}
+
+void GameController::removeFromLevel(CollisionObject* collisionObject) {
+    level->removeChild(collisionObject);
 }
 
 GameStatus GameController::status() const {

@@ -126,9 +126,19 @@ public:
      */
     bool exceedsPlayerMax(const u8 playerAmount);
 
-    // void addWeapon(const WeaponData& weaponData, const Vec2& position);
+    /**
+     * Adds a physical object to the actual level.
+     * @param nodeName the name of the node to add to structure.
+     * @param physicObject the object to add to level
+     */
+    void addToLevel(const std::string& nodeName, std::unique_ptr<CollisionObject>physicObject);
 
-    // void addBullet(const BulletData& bulletData, const Vec2& position);
+    /**
+     * Removes a physical object from the actual level.
+     * @param physicObject the object to remove from level
+     */
+    void removeFromLevel(CollisionObject* collisionObject);
+
     /**
      * Get the status of the game
      * @return the status of the game

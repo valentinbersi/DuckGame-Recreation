@@ -14,6 +14,7 @@
 #include "ItemID.h"
 #include "Layer.h"
 #include "WeaponFactory.h"
+#include "GameController.h"
 
 /**
  * Macro for easier event handling
@@ -91,7 +92,8 @@ void Player::onItemCollision(CollisionObject* item) {
                 weapon->connect(EquippableWeapon::Events::Fired,
                                 eventHandler(&Player::onWeaponFired, , const Vector2&));
                 addChild(WEAPON, weapon);
-                getRoot()->removeChild(item);
+                
+                static_cast<GameController*>(getRoot())->removeFromLevel(item);
         }
     }
 }
@@ -277,7 +279,8 @@ void Player::update(const float delta) {
         input.releaseAction(INTERACT);
         std::unique_ptr<Item> item = ItemFactory::createItem(weapon->getID());
         item->setPosition(globalPosition());
-        getRoot()->addChild(WEAPON, std::move(item));
+        // getRoot()->addChild(WEAPON, std::move(item));
+        getRoot<GameController>()->addToLevel(WEAPON, std::move(item));
         removeChild(WEAPON);
         weapon = nullptr;
     }
