@@ -4,24 +4,43 @@
 #include <list>
 
 #include "ItemSpawner.h"
+#include "Layer.h"
 #include "SpawnPoint.h"
 #include "TerrainBlock.h"
 
 Level::Level(const LevelData& level) {
-    for (u64 i = 0; i < level.terrainBlocks.size(); ++i) {
-        auto block = new TerrainBlock(level.terrainBlocks[i]);
+
+    addChild("Death zone", new StaticObject({static_cast<float>(level.width) / 2, -20}, Layer::Wall,
+                                            Layer::None, static_cast<float>(level.width), 40));
+
+    addChild("Death zone",
+             new StaticObject(
+                     {static_cast<float>(level.width) / 2, static_cast<float>(level.height) + 20},
+                     Layer::DeathZone, Layer::None, static_cast<float>(level.width), 40));
+
+    addChild("Death zone",
+             new StaticObject({-20, static_cast<float>(level.height) / 2}, Layer::Wall, Layer::None,
+                              40, static_cast<float>(level.height)));
+
+    addChild("Death zone",
+             new StaticObject(
+                     {static_cast<float>(level.width) + 20, static_cast<float>(level.height) / 2},
+                     Layer::Wall, Layer::None, 40, static_cast<float>(level.height)));
+
+    for (const auto& terrainBlock: level.terrainBlocks) {
+        auto block = new TerrainBlock(terrainBlock);
         terrainBlocks.push_back(block);
         addChild("TerrainBlock", block);
     }
 
-    for (u64 i = 0; i < level.itemSpawnPoints.size(); ++i) {
-        auto item = new ItemSpawner(level.itemSpawnPoints[i]);
+    for (const auto& itemSpawnPoint: level.itemSpawnPoints) {
+        auto item = new ItemSpawner(itemSpawnPoint);
         itemSpawners.push_back(item);
         addChild("ItemSpawner", item);
     }
 
-    for (u64 i = 0; i < level.duckSpawnPoints.size(); ++i)
-        addChild("SpawnPoint", new SpawnPoint(level.duckSpawnPoints[i]));
+    for (const auto& duckSpawnPoint: level.duckSpawnPoints)
+        addChild("SpawnPoint", new SpawnPoint(duckSpawnPoint));
 }
 
 std::list<SizedObjectData> Level::blockStatus() const {
