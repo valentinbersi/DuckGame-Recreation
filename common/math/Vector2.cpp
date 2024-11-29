@@ -228,4 +228,9 @@ Vector2::Orientation Vector2::orientation(const Vector2& p, const Vector2& q, co
     return val > 0 ? Orientation::CounterClockwise : Orientation::Clockwise;
 }
 
+std::ostream& operator<<(std::ostream& os, const Vector2& v) {
+    os << '(' << v.x() << ", " << v.y() << ')';
+    return os;
+}
+
 Vector2 operator*(const float scalar, const Vector2& v) { return v * scalar; }
