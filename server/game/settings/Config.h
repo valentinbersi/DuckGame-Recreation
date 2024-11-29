@@ -10,7 +10,7 @@
 /**
  * The global configuration of the game
  */
-class GlobalConfig {
+class Config {
     static const HashMap<std::string, ItemID> itemIDs;
 
     static std::string configDirectory;
@@ -21,12 +21,12 @@ public:
         explicit BadConfigFile(const std::string& message);
     };
 
-    GlobalConfig() = delete;
-    GlobalConfig(const GlobalConfig& other) = delete;
-    GlobalConfig(GlobalConfig&& other) noexcept = delete;
-    GlobalConfig& operator=(const GlobalConfig& other) = delete;
-    GlobalConfig& operator=(GlobalConfig&& other) noexcept = delete;
-    ~GlobalConfig() = default;
+    Config() = delete;
+    Config(const Config& other) = delete;
+    Config(Config&& other) noexcept = delete;
+    Config& operator=(const Config& other) = delete;
+    Config& operator=(Config&& other) noexcept = delete;
+    ~Config() = default;
 
     /**
      * Set the path to the configuration file
@@ -66,7 +66,7 @@ public:
          */
         static void load();
 
-        friend class GlobalConfig;
+        friend class Config;
 
     public:
         Duck() = delete;
@@ -95,7 +95,7 @@ public:
          */
         static void load();
 
-        friend class GlobalConfig;
+        friend class Config;
 
     public:
         Physics() = delete;
@@ -116,7 +116,7 @@ public:
          */
         static void load();
 
-        friend class GlobalConfig;
+        friend class Config;
 
     public:
         Weapons() = delete;
@@ -139,7 +139,7 @@ public:
              */
             static void load();
 
-            friend class GlobalConfig;
+            friend class Config;
 
         public:
             Grenade() = delete;
@@ -164,7 +164,7 @@ public:
              */
             static void load();
 
-            friend class GlobalConfig;
+            friend class Config;
 
         public:
             Banana() = delete;
@@ -191,7 +191,7 @@ public:
              */
             static void load();
 
-            friend class GlobalConfig;
+            friend class Config;
 
         public:
             PewPewLaser() = delete;
@@ -223,7 +223,7 @@ public:
              */
             static void load();
 
-            friend class GlobalConfig;
+            friend class Config;
 
         public:
             LaserRifle() = delete;
@@ -256,7 +256,7 @@ public:
              */
             static void load();
 
-            friend class GlobalConfig;
+            friend class Config;
 
         public:
             Ak47() = delete;
@@ -286,7 +286,7 @@ public:
              */
             static void load();
 
-            friend class GlobalConfig;
+            friend class Config;
 
         public:
             DuelPistol() = delete;
@@ -313,7 +313,7 @@ public:
              */
             static void load();
 
-            friend class GlobalConfig;
+            friend class Config;
 
         public:
             CowboyPistol() = delete;
@@ -340,7 +340,7 @@ public:
              */
             static void load();
 
-            friend class GlobalConfig;
+            friend class Config;
 
         public:
             Magnum() = delete;
@@ -370,7 +370,7 @@ public:
              */
             static void load();
 
-            friend class GlobalConfig;
+            friend class Config;
 
         public:
             Shotgun() = delete;
@@ -401,7 +401,7 @@ public:
              */
             static void load();
 
-            friend class GlobalConfig;
+            friend class Config;
 
         public:
             Sniper() = delete;
@@ -428,7 +428,7 @@ public:
          */
         static void load();
 
-        friend class GlobalConfig;
+        friend class Config;
 
     public:
         Armor() = delete;
@@ -451,7 +451,7 @@ public:
          */
         static void load();
 
-        friend class GlobalConfig;
+        friend class Config;
 
     public:
         Match() = delete;
@@ -466,69 +466,69 @@ public:
     };
 };
 
-inline float GlobalConfig::Duck::jumpTime() { return jumpTime_; }
-inline float GlobalConfig::Duck::acceleration() { return acceleration_; }
-inline float GlobalConfig::Duck::airAcceleration() { return airAcceleration_; }
-inline float GlobalConfig::Duck::minSpeed() { return minSpeed_; }
-inline float GlobalConfig::Duck::maxSpeed() { return maxSpeed_; }
-inline float GlobalConfig::Duck::jumpSpeed() { return jumpSpeed_; }
-inline ItemID GlobalConfig::Duck::defaultWeapon() { return defaultWeapon_; }
-inline bool GlobalConfig::Duck::defaultArmor() { return defaultArmor_; }
-inline bool GlobalConfig::Duck::defaultHelmet() { return defaultHelmet_; }
-inline float GlobalConfig::Physics::gravity() { return gravity_; }
-inline float GlobalConfig::Weapons::minSpawnTime() { return minSpawnTime_; }
-inline float GlobalConfig::Weapons::maxSpawnTime() { return maxSpawnTime_; }
-inline u8 GlobalConfig::Weapons::Grenade::ammo() { return ammo_; }
-inline float GlobalConfig::Weapons::Grenade::reach() { return reach_; }
-inline float GlobalConfig::Weapons::Grenade::radius() { return radius_; }
-inline float GlobalConfig::Weapons::Grenade::explosionTime() { return explosionTime_; }
-inline u8 GlobalConfig::Weapons::Banana::ammo() { return ammo_; }
-inline float GlobalConfig::Weapons::Banana::reach() { return reach_; }
-inline u8 GlobalConfig::Weapons::PewPewLaser::ammo() { return ammo_; }
-inline float GlobalConfig::Weapons::PewPewLaser::dispersion() { return dispersion_; }
-inline Vector2 GlobalConfig::Weapons::PewPewLaser::recoil() { return recoil_; }
-inline float GlobalConfig::Weapons::PewPewLaser::minReach() { return minReach_; }
-inline float GlobalConfig::Weapons::PewPewLaser::maxReach() { return maxReach_; }
-inline u8 GlobalConfig::Weapons::PewPewLaser::raysPerShot() { return raysPerShot_; }
-inline u8 GlobalConfig::Weapons::LaserRifle::ammo() { return ammo_; }
-inline float GlobalConfig::Weapons::LaserRifle::reach() { return reach_; }
-inline float GlobalConfig::Weapons::LaserRifle::dispersion() { return dispersion_; }
-inline Vector2 GlobalConfig::Weapons::LaserRifle::recoil() { return recoil_; }
-inline float GlobalConfig::Weapons::LaserRifle::timeBetweenShots() { return timeBetweenShots_; }
-inline float GlobalConfig::Weapons::LaserRifle::rayAngle() { return rayAngle_; }
-inline u8 GlobalConfig::Weapons::LaserRifle::bounces() { return bounces_; }
-inline u8 GlobalConfig::Weapons::Ak47::ammo() { return ammo_; }
-inline float GlobalConfig::Weapons::Ak47::reach() { return reach_; }
-inline Vector2 GlobalConfig::Weapons::Ak47::recoil() { return recoil_; }
-inline float GlobalConfig::Weapons::Ak47::timeBetweenShots() { return timeBetweenShots_; }
-inline float GlobalConfig::Weapons::Ak47::minDispersion() { return minDispersion_; }
-inline float GlobalConfig::Weapons::Ak47::midDispersion() { return midDispersion_; }
-inline float GlobalConfig::Weapons::Ak47::maxDispersion() { return maxDispersion_; }
-inline u8 GlobalConfig::Weapons::DuelPistol::ammo() { return ammo_; }
-inline float GlobalConfig::Weapons::DuelPistol::reach() { return reach_; }
-inline float GlobalConfig::Weapons::DuelPistol::dispersion() { return dispersion_; }
-inline Vector2 GlobalConfig::Weapons::DuelPistol::recoil() { return recoil_; }
-inline u8 GlobalConfig::Weapons::CowboyPistol::ammo() { return ammo_; }
-inline float GlobalConfig::Weapons::CowboyPistol::reach() { return reach_; }
-inline float GlobalConfig::Weapons::CowboyPistol::dispersion() { return dispersion_; }
-inline Vector2 GlobalConfig::Weapons::CowboyPistol::recoil() { return recoil_; }
-inline u8 GlobalConfig::Weapons::Magnum::ammo() { return ammo_; }
-inline float GlobalConfig::Weapons::Magnum::reach() { return reach_; }
-inline float GlobalConfig::Weapons::Magnum::dispersion() { return dispersion_; }
-inline Vector2 GlobalConfig::Weapons::Magnum::recoil() { return recoil_; }
-inline u8 GlobalConfig::Weapons::Shotgun::ammo() { return ammo_; }
-inline float GlobalConfig::Weapons::Shotgun::dispersion() { return dispersion_; }
-inline Vector2 GlobalConfig::Weapons::Shotgun::recoil() { return recoil_; }
-inline float GlobalConfig::Weapons::Shotgun::minReach() { return minReach_; }
-inline float GlobalConfig::Weapons::Shotgun::maxReach() { return maxReach_; }
-inline u8 GlobalConfig::Weapons::Shotgun::pelletsPerShot() { return pelletsPerShot_; }
-inline float GlobalConfig::Weapons::Shotgun::reloadTime() { return reloadTime_; }
-inline u8 GlobalConfig::Weapons::Sniper::ammo() { return ammo_; }
-inline float GlobalConfig::Weapons::Sniper::reach() { return reach_; }
-inline float GlobalConfig::Weapons::Sniper::dispersion() { return dispersion_; }
-inline Vector2 GlobalConfig::Weapons::Sniper::recoil() { return recoil_; }
-inline float GlobalConfig::Weapons::Sniper::reloadTime() { return reloadTime_; }
-inline u8 GlobalConfig::Armor::armor() { return armor_; }
-inline u8 GlobalConfig::Armor::helmet() { return helmet_; }
-inline u8 GlobalConfig::Match::rounds() { return rounds_; }
-inline u8 GlobalConfig::Match::pointsToWin() { return pointsToWin_; }
+inline float Config::Duck::jumpTime() { return jumpTime_; }
+inline float Config::Duck::acceleration() { return acceleration_; }
+inline float Config::Duck::airAcceleration() { return airAcceleration_; }
+inline float Config::Duck::minSpeed() { return minSpeed_; }
+inline float Config::Duck::maxSpeed() { return maxSpeed_; }
+inline float Config::Duck::jumpSpeed() { return jumpSpeed_; }
+inline ItemID Config::Duck::defaultWeapon() { return defaultWeapon_; }
+inline bool Config::Duck::defaultArmor() { return defaultArmor_; }
+inline bool Config::Duck::defaultHelmet() { return defaultHelmet_; }
+inline float Config::Physics::gravity() { return gravity_; }
+inline float Config::Weapons::minSpawnTime() { return minSpawnTime_; }
+inline float Config::Weapons::maxSpawnTime() { return maxSpawnTime_; }
+inline u8 Config::Weapons::Grenade::ammo() { return ammo_; }
+inline float Config::Weapons::Grenade::reach() { return reach_; }
+inline float Config::Weapons::Grenade::radius() { return radius_; }
+inline float Config::Weapons::Grenade::explosionTime() { return explosionTime_; }
+inline u8 Config::Weapons::Banana::ammo() { return ammo_; }
+inline float Config::Weapons::Banana::reach() { return reach_; }
+inline u8 Config::Weapons::PewPewLaser::ammo() { return ammo_; }
+inline float Config::Weapons::PewPewLaser::dispersion() { return dispersion_; }
+inline Vector2 Config::Weapons::PewPewLaser::recoil() { return recoil_; }
+inline float Config::Weapons::PewPewLaser::minReach() { return minReach_; }
+inline float Config::Weapons::PewPewLaser::maxReach() { return maxReach_; }
+inline u8 Config::Weapons::PewPewLaser::raysPerShot() { return raysPerShot_; }
+inline u8 Config::Weapons::LaserRifle::ammo() { return ammo_; }
+inline float Config::Weapons::LaserRifle::reach() { return reach_; }
+inline float Config::Weapons::LaserRifle::dispersion() { return dispersion_; }
+inline Vector2 Config::Weapons::LaserRifle::recoil() { return recoil_; }
+inline float Config::Weapons::LaserRifle::timeBetweenShots() { return timeBetweenShots_; }
+inline float Config::Weapons::LaserRifle::rayAngle() { return rayAngle_; }
+inline u8 Config::Weapons::LaserRifle::bounces() { return bounces_; }
+inline u8 Config::Weapons::Ak47::ammo() { return ammo_; }
+inline float Config::Weapons::Ak47::reach() { return reach_; }
+inline Vector2 Config::Weapons::Ak47::recoil() { return recoil_; }
+inline float Config::Weapons::Ak47::timeBetweenShots() { return timeBetweenShots_; }
+inline float Config::Weapons::Ak47::minDispersion() { return minDispersion_; }
+inline float Config::Weapons::Ak47::midDispersion() { return midDispersion_; }
+inline float Config::Weapons::Ak47::maxDispersion() { return maxDispersion_; }
+inline u8 Config::Weapons::DuelPistol::ammo() { return ammo_; }
+inline float Config::Weapons::DuelPistol::reach() { return reach_; }
+inline float Config::Weapons::DuelPistol::dispersion() { return dispersion_; }
+inline Vector2 Config::Weapons::DuelPistol::recoil() { return recoil_; }
+inline u8 Config::Weapons::CowboyPistol::ammo() { return ammo_; }
+inline float Config::Weapons::CowboyPistol::reach() { return reach_; }
+inline float Config::Weapons::CowboyPistol::dispersion() { return dispersion_; }
+inline Vector2 Config::Weapons::CowboyPistol::recoil() { return recoil_; }
+inline u8 Config::Weapons::Magnum::ammo() { return ammo_; }
+inline float Config::Weapons::Magnum::reach() { return reach_; }
+inline float Config::Weapons::Magnum::dispersion() { return dispersion_; }
+inline Vector2 Config::Weapons::Magnum::recoil() { return recoil_; }
+inline u8 Config::Weapons::Shotgun::ammo() { return ammo_; }
+inline float Config::Weapons::Shotgun::dispersion() { return dispersion_; }
+inline Vector2 Config::Weapons::Shotgun::recoil() { return recoil_; }
+inline float Config::Weapons::Shotgun::minReach() { return minReach_; }
+inline float Config::Weapons::Shotgun::maxReach() { return maxReach_; }
+inline u8 Config::Weapons::Shotgun::pelletsPerShot() { return pelletsPerShot_; }
+inline float Config::Weapons::Shotgun::reloadTime() { return reloadTime_; }
+inline u8 Config::Weapons::Sniper::ammo() { return ammo_; }
+inline float Config::Weapons::Sniper::reach() { return reach_; }
+inline float Config::Weapons::Sniper::dispersion() { return dispersion_; }
+inline Vector2 Config::Weapons::Sniper::recoil() { return recoil_; }
+inline float Config::Weapons::Sniper::reloadTime() { return reloadTime_; }
+inline u8 Config::Armor::armor() { return armor_; }
+inline u8 Config::Armor::helmet() { return helmet_; }
+inline u8 Config::Match::rounds() { return rounds_; }
+inline u8 Config::Match::pointsToWin() { return pointsToWin_; }

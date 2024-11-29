@@ -1,7 +1,7 @@
-#include "GlobalConfig.h"
-
 #include <limits>
 #include <utility>
+
+#include "Config.h"
 
 #define GRENADE "grenade"
 #define BANANA "banana"
@@ -17,7 +17,7 @@
 #define ARMOR "armor"
 #define NOTHING "nothing"
 
-const HashMap<std::string, ItemID> GlobalConfig::itemIDs = {{GRENADE, ItemID::Grenade},
+const HashMap<std::string, ItemID> Config::itemIDs = {{GRENADE, ItemID::Grenade},
                                                             {BANANA, ItemID::Banana},
                                                             {PEW_PEW_LASER, ItemID::PewPewLaser},
                                                             {LASER_RIFLE, ItemID::LaserRifle},
@@ -31,97 +31,97 @@ const HashMap<std::string, ItemID> GlobalConfig::itemIDs = {{GRENADE, ItemID::Gr
                                                             {ARMOR, ItemID::Armor},
                                                             {NOTHING, ItemID::NONE}};
 
-std::string GlobalConfig::configDirectory{"/etc/DuckGame/"};     // NOLINT(runtime/string)
-std::string GlobalConfig::mapsDirectory_{"/etc/DuckGame/maps"};  // NOLINT(runtime/string)
+std::string Config::configDirectory{"/etc/DuckGame/"};     // NOLINT(runtime/string)
+std::string Config::mapsDirectory_{"/etc/DuckGame/maps"};  // NOLINT(runtime/string)
 
-float GlobalConfig::Duck::jumpTime_{};
-float GlobalConfig::Duck::acceleration_{};
-float GlobalConfig::Duck::airAcceleration_{};
-float GlobalConfig::Duck::minSpeed_{};
-float GlobalConfig::Duck::maxSpeed_{};
-float GlobalConfig::Duck::jumpSpeed_{};
-ItemID GlobalConfig::Duck::defaultWeapon_{ItemID::NONE};
-bool GlobalConfig::Duck::defaultArmor_{};
-bool GlobalConfig::Duck::defaultHelmet_{};
+float Config::Duck::jumpTime_{};
+float Config::Duck::acceleration_{};
+float Config::Duck::airAcceleration_{};
+float Config::Duck::minSpeed_{};
+float Config::Duck::maxSpeed_{};
+float Config::Duck::jumpSpeed_{};
+ItemID Config::Duck::defaultWeapon_{ItemID::NONE};
+bool Config::Duck::defaultArmor_{};
+bool Config::Duck::defaultHelmet_{};
 
-float GlobalConfig::Physics::gravity_{};
+float Config::Physics::gravity_{};
 
-float GlobalConfig::Weapons::minSpawnTime_{};
-float GlobalConfig::Weapons::maxSpawnTime_{};
+float Config::Weapons::minSpawnTime_{};
+float Config::Weapons::maxSpawnTime_{};
 
-u8 GlobalConfig::Weapons::Grenade::ammo_{};
-float GlobalConfig::Weapons::Grenade::reach_{};
-float GlobalConfig::Weapons::Grenade::radius_{};
-float GlobalConfig::Weapons::Grenade::explosionTime_{};
+u8 Config::Weapons::Grenade::ammo_{};
+float Config::Weapons::Grenade::reach_{};
+float Config::Weapons::Grenade::radius_{};
+float Config::Weapons::Grenade::explosionTime_{};
 
-u8 GlobalConfig::Weapons::Banana::ammo_{};
-float GlobalConfig::Weapons::Banana::reach_{};
+u8 Config::Weapons::Banana::ammo_{};
+float Config::Weapons::Banana::reach_{};
 
-u8 GlobalConfig::Weapons::PewPewLaser::ammo_{};
-float GlobalConfig::Weapons::PewPewLaser::dispersion_{};
-Vector2 GlobalConfig::Weapons::PewPewLaser::recoil_{};
-float GlobalConfig::Weapons::PewPewLaser::minReach_{};
-float GlobalConfig::Weapons::PewPewLaser::maxReach_{};
-u8 GlobalConfig::Weapons::PewPewLaser::raysPerShot_{};
+u8 Config::Weapons::PewPewLaser::ammo_{};
+float Config::Weapons::PewPewLaser::dispersion_{};
+Vector2 Config::Weapons::PewPewLaser::recoil_{};
+float Config::Weapons::PewPewLaser::minReach_{};
+float Config::Weapons::PewPewLaser::maxReach_{};
+u8 Config::Weapons::PewPewLaser::raysPerShot_{};
 
-u8 GlobalConfig::Weapons::LaserRifle::ammo_{};
-float GlobalConfig::Weapons::LaserRifle::reach_{};
-float GlobalConfig::Weapons::LaserRifle::dispersion_{};
-Vector2 GlobalConfig::Weapons::LaserRifle::recoil_{};
-float GlobalConfig::Weapons::LaserRifle::timeBetweenShots_{};
-float GlobalConfig::Weapons::LaserRifle::rayAngle_{};
-u8 GlobalConfig::Weapons::LaserRifle::bounces_{};
+u8 Config::Weapons::LaserRifle::ammo_{};
+float Config::Weapons::LaserRifle::reach_{};
+float Config::Weapons::LaserRifle::dispersion_{};
+Vector2 Config::Weapons::LaserRifle::recoil_{};
+float Config::Weapons::LaserRifle::timeBetweenShots_{};
+float Config::Weapons::LaserRifle::rayAngle_{};
+u8 Config::Weapons::LaserRifle::bounces_{};
 
-u8 GlobalConfig::Weapons::Ak47::ammo_{};
-float GlobalConfig::Weapons::Ak47::reach_{};
-Vector2 GlobalConfig::Weapons::Ak47::recoil_{};
-float GlobalConfig::Weapons::Ak47::timeBetweenShots_{};
-float GlobalConfig::Weapons::Ak47::minDispersion_{};
-float GlobalConfig::Weapons::Ak47::midDispersion_{};
-float GlobalConfig::Weapons::Ak47::maxDispersion_{};
+u8 Config::Weapons::Ak47::ammo_{};
+float Config::Weapons::Ak47::reach_{};
+Vector2 Config::Weapons::Ak47::recoil_{};
+float Config::Weapons::Ak47::timeBetweenShots_{};
+float Config::Weapons::Ak47::minDispersion_{};
+float Config::Weapons::Ak47::midDispersion_{};
+float Config::Weapons::Ak47::maxDispersion_{};
 
-u8 GlobalConfig::Weapons::DuelPistol::ammo_{};
-float GlobalConfig::Weapons::DuelPistol::reach_{};
-float GlobalConfig::Weapons::DuelPistol::dispersion_{};
-Vector2 GlobalConfig::Weapons::DuelPistol::recoil_{};
+u8 Config::Weapons::DuelPistol::ammo_{};
+float Config::Weapons::DuelPistol::reach_{};
+float Config::Weapons::DuelPistol::dispersion_{};
+Vector2 Config::Weapons::DuelPistol::recoil_{};
 
-u8 GlobalConfig::Weapons::CowboyPistol::ammo_{};
-float GlobalConfig::Weapons::CowboyPistol::reach_{};
-float GlobalConfig::Weapons::CowboyPistol::dispersion_{};
-Vector2 GlobalConfig::Weapons::CowboyPistol::recoil_{};
+u8 Config::Weapons::CowboyPistol::ammo_{};
+float Config::Weapons::CowboyPistol::reach_{};
+float Config::Weapons::CowboyPistol::dispersion_{};
+Vector2 Config::Weapons::CowboyPistol::recoil_{};
 
-u8 GlobalConfig::Weapons::Magnum::ammo_{};
-float GlobalConfig::Weapons::Magnum::reach_{};
-float GlobalConfig::Weapons::Magnum::dispersion_{};
-Vector2 GlobalConfig::Weapons::Magnum::recoil_{};
+u8 Config::Weapons::Magnum::ammo_{};
+float Config::Weapons::Magnum::reach_{};
+float Config::Weapons::Magnum::dispersion_{};
+Vector2 Config::Weapons::Magnum::recoil_{};
 
-u8 GlobalConfig::Weapons::Shotgun::ammo_{};
-float GlobalConfig::Weapons::Shotgun::dispersion_{};
-Vector2 GlobalConfig::Weapons::Shotgun::recoil_{};
-float GlobalConfig::Weapons::Shotgun::minReach_{};
-float GlobalConfig::Weapons::Shotgun::maxReach_{};
-u8 GlobalConfig::Weapons::Shotgun::pelletsPerShot_{};
-float GlobalConfig::Weapons::Shotgun::reloadTime_{};
+u8 Config::Weapons::Shotgun::ammo_{};
+float Config::Weapons::Shotgun::dispersion_{};
+Vector2 Config::Weapons::Shotgun::recoil_{};
+float Config::Weapons::Shotgun::minReach_{};
+float Config::Weapons::Shotgun::maxReach_{};
+u8 Config::Weapons::Shotgun::pelletsPerShot_{};
+float Config::Weapons::Shotgun::reloadTime_{};
 
-u8 GlobalConfig::Weapons::Sniper::ammo_{};
-float GlobalConfig::Weapons::Sniper::reach_{};
-float GlobalConfig::Weapons::Sniper::dispersion_{};
-Vector2 GlobalConfig::Weapons::Sniper::recoil_{};
-float GlobalConfig::Weapons::Sniper::reloadTime_{};
+u8 Config::Weapons::Sniper::ammo_{};
+float Config::Weapons::Sniper::reach_{};
+float Config::Weapons::Sniper::dispersion_{};
+Vector2 Config::Weapons::Sniper::recoil_{};
+float Config::Weapons::Sniper::reloadTime_{};
 
-u8 GlobalConfig::Armor::armor_{};
-u8 GlobalConfig::Armor::helmet_{};
+u8 Config::Armor::armor_{};
+u8 Config::Armor::helmet_{};
 
-u8 GlobalConfig::Match::rounds_{};
-u8 GlobalConfig::Match::pointsToWin_{};
+u8 Config::Match::rounds_{};
+u8 Config::Match::pointsToWin_{};
 
-GlobalConfig::BadConfigFile::BadConfigFile(const std::string& message):
+Config::BadConfigFile::BadConfigFile(const std::string& message):
         std::runtime_error(message) {}
 
-void GlobalConfig::setConfigPath(std::string path) { configDirectory = std::move(path); }
-void GlobalConfig::setMapsDirectory(std::string maps) { mapsDirectory_ = std::move(maps); }
+void Config::setConfigPath(std::string path) { configDirectory = std::move(path); }
+void Config::setMapsDirectory(std::string maps) { mapsDirectory_ = std::move(maps); }
 
-const std::string& GlobalConfig::mapsDirectory() { return mapsDirectory_; }
+const std::string& Config::mapsDirectory() { return mapsDirectory_; }
 
 #define X_COORD "x"
 #define Y_COORD "y"
@@ -144,7 +144,7 @@ struct YAML::convert<Vector2> {
     }
 };
 
-void GlobalConfig::load() {
+void Config::load() {
     using YAML::Node, YAML::LoadFile, YAML::BadFile, YAML::ParserException;
 
     Duck::load();
@@ -216,7 +216,7 @@ void GlobalConfig::load() {
 #define MAX_SPEED_BAD_VALUE "Maximum speed must be greater or equal than 0"
 #define JUMP_SPEED_BAD_VALUE "Jump speed must be greater or equal than 0"
 
-void GlobalConfig::Duck::load() {
+void Config::Duck::load() {
     using YAML::Node, YAML::LoadFile, YAML::ParserException, YAML::BadFile;
 
     Node config;
@@ -304,7 +304,7 @@ void GlobalConfig::Duck::load() {
 #define GRAVITY_ERROR PARSING_ERROR_BEGIN " " PHYSICS " " GRAVITY ". " PARSING_ERROR_END " " FLOAT
 #define GRAVITY_BAD_VALUE "Gravity must be greater or equal than 0"
 
-void GlobalConfig::Physics::load() {
+void Config::Physics::load() {
     using YAML::Node, YAML::LoadFile, YAML::ParserException, YAML::BadFile;
 
     Node config;
@@ -339,7 +339,7 @@ void GlobalConfig::Physics::load() {
 #define MAX_SPAWN_TIME_ERROR \
     PARSING_ERROR_BEGIN " " WEAPONS " " MAX_SPAWN_TIME ". " PARSING_ERROR_END " " FLOAT
 
-void GlobalConfig::Weapons::load() {
+void Config::Weapons::load() {
     using YAML::Node, YAML::LoadFile, YAML::ParserException, YAML::BadFile;
 
     Node config;
@@ -384,7 +384,7 @@ void GlobalConfig::Weapons::load() {
 #define RADIUS_BAD_VALUE "Radius must be greater or equal than 0"
 #define EXPLOSION_TIME_BAD_VALUE "Explosion time must be greater or equal than 0"
 
-void GlobalConfig::Weapons::Grenade::load() {
+void Config::Weapons::Grenade::load() {
     using YAML::Node, YAML::LoadFile, YAML::ParserException, YAML::BadFile;
 
     Node config;
@@ -436,7 +436,7 @@ void GlobalConfig::Weapons::Grenade::load() {
 #define BANANA_AMMO_ERROR PARSING_ERROR_BEGIN " " BANANA " " AMMO ". " PARSING_ERROR_END " " U8
 #define BANANA_REACH_ERROR PARSING_ERROR_BEGIN " " BANANA " " REACH ". " PARSING_ERROR_END " " FLOAT
 
-void GlobalConfig::Weapons::Banana::load() {
+void Config::Weapons::Banana::load() {
     using YAML::Node, YAML::LoadFile, YAML::ParserException, YAML::BadFile;
 
     Node config;
@@ -493,7 +493,7 @@ void GlobalConfig::Weapons::Banana::load() {
 #define MIN_REACH_BAD_VALUE "Minimum reach must be greater or equal than 0"
 #define MAX_REACH_BAD_VALUE "Maximum reach must be greater or equal than 0"
 
-void GlobalConfig::Weapons::PewPewLaser::load() {
+void Config::Weapons::PewPewLaser::load() {
     using YAML::Node, YAML::LoadFile, YAML::ParserException, YAML::BadFile;
 
     Node config;
@@ -584,7 +584,7 @@ void GlobalConfig::Weapons::PewPewLaser::load() {
 #define RAY_ANGLE_BAD_VALUE "Ray angle must be greater or equal than 0"
 #define BOUNCES_BAD_VALUE "Bounces must be greater or equal than 0"
 
-void GlobalConfig::Weapons::LaserRifle::load() {
+void Config::Weapons::LaserRifle::load() {
     using YAML::Node, YAML::LoadFile, YAML::ParserException, YAML::BadFile;
 
     Node config;
@@ -678,7 +678,7 @@ void GlobalConfig::Weapons::LaserRifle::load() {
 #define MID_DISPERSION_BAD_VALUE "Mid dispersion must be greater or equal than 0"
 #define MAX_DISPERSION_BAD_VALUE "Maximum dispersion must be greater or equal than 0"
 
-void GlobalConfig::Weapons::Ak47::load() {
+void Config::Weapons::Ak47::load() {
     using YAML::Node, YAML::LoadFile, YAML::ParserException, YAML::BadFile;
 
     Node config;
@@ -760,7 +760,7 @@ void GlobalConfig::Weapons::Ak47::load() {
 #define DUEL_PISTOL_RECOIL_ERROR \
     PARSING_ERROR_BEGIN " " DUEL_PISTOL " " RECOIL ". " PARSING_ERROR_END " " FLOAT
 
-void GlobalConfig::Weapons::DuelPistol::load() {
+void Config::Weapons::DuelPistol::load() {
     using YAML::Node, YAML::LoadFile, YAML::ParserException, YAML::BadFile;
 
     Node config;
@@ -818,7 +818,7 @@ void GlobalConfig::Weapons::DuelPistol::load() {
 #define COWBOY_PISTOL_RECOIL_ERROR \
     PARSING_ERROR_BEGIN " " COWBOY_PISTOL " " RECOIL ". " PARSING_ERROR_END " " FLOAT
 
-void GlobalConfig::Weapons::CowboyPistol::load() {
+void Config::Weapons::CowboyPistol::load() {
     using YAML::Node, YAML::LoadFile, YAML::ParserException, YAML::BadFile;
 
     Node config;
@@ -875,7 +875,7 @@ void GlobalConfig::Weapons::CowboyPistol::load() {
 #define MAGNUM_RECOIL_ERROR \
     PARSING_ERROR_BEGIN " " MAGNUM " " RECOIL ". " PARSING_ERROR_END " " FLOAT
 
-void GlobalConfig::Weapons::Magnum::load() {
+void Config::Weapons::Magnum::load() {
     using YAML::Node, YAML::LoadFile, YAML::ParserException, YAML::BadFile;
 
     Node config;
@@ -941,7 +941,7 @@ void GlobalConfig::Weapons::Magnum::load() {
 
 #define RELOAD_TIME_BAD_VALUE "Reload time must be greater or equal than 0"
 
-void GlobalConfig::Weapons::Shotgun::load() {
+void Config::Weapons::Shotgun::load() {
     using YAML::Node, YAML::LoadFile, YAML::ParserException, YAML::BadFile;
 
     Node config;
@@ -1024,7 +1024,7 @@ void GlobalConfig::Weapons::Shotgun::load() {
 #define SNIPER_RELOAD_TIME_ERROR \
     PARSING_ERROR_BEGIN " " SNIPER " " RELOAD_TIME ". " PARSING_ERROR_END " " FLOAT
 
-void GlobalConfig::Weapons::Sniper::load() {
+void Config::Weapons::Sniper::load() {
     using YAML::Node, YAML::LoadFile, YAML::ParserException, YAML::BadFile;
 
     Node config;
@@ -1087,7 +1087,7 @@ void GlobalConfig::Weapons::Sniper::load() {
 #define ARMOR_BAD_VALUE "Armor must be greater or equal than 0"
 #define HELMET_BAD_VALUE "Helmet must be greater or equal than 0"
 
-void GlobalConfig::Armor::load() {
+void Config::Armor::load() {
     using YAML::Node, YAML::LoadFile, YAML::ParserException, YAML::BadFile;
 
     Node config;
@@ -1129,7 +1129,7 @@ void GlobalConfig::Armor::load() {
 #define ROUNDS_ERROR PARSING_ERROR_BEGIN " " ROUNDS ". " PARSING_ERROR_END " " U8
 #define POINTS_TO_WIN_ERROR PARSING_ERROR_BEGIN " " POINTS_TO_WIN ". " PARSING_ERROR_END " " U8
 
-void GlobalConfig::Match::load() {
+void Config::Match::load() {
     using YAML::Node, YAML::LoadFile, YAML::ParserException, YAML::BadFile;
 
     Node config;

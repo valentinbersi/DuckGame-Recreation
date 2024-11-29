@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "GlobalConfig.h"
+#include "Config.h"
 #include "Server.h"
 
 int main(const int argc, char* argv[]) {
@@ -16,13 +16,13 @@ int main(const int argc, char* argv[]) {
                 std::string configPath(optarg);
                 if (configPath.back() != '/')
                     configPath += '/';
-                GlobalConfig::setConfigPath(std::move(configPath));
+                Config::setConfigPath(std::move(configPath));
             } break;
             case 'm': {
                 std::string mapsPath(optarg);
                 if (mapsPath.back() != '/')
                     mapsPath += '/';
-                GlobalConfig::setMapsDirectory(std::move(mapsPath));
+                Config::setMapsDirectory(std::move(mapsPath));
             } break;
             default:
                 std::cerr << "Usage: " << argv[0]
@@ -39,8 +39,8 @@ int main(const int argc, char* argv[]) {
         port = "8080";
 
     try {
-        GlobalConfig::load();
-    } catch (const GlobalConfig::BadConfigFile& e) {
+        Config::load();
+    } catch (const Config::BadConfigFile& e) {
         std::cerr << e.what() << std::endl;
         return -1;
     }

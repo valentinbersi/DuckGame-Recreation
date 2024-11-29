@@ -18,15 +18,12 @@ class Player final: public PhysicsObject {
     DuckData::Direction _lastViewDirection;
     std::bitset<DuckData::FlagCount> flags;
     Input input;
-    float acceleration;
-    float airAcceleration;
     EquippableWeapon* weapon;
     bool isJumping;
     bool interactWithItem;
     bool actionateWeapon;
     bool canKeepJumping;
     GameTimer* jumpTimer;
-    float jumpTime;
     u32 wonRounds;
 
     /**

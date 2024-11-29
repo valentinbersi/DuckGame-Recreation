@@ -7,7 +7,7 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include "GlobalConfig.h"
+#include "Config.h"
 
 #define MAP_DIRECTORY_NOT_FOUND "Could not find or access the maps directory at"
 #define YAML_EXTENSION ".yaml"
@@ -16,11 +16,11 @@
 std::vector<LevelData> LevelData::loadLevels() {
     std::vector<LevelData> levels;
 
-    if (not std::filesystem::exists(GlobalConfig::mapsDirectory()) or
-        not std::filesystem::is_directory(GlobalConfig::mapsDirectory()))
-        throw std::runtime_error(MAP_DIRECTORY_NOT_FOUND " " + GlobalConfig::mapsDirectory());
+    if (not std::filesystem::exists(Config::mapsDirectory()) or
+        not std::filesystem::is_directory(Config::mapsDirectory()))
+        throw std::runtime_error(MAP_DIRECTORY_NOT_FOUND " " + Config::mapsDirectory());
 
-    for (const auto& entry: std::filesystem::directory_iterator(GlobalConfig::mapsDirectory())) {
+    for (const auto& entry: std::filesystem::directory_iterator(Config::mapsDirectory())) {
         if (not entry.is_regular_file() or entry.path().extension() != YAML_EXTENSION)
             continue;
 
@@ -33,7 +33,7 @@ std::vector<LevelData> LevelData::loadLevels() {
     }
 
     if (levels.empty())
-        throw std::runtime_error(NO_LEVELS " " + GlobalConfig::mapsDirectory());
+        throw std::runtime_error(NO_LEVELS " " + Config::mapsDirectory());
 
     return levels;
 }

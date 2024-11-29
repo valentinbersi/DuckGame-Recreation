@@ -7,6 +7,7 @@
 
 #include "Area.h"
 #include "Bullet.h"
+#include "Config.h"
 #include "DuckData.h"
 #include "GameTimer.h"
 #include "Item.h"
@@ -25,9 +26,6 @@
 
 #define DEFAULT_LIFE 30
 #define DEFAULT_FLAGS 0
-#define JUMP_TIME 0.2f
-#define ACCELERATION 100
-#define AIR_ACCELERATION 40
 #define PLAYER_DIMENSIONS 2.0f, 2.875f
 #define MOVE_RIGHT "Move Right"
 #define MOVE_LEFT "Move Left"
@@ -38,6 +36,7 @@
 #define LOOK_UP "Look Up"
 #define JUMP_TIMER "JumpTimer"
 #define ITEM_DETECTOR "ItemDetector"
+#define WEAPON "Weapon"
 
 Player::Player(const DuckData::Id id):
         PhysicsObject({30, 0}, Layer::Player, Layer::Wall, PLAYER_DIMENSIONS, Gravity::Enabled,
@@ -47,14 +46,13 @@ Player::Player(const DuckData::Id id):
         _viewDirection(DuckData::Direction::Right),
         _lastViewDirection(DuckData::Direction::Right),
         flags(DEFAULT_FLAGS),
-        acceleration(ACCELERATION),
-        airAcceleration(AIR_ACCELERATION),
         weapon(nullptr),
         isJumping(false),
         interactWithItem(false),
         actionateWeapon(false),
         canKeepJumping(true),
-        jumpTimer(new GameTimer(JUMP_TIME)) {
+        jumpTimer(new GameTimer(Config::Duck::jumpTime())),
+        wonRounds(0) {
     input.addAction(MOVE_RIGHT);
     input.addAction(MOVE_LEFT);
     input.addAction(CROUCH);
@@ -62,6 +60,21 @@ Player::Player(const DuckData::Id id):
     input.addAction(INTERACT);
     input.addAction(SHOOT);
     input.addAction(LOOK_UP);
+
+    Config::Duck::defaultWeapon() == ItemID::NONE ?
+            weapon = nullptr :
+            weapon = WeaponFactory::createWeapon(Config::Duck::defaultWeapon()).release();
+
+    if (weapon) {
+        weapon->connect(EquippableWeapon::Events::Fired,
+                        eventHandler(&Player::onWeaponFired, , const Vector2&));
+        weapon->connect(EquippableWeapon::Events::NoMoreBullets,
+                        eventHandler(&Player::onWeaponNoMoreBullets));
+        addChild(WEAPON, weapon);
+    }
+
+    flags.set(DuckData::Flag::Index::Armor, Config::Duck::defaultArmor());
+    flags.set(DuckData::Flag::Index::Helmet, Config::Duck::defaultHelmet());
 
     jumpTimer->connect(GameTimer::Events::Timeout, eventHandler(&Player::onJumpTimerTimeout));
     addChild(JUMP_TIMER, jumpTimer);
@@ -73,8 +86,6 @@ Player::Player(const DuckData::Id id):
                           eventHandler(&Player::onItemCollision, , CollisionObject*));
     addChild(ITEM_DETECTOR, itemDetector);
 }
-
-#define WEAPON "Weapon"
 
 void Player::onItemCollision(CollisionObject* item) {
     if (input.isActionJustPressed(INTERACT) and not weapon) {
@@ -90,15 +101,17 @@ void Player::onItemCollision(CollisionObject* item) {
                 weapon = WeaponFactory::createWeapon(id).release();
                 weapon->connect(EquippableWeapon::Events::Fired,
                                 eventHandler(&Player::onWeaponFired, , const Vector2&));
+                weapon->connect(EquippableWeapon::Events::NoMoreBullets,
+                                eventHandler(&Player::onWeaponNoMoreBullets));
                 addChild(WEAPON, weapon);
-                getRoot()->removeChild(item);
+                item->parent()->removeChild(item);
         }
     }
 }
 
 void Player::onCollision(const CollisionObject* object) {
     if (object->layers().test(Layer::Index::DeathZone))
-        return (void)setPosition({30, 0});
+        return (void)setGlobalPosition({30, 0});
 
     if (object->layers().test(Layer::Index::Bullet))
         return kill();
@@ -175,9 +188,6 @@ void Player::manageInput() {
         actionateWeapon = false;
 }
 
-#define MIN_SPEED 0
-#define MAX_SPEED 30
-
 void Player::move(const float delta, const float movementAcceleration) {
     switch (_movementDirection) {
         case DuckData::Direction::Right:
@@ -190,35 +200,33 @@ void Player::move(const float delta, const float movementAcceleration) {
             if (_velocity.x() > 0) {
                 flags.set(DuckData::Flag::Index::IsMoving);
                 _velocity += Vector2::LEFT * movementAcceleration * delta;
-                if (_velocity.x() < MIN_SPEED)
-                    _velocity.setX(MIN_SPEED);
+                if (_velocity.x() < Config::Duck::minSpeed())
+                    _velocity.setX(Config::Duck::minSpeed());
             } else if (_velocity.x() < 0) {
                 flags.set(DuckData::Flag::Index::IsMoving);
                 _velocity += Vector2::RIGHT * movementAcceleration * delta;
-                if (_velocity.x() > MIN_SPEED)
-                    _velocity.setX(MIN_SPEED);
+                if (_velocity.x() > Config::Duck::minSpeed())
+                    _velocity.setX(Config::Duck::minSpeed());
             }
     }
 
-    if (_velocity.x() > MAX_SPEED)
-        _velocity.setX(MAX_SPEED);
-    else if (_velocity.x() < -MAX_SPEED)
-        _velocity.setX(-MAX_SPEED);
+    if (_velocity.x() > Config::Duck::maxSpeed())
+        _velocity.setX(Config::Duck::maxSpeed());
+    else if (_velocity.x() < -Config::Duck::maxSpeed())
+        _velocity.setX(-Config::Duck::maxSpeed());
 }
 
 void Player::performActionsInAir(const float delta) {
-    move(delta, airAcceleration);
+    move(delta, Config::Duck::airAcceleration());
     if (not jumpTimer->started())
         jumpTimer->start();
 }
 
 void Player::performActionsInGround(const float delta) {
-    move(delta, acceleration);
+    move(delta, Config::Duck::acceleration());
     jumpTimer->reset();
     canKeepJumping = true;
 }
-
-#define JUMP_SPEED 20
 
 void Player::performActions(const float delta) {
     if (not _onGround)
@@ -227,7 +235,7 @@ void Player::performActions(const float delta) {
         performActionsInGround(delta);
 
     if (isJumping and canKeepJumping)
-        _velocity.setY(-JUMP_SPEED);
+        _velocity.setY(-Config::Duck::jumpSpeed());
 }
 
 void Player::moveRight() { input.pressAction(MOVE_RIGHT); }
@@ -259,6 +267,8 @@ void Player::stopLookUp() { input.releaseAction(LOOK_UP); }
 void Player::start() {}
 
 void Player::update(const float delta) {
+    std::cout << "Position: " << globalPosition() << std::endl;
+
     resetState();
     if (flags.test(DuckData::Flag::Index::IsDead))
         return;
