@@ -20,6 +20,8 @@
 #define ROCK "assets/enviroment/rock.png"
 #define WEAPON_SPAWNER "assets/enviroment/spawner.png"
 
+#define WIN_PATH "assets/sounds/end-effect.mp3"
+
 using SDL2pp::NullOpt;
 using SDL2pp::Rect;
 using SDL2pp::Renderer;
@@ -81,6 +83,7 @@ void Game::init() {
         hudManager.check(ducks, ducksToRender, spritesMapping);
         if (transition) {
             transition = false;
+            soundManager.playEffect(WIN_PATH);
             auto message = std::make_unique<GameMessage>(InputAction::NEXT_ROUND, 1);
             communicator.trysend(std::move(message));
 
