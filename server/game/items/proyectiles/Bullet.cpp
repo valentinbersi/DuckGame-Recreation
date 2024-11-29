@@ -18,8 +18,6 @@
 void Bullet::onCollision(CollisionObject* object) const {
     if (object->layers().test(Layer::Index::Player))
         static_cast<Player*>(object)->kill();
-
-    parent()->removeChild(this);
 }
 
 Bullet::Bullet(Vector2 velocity, const u8 tiles):

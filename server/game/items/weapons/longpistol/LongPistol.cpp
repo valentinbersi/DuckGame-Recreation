@@ -33,10 +33,12 @@ void LongPistol::actionate() {
                     .rotated(randomGenerator());
 
     auto bullet = std::make_unique<Bullet>(direction * BULLET_SPEED, BULLET_TILES);
-    bullet->setGlobalPosition(parent<Player>()->globalPosition() +
-                              (parent<Player>()->viewDirection() == DuckData::Direction::Right ?
-                                       Vector2::RIGHT * 2 :
-                                       Vector2::LEFT * 2));
+    bullet->setGlobalPosition(
+            parent<Player>()->globalPosition() +
+                    (parent<Player>()->viewDirection() == DuckData::Direction::Right ?
+                             Vector2::RIGHT * 2 :
+                             Vector2::LEFT * 2),
+            Force::Yes);
     getRoot()->addChild("Bullet", std::move(bullet));
     fire<const Vector2&>(Events::Fired, recoil);
 }

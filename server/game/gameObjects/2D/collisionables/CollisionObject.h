@@ -67,11 +67,18 @@ public:
     void updateInternal(float delta) override;
 
     /**
+     * Set the global position of the object
+     * @param globalPosition  the new global position
+     * @return this CollisionObject
+     */
+    GameObject2D& setGlobalPosition(Vector2 globalPosition, Force = Force::No) noexcept override;
+
+    /**
      * Set the position of the object
      * @param position the new position
      * @return this CollisionObject
      */
-    GameObject2D& setPosition(Vector2 position) noexcept final;
+    GameObject2D& setPosition(Vector2 position, Force = Force::No) noexcept final;
 
     /**
      * Get the collision layers of the Object
@@ -150,8 +157,9 @@ public:
     /**
      * Check for collisions with other collision object and perform the collision
      * @param delta the time since the last update
+     * @return true if the object was destroyed during the collision, false otherwise
      */
-    virtual void processCollisions(float delta) = 0;
+    virtual bool processCollisions(float delta) = 0;
 
     /**
      * Get the shape of the CollisionObject

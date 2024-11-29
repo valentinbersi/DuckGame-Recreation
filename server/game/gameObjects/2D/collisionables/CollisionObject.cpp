@@ -33,9 +33,18 @@ void CollisionObject::updateInternal([[maybe_unused]] const float delta) {
     shape.setCenter(globalPosition());
 }
 
-GameObject2D& CollisionObject::setPosition(Vector2 position) noexcept {
+GameObject2D& CollisionObject::setGlobalPosition(Vector2 globalPosition,
+                                                 const Force force) noexcept {
+    GameObject2D::setGlobalPosition(globalPosition);
+    if (force == Force::Yes)
+        shape.setCenter(this->globalPosition());
+    return *this;
+}
+
+GameObject2D& CollisionObject::setPosition(Vector2 position, const Force force) noexcept {
     GameObject2D::setPosition(std::move(position));
-    // shape.setCenter(globalPosition());
+    if (force == Force::Yes)
+        shape.setCenter(globalPosition());
     return *this;
 }
 

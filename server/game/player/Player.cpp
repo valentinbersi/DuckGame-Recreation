@@ -88,6 +88,8 @@ void Player::onItemCollision(CollisionObject* item) {
                 return;
             default:
                 weapon = WeaponFactory::createWeapon(id).release();
+                weapon->connect(EquippableWeapon::Events::Fired,
+                                eventHandler(&Player::onWeaponFired, , const Vector2&));
                 addChild(WEAPON, weapon);
                 getRoot()->removeChild(item);
         }
@@ -98,10 +100,8 @@ void Player::onCollision(const CollisionObject* object) {
     if (object->layers().test(Layer::Index::DeathZone))
         return (void)setPosition({30, 0});
 
-    if (object->layers().test(Layer::Index::Bullet)) {
-        object->parent()->removeChild(object);
+    if (object->layers().test(Layer::Index::Bullet))
         return kill();
-    }
 }
 
 void Player::onWeaponFired(const Vector2& recoil) {
@@ -218,7 +218,7 @@ void Player::performActionsInGround(const float delta) {
     canKeepJumping = true;
 }
 
-#define JUMP_SPEED 80
+#define JUMP_SPEED 20
 
 void Player::performActions(const float delta) {
     if (not _onGround)
@@ -260,6 +260,8 @@ void Player::start() {}
 
 void Player::update(const float delta) {
     resetState();
+    if (flags.test(DuckData::Flag::Index::IsDead))
+        return;
     manageInput();
     performActions(delta);
 
@@ -272,6 +274,7 @@ void Player::update(const float delta) {
         flags |= DuckData::Flag::Flapping;
 
     } else if (input.isActionJustPressed(INTERACT) && weapon) {
+        input.releaseAction(INTERACT);
         std::unique_ptr<Item> item = ItemFactory::createItem(weapon->getID());
         item->setPosition(globalPosition());
         getRoot()->addChild(WEAPON, std::move(item));

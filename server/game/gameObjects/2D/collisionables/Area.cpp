@@ -11,10 +11,12 @@ void Area::start() {}
 
 void Area::update([[maybe_unused]] float delta) {}
 
-void Area::processCollisions([[maybe_unused]] const float delta) {
+bool Area::processCollisions([[maybe_unused]] const float delta) {
     for (auto& object: objectsToCollide) {
         if (const std::shared_ptr ownedObject(object.lock());
             ownedObject != nullptr && collidesWith(*ownedObject))
             fire(Events::Collision, ownedObject.get());
     }
+
+    return false;
 }

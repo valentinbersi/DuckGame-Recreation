@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Force.h"
 #include "GameObject.h"
 #include "Vector2.h"
 
@@ -35,7 +36,7 @@ public:
      * @param globalPosition The new global position
      * @return A reference to this object, to allow builder pattern.
      */
-    GameObject2D& setGlobalPosition(Vector2 globalPosition) noexcept;
+    virtual GameObject2D& setGlobalPosition(Vector2 globalPosition, Force = Force::No) noexcept;
 
     /**
      * Get the global position of the object
@@ -46,9 +47,10 @@ public:
     /**
      * Set the local position of the object
      * @param position The new local position
+     * @param force Indicates if the position should be forced or not
      * @return A reference to this object, to allow builder pattern.
      */
-    virtual GameObject2D& setPosition(Vector2 position) noexcept;
+    virtual GameObject2D& setPosition(Vector2 position, Force force = Force::No) noexcept;
 
     /**
      * Get the local position of the object

@@ -38,5 +38,5 @@ struct Area: CollisionObject {
      * Process the collisions of the area. This will throw events when colliding with another
      * collision object
      */
-    void processCollisions(float delta) override;
+    bool processCollisions(float delta) override;
 };
