@@ -62,13 +62,7 @@ void WaitingPage::recvServerMessage() {
             emit startMatch();
             timer->stop();
         }
-
-        //        if (gameInfo.isNewGame && message.connectedPlayers == 4)
-        //            requestStartGame();
-
-    } else {
-        qDebug() << "replyMessage is NULL";
-    }  // esto nose si va
+    }
 }
 
 void WaitingPage::requestStartGame() {

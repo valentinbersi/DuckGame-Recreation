@@ -35,7 +35,7 @@ public:
         ACTION_RELEASED = 0xB,
         SHOOT_PRESSED = 0xC,
         SHOOT_RELEASED = 0xD,
-        NEXT_ROUND = 0xE,
+        NEXT_ROUND = 0xE
     };
 
     // cppcheck-suppress noExplicitConstructor

@@ -29,7 +29,6 @@ ViewController::ViewController(QWidget* parent):
     ui->setupUi(this);
 
     ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
-    ui->graphicsView->setBackgroundBrush(Qt::NoBrush);
     scene = new LevelScene(this, objects);
     ui->graphicsView->setScene(scene);
     onSceneResize();
@@ -94,7 +93,9 @@ void ViewController::changeBackgroundBrush() {
         QMessageBox::warning(this, "Error", "The selected file is not a valid image.");
         return;
     }
-    backgroundBrush = QBrush(pixmap);
+
+    QPixmap scaledPixmap = pixmap.scaled(ui->centralwidget->size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+    backgroundBrush = QBrush(scaledPixmap);
     update();
 }
 

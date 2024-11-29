@@ -16,7 +16,6 @@ void mainMenu::handleExit() {
                                   QMessageBox::Yes | QMessageBox::No);
 
     if (reply == QMessageBox::Yes) {
-        qDebug() << "se emite exitGameRequested";  // ---------------------------
         emit exitGameRequested();
     }
 }

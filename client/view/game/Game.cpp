@@ -20,6 +20,8 @@
 #define ROCK "assets/enviroment/rock.png"
 #define WEAPON_SPAWNER "assets/enviroment/spawner.png"
 
+#define WIN_PATH "assets/sounds/end-effect.mp3"
+
 using SDL2pp::NullOpt;
 using SDL2pp::Rect;
 using SDL2pp::Renderer;
@@ -33,6 +35,10 @@ const HashMap<ItemID, cppstring> Game::weaponSprites = {
 
 Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         running(true),
+        roundFinished(false),
+        setFinished(false),
+        gameFinished(false),
+        transition(false),
         window_width(DEF_WINDOW_WIDTH),
         window_height(DEF_WINDOW_HEIGHT),
         communicator(communicator),
@@ -46,6 +52,8 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
 
 void Game::init() {
     EnviromentRenderer enviromentRenderer(renderer);
+    HudManager hudManager(window_width, window_height, renderer, transition, roundFinished,
+                          setFinished, gameFinished);
 
     const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>> spritesMapping =
             createSpritesMapping();
@@ -53,13 +61,13 @@ void Game::init() {
     IMG_Init(IMG_INIT_PNG);
 
     Texture backgroundTexture = startBackground();
-    // camera.loadBackgroundSize(backgroundTexture);
     EventHandler handler(window, window_width, window_height, twoPlayersLocal, communicator, ducks,
                          camera, running);
 
     while (running) {
         const float deltaTime = timer.iterationStartSeconds().count();
         getSnapshot();
+
         renderer.Clear();
 
         camera.update(ducks, deltaTime);
@@ -70,8 +78,19 @@ void Game::init() {
         updateBlocks(enviromentRenderer);
         updateItemSpawns(enviromentRenderer);
         updateItems(enviromentRenderer);
-        // updateMap(snapshot);                        //acá updateo objetos, armas, equipo... etc
-        renderer.Present();
+
+        roundFinished = true;
+        hudManager.check(ducks, ducksToRender, spritesMapping);
+        if (transition) {
+            transition = false;
+            soundManager.playEffect(WIN_PATH);
+            auto message = std::make_unique<GameMessage>(InputAction::NEXT_ROUND, 1);
+            communicator.trysend(std::move(message));
+
+        } else {
+            renderer.Present();
+        }  // the renderer is presented inside the hudManager if the round/set/game is finished. in
+           // other case...
 
         handler.handleEvents();
 
@@ -95,12 +114,19 @@ void Game::getSnapshot() {
         return;
 
     clearObjects();
+    //roundFinished = snapshot->roundOver;
+    //setFinished = snapshot->setOver;
+    // gameFinished = snapshot->gameOver;
+
     for (auto& duck: snapshot->ducks) ducks.push_back(std::move(duck));
+    for (auto& duck: snapshot->ducks) {
+        if (!duck.extraData[DuckData::Flag::Index::IsDead]) {
+            ducksToRender.push_back(std::move(duck));
+        }
+    }
     for (const auto& block: snapshot->blockPositions) blocks.push_back(block);
     for (const auto& itemSpawner: snapshot->itemSpawnerPositions) itemSpawns.push_back(itemSpawner);
     for (const auto& item: snapshot->itemPositions) items.push_back(item);
-    // for (const auto& spawner: snapshot->spawnerPosition) spawners.push_back(spawner);
-    // for (const auto& weapon: snapshot->weaponPosition) weapons.push_back(weapon);
 }
 
 void Game::filterObjectsToRender() {
@@ -140,23 +166,19 @@ void Game::updatePlayers(
 
 
         bool flipped = duck.direction == DuckData::Direction::Left;
-
+        bool hasGun = duck.gunID != ItemID::NONE;
         DuckState state = {duck.extraData[DuckData::Flag::Index::PlayingDead],
-                           duck.extraData[DuckData::Flag::Index::Crouching],
                            duck.extraData[DuckData::Flag::Index::InAir],
                            duck.extraData[DuckData::Flag::Index::Flapping],
-                           duck.extraData[DuckData::Flag::Index::BeingDamaged],
                            duck.extraData[DuckData::Flag::Index::IsMoving],
                            duck.extraData[DuckData::Flag::Index::Helmet],
                            duck.extraData[DuckData::Flag::Index::Armor],
                            duck.extraData[DuckData::Flag::Index::IsShooting],
                            duck.extraData[DuckData::Flag::Index::LookingUp],
-                           flipped,
-                           duck.gunID,
-                           duck.direction};
+                           flipped, hasGun, duck.extraData[DuckData::Flag::Index::NoMoreBullets], duck.extraData[DuckData::Flag::Index::IsDead],
+                           duck.gunID, duck.direction};
 
-        if (state.isShooting)
-            soundManager.playSound(/*duck.gun->gunID*/ ItemID::CowboyPistol);
+        soundManager.checkSounds(state);
 
         spritesMapping.at(duck.duckID)->updatePosition(screenPositionX, screenPositionY);
         spritesMapping.at(duck.duckID)->setScale(scale);

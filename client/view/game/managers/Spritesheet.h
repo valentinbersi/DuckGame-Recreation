@@ -41,6 +41,9 @@ public:
     // ...
     void drawEffects(SDL2pp::Rect& playerPosition, bool flip, std::string path);
 
+    //
+    void drawWin(SDL2pp::Rect& playerPosition, bool flip);
+
     // Returns the width of the clip.
     int getClipWidth() const;
 
