@@ -79,7 +79,6 @@ void Game::init() {
         updateItemSpawns(enviromentRenderer);
         updateItems(enviromentRenderer);
 
-        roundFinished = true;
         hudManager.check(ducks, ducksToRender, spritesMapping);
         if (transition) {
             transition = false;
@@ -114,9 +113,9 @@ void Game::getSnapshot() {
         return;
 
     clearObjects();
-    //roundFinished = snapshot->roundOver;
-    //setFinished = snapshot->setOver;
-    // gameFinished = snapshot->gameOver;
+    roundFinished = snapshot->roundEnded;
+    setFinished = snapshot->setEnded;
+    gameFinished = snapshot->gameEnded;
 
     for (auto& duck: snapshot->ducks) ducks.push_back(std::move(duck));
     for (auto& duck: snapshot->ducks) {

@@ -327,4 +327,8 @@ DuckData Player::status() {
 
 void Player::clearInputs() { input.reset(); }
 
+bool Player::isDead() const {
+    return flags.test(DuckData::Flag::Index::IsDead);
+}
+
 Player::~Player() = default;

@@ -16,6 +16,7 @@ class GameController final: public GameObject {
     std::vector<LevelData>& levelsData;
     Level* level;
     std::list<Item*> items;
+    u16 roundsPlayed;
     bool roundEnded;
     bool setEnded;
     bool _gameEnded;
@@ -42,7 +43,7 @@ class GameController final: public GameObject {
      * Updates if the round has ended, the set has ended
      * or if the game has ended.
      */
-    void roundUpdate();
+    void roundUpdate(u8 alivePlayers, PlayerID aliveID);
 
     /**
      * Clears the actual state of the game
@@ -125,6 +126,9 @@ public:
      */
     bool exceedsPlayerMax(const u8 playerAmount);
 
+    // void addWeapon(const WeaponData& weaponData, const Vec2& position);
+
+    // void addBullet(const BulletData& bulletData, const Vec2& position);
     /**
      * Get the status of the game
      * @return the status of the game
@@ -137,13 +141,13 @@ public:
      * 
      * @return true if the game has ended, false otherwise
      */
-    inline bool gameEnded() const;
+    bool gameEnded() const;
 
     /**
      * Checks a round is in progress
      * @return 
      */
-    inline bool roundInProgress() const;
+    bool roundInProgress() const;
 
     /**
      * Sets the round as in progress

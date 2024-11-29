@@ -54,6 +54,9 @@ std::list<SizedObjectData> ClientRecvProtocol::recvBlockPositions() {
 GameStatus ClientRecvProtocol::recvGameStatus() {
     GameStatus status;
     recvByte();  // type
+    status.roundEnded = recvByte();
+    status.setEnded = recvByte();
+    status.gameEnded = recvByte();
     status.ducks = recvDuckData();
     status.itemPositions = recvItemData();
     status.blockPositions = recvBlockPositions();

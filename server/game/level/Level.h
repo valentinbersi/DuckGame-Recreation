@@ -8,6 +8,9 @@
 #include "LevelData.h"
 #include "SizedObjectData.h"
 #include "TerrainBlock.h"
+#include "Player.h"
+
+;
 
 class Level final: public GameObject {
     std::vector<TerrainBlock*> terrainBlocks;
@@ -17,7 +20,7 @@ public:
     /**
      * Create a new Level object
      */
-    explicit Level(const LevelData& level);
+    explicit Level(const LevelData& level, const HashMap<u16, Player*>& players);
 
     /**
      * Get the position of all the blocks in the level

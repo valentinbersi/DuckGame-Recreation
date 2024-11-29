@@ -227,4 +227,9 @@ public:
      * input that are being pressed.
      */
     void clearInputs();
-};
+
+    /**
+     * 
+     */
+    bool isDead() const;
+}; 

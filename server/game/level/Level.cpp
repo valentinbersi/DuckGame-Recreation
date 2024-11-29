@@ -7,7 +7,7 @@
 #include "SpawnPoint.h"
 #include "TerrainBlock.h"
 
-Level::Level(const LevelData& level) {
+Level::Level(const LevelData& level, [[maybe_unused]] const HashMap<u16, Player*>& players) {
     for (u64 i = 0; i < level.terrainBlocks.size(); ++i) {
         auto block = new TerrainBlock(level.terrainBlocks[i]);
         terrainBlocks.push_back(block);
@@ -20,8 +20,13 @@ Level::Level(const LevelData& level) {
         addChild("ItemSpawner", item);
     }
 
-    for (u64 i = 0; i < level.duckSpawnPoints.size(); ++i)
-        addChild("SpawnPoint", new SpawnPoint(level.duckSpawnPoints[i]));
+    // auto iterPlayers = players.begin();
+    // auto iterSpawnPoints = level.duckSpawnPoints.begin();
+    // while(iterPlayers != players.end() && iterSpawnPoints != level.duckSpawnPoints.end()) {
+    //     iterPlayers->second->setPosition(*iterSpawnPoints);
+    //     ++iterPlayers;
+    //     ++iterSpawnPoints;
+    // }
 }
 
 std::list<SizedObjectData> Level::blockStatus() const {

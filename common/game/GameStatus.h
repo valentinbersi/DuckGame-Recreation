@@ -18,6 +18,9 @@ struct GameStatus final: ServerMessage {
     GameStatus& operator=(GameStatus&& other) noexcept;
     bool operator==(const GameStatus& other) const;
 
+    bool roundEnded;
+    bool gameEnded;
+    bool setEnded;
     std::list<DuckData> ducks;
     std::list<ItemData> itemPositions;
     std::list<SizedObjectData> blockPositions;
