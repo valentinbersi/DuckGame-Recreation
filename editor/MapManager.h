@@ -3,6 +3,7 @@
 #include <list>
 #include <string>
 
+#include "MapData.h"
 #include "Object.h"
 
 class MapManager {
@@ -13,8 +14,6 @@ private:
 public:
     MapManager() = default;
 
-    static void exportMap(const std::list<Object>& objects, const std::string& mapName,
-                          int mapWidth, int mapHeight, const std::string& background);
-    static bool importMap(std::list<Object>& objects, const std::string& mapName, int& mapWidth,
-                          int& mapHeight, std::string& background);
+    static void exportMap(MapData& mapData);
+    static bool importMap(MapData& mapData);
 };

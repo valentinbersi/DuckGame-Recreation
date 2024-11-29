@@ -7,10 +7,11 @@
 
 #include "yaml-cpp/yaml.h"
 
-void MapManager::exportMap(const std::list<Object>& objects, const std::string& mapName,
-                           int mapWidth, int mapHeight, const std::string& background) {
-    std::string path = "maps/" + mapName + ".yaml";
-    std::ofstream fout(path);
+void MapManager::exportMap(MapData& mapData) {
+//    std::string path = "maps/" + mapData.name + ".yaml";
+//    std::ofstream fout(path);
+    mapData.path = "maps/" + mapData.name + ".yaml";
+    std::ofstream fout(mapData.path);
     if (!fout.is_open()) {
         qWarning() << "Could not open save file";
         return;
@@ -18,13 +19,13 @@ void MapManager::exportMap(const std::list<Object>& objects, const std::string& 
 
     YAML::Node mapNode;
 
-    mapNode["map_name"] = mapName;
-    mapNode["background"] = background;
-    mapNode["map_width"] = mapWidth;
-    mapNode["map_height"] = mapHeight;
+    mapNode["map_name"] = mapData.name;
+    mapNode["background"] = mapData.backgroundPath;
+    mapNode["map_width"] = mapData.width;
+    mapNode["map_height"] = mapData.height;
 
     YAML::Node objectsNode(YAML::NodeType::Sequence);
-    for (const auto& obj: objects) {
+    for (const auto& obj: mapData.objects) {
         YAML::Node objNode;
         objNode["type"] = objectTypeToString(obj.type);
         objNode["x"] = obj.centerPos.x();
@@ -36,6 +37,7 @@ void MapManager::exportMap(const std::list<Object>& objects, const std::string& 
 
     fout << mapNode;
     fout.close();
+    qDebug() << "se guardo el mapa";
 }
 
 std::string MapManager::objectTypeToString(ObjectType type) {
@@ -62,9 +64,8 @@ ObjectType MapManager::stringToObjectType(const std::string& typeStr) {
     return UNKNOWN;
 }
 
-bool MapManager::importMap(std::list<Object>& objects, const std::string& mapPath, int& mapWidth,
-                           int& mapHeight, std::string& background) {
-    std::ifstream fin(mapPath);
+bool MapManager::importMap(MapData& mapData) {
+    std::ifstream fin(mapData.path);
     if (!fin.is_open()) {
         qWarning() << "Could not open the file to load the map.";
         return false;
@@ -78,10 +79,10 @@ bool MapManager::importMap(std::list<Object>& objects, const std::string& mapPat
             return false;
         }
 
-        auto mapNameFromFile = mapNode["map_name"].as<std::string>();
-        mapWidth = mapNode["map_width"].as<int>();
-        mapHeight = mapNode["map_height"].as<int>();
-        background = mapNode["background"].as<std::string>();
+        mapData.name = mapNode["map_name"].as<std::string>();
+        mapData.width = mapNode["map_width"].as<int>();
+        mapData.height = mapNode["map_height"].as<int>();
+        mapData.backgroundPath = mapNode["background"].as<std::string>();
 
         YAML::Node objectsNode = mapNode["objects"];
         for (const auto& objNode: objectsNode) {
@@ -91,7 +92,7 @@ bool MapManager::importMap(std::list<Object>& objects, const std::string& mapPat
             object.centerPos.setX(objNode["x"].as<int>());
             object.centerPos.setY(objNode["y"].as<int>());
 
-            objects.push_back(object);
+            mapData.objects.push_back(object);
         }
     } catch (const YAML::Exception& e) {
         qWarning() << "Error reading YAML file: " << e.what();
