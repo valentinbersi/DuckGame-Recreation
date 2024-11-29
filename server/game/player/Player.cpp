@@ -92,8 +92,7 @@ void Player::onItemCollision(CollisionObject* item) {
                 weapon->connect(EquippableWeapon::Events::Fired,
                                 eventHandler(&Player::onWeaponFired, , const Vector2&));
                 addChild(WEAPON, weapon);
-                
-                static_cast<GameController*>(getRoot())->removeFromLevel(item);
+                item->parent()->removeChild(item);
         }
     }
 }
@@ -113,6 +112,11 @@ void Player::onWeaponFired(const Vector2& recoil) {
 }
 
 void Player::onWeaponNoMoreBullets() { flags.set(DuckData::Flag::Index::NoMoreBullets); }
+
+void Player::removeWeapon(){
+    removeChild(WEAPON);
+    weapon = nullptr;
+}
 
 void Player::onJumpTimerTimeout() { canKeepJumping = false; }
 
@@ -140,6 +144,7 @@ void Player::manageInput() {
     if (input.isActionPressed(CROUCH)) {
         manageCrouch();
     } else {
+        
         if (input.isActionPressed(JUMP) and _onGround)
             isJumping = true;
 
@@ -279,11 +284,9 @@ void Player::update(const float delta) {
         input.releaseAction(INTERACT);
         std::unique_ptr<Item> item = ItemFactory::createItem(weapon->getID());
         item->setPosition(globalPosition());
-        // getRoot()->addChild(WEAPON, std::move(item));
-        getRoot<GameController>()->addToLevel(WEAPON, std::move(item));
-        removeChild(WEAPON);
-        weapon = nullptr;
-    }
+        getRoot<GameController>()->addToLevel("Item", std::move(item));
+        removeWeapon();
+    } 
 
     if (_velocity.x() < 0)
         _movementDirection = DuckData::Direction::Left;
@@ -334,6 +337,22 @@ DuckData Player::status() {
 }
 
 void Player::clearInputs() { input.reset(); }
+
+void Player::reset() {
+    flags = 0;
+    if (weapon) removeWeapon();
+    setLayers(Layer::Player);
+    clearInputs();
+    _movementDirection = DuckData::Direction::Center;
+    _viewDirection = DuckData::Direction::Right;
+    _lastViewDirection = DuckData::Direction::Right;
+    acceleration = ACCELERATION,
+    airAcceleration = AIR_ACCELERATION;
+    isJumping = false;
+    interactWithItem= false;
+    actionateWeapon = false;
+    canKeepJumping = true;
+}
 
 bool Player::isDead() const {
     return flags.test(DuckData::Flag::Index::IsDead);

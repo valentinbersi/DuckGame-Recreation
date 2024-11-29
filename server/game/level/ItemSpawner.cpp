@@ -30,10 +30,9 @@ void ItemSpawner::onTimeout() {
     const Vector2 newPosition = position() + Vector2::UP * (itemHalfHeight + spawnerHalfHeight);
     item->setPosition(newPosition);
     spawnedItem = item->getReference<Item>();
-    // getRoot()->addChild("Weapon", std::move(item));
-    static_cast<GameController*>(getRoot())->addToLevel("Weapon", std::move(item));
+    getRoot<GameController>()->addToLevel("Item", std::move(item));
     timer->setTimeout(randomGenerator.generateRandomFloat());
-}
+} 
  
 void ItemSpawner::update([[maybe_unused]] const float delta) {
     if (spawnedItem.expired() && !timer->started()) {

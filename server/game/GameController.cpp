@@ -44,10 +44,10 @@ void GameController::loadLevel(const LevelData& level) {
 
     this->level = new Level(level, players);
 
-    this->level->connect(Events::TreeEntered,
-                         eventHandler(&GameController::onTreeEntered, GameObject*));
-    this->level->connect(Events::TreeExited,
-                         eventHandler(&GameController::onTreeExited, GameObject*));
+    // this->level->connect(Events::TreeEntered,
+    //                      eventHandler(&GameController::onTreeEntered, GameObject*));
+    // this->level->connect(Events::TreeExited,
+    //                      eventHandler(&GameController::onTreeExited, GameObject*));
 
     addChild("Level", this->level);
 }
@@ -77,7 +77,10 @@ void GameController::roundUpdate(u8 playerAlive, PlayerID playerID) {
 }
 
 void GameController::clearState() {
-    // removeChild(level);
+    for (auto& [id, player] : players){
+        player->reset();
+    }
+    items.clear();
 }
 
 #define PLAYER_ID "Player with id "
@@ -98,7 +101,7 @@ GameController::GameController(std::vector<LevelData>& levelsData): levelsData(l
 }
 
 void GameController::start() {
-    loadLevel(levelsData[1]); //seria random entre el size del map
+    loadLevel(levelsData[2]); //seria random entre el size del map
     roundEnded = false;
 }
 
@@ -151,6 +154,7 @@ void GameController::removePlayer(const PlayerID playerID) {
         throw PlayerNotFound(playerID);
 
     (void)removeChild(PLAYER + std::to_string(playerID));
+    _gameEnded = (!players.size())? true : false;
 }
 
 Player& GameController::getPlayer(const PlayerID playerID) const { return *players.at(playerID); }
@@ -163,10 +167,6 @@ bool GameController::exceedsPlayerMax(const u8 playerAmount) {
 
 void GameController::addToLevel(const std::string& nodeName, std::unique_ptr<CollisionObject> physicObject) {
     level->addChild(nodeName, std::move(physicObject));
-}
-
-void GameController::removeFromLevel(CollisionObject* collisionObject) {
-    level->removeChild(collisionObject);
 }
 
 GameStatus GameController::status() const {
@@ -190,6 +190,6 @@ void GameController::startNewRound() {
 }
 
 void GameController::loadNewState() {
-    // clearState();
-    // loadLevel(levelsData[0]);
+    clearState();
+    loadLevel(levelsData[1]);
 }

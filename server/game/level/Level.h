@@ -17,6 +17,7 @@ class Level final: public GameObject {
     std::vector<ItemSpawner*> itemSpawners;
 
 public:
+
     /**
      * Create a new Level object
      */

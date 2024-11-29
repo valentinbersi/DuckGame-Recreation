@@ -40,8 +40,7 @@ void LongPistol::actionate() {
                              Vector2::RIGHT * 2 :
                              Vector2::LEFT * 2),
             Force::Yes);
-    // getRoot()->addChild("Bullet", std::move(bullet));
-    static_cast<GameController*>(getRoot())->addToLevel("Bullet", std::move(bullet));
+    getRoot<GameController>()->addToLevel("Bullet", std::move(bullet));
     fire<const Vector2&>(Events::Fired, recoil);
 }
 
