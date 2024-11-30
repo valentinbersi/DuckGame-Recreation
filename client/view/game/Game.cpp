@@ -1,5 +1,6 @@
 #include "Game.h"
 
+#include <algorithm>
 #include <utility>
 
 #define DEF_WINDOW_WIDTH 1040
