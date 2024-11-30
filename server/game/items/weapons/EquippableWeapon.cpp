@@ -1,14 +1,21 @@
 #include "EquippableWeapon.h"
 
-#include <utility>
+#include "Player.h"
 
-EquippableWeapon::EquippableWeapon(const ItemID id, const u8 ammo, Vector2 recoil,
-                                   const float dispersion):
-        ammo(ammo), id(id), firing(false), recoil(std::move(recoil)), dispersion(dispersion) {
+void EquippableWeapon::fire() {
+    if (ammo_ == INeedMoreBullets)
+        return Subject::fire(Events::NoMoreBullets);
+
+    --ammo_;
+    Subject::fire<const Vector2&>(Events::Fired, recoil);
+}
+
+EquippableWeapon::EquippableWeapon(const ItemID id, const u8 ammo, Vector2 recoil):
+        id_(id), ammo_(ammo), recoil(std::move(recoil)) {
     registerEvent<const Vector2&>(Events::Fired);
     registerEvent(Events::NoMoreBullets);
 }
 
-ItemID EquippableWeapon::getID() const { return id; }
+ItemID EquippableWeapon::id() const { return id_; }
 
 EquippableWeapon::~EquippableWeapon() = default;

@@ -285,7 +285,7 @@ void Player::update(const float delta) {
 
     } else if (input.isActionJustPressed(INTERACT) && weapon) {
         input.releaseAction(INTERACT);
-        std::unique_ptr<Item> item = ItemFactory::createItem(weapon->getID());
+        std::unique_ptr<Item> item = ItemFactory::createItem(weapon->id());
         item->setPosition(globalPosition());
         getRoot()->addChild(WEAPON, std::move(item));
         removeChild(WEAPON);
@@ -335,7 +335,7 @@ DuckData Player::status() {
     return {globalPosition(),
             id,
             _lastViewDirection,
-            weapon ? weapon->getID() : ItemID(ItemID::NONE),
+            weapon ? weapon->id() : ItemID(ItemID::NONE),
             flags,
             wonRounds};
 }

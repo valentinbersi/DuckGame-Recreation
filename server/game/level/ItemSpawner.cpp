@@ -16,7 +16,8 @@ RandomFloatGenerator ItemSpawner::randomGenerator(Config::Weapons::minSpawnTime(
                                                   Config::Weapons::maxSpawnTime());
 
 ItemSpawner::ItemSpawner(Vector2 position):
-        StaticObject(position, Layer::Spawner, 0, SPAWNER_DIMENSIONS), timer(new GameTimer(0)) {
+        StaticObject(std::move(position), Layer::Spawner, 0, SPAWNER_DIMENSIONS),
+        timer(new GameTimer(0)) {
     timer->connect(GameTimer::Events::Timeout, eventHandler(&ItemSpawner::onTimeout));
     addChild("Timer", timer);
 }
