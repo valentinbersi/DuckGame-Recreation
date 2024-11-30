@@ -120,14 +120,17 @@ void Game::getSnapshot() {
     gameFinished = snapshot->gameEnded;
     std::ranges::transform(snapshot->ducks, std::back_inserter(ducks),
                            [](DuckData& duck) { return std::move(duck); });
-    for (auto& duck: snapshot->ducks) {
-        if (!duck.extraData[DuckData::Flag::Index::IsDead]) {
+
+    for (auto& duck: snapshot->ducks)
+        if (!duck.extraData[DuckData::Flag::Index::IsDead])
             ducksToRender.push_back(std::move(duck));
-        }
-    }
-    for (const auto& block: snapshot->blockPositions) blocks.push_back(block);
-    for (const auto& itemSpawner: snapshot->itemSpawnerPositions) itemSpawns.push_back(itemSpawner);
-    for (const auto& item: snapshot->itemPositions) items.push_back(item);
+
+    std::ranges::transform(snapshot->blockPositions, std::back_inserter(blocks),
+                           [](SizedObjectData& block) { return std::move(block); });
+    std::ranges::transform(snapshot->itemSpawnerPositions, std::back_inserter(itemSpawns),
+                           [](SizedObjectData& itemSpawner) { return std::move(itemSpawner); });
+    std::ranges::transform(snapshot->itemPositions, std::back_inserter(items),
+                           [](ItemData& item) { return std::move(item); });
 }
 
 void Game::filterObjectsToRender() {
