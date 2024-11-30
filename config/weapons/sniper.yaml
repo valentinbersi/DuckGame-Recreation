@@ -4,4 +4,4 @@ dispersion: 0
 recoil:
   x: 0
   y: 0
-reload time: 1
+reload time: 3

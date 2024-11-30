@@ -7,7 +7,7 @@ class Sniper final: public EquippableWeapon {
     bool firing;
     bool reloading;
     GameTimer* timer;
-    RandomFloatGenerator randomGenerator;
+    RandomFloatGenerator randomDispersionGenerator;
 
     /**
      * Sets reloading to false, this function goes
@@ -19,7 +19,7 @@ class Sniper final: public EquippableWeapon {
      * Generates a bullet
      */
     void generateBullet();
-    
+
 public:
     Sniper() = delete;
     Sniper(const Sniper& other) = delete;

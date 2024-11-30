@@ -1,11 +1,15 @@
 
 #include "Sniper.h"
-#include "Player.h"
+
+#include <memory>
+#include <utility>
+#include "Math.h"
+
 #include "Bullet.h"
 #include "GameController.h"
+#include "Player.h"
 
-#define eventHandler(                                          \
-        Function)                                               \
+#define eventHandler(Function) \
     gameObject::EventHandler<Sniper>::create(getReference<Sniper>(), Function)
 
 Sniper::Sniper(ItemID id, u8 ammo, Vector2 recoil, float reach, float dispersion, float reloadTime):
@@ -14,30 +18,38 @@ Sniper::Sniper(ItemID id, u8 ammo, Vector2 recoil, float reach, float dispersion
         firing(false),
         reloading(false),
         timer(new GameTimer(reloadTime)),
-        randomGenerator(-dispersion, dispersion) {}
+        randomDispersionGenerator(-dispersion ,dispersion) {
+            timer->connect(GameTimer::Events::Timeout, eventHandler(&Sniper::setNotReloading));
+            addChild("Timer", timer);
+        }
 
-void Sniper::setNotReloading() {
+void Sniper::setNotReloading() { 
     reloading = false;
+    timer->reset(); 
 }
 
 void Sniper::generateBullet() {
-    auto bullet = std::make_unique<Bullet>(Vector2::RIGHT, reach);
+    const Vector2 direction =
+            (parent<Player>()->viewDirection() == DuckData::Direction::Right ? Vector2::RIGHT :
+                                                                               Vector2::LEFT)
+                    .rotated(randomDispersionGenerator());
+    auto bullet = std::make_unique<Bullet>(direction, reach);
     bullet->setGlobalPosition(
             parent<Player>()->globalPosition() +
                     (parent<Player>()->viewDirection() == DuckData::Direction::Right ?
-                            Vector2::RIGHT * 2 :
-                            Vector2::LEFT * 2),
+                             Vector2::RIGHT * 2 :
+                             Vector2::LEFT * 2),
             Force::Yes);
 
     getRoot<GameController>()->addToLevel("Bullet", std::move(bullet));
 }
 
 void Sniper::actionate() {
-    if (firing || reloading){
+    if (firing || reloading) {
         return;
     }
     firing = true;
-    if (fire()){
+    if (fire()) {
         generateBullet();
         reloading = true;
         timer->start();

@@ -5,7 +5,7 @@
 #include "Player.h"
 
 bool EquippableWeapon::fire() {
-    if (ammo_ == INeedMoreBullets){
+    if (ammo_ == INeedMoreBullets) {
         Subject::fire(Events::NoMoreBullets);
         return false;
     }

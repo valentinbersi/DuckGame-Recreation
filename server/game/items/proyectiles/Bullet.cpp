@@ -23,7 +23,7 @@ void Bullet::onCollision(CollisionObject* object) const {
 
 Bullet::Bullet(Vector2 direction, const u8 tiles):
         PhysicsObject(Vector2::ZERO, Layer::None, Layer::Player | Layer::Wall | Layer::Box,
-                      BULLET_DIMENSIONS, Gravity::Disabled, std::move(direction*BULLET_SPEED),
+                      BULLET_DIMENSIONS, Gravity::Disabled, std::move(direction * BULLET_SPEED),
                       CollisionType::Stop),
         tiles(tiles) {
     connect(Events::Collision, eventHandler(&Bullet::onCollision, CollisionObject*));

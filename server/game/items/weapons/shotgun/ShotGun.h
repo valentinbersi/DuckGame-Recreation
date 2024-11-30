@@ -1,12 +1,12 @@
 #include "EquippableWeapon.h"
 
-class Shotgun : public EquippableWeapon {
+class Shotgun: public EquippableWeapon {
     float minReach;
     float maxReach;
     bool firing;
     u8 pellets;
     bool hasToReload;
-    RandomIntGenerator randomDistanceGenerator;
+    RandomFloatGenerator randomDistanceGenerator;
     RandomFloatGenerator randomDispersionGenerator;
 
     /**
@@ -21,7 +21,7 @@ public:
     Shotgun& operator=(const Shotgun& other) = delete;
     Shotgun& operator=(Shotgun&& other) noexcept = delete;
 
-     /**
+    /**
      * Creates a new ShotGun
      * @param id The id of the weapon
      * @param ammo The ammo of the weapon
@@ -29,7 +29,8 @@ public:
      * @param reach The reach of the weapon
      * @param dispersion The dispersion of the weapon
      */
-    Shotgun(ItemID id, u8 ammo, Vector2 recoil, float minReach, float maxReach, float dispersion, u8 pellets);
+    Shotgun(ItemID id, u8 ammo, Vector2 recoil, float minReach, float maxReach, float dispersion,
+            u8 pellets);
 
     /**
      * Actionates the shotgun
@@ -42,5 +43,4 @@ public:
     void deactionate() override;
 
     ~Shotgun() override;
-
 };
