@@ -3,10 +3,10 @@
 
 #include <memory>
 #include <utility>
-#include "Math.h"
 
 #include "Bullet.h"
 #include "GameController.h"
+#include "Math.h"
 #include "Player.h"
 
 #define eventHandler(Function) \
@@ -18,14 +18,14 @@ Sniper::Sniper(ItemID id, u8 ammo, Vector2 recoil, float reach, float dispersion
         firing(false),
         reloading(false),
         timer(new GameTimer(reloadTime)),
-        randomDispersionGenerator(-dispersion ,dispersion) {
-            timer->connect(GameTimer::Events::Timeout, eventHandler(&Sniper::setNotReloading));
-            addChild("Timer", timer);
-        }
+        randomDispersionGenerator(-dispersion, dispersion) {
+    timer->connect(GameTimer::Events::Timeout, eventHandler(&Sniper::setNotReloading));
+    addChild("Timer", timer);
+}
 
-void Sniper::setNotReloading() { 
+void Sniper::setNotReloading() {
     reloading = false;
-    timer->reset(); 
+    timer->reset();
 }
 
 void Sniper::generateBullet() {

@@ -7,7 +7,7 @@ class Ak47 final: public EquippableWeapon {
     RandomFloatGenerator randomDispersionMin;
     RandomFloatGenerator randomDispersionMid;
     RandomFloatGenerator randomDispersionMax;
-    GameTimer* timer;   
+    GameTimer* timer;
 
     void onTimeOut();
 
@@ -30,7 +30,8 @@ public:
      * @param reach The reach of the weapon
      * @param dispersion The dispersion of the weapon
      */
-    Ak47(ItemID id, u8 ammo, Vector2 recoil, float reach, float minDispersion, float midDispersion, float maxDispersion, float timeBetweenShots);
+    Ak47(ItemID id, u8 ammo, Vector2 recoil, float reach, float minDispersion, float midDispersion,
+         float maxDispersion, float timeBetweenShots);
 
     /**
      * Actionates the weapon

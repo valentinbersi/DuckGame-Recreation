@@ -5,8 +5,8 @@
 
 #include "Bullet.h"
 #include "GameController.h"
-#include "Player.h"
 #include "Math.h"
+#include "Player.h"
 
 Shotgun::Shotgun(ItemID id, u8 ammo, Vector2 recoil, float minReach, float maxReach,
                  float dispersion, u8 pellets):

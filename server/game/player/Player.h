@@ -231,7 +231,7 @@ public:
      * Reset the player's state to the start of a round
      * it only mantains the amount of rounds won.
      */
-    void reset();    
+    void reset();
 
     /**
      *
