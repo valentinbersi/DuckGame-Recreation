@@ -39,7 +39,7 @@ public:
     void drawWeapon(SDL2pp::Rect& playerPosition, bool flip, const std::string& path);
 
     // ...
-    void drawEffects(SDL2pp::Rect& playerPosition, bool flip, std::string path);
+    void drawEffects(SDL2pp::Rect& playerPosition, bool flip, const std::string& path);
 
     //
     void drawWin(SDL2pp::Rect& playerPosition, bool flip);
