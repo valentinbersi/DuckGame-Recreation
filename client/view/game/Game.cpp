@@ -31,7 +31,8 @@ using SDL2pp::Texture;
 
 const HashMap<ItemID, cppstring> Game::weaponSprites = {
         {ItemID::Magnum, "assets/weapons/Magnum.png"},
-        {ItemID::CowboyPistol, "assets/weapons/CowboyPistol.png"}};
+        {ItemID::CowboyPistol, "assets/weapons/CowboyPistol.png"},
+        {ItemID::DuelPistol, "assets/weapons/DuelPistol.png"}};
 
 Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         running(true),
