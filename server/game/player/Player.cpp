@@ -157,8 +157,10 @@ void Player::manageInput() {
     if (input.isActionPressed(CROUCH)) {
         manageCrouch();
     } else {
+        if (not input.isActionPressed(JUMP))
+            canKeepJumping = false;
 
-        if (input.isActionPressed(JUMP) and _onGround)
+        if (input.isActionPressed(JUMP))
             isJumping = true;
 
         if (input.isActionJustPressed(JUMP) and not _onGround)
@@ -224,9 +226,9 @@ void Player::move(const float delta, const float movementAcceleration) {
 }
 
 void Player::performActionsInAir(const float delta) {
-    move(delta, Config::Duck::airAcceleration());
     if (not jumpTimer->started())
         jumpTimer->start();
+    move(delta, Config::Duck::airAcceleration());
 }
 
 void Player::performActionsInGround(const float delta) {
@@ -274,20 +276,15 @@ void Player::stopLookUp() { input.releaseAction(LOOK_UP); }
 void Player::start() {}
 
 void Player::update(const float delta) {
-    // std::cout << "Position: " << globalPosition() << std::endl;
-
     resetState();
     if (flags.test(DuckData::Flag::Index::IsDead))
         return;
     manageInput();
     performActions(delta);
 
-
-    // if (input.isActionPressed(JUMP) && _onGround) {
-    //     _velocity += Vector2(0, -20);
-
-    if (input.isActionJustPressed(JUMP) && !_onGround) {
-        _velocity += Vector2(0, -3);
+    if (input.isActionJustPressed(JUMP) and not _onGround) {
+        if (_velocity.y() > 0)
+            _velocity.setY(0);
         flags |= DuckData::Flag::Flapping;
 
     } else if (input.isActionJustPressed(INTERACT) && weapon) {
@@ -346,7 +343,7 @@ DuckData Player::status() {
             wonRounds};
 }
 
-void Player::clearInputs(Force force) { input.reset(force); }
+void Player::clearInputs(const Force force) { input.reset(force); }
 
 void Player::reset() {
     flags.reset();
