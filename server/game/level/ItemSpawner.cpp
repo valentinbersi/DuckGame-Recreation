@@ -13,12 +13,10 @@
         Function) /*como no se recibe argumentos en este caso quito coma y __VA_ARGS__*/ \
     gameObject::EventHandler<ItemSpawner>::create(getReference<ItemSpawner>(), Function)
 
-RandomFloatGenerator ItemSpawner::randomGenerator(Config::Weapons::minSpawnTime(),
-                                                  Config::Weapons::maxSpawnTime());
-
 ItemSpawner::ItemSpawner(Vector2 position):
         StaticObject(std::move(position), Layer::Spawner, 0, SPAWNER_DIMENSIONS),
-        timer(new GameTimer(0)) {
+        timer(new GameTimer(0)),
+        randomGenerator(Config::Weapons::minSpawnTime(), Config::Weapons::maxSpawnTime()) {
     timer->connect(GameTimer::Events::Timeout, eventHandler(&ItemSpawner::onTimeout));
     addChild("Timer", timer);
 }
