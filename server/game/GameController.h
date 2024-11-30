@@ -3,13 +3,11 @@
 #include <list>
 #include <memory>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "CollisionManager.h"
 #include "Level.h"
 #include "Player.h"
-
 
 struct LevelData;
 struct GameStatus;
@@ -77,13 +75,18 @@ public:
          */
         explicit PlayerNotFound(PlayerID id);
     };
-
-    GameController(std::vector<LevelData>& levelsData);
+    GameController() = delete;
     GameController(const GameController&) = delete;
     GameController& operator=(const GameController&) = delete;
     GameController(GameController&&) noexcept = delete;
     GameController& operator=(GameController&&) noexcept = delete;
     ~GameController() override;
+
+    /**
+     * Construct a game controller with the levels data
+     * @param levelsData the levels data
+     */
+    explicit GameController(std::vector<LevelData>& levelsData);
 
     /**
      * Start the match
@@ -129,14 +132,15 @@ public:
      * @param playerAmount the amount of player to add/check
      * @return true if It exceeds the maximum amount of players, false otherwise
      */
-    bool exceedsPlayerMax(const u8 playerAmount);
+    bool exceedsPlayerMax(const u8 playerAmount) const;
 
     /**
      * Adds a collision object to the actual level.
      * @param nodeName the name of the node to add to structure.
      * @param collisionObject the object to add to level
      */
-    void addToLevel(const std::string& nodeName, std::unique_ptr<CollisionObject> physicObject);
+    void addToLevel(const std::string& nodeName,
+                    std::unique_ptr<CollisionObject> physicObject) const;
 
     /**
      * Get the status of the game

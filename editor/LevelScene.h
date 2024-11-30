@@ -51,7 +51,7 @@ private:
      * @param object referencia al objeto que se quiere agregar al mapa
      * @param addInList indica si el objeto debe agregarse o no la lista objects
      */
-    void insertObjectInMap(const Object& object, bool addInList);
+    void insertObjectInMap(Object& object, bool addInList);
 
     /**
      * Itera sobre la lista de items y compara el itemRect

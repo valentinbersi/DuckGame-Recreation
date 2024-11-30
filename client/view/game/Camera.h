@@ -24,13 +24,13 @@ public:
     // Calculates the aspect ratio of the window, determines the center of all ducks,
     // and calculates the maximum distance between any two ducks. It then updates the zoom level
     // and view rectangle of the camera based on these values.
-    void update(std::list<DuckData>& ducks, float deltaTime);
+    void update(const std::list<DuckData>& ducks, float deltaTime);
 
     /**
      * Forces the camera to update its position and size to the center of ducks and the max distance
      * of them
      */
-    void forceUpdate(std::list<DuckData>& ducks);
+    void forceUpdate(const std::list<DuckData>& ducks);
 
     // Returns the view rectangle of the camera.
     Rectangle& getViewRect();
@@ -54,10 +54,10 @@ private:
     };
 
     // Gets the info from the camera, like the aspect ratio, center, and max distance between ducks
-    UpdateInfo updateInfo(std::list<DuckData>& ducks) const;
+    UpdateInfo updateInfo(const std::list<DuckData>& ducks) const;
 
     // Calculates the maximum distance between any ducks in the list
-    static Vector2 calculateMaxDistance(std::list<DuckData>& ducks, float aspectRatio);
+    static Vector2 calculateMaxDistance(const std::list<DuckData>& ducks, float aspectRatio);
 
     // Calculates the center point of all ducks in the list
     static Vector2 centerOfDucks(const std::list<DuckData>& ducks);

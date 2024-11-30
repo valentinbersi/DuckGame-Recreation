@@ -59,7 +59,7 @@ bool LevelScene::isEmptyPosition(QRectF itemRect) {
     return true;
 }
 
-void LevelScene::insertObjectInMap(const Object& object, bool addInList) {
+void LevelScene::insertObjectInMap(Object& object, bool addInList) {
     QPointF topLeftPos = object.getBoundingPos();
     QPointF itemPos(int(topLeftPos.x()) * PIXEL_SIZE, int(topLeftPos.y()) * PIXEL_SIZE);
     QSizeF itemSize(object.size.width() * PIXEL_SIZE, object.size.height() * PIXEL_SIZE);
@@ -83,7 +83,7 @@ void LevelScene::insertObjectInMap(const Object& object, bool addInList) {
         //        if (it != objects.end()) {
         //            storedObject = &(*it);
         //        }
-        storedObject = (Object*)(&object);
+        storedObject = &object;
     }
 
     objectsMap[item] = storedObject;
@@ -108,7 +108,7 @@ void LevelScene::loadMap(int mapWidth, int mapHeight) {
     setSceneRect(0, 0, mapWidth * PIXEL_SIZE, mapHeight * PIXEL_SIZE);
     gridWidth = mapWidth * PIXEL_SIZE;
     gridHeight = mapHeight * PIXEL_SIZE;
-    for (const auto& object: objects) {
+    for (auto& object: objects) {
         insertObjectInMap(object, false);
     }
 }
@@ -132,6 +132,7 @@ void LevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     if (event->button() == Qt::RightButton) {
         isDeletingObject = true;
         deleteObjectAt(event->scenePos());
+        // cppcheck-suppress shadowFunction
         emit requestDragModeChange(QGraphicsView::NoDrag);
         return;
     }
@@ -139,6 +140,7 @@ void LevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     if (event->button() == Qt::LeftButton && objectTypeToAdd != UNKNOWN) {
         isAddingObject = true;
         addNewObject(objectTypeToAdd, event->scenePos());
+        // cppcheck-suppress shadowFunction
         emit requestDragModeChange(QGraphicsView::NoDrag);
         return;
     }
@@ -170,10 +172,12 @@ void LevelScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         isAddingObject = false;
+        // cppcheck-suppress shadowFunction
         emit requestDragModeChange(QGraphicsView::ScrollHandDrag);
     }
     if (event->button() == Qt::RightButton) {
         isDeletingObject = false;
+        // cppcheck-suppress shadowFunction
         emit requestDragModeChange(QGraphicsView::ScrollHandDrag);
     }
 
