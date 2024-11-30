@@ -129,14 +129,15 @@ public:
      * @param playerAmount the amount of player to add/check
      * @return true if It exceeds the maximum amount of players, false otherwise
      */
-    bool exceedsPlayerMax(const u8 playerAmount);
+    bool exceedsPlayerMax(const u8 playerAmount) const;
 
     /**
      * Adds a collision object to the actual level.
      * @param nodeName the name of the node to add to structure.
      * @param collisionObject the object to add to level
      */
-    void addToLevel(const std::string& nodeName, std::unique_ptr<CollisionObject> physicObject);
+    void addToLevel(const std::string& nodeName,
+                    std::unique_ptr<CollisionObject> physicObject) const;
 
     /**
      * Get the status of the game

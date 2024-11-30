@@ -55,14 +55,15 @@ void GameController::loadLevel(const LevelData& level) {
 
 void GameController::roundUpdate(u8 playerAlive, PlayerID playerID) {
     bool tie = false;
+    u32 maxRoundsWon = 0;
     if (playerAlive <= 1) {
         ++roundsPlayed;
         roundEnded = true;
-        if (playerAlive) {  // hay un player vivo
+        if (playerAlive)  // hay un player vivo
             players.at(playerID)->winRound();
-        }
-        u32 maxRoundsWon = 0;
-        for (auto& [id, player]: players) {
+
+        maxRoundsWon = 0;
+        for (const Player* player: players | std::views::values) {
             if (player->roundsWon() > maxRoundsWon) {
                 // DuckData::Id playerID = static_cast<DuckData::Id>(id);
                 tie = false;
@@ -74,13 +75,12 @@ void GameController::roundUpdate(u8 playerAlive, PlayerID playerID) {
         }
     }
     setEnded = roundsPlayed % Config::Match::rounds() == 0 && roundsPlayed;
-    _gameEnded = (setEnded && !tie) || _gameEnded;
+    _gameEnded = ((setEnded && !tie) || _gameEnded) && maxRoundsWon >= Config::Match::pointsToWin();
 }
 
 void GameController::clearState() {
-    for (auto& [id, player]: players) {
-        player->reset();
-    }
+    for (Player* player: players | std::views::values) player->reset();
+    setEnded = false;
     items.clear();
 }
 
@@ -97,7 +97,6 @@ GameController::PlayerNotFound::PlayerNotFound(const PlayerID id):
 
 GameController::GameController(std::vector<LevelData>& levelsData): levelsData(levelsData) {
     connect(Events::TreeEntered, eventHandler(&GameController::onTreeEntered, GameObject*));
-
     connect(Events::TreeExited, eventHandler(&GameController::onTreeExited, GameObject*));
 }
 
@@ -163,12 +162,12 @@ Player& GameController::getPlayer(const PlayerID playerID) const { return *playe
 
 u8 GameController::playersCount() const { return players.size(); }
 
-bool GameController::exceedsPlayerMax(const u8 playerAmount) {
+bool GameController::exceedsPlayerMax(const u8 playerAmount) const {
     return players.size() + playerAmount > MAX_PLAYERS;
 }
 
 void GameController::addToLevel(const std::string& nodeName,
-                                std::unique_ptr<CollisionObject> physicObject) {
+                                std::unique_ptr<CollisionObject> physicObject) const {
     level->addChild(nodeName, std::move(physicObject));
 }
 
