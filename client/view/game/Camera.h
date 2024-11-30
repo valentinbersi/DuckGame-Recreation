@@ -54,7 +54,7 @@ private:
     };
 
     // Gets the info from the camera, like the aspect ratio, center, and max distance between ducks
-    UpdateInfo updateInfo(std::list<DuckData>& ducks) const;
+    UpdateInfo updateInfo(const std::list<DuckData>& ducks) const;
 
     // Calculates the maximum distance between any ducks in the list
     static Vector2 calculateMaxDistance(const std::list<DuckData>& ducks, float aspectRatio);

@@ -45,7 +45,7 @@ void Camera::updateZoom(const Vector2& center, const Vector2& maxDistance, const
     viewRect.setCenter(viewRect.center() + (center - viewRect.center()) * CAMERA_SPEED * deltaTime);
 }
 
-Camera::UpdateInfo Camera::updateInfo(std::list<DuckData>& ducks) const {
+Camera::UpdateInfo Camera::updateInfo(const std::list<DuckData>& ducks) const {
     UpdateInfo info;
     info.aspectRatio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
     info.center = centerOfDucks(ducks);
