@@ -19,6 +19,8 @@
 void Bullet::onCollision(CollisionObject* object) const {
     if (object->layers().test(Layer::Index::Player))
         static_cast<Player*>(object)->kill();
+    if (object->layers().test(Layer::Index::Box))
+        parent()->removeChild(object);
 }
 
 Bullet::Bullet(Vector2 direction, const u8 tiles):

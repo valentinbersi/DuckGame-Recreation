@@ -6,6 +6,7 @@
 class Box: public PhysicsObject {  
 private: 
     RandomIntGenerator randomGenerator;
+    bool wasDestroid;
 
     /**
      * Eliminates the box and generates a random item, 
@@ -24,6 +25,12 @@ public:
      * @param position The position of the box
      */
     explicit Box(Vector2 posicion);
+
+    /**
+     * Check if the box was destroyed on the last frame
+     * @param delta The time since the last update
+     */
+    void update(float delta) override;
 
     /**
      * Get the position of the box and its dimensions

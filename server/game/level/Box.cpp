@@ -11,7 +11,8 @@
 Box::Box(Vector2 position): 
     PhysicsObject(std::move(position), Layer::Box, Layer::DeathZone | Layer::Bullet | Layer::Player |
                   Layer::Wall, DIMENSIONS, Gravity::Enabled, Vector2::ZERO ,CollisionType::Bounce),
-    randomGenerator(GENERATE_OPTIONS) {}
+    randomGenerator(GENERATE_OPTIONS),
+    wasDestroid(false) {}
 
 void Box::eliminateBox() {
     switch(randomGenerator()){
@@ -27,12 +28,18 @@ void Box::eliminateBox() {
         default:
             break;    
     }
-    parent()->removeChild(this);
+    wasDestroid = true;
 }
 
 void Box::onCollision(const CollisionObject* object) {
     if (object->layers().test(Layer::Bullet)) {
         return eliminateBox();
+    }
+}
+
+void Box::update(float delta) {
+    if (wasDestroid) {
+        parent()->removeChild(this);
     }
 }
 
