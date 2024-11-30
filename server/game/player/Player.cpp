@@ -40,8 +40,8 @@
 #define WEAPON "Weapon"
 
 Player::Player(const DuckData::Id id):
-        PhysicsObject({30, 0}, Layer::Player, Layer::Wall, PLAYER_DIMENSIONS, Gravity::Enabled,
-                      Vector2::ZERO, CollisionType::Slide),
+        PhysicsObject({30, 0}, Layer::Player, Layer::Wall | Layer::Box, PLAYER_DIMENSIONS,
+                      Gravity::Enabled, Vector2::ZERO, CollisionType::Slide),
         id(id),
         _movementDirection(DuckData::Direction::Center),
         _viewDirection(DuckData::Direction::Right),
@@ -53,7 +53,9 @@ Player::Player(const DuckData::Id id):
         actionateWeapon(false),
         canKeepJumping(true),
         jumpTimer(new GameTimer(Config::Duck::jumpTime())),
-        wonRounds(0) {
+        wonRounds(0),
+        armorProtection(0),
+        helmetProtection(0) {
     input.addAction(MOVE_RIGHT);
     input.addAction(MOVE_LEFT);
     input.addAction(CROUCH);
@@ -115,9 +117,6 @@ void Player::onItemCollision(CollisionObject* item) {
 void Player::onCollision(const CollisionObject* object) {
     if (object->layers().test(Layer::Index::DeathZone))
         return (void)setGlobalPosition({30, 0});
-
-    if (object->layers().test(Layer::Index::Bullet))
-        return kill();
 }
 
 void Player::onWeaponFired(const Vector2& recoil) {
@@ -319,10 +318,22 @@ void Player::update(const float delta) {
 }
 
 void Player::kill() {
-    std::cout << "I DIED" << std::endl;
-
     if (flags.test(DuckData::Flag::Index::IsDead))
         return;
+
+    if (helmetProtection > 0) {
+        --helmetProtection;
+        if (helmetProtection == 0)
+            flags.reset(DuckData::Flag::Index::Helmet);
+        return;
+    }
+
+    if (armorProtection > 0) {
+        --armorProtection;
+        if (armorProtection == 0)
+            flags.reset(DuckData::Flag::Index::Armor);
+        return;
+    }
 
     flags.set(DuckData::Flag::Index::IsDead);
     removeFromLayer(Layer::Index::Player);
@@ -365,5 +376,23 @@ void Player::reset() {
 }
 
 bool Player::isDead() const { return flags.test(DuckData::Flag::Index::IsDead); }
+
+bool Player::equipArmor(const u8 protection) {
+    if (flags.test(DuckData::Flag::Index::Armor))
+        return false;
+
+    flags.set(DuckData::Flag::Index::Armor);
+    armorProtection += protection;
+    return true;
+}
+
+bool Player::equipHelmet(const u8 protection) {
+    if (flags.test(DuckData::Flag::Index::Helmet))
+        return false;
+
+    flags.set(DuckData::Flag::Index::Helmet);
+    helmetProtection += protection;
+    return true;
+}
 
 Player::~Player() = default;

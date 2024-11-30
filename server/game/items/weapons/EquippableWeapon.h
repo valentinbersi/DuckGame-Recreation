@@ -1,12 +1,11 @@
 #pragma once
 
-#include "GameObject.h"
+#include "EquippableItem.h"
 #include "ItemID.h"
 #include "Types.h"
 #include "Vector2.h"
 
-class EquippableWeapon: public GameObject {
-    ItemID id_;
+class EquippableWeapon: public EquippableItem {
     u8 ammo_;
     Vector2 recoil;
 
@@ -34,22 +33,6 @@ public:
      * @param recoil The recoil of the weapon
      */
     EquippableWeapon(ItemID id, u8 ammo, Vector2 recoil);
-
-    /**
-     * Get the id of the weapon
-     * @return The id of the weapon
-     */
-    ItemID id() const;
-
-    /**
-     * Actionate the weapon
-     */
-    virtual void actionate() = 0;
-
-    /**
-     * Actionate the weapon
-     */
-    virtual void deactionate() = 0;
 
     struct Events {
         constexpr static auto Fired = "Fired";

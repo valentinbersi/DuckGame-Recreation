@@ -15,7 +15,7 @@ void CollisionManager::removeCollisionObject(CollisionObject* collisionObject) {
     collisionObjects.remove(collisionObject);
 }
 
-void CollisionManager::processCollisions(const float delta) const {
+void CollisionManager::processCollisions(const float delta) {
     for (CollisionObject* collisionObject: collisionObjects)
         for (const CollisionObject* otherCollisionObject: collisionObjects)
             if (collisionObject != otherCollisionObject)
@@ -25,4 +25,11 @@ void CollisionManager::processCollisions(const float delta) const {
     for (CollisionObject* collisionObject: collisionObjects)
         if (not collisionObject->processCollisions(delta))
             collisionObject->resetRegisteredCollisions();
+        else
+            toRemove.push_front(collisionObject);
+
+    for (const CollisionObject* collisionObject: toRemove)
+        collisionObject->parent()->removeChild(collisionObject);
+
+    toRemove.clear();
 }

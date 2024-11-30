@@ -6,6 +6,7 @@ class CollisionObject;
 
 class CollisionManager {
     std::forward_list<CollisionObject*> collisionObjects;
+    std::forward_list<CollisionObject*> toRemove;
 
 public:
     CollisionManager();
@@ -31,5 +32,5 @@ public:
      * Process all collisions between collisionObjects
      * @param delta The time since the last frame
      */
-    void processCollisions(float delta) const;
+    void processCollisions(float delta);
 };

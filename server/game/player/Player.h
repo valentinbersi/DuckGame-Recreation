@@ -25,6 +25,8 @@ class Player final: public PhysicsObject {
     bool canKeepJumping;
     GameTimer* jumpTimer;
     u32 wonRounds;
+    u8 armorProtection;
+    u8 helmetProtection;
 
     /**
      * Event manager for the player colliding with an item
@@ -242,4 +244,16 @@ public:
      *
      */
     bool isDead() const;
+
+    /**
+     * Equip the armor to the player
+     * @returns true if the player was equipped with the armor, false otherwise
+     */
+    bool equipArmor(u8 protection);
+
+    /**
+     * Equip the helmet to the player
+     * @returns true if the player was equipped with the armor, false otherwise
+     */
+    bool equipHelmet(u8 protection);
 };
