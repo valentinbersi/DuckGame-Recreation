@@ -75,9 +75,10 @@ Vector2 Camera::calculateMaxDistance(const std::list<DuckData>& ducks, const flo
 }
 
 Vector2 Camera::centerOfDucks(const std::list<DuckData>& ducks) {
-    Vector2 center;
-    std::accumulate(ducks.begin(), ducks.end(), center,
-                    [](const Vector2& acc, const DuckData& duck) { return acc + duck.position; });
+    Vector2 center = std::accumulate(
+            ducks.begin(), ducks.end(), Vector2::ZERO,
+            [](const Vector2& sum, const DuckData& duck) { return sum + duck.position; });
+
     if (not ducks.empty())
         center /= static_cast<float>(ducks.size());
     return center;
