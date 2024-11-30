@@ -94,7 +94,8 @@ void ViewController::changeBackgroundBrush() {
         return;
     }
 
-    QPixmap scaledPixmap = pixmap.scaled(ui->centralwidget->size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+    QPixmap scaledPixmap = pixmap.scaled(ui->centralwidget->size(), Qt::KeepAspectRatioByExpanding,
+                                         Qt::SmoothTransformation);
     backgroundBrush = QBrush(scaledPixmap);
     update();
 }

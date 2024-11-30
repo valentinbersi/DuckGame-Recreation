@@ -53,12 +53,9 @@ GameStatus& GameStatus::operator=(GameStatus&& other) noexcept {
 }
 
 bool GameStatus::operator==(const GameStatus& other) const {
-    return roundEnded == other.roundEnded && 
-           gameEnded == other.gameEnded && 
-           setEnded == other.setEnded && 
-           ducks == other.ducks && 
-           itemPositions == other.itemPositions &&
-           blockPositions == other.blockPositions &&
+    return roundEnded == other.roundEnded && gameEnded == other.gameEnded &&
+           setEnded == other.setEnded && ducks == other.ducks &&
+           itemPositions == other.itemPositions && blockPositions == other.blockPositions &&
            itemSpawnerPositions == other.itemSpawnerPositions;
 }
 

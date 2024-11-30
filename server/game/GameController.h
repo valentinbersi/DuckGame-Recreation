@@ -1,10 +1,15 @@
 #pragma once
 
 #include <list>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "CollisionManager.h"
 #include "Level.h"
 #include "Player.h"
+
 
 struct LevelData;
 struct GameStatus;
@@ -33,7 +38,7 @@ class GameController final: public GameObject {
      */
     void onTreeExited(GameObject* object) override;
 
-     /**
+    /**
      * Load the level
      * @param level the level to load
      */
@@ -140,16 +145,16 @@ public:
     GameStatus status() const;
 
     /**
-     * Check if the game has ended, that is, 
+     * Check if the game has ended, that is,
      * if a player has enough rounds won.
-     * 
+     *
      * @return true if the game has ended, false otherwise
      */
     bool gameEnded() const;
 
     /**
      * Checks a round is in progress
-     * @return 
+     * @return
      */
     bool roundInProgress() const;
 
@@ -162,5 +167,4 @@ public:
      * Clears previous State and loads a new one
      */
     void loadNewState();
-
 };

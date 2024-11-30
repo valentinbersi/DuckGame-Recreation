@@ -34,11 +34,11 @@ BlockingQueue<std::unique_ptr<Command>>* GameMapMonitor::joinGame(
     if (game->is_alive()) {
         throw AlreadyStarted(matchID);
     }
-    
+
     if (game->isJoinable()) {
         throw MatchEnded(matchID);
     }
-    
+
     if (!game->canJoinGame(playerCount)) {
         throw NoSpaceLeft(matchID);
     }

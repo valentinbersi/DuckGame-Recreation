@@ -8,13 +8,13 @@
 #include "Area.h"
 #include "Bullet.h"
 #include "DuckData.h"
+#include "GameController.h"
 #include "GameTimer.h"
 #include "Item.h"
 #include "ItemFactory.h"
 #include "ItemID.h"
 #include "Layer.h"
 #include "WeaponFactory.h"
-#include "GameController.h"
 
 /**
  * Macro for easier event handling
@@ -113,7 +113,7 @@ void Player::onWeaponFired(const Vector2& recoil) {
 
 void Player::onWeaponNoMoreBullets() { flags.set(DuckData::Flag::Index::NoMoreBullets); }
 
-void Player::removeWeapon(){
+void Player::removeWeapon() {
     removeChild(WEAPON);
     weapon = nullptr;
 }
@@ -144,7 +144,7 @@ void Player::manageInput() {
     if (input.isActionPressed(CROUCH)) {
         manageCrouch();
     } else {
-        
+
         if (input.isActionPressed(JUMP) and _onGround)
             isJumping = true;
 
@@ -286,7 +286,7 @@ void Player::update(const float delta) {
         item->setPosition(globalPosition());
         getRoot<GameController>()->addToLevel("Item", std::move(item));
         removeWeapon();
-    } 
+    }
 
     if (_velocity.x() < 0)
         _movementDirection = DuckData::Direction::Left;
@@ -340,22 +340,20 @@ void Player::clearInputs() { input.reset(); }
 
 void Player::reset() {
     flags = 0;
-    if (weapon) removeWeapon();
+    if (weapon)
+        removeWeapon();
     setLayers(Layer::Player);
     clearInputs();
     _movementDirection = DuckData::Direction::Center;
     _viewDirection = DuckData::Direction::Right;
     _lastViewDirection = DuckData::Direction::Right;
-    acceleration = ACCELERATION,
-    airAcceleration = AIR_ACCELERATION;
+    acceleration = ACCELERATION, airAcceleration = AIR_ACCELERATION;
     isJumping = false;
-    interactWithItem= false;
+    interactWithItem = false;
     actionateWeapon = false;
     canKeepJumping = true;
 }
 
-bool Player::isDead() const {
-    return flags.test(DuckData::Flag::Index::IsDead);
-}
+bool Player::isDead() const { return flags.test(DuckData::Flag::Index::IsDead); }
 
 Player::~Player() = default;

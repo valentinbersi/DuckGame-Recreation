@@ -95,7 +95,7 @@ class Player final: public PhysicsObject {
      * Removes the player Weapon
      */
     void removeWeapon();
-    
+
 public:
     Player() = delete;
     Player(const Player& other) = delete;
@@ -238,7 +238,7 @@ public:
     void reset();
 
     /**
-     * 
+     *
      */
     bool isDead() const;
-}; 
+};

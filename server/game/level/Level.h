@@ -6,18 +6,16 @@
 #include "GameObject.h"
 #include "ItemSpawner.h"
 #include "LevelData.h"
+#include "Player.h"
 #include "SizedObjectData.h"
 #include "TerrainBlock.h"
-#include "Player.h"
 
-;
 
 class Level final: public GameObject {
     std::vector<TerrainBlock*> terrainBlocks;
     std::vector<ItemSpawner*> itemSpawners;
 
 public:
-
     /**
      * Create a new Level object
      */

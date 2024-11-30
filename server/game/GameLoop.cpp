@@ -38,10 +38,10 @@ void GameLoop::broadcast(std::shared_ptr<ServerMessage> message) {
     }
 }
 
-void GameLoop::processRound(const float deltaTime) {       
+void GameLoop::processRound(const float deltaTime) {
     game.updateInternal(deltaTime);
-    game.update(deltaTime);                
-    broadcast(std::make_shared<GameStatus>(std::move(game.status()))); 
+    game.update(deltaTime);
+    broadcast(std::make_shared<GameStatus>(std::move(game.status())));
 }
 
 void GameLoop::loadNewStateIfOver() {
@@ -62,10 +62,10 @@ void GameLoop::run() {
             const float deltaTime = timer.iterationStartSeconds().count();
             retrieveCurrentFrameCommands();
             processCurrentFrameCommands();
-            if(game.roundInProgress()){
+            if (game.roundInProgress()) {
                 processRound(deltaTime);
                 loadNewStateIfOver();
-            timer.iterationEnd(FPS);
+                timer.iterationEnd(FPS);
             }
         }
 
@@ -103,5 +103,3 @@ BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCo
 void GameLoop::JoinTransactionCompleted() {
     broadcast(std::make_shared<ReplyMessage>(game.playersCount()));
 }
-
-

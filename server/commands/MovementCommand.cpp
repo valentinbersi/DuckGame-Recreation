@@ -3,7 +3,7 @@
 MovementCommand::MovementCommand(PlayerID id, InputAction action): Command(id), action(action) {}
 
 void MovementCommand::execute(GameController& gameController) {
-    if(!gameController.roundInProgress()){
+    if (!gameController.roundInProgress()) {
         return;
     }
     Player& player = gameController.getPlayer(id);

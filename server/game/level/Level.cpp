@@ -22,7 +22,7 @@ Level::Level(const LevelData& level, [[maybe_unused]] const HashMap<u16, Player*
 
     auto iterPlayers = players.begin();
     auto iterSpawnPoints = level.duckSpawnPoints.begin();
-    while(iterPlayers != players.end() && iterSpawnPoints != level.duckSpawnPoints.end()) {
+    while (iterPlayers != players.end() && iterSpawnPoints != level.duckSpawnPoints.end()) {
         iterPlayers->second->setPosition(*iterSpawnPoints);
         ++iterPlayers;
         ++iterSpawnPoints;

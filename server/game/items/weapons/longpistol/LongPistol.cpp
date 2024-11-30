@@ -4,9 +4,9 @@
 #include <utility>
 
 #include "Bullet.h"
+#include "GameController.h"
 #include "Math.h"
 #include "Player.h"
-#include "GameController.h"
 
 #define AMMO 6
 

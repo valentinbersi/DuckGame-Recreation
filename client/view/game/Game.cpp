@@ -174,8 +174,12 @@ void Game::updatePlayers(
                            duck.extraData[DuckData::Flag::Index::Armor],
                            duck.extraData[DuckData::Flag::Index::IsShooting],
                            duck.extraData[DuckData::Flag::Index::LookingUp],
-                           flipped, hasGun, duck.extraData[DuckData::Flag::Index::NoMoreBullets], duck.extraData[DuckData::Flag::Index::IsDead],
-                           duck.gunID, duck.direction};
+                           flipped,
+                           hasGun,
+                           duck.extraData[DuckData::Flag::Index::NoMoreBullets],
+                           duck.extraData[DuckData::Flag::Index::IsDead],
+                           duck.gunID,
+                           duck.direction};
 
         soundManager.checkSounds(state);
 

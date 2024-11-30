@@ -57,27 +57,27 @@ void GameController::roundUpdate(u8 playerAlive, PlayerID playerID) {
     if (playerAlive <= 1) {
         ++roundsPlayed;
         roundEnded = true;
-        if (playerAlive) { //hay un player vivo
+        if (playerAlive) {  // hay un player vivo
             players.at(playerID)->winRound();
         }
         u32 maxRoundsWon = 0;
-        for (auto& [id, player] : players){
-            if (player->roundsWon() > maxRoundsWon){
+        for (auto& [id, player]: players) {
+            if (player->roundsWon() > maxRoundsWon) {
                 // DuckData::Id playerID = static_cast<DuckData::Id>(id);
                 tie = false;
                 maxRoundsWon = player->roundsWon();
-                
-            } else if (player->roundsWon() == maxRoundsWon){
+
+            } else if (player->roundsWon() == maxRoundsWon) {
                 tie = true;
             }
         }
     }
-    setEnded = (roundsPlayed%5==0 && roundsPlayed) ? true : false; 
-    _gameEnded = (setEnded && !tie)? true : false;
+    setEnded = (roundsPlayed % 5 == 0 && roundsPlayed) ? true : false;
+    _gameEnded = (setEnded && !tie) ? true : false;
 }
 
 void GameController::clearState() {
-    for (auto& [id, player] : players){
+    for (auto& [id, player]: players) {
         player->reset();
     }
     items.clear();
@@ -101,7 +101,7 @@ GameController::GameController(std::vector<LevelData>& levelsData): levelsData(l
 }
 
 void GameController::start() {
-    loadLevel(levelsData[2]); //seria random entre el size del map
+    loadLevel(levelsData[2]);  // seria random entre el size del map
     roundEnded = false;
 }
 
@@ -109,9 +109,9 @@ void GameController::update(const float delta) {
     collisionManager.processCollisions(delta);
     u8 alivePlayers(0);
     PlayerID aliveID(0);
-    for (auto& [id, player] : players){
+    for (auto& [id, player]: players) {
         player->clearInputs();
-        if (!player->isDead()){
+        if (!player->isDead()) {
             aliveID = id;
             ++alivePlayers;
         }
@@ -154,7 +154,7 @@ void GameController::removePlayer(const PlayerID playerID) {
         throw PlayerNotFound(playerID);
 
     (void)removeChild(PLAYER + std::to_string(playerID));
-    _gameEnded = (!players.size())? true : false;
+    _gameEnded = (!players.size()) ? true : false;
 }
 
 Player& GameController::getPlayer(const PlayerID playerID) const { return *players.at(playerID); }
@@ -165,7 +165,8 @@ bool GameController::exceedsPlayerMax(const u8 playerAmount) {
     return players.size() + playerAmount > MAX_PLAYERS;
 }
 
-void GameController::addToLevel(const std::string& nodeName, std::unique_ptr<CollisionObject> physicObject) {
+void GameController::addToLevel(const std::string& nodeName,
+                                std::unique_ptr<CollisionObject> physicObject) {
     level->addChild(nodeName, std::move(physicObject));
 }
 
@@ -185,9 +186,7 @@ bool GameController::gameEnded() const { return _gameEnded; }
 
 bool GameController::roundInProgress() const { return !roundEnded; }
 
-void GameController::startNewRound() {
-    roundEnded = false;
-}
+void GameController::startNewRound() { roundEnded = false; }
 
 void GameController::loadNewState() {
     clearState();

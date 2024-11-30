@@ -1,6 +1,6 @@
 #include "Command.h"
 
-class NextRoundCommand : public Command { 
+class NextRoundCommand: public Command {
 public:
     /**
      * Creates a new NextRoundCommand

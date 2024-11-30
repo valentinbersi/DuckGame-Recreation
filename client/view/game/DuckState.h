@@ -35,9 +35,9 @@ struct DuckState {
             gunEquipped(ItemID::NONE),
             direction(DuckData::Direction::Right) {}
 
-    DuckState(bool playingDead, bool inAir, bool flapping, bool moving,
-              bool hasHelmet, bool hasChestplate, bool isShooting, bool lookingUp, bool flipped,
-              bool hasGun, bool noMoreBullets, bool isDead, ItemID gunEquipped, DuckData::Direction direction)
+    DuckState(bool playingDead, bool inAir, bool flapping, bool moving, bool hasHelmet,
+              bool hasChestplate, bool isShooting, bool lookingUp, bool flipped, bool hasGun,
+              bool noMoreBullets, bool isDead, ItemID gunEquipped, DuckData::Direction direction)
 
             :
             playingDead(playingDead),

@@ -37,7 +37,6 @@ struct DuckData final: SizedObjectData {
          * Convert the direction to a value
          * @return the value of the direction
          */
-        // cppcheck-suppress noExplicitConstructor
         operator Value() const;
 
         /**

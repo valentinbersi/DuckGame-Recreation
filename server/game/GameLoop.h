@@ -93,5 +93,4 @@ public:
      * Indicates to all clients that player/s has joined
      */
     void JoinTransactionCompleted();
-
 };

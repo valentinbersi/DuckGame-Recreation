@@ -2,9 +2,9 @@
 
 #include <utility>
 
+#include "GameController.h"
 #include "ItemFactory.h"
 #include "Layer.h"
-#include "GameController.h"
 
 #define SPAWN_TIME_RANGE 5.0f, 20.0f
 #define SPAWNER_DIMENSIONS 3.5f, 1.5f
@@ -32,8 +32,8 @@ void ItemSpawner::onTimeout() {
     spawnedItem = item->getReference<Item>();
     getRoot<GameController>()->addToLevel("Item", std::move(item));
     timer->setTimeout(randomGenerator.generateRandomFloat());
-} 
- 
+}
+
 void ItemSpawner::update([[maybe_unused]] const float delta) {
     if (spawnedItem.expired() && !timer->started()) {
         timer->start();
