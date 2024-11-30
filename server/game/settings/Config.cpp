@@ -354,12 +354,14 @@ void Config::Weapons::load() {
 
     try {
         minSpawnTime_ = config[MIN_SPAWN_TIME].as<float>();
+        printf("minSpawnTime_: %f\n", minSpawnTime_);
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(MIN_SPAWN_TIME_ERROR);
     }
 
     try {
         maxSpawnTime_ = config[MAX_SPAWN_TIME].as<float>();
+        printf("maxSpawnTime_: %f\n", maxSpawnTime_);
     } catch (const YAML::BadConversion& _) {
         throw BadConfigFile(MAX_SPAWN_TIME_ERROR);
     }

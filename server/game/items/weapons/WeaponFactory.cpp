@@ -2,6 +2,8 @@
 
 #include "Config.h"
 #include "LongPistol.h"
+#include "ShotGun.h"
+#include "Sniper.h"
 
 #define INVALID_ID "Invalid ItemID"
 
@@ -28,6 +30,19 @@ std::unordered_map<ItemID, std::function<std::unique_ptr<EquippableWeapon>()>>
                              ItemID::Magnum, Config::Weapons::Magnum::ammo(),
                              Config::Weapons::Magnum::recoil(), Config::Weapons::Magnum::reach(),
                              Config::Weapons::Magnum::dispersion());
+                 }},
+                 {ItemID::Shotgun, [] {
+                     return std::make_unique<Shotgun>(
+                             ItemID::Shotgun, Config::Weapons::Shotgun::ammo(),
+                             Config::Weapons::Shotgun::recoil(), Config::Weapons::Shotgun::minReach(),
+                             Config::Weapons::Shotgun::maxReach(), Config::Weapons::Shotgun::dispersion(), 
+                             Config::Weapons::Shotgun::pelletsPerShot());
+                 }},
+                 {ItemID::Sniper, [] {
+                     return std::make_unique<Sniper>(
+                             ItemID::Sniper, Config::Weapons::Sniper::ammo(),
+                             Config::Weapons::Sniper::recoil(), Config::Weapons::Sniper::reach(),
+                             Config::Weapons::Sniper::dispersion(), Config::Weapons::Sniper::reloadTime());
                  }}};
 
 std::unique_ptr<EquippableWeapon> WeaponFactory::createWeapon(const ItemID id) {

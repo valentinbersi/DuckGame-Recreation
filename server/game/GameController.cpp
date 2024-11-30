@@ -138,11 +138,11 @@ DuckData::Id GameController::addPlayer(const PlayerID playerID) {
 
     const auto newPlayer = new Player(duckID);
 
-    newPlayer->connect(Events::TreeEntered,
-                       eventHandler(&GameController::onTreeEntered, GameObject*));
+    // newPlayer->connect(Events::TreeEntered,
+    //                    eventHandler(&GameController::onTreeEntered, GameObject*));
 
-    newPlayer->connect(Events::TreeExited,
-                       eventHandler(&GameController::onTreeExited, GameObject*));
+    // newPlayer->connect(Events::TreeExited,
+    //                    eventHandler(&GameController::onTreeExited, GameObject*));
 
     addChild(PLAYER + id, newPlayer);
     players.emplace(playerID, newPlayer);

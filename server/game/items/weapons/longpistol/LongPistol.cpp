@@ -9,7 +9,6 @@
 #include "Player.h"
 
 #define BULLET_TILES 20
-#define BULLET_SPEED 400
 #define BULLET_DAMAGE 10
 
 LongPistol::LongPistol(const ItemID id, const u8 ammo, Vector2 recoil, const float reach,
@@ -24,22 +23,22 @@ void LongPistol::actionate() {
         return;
 
     firing = true;
-    fire();
+    if(fire()){
+        const Vector2 direction =
+                (parent<Player>()->viewDirection() == DuckData::Direction::Right ? Vector2::RIGHT :
+                                                                                Vector2::LEFT)
+                        .rotated(randomGenerator());
 
-    const Vector2 direction =
-            (parent<Player>()->viewDirection() == DuckData::Direction::Right ? Vector2::RIGHT :
-                                                                               Vector2::LEFT)
-                    .rotated(randomGenerator());
+        auto bullet = std::make_unique<Bullet>(direction, reach);
+        bullet->setGlobalPosition(
+                parent<Player>()->globalPosition() +
+                        (parent<Player>()->viewDirection() == DuckData::Direction::Right ?
+                                Vector2::RIGHT * 2 :
+                                Vector2::LEFT * 2),
+                Force::Yes);
 
-    auto bullet = std::make_unique<Bullet>(direction * BULLET_SPEED, reach);
-    bullet->setGlobalPosition(
-            parent<Player>()->globalPosition() +
-                    (parent<Player>()->viewDirection() == DuckData::Direction::Right ?
-                             Vector2::RIGHT * 2 :
-                             Vector2::LEFT * 2),
-            Force::Yes);
-
-    getRoot<GameController>()->addToLevel("Bullet", std::move(bullet));
+        getRoot<GameController>()->addToLevel("Bullet", std::move(bullet));
+    }
 }
 
 void LongPistol::deactionate() { firing = false; }

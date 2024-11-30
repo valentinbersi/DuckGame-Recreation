@@ -2,12 +2,15 @@
 
 #include "Player.h"
 
-void EquippableWeapon::fire() {
-    if (ammo_ == INeedMoreBullets)
-        return Subject::fire(Events::NoMoreBullets);
+bool EquippableWeapon::fire() {
+    if (ammo_ == INeedMoreBullets){
+        Subject::fire(Events::NoMoreBullets);
+        return false;
+    }
 
     --ammo_;
     Subject::fire<const Vector2&>(Events::Fired, recoil);
+    return true;
 }
 
 EquippableWeapon::EquippableWeapon(const ItemID id, const u8 ammo, Vector2 recoil):

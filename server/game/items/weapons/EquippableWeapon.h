@@ -13,9 +13,10 @@ class EquippableWeapon: public GameObject {
 protected:
     /**
      * Fires the weapon, this means decrementing the ammo. If the ammo is 0, it will fire the
-     * NoMoreBullets event, otherwise it will fire the Fired event
+     * NoMoreBullets event, otherwise it will fire the Fired event.
+     * @return True if the weapon was fired, false otherwise
      */
-    virtual void fire();
+    virtual bool fire();
 
 public:
     constexpr static u8 INeedMoreBullets = 0;
