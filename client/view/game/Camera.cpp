@@ -6,7 +6,7 @@ Camera::Camera(int& windowWidth, int& windowHeight):
         viewRect(Vector2::ZERO, {0, 0}),
         ducksArrived(false) {}
 
-void Camera::update(std::list<DuckData>& ducks, const float deltaTime) {
+void Camera::update(const std::list<DuckData>& ducks, const float deltaTime) {
     auto [center, maxDistance, aspectRatio] = updateInfo(ducks);
     updateZoom(center, maxDistance, aspectRatio, deltaTime);
 
@@ -14,7 +14,7 @@ void Camera::update(std::list<DuckData>& ducks, const float deltaTime) {
         ducksArrived = true;
 }
 
-void Camera::forceUpdate(std::list<DuckData>& ducks) {
+void Camera::forceUpdate(const std::list<DuckData>& ducks) {
     auto [center, maxDistance, aspectRatio] = updateInfo(ducks);
     updateZoom(center, maxDistance, aspectRatio, 1, Force::Yes);
 
