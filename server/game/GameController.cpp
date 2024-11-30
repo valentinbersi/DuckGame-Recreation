@@ -3,6 +3,7 @@
 #include <ranges>
 #include <string>
 
+#include "Config.h"
 #include "GameStatus.h"
 #include "Layer.h"
 #include "LevelData.h"
@@ -72,8 +73,8 @@ void GameController::roundUpdate(u8 playerAlive, PlayerID playerID) {
             }
         }
     }
-    setEnded = (roundsPlayed % 5 == 0 && roundsPlayed) ? true : false;
-    _gameEnded = ((setEnded && !tie) || _gameEnded) ? true : false;
+    setEnded = roundsPlayed % Config::Match::rounds() == 0 && roundsPlayed;
+    _gameEnded = (setEnded && !tie) || _gameEnded;
 }
 
 void GameController::clearState() {
@@ -155,7 +156,7 @@ void GameController::removePlayer(const PlayerID playerID) {
 
     (void)removeChild(PLAYER + std::to_string(playerID));
     players.erase(playerID);
-    _gameEnded = (!players.size()) ? true : false;
+    _gameEnded = players.size() == 0;
 }
 
 Player& GameController::getPlayer(const PlayerID playerID) const { return *players.at(playerID); }
