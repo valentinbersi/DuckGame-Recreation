@@ -2,6 +2,7 @@
 
 #include <ranges>
 #include <string>
+#include <utility>
 
 #include "Config.h"
 #include "GameStatus.h"
