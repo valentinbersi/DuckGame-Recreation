@@ -65,8 +65,8 @@ void GameLoop::run() {
             if (game.roundInProgress()) {
                 processRound(deltaTime);
                 loadNewStateIfOver();
-                timer.iterationEnd(FPS);
             }
+            timer.iterationEnd(FPS);
         }
 
     } catch (const ClosedQueue& err) {

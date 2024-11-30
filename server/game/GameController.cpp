@@ -73,7 +73,7 @@ void GameController::roundUpdate(u8 playerAlive, PlayerID playerID) {
         }
     }
     setEnded = (roundsPlayed % 5 == 0 && roundsPlayed) ? true : false;
-    _gameEnded = (setEnded && !tie) ? true : false;
+    _gameEnded = ((setEnded && !tie) || _gameEnded) ? true : false;
 }
 
 void GameController::clearState() {
@@ -154,6 +154,7 @@ void GameController::removePlayer(const PlayerID playerID) {
         throw PlayerNotFound(playerID);
 
     (void)removeChild(PLAYER + std::to_string(playerID));
+    players.erase(playerID);
     _gameEnded = (!players.size()) ? true : false;
 }
 
