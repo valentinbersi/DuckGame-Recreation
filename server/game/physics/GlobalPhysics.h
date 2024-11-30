@@ -8,7 +8,7 @@ class GlobalPhysics {
     /**
      * Construct a gloabal physics object
      */
-    explicit GlobalPhysics();
+    GlobalPhysics();
 
 public:
     GlobalPhysics(const GlobalPhysics& other) = delete;
