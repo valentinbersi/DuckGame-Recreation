@@ -17,11 +17,9 @@ class WaitingPage: public QWidget {
     Q_OBJECT
 
 private:
-    // cppcheck-suppress unusedStructMember
     Ui::WaitingPage* ui;
     Communicator& communicator;
     GameInfo& gameInfo;
-    // cppcheck-suppress unusedStructMember
     QTimer* timer;
 
     //    std::unordered_map<DuckData::Id, QPixmap> mapDuckIcons =

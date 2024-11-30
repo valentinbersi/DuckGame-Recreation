@@ -2,7 +2,7 @@
 
 #include <string>
 #include <utility>
-
+#include "Force.h"
 #include "Types.h"
 
 /**
@@ -89,5 +89,5 @@ public:
     /**
      * Resets the inputs that are just pressed.
      */
-    void reset();
+    void reset(Force force = Force::No);
 };

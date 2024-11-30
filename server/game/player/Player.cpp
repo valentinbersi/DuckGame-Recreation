@@ -274,7 +274,7 @@ void Player::stopLookUp() { input.releaseAction(LOOK_UP); }
 void Player::start() {}
 
 void Player::update(const float delta) {
-    std::cout << "Position: " << globalPosition() << std::endl;
+    // std::cout << "Position: " << globalPosition() << std::endl;
 
     resetState();
     if (flags.test(DuckData::Flag::Index::IsDead))
@@ -346,14 +346,14 @@ DuckData Player::status() {
             wonRounds};
 }
 
-void Player::clearInputs() { input.reset(); }
+void Player::clearInputs(Force force) { input.reset(force); }
 
 void Player::reset() {
     flags.reset();
     if (weapon)
         removeWeapon();
     setLayers(Layer::Player);
-    clearInputs();
+    clearInputs(Force::Yes);
     _movementDirection = DuckData::Direction::Center;
     _viewDirection = DuckData::Direction::Right;
     _lastViewDirection = DuckData::Direction::Right;

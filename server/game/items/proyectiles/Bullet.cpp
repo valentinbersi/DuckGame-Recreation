@@ -6,6 +6,7 @@
 #include "Player.h"
 
 #define BULLET_DIMENSIONS 0.375, 0.375
+#define BULLET_SPEED 400
 
 /**
  * Macro for easier event handling
@@ -20,9 +21,9 @@ void Bullet::onCollision(CollisionObject* object) const {
         static_cast<Player*>(object)->kill();
 }
 
-Bullet::Bullet(Vector2 velocity, const u8 tiles):
+Bullet::Bullet(Vector2 direction, const u8 tiles):
         PhysicsObject(Vector2::ZERO, Layer::None, Layer::Player | Layer::Wall | Layer::Box,
-                      BULLET_DIMENSIONS, Gravity::Disabled, std::move(velocity),
+                      BULLET_DIMENSIONS, Gravity::Disabled, std::move(direction * BULLET_SPEED),
                       CollisionType::Stop),
         tiles(tiles) {
     connect(Events::Collision, eventHandler(&Bullet::onCollision, CollisionObject*));

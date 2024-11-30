@@ -223,16 +223,15 @@ public:
     void stopLookUp();
 
     /**
-     * Clear player's inputs that are just pressed, manains
-     * input that are being pressed.
+     * Clear player's inputs depending on force value
      */
-    void clearInputs();
+    void clearInputs(Force force = Force::No);
 
     /**
      * Reset the player's state to the start of a round
      * it only mantains the amount of rounds won.
      */
-    void reset();
+    void reset();    
 
     /**
      *
