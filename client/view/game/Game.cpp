@@ -117,8 +117,8 @@ void Game::getSnapshot() {
     roundFinished = snapshot->roundEnded;
     setFinished = snapshot->setEnded;
     gameFinished = snapshot->gameEnded;
-
-    for (auto& duck: snapshot->ducks) ducks.push_back(std::move(duck));
+    std::ranges::transform(snapshot->ducks, std::back_inserter(ducks),
+                           [](DuckData& duck) { return std::move(duck); });
     for (auto& duck: snapshot->ducks) {
         if (!duck.extraData[DuckData::Flag::Index::IsDead]) {
             ducksToRender.push_back(std::move(duck));
