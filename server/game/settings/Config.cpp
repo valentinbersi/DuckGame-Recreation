@@ -1,7 +1,7 @@
+#include "Config.h"
+
 #include <limits>
 #include <utility>
-
-#include "Config.h"
 
 #define GRENADE "grenade"
 #define BANANA "banana"
@@ -18,18 +18,18 @@
 #define NOTHING "nothing"
 
 const HashMap<std::string, ItemID> Config::itemIDs = {{GRENADE, ItemID::Grenade},
-                                                            {BANANA, ItemID::Banana},
-                                                            {PEW_PEW_LASER, ItemID::PewPewLaser},
-                                                            {LASER_RIFLE, ItemID::LaserRifle},
-                                                            {AK_47, ItemID::Ak47},
-                                                            {DUEL_PISTOL, ItemID::DuelPistol},
-                                                            {COWBOY_PISTOL, ItemID::CowboyPistol},
-                                                            {MAGNUM, ItemID::Magnum},
-                                                            {SHOTGUN, ItemID::Shotgun},
-                                                            {SNIPER, ItemID::Sniper},
-                                                            {HELMET, ItemID::Helmet},
-                                                            {ARMOR, ItemID::Armor},
-                                                            {NOTHING, ItemID::NONE}};
+                                                      {BANANA, ItemID::Banana},
+                                                      {PEW_PEW_LASER, ItemID::PewPewLaser},
+                                                      {LASER_RIFLE, ItemID::LaserRifle},
+                                                      {AK_47, ItemID::Ak47},
+                                                      {DUEL_PISTOL, ItemID::DuelPistol},
+                                                      {COWBOY_PISTOL, ItemID::CowboyPistol},
+                                                      {MAGNUM, ItemID::Magnum},
+                                                      {SHOTGUN, ItemID::Shotgun},
+                                                      {SNIPER, ItemID::Sniper},
+                                                      {HELMET, ItemID::Helmet},
+                                                      {ARMOR, ItemID::Armor},
+                                                      {NOTHING, ItemID::NONE}};
 
 std::string Config::configDirectory{"/etc/DuckGame/"};     // NOLINT(runtime/string)
 std::string Config::mapsDirectory_{"/etc/DuckGame/maps"};  // NOLINT(runtime/string)
@@ -115,8 +115,7 @@ u8 Config::Armor::helmet_{};
 u8 Config::Match::rounds_{};
 u8 Config::Match::pointsToWin_{};
 
-Config::BadConfigFile::BadConfigFile(const std::string& message):
-        std::runtime_error(message) {}
+Config::BadConfigFile::BadConfigFile(const std::string& message): std::runtime_error(message) {}
 
 void Config::setConfigPath(std::string path) { configDirectory = std::move(path); }
 void Config::setMapsDirectory(std::string maps) { mapsDirectory_ = std::move(maps); }
