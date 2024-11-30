@@ -53,7 +53,7 @@ Camera::UpdateInfo Camera::updateInfo(std::list<DuckData>& ducks) const {
     return info;
 }
 
-Vector2 Camera::calculateMaxDistance(std::list<DuckData>& ducks, const float aspectRatio) {
+Vector2 Camera::calculateMaxDistance(const std::list<DuckData>& ducks, const float aspectRatio) {
     Vector2 maxDistance;
 
     for (auto it1 = ducks.begin(); it1 != ducks.end(); ++it1) {

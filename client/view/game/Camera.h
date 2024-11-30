@@ -57,7 +57,7 @@ private:
     UpdateInfo updateInfo(std::list<DuckData>& ducks) const;
 
     // Calculates the maximum distance between any ducks in the list
-    static Vector2 calculateMaxDistance(std::list<DuckData>& ducks, float aspectRatio);
+    static Vector2 calculateMaxDistance(const std::list<DuckData>& ducks, float aspectRatio);
 
     // Calculates the center point of all ducks in the list
     static Vector2 centerOfDucks(const std::list<DuckData>& ducks);
