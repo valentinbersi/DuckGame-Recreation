@@ -27,8 +27,8 @@ int Communicator::percentOfMessagesToReceive(int amount) {
 }
 
 std::optional<GameStatus> Communicator::tryRecvLast() {
-    return recvQueueGame.tryPopPercent([this](int amount) 
-    { return percentOfMessagesToReceive(amount); });
+    return recvQueueGame.tryPopPercent(
+            [this](int amount) { return percentOfMessagesToReceive(amount); });
 }
 
 std::optional<ReplyMessage> Communicator::tryRecvReply() { return recvQueueLobby.try_pop(); }
