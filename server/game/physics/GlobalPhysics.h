@@ -2,7 +2,30 @@
 
 #include "Vector2.h"
 
-struct GlobalPhysics {
-    static const float gravityScalar;
-    static const Vector2 gravity;
+class GlobalPhysics {
+    const float gravityScalar;
+
+    /**
+     * Construct a gloabal physics object
+     */
+    explicit GlobalPhysics();
+
+public:
+    GlobalPhysics(const GlobalPhysics& other) = delete;
+    GlobalPhysics(GlobalPhysics&& other) noexcept = delete;
+    GlobalPhysics& operator=(const GlobalPhysics& other) = delete;
+    GlobalPhysics& operator=(GlobalPhysics&& other) noexcept = delete;
+    ~GlobalPhysics();
+
+    /**
+     * Get the global physics object
+     * @return The global physics object
+     */
+    static GlobalPhysics& get();
+
+    /**
+     * Get the gravity vector
+     * @return The gravity vector
+     */
+    Vector2 gravity() const;
 };

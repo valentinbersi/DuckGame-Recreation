@@ -2,6 +2,13 @@
 
 #include "Config.h"
 
-const float GlobalPhysics::gravityScalar(Config::Physics::gravity());
+GlobalPhysics::GlobalPhysics(): gravityScalar(Config::Physics::gravity()) {}
 
-const Vector2 GlobalPhysics::gravity(Vector2(0, 1) * gravityScalar);
+GlobalPhysics::~GlobalPhysics() = default;
+
+GlobalPhysics& GlobalPhysics::get() {
+    static GlobalPhysics instance;
+    return instance;
+}
+
+Vector2 GlobalPhysics::gravity() const { return Vector2::DOWN * gravityScalar; }

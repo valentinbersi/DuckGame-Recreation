@@ -38,9 +38,6 @@ Level::Level(const LevelData& level, const HashMap<u16, Player*>& players) {
         addChild("ItemSpawner", item);
     }
 
-    for (const auto& duckSpawnPoint: level.duckSpawnPoints)
-        addChild("SpawnPoint", new SpawnPoint(duckSpawnPoint));
-
     auto iterPlayers = players.begin();
     auto iterSpawnPoints = level.duckSpawnPoints.begin();
     while (iterPlayers != players.end() && iterSpawnPoints != level.duckSpawnPoints.end()) {

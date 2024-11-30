@@ -349,7 +349,7 @@ DuckData Player::status() {
 void Player::clearInputs() { input.reset(); }
 
 void Player::reset() {
-    flags = 0;
+    flags.reset();
     if (weapon)
         removeWeapon();
     setLayers(Layer::Player);
@@ -357,7 +357,6 @@ void Player::reset() {
     _movementDirection = DuckData::Direction::Center;
     _viewDirection = DuckData::Direction::Right;
     _lastViewDirection = DuckData::Direction::Right;
-    acceleration = ACCELERATION, airAcceleration = AIR_ACCELERATION;
     isJumping = false;
     interactWithItem = false;
     actionateWeapon = false;

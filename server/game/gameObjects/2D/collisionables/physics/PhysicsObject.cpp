@@ -23,7 +23,7 @@ PhysicsObject::~PhysicsObject() = default;
 
 void PhysicsObject::updateInternal(const float delta) {
     if (gravity == Gravity::Enabled)
-        _velocity += GlobalPhysics::gravity * delta;
+        _velocity += GlobalPhysics::get().gravity() * delta;
 
     CollisionObject::updateInternal(delta);
 }
