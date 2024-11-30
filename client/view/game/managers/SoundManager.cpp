@@ -6,7 +6,7 @@
 #define CUACK "assets/sounds/cuack.mp3"
 #define NO_MORE_BULLETS "assets/sounds/noMoreBullets.mp3"
 
-SoundManager::SoundManager() {
+SoundManager::SoundManager() : firstFrameDead(true) {
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 512) < 0)
         std::cerr << "Error: " << Mix_GetError() << std::endl;
     playMusic();
@@ -62,7 +62,8 @@ void SoundManager::playEffect(const std::string& path) {
 void SoundManager::checkSounds(DuckState& state) {
     if (state.isShooting)
         playSound(state.gunEquipped);
-    if (state.beingDamaged)
+    if (state.isDead || firstFrameDead)
+        firstFrameDead = false;
         playEffect(CUACK);
     if (state.noMoreBullets)
         playEffect(NO_MORE_BULLETS);

@@ -38,7 +38,7 @@ public:
 private:
     // This method adjusts the size of the view rectangle based on the maximum distance between
     // ducks and the aspect ratio of the window. It then centers the view rectangle on the provided
-    // center point.
+    // center point
     void updateZoom(const Vector2& center, const Vector2& maxDistance, float aspectRatio,
                     float deltaTime, Force = Force::No);
 
@@ -53,12 +53,13 @@ private:
         float aspectRatio;
     };
 
+    // Gets the info from the camera, like the aspect ratio, center, and max distance between ducks
     UpdateInfo updateInfo(std::list<DuckData>& ducks) const;
 
-    // Calculates the maximum distance between any ducks in the list.
+    // Calculates the maximum distance between any ducks in the list
     static Vector2 calculateMaxDistance(std::list<DuckData>& ducks, float aspectRatio);
 
-    // Calculates the center point of all ducks in the list.
+    // Calculates the center point of all ducks in the list
     static Vector2 centerOfDucks(const std::list<DuckData>& ducks);
 
     int& windowWidth;

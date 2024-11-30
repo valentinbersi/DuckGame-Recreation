@@ -21,13 +21,10 @@ void GameLauncher::exec() {
         if (startGame) {
             Game game(communicator, twoPlayersLocal);
             game.init();
-        } else {
-            qDebug() << "!startGame";
         }
     } catch (const LibError& libError) {
         syslog(LOG_CRIT, "%s", libError.what());
     }
-    qDebug() << "final exec";
 }
 
 void GameLauncher::startedSDL() { startGame = true; }

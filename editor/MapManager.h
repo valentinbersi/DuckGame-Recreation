@@ -16,5 +16,5 @@ public:
     static void exportMap(const std::list<Object>& objects, const std::string& mapName,
                           int mapWidth, int mapHeight, const std::string& background);
     static bool importMap(std::list<Object>& objects, const std::string& mapName, int& mapWidth,
-                          int& mapHeight, const std::string& background);
+                          int& mapHeight, std::string& background);
 };

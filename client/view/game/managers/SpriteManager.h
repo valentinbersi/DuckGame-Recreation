@@ -90,6 +90,7 @@ private:
     bool isMoving;
     bool inAir;
     bool flapping;
+    bool dead;
     std::unique_ptr<Spritesheet> spritesheet;
     std::unique_ptr<WeaponSpriteManager> weaponSpriteManager;
     DuckState state;
