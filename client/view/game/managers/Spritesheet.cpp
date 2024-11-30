@@ -72,7 +72,7 @@ void Spritesheet::drawHelmet(SDL2pp::Rect& playerPosition, bool flip) {
                      &m_clip, &playerPosition, angle, nullptr, flipType);
 }
 
-void Spritesheet::drawWeapon(SDL2pp::Rect& playerPosition, bool flip, std::string path) {
+void Spritesheet::drawWeapon(SDL2pp::Rect& playerPosition, bool flip, const std::string& path) {
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     SDL_RenderCopyEx(renderer.Get(), TextureManager::getTexture(path, renderer).Get(), &m_clip,
                      &playerPosition, angle, nullptr, flipType);
