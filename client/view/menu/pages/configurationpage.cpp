@@ -71,9 +71,7 @@ QString getColor(DuckData::Id id) {
 bool configurationPage::initMatchRequest(LobbyRequest& request) {
     auto message =
             std::make_unique<LobbyMessage>(request, gameInfo.playersNumber, gameInfo.matchID);
-    qDebug() << message->request << message->playerCount << message->matchId;
     if (communicator.trysend(std::move(message))) {
-        // chequear si se envio ¿?
         ReplyMessage replyMessage = communicator.blockingRecv();
         if (replyMessage.matchID == 0) {
             QMessageBox::warning(this, "Error", QString::fromStdString(replyMessage.error));
@@ -83,11 +81,8 @@ bool configurationPage::initMatchRequest(LobbyRequest& request) {
         gameInfo.matchID = replyMessage.matchID;
         gameInfo.Duck1Color = replyMessage.color1;
         gameInfo.Duck2Color = replyMessage.color2;
-        qDebug() << "color 1:" << getColor(gameInfo.Duck1Color)
-                 << "color 2:" << getColor(gameInfo.Duck2Color);
         return true;
     } else {
-        qDebug() << "no se envio PLAY";  // deberia mostrarle un mensaje al usuario
         return false;
     }
 }

@@ -14,13 +14,15 @@ private:
     int gridWidth;              /** ancho de la grilla (no del mapa) */
     int gridHeight;             /** alto de la grilla (no del mapa) */
     std::list<Object>& objects; /** referencia a la lista de objetos del editor */
-    QMap<QGraphicsPixmapItem*, Object*> objectsMap; /** */
+    QMap<QGraphicsPixmapItem*, Object*> objectsMap; /** map usado para asociar el item gráfico de Qt con el Object en memoria*/
 
-    QGraphicsPixmapItem* selectedItem; /** */
-    QPointF originalItemPos;           /** */
+    QGraphicsPixmapItem* selectedItem; /** apunta al item seleccionado que quiere moverse*/
+    QPointF originalItemPos;           /** posicion original del item que esta siendo seleccionado*/
 
-    int ducksCount;             /** */
-    ObjectType objectTypeToAdd; /** */
+    int ducksCount;             /** cantidad de spawn de patos en el mapa */
+    ObjectType objectTypeToAdd; /** tipo de objeto seleccionado para agregar */
+
+    /** flags que indican si se esta queriendo agregar o eliminar un objeto del mapa*/
     bool isAddingObject = false;
     bool isDeletingObject = false;
 

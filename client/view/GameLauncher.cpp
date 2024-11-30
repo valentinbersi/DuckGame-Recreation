@@ -21,7 +21,6 @@ void GameLauncher::exec() {
         if (startGame) {
             Game game(communicator, twoPlayersLocal);
             game.init();
-        } else {
         }
     } catch (const LibError& libError) {
         syslog(LOG_CRIT, "%s", libError.what());
