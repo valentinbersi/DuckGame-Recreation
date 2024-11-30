@@ -45,7 +45,7 @@ void ServerSendProtocol::sendBlock(const SizedObjectData& objData) {
 
 void ServerSendProtocol::sendReplyMessage(u16 matchID, u8 startGame, u8 connectedPlayers,
                                           DuckData::Id color1, DuckData::Id color2,
-                                          std::string& error) {
+                                          const std::string& error) {
     sendShort(matchID);
     sendByte(startGame);
     sendByte(connectedPlayers);
