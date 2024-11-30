@@ -21,14 +21,14 @@ bool Communicator::trysend(std::unique_ptr<ClientMessage> message) {
 
 std::optional<GameStatus> Communicator::tryrecv() { return recvQueueGame.try_pop(); }
 
+int Communicator::percentOfMessagesToReceive(int amount) {
+    int step = 4;
+    return amount / step + 1;
+}
+
 std::optional<GameStatus> Communicator::tryRecvLast() {
-    std::queue<GameStatus> queue = recvQueueGame.popAll();
-    if (queue.empty()) {
-        return std::nullopt;
-    }
-    GameStatus message = std::move(queue.back());
-    queue.pop();
-    return message;
+    return recvQueueGame.tryPopPercent(
+            [this](int amount) { return percentOfMessagesToReceive(amount); });
 }
 
 std::optional<ReplyMessage> Communicator::tryRecvReply() { return recvQueueLobby.try_pop(); }

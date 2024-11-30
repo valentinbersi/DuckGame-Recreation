@@ -22,6 +22,12 @@ public:
     float generateRandomFloat();
 
     /**
+     * Generates random values between the given range on construction
+     * @return the random float generated
+     */
+    float operator()();
+
+    /**
      * Destructor for RandomFloatGenerator {
      */
     ~RandomFloatGenerator();
@@ -46,6 +52,12 @@ public:
      * @return the random int generated
      */
     int generateRandomInt();
+
+    /**
+     * Generates random values between the given range on construction
+     * @return the random int generated
+     */
+    int operator()();
 
     /**
      * Destructor for RandomIntGenerator

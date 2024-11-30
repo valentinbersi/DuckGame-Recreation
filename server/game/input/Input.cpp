@@ -69,6 +69,11 @@ bool Input::isActionJustPressed(const std::string& action) const {
     return inputs.at(action).second;
 }
 
-void Input::reset() {
-    for (auto& [_, justPressed]: inputs | std::views::values) justPressed = false;
+void Input::reset(Force force) {
+    for (auto& [isPressed, isJustPressed]: inputs | std::views::values) {
+        if (force == Force::Yes)
+            isPressed = false;
+
+        isJustPressed = false;
+    }
 }

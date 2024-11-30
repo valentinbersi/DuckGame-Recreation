@@ -10,6 +10,7 @@
 
 #include "Camera.h"
 #include "DuckData.h"
+#include "Force.h"
 #include "Rectangle.h"
 #include "SpriteManager.h"
 #include "Spritesheet.h"
@@ -23,23 +24,21 @@ public:
     // Calculates the aspect ratio of the window, determines the center of all ducks,
     // and calculates the maximum distance between any two ducks. It then updates the zoom level
     // and view rectangle of the camera based on these values.
-    void update(std::list<DuckData>& ducks, float deltaTime);
+    void update(const std::list<DuckData>& ducks, float deltaTime);
 
     /**
      * Forces the camera to update its position and size to the center of ducks and the max distance
      * of them
      */
-    void forceUpdate(std::list<DuckData>& ducks);
+    void forceUpdate(const std::list<DuckData>& ducks);
 
     // Returns the view rectangle of the camera.
     Rectangle& getViewRect();
 
 private:
-    enum class Force { Yes, No };
-
     // This method adjusts the size of the view rectangle based on the maximum distance between
     // ducks and the aspect ratio of the window. It then centers the view rectangle on the provided
-    // center point.
+    // center point
     void updateZoom(const Vector2& center, const Vector2& maxDistance, float aspectRatio,
                     float deltaTime, Force = Force::No);
 
@@ -54,12 +53,13 @@ private:
         float aspectRatio;
     };
 
-    UpdateInfo updateInfo(std::list<DuckData>& ducks) const;
+    // Gets the info from the camera, like the aspect ratio, center, and max distance between ducks
+    UpdateInfo updateInfo(const std::list<DuckData>& ducks) const;
 
-    // Calculates the maximum distance between any ducks in the list.
-    static Vector2 calculateMaxDistance(std::list<DuckData>& ducks, float aspectRatio);
+    // Calculates the maximum distance between any ducks in the list
+    static Vector2 calculateMaxDistance(const std::list<DuckData>& ducks, float aspectRatio);
 
-    // Calculates the center point of all ducks in the list.
+    // Calculates the center point of all ducks in the list
     static Vector2 centerOfDucks(const std::list<DuckData>& ducks);
 
     int& windowWidth;

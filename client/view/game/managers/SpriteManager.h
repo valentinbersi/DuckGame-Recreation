@@ -33,11 +33,15 @@ public:
     //  accordingly. Finally, it draws the feathers based on whether the duck has a weapon equipped.
     void draw(int col, int row);
 
+    void drawWin();
+
     // Updates the position of the duck.
     void updatePosition(float new_x, float new_y);
 
     // Sets the scale of the sprite.
     void setScale(float newScale);
+
+    DuckState& getState();
 
 private:
     // Updates the internal flags of the SpriteManager based on the current state of the duck.
@@ -86,6 +90,7 @@ private:
     bool isMoving;
     bool inAir;
     bool flapping;
+    bool dead;
     std::unique_ptr<Spritesheet> spritesheet;
     std::unique_ptr<WeaponSpriteManager> weaponSpriteManager;
     DuckState state;

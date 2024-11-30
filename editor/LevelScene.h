@@ -14,7 +14,8 @@ private:
     int gridWidth;              /** ancho de la grilla (no del mapa) */
     int gridHeight;             /** alto de la grilla (no del mapa) */
     std::list<Object>& objects; /** referencia a la lista de objetos del editor */
-    QMap<QGraphicsPixmapItem*, Object*> objectsMap; /** map usado para asociar el item gráfico de Qt con el Object en memoria*/
+    QMap<QGraphicsPixmapItem*, Object*>
+            objectsMap; /** map usado para asociar el item gráfico de Qt con el Object en memoria*/
 
     QGraphicsPixmapItem* selectedItem; /** apunta al item seleccionado que quiere moverse*/
     QPointF originalItemPos;           /** posicion original del item que esta siendo seleccionado*/
@@ -50,7 +51,7 @@ private:
      * @param object referencia al objeto que se quiere agregar al mapa
      * @param addInList indica si el objeto debe agregarse o no la lista objects
      */
-    void insertObjectInMap(const Object& object, bool addInList);
+    void insertObjectInMap(Object& object, bool addInList);
 
     /**
      * Itera sobre la lista de items y compara el itemRect

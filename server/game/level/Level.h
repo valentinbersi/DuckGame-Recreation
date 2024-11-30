@@ -6,18 +6,20 @@
 #include "GameObject.h"
 #include "ItemSpawner.h"
 #include "LevelData.h"
+#include "Player.h"
 #include "SizedObjectData.h"
 #include "TerrainBlock.h"
 
+
 class Level final: public GameObject {
     std::vector<TerrainBlock*> terrainBlocks;
-    std::vector<ItemSpawner*> itemSpawner;
+    std::vector<ItemSpawner*> itemSpawners;
 
 public:
     /**
      * Create a new Level object
      */
-    explicit Level(const LevelData& level);
+    explicit Level(const LevelData& level, const HashMap<u16, Player*>& players);
 
     /**
      * Get the position of all the blocks in the level

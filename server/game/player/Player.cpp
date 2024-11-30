@@ -1,12 +1,15 @@
 #include "Player.h"
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
 
 #include "Area.h"
 #include "Bullet.h"
+#include "Config.h"
 #include "DuckData.h"
+#include "GameController.h"
 #include "GameTimer.h"
 #include "Item.h"
 #include "ItemFactory.h"
@@ -14,6 +17,17 @@
 #include "Layer.h"
 #include "WeaponFactory.h"
 
+/**
+ * Macro for easier event handling
+ * @param Function The function to call
+ * @param ... The type of the arguments to pass to the function
+ */
+#define eventHandler(Function, ...) \
+    gameObject::EventHandler<Player __VA_ARGS__>::create(getReference<Player>(), Function)
+
+#define DEFAULT_LIFE 30
+#define DEFAULT_FLAGS 0
+#define PLAYER_DIMENSIONS 2.0f, 2.875f
 #define MOVE_RIGHT "Move Right"
 #define MOVE_LEFT "Move Left"
 #define CROUCH "Crouch"
@@ -21,31 +35,25 @@
 #define INTERACT "Interact"
 #define SHOOT "Shoot"
 #define LOOK_UP "Look Up"
-
-#define DEFAULT_LIFE 30
-#define DEFAULT_FLAGS 0
-#define DEFAULT_SPEED 40
-#define PLAYER_DIMENSIONS 2.0f, 2.875f
-
-/**
- * Macro for easier event handling
- * @param Function The function to call
- * @param ... The type of the arguments to pass to the function
- */
-#define eventHandler(Function, ...) \
-    gameObject::EventHandler<Player, __VA_ARGS__>::create(getReference<Player>(), Function)
-
+#define JUMP_TIMER "JumpTimer"
+#define ITEM_DETECTOR "ItemDetector"
+#define WEAPON "Weapon"
 
 Player::Player(const DuckData::Id id):
         PhysicsObject({30, 0}, Layer::Player, Layer::Wall, PLAYER_DIMENSIONS, Gravity::Enabled,
                       Vector2::ZERO, CollisionType::Slide),
         id(id),
-        life(DEFAULT_LIFE),
-        _direction(DuckData::Direction::Right),
+        _movementDirection(DuckData::Direction::Center),
+        _viewDirection(DuckData::Direction::Right),
+        _lastViewDirection(DuckData::Direction::Right),
         flags(DEFAULT_FLAGS),
-        speed(DEFAULT_SPEED),
         weapon(nullptr),
-        isDead(false) {
+        isJumping(false),
+        interactWithItem(false),
+        actionateWeapon(false),
+        canKeepJumping(true),
+        jumpTimer(new GameTimer(Config::Duck::jumpTime())),
+        wonRounds(0) {
     input.addAction(MOVE_RIGHT);
     input.addAction(MOVE_LEFT);
     input.addAction(CROUCH);
@@ -54,12 +62,30 @@ Player::Player(const DuckData::Id id):
     input.addAction(SHOOT);
     input.addAction(LOOK_UP);
 
-    connect(Events::Collision, eventHandler(&Player::onCollision, CollisionObject*));
+    Config::Duck::defaultWeapon() == ItemID::NONE ?
+            weapon = nullptr :
+            weapon = WeaponFactory::createWeapon(Config::Duck::defaultWeapon()).release();
+
+    if (weapon) {
+        weapon->connect(EquippableWeapon::Events::Fired,
+                        eventHandler(&Player::onWeaponFired, , const Vector2&));
+        weapon->connect(EquippableWeapon::Events::NoMoreBullets,
+                        eventHandler(&Player::onWeaponNoMoreBullets));
+        addChild(WEAPON, weapon);
+    }
+
+    flags.set(DuckData::Flag::Index::Armor, Config::Duck::defaultArmor());
+    flags.set(DuckData::Flag::Index::Helmet, Config::Duck::defaultHelmet());
+
+    jumpTimer->connect(GameTimer::Events::Timeout, eventHandler(&Player::onJumpTimerTimeout));
+    addChild(JUMP_TIMER, jumpTimer);
+
+    connect(Events::Collision, eventHandler(&Player::onCollision, , CollisionObject*));
 
     const auto itemDetector = new Area(Vector2::ZERO, 0, Layer::Item, PLAYER_DIMENSIONS);
     itemDetector->connect(Events::Collision,
-                          eventHandler(&Player::onItemCollision, CollisionObject*));
-    addChild("ItemDetector", itemDetector);
+                          eventHandler(&Player::onItemCollision, , CollisionObject*));
+    addChild(ITEM_DETECTOR, itemDetector);
 }
 
 void Player::onItemCollision(CollisionObject* item) {
@@ -74,27 +100,152 @@ void Player::onItemCollision(CollisionObject* item) {
                 return;
             default:
                 weapon = WeaponFactory::createWeapon(id).release();
-                addChild("Weapon", weapon);
-                getRoot()->removeChild(item);
+                weapon->connect(EquippableWeapon::Events::Fired,
+                                eventHandler(&Player::onWeaponFired, , const Vector2&));
+                weapon->connect(EquippableWeapon::Events::NoMoreBullets,
+                                eventHandler(&Player::onWeaponNoMoreBullets));
+                addChild(WEAPON, weapon);
+                item->parent()->removeChild(item);
         }
     }
 }
 
-void Player::onCollision(CollisionObject* item) {
-    if (item->layers().test(Layer::Index::DeathZone))
-        return (void)setPosition({30, 0});
+void Player::onCollision(const CollisionObject* object) {
+    if (object->layers().test(Layer::Index::DeathZone))
+        return (void)setGlobalPosition({30, 0});
 
-    if (item->layers().test(Layer::Index::Bullet))  // So static cast is safe
-        return damage(static_cast<Bullet*>(item)->damage());
+    if (object->layers().test(Layer::Index::Bullet))
+        return kill();
 }
 
 void Player::onWeaponFired(const Vector2& recoil) {
     _velocity.setX(0);
     _velocity += recoil;
-    flags |= DuckData::Flag::IsShooting;
+    flags.set(DuckData::Flag::Index::IsShooting);
 }
 
-void Player::onWeaponNoMoreBullets() { flags |= DuckData::Flag::NoMoreBullets; }
+void Player::onWeaponNoMoreBullets() { flags.set(DuckData::Flag::Index::NoMoreBullets); }
+
+void Player::removeWeapon() {
+    removeChild(WEAPON);
+    weapon = nullptr;
+}
+
+void Player::onJumpTimerTimeout() { canKeepJumping = false; }
+
+void Player::resetState() {
+    isJumping = false;
+    _movementDirection = DuckData::Direction::Center;
+    _viewDirection = DuckData::Direction::Center;
+    flags &= DuckData::Flag::IsDead | DuckData::Flag::Armor | DuckData::Flag::Helmet;
+}
+
+void Player::manageCrouch() {
+    flags.set(DuckData::Flag::Index::PlayingDead);
+
+    if (input.isActionPressed(MOVE_LEFT))
+        _viewDirection.pushLeft();
+
+    if (input.isActionPressed(MOVE_RIGHT))
+        _viewDirection.pushRight();
+}
+
+void Player::manageInput() {
+    if (flags.test(DuckData::Flag::Index::IsDead))
+        return;
+
+    if (input.isActionPressed(CROUCH)) {
+        manageCrouch();
+    } else {
+        if (not input.isActionPressed(JUMP))
+            canKeepJumping = false;
+
+        if (input.isActionPressed(JUMP))
+            isJumping = true;
+
+        if (input.isActionJustPressed(JUMP) and not _onGround)
+            flags.set(DuckData::Flag::Index::Flapping);
+
+        if (input.isActionPressed(MOVE_RIGHT)) {
+            flags.set(DuckData::Flag::Index::IsMoving);
+            _movementDirection.pushRight();
+        }
+
+        if (input.isActionPressed(MOVE_LEFT)) {
+            flags.set(DuckData::Flag::Index::IsMoving);
+            _movementDirection.pushLeft();
+        }
+
+        if (_movementDirection == DuckData::Direction::Center) {
+            flags.reset(DuckData::Flag::Index::IsMoving);
+            _viewDirection = _lastViewDirection;
+        } else {
+            _viewDirection = _movementDirection;
+            _lastViewDirection = _viewDirection;
+        }
+
+        if (input.isActionPressed(LOOK_UP))
+            flags.set(DuckData::Flag::Index::LookingUp);
+    }
+
+    if (input.isActionJustPressed(INTERACT))
+        interactWithItem = true;
+
+    if (input.isActionPressed(SHOOT))
+        actionateWeapon = true;
+    else
+        actionateWeapon = false;
+}
+
+void Player::move(const float delta, const float movementAcceleration) {
+    switch (_movementDirection) {
+        case DuckData::Direction::Right:
+            _velocity += Vector2::RIGHT * movementAcceleration * delta;
+            break;
+        case DuckData::Direction::Left:
+            _velocity += Vector2::LEFT * movementAcceleration * delta;
+            break;
+        default:
+            if (_velocity.x() > 0) {
+                flags.set(DuckData::Flag::Index::IsMoving);
+                _velocity += Vector2::LEFT * movementAcceleration * delta;
+                if (_velocity.x() < Config::Duck::minSpeed())
+                    _velocity.setX(Config::Duck::minSpeed());
+            } else if (_velocity.x() < 0) {
+                flags.set(DuckData::Flag::Index::IsMoving);
+                _velocity += Vector2::RIGHT * movementAcceleration * delta;
+                if (_velocity.x() > Config::Duck::minSpeed())
+                    _velocity.setX(Config::Duck::minSpeed());
+            }
+    }
+
+    if (_velocity.x() > Config::Duck::maxSpeed())
+        _velocity.setX(Config::Duck::maxSpeed());
+    else if (_velocity.x() < -Config::Duck::maxSpeed())
+        _velocity.setX(-Config::Duck::maxSpeed());
+}
+
+void Player::performActionsInAir(const float delta) {
+    if (not jumpTimer->started())
+        jumpTimer->start();
+    move(delta, Config::Duck::airAcceleration());
+}
+
+void Player::performActionsInGround(const float delta) {
+    move(delta, Config::Duck::acceleration());
+    jumpTimer->reset();
+    canKeepJumping = true;
+}
+
+void Player::performActions(const float delta) {
+    if (not _onGround)
+        performActionsInAir(delta);
+    else
+        performActionsInGround(delta);
+
+    if (isJumping and canKeepJumping)
+        _velocity.setY(-Config::Duck::jumpSpeed());
+}
 
 void Player::moveRight() { input.pressAction(MOVE_RIGHT); }
 
@@ -124,43 +275,30 @@ void Player::stopLookUp() { input.releaseAction(LOOK_UP); }
 
 void Player::start() {}
 
-void Player::update([[maybe_unused]] const float delta) {
-    if (not input.isActionPressed(JUMP) and _velocity.y() < 0)
-        _velocity = _velocity.y(0);
+void Player::update(const float delta) {
+    resetState();
+    if (flags.test(DuckData::Flag::Index::IsDead))
+        return;
+    manageInput();
+    performActions(delta);
 
-    _velocity = _velocity.x(0);
-    flags &= DuckData::Flag::Armor | DuckData::Flag::Helmet;
-
-    if (input.isActionPressed(CROUCH)) {
-        flags |= DuckData::Flag::Crouching;
-
-    } else if (input.isActionPressed(MOVE_RIGHT)) {
-        _velocity += Vector2(speed, 0);
-        flags |= DuckData::Flag::IsMoving;
-
-    } else if (input.isActionPressed(MOVE_LEFT)) {
-        _velocity += Vector2(-speed, 0);
-        flags |= DuckData::Flag::IsMoving;
-
-    } else if (input.isActionPressed(JUMP) && _onGround) {
-        _velocity += Vector2(0, -20);
-
-    } else if (input.isActionJustPressed(JUMP) && !_onGround) {
-        _velocity += Vector2(0, -3);
+    if (input.isActionJustPressed(JUMP) and not _onGround) {
+        if (_velocity.y() > 0)
+            _velocity.setY(0);
         flags |= DuckData::Flag::Flapping;
 
     } else if (input.isActionJustPressed(INTERACT) && weapon) {
-        std::unique_ptr<Item> item = ItemFactory::createItem(weapon->getID());
+        input.releaseAction(INTERACT);
+        std::unique_ptr<Item> item = ItemFactory::createItem(weapon->id());
         item->setPosition(globalPosition());
-        getRoot()->addChild("Weapon", std::move(item));
-        removeChild("Weapon");
-        weapon = nullptr;
+        getRoot<GameController>()->addToLevel("Item", std::move(item));
+        removeWeapon();
     }
 
     if (_velocity.x() < 0)
-        _direction = DuckData::Direction::Left;
+        _movementDirection = DuckData::Direction::Left;
     else if (_velocity.x() > 0)
-        _direction = DuckData::Direction::Right;
+        _movementDirection = DuckData::Direction::Right;
 
     if (weapon) {
         if (input.isActionPressed(SHOOT))
@@ -171,36 +309,57 @@ void Player::update([[maybe_unused]] const float delta) {
 
     if (input.isActionPressed(LOOK_UP))
         flags |= DuckData::Flag::LookingUp;
-    // logica de apuntado para arriba, talvez direction es up??
 
-    if (!_onGround)
+    if (not _onGround)
         flags |= DuckData::Flag::InAir;
 }
 
-void Player::damage(const i8 damage) {
-    if (isDead)
+void Player::kill() {
+    std::cout << "I DIED" << std::endl;
+
+    if (flags.test(DuckData::Flag::Index::IsDead))
         return;
 
-    life -= damage;
-    if (life < 0)
-        removeFromLayer(Layer::Player);
+    flags.set(DuckData::Flag::Index::IsDead);
+    removeFromLayer(Layer::Index::Player);
 }
 
 void Player::makeShoot() { flags |= DuckData::Flag::IsShooting; }
 
 void Player::notMoreBullets() { flags |= DuckData::Flag::NoMoreBullets; }
 
-DuckData::Direction Player::direction() const { return _direction; }
+DuckData::Direction Player::viewDirection() const { return _lastViewDirection; }
+
+u32 Player::roundsWon() const { return wonRounds; }
+
+void Player::winRound() { ++wonRounds; }
 
 DuckData Player::status() {
     return {globalPosition(),
             id,
-            life,
-            _direction,
-            weapon ? weapon->getID() : ItemID(ItemID::NONE),
-            flags};
+            _lastViewDirection,
+            weapon ? weapon->id() : ItemID(ItemID::NONE),
+            flags,
+            wonRounds};
 }
 
-void Player::clearInputs() { input.reset(); }
+void Player::clearInputs(const Force force) { input.reset(force); }
+
+void Player::reset() {
+    flags.reset();
+    if (weapon)
+        removeWeapon();
+    setLayers(Layer::Player);
+    clearInputs(Force::Yes);
+    _movementDirection = DuckData::Direction::Center;
+    _viewDirection = DuckData::Direction::Right;
+    _lastViewDirection = DuckData::Direction::Right;
+    isJumping = false;
+    interactWithItem = false;
+    actionateWeapon = false;
+    canKeepJumping = true;
+}
+
+bool Player::isDead() const { return flags.test(DuckData::Flag::Index::IsDead); }
 
 Player::~Player() = default;

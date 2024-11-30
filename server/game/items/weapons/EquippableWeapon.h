@@ -6,12 +6,17 @@
 #include "Vector2.h"
 
 class EquippableWeapon: public GameObject {
-protected:
-    u8 ammo;
-    ItemID id;
-    bool firing;
+    ItemID id_;
+    u8 ammo_;
     Vector2 recoil;
-    float dispersion;
+
+protected:
+    /**
+     * Fires the weapon, this means decrementing the ammo. If the ammo is 0, it will fire the
+     * NoMoreBullets event, otherwise it will fire the Fired event.
+     * @return True if the weapon was fired, false otherwise
+     */
+    virtual bool fire();
 
 public:
     constexpr static u8 INeedMoreBullets = 0;
@@ -27,26 +32,22 @@ public:
      * @param id The id of the weapon
      * @param ammo The ammo of the weapon
      * @param recoil The recoil of the weapon
-     * @param dispersion The dispersion of the weapon
-     *
      */
-    explicit EquippableWeapon(ItemID id, u8 ammo, Vector2 recoil, float dispersion);
+    EquippableWeapon(ItemID id, u8 ammo, Vector2 recoil);
 
     /**
      * Get the id of the weapon
      * @return The id of the weapon
      */
-    ItemID getID() const;
+    ItemID id() const;
 
     /**
      * Actionate the weapon
-     * @return The recoil of the weapon
      */
     virtual void actionate() = 0;
 
     /**
      * Actionate the weapon
-     * @return The recoil of the weapon
      */
     virtual void deactionate() = 0;
 

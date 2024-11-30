@@ -2,7 +2,12 @@
 
 #include "EquippableWeapon.h"
 
-struct LongPistol: EquippableWeapon {
+class LongPistol final: public EquippableWeapon {
+    float reach;
+    bool firing;
+    RandomFloatGenerator randomGenerator;
+
+public:
     LongPistol() = delete;
     LongPistol(const LongPistol& other) = delete;
     LongPistol(LongPistol&& other) noexcept = delete;
@@ -12,10 +17,12 @@ struct LongPistol: EquippableWeapon {
     /**
      * Creates a new LongPistol
      * @param id The id of the weapon
+     * @param ammo The ammo of the weapon
      * @param recoil The recoil of the weapon
+     * @param reach The reach of the weapon
      * @param dispersion The dispersion of the weapon
      */
-    explicit LongPistol(ItemID id, Vector2 recoil, float dispersion);
+    LongPistol(ItemID id, u8 ammo, Vector2 recoil, float reach, float dispersion);
 
     /**
      * Actionates the weapon
@@ -29,33 +36,5 @@ struct LongPistol: EquippableWeapon {
      */
     void deactionate() override;
 
-    /**
-     * Updates the weapon
-     * @param delta The time passed since the last update
-     */
-    void update(float delta) override;
-
     ~LongPistol() override;
-};
-
-class CowboyPistol final: public LongPistol {
-public:
-    /**
-     * Creates a new CowboyPistol
-     * @param id The id of the weapon
-     */
-    explicit CowboyPistol();
-
-    ~CowboyPistol() override;
-};
-
-class Magnum final: public LongPistol {
-public:
-    /**
-     * Creates a new Magnum
-     * @param id The id of the weapon
-     */
-    explicit Magnum();
-
-    ~Magnum() override;
 };

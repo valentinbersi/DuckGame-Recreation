@@ -4,54 +4,43 @@
 #include <utility>
 
 #include "Bullet.h"
+#include "GameController.h"
 #include "Math.h"
 #include "Player.h"
 
-#define AMMO 6
-
-LongPistol::LongPistol(const ItemID id, Vector2 recoil, const float dispersion):
-        EquippableWeapon(id, AMMO, std::move(recoil), dispersion) {}
-
 #define BULLET_TILES 20
-#define BULLET_SPEED 400
 #define BULLET_DAMAGE 10
 
-void LongPistol::actionate() {
-    static RandomFloatGenerator randomGenerator(-dispersion, dispersion);
+LongPistol::LongPistol(const ItemID id, const u8 ammo, Vector2 recoil, const float reach,
+                       const float dispersion):
+        EquippableWeapon(id, ammo, std::move(recoil)),
+        reach(reach),
+        firing(false),
+        randomGenerator(-dispersion, dispersion) {}
 
+void LongPistol::actionate() {
     if (firing)
         return;
 
-    if (ammo == INeedMoreBullets)
-        return fire(Events::NoMoreBullets);
-
     firing = true;
-    --ammo;
+    if (fire()) {
+        const Vector2 direction =
+                (parent<Player>()->viewDirection() == DuckData::Direction::Right ? Vector2::RIGHT :
+                                                                                   Vector2::LEFT)
+                        .rotated(randomGenerator());
 
-    const Vector2 direction =
-            parent<Player>()->direction() == DuckData::Direction::Right ?
-                    Vector2::RIGHT.rotated(randomGenerator.generateRandomFloat()) :
-                    Vector2::LEFT.rotated(randomGenerator.generateRandomFloat());
+        auto bullet = std::make_unique<Bullet>(direction, reach);
+        bullet->setGlobalPosition(
+                parent<Player>()->globalPosition() +
+                        (parent<Player>()->viewDirection() == DuckData::Direction::Right ?
+                                 Vector2::RIGHT * 2 :
+                                 Vector2::LEFT * 2),
+                Force::Yes);
 
-    auto bullet = std::make_unique<Bullet>(BULLET_DAMAGE, direction * BULLET_SPEED, BULLET_TILES);
-    bullet->setGlobalPosition(parent<Player>()->globalPosition() +
-                              (parent<Player>()->direction() == DuckData::Direction::Right ?
-                                       Vector2::RIGHT * 2 :
-                                       Vector2::LEFT * 2));
-    getRoot()->addChild("Bullet", std::move(bullet));
-    fire<const Vector2&>(Events::Fired, recoil);
+        getRoot<GameController>()->addToLevel("Bullet", std::move(bullet));
+    }
 }
 
 void LongPistol::deactionate() { firing = false; }
 
-void LongPistol::update([[maybe_unused]] float delta) {}
-
 LongPistol::~LongPistol() = default;
-
-CowboyPistol::CowboyPistol(): LongPistol(ItemID::CowboyPistol, Vector2::ZERO, 0.0) {}
-
-CowboyPistol::~CowboyPistol() = default;
-
-Magnum::Magnum(): LongPistol(ItemID::Magnum, Vector2::RIGHT * 5, Math::toRadians(20)) {}
-
-Magnum::~Magnum() = default;

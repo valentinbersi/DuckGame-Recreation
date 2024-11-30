@@ -73,6 +73,8 @@ target_include_directories(common PUBLIC .)
 
 file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/assets)
 file(COPY ${CMAKE_SOURCE_DIR}/assets/ DESTINATION ${CMAKE_BINARY_DIR}/assets)
+file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/maps)
+file(COPY ${CMAKE_SOURCE_DIR}/maps/ DESTINATION ${CMAKE_BINARY_DIR}/maps)
 file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/config)
 file(COPY ${CMAKE_SOURCE_DIR}/config/ DESTINATION ${CMAKE_BINARY_DIR}/config)
 

@@ -1,6 +1,9 @@
 #pragma once
 
 #include <list>
+#include <memory>
+#include <string>
+#include <vector>
 
 #include "CollisionManager.h"
 #include "Level.h"
@@ -13,8 +16,14 @@ typedef u16 PlayerID;
 class GameController final: public GameObject {
     HashMap<PlayerID, Player*> players;
     CollisionManager collisionManager;
+    std::vector<LevelData>& levelsData;
     Level* level;
     std::list<Item*> items;
+    u16 roundsPlayed;
+    bool roundEnded;
+    bool setEnded;
+    bool _gameEnded;
+    RandomIntGenerator mapSelector;
 
     /**
      * GameController handler for tree entered event
@@ -27,6 +36,23 @@ class GameController final: public GameObject {
      * @param object The child that was removed
      */
     void onTreeExited(GameObject* object) override;
+
+    /**
+     * Load the level
+     * @param level the level to load
+     */
+    void loadLevel(const LevelData& level);
+
+    /**
+     * Updates if the round has ended, the set has ended
+     * or if the game has ended.
+     */
+    void roundUpdate(u8 alivePlayers, PlayerID aliveID);
+
+    /**
+     * Clears the actual state of the game
+     */
+    void clearState();
 
 public:
     /**
@@ -50,13 +76,18 @@ public:
          */
         explicit PlayerNotFound(PlayerID id);
     };
-
-    GameController();
+    GameController() = delete;
     GameController(const GameController&) = delete;
     GameController& operator=(const GameController&) = delete;
     GameController(GameController&&) noexcept = delete;
     GameController& operator=(GameController&&) noexcept = delete;
     ~GameController() override;
+
+    /**
+     * Construct a game controller with the levels data
+     * @param levelsData the levels data
+     */
+    explicit GameController(std::vector<LevelData>& levelsData);
 
     /**
      * Start the match
@@ -102,17 +133,43 @@ public:
      * @param playerAmount the amount of player to add/check
      * @return true if It exceeds the maximum amount of players, false otherwise
      */
-    bool exceedsPlayerMax(const u8 playerAmount);
+    bool exceedsPlayerMax(const u8 playerAmount) const;
 
     /**
-     * Load the level
-     * @param level the level to load
+     * Adds a collision object to the actual level.
+     * @param nodeName the name of the node to add to structure.
+     * @param collisionObject the object to add to level
      */
-    void loadLevel(const LevelData& level);
+    void addToLevel(const std::string& nodeName,
+                    std::unique_ptr<CollisionObject> physicObject) const;
 
     /**
      * Get the status of the game
      * @return the status of the game
      */
     GameStatus status() const;
+
+    /**
+     * Check if the game has ended, that is,
+     * if a player has enough rounds won.
+     *
+     * @return true if the game has ended, false otherwise
+     */
+    bool gameEnded() const;
+
+    /**
+     * Checks a round is in progress
+     * @return
+     */
+    bool roundInProgress() const;
+
+    /**
+     * Sets the round as in progress
+     */
+    void startNewRound();
+
+    /**
+     * Clears previous State and loads a new one
+     */
+    void loadNewState();
 };

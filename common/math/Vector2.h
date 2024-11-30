@@ -1,4 +1,5 @@
 #pragma once
+#include <sstream>
 
 /**
  * A mathematical vector for two dimensions. All operations are done in x = (1, 0) and y = (0, 1)
@@ -6,6 +7,8 @@
  */
 class Vector2 {
     float _x, _y;
+
+    friend std::ostream& operator<<(std::ostream& os, const Vector2& v);
 
 public:
     /**

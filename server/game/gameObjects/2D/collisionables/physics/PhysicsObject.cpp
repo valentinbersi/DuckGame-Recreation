@@ -23,12 +23,12 @@ PhysicsObject::~PhysicsObject() = default;
 
 void PhysicsObject::updateInternal(const float delta) {
     if (gravity == Gravity::Enabled)
-        _velocity += GlobalPhysics::gravity * delta;
+        _velocity += GlobalPhysics::get().gravity() * delta;
 
     CollisionObject::updateInternal(delta);
 }
 
-void PhysicsObject::processCollisions(const float delta) {
+bool PhysicsObject::processCollisions(const float delta) {
     _onGround = false;
     std::vector<std::pair<int, float>> collisionOrder;
 
@@ -79,6 +79,10 @@ void PhysicsObject::processCollisions(const float delta) {
                 // TODO: implement
                 break;
 
+            case CollisionType::Destroy:
+                fire(Events::Collision, objectPtr.get());
+                return true;
+
             default:
                 break;
         }
@@ -87,6 +91,7 @@ void PhysicsObject::processCollisions(const float delta) {
     }
 
     setPosition(position() + _velocity * delta);
+    return false;
 }
 
 void PhysicsObject::setGravity(const Gravity gravity) { this->gravity = gravity; }

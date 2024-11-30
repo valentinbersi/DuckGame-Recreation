@@ -23,6 +23,7 @@
 #include "EventHandler.h"
 #include "GameMessage.h"
 #include "GameStatus.h"
+#include "HudManager.h"
 #include "MessageType.h"
 #include "ServerMessage.h"
 #include "SoundManager.h"
@@ -53,7 +54,10 @@ private:
     // Creates the mapping of the SpriteManagers for each duck.
     std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>> createSpritesMapping();
 
-    // Updates the positions, states, and scales of the player sprites based on the camera view.
+    /**
+     * Updates the positions, states, and scales of the player sprites based on the camera view.
+     * @param spritesMapping the mapping of the SpriteManager for each duck
+     */
     void updatePlayers(
             const std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
 
@@ -66,7 +70,11 @@ private:
     template <typename SizedObject>
     std::list<SDL2pp::Rect> calculateObjectsPositionsAndSize(std::list<SizedObject> objects);
 
-    // Updates the positions and scales of the blocks based on the camera view and renders them.
+    /**
+     * Updates the positions and scales of the blocks based on the camera view and renders them.
+     * @param enviromentRenderer the renderer that draws the enviroment objects
+     * @return
+     */
     void updateBlocks(EnviromentRenderer& enviromentRenderer);
 
     /**
@@ -84,13 +92,22 @@ private:
     // Receives the latest game status snapshot from the server and updates the game objects.
     void getSnapshot();
 
-    // Shows the background texture.
+    /**
+     * Shows the background texture
+     * @param backgroundTexture the background texture to show
+     */
     void showBackground(SDL2pp::Texture& backgroundTexture);
 
     // Clears the game objects, expecting to refill them with the next snapshot.
     void clearObjects();
 
+    void finishedSet();
+
     bool running;
+    bool roundFinished;
+    bool setFinished;
+    bool gameFinished;
+    bool transition;
     int window_width;
     int window_height;
     Communicator& communicator;
@@ -108,7 +125,8 @@ private:
     std::list<ItemData> itemsToRender;
     std::list<SizedObjectData> blocks;
     std::list<SizedObjectData> blocksToRender;
-    std::list<DuckData> ducks;  // No ducks to render because all ducks should be rendered
+    std::list<DuckData> ducks;
+    std::list<DuckData> ducksToRender;
 
     std::vector<std::string> backgrounds = {
             "assets/background/forest-night.png", "assets/background/city.png",

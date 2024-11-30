@@ -14,5 +14,5 @@ public:
      */
     explicit TerrainBlock(Vector2 position);
 
-    SizedObjectData status();
+    SizedObjectData status() const;
 };

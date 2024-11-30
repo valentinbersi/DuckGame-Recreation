@@ -40,5 +40,5 @@ struct StaticObject: CollisionObject {
     /**
      * Does nothing on StaticObject
      */
-    void processCollisions(float delta) final;
+    bool processCollisions(float delta) final;
 };
