@@ -59,7 +59,7 @@ void SoundManager::playEffect(const std::string& path) {
     Mix_PlayChannel(-1, effect, 0);
 }
 
-void SoundManager::checkSounds(DuckState& state) {
+void SoundManager::checkSounds(const DuckState& state) {
     if (state.isShooting)
         playSound(state.gunEquipped);
     if (state.isDead || firstFrameDead) {

@@ -28,7 +28,7 @@ public:
 
     void playEffect(const std::string& path);
 
-    void checkSounds(DuckState& state);
+    void checkSounds(const DuckState& state);
 
 private:
     // Plays the music in loop.
