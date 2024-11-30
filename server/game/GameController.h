@@ -23,6 +23,7 @@ class GameController final: public GameObject {
     bool roundEnded;
     bool setEnded;
     bool _gameEnded;
+    RandomIntGenerator mapSelector;
 
     /**
      * GameController handler for tree entered event

@@ -24,7 +24,7 @@ void GameController::onTreeEntered(GameObject* object) {
     if (const auto collisionObject = dynamic_cast<CollisionObject*>(object);
         collisionObject != nullptr) {
         if (collisionObject->layers().test(Layer::Index::Item))
-            items.push_back(static_cast<Item*>(collisionObject));
+            items.push_back(static_cast<Item*>(collisionObject));  // Safe to static cast here
 
         collisionManager.addCollisionObject(collisionObject);
     }
@@ -34,7 +34,7 @@ void GameController::onTreeExited(GameObject* object) {
     if (const auto collisionObject = dynamic_cast<CollisionObject*>(object);
         collisionObject != nullptr) {
         if (collisionObject->layers().test(Layer::Index::Item))
-            items.remove(static_cast<Item*>(collisionObject));
+            items.remove(static_cast<Item*>(collisionObject));  // Safe to static cast here
 
         collisionManager.removeCollisionObject(collisionObject);
     }
@@ -96,13 +96,20 @@ GameController::AlreadyAddedPlayer::AlreadyAddedPlayer(const PlayerID id):
 GameController::PlayerNotFound::PlayerNotFound(const PlayerID id):
         std::out_of_range(PLAYER_ID + std::to_string(id) + NOT_FOUND) {}
 
-GameController::GameController(std::vector<LevelData>& levelsData): levelsData(levelsData) {
+GameController::GameController(std::vector<LevelData>& levelsData):
+        levelsData(levelsData),
+        level(nullptr),
+        roundsPlayed(0),
+        roundEnded(false),
+        setEnded(false),
+        _gameEnded(false),
+        mapSelector(0, static_cast<int>(levelsData.size()) - 1) {
     connect(Events::TreeEntered, eventHandler(&GameController::onTreeEntered, GameObject*));
     connect(Events::TreeExited, eventHandler(&GameController::onTreeExited, GameObject*));
 }
 
 void GameController::start() {
-    loadLevel(levelsData[2]);  // seria random entre el size del map
+    loadLevel(levelsData[mapSelector()]);  // seria random entre el size del map
     roundEnded = false;
 }
 
@@ -156,7 +163,7 @@ void GameController::removePlayer(const PlayerID playerID) {
 
     (void)removeChild(PLAYER + std::to_string(playerID));
     players.erase(playerID);
-    _gameEnded = players.size() == 0;
+    _gameEnded = players.empty();
 }
 
 Player& GameController::getPlayer(const PlayerID playerID) const { return *players.at(playerID); }
@@ -192,5 +199,5 @@ void GameController::startNewRound() { roundEnded = false; }
 
 void GameController::loadNewState() {
     clearState();
-    loadLevel(levelsData[1]);
+    loadLevel(levelsData[mapSelector()]);
 }
