@@ -15,8 +15,6 @@
 
 class GameLoop final: public Thread {
     constexpr static std::uint8_t FRAME_TIMES_AMOUNT = 2;
-
-    std::vector<LevelData>& levels;
     std::map<PlayerID, std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>>>
             clientQueuesMap{};
     BlockingQueue<std::unique_ptr<Command>> clientCommands;
@@ -45,6 +43,17 @@ class GameLoop final: public Thread {
      * @param
      */
     bool shouldAddQueue(const u16 clientID);
+
+    /**
+     * Process a round of the game
+     * @param deltaTime the time since the last frame
+     */
+    void processRound(const float deltaTime);
+
+    /**
+     * loads new state of game if round is over
+     */
+    void loadNewStateIfOver();
 
 public:
     /**

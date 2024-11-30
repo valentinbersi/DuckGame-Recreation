@@ -4,6 +4,8 @@
 #include <utility>
 
 #include "Bullet.h"
+#include "GameController.h"
+#include "Math.h"
 #include "Player.h"
 
 #define BULLET_TILES 20
@@ -37,7 +39,7 @@ void LongPistol::actionate() {
                              Vector2::LEFT * 2),
             Force::Yes);
 
-    getRoot()->addChild("Bullet", std::move(bullet));
+    getRoot<GameController>()->addToLevel("Bullet", std::move(bullet));
 }
 
 void LongPistol::deactionate() { firing = false; }

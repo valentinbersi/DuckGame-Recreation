@@ -88,6 +88,11 @@ class Player final: public PhysicsObject {
      */
     void performActions(float delta);
 
+    /**
+     * Removes the player Weapon
+     */
+    void removeWeapon();
+
 public:
     Player() = delete;
     Player(const Player& other) = delete;
@@ -222,4 +227,15 @@ public:
      * input that are being pressed.
      */
     void clearInputs();
+
+    /**
+     * Reset the player's state to the start of a round
+     * it only mantains the amount of rounds won.
+     */
+    void reset();
+
+    /**
+     *
+     */
+    bool isDead() const;
 };

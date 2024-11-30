@@ -26,6 +26,8 @@ public:
 
     void sendMessage(std::shared_ptr<ServerMessage>&& mensaje);
 
+    void sendRoundData(bool roundEnded, bool setEnded, bool gameEnded);
+
     void sendLen(u16 len);
 
     void sendDuckData(const DuckData& objData);

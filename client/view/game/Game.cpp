@@ -79,7 +79,6 @@ void Game::init() {
         updateItemSpawns(enviromentRenderer);
         updateItems(enviromentRenderer);
 
-        // roundFinished = true;
         hudManager.check(ducks, ducksToRender, spritesMapping);
         if (transition) {
             transition = false;
@@ -114,9 +113,9 @@ void Game::getSnapshot() {
         return;
 
     clearObjects();
-    // roundFinished = snapshot->roundOver;
-    // setFinished = snapshot->setOver;
-    //  gameFinished = snapshot->gameOver;
+    roundFinished = snapshot->roundEnded;
+    setFinished = snapshot->setEnded;
+    gameFinished = snapshot->gameEnded;
 
     for (auto& duck: snapshot->ducks) ducks.push_back(std::move(duck));
     for (auto& duck: snapshot->ducks) {
@@ -175,8 +174,12 @@ void Game::updatePlayers(
                            duck.extraData[DuckData::Flag::Index::Armor],
                            duck.extraData[DuckData::Flag::Index::IsShooting],
                            duck.extraData[DuckData::Flag::Index::LookingUp],
-                           flipped, hasGun, duck.extraData[DuckData::Flag::Index::NoMoreBullets], duck.extraData[DuckData::Flag::Index::IsDead],
-                           duck.gunID, duck.direction};
+                           flipped,
+                           hasGun,
+                           duck.extraData[DuckData::Flag::Index::NoMoreBullets],
+                           duck.extraData[DuckData::Flag::Index::IsDead],
+                           duck.gunID,
+                           duck.direction};
 
         soundManager.checkSounds(state);
 

@@ -25,7 +25,30 @@ void GameLoop::processCurrentFrameCommands() {
     }
 }
 
-GameLoop::GameLoop(std::vector<LevelData>& levels): levels(levels) {}
+GameLoop::GameLoop(std::vector<LevelData>& levels): game(levels) {}
+
+void GameLoop::broadcast(std::shared_ptr<ServerMessage> message) {
+    for (auto it = clientQueuesMap.begin(); it != clientQueuesMap.end();) {
+        if (it->second.expired()) {
+            it = clientQueuesMap.erase(it);
+        } else {
+            bool sucess = it->second.lock()->try_push(message);
+            it = sucess ? ++it : clientQueuesMap.erase(it);
+        }
+    }
+}
+
+void GameLoop::processRound(const float deltaTime) {
+    game.updateInternal(deltaTime);
+    game.update(deltaTime);
+    broadcast(std::make_shared<GameStatus>(std::move(game.status())));
+}
+
+void GameLoop::loadNewStateIfOver() {
+    if (!game.roundInProgress()) {
+        game.loadNewState();
+    }
+}
 
 #define FPS 30
 
@@ -34,21 +57,18 @@ void GameLoop::run() {
         broadcast(std::make_shared<ReplyMessage>(ReplyMessage::startGameInstance));
         timer.start();
         game.start();
-        game.loadLevel(levels[0]);
-        // while(_keep_running){
-        while (_keep_running) {  // poner game.MatchEnded() y && _keep_running para condicion de
-                                 // corte.
+
+        while (!game.gameEnded() && _keep_running) {
             const float deltaTime = timer.iterationStartSeconds().count();
             retrieveCurrentFrameCommands();
             processCurrentFrameCommands();
-            game.updateInternal(deltaTime);
-            game.update(deltaTime);
-            broadcast(std::make_shared<GameStatus>(
-                    std::move(game.status())));  // talvez aca ya manda de una gameended
+            if (game.roundInProgress()) {
+                processRound(deltaTime);
+                loadNewStateIfOver();
+            }
             timer.iterationEnd(FPS);
         }
 
-        // }
     } catch (const ClosedQueue& err) {
         // Expected when closing server
     } catch (const std::exception& err) {
@@ -82,15 +102,4 @@ BlockingQueue<std::unique_ptr<Command>>* GameLoop::getQueue() { return &clientCo
 
 void GameLoop::JoinTransactionCompleted() {
     broadcast(std::make_shared<ReplyMessage>(game.playersCount()));
-}
-
-void GameLoop::broadcast(std::shared_ptr<ServerMessage> message) {
-    for (auto it = clientQueuesMap.begin(); it != clientQueuesMap.end();) {
-        if (it->second.expired()) {
-            it = clientQueuesMap.erase(it);
-        } else {
-            bool sucess = it->second.lock()->try_push(message);
-            it = sucess ? ++it : clientQueuesMap.erase(it);
-        }
-    }
 }

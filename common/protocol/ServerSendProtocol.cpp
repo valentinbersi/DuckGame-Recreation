@@ -19,6 +19,12 @@ void ServerSendProtocol::sendRectangle(const Rectangle& rectangle) {
     sendVector2(rectangle.size());
 }
 
+void ServerSendProtocol::sendRoundData(bool roundEnded, bool setEnded, bool gameEnded) {
+    sendByte(roundEnded);
+    sendByte(setEnded);
+    sendByte(gameEnded);
+}
+
 void ServerSendProtocol::sendDuckData(const DuckData& duckData) {
     sendByte(static_cast<u8>(duckData.duckID));
     sendByte(static_cast<u8>(duckData.direction));

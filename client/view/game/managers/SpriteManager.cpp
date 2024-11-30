@@ -67,10 +67,14 @@ void SpriteManager::update(const DuckState& newState) {
     state = newState;
     setFlags();
 
-    if (dead) draw(SPRITESHEET_DEAD_COL, SPRITESHEET_DEAD_ROW);
-    else if (state.inAir) draw(frame, SPRITESHEET_JUMP_ROW);
-    else if (state.playingDead) draw(SPRITESHEET_PLAYING_DEAD_COL, SPRITESHEET_DEAD_ROW);
-    else draw(frame, SPRITESHEET_RIGHT_LEFT_ROW);
+    if (dead)
+        draw(SPRITESHEET_DEAD_COL, SPRITESHEET_DEAD_ROW);
+    else if (state.inAir)
+        draw(frame, SPRITESHEET_JUMP_ROW);
+    else if (state.playingDead)
+        draw(SPRITESHEET_PLAYING_DEAD_COL, SPRITESHEET_DEAD_ROW);
+    else
+        draw(frame, SPRITESHEET_RIGHT_LEFT_ROW);
 
     spritesheet->resetDamageEffects();
 }

@@ -27,10 +27,12 @@ LevelScene::LevelScene(QObject* parent, std::list<Object>& objects):
 
 void LevelScene::deleteObjectAt(const QPointF& position) {
     auto* itemAtPosition = qgraphicsitem_cast<QGraphicsPixmapItem*>(items(position).value(0));
-    if (!itemAtPosition) return;
+    if (!itemAtPosition)
+        return;
 
     auto* object = objectsMap[itemAtPosition];
-    if (object->type == DUCK) ducksCount--;
+    if (object->type == DUCK)
+        ducksCount--;
 
     objects.remove(*object);
     objectsMap.remove(itemAtPosition);
@@ -42,7 +44,8 @@ bool LevelScene::enoughDucks() const { return ducksCount >= MIN_DUCKS; }
 
 bool LevelScene::isEmptyPosition(QRectF itemRect) {
     for (QGraphicsItem* currentItem: items()) {
-        if (selectedItem == currentItem) continue;
+        if (selectedItem == currentItem)
+            continue;
 
         QRectF currentItemRect = currentItem->sceneBoundingRect();
         // el +- 0.5 es por un borde invisible que el QT agrega en los Pixmap
@@ -76,15 +79,16 @@ void LevelScene::insertObjectInMap(const Object& object, bool addInList) {
         objects.push_back(object);
         storedObject = &objects.back();
     } else {
-//        auto it = std::find(objects.begin(), objects.end(), object);
-//        if (it != objects.end()) {
-//            storedObject = &(*it);
-//        }
+        //        auto it = std::find(objects.begin(), objects.end(), object);
+        //        if (it != objects.end()) {
+        //            storedObject = &(*it);
+        //        }
         storedObject = (Object*)(&object);
     }
 
     objectsMap[item] = storedObject;
-    if (object.type == DUCK) ducksCount++;
+    if (object.type == DUCK)
+        ducksCount++;
 
     /** ESTO CAPAZ PODRIA HACERLO APARTE */
     QRectF objectRect(item->scenePos(),
@@ -156,7 +160,9 @@ void LevelScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
         deleteObjectAt(event->scenePos());
 
     if (selectedItem)
-        selectedItem->setPos(event->scenePos() - QPointF(selectedItem->boundingRect().width() / 2, selectedItem->boundingRect().height() / 2));
+        selectedItem->setPos(event->scenePos() -
+                             QPointF(selectedItem->boundingRect().width() / 2,
+                                     selectedItem->boundingRect().height() / 2));
 
     QGraphicsScene::mouseMoveEvent(event);
 }

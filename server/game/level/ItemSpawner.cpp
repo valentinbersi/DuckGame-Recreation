@@ -3,6 +3,7 @@
 #include <utility>
 
 #include "Config.h"
+#include "GameController.h"
 #include "ItemFactory.h"
 #include "Layer.h"
 
@@ -31,7 +32,7 @@ void ItemSpawner::onTimeout() {
     const Vector2 newPosition = position() + Vector2::UP * (itemHalfHeight + spawnerHalfHeight);
     item->setPosition(newPosition);
     spawnedItem = item->getReference<Item>();
-    getRoot()->addChild("Weapon", std::move(item));
+    getRoot<GameController>()->addToLevel("Item", std::move(item));
     timer->setTimeout(randomGenerator.generateRandomFloat());
 }
 
