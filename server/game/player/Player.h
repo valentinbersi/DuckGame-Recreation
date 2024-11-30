@@ -93,6 +93,11 @@ class Player final: public PhysicsObject {
      */
     void removeWeapon();
 
+    /**
+     * Updates the data of the duck
+     */
+    void updateData();
+
 public:
     Player() = delete;
     Player(const Player& other) = delete;
