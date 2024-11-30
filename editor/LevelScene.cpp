@@ -172,6 +172,7 @@ void LevelScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         isAddingObject = false;
+        // cppcheck-suppress shadowFunction
         emit requestDragModeChange(QGraphicsView::ScrollHandDrag);
     }
     if (event->button() == Qt::RightButton) {
