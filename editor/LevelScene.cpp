@@ -140,6 +140,7 @@ void LevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     if (event->button() == Qt::LeftButton && objectTypeToAdd != UNKNOWN) {
         isAddingObject = true;
         addNewObject(objectTypeToAdd, event->scenePos());
+        // cppcheck-suppress shadowFunction
         emit requestDragModeChange(QGraphicsView::NoDrag);
         return;
     }
