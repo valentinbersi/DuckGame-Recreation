@@ -7,6 +7,7 @@
 #include <optional>
 #include <queue>
 #include <utility>
+#include <functional>
 
 struct ClosedQueue final: std::runtime_error {
     /**
@@ -119,12 +120,40 @@ public:
      * @return a queue with all the elements of the blocking queue
      */
     std::queue<T, C> popAll();
+
+    /**
+     * Get a elements acording to the size of the queue 
+     * @param func the function taht dictates the amount of
+     * elements to pop.
+     * @return the element poped last of the amount or nullopt if the queue is empty
+     */
+    std::optional<T> tryPopPercent(std::function<int(int)> func);
 };
 
 template <typename T, class C>
 std::queue<T, C> BlockingQueue<T, C>::popAll() {
     std::unique_lock lck(mtx);
     return std::move(q);
+}
+template<typename T, class C>
+std::optional<T> BlockingQueue<T, C>::tryPopPercent(std::function<int(int)> func) {
+    std::unique_lock lck(mtx);
+    (void)func;
+    if (q.empty()) {
+        if (closed)
+            throw ClosedQueue();
+        return std::nullopt;
+    }
+    if (q.size() == this->max_size)
+        is_not_full.notify_all();
+    
+    int amount = func(q.size());
+    for (int i = 0; i < amount - 1; i++) {
+        q.pop();
+    }
+    T val(std::move(q.front()));
+    q.pop();
+    return val;
 }
 
 template <typename T, class C>

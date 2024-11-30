@@ -23,6 +23,8 @@ private:
     CommunicatorSender sender;
     CommunicatorReceiver receiver;
 
+    int percentOfMessagesToReceive(int amount);
+
 public:
     explicit Communicator(const std::string& hostname, const std::string& servername);
 
