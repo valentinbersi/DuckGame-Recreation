@@ -132,6 +132,7 @@ void LevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     if (event->button() == Qt::RightButton) {
         isDeletingObject = true;
         deleteObjectAt(event->scenePos());
+        // cppcheck-suppress shadowFunction
         emit requestDragModeChange(QGraphicsView::NoDrag);
         return;
     }
