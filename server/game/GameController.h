@@ -75,13 +75,18 @@ public:
          */
         explicit PlayerNotFound(PlayerID id);
     };
-
-    GameController(std::vector<LevelData>& levelsData);
+    GameController() = delete;
     GameController(const GameController&) = delete;
     GameController& operator=(const GameController&) = delete;
     GameController(GameController&&) noexcept = delete;
     GameController& operator=(GameController&&) noexcept = delete;
     ~GameController() override;
+
+    /**
+     * Construct a game controller with the levels data
+     * @param levelsData the levels data
+     */
+    explicit GameController(std::vector<LevelData>& levelsData);
 
     /**
      * Start the match
