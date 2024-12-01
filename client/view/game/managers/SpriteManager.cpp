@@ -155,7 +155,7 @@ void SpriteManager::drawFeathers(int col, int row) {
         drawFlapping();
         return;
 
-    } else if (!state.hasGun && !state.playingDead) {
+    } else if (!state.hasGun && !state.playingDead && !state.isDead) {
         spritesheet->selectSprite(col, row, FEATHER);
 
     } else {
