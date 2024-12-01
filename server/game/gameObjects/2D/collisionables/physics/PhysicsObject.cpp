@@ -76,7 +76,7 @@ bool PhysicsObject::processCollisions(const float delta) {
                              (1 - collisionInfo->contactTime);
                 break;
             case CollisionType::Bounce:
-                _velocity = _velocity.bounce(collisionInfo->contactNormal);
+                // TODO: implement
                 break;
 
             case CollisionType::Destroy:

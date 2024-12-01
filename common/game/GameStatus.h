@@ -25,7 +25,6 @@ struct GameStatus final: ServerMessage {
     std::list<ItemData> itemPositions;
     std::list<SizedObjectData> blockPositions;
     std::list<SizedObjectData> itemSpawnerPositions;
-    std::list<SizedObjectData> boxPositions;
 
     /**
      * Send the GameStatus to the Client.
