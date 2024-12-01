@@ -241,7 +241,8 @@ public:
     void reset();
 
     /**
-     *
+     * Check if the player is dead
+     * @return true if the player is dead, false otherwise
      */
     bool isDead() const;
 
@@ -256,4 +257,16 @@ public:
      * @returns true if the player was equipped with the armor, false otherwise
      */
     bool equipHelmet(u8 protection);
+
+    /**
+     * Get the protection of the player's armor
+     * @return the protection of the player's armor
+     */
+    bool isLookingUp() const;
+
+    /**
+     * Get the aiming direction of the player
+     * @return the aiming direction of the player
+     */
+    Vector2 aimingDirection() const;
 };
