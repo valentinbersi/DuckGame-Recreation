@@ -1,5 +1,8 @@
+#pragma once
+
 #include "EquippableWeapon.h"
 #include "GameTimer.h"
+
 class Ak47 final: public EquippableWeapon {
     float reach;
     bool delay;

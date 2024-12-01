@@ -13,7 +13,7 @@
 #define OFFSET_RIGHT 40
 #define OFFSET_LEFT 40
 
-MapManager::MapManager(MapData& mapData) : mapData(mapData){}
+MapManager::MapManager(MapData& mapData): mapData(mapData) {}
 
 void MapManager::addOffset() {
     int x_min = mapData.width;
@@ -22,13 +22,18 @@ void MapManager::addOffset() {
     int y_max = 0;
 
     // busco los máximos y mínimos.
-    for (Object& obj : mapData.objects) {
+    for (Object& obj: mapData.objects) {
         QPointF topLeftPos = obj.getBoundingPos();
-        if (topLeftPos.x() < x_min) x_min = (int)topLeftPos.x();
-        if (topLeftPos.y() < y_min) y_min = (int)topLeftPos.y();
-        QPointF bottomRightPos(topLeftPos.x() + obj.size.width(), topLeftPos.y() + obj.size.height());
-        if (bottomRightPos.x() > x_max) x_max = (int)bottomRightPos.x();
-        if (bottomRightPos.y() > y_max) y_max = (int)bottomRightPos.y();
+        if (topLeftPos.x() < x_min)
+            x_min = (int)topLeftPos.x();
+        if (topLeftPos.y() < y_min)
+            y_min = (int)topLeftPos.y();
+        QPointF bottomRightPos(topLeftPos.x() + obj.size.width(),
+                               topLeftPos.y() + obj.size.height());
+        if (bottomRightPos.x() > x_max)
+            x_max = (int)bottomRightPos.x();
+        if (bottomRightPos.y() > y_max)
+            y_max = (int)bottomRightPos.y();
     }
 
     // calculo los offsets
@@ -44,13 +49,13 @@ void MapManager::addOffset() {
     if (x_min > OFFSET_LEFT)
         offsetLeft = 0;
 
-//    int offsetDown = OFFSET_DOWN;
-//    if (mapData.height - y_max < OFFSET_DOWN)
-//        offsetDown = OFFSET_DOWN - (mapData.height - y_max);
-//
-//    int offsetRight = OFFSET_RIGHT;
-//    if (mapData.width - x_max < OFFSET_RIGHT)
-//        offsetRight = OFFSET_RIGHT - (mapData.width - x_max);
+    //    int offsetDown = OFFSET_DOWN;
+    //    if (mapData.height - y_max < OFFSET_DOWN)
+    //        offsetDown = OFFSET_DOWN - (mapData.height - y_max);
+    //
+    //    int offsetRight = OFFSET_RIGHT;
+    //    if (mapData.width - x_max < OFFSET_RIGHT)
+    //        offsetRight = OFFSET_RIGHT - (mapData.width - x_max);
 
     // ajusto el tamaño del mapa
     mapData.width = offsetLeft + x_max + OFFSET_RIGHT;
@@ -58,14 +63,14 @@ void MapManager::addOffset() {
 
     // muevo los objetos
     QPoint offsetObject(offsetLeft, offsetUp);
-    for (Object& obj : mapData.objects) {
+    for (Object& obj: mapData.objects) {
         obj.centerPos += offsetObject;
     }
 }
 
 void MapManager::exportMap() {
-//    std::string path = "maps/" + mapData.name + ".yaml";
-//    std::ofstream fout(path);
+    //    std::string path = "maps/" + mapData.name + ".yaml";
+    //    std::ofstream fout(path);
     addOffset();
     mapData.path = "maps/" + mapData.name + ".yaml";
     std::ofstream fout(mapData.path);

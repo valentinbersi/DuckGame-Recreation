@@ -25,11 +25,14 @@
 
 
 ViewController::ViewController(QWidget* parent):
-        QMainWindow(parent), ui(new Ui::ViewController), mapManager(mapData), backgroundBrush(Qt::white) {
+        QMainWindow(parent),
+        ui(new Ui::ViewController),
+        mapManager(mapData),
+        backgroundBrush(Qt::white) {
     ui->setupUi(this);
 
     ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
-    //scene = new LevelScene(this, objects);
+    // scene = new LevelScene(this, objects);
     scene = new LevelScene(this, mapData.objects);
     ui->graphicsView->setScene(scene);
     onSceneResize();
@@ -128,9 +131,9 @@ bool ViewController::confirmAndSaveMap() {
     QMessageBox::StandardButton reply =
             QMessageBox::question(this, "Confirmation", "Do you want to save the map open?",
                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-    if (reply == QMessageBox::Cancel)
+    if (reply == QMessageBox::Cancel) {
         return false;
-    else if (reply == QMessageBox::Yes) {
+    } else if (reply == QMessageBox::Yes) {
         mapData.name = ui->lineEditMapName->text().toStdString();
         mapManager.exportMap();
     }
@@ -189,6 +192,7 @@ void ViewController::on_actionEditMap_triggered() {
         return;
 
     scene->loadMap(mapData.width, mapData.height);
+    onSceneResize();
     changeBackgroundBrush();
     ui->lineEditMapName->setText(QString::fromStdString(mapData.name));
     QMessageBox::information(this, "Imported Map", "The map has been imported successfully!");

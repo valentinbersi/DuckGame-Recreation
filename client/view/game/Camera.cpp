@@ -84,4 +84,6 @@ Vector2 Camera::centerOfDucks(const std::list<DuckData>& ducks) {
     return center;
 }
 
+void Camera::noDucksArrived() { ducksArrived = false; }
+
 Rectangle& Camera::getViewRect() { return viewRect; }

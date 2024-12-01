@@ -35,7 +35,9 @@ public:
         ACTION_RELEASED = 0xB,
         SHOOT_PRESSED = 0xC,
         SHOOT_RELEASED = 0xD,
-        NEXT_ROUND = 0xE
+        NEXT_ROUND = 0xE,
+        END_ROUND_CHEAT = 0xF,
+        END_GAME_CHEAT = 0x10
     };
 
     // cppcheck-suppress noExplicitConstructor

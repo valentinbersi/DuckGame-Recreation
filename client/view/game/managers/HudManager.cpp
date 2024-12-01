@@ -23,36 +23,38 @@ HudManager::HudManager(int& windowWidth, int& windowHeight, Renderer& renderer, 
         setFinished(setFinished),
         gameFinished(gameFinished) {}
 
-// FALTA DIBUJAR UN + 1 CON UNA FONT AMARILLA EN LA CABEZA DEL PATO CUANDO FINALIZA LA RONDA (CUANDO
-// LA GANA)
-
-
 void HudManager::check(
-        std::list<DuckData>& ducks, std::list<DuckData> ducksToRender,
+        std::list<DuckData>& ducks, std::list<DuckData>& ducksToRender,
         const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
-    if (roundFinished) {
-        finishedRound(ducks, spritesMapping);
-        roundFinished = false;
+    if (gameFinished) {
+        winnerShow(ducksToRender, spritesMapping);
+        finishedGame(ducks, spritesMapping);
+
     } else if (setFinished) {
+        winnerShow(ducksToRender, spritesMapping);
         finishedSet(ducks, spritesMapping);
-        finishedRound(ducksToRender, spritesMapping);
-        setFinished = false;
-    } else if (gameFinished) {
-        // finishedGame();
+        finishedRound();
+
+    } else if (roundFinished) {
+        winnerShow(ducksToRender, spritesMapping);
+        finishedRound();
     }
+
+    resetFlags();
 }
 
-void HudManager::finishedRound(
+void HudManager::winnerShow(
         std::list<DuckData>& ducksToRender,
         const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
     auto& winner = ducksToRender.front();
-    spritesMapping.at(winner.duckID)->drawWin();
+
+    spritesMapping.at(winner.duckID)->drawWin(gameFinished);
     renderer.Present();
 
     SDL_Delay(1000);
+}
 
-    int centerX = windowWidth / 2;
-    int centerY = windowHeight / 2;
+void HudManager::toBlackTransition(int centerX, int centerY) const {
     int size = 10;
 
     int maxSize = std::max(windowWidth, windowHeight);
@@ -75,6 +77,12 @@ void HudManager::finishedRound(
 
     SDL_SetRenderDrawColor(renderer.Get(), 0, 0, 0, 255);
     SDL_RenderClear(renderer.Get());
+}
+
+void HudManager::finishedRound() const {
+    int centerX = windowWidth / 2;
+    int centerY = windowHeight / 2;
+    toBlackTransition(centerX, centerY);
 
     Texture& imageTexture = TextureManager::getTexture(LOADING_IMAGE, renderer);
 
@@ -133,6 +141,39 @@ void HudManager::finishedSet(
     SDL_Delay(5000);
 }
 
+void HudManager::finishedGame(
+        std::list<DuckData>& ducks,
+        const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
+
+    int centerX = windowWidth / 2;
+    int centerY = windowHeight / 2;
+    toBlackTransition(centerX, centerY);
+
+    // Recuadro negro
+    Rect borderRect;
+    borderRect.x = 100;
+    borderRect.y = centerY - windowHeight / 10;
+    borderRect.w = windowWidth - 200;
+    borderRect.h = windowHeight / 5 + 20;
+
+    SDL_SetRenderDrawColor(renderer.Get(), 0, 0, 0, 255);
+    SDL_RenderFillRect(renderer.Get(), &borderRect);
+
+    // Recuadro gris
+    Rect tableRect = borderRect;
+    tableRect.x += 2;
+    tableRect.y += 2;
+    tableRect.w -= 4;
+    tableRect.h -= 4;
+
+    SDL_SetRenderDrawColor(renderer.Get(), 50, 50, 50, 255);
+    SDL_RenderFillRect(renderer.Get(), &tableRect);
+
+    showPoints(ducks, tableRect, spritesMapping);
+    renderer.Present();
+    SDL_Delay(5000);
+}
+
 std::string duckIDToString(DuckData::Id id) {
     switch (id) {
         case DuckData::Id::White:
@@ -166,7 +207,7 @@ void HudManager::showPoints(
     int xOffset = 10;  // Space between ducks
 
     for (const auto& duck: ducks) {
-        std::string scoreText = /*std::to_string(duck.score)*/ "20";
+        std::string scoreText = std::to_string(duck.roundsWon);
         SDL_Surface* textSurface = TTF_RenderText_Solid(font, scoreText.c_str(), textColor);
         if (!textSurface) {
             std::cerr << "Error al crear la superficie del texto: " << TTF_GetError() << std::endl;
@@ -209,4 +250,10 @@ void HudManager::showPoints(
 
     TTF_CloseFont(font);
     TTF_Quit();
+}
+
+void HudManager::resetFlags() const {
+    roundFinished = false;
+    setFinished = false;
+    gameFinished = false;
 }

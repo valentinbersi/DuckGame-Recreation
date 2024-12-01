@@ -50,5 +50,7 @@ private:
             {ItemID::Magnum, "assets/weapons/Magnum.png"},
             {ItemID::Shotgun, "assets/weapons/Shotgun.png"},
             {ItemID::Sniper, "assets/weapons/Sniper.png"},
+            {ItemID::Helmet, "assets/weapons/Helmet.png"},
+            {ItemID::Armor, "assets/weapons/Chestplate.png"},
     };
 };

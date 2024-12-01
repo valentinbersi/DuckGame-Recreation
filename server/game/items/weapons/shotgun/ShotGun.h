@@ -1,6 +1,8 @@
+#pragma once
+
 #include "EquippableWeapon.h"
 
-class Shotgun: public EquippableWeapon {
+class Shotgun final: public EquippableWeapon {
     float minReach;
     float maxReach;
     bool firing;
