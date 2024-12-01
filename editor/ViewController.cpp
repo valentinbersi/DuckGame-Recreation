@@ -192,6 +192,7 @@ void ViewController::on_actionEditMap_triggered() {
         return;
 
     scene->loadMap(mapData.width, mapData.height);
+    onSceneResize();
     changeBackgroundBrush();
     ui->lineEditMapName->setText(QString::fromStdString(mapData.name));
     QMessageBox::information(this, "Imported Map", "The map has been imported successfully!");
