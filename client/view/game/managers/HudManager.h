@@ -16,7 +16,7 @@ public:
     HudManager(int& windowWidth, int& windowHeight, SDL2pp::Renderer& renderer, bool& transition,
                bool& roundFinished, bool& setFinished, bool& gameFinished);
     ~HudManager() = default;
-    void check(std::list<DuckData>& ducks, std::list<DuckData> ducksToRender,
+    void check(std::list<DuckData>& ducks, std::list<DuckData>& ducksToRender,
                const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
     void finishedRound(std::list<DuckData>& ducksToRender,
                        const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);

@@ -20,6 +20,7 @@
 
 #define ROCK "assets/enviroment/rock.png"
 #define WEAPON_SPAWNER "assets/enviroment/spawner.png"
+#define BOX "assets/enviroment/box.png"
 
 #define WIN_PATH "assets/sounds/end-effect.mp3"
 
@@ -75,12 +76,13 @@ void Game::init() {
 
         renderer.Clear();
 
-        camera.update(ducks, deltaTime);
+        camera.update(ducks, deltaTime);            //ducks to render no funca
         filterObjectsToRender();
 
         showBackground(backgroundTexture);
         updatePlayers(spritesMapping);
         updateBlocks(enviromentRenderer);
+        //updateBoxes(enviromentRenderer);
         updateItemSpawns(enviromentRenderer);
         updateItems(enviromentRenderer);
 
@@ -90,6 +92,7 @@ void Game::init() {
             soundManager.playEffect(WIN_PATH);
             auto message = std::make_unique<GameMessage>(InputAction::NEXT_ROUND, 1);
             communicator.trysend(std::move(message));
+            clearObjects();
 
         } else {
             renderer.Present();
@@ -121,17 +124,20 @@ void Game::getSnapshot() {
     roundFinished = snapshot->roundEnded;
     setFinished = snapshot->setEnded;
     gameFinished = snapshot->gameEnded;
+
     std::ranges::transform(snapshot->ducks, std::back_inserter(ducks),
                            [](DuckData& duck) { return std::move(duck); });
 
-    for (auto& duck: snapshot->ducks)
-        if (!duck.extraData[DuckData::Flag::Index::IsDead])
-            ducksToRender.push_back(std::move(duck));
+    /*for (auto& duck: snapshot->ducks)
+        if (!duck.extraData.test(DuckData::Flag::Index::IsDead))
+            ducksToRender.push_back(std::move(duck));*/
 
     std::ranges::transform(snapshot->blockPositions, std::back_inserter(blocks),
                            [](SizedObjectData& block) { return std::move(block); });
     std::ranges::transform(snapshot->itemSpawnerPositions, std::back_inserter(itemSpawns),
                            [](SizedObjectData& itemSpawner) { return std::move(itemSpawner); });
+    //std::ranges::transform(snapshot->boxPositions, std::back_inserter(boxes),
+    //                   [](SizedObjectData& box) { return std::move(box); });
     std::ranges::transform(snapshot->itemPositions, std::back_inserter(items),
                            [](ItemData& item) { return std::move(item); });
 }
@@ -146,6 +152,10 @@ void Game::filterObjectsToRender() {
     for (SizedObjectData& itemSpawn: itemSpawns)
         if (viewRect.overlaps(itemSpawn.rectangle))
             itemSpawnsToRender.push_back(std::move(itemSpawn));
+
+    //for (SizedObjectData& box: boxes)
+        //if (viewRect.overlaps(box.rectangle))
+            //boxesToRender.push_back(std::move(box));
 
     for (ItemData& item: items)
         if (viewRect.overlaps(item.rectangle))
@@ -207,6 +217,11 @@ void Game::updateItemSpawns(EnviromentRenderer& enviromentRenderer) {
         enviromentRenderer.drawEnviroment(itemSpawn, WEAPON_SPAWNER);
 }
 
+void Game::updateBoxes(EnviromentRenderer& enviromentRenderer) {
+    for (Rect& box: calculateObjectsPositionsAndSize(boxesToRender))
+        enviromentRenderer.drawEnviroment(box, BOX);
+}
+
 void Game::updateItems(EnviromentRenderer& enviromentRenderer) {
     std::list<Rect> rectsToDraw = calculateObjectsPositionsAndSize(itemsToRender);
     auto rectsIt = rectsToDraw.begin();
@@ -247,6 +262,7 @@ std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>> Game::createSpr
 
 void Game::clearObjects() {
     ducks.clear();
+    ducksToRender.clear();
     blocks.clear();
     blocksToRender.clear();
     itemSpawns.clear();

@@ -23,22 +23,18 @@ HudManager::HudManager(int& windowWidth, int& windowHeight, Renderer& renderer, 
         setFinished(setFinished),
         gameFinished(gameFinished) {}
 
-// FALTA DIBUJAR UN + 1 CON UNA FONT AMARILLA EN LA CABEZA DEL PATO CUANDO FINALIZA LA RONDA (CUANDO
-// LA GANA)
-
-
 void HudManager::check(
-        std::list<DuckData>& ducks, std::list<DuckData> ducksToRender,
+        std::list<DuckData>& ducks, std::list<DuckData>& ducksToRender,
         const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
-    if (roundFinished) {
-        finishedRound(ducks, spritesMapping);
-        roundFinished = false;
+    if (gameFinished) {
+        //finished game
     } else if (setFinished) {
         finishedSet(ducks, spritesMapping);
         finishedRound(ducksToRender, spritesMapping);
         setFinished = false;
-    } else if (gameFinished) {
-        // finishedGame();
+    } else if (roundFinished) {
+        finishedRound(ducks, spritesMapping);
+        roundFinished = false;
     }
 }
 
@@ -46,6 +42,10 @@ void HudManager::finishedRound(
         std::list<DuckData>& ducksToRender,
         const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
     auto& winner = ducksToRender.front();
+
+    if (winner.extraData[DuckData::Flag::Index::IsDead]) std::cout << "Lol" << std::endl;
+    if (ducksToRender.back().extraData[DuckData::Flag::Index::IsDead]) std::cout << "XD" << std::endl;
+
     spritesMapping.at(winner.duckID)->drawWin();
     renderer.Present();
 
