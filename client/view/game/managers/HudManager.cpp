@@ -26,12 +26,13 @@ HudManager::HudManager(int& windowWidth, int& windowHeight, Renderer& renderer, 
 void HudManager::check(
         std::list<DuckData>& ducks, std::list<DuckData>& ducksToRender,
         const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
-    if (gameFinished) {
+    /*if (gameFinished) {
         //finished game
-    } else if (setFinished) {
+    } else*/ if (setFinished) {
         finishedSet(ducks, spritesMapping);
         finishedRound(ducksToRender, spritesMapping);
         setFinished = false;
+        roundFinished = false;
     } else if (roundFinished) {
         finishedRound(ducksToRender, spritesMapping);
         roundFinished = false;
@@ -42,9 +43,6 @@ void HudManager::finishedRound(
         std::list<DuckData>& ducksToRender,
         const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
     auto& winner = ducksToRender.front();
-
-    if (winner.extraData[DuckData::Flag::Index::IsDead]) std::cout << "Lol" << std::endl;
-    if (ducksToRender.back().extraData[DuckData::Flag::Index::IsDead]) std::cout << "XD" << std::endl;
 
     spritesMapping.at(winner.duckID)->drawWin();
     renderer.Present();

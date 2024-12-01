@@ -82,7 +82,7 @@ void Game::init() {
         showBackground(backgroundTexture);
         updatePlayers(spritesMapping);
         updateBlocks(enviromentRenderer);
-        //updateBoxes(enviromentRenderer);
+        updateBoxes(enviromentRenderer);
         updateItemSpawns(enviromentRenderer);
         updateItems(enviromentRenderer);
 
@@ -93,6 +93,7 @@ void Game::init() {
             auto message = std::make_unique<GameMessage>(InputAction::NEXT_ROUND, 1);
             communicator.trysend(std::move(message));
             clearObjects();
+            camera.noDucksArrived();
 
         } else {
             renderer.Present();
@@ -136,8 +137,8 @@ void Game::getSnapshot() {
                            [](SizedObjectData& block) { return std::move(block); });
     std::ranges::transform(snapshot->itemSpawnerPositions, std::back_inserter(itemSpawns),
                            [](SizedObjectData& itemSpawner) { return std::move(itemSpawner); });
-    //std::ranges::transform(snapshot->boxPositions, std::back_inserter(boxes),
-    //                   [](SizedObjectData& box) { return std::move(box); });
+    std::ranges::transform(snapshot->boxPositions, std::back_inserter(boxes),
+                       [](SizedObjectData& box) { return std::move(box); });
     std::ranges::transform(snapshot->itemPositions, std::back_inserter(items),
                            [](ItemData& item) { return std::move(item); });
 }
@@ -153,9 +154,9 @@ void Game::filterObjectsToRender() {
         if (viewRect.overlaps(itemSpawn.rectangle))
             itemSpawnsToRender.push_back(std::move(itemSpawn));
 
-    //for (SizedObjectData& box: boxes)
-        //if (viewRect.overlaps(box.rectangle))
-            //boxesToRender.push_back(std::move(box));
+    for (SizedObjectData& box: boxes)
+        if (viewRect.overlaps(box.rectangle))
+            boxesToRender.push_back(std::move(box));
 
     for (ItemData& item: items)
         if (viewRect.overlaps(item.rectangle))
@@ -269,6 +270,8 @@ void Game::clearObjects() {
     itemSpawnsToRender.clear();
     items.clear();
     itemsToRender.clear();
+    boxes.clear();
+    boxesToRender.clear();
 }
 
 Game::~Game() {
