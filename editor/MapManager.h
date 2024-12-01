@@ -15,7 +15,7 @@ private:
     void addOffset();
 
 public:
-    MapManager(MapData& mapData);
+    explicit MapManager(MapData& mapData);
 
     void exportMap();
     bool importMap();

@@ -2,6 +2,7 @@
 
 #include <bitset>
 #include <forward_list>
+#include <memory>
 
 #include "CollisionObject.h"
 #include "GameObject.h"

@@ -82,7 +82,7 @@ void GameController::roundUpdate(u8 playerAlive, PlayerID playerID) {
 
 void GameController::clearState() {
     for (Player* player: players | std::views::values) player->reset();
-    if (setEnded){
+    if (setEnded) {
         setEnded = false;
         roundsPlayed = 0;
     }

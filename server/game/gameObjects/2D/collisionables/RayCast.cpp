@@ -1,5 +1,9 @@
 #include "RayCast.h"
 
+#include <algorithm>
+#include <utility>
+#include <vector>
+
 RayCast::RayCast(Vector2 start, Vector2 end, const std::bitset<LayersCount> scannedLayers):
         ray(std::move(start), std::move(end)), scannedLayers(scannedLayers) {}
 

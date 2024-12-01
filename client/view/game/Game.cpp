@@ -90,7 +90,8 @@ void Game::init() {
 
         hudManager.check(ducks, ducksToRender, spritesMapping);
         if (transition) {
-            if (gameFinished) running = false;
+            if (gameFinished)
+                running = false;
             transition = false;
             soundManager.playEffect(WIN_PATH);
             auto message = std::make_unique<GameMessage>(InputAction::NEXT_ROUND, 1);
@@ -140,7 +141,7 @@ void Game::getSnapshot() {
     std::ranges::transform(snapshot->itemSpawnerPositions, std::back_inserter(itemSpawns),
                            [](SizedObjectData& itemSpawner) { return std::move(itemSpawner); });
     std::ranges::transform(snapshot->boxPositions, std::back_inserter(boxes),
-                       [](SizedObjectData& box) { return std::move(box); });
+                           [](SizedObjectData& box) { return std::move(box); });
     std::ranges::transform(snapshot->itemPositions, std::back_inserter(items),
                            [](ItemData& item) { return std::move(item); });
 }

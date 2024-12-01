@@ -35,8 +35,9 @@ WaitingPage::WaitingPage(QWidget* parent, Communicator& communicator, GameInfo& 
     if (gameInfo.playersNumber == 1) {
         ui->Duck2->setVisible(false);
         ui->Duck2Label->setVisible(false);
-    } else if (gameInfo.playersNumber == 2)
+    } else if (gameInfo.playersNumber == 2) {
         ui->Duck2->setPixmap(QPixmap(getDuckIconPath(gameInfo.Duck2Color)));
+    }
 }
 
 QString WaitingPage::getDuckIconPath(DuckData::Id id) {

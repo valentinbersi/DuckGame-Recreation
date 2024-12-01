@@ -1,11 +1,12 @@
 #include "EquippableItemFactory.h"
+
 #include "Ak47.h"
 #include "Config.h"
+#include "EquippableArmor.h"
 #include "LongPistol.h"
 #include "Math.h"
 #include "ShotGun.h"
 #include "Sniper.h"
-#include "EquippableArmor.h"
 
 
 #define INVALID_ID "Invalid ItemID"
@@ -53,7 +54,8 @@ std::unordered_map<ItemID, std::function<std::unique_ptr<EquippableItem>()>>
                              Config::Weapons::Sniper::dispersion(),
                              Config::Weapons::Sniper::reloadTime());
                  }},
-                {ItemID::Ak47, [] {
+                {ItemID::Ak47,
+                 [] {
                      return std::make_unique<Ak47>(
                              ItemID::Ak47, Config::Weapons::Ak47::ammo(),
                              Config::Weapons::Ak47::recoil(), Config::Weapons::Ak47::reach(),
@@ -62,16 +64,15 @@ std::unordered_map<ItemID, std::function<std::unique_ptr<EquippableItem>()>>
                              Math::toRadians(Config::Weapons::Ak47::maxDispersion()),
                              Config::Weapons::Ak47::timeBetweenShots());
                  }},
-                {ItemID::Helmet, []{
-                    return std::make_unique<EquippableArmor>(
-                        ItemID::Helmet, 
-                        Config::Armor::helmet());
+                {ItemID::Helmet,
+                 [] {
+                     return std::make_unique<EquippableArmor>(ItemID::Helmet,
+                                                              Config::Armor::helmet());
                  }},
-                {ItemID::Armor, []{
-                    return std::make_unique<EquippableArmor>(
-                        ItemID::Armor, 
-                        Config::Armor::armor());
-                }}};
+                {ItemID::Armor, [] {
+                     return std::make_unique<EquippableArmor>(ItemID::Armor,
+                                                              Config::Armor::armor());
+                 }}};
 
 std::unique_ptr<EquippableItem> EquippableItemFactory::createEquippableItem(const ItemID id) {
     const auto function = factory.find(id);

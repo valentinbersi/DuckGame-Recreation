@@ -9,13 +9,13 @@
 #include "Bullet.h"
 #include "Config.h"
 #include "DuckData.h"
+#include "EquippableItemFactory.h"
 #include "GameController.h"
 #include "GameTimer.h"
 #include "Item.h"
 #include "ItemFactory.h"
 #include "ItemID.h"
 #include "Layer.h"
-#include "EquippableItemFactory.h"
 
 /**
  * Macro for easier event handling
@@ -66,13 +66,14 @@ Player::Player(const DuckData::Id id):
 
     Config::Duck::defaultWeapon() == ItemID::NONE ?
             item = nullptr :
-            item = EquippableItemFactory::createEquippableItem(Config::Duck::defaultWeapon()).release();
+            item = EquippableItemFactory::createEquippableItem(Config::Duck::defaultWeapon())
+                           .release();
 
     if (item) {
         item->connect(EquippableWeapon::Events::Fired,
-                        eventHandler(&Player::onWeaponFired, , const Vector2&));
+                      eventHandler(&Player::onWeaponFired, , const Vector2&));
         item->connect(EquippableWeapon::Events::NoMoreBullets,
-                        eventHandler(&Player::onWeaponNoMoreBullets));
+                      eventHandler(&Player::onWeaponNoMoreBullets));
         addChild(EQUIPPED_ITEM, item);
     }
 
