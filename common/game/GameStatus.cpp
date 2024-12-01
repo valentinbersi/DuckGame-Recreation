@@ -12,7 +12,8 @@ GameStatus::GameStatus(const GameStatus& other):
         ducks(other.ducks),
         itemPositions(other.itemPositions),
         blockPositions(other.blockPositions),
-        itemSpawnerPositions(other.itemSpawnerPositions) {}
+        itemSpawnerPositions(other.itemSpawnerPositions),
+        boxPositions(other.boxPositions) {}
 
 GameStatus& GameStatus::operator=(const GameStatus& other) {
     if (this == &other)
@@ -25,6 +26,7 @@ GameStatus& GameStatus::operator=(const GameStatus& other) {
     itemPositions = other.itemPositions;
     blockPositions = other.blockPositions;
     itemSpawnerPositions = other.itemSpawnerPositions;
+    boxPositions = other.boxPositions;
     return *this;
 }
 
@@ -36,7 +38,8 @@ GameStatus::GameStatus(GameStatus&& other) noexcept:
         ducks(std::move(other.ducks)),
         itemPositions(std::move(other.itemPositions)),
         blockPositions(std::move(other.blockPositions)),
-        itemSpawnerPositions(std::move(other.itemSpawnerPositions)) {}
+        itemSpawnerPositions(std::move(other.itemSpawnerPositions)),
+        boxPositions(std::move(other.boxPositions)) {}
 
 GameStatus& GameStatus::operator=(GameStatus&& other) noexcept {
     if (this == &other)
@@ -49,6 +52,7 @@ GameStatus& GameStatus::operator=(GameStatus&& other) noexcept {
     itemPositions = std::move(other.itemPositions);
     blockPositions = std::move(other.blockPositions);
     itemSpawnerPositions = std::move(other.itemSpawnerPositions);
+    boxPositions = std::move(other.boxPositions);
     return *this;
 }
 
@@ -56,7 +60,7 @@ bool GameStatus::operator==(const GameStatus& other) const {
     return roundEnded == other.roundEnded && gameEnded == other.gameEnded &&
            setEnded == other.setEnded && ducks == other.ducks &&
            itemPositions == other.itemPositions && blockPositions == other.blockPositions &&
-           itemSpawnerPositions == other.itemSpawnerPositions;
+           itemSpawnerPositions == other.itemSpawnerPositions && boxPositions == other.boxPositions;
 }
 
 template <typename T>
@@ -74,4 +78,5 @@ void GameStatus::send(ServerSendProtocol& serverProtocol) {
     sendList(serverProtocol, itemPositions, &ServerSendProtocol::sendItemData);
     sendList(serverProtocol, blockPositions, &ServerSendProtocol::sendBlock);
     sendList(serverProtocol, itemSpawnerPositions, &ServerSendProtocol::sendBlock);
+    sendList(serverProtocol, boxPositions, &ServerSendProtocol::sendBlock);
 }
