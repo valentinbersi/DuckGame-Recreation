@@ -33,7 +33,7 @@ void HudManager::check(
         finishedRound(ducksToRender, spritesMapping);
         setFinished = false;
     } else if (roundFinished) {
-        finishedRound(ducks, spritesMapping);
+        finishedRound(ducksToRender, spritesMapping);
         roundFinished = false;
     }
 }

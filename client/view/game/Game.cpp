@@ -76,7 +76,7 @@ void Game::init() {
 
         renderer.Clear();
 
-        camera.update(ducks, deltaTime);            //ducks to render no funca
+        camera.update(ducksToRender, deltaTime);            //ducks to render no funca
         filterObjectsToRender();
 
         showBackground(backgroundTexture);
@@ -128,9 +128,9 @@ void Game::getSnapshot() {
     std::ranges::transform(snapshot->ducks, std::back_inserter(ducks),
                            [](DuckData& duck) { return std::move(duck); });
 
-    /*for (auto& duck: snapshot->ducks)
+    for (auto& duck: snapshot->ducks)
         if (!duck.extraData.test(DuckData::Flag::Index::IsDead))
-            ducksToRender.push_back(std::move(duck));*/
+            ducksToRender.push_back(std::move(duck));
 
     std::ranges::transform(snapshot->blockPositions, std::back_inserter(blocks),
                            [](SizedObjectData& block) { return std::move(block); });

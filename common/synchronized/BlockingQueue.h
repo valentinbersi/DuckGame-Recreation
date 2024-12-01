@@ -138,7 +138,7 @@ std::queue<T, C> BlockingQueue<T, C>::popAll() {
 template <typename T, class C>
 std::optional<T> BlockingQueue<T, C>::tryPopPercent(std::function<int(int)> func) {
     std::unique_lock lck(mtx);
-    (void)func;
+    //(void)func;
     if (q.empty()) {
         if (closed)
             throw ClosedQueue();
