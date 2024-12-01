@@ -2,14 +2,62 @@
 
 #include <QDebug>
 #include <fstream>
-#include <list>
 #include <string>
 
 #include "yaml-cpp/yaml.h"
 
+/** la unidad de los offset son pixeles. 2 Pixeles == 1 Tile */
+#define OFFSET_UP 40
+#define OFFSET_RIGHT 80
+#define OFFSET_DOWN 40
+#define OFFSET_LEFT 80
+
+void MapManager::addOffset(MapData& mapData) {
+    int x_min = mapData.width;
+    int x_max = 0;
+    int y_min = mapData.height;
+    int y_max = 0;
+
+    // busco los máximos y mínimos.
+    for (Object& obj : mapData.objects) {
+        QPointF topLeftPos = obj.getBoundingPos();
+        if (topLeftPos.x() < x_min) x_min = (int)topLeftPos.x();
+        if (topLeftPos.y() < y_min) y_min = (int)topLeftPos.y();
+        QPointF bottomRightPos(topLeftPos.x() + obj.size.width(), topLeftPos.y() + obj.size.height());
+        if (bottomRightPos.x() > x_max) x_max = (int)bottomRightPos.x();
+        if (bottomRightPos.y() > y_max) y_max = (int)bottomRightPos.y();
+    }
+
+    // calculo los offsets
+    int offsetUp = OFFSET_UP - y_min;
+    int offsetLeft = OFFSET_LEFT - x_min;
+
+    int offsetDown = OFFSET_DOWN;
+    if (mapData.height - y_max < OFFSET_DOWN)
+        offsetDown = OFFSET_DOWN - (mapData.height - y_max);
+
+    int offsetRight = OFFSET_RIGHT;
+    if (mapData.width - x_max < OFFSET_RIGHT)
+        offsetRight = OFFSET_RIGHT - (mapData.width - x_max);
+
+    // ajusto el tamaño del mapa
+    qDebug() << "map Width pre ajuste:" << mapData.width;
+    mapData.width = offsetLeft + x_max + offsetRight;
+    qDebug() << "offsetLeft:" << offsetLeft << " x_max:" << x_max << " offsetRight:" << offsetRight << " x_min:" << x_min ;
+    qDebug() << "map Width post ajuste:" << mapData.width;
+    mapData.height = offsetUp + y_max + offsetDown;
+
+    // muevo los objetos
+    QPoint offsetObject(offsetLeft, offsetUp);
+    for (Object& obj : mapData.objects) {
+        obj.centerPos += offsetObject;
+    }
+}
+
 void MapManager::exportMap(MapData& mapData) {
 //    std::string path = "maps/" + mapData.name + ".yaml";
 //    std::ofstream fout(path);
+    addOffset(mapData);
     mapData.path = "maps/" + mapData.name + ".yaml";
     std::ofstream fout(mapData.path);
     if (!fout.is_open()) {

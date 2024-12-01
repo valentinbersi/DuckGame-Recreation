@@ -10,6 +10,7 @@ class MapManager {
 private:
     static std::string objectTypeToString(ObjectType type);
     static ObjectType stringToObjectType(const std::string& typeStr);
+    static void addOffset(MapData& mapData);
 
 public:
     MapManager() = default;
