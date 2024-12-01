@@ -90,6 +90,7 @@ void Game::init() {
 
         hudManager.check(ducks, ducksToRender, spritesMapping);
         if (transition) {
+            if (gameFinished) running = false;
             transition = false;
             soundManager.playEffect(WIN_PATH);
             auto message = std::make_unique<GameMessage>(InputAction::NEXT_ROUND, 1);
