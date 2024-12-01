@@ -1,6 +1,8 @@
 #pragma once
 
+#include <list>
 #include <string>
+
 #include "Object.h"
 
 struct MapData {

@@ -12,11 +12,12 @@
  */
 class Config {
     static const HashMap<std::string, ItemID> itemIDs;
-
+    static const HashMap<ItemID, u8>& getDefaultAmmoMap();
     static std::string configDirectory;
     static std::string mapsDirectory_;
 
 public:
+    static u8 getDefaultAmmo(ItemID id);
     struct BadConfigFile final: std::runtime_error {
         explicit BadConfigFile(const std::string& message);
     };

@@ -155,7 +155,7 @@ void SpriteManager::drawFeathers(int col, int row) {
         drawFlapping();
         return;
 
-    } else if (!state.hasGun && !state.playingDead) {
+    } else if (!state.hasGun && !state.playingDead && !state.isDead) {
         spritesheet->selectSprite(col, row, FEATHER);
 
     } else {
@@ -193,7 +193,7 @@ void SpriteManager::drawHelmet() {
     spritesheet->drawHelmet(position, state.flipped);
 }
 
-void SpriteManager::drawWin() {
+void SpriteManager::drawWin(bool endGame) {
     spritesheet->selectSprite(0, 0, NO_FEATHER);
     SDL2pp::Rect position = getPosition(NO_FEATHER, NO_CHESTPLATE, HELMET);
 
@@ -201,7 +201,7 @@ void SpriteManager::drawWin() {
     position.x += 0.4 * scale;
     position.w = 0.8 * scale;
     position.h = 0.8 * scale;
-    spritesheet->drawWin(position, state.flipped);
+    spritesheet->drawWin(position, state.flipped, endGame);
 }
 
 SDL2pp::Rect SpriteManager::getPosition(bool isFeather, bool isChestplate, bool isHelmet) {

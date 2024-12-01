@@ -1,3 +1,4 @@
+#pragma once
 
 #include "EquippableWeapon.h"
 #include "GameTimer.h"

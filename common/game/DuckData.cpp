@@ -93,5 +93,6 @@ DuckData::DuckData(const Vector2& position, const Id id, const Direction directi
 
 bool DuckData::operator==(const DuckData& other) const {
     return position.isEqualAprox(other.position) && duckID == other.duckID &&
-           gunID == other.gunID && direction == other.direction && extraData == other.extraData;
+           gunID == other.gunID && direction == other.direction && extraData == other.extraData &&
+           roundsWon == other.roundsWon;
 }

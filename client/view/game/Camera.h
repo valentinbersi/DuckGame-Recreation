@@ -35,6 +35,8 @@ public:
     // Returns the view rectangle of the camera.
     Rectangle& getViewRect();
 
+    void noDucksArrived();
+
 private:
     // This method adjusts the size of the view rectangle based on the maximum distance between
     // ducks and the aspect ratio of the window. It then centers the view rectangle on the provided
