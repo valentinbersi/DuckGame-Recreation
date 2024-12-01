@@ -113,7 +113,7 @@ GameController::GameController(std::vector<LevelData>& levelsData):
 }
 
 void GameController::start() {
-    loadLevel(levelsData[mapSelector()]);  // seria random entre el size del map
+    loadLevel(levelsData[mapSelector()]);
     roundEnded = false;
 }
 
@@ -199,4 +199,11 @@ void GameController::startNewRound() { roundEnded = false; }
 void GameController::loadNewState() {
     clearState();
     loadLevel(levelsData[mapSelector()]);
+}
+
+void GameController::endGame() { _gameEnded = false; }
+
+void GameController::endRound() {
+    // kills all players, no round point will be given.
+    for (Player* player: players | std::views::values) player->kill();
 }

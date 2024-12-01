@@ -172,4 +172,14 @@ public:
      * Clears previous State and loads a new one
      */
     void loadNewState();
+
+    /**
+     * Finish the match by force
+     */
+    void endGame();
+
+    /**
+     * Finish the round by force
+     */
+    void endRound();
 };
