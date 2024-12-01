@@ -21,7 +21,8 @@ Box::Box(Vector2 position):
 void Box::eliminateBox() {
     switch (randomGenerator()) {
         case (ITEM): {
-            std::unique_ptr<Item> item = ItemFactory::createItem(ItemID::randomItemID());
+            std::unique_ptr<Item> item =
+                    ItemFactory::createItem(ItemID::randomItemID(), 0, Force::Yes);
             item->setPosition(globalPosition());
             parent()->addChild("Item", std::move(item));
             break;

@@ -31,6 +31,30 @@ const HashMap<std::string, ItemID> Config::itemIDs = {{GRENADE, ItemID::Grenade}
                                                       {ARMOR, ItemID::Armor},
                                                       {NOTHING, ItemID::NONE}};
 
+const HashMap<ItemID, u8>& Config::getDefaultAmmoMap() {
+    static const HashMap<ItemID, u8> defaultAmmo = {
+            {ItemID::DuelPistol, Config::Weapons::DuelPistol::ammo()},
+            {ItemID::CowboyPistol, Config::Weapons::CowboyPistol::ammo()},
+            {ItemID::Magnum, Config::Weapons::Magnum::ammo()},
+            {ItemID::Shotgun, Config::Weapons::Shotgun::ammo()},
+            {ItemID::Sniper, Config::Weapons::Sniper::ammo()},
+            {ItemID::Ak47, Config::Weapons::Ak47::ammo()},
+            {ItemID::PewPewLaser, Config::Weapons::PewPewLaser::ammo()},
+            {ItemID::LaserRifle, Config::Weapons::LaserRifle::ammo()},
+            {ItemID::Grenade, Config::Weapons::Grenade::ammo()},
+            {ItemID::Banana, Config::Weapons::Banana::ammo()}};
+    return defaultAmmo;
+}
+
+u8 Config::getDefaultAmmo(ItemID id) {
+    const auto& defaultAmmo = getDefaultAmmoMap();
+    auto it = defaultAmmo.find(id);
+    if (it != defaultAmmo.end()) {
+        return it->second;
+    }
+    return 0;
+}
+
 std::string Config::configDirectory{"/etc/DuckGame/"};     // NOLINT(runtime/string)
 std::string Config::mapsDirectory_{"/etc/DuckGame/maps"};  // NOLINT(runtime/string)
 

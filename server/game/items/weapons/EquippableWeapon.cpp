@@ -21,4 +21,6 @@ EquippableWeapon::EquippableWeapon(const ItemID id, const u8 ammo, Vector2 recoi
     registerEvent(Events::NoMoreBullets);
 }
 
+u8 EquippableWeapon::ammo() const { return ammo_; }
+
 EquippableWeapon::~EquippableWeapon() = default;

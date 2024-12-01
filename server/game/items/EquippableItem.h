@@ -21,6 +21,12 @@ public:
     explicit EquippableItem(ItemID id);
 
     /**
+     * To override, returns cero if not
+     * @return return cero always
+     */
+    virtual u8 ammo() const;
+
+    /**
      * Get the id of the item
      * @return The id of the item
      */

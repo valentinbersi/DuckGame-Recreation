@@ -9,7 +9,7 @@ class EquippableItemFactory {
     /**
      * HashMap used to create EquippableItem
      */
-    static std::unordered_map<ItemID, std::function<std::unique_ptr<EquippableItem>()>> factory;
+    static std::unordered_map<ItemID, std::function<std::unique_ptr<EquippableItem>(u8)>> factory;
 
 public:
     /**
@@ -18,5 +18,5 @@ public:
      * @param id
      * @return unique pointer to Created Equippable Item
      */
-    static std::unique_ptr<EquippableItem> createEquippableItem(const ItemID id);
+    static std::unique_ptr<EquippableItem> createEquippableItem(const ItemID id, u8 ammo);
 };

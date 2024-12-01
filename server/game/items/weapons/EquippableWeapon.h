@@ -34,6 +34,12 @@ public:
      */
     EquippableWeapon(ItemID id, u8 ammo, Vector2 recoil);
 
+
+    /**
+     * @return the ammo associated
+     */
+    u8 ammo() const override;
+
     struct Events {
         constexpr static auto Fired = "Fired";
         constexpr static auto NoMoreBullets = "NoMoreBullets";

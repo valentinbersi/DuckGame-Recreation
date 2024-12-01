@@ -6,6 +6,7 @@
 
 class Item final: public PhysicsObject {
     ItemID _id;
+    u8 _ammo;  // 0 for non weapons
 
 public:
     Item() = delete;
@@ -20,13 +21,20 @@ public:
      * @param height the heigth of the item
      * @param id the id of the item
      */
-    Item(float width, float height, ItemID id);
+    Item(float width, float height, ItemID id, u8 ammo);
 
     /**
      * Get the id of the item
      * @return ItemId related to the Item
      */
     ItemID id() const noexcept;
+
+
+    /**
+     * Get the ammo of the item
+     * @return ammoint of ammo
+     */
+    u8 ammo() const noexcept;
 
     /**
      * Gives Data related to the Item;
