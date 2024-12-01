@@ -8,6 +8,9 @@
 #include <string>
 
 #include "LevelScene.h"
+#include "MapData.h"
+#include "MapManager.h"
+#include "Types.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -24,8 +27,10 @@ public:
 
 private:
     Ui::ViewController* ui;
-    std::string background;
-    std::list<Object> objects;
+//    std::string background;
+//    std::list<Object> objects;
+    MapData mapData;
+    MapManager mapManager;
     LevelScene* scene;
 
     QPushButton* platformButton;
@@ -35,6 +40,8 @@ private:
     std::map<QPushButton*, ObjectType> buttonTypeMap;
 
     QBrush backgroundBrush;
+
+    cppstring pathToArgument;
 
     // void wheelEvent(QWheelEvent* event) override;
     /**
