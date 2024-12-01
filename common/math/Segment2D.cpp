@@ -1,5 +1,6 @@
-#include "Math.h"
 #include "Segment2D.h"
+
+#include "Math.h"
 
 Segment2D::Segment2D(Vector2 begin, Vector2 end): start_(std::move(begin)), end_(std::move(end)) {}
 
