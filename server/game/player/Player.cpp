@@ -96,22 +96,31 @@ void Player::onItemCollision(CollisionObject* itemDetected) {
         return;
 
     const auto itemPtr = static_cast<Item*>(itemDetected);  // Static cast is safe
-    switch (const ItemID id = itemPtr->id()) {
-        case ItemID::Helmet:
-            flags |= flags.test(DuckData::Flag::Index::Helmet) ? flags : DuckData::Flag::Helmet;
-            return;
-        case ItemID::Armor:
-            flags |= flags.test(DuckData::Flag::Index::Armor) ? flags : DuckData::Flag::Armor;
-            return;
-        default:
-            item = EquippableItemFactory::createEquippableItem(id).release();
-            item->connect(EquippableWeapon::Events::Fired,
-                            eventHandler(&Player::onWeaponFired, , const Vector2&));
-            item->connect(EquippableWeapon::Events::NoMoreBullets,
-                            eventHandler(&Player::onWeaponNoMoreBullets));
-            addChild(EQUIPPED_ITEM, item);
-            itemDetected->parent()->removeChild(itemDetected);
+    const ItemID id = itemPtr->id();
+    item = EquippableItemFactory::createEquippableItem(id).release();
+    if (!(id == ItemID::Helmet || id == ItemID::Armor)) {
+        item->connect(EquippableWeapon::Events::Fired,
+                      eventHandler(&Player::onWeaponFired, , const Vector2&));
+        item->connect(EquippableWeapon::Events::NoMoreBullets,
+                      eventHandler(&Player::onWeaponNoMoreBullets));
     }
+    addChild(EQUIPPED_ITEM, item);
+    itemDetected->parent()->removeChild(itemDetected);
+    // switch (const ItemID id = itemPtr->id()) {
+    //     case ItemID::Helmet:
+    //         flags |= flags.test(DuckData::Flag::Index::Helmet) ? flags : DuckData::Flag::Helmet;
+    //         return;
+    //     case ItemID::Armor:
+    //         flags |= flags.test(DuckData::Flag::Index::Armor) ? flags : DuckData::Flag::Armor;
+    //         return;
+    //     default:
+    //         item = EquippableItemFactory::createEquippableItem(id).release();
+    //         item->connect(EquippableWeapon::Events::Fired,
+    //                         eventHandler(&Player::onWeaponFired, , const Vector2&));
+    //         item->connect(EquippableWeapon::Events::NoMoreBullets,
+    //                         eventHandler(&Player::onWeaponNoMoreBullets));
+    //         addChild(EQUIPPED_ITEM, item);
+    //         itemDetected->parent()->removeChild(itemDetected);
 }
 
 void Player::onCollision(const CollisionObject* object) {
