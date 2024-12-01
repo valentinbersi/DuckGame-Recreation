@@ -3,6 +3,10 @@
 RayCast::RayCast(Vector2 start, Vector2 end, const std::bitset<LayersCount> scannedLayers):
         ray(std::move(start), std::move(end)), scannedLayers(scannedLayers) {}
 
+RayCast::RayCast(Vector2 start, const Vector2& direction, const float length,
+                 const std::bitset<LayersCount> scannedLayers):
+        ray(std::move(start), direction.normalized() * length), scannedLayers(scannedLayers) {}
+
 void RayCast::registerCollisions(std::weak_ptr<CollisionObject> object) {
     if ((scannedLayers & object.lock()->layers()).any())
         objectsToCollide.push_front(std::move(object));
