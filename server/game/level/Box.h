@@ -3,12 +3,12 @@
 #include "RandomGenerator.h"
 #include "SizedObjectData.h"
 
-class Box: public PhysicsObject {  
-private: 
+class Box: public PhysicsObject {
+private:
     RandomIntGenerator randomGenerator;
 
     /**
-     * Eliminates the box and generates a random item, 
+     * Eliminates the box and generates a random item,
      * an explosion or nothing
      */
     void eliminateBox();

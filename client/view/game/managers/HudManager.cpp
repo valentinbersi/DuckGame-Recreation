@@ -43,7 +43,9 @@ void HudManager::check(
     resetFlags();
 }
 
-void HudManager::winnerShow(std::list<DuckData>& ducksToRender, const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
+void HudManager::winnerShow(
+        std::list<DuckData>& ducksToRender,
+        const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
     auto& winner = ducksToRender.front();
 
     spritesMapping.at(winner.duckID)->drawWin(gameFinished);

@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "Force.h"
 #include "Item.h"
 #include "unordered_map"
 
@@ -9,7 +10,7 @@ class ItemFactory {
     /**
      * HashMap used to create Item
      */
-    static std::unordered_map<ItemID, std::function<std::unique_ptr<Item>()>> factory;
+    static std::unordered_map<ItemID, std::function<std::unique_ptr<Item>(u8)>> factory;
 
 public:
     /**
@@ -18,5 +19,5 @@ public:
      * @param id
      * @return unique pointer to Created Item
      */
-    static std::unique_ptr<Item> createItem(const ItemID id);
+    static std::unique_ptr<Item> createItem(const ItemID id, u8 ammo, Force force);
 };

@@ -66,7 +66,9 @@ Player::Player(const DuckData::Id id):
 
     Config::Duck::defaultWeapon() == ItemID::NONE ?
             item = nullptr :
-            item = EquippableItemFactory::createEquippableItem(Config::Duck::defaultWeapon())
+            item = EquippableItemFactory::createEquippableItem(
+                           Config::Duck::defaultWeapon(),
+                           Config::getDefaultAmmo(Config::Duck::defaultWeapon()))
                            .release();
 
     if (item) {
@@ -98,7 +100,8 @@ void Player::onItemCollision(CollisionObject* itemDetected) {
 
     const auto itemPtr = static_cast<Item*>(itemDetected);  // Static cast is safe
     const ItemID id = itemPtr->id();
-    item = EquippableItemFactory::createEquippableItem(id).release();
+    const u8 ammo = itemPtr->ammo();
+    item = EquippableItemFactory::createEquippableItem(id, ammo).release();
     if (!(id == ItemID::Helmet || id == ItemID::Armor)) {
         item->connect(EquippableWeapon::Events::Fired,
                       eventHandler(&Player::onWeaponFired, , const Vector2&));
@@ -107,21 +110,6 @@ void Player::onItemCollision(CollisionObject* itemDetected) {
     }
     addChild(EQUIPPED_ITEM, item);
     itemDetected->parent()->removeChild(itemDetected);
-    // switch (const ItemID id = itemPtr->id()) {
-    //     case ItemID::Helmet:
-    //         flags |= flags.test(DuckData::Flag::Index::Helmet) ? flags : DuckData::Flag::Helmet;
-    //         return;
-    //     case ItemID::Armor:
-    //         flags |= flags.test(DuckData::Flag::Index::Armor) ? flags : DuckData::Flag::Armor;
-    //         return;
-    //     default:
-    //         item = EquippableItemFactory::createEquippableItem(id).release();
-    //         item->connect(EquippableWeapon::Events::Fired,
-    //                         eventHandler(&Player::onWeaponFired, , const Vector2&));
-    //         item->connect(EquippableWeapon::Events::NoMoreBullets,
-    //                         eventHandler(&Player::onWeaponNoMoreBullets));
-    //         addChild(EQUIPPED_ITEM, item);
-    //         itemDetected->parent()->removeChild(itemDetected);
 }
 
 void Player::onCollision(const CollisionObject* object) {
@@ -276,7 +264,8 @@ void Player::performActions(const float delta) {
 
     if (interactWithItem and item) {
         input.releaseAction(INTERACT);
-        std::unique_ptr<Item> dropItem = ItemFactory::createItem(item->id());
+        std::unique_ptr<Item> dropItem =
+                ItemFactory::createItem(item->id(), item->ammo(), Force::No);
         dropItem->setPosition(globalPosition());
         getRoot<GameController>()->addToLevel("Item", std::move(dropItem));
         removeItem();

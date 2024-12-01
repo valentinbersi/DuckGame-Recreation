@@ -6,17 +6,19 @@ EquippableArmor::EquippableArmor(ItemID id, const u8 protection):
         EquippableItem(id), protection(protection) {}
 
 void EquippableArmor::actionate() {
+    bool wasRemoved = false;
     switch (id()) {
         case ItemID::Helmet:
-            parent<Player>()->equipHelmet(protection);
+            wasRemoved = parent<Player>()->equipHelmet(protection);
             break;
         case ItemID::Armor:
-            parent<Player>()->equipArmor(protection);
+            wasRemoved = parent<Player>()->equipArmor(protection);
             break;
         default:
             throw std::logic_error("Invalid armor id");
     }
-    parent()->removeChild(this);
+    if (wasRemoved)
+        parent()->removeChild(this);
 }
 
 // Just here for herency

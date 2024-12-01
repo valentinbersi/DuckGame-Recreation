@@ -52,12 +52,6 @@ void GameController::loadLevel(const LevelData& level) {
         removeChild("Level");
 
     this->level = new Level(level, players);
-
-    // this->level->connect(Events::TreeEntered,
-    //                      eventHandler(&GameController::onTreeEntered, GameObject*));
-    // this->level->connect(Events::TreeExited,
-    //                      eventHandler(&GameController::onTreeExited, GameObject*));
-
     addChild("Level", this->level);
 }
 
@@ -82,13 +76,16 @@ void GameController::roundUpdate(u8 playerAlive, PlayerID playerID) {
             }
         }
     }
-    setEnded = (roundsPlayed % Config::Match::rounds() == 0) && roundsPlayed;
-    _gameEnded = ((setEnded && !tie) || _gameEnded) && (maxRoundsWon >= Config::Match::pointsToWin());
+    setEnded = ((roundsPlayed % Config::Match::rounds()) == 0) && roundsPlayed;
+    _gameEnded = (setEnded && !tie && (maxRoundsWon >= Config::Match::pointsToWin())) || _gameEnded;
 }
 
 void GameController::clearState() {
     for (Player* player: players | std::views::values) player->reset();
-    setEnded = false;
+    if (setEnded) {
+        setEnded = false;
+        roundsPlayed = 0;
+    }
     items.clear();
 }
 
@@ -116,7 +113,7 @@ GameController::GameController(std::vector<LevelData>& levelsData):
 }
 
 void GameController::start() {
-    loadLevel(levelsData[mapSelector()]);  // seria random entre el size del map
+    loadLevel(levelsData[mapSelector()]);
     roundEnded = false;
 }
 
@@ -152,12 +149,6 @@ DuckData::Id GameController::addPlayer(const PlayerID playerID) {
     const auto duckID = static_cast<DuckData::Id>(players.size());
 
     const auto newPlayer = new Player(duckID);
-
-    // newPlayer->connect(Events::TreeEntered,
-    //                    eventHandler(&GameController::onTreeEntered, GameObject*));
-
-    // newPlayer->connect(Events::TreeExited,
-    //                    eventHandler(&GameController::onTreeExited, GameObject*));
 
     addChild(PLAYER + id, newPlayer);
     players.emplace(playerID, newPlayer);
@@ -208,4 +199,11 @@ void GameController::startNewRound() { roundEnded = false; }
 void GameController::loadNewState() {
     clearState();
     loadLevel(levelsData[mapSelector()]);
+}
+
+void GameController::endGame() { _gameEnded = false; }
+
+void GameController::endRound() {
+    // kills all players, no round point will be given.
+    for (Player* player: players | std::views::values) player->kill();
 }
