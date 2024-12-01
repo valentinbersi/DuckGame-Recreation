@@ -7,10 +7,11 @@
 #include "yaml-cpp/yaml.h"
 
 /** la unidad de los offset son pixeles. 2 Pixeles == 1 Tile */
-#define OFFSET_UP 40
-#define OFFSET_RIGHT 80
-#define OFFSET_DOWN 40
-#define OFFSET_LEFT 80
+/** Se agrega un borde de 40 tiles por encima y por debajo del mapa y de 20 tiles a los costados */
+#define OFFSET_UP 80
+#define OFFSET_DOWN 80
+#define OFFSET_RIGHT 40
+#define OFFSET_LEFT 40
 
 MapManager::MapManager(MapData& mapData) : mapData(mapData){}
 
@@ -31,23 +32,29 @@ void MapManager::addOffset() {
     }
 
     // calculo los offsets
-    int offsetUp = OFFSET_UP - y_min;
-    int offsetLeft = OFFSET_LEFT - x_min;
+    int offsetUp = OFFSET_UP;
+    if (y_min < OFFSET_UP)
+        offsetUp -= y_min;
+    if (y_min > OFFSET_UP)
+        offsetUp = 0;
 
-    int offsetDown = OFFSET_DOWN;
-    if (mapData.height - y_max < OFFSET_DOWN)
-        offsetDown = OFFSET_DOWN - (mapData.height - y_max);
+    int offsetLeft = OFFSET_LEFT;
+    if (x_min < OFFSET_LEFT)
+        offsetLeft -= x_min;
+    if (x_min > OFFSET_LEFT)
+        offsetLeft = 0;
 
-    int offsetRight = OFFSET_RIGHT;
-    if (mapData.width - x_max < OFFSET_RIGHT)
-        offsetRight = OFFSET_RIGHT - (mapData.width - x_max);
+//    int offsetDown = OFFSET_DOWN;
+//    if (mapData.height - y_max < OFFSET_DOWN)
+//        offsetDown = OFFSET_DOWN - (mapData.height - y_max);
+//
+//    int offsetRight = OFFSET_RIGHT;
+//    if (mapData.width - x_max < OFFSET_RIGHT)
+//        offsetRight = OFFSET_RIGHT - (mapData.width - x_max);
 
     // ajusto el tamaño del mapa
-    qDebug() << "map Width pre ajuste:" << mapData.width;
-    mapData.width = offsetLeft + x_max + offsetRight;
-    qDebug() << "offsetLeft:" << offsetLeft << " x_max:" << x_max << " offsetRight:" << offsetRight << " x_min:" << x_min ;
-    qDebug() << "map Width post ajuste:" << mapData.width;
-    mapData.height = offsetUp + y_max + offsetDown;
+    mapData.width = offsetLeft + x_max + OFFSET_RIGHT;
+    mapData.height = offsetUp + y_max + OFFSET_DOWN;
 
     // muevo los objetos
     QPoint offsetObject(offsetLeft, offsetUp);
