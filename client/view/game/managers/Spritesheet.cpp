@@ -12,7 +12,8 @@
 
 #define CHESTPLATE_PATH "assets/player/chestplate.png"
 #define HELMET_PATH "assets/player/helmets.png"
-#define WIN_PATH "assets/player/winner.png"
+#define WIN_PATH "assets/hud/winner.png"
+#define CROWN_PATH "assets/hud/crown.png"
 
 #define N_COL_F 5  // Feathers
 #define N_ROW_F 8  // PERO NO LE DARÉ USO A TODAS
@@ -84,9 +85,10 @@ void Spritesheet::drawEffects(SDL2pp::Rect& playerPosition, bool flip, const std
                      &playerPosition, angle, nullptr, flipType);
 }
 
-void Spritesheet::drawWin(SDL2pp::Rect& playerPosition, bool flip) {
+void Spritesheet::drawWin(SDL2pp::Rect& playerPosition, bool flip, bool endGame) {
+    std::string winPath = endGame ? CROWN_PATH : WIN_PATH;
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-    SDL_RenderCopyEx(renderer.Get(), TextureManager::getTexture(WIN_PATH, renderer).Get(), &m_clip,
+    SDL_RenderCopyEx(renderer.Get(), TextureManager::getTexture(winPath, renderer).Get(), &m_clip,
                      &playerPosition, 0.0, nullptr, flipType);
 }
 

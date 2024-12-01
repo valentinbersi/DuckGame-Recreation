@@ -83,6 +83,8 @@ private:
      */
     void updateItemSpawns(EnviromentRenderer& enviromentRenderer);
 
+    void updateBoxes(EnviromentRenderer& enviromentRenderer);
+
     /**
      * Updates the positions and scales of the items based on the camera view and renders
      * @param enviromentRenderer the renderer that draws the enviroment objects
@@ -125,6 +127,8 @@ private:
     std::list<ItemData> itemsToRender;
     std::list<SizedObjectData> blocks;
     std::list<SizedObjectData> blocksToRender;
+    std::list<SizedObjectData> boxes;
+    std::list<SizedObjectData> boxesToRender;
     std::list<DuckData> ducks;
     std::list<DuckData> ducksToRender;
 
