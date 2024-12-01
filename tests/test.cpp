@@ -21,9 +21,7 @@
 
 TEST(ProtocolTest, LobbyToServerSend) {
     ListenerSocket skt("8080");
-    std::string a = "Player1";
-    std::string b = "Player2";
-    LobbyMessage lobbyMsg(LobbyRequest::NEWMATCH, 2, a, b, 0);
+    LobbyMessage lobbyMsg(LobbyRequest::NEWMATCH, 2, 0);
 
     std::thread client([lobbyMsg]() {
         ActiveSocket sktClient("localhost", "8080");
@@ -43,19 +41,11 @@ TEST(ProtocolTest, LobbyToServerSend) {
 TEST(ProtocolTest, LobbyToServerMultipleSends) {
     ListenerSocket skt("8080");
     std::list<LobbyMessage> list;
-    std::string a = "Player1";
-    std::string b = "Player2";
-    std::string c = "Player3";
-    std::string d = "Player4";
-    std::string e = "Player5";
-    std::string f = "Player6";
-    std::string g = " ";
-
     list.push_back(LobbyMessage());
-    list.push_back(LobbyMessage(LobbyRequest::NEWMATCH, 2, a, b, 0));
-    list.push_back(LobbyMessage(LobbyRequest::JOINMATCH, 1, c, d, 4281));
-    list.push_back(LobbyMessage(LobbyRequest::JOINMATCH, 1, e, f, 16678));
-    list.push_back(LobbyMessage(LobbyRequest::STARTMATCH, 2, g, g, 31227));
+    list.push_back(LobbyMessage(LobbyRequest::NEWMATCH, 2, 0));
+    list.push_back(LobbyMessage(LobbyRequest::JOINMATCH, 1, 4281));
+    list.push_back(LobbyMessage(LobbyRequest::JOINMATCH, 1, 16678));
+    list.push_back(LobbyMessage(LobbyRequest::STARTMATCH, 2, 31227));
 
     std::thread client([list]() {
         ActiveSocket sktClient("localhost", "8080");
@@ -78,12 +68,8 @@ TEST(ProtocolTest, LobbyToServerMultipleSends) {
 
 TEST(ProtocolTest, MultiLoobySend) {
     ListenerSocket skt("8080");
-    std::string a = "Player1";
-    std::string b = "Player2";
-    std::string c = "Player3";
-    std::string d = "Player4";
-    LobbyMessage msg1(LobbyRequest::NEWMATCH, 2, a, b, 0);
-    LobbyMessage msg2(LobbyRequest::JOINMATCH, 1, c, d, 4281);
+    LobbyMessage msg1(LobbyRequest::NEWMATCH, 2, 0);
+    LobbyMessage msg2(LobbyRequest::JOINMATCH, 1, 4281);
 
     std::thread client1([msg1]() {
         ActiveSocket sktClient("localhost", "8080");
@@ -113,7 +99,7 @@ TEST(ProtocolTest, MultiLoobySend) {
 
 TEST(ProtocolTest, ServerToLobbySendReply) {
     ListenerSocket skt("8080");
-    ReplyMessage replyMsg;
+    ReplyMessage replyMsg(12389, 1, 3, DuckData::Id::White, DuckData::Id::Yellow, "NO ERROR");
 
     std::thread client([replyMsg]() {
         ActiveSocket sktClient("localhost", "8080");
@@ -152,11 +138,13 @@ TEST(ProtocolTest, ServerToGameCorrectValues) {
     ListenerSocket peer("8080");
 
     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
-    status->ducks.emplace_back(Vector2(0, 0), DuckID::White, 10, ItemID::CowboyPistol, 0b100);
+    status->ducks.emplace_back(Vector2(0, 0), DuckData::Id::White, DuckData::Direction::Center,
+                               ItemID::CowboyPistol, 0b100, 5);
     status->itemPositions.emplace_back(
             ItemData(ItemID::Banana, Rectangle(Vector2(134, 4.7), Vector2(0, 3.124))));
     status->blockPositions.emplace_back(Rectangle(Vector2(0, 0), Vector2(0, 0)));
     status->itemSpawnerPositions.emplace_back(Rectangle(Vector2(23, 4), Vector2(6, 7)));
+    status->boxPositions.emplace_back(Rectangle(Vector2(0, 78), Vector2(4.678, 0)));
 
     std::thread client([status]() {
         ActiveSocket clientSkt("localhost", "8080");
@@ -176,12 +164,15 @@ TEST(ProtocolTest, ServerToOneGameFillStatus) {
     ListenerSocket peer("8080");
 
     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
-    status->ducks.emplace_back(Vector2(42.6, 5.5134), DuckID::Grey, 8, ItemID::Ak47, 0b1 | 0b10);
-    status->ducks.emplace_back(Vector2(0, 0), DuckID::Orange, 1, ItemID::Banana, 0b1);
-    status->ducks.emplace_back(Vector2(0, 5.5134), DuckID::White, 5, ItemID::DuelPistol,
-                               0b1 | 0b10 | 0b100);
-    status->ducks.emplace_back(Vector2(77.90845, 0.654), DuckID::Yellow, 10, ItemID::PewPewLaser,
-                               0b1 | 0b10 | 0b1000);
+    status->ducks.emplace_back(Vector2(42.6, 5.5134), DuckData::Id::Grey, DuckData::Direction::Left,
+                               ItemID::Ak47, 0b1 | 0b10, 56);
+    status->ducks.emplace_back(Vector2(0, 0), DuckData::Id::Orange, DuckData::Direction::Right,
+                               ItemID::Banana, 0b1, 29);
+    status->ducks.emplace_back(Vector2(0, 5.5134), DuckData::Id::White, DuckData::Direction::Center,
+                               ItemID::DuelPistol, 0b1 | 0b10 | 0b100, 5);
+    status->ducks.emplace_back(Vector2(77.90845, 0.654), DuckData::Id::Yellow,
+                               DuckData::Direction::Center, ItemID::PewPewLaser,
+                               0b1 | 0b10 | 0b1000, 0);
 
     status->itemPositions.emplace_back(
             ItemData(ItemID::Banana, Rectangle(Vector2(134, 4.7), Vector2(0, 3.124))));
@@ -197,6 +188,8 @@ TEST(ProtocolTest, ServerToOneGameFillStatus) {
     status->itemSpawnerPositions.emplace_back(Rectangle(Vector2(33434.78, 123.8), Vector2(3, 4)));
     status->itemSpawnerPositions.emplace_back(Rectangle(Vector2(3234.49, 343.8), Vector2(7, 8)));
 
+    status->boxPositions.emplace_back(Rectangle(Vector2(0, 70), Vector2(4.678, 0)));
+    status->boxPositions.emplace_back(Rectangle(Vector2(100, 90), Vector2(56, 466)));
 
     std::thread client([status]() {
         ActiveSocket clientSkt("localhost", "8080");
