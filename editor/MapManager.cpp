@@ -12,7 +12,9 @@
 #define OFFSET_DOWN 40
 #define OFFSET_LEFT 80
 
-void MapManager::addOffset(MapData& mapData) {
+MapManager::MapManager(MapData& mapData) : mapData(mapData){}
+
+void MapManager::addOffset() {
     int x_min = mapData.width;
     int x_max = 0;
     int y_min = mapData.height;
@@ -54,10 +56,10 @@ void MapManager::addOffset(MapData& mapData) {
     }
 }
 
-void MapManager::exportMap(MapData& mapData) {
+void MapManager::exportMap() {
 //    std::string path = "maps/" + mapData.name + ".yaml";
 //    std::ofstream fout(path);
-    addOffset(mapData);
+    addOffset();
     mapData.path = "maps/" + mapData.name + ".yaml";
     std::ofstream fout(mapData.path);
     if (!fout.is_open()) {
@@ -112,7 +114,7 @@ ObjectType MapManager::stringToObjectType(const std::string& typeStr) {
     return UNKNOWN;
 }
 
-bool MapManager::importMap(MapData& mapData) {
+bool MapManager::importMap() {
     std::ifstream fin(mapData.path);
     if (!fin.is_open()) {
         qWarning() << "Could not open the file to load the map.";

@@ -8,13 +8,15 @@
 
 class MapManager {
 private:
-    static std::string objectTypeToString(ObjectType type);
-    static ObjectType stringToObjectType(const std::string& typeStr);
-    static void addOffset(MapData& mapData);
+    MapData& mapData;
+
+    std::string objectTypeToString(ObjectType type);
+    ObjectType stringToObjectType(const std::string& typeStr);
+    void addOffset();
 
 public:
-    MapManager() = default;
+    MapManager(MapData& mapData);
 
-    static void exportMap(MapData& mapData);
-    static bool importMap(MapData& mapData);
+    void exportMap();
+    bool importMap();
 };

@@ -25,7 +25,7 @@
 
 
 ViewController::ViewController(QWidget* parent):
-        QMainWindow(parent), ui(new Ui::ViewController), backgroundBrush(Qt::white) {
+        QMainWindow(parent), ui(new Ui::ViewController), mapManager(mapData), backgroundBrush(Qt::white) {
     ui->setupUi(this);
 
     ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
@@ -120,7 +120,7 @@ void ViewController::on_actionSaveMap_triggered() {
         return;
     }
     mapData.name = ui->lineEditMapName->text().toStdString();
-    MapManager::exportMap(mapData);
+    mapManager.exportMap();
     QMessageBox::information(this, "Save Map", "The map was saved successfully!");
 }
 
@@ -132,7 +132,7 @@ bool ViewController::confirmAndSaveMap() {
         return false;
     else if (reply == QMessageBox::Yes) {
         mapData.name = ui->lineEditMapName->text().toStdString();
-        MapManager::exportMap(mapData);
+        mapManager.exportMap();
     }
     return true;
 }
@@ -184,7 +184,7 @@ void ViewController::on_actionEditMap_triggered() {
     mapData.path = fileName.toStdString();
     scene->clearAll();
 
-    bool success = MapManager::importMap(mapData);
+    bool success = mapManager.importMap();
     if (!success)
         return;
 

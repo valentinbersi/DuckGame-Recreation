@@ -9,6 +9,7 @@
 
 #include "LevelScene.h"
 #include "MapData.h"
+#include "MapManager.h"
 #include "Types.h"
 
 QT_BEGIN_NAMESPACE
@@ -29,6 +30,7 @@ private:
 //    std::string background;
 //    std::list<Object> objects;
     MapData mapData;
+    MapManager mapManager;
     LevelScene* scene;
 
     QPushButton* platformButton;
