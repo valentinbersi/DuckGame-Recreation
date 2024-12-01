@@ -38,8 +38,8 @@ const HashMap<ItemID, cppstring> Game::weaponSprites = {
         {ItemID::Shotgun, "assets/weapons/Shotgun.png"},
         {ItemID::Sniper, "assets/weapons/Sniper.png"},
         {ItemID::Ak47, "assets/weapons/Ak47.png"},
-        {ItemID::Helmet, "assets/weapons/Helmet.png"},
-        {ItemID::Armor, "assets/weapons/Chestplate.png"}};
+        {ItemID::Helmet, "assets/weapons/HelmetBig.png"},
+        {ItemID::Armor, "assets/weapons/ChestplateBig.png"}};
 
 Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         running(true),
@@ -78,7 +78,7 @@ void Game::init() {
 
         renderer.Clear();
 
-        camera.update(ducksToRender, deltaTime);            //ducks to render no funca
+        camera.update(ducksToRender, deltaTime);
         filterObjectsToRender();
 
         showBackground(backgroundTexture);
@@ -99,8 +99,7 @@ void Game::init() {
 
         } else {
             renderer.Present();
-        }  // the renderer is presented inside the hudManager if the round/set/game is finished. in
-           // other case...
+        }
 
         handler.handleEvents();
 
