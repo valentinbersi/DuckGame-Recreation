@@ -38,8 +38,8 @@ const HashMap<ItemID, cppstring> Game::weaponSprites = {
         {ItemID::Shotgun, "assets/weapons/Shotgun.png"},
         {ItemID::Sniper, "assets/weapons/Sniper.png"},
         {ItemID::Ak47, "assets/weapons/Ak47.png"},
-        {ItemID::Helmet, "assets/items/helmet.png"},
-        {ItemID::Armor, "assets/items/armor.png"}};
+        {ItemID::Helmet, "assets/weapons/Helmet.png"},
+        {ItemID::Armor, "assets/weapons/Chestplate.png"}};
 
 Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         running(true),
