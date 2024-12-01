@@ -2,9 +2,12 @@
 
 #include <forward_list>
 
+
+class RayCast;
 class CollisionObject;
 
 class CollisionManager {
+    std::forward_list<RayCast*> rayCasts;
     std::forward_list<CollisionObject*> collisionObjects;
     std::forward_list<CollisionObject*> toRemove;
 
@@ -15,6 +18,18 @@ public:
     CollisionManager(CollisionManager&&) = delete;
     CollisionManager& operator=(CollisionManager&&) = delete;
     ~CollisionManager() = default;
+
+    /**
+     * Add a rayCast to the list of rayCasts
+     * @param rayCast The rayCast to add
+     */
+    void addRayCast(RayCast* rayCast);
+
+    /**
+     * Remove a rayCast from the list of rayCasts
+     * @param rayCast The rayCast to remove
+     */
+    void removeRayCast(RayCast* rayCast);
 
     /**
      * Add a collisionObject to the list of collisionObjects

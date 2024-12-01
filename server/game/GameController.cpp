@@ -8,6 +8,7 @@
 #include "GameStatus.h"
 #include "Layer.h"
 #include "LevelData.h"
+#include "RayCast.h"
 
 /**
  * Macro for easier event handling
@@ -28,6 +29,9 @@ void GameController::onTreeEntered(GameObject* object) {
 
         collisionManager.addCollisionObject(collisionObject);
     }
+
+    if (const auto rayCast = dynamic_cast<RayCast*>(object); rayCast != nullptr)
+        collisionManager.addRayCast(rayCast);
 }
 
 void GameController::onTreeExited(GameObject* object) {
@@ -38,6 +42,9 @@ void GameController::onTreeExited(GameObject* object) {
 
         collisionManager.removeCollisionObject(collisionObject);
     }
+
+    if (const auto rayCast = dynamic_cast<RayCast*>(object); rayCast != nullptr)
+        collisionManager.removeRayCast(rayCast);
 }
 
 void GameController::loadLevel(const LevelData& level) {

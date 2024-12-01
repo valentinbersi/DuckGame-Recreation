@@ -1,9 +1,11 @@
 #pragma once
 
 #include <optional>
+#include <vector>
 
 #include "IntersectionInfo.h"
 #include "Ray2D.h"
+#include "Segment2D.h"
 #include "Vector2.h"
 
 class Rectangle final {
@@ -115,6 +117,13 @@ public:
      * @return true if the segment overlaps with the rectangle, false otherwise
      */
     [[nodiscard]] std::optional<IntersectionInfo> overlaps(const Ray2D& ray) const;
+
+    /**
+     * Get the intersection points of a segment with this rectangle
+     * @param ray The segment to check
+     * @return The intersection points of the segment with the rectangle
+     */
+    [[nodiscard]] std::vector<Vector2> intersectionPointsWith(const Segment2D& ray) const;
 
     /**
      * Checks if two rectangles are equal aproximately
