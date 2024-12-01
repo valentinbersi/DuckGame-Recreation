@@ -106,21 +106,6 @@ void Player::onItemCollision(CollisionObject* itemDetected) {
     }
     addChild(EQUIPPED_ITEM, item);
     itemDetected->parent()->removeChild(itemDetected);
-    // switch (const ItemID id = itemPtr->id()) {
-    //     case ItemID::Helmet:
-    //         flags |= flags.test(DuckData::Flag::Index::Helmet) ? flags : DuckData::Flag::Helmet;
-    //         return;
-    //     case ItemID::Armor:
-    //         flags |= flags.test(DuckData::Flag::Index::Armor) ? flags : DuckData::Flag::Armor;
-    //         return;
-    //     default:
-    //         item = EquippableItemFactory::createEquippableItem(id).release();
-    //         item->connect(EquippableWeapon::Events::Fired,
-    //                         eventHandler(&Player::onWeaponFired, , const Vector2&));
-    //         item->connect(EquippableWeapon::Events::NoMoreBullets,
-    //                         eventHandler(&Player::onWeaponNoMoreBullets));
-    //         addChild(EQUIPPED_ITEM, item);
-    //         itemDetected->parent()->removeChild(itemDetected);
 }
 
 void Player::onCollision(const CollisionObject* object) {
