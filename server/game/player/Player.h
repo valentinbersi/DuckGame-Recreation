@@ -18,7 +18,7 @@ class Player final: public PhysicsObject {
     DuckData::Direction _lastViewDirection;
     std::bitset<DuckData::FlagCount> flags;
     Input input;
-    EquippableWeapon* weapon;
+    EquippableItem* item;
     bool isJumping;
     bool interactWithItem;
     bool actionateWeapon;
@@ -91,9 +91,9 @@ class Player final: public PhysicsObject {
     void performActions(float delta);
 
     /**
-     * Removes the player Weapon
+     * Removes the player Item
      */
-    void removeWeapon();
+    void removeItem();
 
     /**
      * Updates the data of the duck

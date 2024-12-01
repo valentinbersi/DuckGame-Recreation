@@ -75,8 +75,8 @@ void GameController::roundUpdate(u8 playerAlive, PlayerID playerID) {
             }
         }
     }
-    setEnded = roundsPlayed % Config::Match::rounds() == 0 && roundsPlayed;
-    _gameEnded = ((setEnded && !tie) || _gameEnded) && maxRoundsWon >= Config::Match::pointsToWin();
+    setEnded = (roundsPlayed % Config::Match::rounds() == 0) && roundsPlayed;
+    _gameEnded = ((setEnded && !tie) || _gameEnded) && (maxRoundsWon >= Config::Match::pointsToWin());
 }
 
 void GameController::clearState() {
