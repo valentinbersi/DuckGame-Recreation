@@ -93,7 +93,7 @@ private:
 
     void updateEffects(EnviromentRenderer &enviromentRenderer);
 
-    std::list<std::pair<Vector2, Vector2>> calculateSegmentPositionsAndSize(const std::list<Segment2D>& segments);
+    std::list<std::pair<Vector2, Vector2>> calculateSegmentPositionsAndSize(std::list<Segment2D>& segments);
 
     // Receives the latest game status snapshot from the server and updates the game objects.
     void getSnapshot();

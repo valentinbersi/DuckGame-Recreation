@@ -259,17 +259,18 @@ void Game::updateEffects(EnviromentRenderer& enviromentRenderer) {
     // usando UNA lista sola de posiciones generales y filtrando usando un enum y/o map ?
 }
 
-std::list<std::pair<Vector2, Vector2>> Game::calculateSegmentPositionsAndSize(const std::list<Segment2D>& segments) {
+std::list<std::pair<Vector2, Vector2>> Game::calculateSegmentPositionsAndSize(std::list<Segment2D>& segments) {
     std::list<std::pair<Vector2, Vector2>> positionsToDraw;
 
-    for (const auto& segment : segments) {
+    for (auto& segment : segments) {
+        Segment2D cutSegment = segment.cut(20.0f);
         const float positionScaleX = static_cast<float>(window_width) / camera.getViewRect().size().x();
         const float positionScaleY = static_cast<float>(window_height) / camera.getViewRect().size().y();
 
-        const float startX = (segment.start().x() - camera.getViewRect().center().x()) * positionScaleX + static_cast<float>(window_width) / 2;
-        const float startY = (segment.start().y() - camera.getViewRect().center().y()) * positionScaleY + static_cast<float>(window_height) / 2;
-        const float endX = (segment.end().x() - camera.getViewRect().center().x()) * positionScaleX + static_cast<float>(window_width) / 2;
-        const float endY = (segment.end().y() - camera.getViewRect().center().y()) * positionScaleY + static_cast<float>(window_height) / 2;
+        const float startX = (cutSegment.start().x() - camera.getViewRect().center().x()) * positionScaleX + static_cast<float>(window_width) / 2;
+        const float startY = (cutSegment.start().y() - camera.getViewRect().center().y()) * positionScaleY + static_cast<float>(window_height) / 2;
+        const float endX = (cutSegment.end().x() - camera.getViewRect().center().x()) * positionScaleX + static_cast<float>(window_width) / 2;
+        const float endY = (cutSegment.end().y() - camera.getViewRect().center().y()) * positionScaleY + static_cast<float>(window_height) / 2;
 
         positionsToDraw.emplace_back(Vector2(startX, startY), Vector2(endX, endY));
     }
