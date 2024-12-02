@@ -5,6 +5,7 @@
 
 #include "DuckState.h"
 #include "ItemID.h"
+#include "Resource.h"
 #include "Spritesheet.h"
 #include "TextureManager.h"
 
@@ -40,17 +41,17 @@ private:
                     const DuckState& state);
 
     std::unordered_map<ItemID, std::string> gunPaths = {
-            {ItemID::Grenade, "assets/weapons/Grenade.png"},
-            {ItemID::Banana, "assets/weapons/Banana.png"},
-            {ItemID::PewPewLaser, "assets/weapons/PewPewLaser.png"},
-            {ItemID::LaserRifle, "assets/weapons/LaserRifle.png"},
-            {ItemID::Ak47, "assets/weapons/Ak47.png"},
-            {ItemID::DuelPistol, "assets/weapons/DuelPistol.png"},
-            {ItemID::CowboyPistol, "assets/weapons/CowboyPistol.png"},
-            {ItemID::Magnum, "assets/weapons/Magnum.png"},
-            {ItemID::Shotgun, "assets/weapons/Shotgun.png"},
-            {ItemID::Sniper, "assets/weapons/Sniper.png"},
-            {ItemID::Helmet, "assets/weapons/Helmet.png"},
-            {ItemID::Armor, "assets/weapons/Chestplate.png"},
+            {ItemID::Grenade, Resource::get().resource("weapons/Grenade.png")},
+            {ItemID::Banana, Resource::get().resource("weapons/Banana.png")},
+            {ItemID::PewPewLaser, Resource::get().resource("weapons/PewPewLaser.png")},
+            {ItemID::LaserRifle, Resource::get().resource("weapons/LaserRifle.png")},
+            {ItemID::Ak47, Resource::get().resource("weapons/Ak47.png")},
+            {ItemID::DuelPistol, Resource::get().resource("weapons/DuelPistol.png")},
+            {ItemID::CowboyPistol, Resource::get().resource("weapons/CowboyPistol.png")},
+            {ItemID::Magnum, Resource::get().resource("weapons/Magnum.png")},
+            {ItemID::Shotgun, Resource::get().resource("weapons/Shotgun.png")},
+            {ItemID::Sniper, Resource::get().resource("weapons/Sniper.png")},
+            {ItemID::Helmet, Resource::get().resource("weapons/Helmet.png")},
+            {ItemID::Armor, Resource::get().resource("weapons/Chestplate.png")},
     };
 };

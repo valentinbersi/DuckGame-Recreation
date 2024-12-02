@@ -119,7 +119,7 @@ private:
     Timer timer;
     bool& twoPlayersLocal;
     Camera camera;
-    static const HashMap<ItemID, cppstring> weaponSprites;
+    static const HashMap<ItemID, std::string> weaponSprites;
 
     std::list<SizedObjectData> itemSpawns;
     std::list<SizedObjectData> itemSpawnsToRender;
@@ -133,10 +133,14 @@ private:
     std::list<DuckData> ducksToRender;
 
     std::vector<std::string> backgrounds = {
-            "assets/background/forest-night.png", "assets/background/city.png",
-            "assets/background/forest-day.png",   "assets/background/snowy-peaks.png",
-            "assets/background/desert.png",       "assets/background/cascade-cave.png",
-            "assets/background/sunset.png",       "assets/background/dark-cave.png"};
+            Resource::get().resource("background/forest-night.png"),
+            Resource::get().resource("background/city.png"),
+            Resource::get().resource("background/forest-day.png"),
+            Resource::get().resource("background/snowy-peaks.png"),
+            Resource::get().resource("background/desert.png"),
+            Resource::get().resource("background/cascade-cave.png"),
+            Resource::get().resource("background/sunset.png"),
+            Resource::get().resource("background/dark-cave.png")};
 };
 
 template <typename SizedObject>

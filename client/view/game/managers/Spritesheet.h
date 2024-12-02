@@ -11,7 +11,7 @@
 class Spritesheet {
 public:
     // Constructor.
-    Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer& renderer);
+    Spritesheet(std::string path1, std::string path2, SDL2pp::Renderer& renderer);
 
     // Destructor.
     ~Spritesheet() = default;
@@ -57,7 +57,7 @@ public:
 private:
     SDL_Rect m_clip;
     SDL2pp::Renderer& renderer;
-    const char* pathPlayer;
-    const char* pathFeather;
+    std::string pathPlayer;
+    std::string pathFeather;
     float angle;
 };

@@ -17,7 +17,7 @@
 class SpriteManager {
 public:
     // Constructor
-    SpriteManager(const char* path1, const char* path2,
+    SpriteManager(std::string path1, std::string path2,
                   SDL2pp::Renderer& renderer /*, int& window_width, int& window_height*/);
 
     // Destructor
@@ -84,8 +84,8 @@ private:
     void adjustForChestplate(SDL2pp::Rect& position);
 
 
-    const char* path1;
-    const char* path2;
+    std::string path1;
+    std::string path2;
     float scale;
     bool isMoving;
     bool inAir;

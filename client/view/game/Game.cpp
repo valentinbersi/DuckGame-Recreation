@@ -8,21 +8,21 @@
 
 #define WINDOW_TITLE "DuckGame"
 
-#define greySheet "assets/player/greyDuck.png"
-#define orangeSheet "assets/player/orangeDuck.png"
-#define whiteSheet "assets/player/whiteDuck.png"
-#define yellowSheet "assets/player/yellowDuck.png"
+#define greySheet "player/greyDuck.png"
+#define orangeSheet "player/orangeDuck.png"
+#define whiteSheet "player/whiteDuck.png"
+#define yellowSheet "player/yellowDuck.png"
 
-#define greyFeathers "assets/player/greyDuckFeathers.png"
-#define orangeFeathers "assets/player/orangeDuckFeathers.png"
-#define whiteFeathers "assets/player/whiteDuckFeathers.png"
-#define yellowFeathers "assets/player/yellowDuckFeathers.png"
+#define greyFeathers "player/greyDuckFeathers.png"
+#define orangeFeathers "player/orangeDuckFeathers.png"
+#define whiteFeathers "player/whiteDuckFeathers.png"
+#define yellowFeathers "player/yellowDuckFeathers.png"
 
-#define ROCK "assets/enviroment/rock.png"
-#define WEAPON_SPAWNER "assets/enviroment/spawner.png"
-#define BOX "assets/enviroment/box.png"
+#define ROCK "enviroment/rock.png"
+#define WEAPON_SPAWNER "enviroment/spawner.png"
+#define BOX "enviroment/box.png"
 
-#define WIN_PATH "assets/sounds/end-effect.mp3"
+#define WIN_PATH "sounds/end-effect.mp3"
 
 using SDL2pp::NullOpt;
 using SDL2pp::Rect;
@@ -31,15 +31,15 @@ using SDL2pp::SDL;
 using SDL2pp::Surface;
 using SDL2pp::Texture;
 
-const HashMap<ItemID, cppstring> Game::weaponSprites = {
-        {ItemID::Magnum, "assets/weapons/Magnum.png"},
-        {ItemID::CowboyPistol, "assets/weapons/CowboyPistol.png"},
-        {ItemID::DuelPistol, "assets/weapons/DuelPistol.png"},
-        {ItemID::Shotgun, "assets/weapons/Shotgun.png"},
-        {ItemID::Sniper, "assets/weapons/Sniper.png"},
-        {ItemID::Ak47, "assets/weapons/Ak47.png"},
-        {ItemID::Helmet, "assets/weapons/HelmetBig.png"},
-        {ItemID::Armor, "assets/weapons/ChestplateBig.png"}};
+const HashMap<ItemID, std::string> Game::weaponSprites = {
+        {ItemID::Magnum, "weapons/Magnum.png"},
+        {ItemID::CowboyPistol, "weapons/CowboyPistol.png"},
+        {ItemID::DuelPistol, "weapons/DuelPistol.png"},
+        {ItemID::Shotgun, "weapons/Shotgun.png"},
+        {ItemID::Sniper, "weapons/Sniper.png"},
+        {ItemID::Ak47, "weapons/Ak47.png"},
+        {ItemID::Helmet, "weapons/HelmetBig.png"},
+        {ItemID::Armor, "weapons/ChestplateBig.png"}};
 
 Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         running(true),
@@ -93,7 +93,7 @@ void Game::init() {
             if (gameFinished)
                 running = false;
             transition = false;
-            soundManager.playEffect(WIN_PATH);
+            soundManager.playEffect(Resource::get().resource(WIN_PATH));
             auto message = std::make_unique<GameMessage>(InputAction::NEXT_ROUND, 1);
             communicator.trysend(std::move(message));
             clearObjects();
@@ -213,17 +213,18 @@ void Game::updatePlayers(
 
 void Game::updateBlocks(EnviromentRenderer& enviromentRenderer) {
     for (Rect& block: calculateObjectsPositionsAndSize(blocksToRender))
-        enviromentRenderer.drawEnviroment(block, ROCK);
+        enviromentRenderer.drawEnviroment(block, Resource::get().resource(ROCK).c_str());
 }
 
 void Game::updateItemSpawns(EnviromentRenderer& enviromentRenderer) {
     for (Rect& itemSpawn: calculateObjectsPositionsAndSize(itemSpawnsToRender))
-        enviromentRenderer.drawEnviroment(itemSpawn, WEAPON_SPAWNER);
+        enviromentRenderer.drawEnviroment(itemSpawn,
+                                          Resource::get().resource(WEAPON_SPAWNER).c_str());
 }
 
 void Game::updateBoxes(EnviromentRenderer& enviromentRenderer) {
     for (Rect& box: calculateObjectsPositionsAndSize(boxesToRender))
-        enviromentRenderer.drawEnviroment(box, BOX);
+        enviromentRenderer.drawEnviroment(box, Resource::get().resource(BOX).c_str());
 }
 
 void Game::updateItems(EnviromentRenderer& enviromentRenderer) {
@@ -232,7 +233,8 @@ void Game::updateItems(EnviromentRenderer& enviromentRenderer) {
     auto itemsIt = itemsToRender.begin();
 
     while (rectsIt != rectsToDraw.end() && itemsIt != itemsToRender.end()) {
-        enviromentRenderer.drawEnviroment(*rectsIt, weaponSprites.at(itemsIt->id));
+        enviromentRenderer.drawEnviroment(
+                *rectsIt, Resource::get().resource(weaponSprites.at(itemsIt->id)).c_str());
         ++rectsIt;
         ++itemsIt;
     }
@@ -252,14 +254,22 @@ void Game::showBackground(Texture& backgroundTexture) {
 std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>> Game::createSpritesMapping() {
     std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>> spritesMapping;
 
-    spritesMapping.emplace(DuckData::Id::White,
-                           std::make_unique<SpriteManager>(whiteSheet, whiteFeathers, renderer));
-    spritesMapping.emplace(DuckData::Id::Orange,
-                           std::make_unique<SpriteManager>(orangeSheet, orangeFeathers, renderer));
-    spritesMapping.emplace(DuckData::Id::Yellow,
-                           std::make_unique<SpriteManager>(yellowSheet, yellowFeathers, renderer));
-    spritesMapping.emplace(DuckData::Id::Grey,
-                           std::make_unique<SpriteManager>(greySheet, greyFeathers, renderer));
+    spritesMapping.emplace(
+            DuckData::Id::White,
+            std::make_unique<SpriteManager>(Resource::get().resource(whiteSheet),
+                                            Resource::get().resource(whiteFeathers), renderer));
+    spritesMapping.emplace(
+            DuckData::Id::Orange,
+            std::make_unique<SpriteManager>(Resource::get().resource(orangeSheet),
+                                            Resource::get().resource(orangeFeathers), renderer));
+    spritesMapping.emplace(
+            DuckData::Id::Yellow,
+            std::make_unique<SpriteManager>(Resource::get().resource(yellowSheet),
+                                            Resource::get().resource(yellowFeathers), renderer));
+    spritesMapping.emplace(
+            DuckData::Id::Grey,
+            std::make_unique<SpriteManager>(Resource::get().resource(greySheet),
+                                            Resource::get().resource(greyFeathers), renderer));
 
     return spritesMapping;
 }

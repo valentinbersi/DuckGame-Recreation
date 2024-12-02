@@ -41,16 +41,16 @@
 #define UP_ANGLE_LEFT 90.0
 
 SpriteManager::SpriteManager(
-        const char* path1, const char* path2,
+        std::string path1, std::string path2,
         SDL2pp::Renderer& renderer /*, int& window_width, int& window_height*/):
-        path1(path1),
-        path2(path2),
+        path1(std::move(path1)),
+        path2(std::move(path2)),
         scale(DEFAULT_SCALE),
         isMoving(false),
         inAir(false),
         flapping(false),
         dead(false),
-        spritesheet(std::make_unique<Spritesheet>(path1, path2, renderer)),
+        spritesheet(std::make_unique<Spritesheet>(this->path1, this->path2, renderer)),
         weaponSpriteManager(std::make_unique<WeaponSpriteManager>()),
         state(),
         frame(0),

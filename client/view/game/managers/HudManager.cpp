@@ -3,8 +3,10 @@
 #include <algorithm>
 #include <string>
 
-#define SET_FINISHED "assets/hud/set.PNG"
-#define LOADING_IMAGE "assets/hud/loading.png"
+#include "Resource.h"
+
+#define SET_FINISHED "hud/set.PNG"
+#define LOADING_IMAGE "hud/loading.png"
 
 using SDL2pp::NullOpt;
 using SDL2pp::Rect;
@@ -84,7 +86,8 @@ void HudManager::finishedRound() const {
     int centerY = windowHeight / 2;
     toBlackTransition(centerX, centerY);
 
-    Texture& imageTexture = TextureManager::getTexture(LOADING_IMAGE, renderer);
+    Texture& imageTexture =
+            TextureManager::getTexture(Resource::get().resource(LOADING_IMAGE), renderer);
 
     int imageWidth = imageTexture.GetWidth();
     int imageHeight = imageTexture.GetHeight();
@@ -105,7 +108,8 @@ void HudManager::finishedRound() const {
 void HudManager::finishedSet(
         std::list<DuckData>& ducks,
         const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
-    Texture& setTexture = TextureManager::getTexture(SET_FINISHED, renderer);
+    Texture& setTexture =
+            TextureManager::getTexture(Resource::get().resource(SET_FINISHED), renderer);
 
     int newSize = std::min(windowWidth, windowHeight) / 2;
 
@@ -197,7 +201,8 @@ void HudManager::showPoints(
         return;
     }
 
-    TTF_Font* font = TTF_OpenFont("assets/fonts/font.ttf", 24);
+    std::string pathToFont(Resource::get().resource("fonts/font.ttf"));
+    TTF_Font* font = TTF_OpenFont(pathToFont.c_str(), 24);
     if (!font) {
         std::cerr << "Error al cargar la fuente: " << TTF_GetError() << std::endl;
         return;
