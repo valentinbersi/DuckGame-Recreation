@@ -1,12 +1,10 @@
 #include "Player.h"
 
-#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
 
 #include "Area.h"
-#include "Bullet.h"
 #include "Config.h"
 #include "DuckData.h"
 #include "EquippableItemFactory.h"
@@ -316,7 +314,7 @@ void Player::update(const float delta) {
     updateData();
 }
 
-void Player::kill() {
+void Player::damage() {
     if (flags.test(DuckData::Flag::Index::IsDead))
         return;
 
@@ -394,6 +392,15 @@ bool Player::equipHelmet(const u8 protection) {
     helmetProtection += protection;
     item = nullptr;
     return true;
+}
+
+bool Player::isLookingUp() const { return flags.test(DuckData::Flag::Index::LookingUp); }
+
+Vector2 Player::aimingDirection() const {
+    if (isLookingUp())
+        return Vector2::UP;
+
+    return _lastViewDirection == DuckData::Direction::Right ? Vector2::RIGHT : Vector2::LEFT;
 }
 
 Player::~Player() = default;

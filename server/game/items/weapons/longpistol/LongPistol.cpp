@@ -1,46 +1,63 @@
 #include "LongPistol.h"
 
-#include <memory>
 #include <utility>
 
-#include "Bullet.h"
 #include "GameController.h"
-#include "Math.h"
+#include "Layer.h"
 #include "Player.h"
+#include "RayCast.h"
 
 #define BULLET_TILES 20
 #define BULLET_DAMAGE 10
 
+void LongPistol::onBulletCollision(CollisionObject* object) {
+    if (object->layers().test(Layer::Index::Player))
+        static_cast<Player*>(object)->damage();
+}
+
 LongPistol::LongPistol(const ItemID id, const u8 ammo, Vector2 recoil, const float reach,
                        const float dispersion):
-        EquippableWeapon(id, ammo, std::move(recoil)),
+        ShootableGun(id, ammo, std::move(recoil)),
         reach(reach),
         firing(false),
-        randomGenerator(-dispersion, dispersion) {}
+        fireNextFrame(false),
+        randomGenerator(-dispersion, dispersion),
+        bullet(nullptr) {}
+
+void LongPistol::update([[maybe_unused]] float delta) {
+    using gameObject::EventHandler;
+
+    if (bullet) {
+        removeChild(bullet);
+        bullet = nullptr;
+    }
+
+    if (not fireNextFrame)
+        return;
+
+    if (not fire()) {
+        fireNextFrame = false;
+        return;
+    }
+
+    fireNextFrame = false;
+    bullet = generateBullet(parent<Player>()->aimingDirection().rotated(randomGenerator()), reach);
+    bullet->connect(RayCast::Events::Collision,
+                    EventHandler<LongPistol, CollisionObject*>::create(
+                            getReference<LongPistol>(), &LongPistol::onBulletCollision));
+}
 
 void LongPistol::actionate() {
     if (firing)
         return;
 
     firing = true;
-    if (fire()) {
-        const Vector2 direction =
-                (parent<Player>()->viewDirection() == DuckData::Direction::Right ? Vector2::RIGHT :
-                                                                                   Vector2::LEFT)
-                        .rotated(randomGenerator());
-
-        auto bullet = std::make_unique<Bullet>(direction, reach);
-        bullet->setGlobalPosition(
-                parent<Player>()->globalPosition() +
-                        (parent<Player>()->viewDirection() == DuckData::Direction::Right ?
-                                 Vector2::RIGHT * 2 :
-                                 Vector2::LEFT * 2),
-                Force::Yes);
-
-        getRoot<GameController>()->addToLevel("Bullet", std::move(bullet));
-    }
+    fireNextFrame = true;
 }
 
-void LongPistol::deactionate() { firing = false; }
+void LongPistol::deactionate() {
+    firing = false;
+    fireNextFrame = false;
+}
 
 LongPistol::~LongPistol() = default;

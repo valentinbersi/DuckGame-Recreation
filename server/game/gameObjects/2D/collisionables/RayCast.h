@@ -25,6 +25,16 @@ public:
     RayCast(Vector2 start, Vector2 end, std::bitset<LayersCount> scannedLayers);
 
     /**
+     * Construct a RayCast object with a start point, direction and length
+     * @param start The start point of the ray
+     * @param direction The direction of the ray, the constructor normalizes it for you
+     * @param length The length of the ray
+     * @param scannedLayers The layers to scan for collisions
+     */
+    RayCast(Vector2 start, const Vector2& direction, float length,
+            std::bitset<LayersCount> scannedLayers);
+
+    /**
      * Register objects to detect collision with
      * @param object The object to detect collision with
      */
