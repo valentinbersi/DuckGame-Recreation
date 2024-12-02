@@ -201,7 +201,7 @@ void GameController::loadNewState() {
     loadLevel(levelsData[mapSelector()]);
 }
 
-void GameController::endGame() { _gameEnded = false; }
+void GameController::endGame() { _gameEnded = true; }
 
 void GameController::endRound() {
     // kills all players, no round point will be given.

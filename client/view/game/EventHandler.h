@@ -2,6 +2,7 @@
 
 #include <list>
 #include <memory>
+#include <typeindex>
 #include <unordered_map>
 
 #include <SDL2/SDL.h>
@@ -38,6 +39,9 @@ private:
     // InputAction. It works also with two players, sending the message to the server with the
     // player number.
     void handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown);
+
+    bool isCheatActive(const std::vector<SDL_Scancode>& keys);
+
 
     // Returns if the game is fullscreen or not using SDL special flags.
     bool isFullscreen();
@@ -89,4 +93,22 @@ private:
             {SDL_SCANCODE_RIGHT, InputAction::RIGHT_RELEASED},
             {SDL_SCANCODE_COMMA, InputAction::JUMP_RELEASED},
             {SDL_SCANCODE_SLASH, InputAction::SHOOT_RELEASED}};
+
+    std::unordered_map<SDL_Scancode, InputAction> cheats = {
+                {SDL_SCANCODE_1, InputAction::END_ROUND_CHEAT},
+                {SDL_SCANCODE_2, InputAction::END_GAME_CHEAT},
+                {SDL_SCANCODE_3, InputAction::AK47_CHEAT},
+                {SDL_SCANCODE_4, InputAction::SHOTGUN_CHEAT},
+                {SDL_SCANCODE_5, InputAction::MAGNUM_CHEAT},
+                {SDL_SCANCODE_6, InputAction::COWBOYPISTOL_CHEAT},
+                {SDL_SCANCODE_7, InputAction::DUELPISTOL},
+                {SDL_SCANCODE_8, InputAction::SNIPER},
+                {SDL_SCANCODE_9, InputAction::LASER_RIFLE},
+                {SDL_SCANCODE_0, InputAction::PEWPEW},
+                {SDL_SCANCODE_F1, InputAction::GRENADE},
+                {SDL_SCANCODE_F2, InputAction::BANANA},
+                {SDL_SCANCODE_F3, InputAction::ARMOR},
+                {SDL_SCANCODE_F4, InputAction::HELMET},
+                {SDL_SCANCODE_F5, InputAction::INFINITE_AMMO}};
 };
+
