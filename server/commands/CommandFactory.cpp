@@ -1,11 +1,11 @@
 
 #include "CommandFactory.h"
 
+#include "CheatCommand.h"
 #include "InteractCommand.h"
 #include "MovementCommand.h"
 #include "NextRoundCommand.h"
 #include "ShootCommand.h"
-
 
 HashMap<InputAction, std::function<std::unique_ptr<Command>(PlayerID id)>> CommandFactory::factory{
         {InputAction::LEFT_PRESSED,
@@ -50,6 +50,7 @@ HashMap<InputAction, std::function<std::unique_ptr<Command>(PlayerID id)>> Comma
          }},
         {InputAction::ACTION_PRESSED,
          [](PlayerID id) { return std::make_unique<InteractCommand>(id); }},
+
         {InputAction::ACTION_RELEASED,
          [](PlayerID id) { return std::make_unique<InteractCommand>(id); }},
 
@@ -63,7 +64,16 @@ HashMap<InputAction, std::function<std::unique_ptr<Command>(PlayerID id)>> Comma
          }},
 
         {InputAction::NEXT_ROUND,
-         [](PlayerID id) { return std::make_unique<NextRoundCommand>(id); }}};
+         [](PlayerID id) { return std::make_unique<NextRoundCommand>(id); }},
+
+        {InputAction::END_ROUND_CHEAT,
+         [](PlayerID id) {
+             return std::make_unique<CheatCommand>(id, InputAction::END_ROUND_CHEAT);
+         }},
+
+        {InputAction::END_GAME_CHEAT, [](PlayerID id) {
+             return std::make_unique<CheatCommand>(id, InputAction::END_GAME_CHEAT);
+         }}};
 
 std::unique_ptr<Command> CommandFactory::createCommand(const InputAction input,
                                                        const PlayerID PlayerID) {

@@ -78,15 +78,15 @@ private:
             {SDL_SCANCODE_DOWN, InputAction::DOWN_PRESSED},
             {SDL_SCANCODE_LEFT, InputAction::LEFT_PRESSED},
             {SDL_SCANCODE_RIGHT, InputAction::RIGHT_PRESSED},
-            {SDL_SCANCODE_RCTRL, InputAction::ACTION_PRESSED},
-            {SDL_SCANCODE_RSHIFT, InputAction::JUMP_PRESSED},
-            {SDL_SCANCODE_DELETE, InputAction::SHOOT_PRESSED}};
+            {SDL_SCANCODE_PERIOD, InputAction::ACTION_PRESSED},
+            {SDL_SCANCODE_COMMA, InputAction::JUMP_PRESSED},
+            {SDL_SCANCODE_SLASH, InputAction::SHOOT_PRESSED}};
 
     std::unordered_map<SDL_Scancode, InputAction> keyMappingReleasedPlayer2 = {
             {SDL_SCANCODE_UP, InputAction::UP_RELEASED},
             {SDL_SCANCODE_DOWN, InputAction::DOWN_RELEASED},
             {SDL_SCANCODE_LEFT, InputAction::LEFT_RELEASED},
             {SDL_SCANCODE_RIGHT, InputAction::RIGHT_RELEASED},
-            {SDL_SCANCODE_RSHIFT, InputAction::JUMP_RELEASED},
-            {SDL_SCANCODE_DELETE, InputAction::SHOOT_PRESSED}};
+            {SDL_SCANCODE_COMMA, InputAction::JUMP_RELEASED},
+            {SDL_SCANCODE_SLASH, InputAction::SHOOT_RELEASED}};
 };

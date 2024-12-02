@@ -25,11 +25,15 @@
 
 
 ViewController::ViewController(QWidget* parent):
-        QMainWindow(parent), ui(new Ui::ViewController), backgroundBrush(Qt::white) {
+        QMainWindow(parent),
+        ui(new Ui::ViewController),
+        mapManager(mapData),
+        backgroundBrush(Qt::white) {
     ui->setupUi(this);
 
     ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
-    scene = new LevelScene(this, objects);
+    // scene = new LevelScene(this, objects);
+    scene = new LevelScene(this, mapData.objects);
     ui->graphicsView->setScene(scene);
     onSceneResize();
     setupToolBar();
@@ -87,7 +91,7 @@ void ViewController::onSceneResize() {
 }
 
 void ViewController::changeBackgroundBrush() {
-    QString _background = QString::fromStdString(background);
+    QString _background = QString::fromStdString(mapData.backgroundPath);
     QPixmap pixmap(_background);
     if (pixmap.isNull()) {
         QMessageBox::warning(this, "Error", "The selected file is not a valid image.");
@@ -109,7 +113,7 @@ void ViewController::selectBackground() {
         return;
     }
 
-    background = filePath.toStdString();
+    mapData.backgroundPath = filePath.toStdString();
     changeBackgroundBrush();
 }
 
@@ -118,8 +122,8 @@ void ViewController::on_actionSaveMap_triggered() {
         QMessageBox::warning(this, "Error", "The map should have 4 duck spawns.");
         return;
     }
-    MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(), scene->getMapWidth(),
-                          scene->getMapHeight(), background);
+    mapData.name = ui->lineEditMapName->text().toStdString();
+    mapManager.exportMap();
     QMessageBox::information(this, "Save Map", "The map was saved successfully!");
 }
 
@@ -127,11 +131,12 @@ bool ViewController::confirmAndSaveMap() {
     QMessageBox::StandardButton reply =
             QMessageBox::question(this, "Confirmation", "Do you want to save the map open?",
                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-    if (reply == QMessageBox::Cancel)
+    if (reply == QMessageBox::Cancel) {
         return false;
-    else if (reply == QMessageBox::Yes)
-        MapManager::exportMap(objects, ui->lineEditMapName->text().toStdString(),
-                              scene->getMapWidth(), scene->getMapHeight(), background);
+    } else if (reply == QMessageBox::Yes) {
+        mapData.name = ui->lineEditMapName->text().toStdString();
+        mapManager.exportMap();
+    }
     return true;
 }
 
@@ -179,21 +184,17 @@ void ViewController::on_actionEditMap_triggered() {
         return;
     }
 
-    QFileInfo fileInfo(fileName);
-    QString mapName = fileInfo.baseName();
-
+    mapData.path = fileName.toStdString();
     scene->clearAll();
 
-    int mapWidth;
-    int mapHeight;
-    bool success =
-            MapManager::importMap(objects, fileName.toStdString(), mapWidth, mapHeight, background);
+    bool success = mapManager.importMap();
     if (!success)
         return;
 
-    scene->loadMap(mapWidth, mapHeight);
+    scene->loadMap(mapData.width, mapData.height);
+    onSceneResize();
     changeBackgroundBrush();
-    ui->lineEditMapName->setText(mapName);
+    ui->lineEditMapName->setText(QString::fromStdString(mapData.name));
     QMessageBox::information(this, "Imported Map", "The map has been imported successfully!");
 }
 

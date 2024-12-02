@@ -3,18 +3,20 @@
 #include <list>
 #include <string>
 
+#include "MapData.h"
 #include "Object.h"
 
 class MapManager {
 private:
-    static std::string objectTypeToString(ObjectType type);
-    static ObjectType stringToObjectType(const std::string& typeStr);
+    MapData& mapData;
+
+    std::string objectTypeToString(ObjectType type);
+    ObjectType stringToObjectType(const std::string& typeStr);
+    void addOffset();
 
 public:
-    MapManager() = default;
+    explicit MapManager(MapData& mapData);
 
-    static void exportMap(const std::list<Object>& objects, const std::string& mapName,
-                          int mapWidth, int mapHeight, const std::string& background);
-    static bool importMap(std::list<Object>& objects, const std::string& mapName, int& mapWidth,
-                          int& mapHeight, std::string& background);
+    void exportMap();
+    bool importMap();
 };

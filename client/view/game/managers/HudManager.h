@@ -16,16 +16,21 @@ public:
     HudManager(int& windowWidth, int& windowHeight, SDL2pp::Renderer& renderer, bool& transition,
                bool& roundFinished, bool& setFinished, bool& gameFinished);
     ~HudManager() = default;
-    void check(std::list<DuckData>& ducks, std::list<DuckData> ducksToRender,
+    void check(std::list<DuckData>& ducks, std::list<DuckData>& ducksToRender,
                const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
-    void finishedRound(std::list<DuckData>& ducksToRender,
-                       const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
 
 private:
+    void toBlackTransition(int centerX, int centerY) const;
+    void winnerShow(std::list<DuckData>& ducksToRender,
+                    const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
+    void finishedRound() const;
     void finishedSet(std::list<DuckData>& ducks,
                      const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
+    void finishedGame(std::list<DuckData>& ducks,
+                      const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
     void showPoints(std::list<DuckData>& ducks, SDL2pp::Rect& tableRect,
                     const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
+    void resetFlags() const;
     int& windowWidth;
     int& windowHeight;
     SDL2pp::Renderer& renderer;
