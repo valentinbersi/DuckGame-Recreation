@@ -19,4 +19,3 @@ cd ..
 rm -r dependencies || echo "Error: dependencies directory could not be removed"
 sudo apt upgrade -y
 echo "Pre dependencies installed"
-
