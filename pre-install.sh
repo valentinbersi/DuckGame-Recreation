@@ -16,6 +16,5 @@ sudo cp /usr/local/lib/cmake/opusfile/OpusFileTargets-noconfig.cmake /usr/local/
 ../install-sdl-ttf.sh || echo "Error: SDL_ttf could not be installed" | exit 1
 ../install-libsdl2pp.sh || echo "Error: libsdl2pp could not be installed" | exit 1
 cd ..
-rm -r dependencies || echo "Error: dependencies directory could not be removed"
 sudo apt upgrade -y
 echo "Pre dependencies installed"
