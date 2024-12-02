@@ -75,7 +75,7 @@ private:
     SDL2pp::Rect calculateBasePosition();
 
     // Adjusts the position of the sprite for the feathers.
-    void adjustForFeathers(SDL2pp::Rect& position);
+    void adjustForFeathers(SDL2pp::Rect& position) const;
 
     // Adjusts the position of the sprite for the helmet.
     void adjustForHelmet(SDL2pp::Rect& position);

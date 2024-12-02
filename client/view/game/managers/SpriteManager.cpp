@@ -90,8 +90,7 @@ void SpriteManager::setFlags() {
     negateFlag(state.inAir, inAir);
     negateFlag(state.moving, isMoving);
 
-    if (state.playingDead)
-        state.lookingUp = true;
+    if (state.playingDead) state.lookingUp = true;
 
     if (state.lookingUp) {
         if (!state.flipped)
@@ -113,6 +112,8 @@ void SpriteManager::setFlags() {
         dead = !dead;
         spritesheet->damageEffects(m_position_x, m_position_y);
     }
+
+    if (state.inAir) state.playingDead = false;
 }
 
 void SpriteManager::negateFlag(bool flag, bool& flagToNegate) {
@@ -178,7 +179,6 @@ void SpriteManager::drawFlapping() {
     flappingFrame++;
 }
 
-
 void SpriteManager::drawChestplate(int col, int row) {
     if (state.playingDead)
         col = 1;
@@ -190,7 +190,7 @@ void SpriteManager::drawChestplate(int col, int row) {
 void SpriteManager::drawHelmet() {
     spritesheet->selectSprite(2, 0, NO_FEATHER);
     SDL2pp::Rect position = getPosition(NO_FEATHER, NO_CHESTPLATE, HELMET);
-    spritesheet->drawHelmet(position, state.flipped);
+    spritesheet->drawHelmet(position, state.flipped, state.lookingUp, state.playingDead, state.inAir);
 }
 
 void SpriteManager::drawWin(bool endGame) {
@@ -222,7 +222,7 @@ SDL2pp::Rect SpriteManager::calculateBasePosition() {
             static_cast<int>(scale * 2), static_cast<int>(scale * 2)};
 }
 
-void SpriteManager::adjustForFeathers(SDL2pp::Rect& position) {
+void SpriteManager::adjustForFeathers(SDL2pp::Rect& position) const {
     if (!state.lookingUp) {
         if (state.flipped)
             position.x += 0.75 * scale;
