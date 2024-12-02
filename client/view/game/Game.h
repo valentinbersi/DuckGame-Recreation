@@ -91,6 +91,10 @@ private:
      */
     void updateItems(EnviromentRenderer& enviromentRenderer);
 
+    void updateEffects(EnviromentRenderer &enviromentRenderer);
+
+    std::list<std::pair<Vector2, Vector2>> calculateSegmentPositionsAndSize(const std::list<Segment2D>& segments);
+
     // Receives the latest game status snapshot from the server and updates the game objects.
     void getSnapshot();
 
@@ -129,6 +133,7 @@ private:
     std::list<SizedObjectData> blocksToRender;
     std::list<SizedObjectData> boxes;
     std::list<SizedObjectData> boxesToRender;
+    std::list<std::list<Segment2D>> bulletPositions;
     std::list<DuckData> ducks;
     std::list<DuckData> ducksToRender;
 

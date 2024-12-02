@@ -42,12 +42,12 @@ void Spritesheet::damageEffects(double& m_x, double& m_y) {
     SDL_SetTextureColorMod(TextureManager::getTexture(pathFeather, renderer).Get(), 255, 0, 0);
 }
 
-void Spritesheet::resetDamageEffects() {
+void Spritesheet::resetDamageEffects() const {
     SDL_SetTextureColorMod(TextureManager::getTexture(pathPlayer, renderer).Get(), 255, 255, 255);
     SDL_SetTextureColorMod(TextureManager::getTexture(pathFeather, renderer).Get(), 255, 255, 255);
 }
 
-void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool feathers) {
+void Spritesheet::drawSelectedSprite(const SDL2pp::Rect& position, const bool flip, bool feathers) const {
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
     SDL_Texture* texture = feathers ? TextureManager::getTexture(pathFeather, renderer).Get() :
@@ -62,7 +62,7 @@ void Spritesheet::drawSelectedSprite(SDL2pp::Rect& position, bool flip, bool fea
         SDL_RenderCopyEx(renderer.Get(), texture, &m_clip, &position, 0.0, nullptr, flipType);
 }
 
-void Spritesheet::drawChestplate(SDL2pp::Rect& playerPosition, bool flip) {
+void Spritesheet::drawChestplate(const SDL2pp::Rect& playerPosition, const bool flip) const {
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     SDL_RenderCopyEx(
             renderer.Get(),
@@ -70,27 +70,35 @@ void Spritesheet::drawChestplate(SDL2pp::Rect& playerPosition, bool flip) {
             &m_clip, &playerPosition, 0.0, nullptr, flipType);
 }
 
-void Spritesheet::drawHelmet(SDL2pp::Rect& playerPosition, bool flip) {
+void Spritesheet::drawHelmet(const SDL2pp::Rect& playerPosition, bool flip, bool lookingUp, bool playingDead, bool inAir) const {
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-    SDL_RenderCopyEx(
-            renderer.Get(),
-            TextureManager::getTexture(Resource::get().resource(HELMET_PATH), renderer).Get(),
-            &m_clip, &playerPosition, angle, nullptr, flipType);
+    if (playingDead || (!lookingUp && !playingDead && inAir)) {
+        SDL_RenderCopyEx(
+                renderer.Get(),
+                TextureManager::getTexture(Resource::get().resource(HELMET_PATH), renderer).Get(),
+                &m_clip, &playerPosition, angle, nullptr, flipType);
+    }
+    else {
+        SDL_RenderCopyEx(
+        renderer.Get(),
+        TextureManager::getTexture(Resource::get().resource(HELMET_PATH), renderer).Get(),
+        &m_clip, &playerPosition, 0.0, nullptr, flipType);
+    }
 }
 
-void Spritesheet::drawWeapon(SDL2pp::Rect& playerPosition, bool flip, const std::string& path) {
+void Spritesheet::drawWeapon(const SDL2pp::Rect& playerPosition, const bool flip, const std::string& path) const {
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     SDL_RenderCopyEx(renderer.Get(), TextureManager::getTexture(path, renderer).Get(), &m_clip,
                      &playerPosition, angle, nullptr, flipType);
 }
 
-void Spritesheet::drawEffects(SDL2pp::Rect& playerPosition, bool flip, const std::string& path) {
+void Spritesheet::drawEffects(const SDL2pp::Rect& playerPosition, const bool flip, const std::string& path) {
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     SDL_RenderCopyEx(renderer.Get(), TextureManager::getTexture(path, renderer).Get(), &m_clip,
                      &playerPosition, angle, nullptr, flipType);
 }
 
-void Spritesheet::drawWin(SDL2pp::Rect& playerPosition, bool flip, bool endGame) {
+void Spritesheet::drawWin(const SDL2pp::Rect& playerPosition, bool flip, bool endGame) const {
     std::string winPath =
             endGame ? Resource::get().resource(CROWN_PATH) : Resource::get().resource(WIN_PATH);
     SDL_RendererFlip flipType = flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
