@@ -1,5 +1,5 @@
 map_name: DesertMap
-background: assets/background/desert.png
+background: 3
 map_width: 202
 map_height: 204
 objects:

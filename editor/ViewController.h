@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QListWidgetItem>
 #include <QMainWindow>
 #include <QPushButton>
 #include <list>
@@ -27,8 +28,6 @@ public:
 
 private:
     Ui::ViewController* ui;
-    //    std::string background;
-    //    std::list<Object> objects;
     MapData mapData;
     MapManager mapManager;
     LevelScene* scene;
@@ -90,9 +89,11 @@ private:
      */
     bool confirmAndSaveMap();
 
-    void selectBackground();
+    // void selectBackground();
     void changeBackgroundBrush();
     void paintEvent(QPaintEvent* event) override;
     void setupToolBar();
+    void loadBackgrounds();
+    void onBackgroundSelected(QListWidgetItem* item);
 };
 #endif  // MAINWINDOW_H

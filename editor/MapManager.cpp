@@ -5,6 +5,7 @@
 #include <string>
 
 #include "yaml-cpp/yaml.h"
+#include "Background.h"
 
 /** la unidad de los offset son pixeles. 2 Pixeles == 1 Tile */
 /** Se agrega un borde de 40 tiles por encima y por debajo del mapa y de 20 tiles a los costados */
@@ -82,7 +83,7 @@ void MapManager::exportMap() {
     YAML::Node mapNode;
 
     mapNode["map_name"] = mapData.name;
-    mapNode["background"] = mapData.backgroundPath;
+    mapNode["background"] = (int)mapData.backgroundID;
     mapNode["map_width"] = mapData.width;
     mapNode["map_height"] = mapData.height;
 
@@ -144,8 +145,8 @@ bool MapManager::importMap() {
         mapData.name = mapNode["map_name"].as<std::string>();
         mapData.width = mapNode["map_width"].as<int>();
         mapData.height = mapNode["map_height"].as<int>();
-        mapData.backgroundPath = mapNode["background"].as<std::string>();
-
+        mapData.backgroundID = (BackgroundID)((BackgroundID::Value)(mapNode["background"].as<int>()));
+        qDebug() << "tamaño del mapa:" << mapData.width << mapData.height;
         YAML::Node objectsNode = mapNode["objects"];
         for (const auto& objNode: objectsNode) {
             auto typeStr = objNode["type"].as<std::string>();
