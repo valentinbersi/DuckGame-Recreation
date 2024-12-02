@@ -1,8 +1,10 @@
 #pragma once
 
 #include <bitset>
+#include <list>
 
 #include "ItemID.h"
+#include "Segment2D.h"
 #include "SizedObjectData.h"
 #include "Types.h"
 
@@ -58,6 +60,7 @@ struct DuckData final: SizedObjectData {
     Id duckID;
     Direction direction;
     ItemID gunID;
+    std::list<Segment2D> bulletsFromGun;
     std::bitset<FlagCount> extraData;
     u32 roundsWon;
 
@@ -123,11 +126,12 @@ struct DuckData final: SizedObjectData {
      * @param life the life of the duck
      * @param direction the direction the duck is facing
      * @param gunID the gun the duck is holding
+     * @param bulletsFromGun the bullets the gun has shot
      * @param extraData actions the duck is performing and armor data
      * @param roundsWon the number of rounds the duck has won
      */
     DuckData(const Vector2& position, Id id, Direction direction, ItemID gunID,
-             std::bitset<FlagCount> extraData, u32 roundsWon);
+             std::list<Segment2D> bulletsFromGun, std::bitset<FlagCount> extraData, u32 roundsWon);
 
     /**
      * Check if this DuckData is equal to the other DuckData

@@ -19,12 +19,6 @@ class Ak47 final: public ShootableGun {
 
     Vector2 generateDirection();
 
-    /**
-     * Handles the collision of the bullet
-     * @param object The object that the bullet collided with
-     */
-    void onBulletCollision(CollisionObject* object);
-
 public:
     Ak47() = delete;
     Ak47(const Ak47& other) = delete;

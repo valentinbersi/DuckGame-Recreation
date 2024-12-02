@@ -1,7 +1,10 @@
 #pragma once
 
+#include <list>
+
 #include "GameObject.h"
 #include "ItemID.h"
+#include "Segment2D.h"
 
 class EquippableItem: public GameObject {
     ItemID id_;
@@ -41,4 +44,11 @@ public:
      * Deactionate the item
      */
     virtual void deactionate() = 0;
+
+    /**
+     * Get the status og the bullets been fired on this frame.
+     * Only relevant for Shootable Weapons.
+     * @return The segment representing the trayectory of the bullets
+     */
+    virtual std::list<Segment2D> status() const;
 };

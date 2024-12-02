@@ -1,5 +1,6 @@
 #include "Player.h"
 
+#include <list>
 #include <memory>
 #include <string>
 #include <utility>
@@ -351,6 +352,7 @@ DuckData Player::status() {
             id,
             _lastViewDirection,
             item ? item->id() : ItemID(ItemID::NONE),
+            item ? item->status() : std::list<Segment2D>(),
             flags,
             wonRounds};
 }

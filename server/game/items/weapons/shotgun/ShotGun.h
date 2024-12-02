@@ -9,16 +9,9 @@ class Shotgun final: public ShootableGun {
     float maxReach;
     bool firing;
     bool fireNextFrame;
-    std::vector<RayCast*> pellets;
     bool hasToReload;
     RandomFloatGenerator randomDistanceGenerator;
     RandomFloatGenerator randomDispersionGenerator;
-
-    /**
-     * Handles the collision of the bullet
-     * @param object The object that the bullet collided with
-     */
-    void onBulletCollision(CollisionObject* object);
 
 public:
     Shotgun() = delete;

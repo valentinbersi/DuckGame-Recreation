@@ -19,6 +19,8 @@ class ServerSendProtocol final: public SendProtocol {
 private:
     void sendVector2(const Vector2& vector);
 
+    void sendSegment(const Segment2D& segment);
+
     void sendRectangle(const Rectangle& rectangle);
 
 public:

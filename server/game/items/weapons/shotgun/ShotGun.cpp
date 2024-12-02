@@ -8,11 +8,6 @@
 #include "Math.h"
 #include "Player.h"
 
-void Shotgun::onBulletCollision(CollisionObject* object) {
-    if (object->layers().test(Layer::Index::Player))
-        static_cast<Player*>(object)->damage();
-}
-
 Shotgun::Shotgun(const ItemID id, const u8 ammo, Vector2 recoil, const float minReach,
                  const float maxReach, const float dispersion, const u8 pellets):
         ShootableGun(id, ammo, std::move(recoil)),
@@ -20,18 +15,20 @@ Shotgun::Shotgun(const ItemID id, const u8 ammo, Vector2 recoil, const float min
         maxReach(maxReach),
         firing(false),
         fireNextFrame(false),
-        pellets(pellets, nullptr),
         hasToReload(false),
         randomDistanceGenerator(minReach, maxReach),
-        randomDispersionGenerator(-dispersion, dispersion) {}
+        randomDispersionGenerator(-dispersion, dispersion) {
+    bullets.resize(pellets);
+}
 
 void Shotgun::update([[maybe_unused]] float delta) {
     using gameObject::EventHandler;
-    if (pellets[0])
-        for (RayCast*& pellet: pellets) {
+    if (bullets.front()) {
+        for (RayCast*& pellet: bullets) {
             removeChild(pellet);
             pellet = nullptr;
         }
+    }
 
     if (not fireNextFrame)
         return;
@@ -42,13 +39,13 @@ void Shotgun::update([[maybe_unused]] float delta) {
     }
 
     fireNextFrame = false;
-    for (RayCast*& pellet: pellets) {
+    for (RayCast*& pellet: bullets) {
         pellet = generateBullet(
                 parent<Player>()->aimingDirection().rotated(randomDispersionGenerator()),
                 randomDistanceGenerator());
         pellet->connect(RayCast::Events::Collision,
-                        EventHandler<Shotgun, CollisionObject*>::create(
-                                getReference<Shotgun>(), &Shotgun::onBulletCollision));
+                        EventHandler<ShootableGun, CollisionObject*>::create(
+                                getReference<ShootableGun>(), &ShootableGun::onBulletCollision));
     }
 
     hasToReload = true;

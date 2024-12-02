@@ -34,4 +34,10 @@ public:
      * @return The intersection point
      */
     std::optional<Vector2> intersects(const Segment2D& other) const;
+
+    /**
+     * Compares if two segments are equal
+     * @param other the segment to compare
+     */
+    bool operator==(const Segment2D& other) const;
 };

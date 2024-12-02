@@ -28,15 +28,10 @@ void Sniper::setNotReloading() {
     timer->reset();
 }
 
-void Sniper::onBulletCollision(CollisionObject* object) {
-    if (object->layers().test(Layer::Index::Player))
-        static_cast<Player*>(object)->damage();
-}
-
 void Sniper::update([[maybe_unused]] float delta) {
-    if (bullet) {
-        removeChild(bullet);
-        bullet = nullptr;
+    if (!bullets.empty()) {
+        removeChild(bullets.front());
+        bullets.pop_front();
     }
 
     if (not fireNextFrame or reloading)
@@ -50,8 +45,9 @@ void Sniper::update([[maybe_unused]] float delta) {
     fireNextFrame = false;
     bullet = generateBullet(parent<Player>()->aimingDirection(), reach);
     bullet->connect(RayCast::Events::Collision,
-                    gameObject::EventHandler<Sniper, CollisionObject*>::create(
-                            getReference<Sniper>(), &Sniper::onBulletCollision));
+                    gameObject::EventHandler<ShootableGun, CollisionObject*>::create(
+                            getReference<ShootableGun>(), &ShootableGun::onBulletCollision));
+    bullets.push_back(bullet);
     reloading = true;
     timer->start();
 }
