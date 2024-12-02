@@ -56,3 +56,5 @@ void RayCast::processCollisions() {
 }
 
 void RayCast::clearCollisions() { objectsToCollide.clear(); }
+
+Segment2D RayCast::getSegment() const { return ray; }

@@ -85,4 +85,17 @@ std::list<SizedObjectData> Level::boxStatus() const {
     return boxPositions;
 }
 
+void Level::update([[maybe_unused]] float delta) {
+    std::vector<Box*> boxesToDestroy;
+    boxes.remove_if([&boxesToDestroy](Box* box) {
+        if (box->wasDestroyed()) {
+            boxesToDestroy.push_back(box);
+            return true;
+        }
+        return false;
+    });
+
+    for (Box* box: boxesToDestroy) removeChild(box);
+}
+
 Level::~Level() = default;

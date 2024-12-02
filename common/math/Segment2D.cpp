@@ -26,3 +26,7 @@ std::optional<Vector2> Segment2D::intersects(const Segment2D& other) const {
 
     return std::nullopt;
 }
+
+bool Segment2D::operator==(const Segment2D& other) const {
+    return start_ == other.start_ and end_ == other.end_;
+}
