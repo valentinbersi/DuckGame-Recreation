@@ -6,6 +6,7 @@
 #include "MovementCommand.h"
 #include "NextRoundCommand.h"
 #include "ShootCommand.h"
+#include "WeaponCheatsCommand.h"
 
 HashMap<InputAction, std::function<std::unique_ptr<Command>(PlayerID id)>> CommandFactory::factory{
         {InputAction::LEFT_PRESSED,
@@ -73,13 +74,20 @@ HashMap<InputAction, std::function<std::unique_ptr<Command>(PlayerID id)>> Comma
 
         {InputAction::END_GAME_CHEAT, [](PlayerID id) {
              return std::make_unique<CheatCommand>(id, InputAction::END_GAME_CHEAT);
-         }}};
+         }}
+         };
 
 std::unique_ptr<Command> CommandFactory::createCommand(const InputAction input,
                                                        const PlayerID PlayerID) {
+
+    if (input > InputAction::WEAPON_CHEAT && input <= InputAction::INFINITE_AMMO){
+        return std::make_unique<WeaponCheatsCommand>(PlayerID, input);
+    }
     const auto function = factory.find(input);
     if (function == factory.end())
         throw std::invalid_argument("Not valid");
-
+    if (input >= InputAction::AK47_CHEAT){
+        return function->second(PlayerID);
+    }
     return function->second(PlayerID);
 }
