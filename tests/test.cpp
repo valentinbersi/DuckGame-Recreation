@@ -136,10 +136,10 @@ TEST(ProtocolTest, GameToServerOneMessage) {
 
 TEST(ProtocolTest, ServerToGameCorrectValues) {
     ListenerSocket peer("8080");
-
+    std::list<Segment2D> segmentos({Segment2D({0,0},{0,0}), Segment2D({1,1},{1,1})});
     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
     status->ducks.emplace_back(Vector2(0, 0), DuckData::Id::White, DuckData::Direction::Center,
-                               ItemID::CowboyPistol, 0b100, 5);
+                            ItemID::CowboyPistol,segmentos, 0b100, 5);
     status->itemPositions.emplace_back(
             ItemData(ItemID::Banana, Rectangle(Vector2(134, 4.7), Vector2(0, 3.124))));
     status->blockPositions.emplace_back(Rectangle(Vector2(0, 0), Vector2(0, 0)));
@@ -162,16 +162,19 @@ TEST(ProtocolTest, ServerToGameCorrectValues) {
 
 TEST(ProtocolTest, ServerToOneGameFillStatus) {
     ListenerSocket peer("8080");
-
+    std::list<Segment2D> segmentos1({Segment2D({0,0},{0,0}), Segment2D({1,1},{1,1})});
+    std::list<Segment2D> segmentos2({Segment2D({-3432,-243.67},{1,1244})});
+    std::list<Segment2D> segmentos3({Segment2D({0,0},{0,0}), Segment2D({56,77.56},{23.3,-845})});
+    std::list<Segment2D> segmentos4({Segment2D({432.78,214.567},{-233,-231}), Segment2D({1,1},{1,1})});
     std::shared_ptr<GameStatus> status = std::make_shared<GameStatus>();
     status->ducks.emplace_back(Vector2(42.6, 5.5134), DuckData::Id::Grey, DuckData::Direction::Left,
-                               ItemID::Ak47, 0b1 | 0b10, 56);
+                                ItemID::Ak47,segmentos1, 0b1 | 0b10, 56);
     status->ducks.emplace_back(Vector2(0, 0), DuckData::Id::Orange, DuckData::Direction::Right,
-                               ItemID::Banana, 0b1, 29);
+                                 ItemID::Banana, segmentos2, 0b1, 29);
     status->ducks.emplace_back(Vector2(0, 5.5134), DuckData::Id::White, DuckData::Direction::Center,
-                               ItemID::DuelPistol, 0b1 | 0b10 | 0b100, 5);
+                                ItemID::DuelPistol, segmentos3, 0b1 | 0b10 | 0b100, 5);
     status->ducks.emplace_back(Vector2(77.90845, 0.654), DuckData::Id::Yellow,
-                               DuckData::Direction::Center, ItemID::PewPewLaser,
+                                DuckData::Direction::Center, ItemID::PewPewLaser, segmentos4,
                                0b1 | 0b10 | 0b1000, 0);
 
     status->itemPositions.emplace_back(
