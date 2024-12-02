@@ -1,16 +1,14 @@
 #include "ShootableGun.h"
 
 #include "DuckData.h"
+#include "Layer.h"
 #include "Player.h"
 #include "RayCast.h"
 
 RayCast* ShootableGun::generateBullet(const Vector2& direction, const float reach) {
-    const auto bullet =
-            new RayCast(parent<GameObject2D>()->globalPosition() +
-                                (parent<Player>()->viewDirection() == DuckData::Direction::Right ?
-                                         Vector2::RIGHT * 2 :
-                                         Vector2::LEFT * 2),
-                        direction, reach * 2);
+    const auto bullet = new RayCast(
+            parent<GameObject2D>()->globalPosition() + parent<Player>()->aimingDirection() * 3,
+            direction, reach * 2, Layer::Wall | Layer::Box | Layer::Player);
 
     addChild("Bullet", bullet);
     return bullet;

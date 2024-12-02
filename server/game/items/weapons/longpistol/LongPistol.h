@@ -2,12 +2,20 @@
 
 #include "ShootableGun.h"
 
+
+class CollisionObject;
 class LongPistol final: public ShootableGun {
     float reach;
     bool firing;
     bool fireNextFrame;
     RandomFloatGenerator randomGenerator;
     RayCast* bullet;
+
+    /**
+     * Handles the collision of the bullet
+     * @param object The object that the bullet collided with
+     */
+    void onBulletCollision(CollisionObject* object);
 
 public:
     LongPistol() = delete;
@@ -34,13 +42,11 @@ public:
 
     /**
      * Actionates the weapon
-     * @return The recoil of the weapon
      */
     void actionate() override;
 
     /**
      * Deactionates the weapon
-     * @return The recoil of the weapon
      */
     void deactionate() override;
 

@@ -1,12 +1,10 @@
 #include "Player.h"
 
-#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
 
 #include "Area.h"
-#include "Bullet.h"
 #include "Config.h"
 #include "DuckData.h"
 #include "EquippableItemFactory.h"
@@ -316,7 +314,7 @@ void Player::update(const float delta) {
     updateData();
 }
 
-void Player::kill() {
+void Player::damage() {
     if (flags.test(DuckData::Flag::Index::IsDead))
         return;
 

@@ -205,5 +205,5 @@ void GameController::endGame() { _gameEnded = false; }
 
 void GameController::endRound() {
     // kills all players, no round point will be given.
-    for (Player* player: players | std::views::values) player->kill();
+    for (Player* player: players | std::views::values) player->damage();
 }

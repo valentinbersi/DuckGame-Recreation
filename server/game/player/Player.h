@@ -127,7 +127,7 @@ public:
     /**
      * Kill the player
      */
-    void kill();
+    void damage();
 
     /**
      * Makes the player shoot

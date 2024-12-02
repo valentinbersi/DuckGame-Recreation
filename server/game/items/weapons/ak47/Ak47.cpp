@@ -1,22 +1,27 @@
 #include "Ak47.h"
 
-#include <memory>
 #include <utility>
 
-#include "Bullet.h"
 #include "GameController.h"
+#include "Layer.h"
 #include "Player.h"
+#include "RayCast.h"
+
 #define BULLET_TO_MID_VARIATION 2
 #define BULLET_TO_MAX_VARIATION 4
 
 #define eventHandler(Function) \
     gameObject::EventHandler<Ak47>::create(getReference<Ak47>(), Function)
 
-Ak47::Ak47(ItemID id, u8 ammo, Vector2 recoil, float reach, float minDispersion,
-           float midDispersion, float maxDispersion, float timeBetweenShots):
-        EquippableWeapon(id, ammo, std::move(recoil)),
+Ak47::Ak47(const ItemID id, const u8 ammo, Vector2 recoil, const float reach,
+           const float minDispersion, const float midDispersion, const float maxDispersion,
+           const float timeBetweenShots):
+        ShootableGun(id, ammo, std::move(recoil)),
         reach(reach),
+        delay(false),
         bulletsFired(0),
+        fireNextFrame(false),
+        bullet(nullptr),
         randomDispersionMin(-minDispersion, maxDispersion),
         randomDispersionMid(-midDispersion, midDispersion),
         randomDispersionMax(-maxDispersion, maxDispersion),
@@ -30,45 +35,57 @@ void Ak47::onTimeOut() {
     timer->reset();
 }
 
-Vector2 Ak47::generateDirection() {
-    float variation;
-    if (bulletsFired < BULLET_TO_MID_VARIATION) {
-        variation = randomDispersionMin();
-    } else if (bulletsFired < BULLET_TO_MAX_VARIATION) {
-        variation = randomDispersionMid();
-    } else {
-        variation = randomDispersionMax();
+void Ak47::update([[maybe_unused]] float delta) {
+    using gameObject::EventHandler;
+
+    if (bullet) {
+        removeChild(bullet);
+        bullet = nullptr;
     }
-    return (parent<Player>()->viewDirection() == DuckData::Direction::Right ? Vector2::RIGHT :
-                                                                              Vector2::LEFT)
-            .rotated(variation);
-}
 
-void Ak47::generateBullet() {
-    auto bullet = std::make_unique<Bullet>(generateDirection(), reach);
-    bullet->setGlobalPosition(
-            parent<Player>()->globalPosition() +
-                    (parent<Player>()->viewDirection() == DuckData::Direction::Right ?
-                             Vector2::RIGHT * 2 :
-                             Vector2::LEFT * 2),
-            Force::Yes);
+    if (delay or not fireNextFrame)
+        return;
 
-    getRoot<GameController>()->addToLevel("Bullet", std::move(bullet));
-}
-
-void Ak47::actionate() {
-    if (delay) {
+    if (not fire()) {
+        fireNextFrame = false;
         return;
     }
 
-    if (fire()) {
-        generateBullet();
-        delay = true;
-        ++bulletsFired;
-        timer->start();
-    }
+    fireNextFrame = false;
+    bullet = generateBullet(generateDirection(), reach);
+    bullet->connect(RayCast::Events::Collision,
+                    EventHandler<Ak47, CollisionObject*>::create(getReference<Ak47>(),
+                                                                 &Ak47::onBulletCollision));
+    delay = true;
+    ++bulletsFired;
+    timer->start();
 }
 
-void Ak47::deactionate() { bulletsFired = 0; }
+Vector2 Ak47::generateDirection() {
+    float variation;
+
+    if (bulletsFired < BULLET_TO_MID_VARIATION)
+        variation = randomDispersionMin();
+
+    else if (bulletsFired < BULLET_TO_MAX_VARIATION)
+        variation = randomDispersionMid();
+
+    else
+        variation = randomDispersionMax();
+
+    return parent<Player>()->aimingDirection().rotated(variation);
+}
+
+void Ak47::onBulletCollision(CollisionObject* object) {
+    if (object->layers().test(Layer::Index::Player))
+        static_cast<Player*>(object)->damage();
+}
+
+void Ak47::actionate() { fireNextFrame = true; }
+
+void Ak47::deactionate() {
+    bulletsFired = 0;
+    fireNextFrame = false;
+}
 
 Ak47::~Ak47() = default;
