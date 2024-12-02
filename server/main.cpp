@@ -10,8 +10,8 @@ int main(const int argc, char* argv[]) {
         switch (opt) {
             case 'h':
                 std::cout << "Usage: " << argv[0]
-                          << " [-h] [-c config_directory] [-m maps_directory] [port]" << std::endl;
-                return 0;
+                          << " [-h] [-c config_directory] [-m maps_directory] port" << std::endl;
+                return EXIT_SUCCESS;
             case 'c': {
                 std::string configPath(optarg);
                 if (configPath.back() != '/')
@@ -26,23 +26,27 @@ int main(const int argc, char* argv[]) {
             } break;
             default:
                 std::cerr << "Usage: " << argv[0]
-                          << " [-h] [-c config_directory] [-m maps_directory] [port]" << std::endl;
-                return -1;
+                          << " [-h] [-c config_directory] [-m maps_directory] port" << std::endl;
+                return EXIT_FAILURE;
         }
     }
 
     std::string port;
 
-    if (optind < argc)
+    if (optind < argc) {
         port = argv[optind];
-    else
-        port = "8080";
+    } else {
+        std::cerr << "Usage: " << argv[0] << " [-h] [-c config_directory] [-m maps_directory] port"
+                  << std::endl;
+        return EXIT_FAILURE;
+    }
+
 
     try {
         Config::load();
     } catch (const Config::BadConfigFile& e) {
         std::cerr << e.what() << std::endl;
-        return -1;
+        return EXIT_FAILURE;
     }
 
     try {
@@ -50,6 +54,6 @@ int main(const int argc, char* argv[]) {
         return server.run();
     } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
-        return -1;
+        return EXIT_FAILURE;
     }
 }
