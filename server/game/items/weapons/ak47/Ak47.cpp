@@ -38,9 +38,9 @@ void Ak47::onTimeOut() {
 void Ak47::update([[maybe_unused]] float delta) {
     using gameObject::EventHandler;
 
-    if (bullet) {
-        removeChild(bullet);
-        bullet = nullptr;
+    if (!bullets.empty()) {
+        removeChild(bullets.front());
+        bullets.pop_front();
     }
 
     if (delay or not fireNextFrame)
@@ -54,8 +54,9 @@ void Ak47::update([[maybe_unused]] float delta) {
     fireNextFrame = false;
     bullet = generateBullet(generateDirection(), reach);
     bullet->connect(RayCast::Events::Collision,
-                    EventHandler<Ak47, CollisionObject*>::create(getReference<Ak47>(),
-                                                                 &Ak47::onBulletCollision));
+                    EventHandler<ShootableGun, CollisionObject*>::create(
+                            getReference<ShootableGun>(), &ShootableGun::onBulletCollision));
+    bullets.push_back(bullet);
     delay = true;
     ++bulletsFired;
     timer->start();
@@ -74,11 +75,6 @@ Vector2 Ak47::generateDirection() {
         variation = randomDispersionMax();
 
     return parent<Player>()->aimingDirection().rotated(variation);
-}
-
-void Ak47::onBulletCollision(CollisionObject* object) {
-    if (object->layers().test(Layer::Index::Player))
-        static_cast<Player*>(object)->damage();
 }
 
 void Ak47::actionate() { fireNextFrame = true; }

@@ -10,4 +10,3 @@ enum class BackgroundID {
     SNOWY_PEAKS,
     SUNSET
 };
-

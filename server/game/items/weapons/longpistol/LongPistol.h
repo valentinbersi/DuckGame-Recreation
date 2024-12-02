@@ -11,12 +11,6 @@ class LongPistol final: public ShootableGun {
     RandomFloatGenerator randomGenerator;
     RayCast* bullet;
 
-    /**
-     * Handles the collision of the bullet
-     * @param object The object that the bullet collided with
-     */
-    void onBulletCollision(CollisionObject* object);
-
 public:
     LongPistol() = delete;
     LongPistol(const LongPistol& other) = delete;

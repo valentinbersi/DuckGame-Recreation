@@ -6,18 +6,13 @@
 class Box: public PhysicsObject {
 private:
     RandomIntGenerator randomGenerator;
-    bool wasDestroid;
+    bool _wasDestroid;
 
     /**
      * Eliminates the box and generates a random item,
      * an explosion or nothing
      */
     void eliminateBox();
-
-    /**
-     * Called when the box collides with another object
-     */
-    void onCollision(const CollisionObject* object);
 
 public:
     /**
@@ -27,10 +22,16 @@ public:
     explicit Box(Vector2 posicion);
 
     /**
-     * Check if the box was destroyed on the last frame
-     * @param delta The time since the last update
+     * Called when the box collides with another object
+     * @param object The object that collided with the box
      */
-    void update(float delta) override;
+    void onCollision();
+
+    /**
+     * Check if the box was destroyed
+     * @return true if the box was destroyed
+     */
+    bool wasDestroyed() const;
 
     /**
      * Get the position of the box and its dimensions

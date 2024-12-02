@@ -19,12 +19,6 @@ class Sniper final: public ShootableGun {
      */
     void setNotReloading();
 
-    /**
-     * Handles the collision of the bullet
-     * @param object The object that the bullet collided
-     */
-    void onBulletCollision(CollisionObject* object);
-
 public:
     Sniper() = delete;
     Sniper(const Sniper& other) = delete;

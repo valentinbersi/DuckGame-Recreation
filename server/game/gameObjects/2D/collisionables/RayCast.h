@@ -51,6 +51,12 @@ public:
      */
     void clearCollisions();
 
+    /**
+     * Gets the segment of the ray
+     * @return The segment of the ray
+     */
+    Segment2D getSegment() const;
+
     struct Events {
         constexpr static auto Collision = "Collision";
     };
