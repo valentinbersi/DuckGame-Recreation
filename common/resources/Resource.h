@@ -13,7 +13,7 @@ class Resource {
 
 public:
     struct BadResource final: std::runtime_error {
-        explicit BadResource(std::string errorMessage);
+        explicit BadResource(const std::string& errorMessage);
     };
 
     /**
@@ -27,7 +27,7 @@ public:
      * @return the absolute path to the resource
      * @throws BadResource if the resource was not find
      */
-    std::string getResource(const std::string& resource) const;
+    std::string resource(const std::string& resource) const;
 
     /**
      * Get the resource instance
