@@ -102,11 +102,7 @@ void SpriteManager::setFlags() {
         spritesheet->setAngle(DEFAULT_ANGLE);
     }
 
-
-    if (flapping != state.flapping) {
-        flapping = !flapping;
-        flappingFrame = DEFAULT_FLAPPING;
-    }
+    if (state.flapping) flapping = true;
 
     if (state.isDead != dead) {
         dead = !dead;
@@ -149,14 +145,15 @@ void SpriteManager::drawFeathers(int col, int row) {
     if (state.hasGun) {
         spritesheet->selectSprite(COL_WEAPON, ROW_WEAPON, FEATHER);
 
-    } else if (state.flapping && !state.hasGun) {
+    } else if (flapping) {
         if (flappingFrame > LIMIT_FLAPPING_FRAMES) {
             flappingFrame = DEFAULT_FLAPPING;
+            flapping = false;
         }
         drawFlapping();
         return;
 
-    } else if (!state.hasGun && !state.playingDead && !state.isDead) {
+    } else if (!state.playingDead && !state.isDead) {
         spritesheet->selectSprite(col, row, FEATHER);
 
     } else {
