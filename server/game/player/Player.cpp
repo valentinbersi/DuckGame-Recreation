@@ -327,7 +327,7 @@ void Player::damage() {
     kill();
 }
 
-void Player::kill() { 
+void Player::kill() {
     flags.set(DuckData::Flag::Index::IsDead);
     removeFromLayer(Layer::Index::Player);
 }

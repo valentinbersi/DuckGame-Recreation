@@ -30,7 +30,7 @@ public:
     virtual u8 ammo() const;
 
     /**
-     * To override, does nothing on 
+     * To override, does nothing on
      * this class, to implement
      */
     virtual void setAmmo(const u8 ammo);

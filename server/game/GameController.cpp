@@ -1,9 +1,9 @@
 #include "GameController.h"
 
+#include <cstdint>
 #include <ranges>
 #include <string>
 #include <utility>
-#include <cstdint>
 
 #include "Config.h"
 #include "GameStatus.h"

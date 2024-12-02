@@ -1,13 +1,14 @@
 #pragma once
 #include "Command.h"
-#include "MessageType.h"
 #include "ItemID.h"
+#include "MessageType.h"
 #include "Types.h"
 
 class WeaponCheatsCommand: public Command {
 private:
     InputAction cheatCode;
     HashMap<InputAction, ItemID> cheatMap;
+
 public:
     /**
      * Creates a new WeaponCheatsCommand

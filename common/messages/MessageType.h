@@ -38,7 +38,7 @@ public:
         NEXT_ROUND = 0xE,
         END_ROUND_CHEAT = 0xF,
         END_GAME_CHEAT = 0x10,
-        WEAPON_CHEAT = 0x11, //auxiliar
+        WEAPON_CHEAT = 0x11,  // auxiliar
         AK47_CHEAT = 0x12,
         SHOTGUN_CHEAT = 0x13,
         MAGNUM_CHEAT = 0x14,

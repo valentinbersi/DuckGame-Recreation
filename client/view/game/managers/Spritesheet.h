@@ -33,7 +33,8 @@ public:
     void drawChestplate(const SDL2pp::Rect& playerPosition, bool flip) const;
 
     // Blah blah blah, same logic of the previous method.
-    void drawHelmet(const SDL2pp::Rect& playerPosition, bool flip, bool lookingUp, bool playingDead, bool inAir) const;
+    void drawHelmet(const SDL2pp::Rect& playerPosition, bool flip, bool lookingUp, bool playingDead,
+                    bool inAir) const;
 
     // Yes
     void drawWeapon(const SDL2pp::Rect& playerPosition, bool flip, const std::string& path) const;

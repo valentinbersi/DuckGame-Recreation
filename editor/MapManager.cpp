@@ -5,6 +5,7 @@
 #include <string>
 
 #include "yaml-cpp/yaml.h"
+
 #include "Background.h"
 
 /** la unidad de los offset son pixeles. 2 Pixeles == 1 Tile */
@@ -145,7 +146,8 @@ bool MapManager::importMap() {
         mapData.name = mapNode["map_name"].as<std::string>();
         mapData.width = mapNode["map_width"].as<int>();
         mapData.height = mapNode["map_height"].as<int>();
-        mapData.backgroundID = (BackgroundID)((BackgroundID::Value)(mapNode["background"].as<int>()));
+        mapData.backgroundID =
+                (BackgroundID)((BackgroundID::Value)(mapNode["background"].as<int>()));
         qDebug() << "tamaño del mapa:" << mapData.width << mapData.height;
         YAML::Node objectsNode = mapNode["objects"];
         for (const auto& objNode: objectsNode) {
