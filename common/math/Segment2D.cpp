@@ -27,6 +27,10 @@ std::optional<Vector2> Segment2D::intersects(const Segment2D& other) const {
     return std::nullopt;
 }
 
+Segment2D Segment2D::cut(const float newLength) {
+    return {start_, start_ + (end_ - start_).normalized() * newLength};
+}
+
 bool Segment2D::operator==(const Segment2D& other) const {
     return start_ == other.start_ and end_ == other.end_;
 }

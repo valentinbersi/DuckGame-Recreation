@@ -78,9 +78,11 @@ file(COPY ${CMAKE_SOURCE_DIR}/maps/ DESTINATION ${CMAKE_BINARY_DIR}/maps)
 file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/config)
 file(COPY ${CMAKE_SOURCE_DIR}/config/ DESTINATION ${CMAKE_BINARY_DIR}/config)
 
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/assets/ DESTINATION /var/local/DuckGame/assets)
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/maps/ DESTINATION /etc/DuckGame/maps)
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/config/ DESTINATION /etc/DuckGame/config)
+set(CMAKE_INSTALL_BINDIR "/usr/bin")
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/assets/ DESTINATION /var/DuckGame/)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/maps/ DESTINATION /etc/DuckGame/maps/)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/config/ DESTINATION /etc/DuckGame/config/)
 
 # Install libSDL2pp (for client or editor)
 if (CLIENT OR EDITOR)

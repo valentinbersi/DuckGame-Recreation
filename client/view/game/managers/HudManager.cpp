@@ -176,6 +176,8 @@ void HudManager::finishedGame(
     showPoints(ducks, tableRect, spritesMapping);
     renderer.Present();
     SDL_Delay(5000);
+
+    transition = true;
 }
 
 std::string duckIDToString(DuckData::Id id) {
@@ -260,5 +262,4 @@ void HudManager::showPoints(
 void HudManager::resetFlags() const {
     roundFinished = false;
     setFinished = false;
-    gameFinished = false;
 }

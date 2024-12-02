@@ -87,11 +87,14 @@ void Game::init() {
         updateBoxes(enviromentRenderer);
         updateItemSpawns(enviromentRenderer);
         updateItems(enviromentRenderer);
+        updateEffects(enviromentRenderer);           //aca se hacer marcas de bala, explosiones, rebotes y cascaras de banana
 
         hudManager.check(ducks, ducksToRender, spritesMapping);
         if (transition) {
-            if (gameFinished)
+            if (gameFinished) {
                 running = false;
+                continue;
+            }
             transition = false;
             soundManager.playEffect(Resource::get().resource(WIN_PATH));
             auto message = std::make_unique<GameMessage>(InputAction::NEXT_ROUND, 1);
@@ -205,6 +208,8 @@ void Game::updatePlayers(
 
         soundManager.checkSounds(state);
 
+        if (!duck.bulletsFromGun.empty()) bulletPositions.push_back(duck.bulletsFromGun);
+
         spritesMapping.at(duck.duckID)->updatePosition(screenPositionX, screenPositionY);
         spritesMapping.at(duck.duckID)->setScale(scale);
         spritesMapping.at(duck.duckID)->update(state);
@@ -238,6 +243,39 @@ void Game::updateItems(EnviromentRenderer& enviromentRenderer) {
         ++rectsIt;
         ++itemsIt;
     }
+}
+
+void Game::updateEffects(EnviromentRenderer& enviromentRenderer) {
+    if (!bulletPositions.empty()) {
+        std::list<Segment2D> flattenedBulletPositions;
+        for (const auto& bulletList : bulletPositions) {
+            flattenedBulletPositions.insert(flattenedBulletPositions.end(), bulletList.begin(), bulletList.end());
+        }
+        std::list<std::pair<Vector2, Vector2>> bulletPositions = calculateSegmentPositionsAndSize(flattenedBulletPositions);
+        enviromentRenderer.drawBullets(bulletPositions);
+    }
+
+    // y aca dibujo rebotes, explosiones y cascara
+    // usando UNA lista sola de posiciones generales y filtrando usando un enum y/o map ?
+}
+
+std::list<std::pair<Vector2, Vector2>> Game::calculateSegmentPositionsAndSize(std::list<Segment2D>& segments) {
+    std::list<std::pair<Vector2, Vector2>> positionsToDraw;
+
+    for (auto& segment : segments) {
+        Segment2D cutSegment = segment.cut(20.0f);
+        const float positionScaleX = static_cast<float>(window_width) / camera.getViewRect().size().x();
+        const float positionScaleY = static_cast<float>(window_height) / camera.getViewRect().size().y();
+
+        const float startX = (cutSegment.start().x() - camera.getViewRect().center().x()) * positionScaleX + static_cast<float>(window_width) / 2;
+        const float startY = (cutSegment.start().y() - camera.getViewRect().center().y()) * positionScaleY + static_cast<float>(window_height) / 2;
+        const float endX = (cutSegment.end().x() - camera.getViewRect().center().x()) * positionScaleX + static_cast<float>(window_width) / 2;
+        const float endY = (cutSegment.end().y() - camera.getViewRect().center().y()) * positionScaleY + static_cast<float>(window_height) / 2;
+
+        positionsToDraw.emplace_back(Vector2(startX, startY), Vector2(endX, endY));
+    }
+
+    return positionsToDraw;
 }
 
 void Game::showBackground(Texture& backgroundTexture) {
@@ -285,6 +323,7 @@ void Game::clearObjects() {
     itemsToRender.clear();
     boxes.clear();
     boxesToRender.clear();
+    bulletPositions.clear();
 }
 
 Game::~Game() {

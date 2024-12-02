@@ -36,6 +36,13 @@ public:
     std::optional<Vector2> intersects(const Segment2D& other) const;
 
     /**
+     * Cuts the segment to a new length and returns it
+     * @param newLength The new length of the segment
+     * @return The new segment
+     */
+    Segment2D cut(float newLength);
+
+    /**
      * Compares if two segments are equal
      * @param other the segment to compare
      */
