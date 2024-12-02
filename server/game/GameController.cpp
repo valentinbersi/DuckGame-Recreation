@@ -3,6 +3,7 @@
 #include <ranges>
 #include <string>
 #include <utility>
+#include <cstdint>
 
 #include "Config.h"
 #include "GameStatus.h"
@@ -166,6 +167,16 @@ void GameController::removePlayer(const PlayerID playerID) {
 
 Player& GameController::getPlayer(const PlayerID playerID) const { return *players.at(playerID); }
 
+void GameController::giveItemToPlayer(const PlayerID playerID, const ItemID itemID) {
+    if (players.contains(playerID))
+        players.at(playerID)->setItem(itemID, Config::getDefaultAmmo(itemID), Force::Yes);
+}
+
+void GameController::giveFullAmmoToPlayer(const PlayerID playerID) {
+    if (players.contains(playerID))
+        players.at(playerID)->setAmmo(UINT8_MAX);
+}
+
 u8 GameController::playersCount() const { return players.size(); }
 
 bool GameController::exceedsPlayerMax(const u8 playerAmount) const {
@@ -205,5 +216,5 @@ void GameController::endGame() { _gameEnded = true; }
 
 void GameController::endRound() {
     // kills all players, no round point will be given.
-    for (Player* player: players | std::views::values) player->damage();
+    for (Player* player: players | std::views::values) player->kill();
 }

@@ -23,4 +23,6 @@ EquippableWeapon::EquippableWeapon(const ItemID id, const u8 ammo, Vector2 recoi
 
 u8 EquippableWeapon::ammo() const { return ammo_; }
 
+void EquippableWeapon::setAmmo(const u8 ammo) { ammo_ = ammo; }
+
 EquippableWeapon::~EquippableWeapon() = default;

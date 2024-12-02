@@ -38,19 +38,20 @@ public:
         NEXT_ROUND = 0xE,
         END_ROUND_CHEAT = 0xF,
         END_GAME_CHEAT = 0x10,
-        AK47_CHEAT = 0x11,
-        SHOTGUN_CHEAT = 0x12,
-        MAGNUM_CHEAT = 0x13,
-        COWBOYPISTOL_CHEAT = 0x14,
-        DUELPISTOL = 0x15,
-        SNIPER = 0x16,
-        LASER_RIFLE = 0x17,
-        PEWPEW = 0x18,
-        GRENADE = 0x19,
-        BANANA = 0x1A,
-        ARMOR = 0x1B,
-        HELMET = 0x1C,
-        INFINITE_AMMO = 0x1D
+        WEAPON_CHEAT = 0x11, //auxiliar
+        AK47_CHEAT = 0x12,
+        SHOTGUN_CHEAT = 0x13,
+        MAGNUM_CHEAT = 0x14,
+        COWBOYPISTOL_CHEAT = 0x15,
+        DUELPISTOL_CHEAT = 0x16,
+        SNIPER_CHEAT = 0x17,
+        LASER_RIFLE_CHEAT = 0x18,
+        PEWPEW_CHEAT = 0x19,
+        GRENADE_CHEAT = 0x1A,
+        BANANA_CHEAT = 0x1B,
+        ARMOR_CHEAT = 0x1C,
+        HELMET_CHEAT = 0x1D,
+        INFINITE_AMMO = 0x1E
     };
 
     // cppcheck-suppress noExplicitConstructor

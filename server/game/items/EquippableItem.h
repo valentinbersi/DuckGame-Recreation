@@ -30,6 +30,12 @@ public:
     virtual u8 ammo() const;
 
     /**
+     * To override, does nothing on 
+     * this class, to implement
+     */
+    virtual void setAmmo(const u8 ammo);
+
+    /**
      * Get the id of the item
      * @return The id of the item
      */

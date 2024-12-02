@@ -93,21 +93,13 @@ Player::Player(const DuckData::Id id):
 }
 
 void Player::onItemCollision(CollisionObject* itemDetected) {
-
     if (not input.isActionJustPressed(INTERACT) or item)
         return;
 
     const auto itemPtr = static_cast<Item*>(itemDetected);  // Static cast is safe
     const ItemID id = itemPtr->id();
     const u8 ammo = itemPtr->ammo();
-    item = EquippableItemFactory::createEquippableItem(id, ammo).release();
-    if (!(id == ItemID::Helmet || id == ItemID::Armor)) {
-        item->connect(EquippableWeapon::Events::Fired,
-                      eventHandler(&Player::onWeaponFired, , const Vector2&));
-        item->connect(EquippableWeapon::Events::NoMoreBullets,
-                      eventHandler(&Player::onWeaponNoMoreBullets));
-    }
-    addChild(EQUIPPED_ITEM, item);
+    setItem(id, ammo);
     itemDetected->parent()->removeChild(itemDetected);
 }
 
@@ -332,7 +324,10 @@ void Player::damage() {
             flags.reset(DuckData::Flag::Index::Armor);
         return;
     }
+    kill();
+}
 
+void Player::kill() { 
     flags.set(DuckData::Flag::Index::IsDead);
     removeFromLayer(Layer::Index::Player);
 }
@@ -384,6 +379,24 @@ bool Player::equipArmor(const u8 protection) {
     armorProtection += protection;
     item = nullptr;
     return true;
+}
+
+void Player::setItem(ItemID id, u8 ammo, Force force) {
+    if (force == Force::Yes and item)
+        removeItem();
+    item = EquippableItemFactory::createEquippableItem(id, ammo).release();
+    if (!(id == ItemID::Helmet || id == ItemID::Armor)) {
+        item->connect(EquippableWeapon::Events::Fired,
+                      eventHandler(&Player::onWeaponFired, , const Vector2&));
+        item->connect(EquippableWeapon::Events::NoMoreBullets,
+                      eventHandler(&Player::onWeaponNoMoreBullets));
+    }
+    addChild(EQUIPPED_ITEM, item);
+}
+
+void Player::setAmmo(const u8 ammo) {
+    if (item)
+        item->setAmmo(ammo);
 }
 
 bool Player::equipHelmet(const u8 protection) {
