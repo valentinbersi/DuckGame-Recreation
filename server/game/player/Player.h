@@ -91,11 +91,6 @@ class Player final: public PhysicsObject {
     void performActions(float delta);
 
     /**
-     * Removes the player Item
-     */
-    void removeItem();
-
-    /**
      * Updates the data of the duck
      */
     void updateData();
@@ -257,6 +252,11 @@ public:
      * @returns true if the player was equipped with the armor, false otherwise
      */
     bool equipHelmet(u8 protection);
+
+    /**
+     * Removes the player Item
+     */
+    void removeItem();
 
     /**
      * Get the protection of the player's armor
