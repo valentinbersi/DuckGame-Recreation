@@ -90,7 +90,8 @@ void SpriteManager::setFlags() {
     negateFlag(state.inAir, inAir);
     negateFlag(state.moving, isMoving);
 
-    if (state.playingDead) state.lookingUp = true;
+    if (state.playingDead)
+        state.lookingUp = true;
 
     if (state.lookingUp) {
         if (!state.flipped)
@@ -102,14 +103,16 @@ void SpriteManager::setFlags() {
         spritesheet->setAngle(DEFAULT_ANGLE);
     }
 
-    if (state.flapping) flapping = true;
+    if (state.flapping)
+        flapping = true;
 
     if (state.isDead != dead) {
         dead = !dead;
         spritesheet->damageEffects(m_position_x, m_position_y);
     }
 
-    if (state.inAir) state.playingDead = false;
+    if (state.inAir)
+        state.playingDead = false;
 }
 
 void SpriteManager::negateFlag(bool flag, bool& flagToNegate) {
@@ -187,7 +190,8 @@ void SpriteManager::drawChestplate(int col, int row) {
 void SpriteManager::drawHelmet() {
     spritesheet->selectSprite(2, 0, NO_FEATHER);
     SDL2pp::Rect position = getPosition(NO_FEATHER, NO_CHESTPLATE, HELMET);
-    spritesheet->drawHelmet(position, state.flipped, state.lookingUp, state.playingDead, state.inAir);
+    spritesheet->drawHelmet(position, state.flipped, state.lookingUp, state.playingDead,
+                            state.inAir);
 }
 
 void SpriteManager::drawWin(bool endGame) {

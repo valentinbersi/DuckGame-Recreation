@@ -95,20 +95,19 @@ private:
             {SDL_SCANCODE_SLASH, InputAction::SHOOT_RELEASED}};
 
     std::unordered_map<SDL_Scancode, InputAction> cheats = {
-                {SDL_SCANCODE_1, InputAction::END_ROUND_CHEAT},
-                {SDL_SCANCODE_2, InputAction::END_GAME_CHEAT},
-                {SDL_SCANCODE_3, InputAction::AK47_CHEAT},
-                {SDL_SCANCODE_4, InputAction::SHOTGUN_CHEAT},
-                {SDL_SCANCODE_5, InputAction::MAGNUM_CHEAT},
-                {SDL_SCANCODE_6, InputAction::COWBOYPISTOL_CHEAT},
-                {SDL_SCANCODE_7, InputAction::DUELPISTOL},
-                {SDL_SCANCODE_8, InputAction::SNIPER},
-                {SDL_SCANCODE_9, InputAction::LASER_RIFLE},
-                {SDL_SCANCODE_0, InputAction::PEWPEW},
-                {SDL_SCANCODE_F1, InputAction::GRENADE},
-                {SDL_SCANCODE_F2, InputAction::BANANA},
-                {SDL_SCANCODE_F3, InputAction::ARMOR},
-                {SDL_SCANCODE_F4, InputAction::HELMET},
-                {SDL_SCANCODE_F5, InputAction::INFINITE_AMMO}};
+            {SDL_SCANCODE_Y, InputAction::END_ROUND_CHEAT},
+            {SDL_SCANCODE_U, InputAction::END_GAME_CHEAT},
+            {SDL_SCANCODE_1, InputAction::AK47_CHEAT},
+            {SDL_SCANCODE_2, InputAction::SHOTGUN_CHEAT},
+            {SDL_SCANCODE_3, InputAction::MAGNUM_CHEAT},
+            {SDL_SCANCODE_4, InputAction::COWBOYPISTOL_CHEAT},
+            {SDL_SCANCODE_5, InputAction::DUELPISTOL_CHEAT},
+            {SDL_SCANCODE_6, InputAction::SNIPER_CHEAT},
+            {SDL_SCANCODE_7, InputAction::LASER_RIFLE_CHEAT},
+            {SDL_SCANCODE_8, InputAction::PEWPEW_CHEAT},
+            {SDL_SCANCODE_9, InputAction::GRENADE_CHEAT},
+            {SDL_SCANCODE_0, InputAction::BANANA_CHEAT},
+            {SDL_SCANCODE_P, InputAction::ARMOR_CHEAT},
+            {SDL_SCANCODE_O, InputAction::HELMET_CHEAT},
+            {SDL_SCANCODE_I, InputAction::INFINITE_AMMO}};
 };
-
