@@ -64,7 +64,9 @@ void ViewController::loadBackgrounds() {
         std::string backgroundPath = Resource::get().resource(background.path());
         QPixmap pixmap(QString::fromStdString(backgroundPath));
         if (!pixmap.isNull()) {
-            auto *item = new QListWidgetItem(QIcon(pixmap), QString::fromStdString(backgroundPath));
+            QString fileName = QFileInfo(QString::fromStdString(backgroundPath)).completeBaseName();
+
+            auto *item = new QListWidgetItem(QIcon(pixmap), fileName);
             item->setData(Qt::UserRole, (BackgroundID::Value)i);
             ui->backgroundList->addItem(item);
         }
