@@ -64,13 +64,19 @@ valen XD
 
 
 
-## ¿Cómo se crean nuevos niveles con el editor?
-Primero que nada, se debe ejecutar el editor como se indica en el primer apartado del manual.
+## Manual de Uso del Editor de Niveles
+Primero que nada, se debe ejecutar el editor como se indica en el primer apartado de este manual.
+
 Una vez dentro del Editor, se veran claramente en pantalla los 4 elementos claves del programa:
 1) Espacio para ingresar el nombre deseado para el mapa
 2) Lista de backgrounds otorgados por el editor
 3) Barra de herramientas donde se pueden seleccionar los elementos que se pueden agregar al mapa (Plataforma/Tile, Spawn de Patos, Spawn de Armas/Armaduras y Cajas)
-4) La grilla que representa el mapa como tal
+4) La grilla que representa el mapa como tal 
+
+
+5) Podemos mencionar un quinto elemento que es el menu superior `Map Options`, donde se encuentran las opciones `New Map`, `Save Map`, `Edit Map` y `Clear All`
+
+![LevelEditorExplicacion.png](../../../LevelEditorExplicacion.png)
 
 Para agregar elementos al mapa, se debe clickear el elemento en la barra de herramientas y luego clickear donde se quiere agregar el elemento. Se puede clickear una vez, o sino tambien mantener presionado y arrastrar el mouse, asi se agregaran muchos elementos de forma facil y rapida.
 Para eliminar elementos, se debe presionar el click derecho del mouse sobre el elemento que se quiere eliminar, o tambien se puede mantener apretado y arrastrar el mouse.
