@@ -10,6 +10,7 @@
 
 #include "Camera.h"
 #include "Communicator.h"
+#include "Background.h"
 #include "DuckData.h"
 #include "EnviromentRenderer.h"
 #include "GameStatus.h"
@@ -35,9 +36,6 @@ private:
     // view, it would not be rendered.
     void filterObjectsToRender();
 
-    // Starts the background randomly.
-    SDL2pp::Texture startBackground();
-
     // Creates the mapping of the SpriteManagers for each duck.
     std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>> createSpritesMapping();
 
@@ -62,23 +60,23 @@ private:
      * @param enviromentRenderer the renderer that draws the enviroment objects
      * @return
      */
-    void updateBlocks(EnviromentRenderer& enviromentRenderer);
+    void updateBlocks(const EnviromentRenderer& enviromentRenderer);
 
     /**
      * Updates the positions and scales of the weapon spawns based on the camera view and renders
      * @param enviromentRenderer the renderer that draws the enviroment objects
      */
-    void updateItemSpawns(EnviromentRenderer& enviromentRenderer);
+    void updateItemSpawns(const EnviromentRenderer& enviromentRenderer);
 
-    void updateBoxes(EnviromentRenderer& enviromentRenderer);
+    void updateBoxes(const EnviromentRenderer& enviromentRenderer);
 
     /**
      * Updates the positions and scales of the items based on the camera view and renders
      * @param enviromentRenderer the renderer that draws the enviroment objects
      */
-    void updateItems(EnviromentRenderer& enviromentRenderer);
+    void updateItems(const EnviromentRenderer& enviromentRenderer);
 
-    void updateEffects(EnviromentRenderer& enviromentRenderer);
+    void updateEffects(const EnviromentRenderer& enviromentRenderer);
 
     std::list<std::pair<Vector2, Vector2>> calculateSegmentPositionsAndSize(
             std::list<Segment2D>& segments);
@@ -90,12 +88,10 @@ private:
      * Shows the background texture
      * @param backgroundTexture the background texture to show
      */
-    void showBackground(SDL2pp::Texture& backgroundTexture);
+    void showBackground();
 
     // Clears the game objects, expecting to refill them with the next snapshot.
     void clearObjects();
-
-    void finishedSet();
 
     bool running;
     bool roundFinished;
@@ -106,6 +102,7 @@ private:
     int window_width;
     int window_height;
     Communicator& communicator;
+    BackgroundID backgroundID;
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
     SoundManager soundManager;
@@ -127,14 +124,14 @@ private:
     std::list<DuckData> ducks;
     std::list<DuckData> ducksToRender;
 
-    std::vector<std::string> backgrounds = {Resource::get().resource("background/forest-night.png"),
+    /*std::vector<std::string> backgrounds = {Resource::get().resource("background/forest-night.png"),
                                             Resource::get().resource("background/city.png"),
                                             Resource::get().resource("background/forest-day.png"),
                                             Resource::get().resource("background/snowy-peaks.png"),
                                             Resource::get().resource("background/desert.png"),
                                             Resource::get().resource("background/cascade-cave.png"),
                                             Resource::get().resource("background/sunset.png"),
-                                            Resource::get().resource("background/dark-cave.png")};
+                                            Resource::get().resource("background/dark-cave.png")};*/
 };
 
 template <typename SizedObject>

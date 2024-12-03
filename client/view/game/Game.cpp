@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <utility>
 #include <random>
-#include <exception>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -11,6 +10,7 @@
 
 #include "DuckState.h"
 #include "EventHandler.h"
+#include "Background.h"
 #include "GameMessage.h"
 #include "HudManager.h"
 #include "MessageType.h"
@@ -31,7 +31,6 @@
 #define whiteFeathers "player/whiteDuckFeathers.png"
 #define yellowFeathers "player/yellowDuckFeathers.png"
 
-#define ROCK "enviroment/rock.png"
 #define WEAPON_SPAWNER "enviroment/spawner.png"
 #define BOX "enviroment/box.png"
 #define EXPLOSION "particles/Explosion.png"
@@ -65,11 +64,11 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         roundFinished(false),
         setFinished(false),
         gameFinished(false),
-        transition(false),
+        transition(true),
         explosion(false),
         window_width(DEF_WINDOW_WIDTH),
         window_height(DEF_WINDOW_HEIGHT),
-        communicator(communicator),
+        communicator(communicator), backgroundID(BackgroundID::None),
         window(WINDOW_TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width,
                window_height, SDL_WINDOW_RESIZABLE),
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
@@ -88,7 +87,6 @@ void Game::init() {
     SDL sdl(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG);
 
-    Texture backgroundTexture = startBackground();
     EventHandler handler(window, window_width, window_height, twoPlayersLocal, communicator, ducks,
                          camera, running);
 
@@ -101,7 +99,7 @@ void Game::init() {
         camera.update(ducksToRender, deltaTime);
         filterObjectsToRender();
 
-        showBackground(backgroundTexture);
+        showBackground();
         updatePlayers(spritesMapping);
         updateBlocks(enviromentRenderer);
         updateBoxes(enviromentRenderer);
@@ -116,7 +114,7 @@ void Game::init() {
                 running = false;
                 continue;
             }
-            transition = false;
+            //transition = false;
             soundManager.playEffect(Resource::get().resource(WIN_PATH));
             auto message = std::make_unique<GameMessage>(InputAction::NEXT_ROUND, 1);
             communicator.trysend(std::move(message));
@@ -133,19 +131,14 @@ void Game::init() {
     }
 }
 
-Texture Game::startBackground() {
-    RandomIntGenerator random(0, backgrounds.size() - 1);
-    const std::size_t randomIndex = random.generateRandomInt();
-    SDL_Surface* rawBackgroundSurface = IMG_Load(backgrounds[randomIndex].c_str());
-    const Surface backgroundSurface(rawBackgroundSurface);
-    Texture backgroundTexture(renderer, backgroundSurface);
-    return backgroundTexture;
-}
-
 void Game::getSnapshot() {
     std::optional<GameStatus> snapshot = communicator.tryRecvLast();
     if (!snapshot.has_value()) return;
 
+    if (transition) {
+        backgroundID = snapshot->backgroundID;
+        transition = false;
+    }
     clearObjects();
     roundFinished = snapshot->roundEnded;
     setFinished = snapshot->setEnded;
@@ -238,23 +231,23 @@ void Game::updatePlayers(
     }
 }
 
-void Game::updateBlocks(EnviromentRenderer& enviromentRenderer) {
+void Game::updateBlocks(const EnviromentRenderer& enviromentRenderer) {
     for (Rect& block: calculateObjectsPositionsAndSize(blocksToRender))
-        enviromentRenderer.drawEnviroment(block, Resource::get().resource(ROCK).c_str());
+        enviromentRenderer.drawEnviroment(block, Resource::get().resource(backgroundID.pathToTileset()).c_str());
 }
 
-void Game::updateItemSpawns(EnviromentRenderer& enviromentRenderer) {
+void Game::updateItemSpawns(const EnviromentRenderer& enviromentRenderer) {
     for (Rect& itemSpawn: calculateObjectsPositionsAndSize(itemSpawnsToRender))
         enviromentRenderer.drawEnviroment(itemSpawn,
                                           Resource::get().resource(WEAPON_SPAWNER).c_str());
 }
 
-void Game::updateBoxes(EnviromentRenderer& enviromentRenderer) {
+void Game::updateBoxes(const EnviromentRenderer& enviromentRenderer) {
     for (Rect& box: calculateObjectsPositionsAndSize(boxesToRender))
         enviromentRenderer.drawEnviroment(box, Resource::get().resource(BOX).c_str());
 }
 
-void Game::updateItems(EnviromentRenderer& enviromentRenderer) {
+void Game::updateItems(const EnviromentRenderer& enviromentRenderer) {
     std::list<Rect> rectsToDraw = calculateObjectsPositionsAndSize(itemsToRender);
     auto rectsIt = rectsToDraw.begin();
     auto itemsIt = itemsToRender.begin();
@@ -267,7 +260,7 @@ void Game::updateItems(EnviromentRenderer& enviromentRenderer) {
     }
 }
 
-void Game::updateEffects(EnviromentRenderer& enviromentRenderer) {
+void Game::updateEffects(const EnviromentRenderer& enviromentRenderer) {
     if (!bulletPositions.empty()) {
         std::list<Segment2D> flattenedBulletPositions;
         for (const auto& bulletList: bulletPositions) {
@@ -322,7 +315,8 @@ std::list<std::pair<Vector2, Vector2>> Game::calculateSegmentPositionsAndSize(
     return positionsToDraw;
 }
 
-void Game::showBackground(Texture& backgroundTexture) {
+void Game::showBackground() {
+    Texture& backgroundTexture = TextureManager::getTexture(Resource::get().resource(backgroundID.pathToBackground()), renderer);
     Rect dstRect;
     dstRect.x = 0;
     dstRect.y = 0;
