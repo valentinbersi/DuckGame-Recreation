@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+#include "Background.h"
 #include "Types.h"
 #include "Vector2.h"
 
@@ -13,6 +14,7 @@ struct LevelData final {
     std::vector<Vector2> boxes;
     std::vector<Vector2> itemSpawnPoints;
     u64 width, height;
+    BackgroundID background{BackgroundID::CascadeCave};
 
     /**
      * Load all levels from the maps directory.
