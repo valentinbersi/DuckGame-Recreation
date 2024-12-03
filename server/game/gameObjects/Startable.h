@@ -11,4 +11,9 @@ struct Startable {
      * Start the object.
      */
     virtual void start() = 0;
+
+    /**
+     * Start the object internally.
+     */
+    virtual void startInternal() = 0;
 };
