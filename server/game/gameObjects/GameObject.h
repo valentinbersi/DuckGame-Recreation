@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 
+#include "Finishable.h"
 #include "Startable.h"
 #include "Subject.h"
 #include "TrackedReference.h"
@@ -23,11 +24,13 @@ class GameObject:
         public gameObject::Subject,
         public TrackedReference,
         public Updatable,
-        public Startable {
-
+        public Startable,
+        public Finishable {
     std::string name;
     GameObject* _parent;
     HashMap<std::string, GameObject*> children;
+    std::list<GameObject*> childrenToRemove;
+    bool active;
 
     /**
      * Object class handler for tree entered event.\n
@@ -121,9 +124,24 @@ public:
     void update(float delta) override;
 
     /**
+     * Does nothing on object
+     */
+    void finish() override;
+
+    /**
      * Updates the children of the object
      */
     void updateInternal(float delta) override;
+
+    /**
+     * Starts the children of the object
+     */
+    void startInternal() override;
+
+    /**
+     * Finishes the children of the object
+     */
+    void finishInternal() override;
 
     /**
      * Add a child to the object
@@ -141,14 +159,14 @@ public:
      * @param name The name of the child to remove
      * @return A pointer to the removed child
      */
-    std::unique_ptr<GameObject> removeChild(const std::string& name);
+    GameObject* removeChild(const std::string& name);
 
     /**
      * Remove a child from the object
      * @param object The child to remove
      * @return A pointer to the removed child
      */
-    std::unique_ptr<GameObject> removeChild(const GameObject* object);
+    GameObject* removeChild(const GameObject* object);
 
     /**
      * Transfer a child from another object to this
