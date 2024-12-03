@@ -54,8 +54,8 @@ void GameObject::addChild(std::string name, GameObject* newChild) {
 
     children.emplace(std::move(name), newChild);
 
-    newChild->start();
-    newChild->startInternal();
+    // newChild->start();
+    // newChild->startInternal();
 
     fire(Events::TreeEntered, newChild);
     for (GameObject* child: newChild->children | std::views::values)

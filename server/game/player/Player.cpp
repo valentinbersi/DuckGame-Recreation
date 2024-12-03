@@ -388,7 +388,7 @@ void Player::setItem(ItemID id, u8 ammo, Force force) {
     if (force == Force::Yes and item)
         removeItem();
     item = EquippableItemFactory::createEquippableItem(id, ammo).release();
-    if (!(id == ItemID::Helmet || id == ItemID::Armor)) {
+    if (!(id == ItemID::Helmet || id == ItemID::Armor || id == ItemID::Grenade)) {
         item->connect(EquippableWeapon::Events::Fired,
                       eventHandler(&Player::onWeaponFired, , const Vector2&));
         item->connect(EquippableWeapon::Events::NoMoreBullets,

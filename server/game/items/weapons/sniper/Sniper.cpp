@@ -21,6 +21,7 @@ Sniper::Sniper(const ItemID id, const u8 ammo, Vector2 recoil, const float reach
         randomDispersionGenerator(-dispersion, dispersion) {
     timer->connect(GameTimer::Events::Timeout, eventHandler(&Sniper::setNotReloading));
     addChild("Timer", timer);
+    timer->reset();
 }
 
 void Sniper::setNotReloading() {

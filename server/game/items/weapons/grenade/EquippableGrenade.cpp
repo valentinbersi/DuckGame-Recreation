@@ -16,6 +16,7 @@ EquippableGrenade::EquippableGrenade(ItemID id, u8 ammo, float timeToExplode):
         Pressed(false){
     timer->connect(GameTimer::Events::Timeout, eventHandler(&EquippableGrenade::onTimeout));
     addChild("Timer", timer);
+    timer->reset();
 }
 
 void EquippableGrenade::onTimeout() {
@@ -25,6 +26,7 @@ void EquippableGrenade::onTimeout() {
 void EquippableGrenade::actionate() {
     if (!timer->started()) {
         timer->start();
+        Pressed = true;
         return;
     }
     if (Pressed){

@@ -16,7 +16,7 @@ Grenade::Grenade(ItemID id, const Vector2 position, const Vector2 direction, flo
         hasExploded(false) {
     
     this->setGlobalPosition(position);
-    this->setLayers(Layer::None);
+    this->setLayers(Layer::Item);
     this->setScannedLayers(Layer::Wall | Layer::Box);
     this->_velocity = Vector2(INICIAL_VELOCITY)*direction;
     timer->connect(GameTimer::Events::Timeout, eventHandler(&Grenade::onTimeout));
