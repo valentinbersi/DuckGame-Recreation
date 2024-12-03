@@ -5,6 +5,7 @@
 #include "DuckData.h"
 #include "ItemData.h"
 #include "ServerMessage.h"
+#include "Background.h"
 #include "SizedObjectData.h"
 
 /**
@@ -21,6 +22,7 @@ struct GameStatus final: ServerMessage {
     bool roundEnded;
     bool gameEnded;
     bool setEnded;
+    BackgroundID backgroundID; 
     std::list<DuckData> ducks;
     std::list<ItemData> itemPositions;
     std::list<SizedObjectData> blockPositions;

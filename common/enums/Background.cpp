@@ -4,6 +4,8 @@ BackgroundID::BackgroundID(): value(None) {}
 
 BackgroundID::BackgroundID(const Value value): value(value) {}
 
+BackgroundID::BackgroundID(const u8 value): value(static_cast<Value>(value)) {}
+
 BackgroundID::operator Value() const { return value; }
 
 const std::string& BackgroundID::pathToBackground() const { return backgrounds.at(*this); }

@@ -76,6 +76,8 @@ Level::Level(const LevelData& level, const HashMap<u16, Player*>& players):
     }
 }
 
+BackgroundID Level::getBackground() const { return background; }
+
 std::list<SizedObjectData> Level::blockStatus() const {
     std::list<SizedObjectData> blockPositions;
     std::ranges::transform(terrainBlocks, std::back_inserter(blockPositions),

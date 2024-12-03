@@ -27,9 +27,9 @@ std::list<DuckData> ClientRecvProtocol::recvDuckData() {
     std::list<DuckData> ducks;
     for (u16 i(0); i < size; ++i) {
         DuckData::Id duckID = static_cast<DuckData::Id>(recvByte());
-        DuckData::Direction direction = static_cast<DuckData::Direction>(recvByte());
+        DuckData::Direction direction = recvByte();
         std::list<Segment2D> bulletsFromGun;
-        u8 gunID = static_cast<ItemID>(recvByte());
+        ItemID gunID = recvByte();
         u16 bulletsAmount = recvShort();
         for (u16 j(0); j < bulletsAmount; ++j) {
             Segment2D segment = recvSegment();
@@ -47,8 +47,8 @@ std::list<ItemData> ClientRecvProtocol::recvItemData() {
     u16 size = recvShort();
     std::list<ItemData> items;
     for (u16 i(0); i < size; ++i) {
-        u8 id = recvByte();
-        items.emplace_back(static_cast<ItemID>(id), recvRectangle());
+        ItemID id = recvByte();
+        items.emplace_back(id, recvRectangle());
     }
     return items;
 }
@@ -68,6 +68,7 @@ GameStatus ClientRecvProtocol::recvGameStatus() {
     status.roundEnded = recvByte();
     status.setEnded = recvByte();
     status.gameEnded = recvByte();
+    status.backgroundID = recvByte();
     status.ducks = recvDuckData();
     status.itemPositions = recvItemData();
     status.blockPositions = recvBlockPositions();

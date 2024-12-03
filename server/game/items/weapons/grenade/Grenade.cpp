@@ -4,7 +4,7 @@
 #include "GameController.h"
 #include "Explosion.h"
 
-#define INICIAL_VELOCITY 10,10
+#define ESCALAR 10
 #define GRENADE_DIMENSIONS 1.25, 1.375
 
 #define eventHandler(Function) \
@@ -18,8 +18,9 @@ Grenade::Grenade(ItemID id, const Vector2 position, const Vector2 direction, flo
     this->setGlobalPosition(position);
     this->setLayers(Layer::Item);
     this->setScannedLayers(Layer::Wall | Layer::Box);
-    this->_velocity = Vector2(INICIAL_VELOCITY)*direction;
+    this->_velocity = direction*10 + Vector2::UP*10;
     timer->connect(GameTimer::Events::Timeout, eventHandler(&Grenade::onTimeout));
+    addChild("Timer", timer);   
     timer->start();
 }
 
@@ -35,9 +36,9 @@ void Grenade::update([[maybe_unused]]float delta) {
         return;
     }
     if (_velocity.x() > 0) {
-        _velocity += Vector2::LEFT * 5 * delta;
+        _velocity += Vector2::LEFT * 10 * delta;
     } else if (_velocity.x() < 0) {
-        _velocity += Vector2::RIGHT * 5 * delta;
+        _velocity += Vector2::RIGHT * 10 * delta;
     }
 }
 

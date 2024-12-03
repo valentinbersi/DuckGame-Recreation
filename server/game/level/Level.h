@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "SizedObjectData.h"
 #include "TerrainBlock.h"
+#include "Background.h"
 
 
 class Level final: public GameObject {
@@ -34,6 +35,12 @@ public:
      * Create a new Level object
      */
     Level(const LevelData& level, const HashMap<u16, Player*>& players);
+    
+    /**
+     * Get the background of the level
+     * @return The background of the level
+     */
+    BackgroundID getBackground() const;
 
     /**
      * Get the position of all the blocks in the level

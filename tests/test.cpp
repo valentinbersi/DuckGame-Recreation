@@ -145,6 +145,10 @@ TEST(ProtocolTest, ServerToGameCorrectValues) {
     status->blockPositions.emplace_back(Rectangle(Vector2(0, 0), Vector2(0, 0)));
     status->itemSpawnerPositions.emplace_back(Rectangle(Vector2(23, 4), Vector2(6, 7)));
     status->boxPositions.emplace_back(Rectangle(Vector2(0, 78), Vector2(4.678, 0)));
+    status->roundEnded = true;
+    status->gameEnded = true;
+    status->setEnded = true;
+    status->backgroundID = BackgroundID::DarkCave; 
 
     std::thread client([status]() {
         ActiveSocket clientSkt("localhost", "8080");
@@ -160,7 +164,7 @@ TEST(ProtocolTest, ServerToGameCorrectValues) {
     client.join();
 }
 
-TEST(ProtocolTest, ServerToOneGameFillStatus) {
+TEST(ProtocolTest, ServerToOneGameFullStatus) {
     ListenerSocket peer("8080");
     std::list<Segment2D> segmentos1({Segment2D({0, 0}, {0, 0}), Segment2D({1, 1}, {1, 1})});
     std::list<Segment2D> segmentos2({Segment2D({-3432, -243.67}, {1, 1244})});
@@ -195,6 +199,11 @@ TEST(ProtocolTest, ServerToOneGameFillStatus) {
 
     status->boxPositions.emplace_back(Rectangle(Vector2(0, 70), Vector2(4.678, 0)));
     status->boxPositions.emplace_back(Rectangle(Vector2(100, 90), Vector2(56, 466)));
+
+    status->roundEnded = true;
+    status->gameEnded = false;
+    status->setEnded = false;
+    status->backgroundID = BackgroundID::City; 
 
     std::thread client([status]() {
         ActiveSocket clientSkt("localhost", "8080");

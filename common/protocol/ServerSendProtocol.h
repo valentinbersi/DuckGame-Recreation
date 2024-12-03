@@ -8,6 +8,7 @@
 #include "ItemData.h"
 #include "SendProtocol.h"
 #include "Types.h"
+#include "Background.h"
 
 // Forward declaration
 struct ServerMessage;
@@ -31,6 +32,8 @@ public:
     void sendRoundData(bool roundEnded, bool setEnded, bool gameEnded);
 
     void sendLen(u16 len);
+
+    void sendBackground(BackgroundID background);
 
     void sendDuckData(const DuckData& objData);
 

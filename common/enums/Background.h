@@ -32,12 +32,16 @@ struct BackgroundID {
     // cppcheck-suppress noExplicitConstructor
     BackgroundID(Value value);
 
+    // cppcheck-suppress noExplicitConstructor
+    BackgroundID(u8 value);
+
     /**
      * Cast the background id to its value
      * @return The value of the background id
      */
     // cppcheck-suppress noExplicitConstructor
     operator Value() const;
+
 
     /**
      * Get the path in the resource folder of the given background
