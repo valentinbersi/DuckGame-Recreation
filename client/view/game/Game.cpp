@@ -43,7 +43,9 @@ const HashMap<ItemID, std::string> Game::weaponSprites = {
         {ItemID::Sniper, "weapons/Sniper.png"},
         {ItemID::Ak47, "weapons/Ak47.png"},
         {ItemID::Helmet, "weapons/HelmetBig.png"},
-        {ItemID::Armor, "weapons/ChestplateBig.png"}};
+        {ItemID::Armor, "weapons/ChestplateBig.png"},
+        {ItemID::Grenade, "weapons/Grenade.png"},
+        {ItemID::Banana, "weapons/Banana.png"}};
 
 Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         running(true),
@@ -92,8 +94,8 @@ void Game::init() {
         updateBoxes(enviromentRenderer);
         updateItemSpawns(enviromentRenderer);
         updateItems(enviromentRenderer);
-        updateEffects(enviromentRenderer);  // aca se hacer marcas de bala, explosiones, rebotes y
-                                            // cascaras de banana
+        updateEffects(enviromentRenderer);
+
 
         hudManager.check(ducks, ducksToRender, spritesMapping);
         if (transition) {
@@ -123,15 +125,13 @@ Texture Game::startBackground() {
     const std::size_t randomIndex = random.generateRandomInt();
     SDL_Surface* rawBackgroundSurface = IMG_Load(backgrounds[randomIndex].c_str());
     const Surface backgroundSurface(rawBackgroundSurface);
-    // SDL_FreeSurface(rawBackgroundSurface);
     Texture backgroundTexture(renderer, backgroundSurface);
     return backgroundTexture;
 }
 
 void Game::getSnapshot() {
     std::optional<GameStatus> snapshot = communicator.tryRecvLast();
-    if (!snapshot.has_value())
-        return;
+    if (!snapshot.has_value()) return;
 
     clearObjects();
     roundFinished = snapshot->roundEnded;
