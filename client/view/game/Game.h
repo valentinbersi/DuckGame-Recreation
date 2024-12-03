@@ -33,10 +33,10 @@ public:
 
 private:
     // Filters the objects to render, based on the camera view. If the object is not in the camera
-    // view, it would not be rendered.
+    // view, it would not be rendered
     void filterObjectsToRender();
 
-    // Creates the mapping of the SpriteManagers for each duck.
+    // Creates the mapping of the SpriteManagers for each duck
     std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>> createSpritesMapping();
 
     /**
@@ -68,6 +68,10 @@ private:
      */
     void updateItemSpawns(const EnviromentRenderer& enviromentRenderer);
 
+    /**
+     * Updates the positions and scales of the boxes based on the camera view and renders
+     * @param enviromentRenderer the renderer that draws the enviroment objects
+     */
     void updateBoxes(const EnviromentRenderer& enviromentRenderer);
 
     /**
@@ -76,21 +80,27 @@ private:
      */
     void updateItems(const EnviromentRenderer& enviromentRenderer);
 
+    /**
+     * Updates the positions and scales of the ducks based on the camera view and renders
+     * @param enviromentRenderer the renderer that draws the enviroment objects
+     */
     void updateEffects(const EnviromentRenderer& enviromentRenderer);
 
+    /**
+     * Updates the positions and scales of the ducks based on the camera view and renders
+     * @param segments the segments to update
+     * @return a list of the positions and sizes of the segments
+     */
     std::list<std::pair<Vector2, Vector2>> calculateSegmentPositionsAndSize(
             std::list<Segment2D>& segments);
 
-    // Receives the latest game status snapshot from the server and updates the game objects.
+    // Receives the latest game status snapshot from the server and updates the game objects
     void getSnapshot();
 
-    /**
-     * Shows the background texture
-     * @param backgroundTexture the background texture to show
-     */
+    // Shows the background texture received from the server
     void showBackground();
 
-    // Clears the game objects, expecting to refill them with the next snapshot.
+    // Clears the game objects, expecting to refill them with the next snapshot
     void clearObjects();
 
     bool running;
@@ -124,15 +134,6 @@ private:
     std::list<SizedObjectData> explosions;
     std::list<DuckData> ducks;
     std::list<DuckData> ducksToRender;
-
-    /*std::vector<std::string> backgrounds = {Resource::get().resource("background/forest-night.png"),
-                                            Resource::get().resource("background/city.png"),
-                                            Resource::get().resource("background/forest-day.png"),
-                                            Resource::get().resource("background/snowy-peaks.png"),
-                                            Resource::get().resource("background/desert.png"),
-                                            Resource::get().resource("background/cascade-cave.png"),
-                                            Resource::get().resource("background/sunset.png"),
-                                            Resource::get().resource("background/dark-cave.png")};*/
 };
 
 template <typename SizedObject>

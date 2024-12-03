@@ -12,31 +12,37 @@
 class WeaponSpriteManager {
 
 public:
-    // Constructor.
+    // Constructor
     WeaponSpriteManager();
 
-    // Selects the weapon to be drawn and its effects based on the current state.
+    /**
+     * Selects the weapon to be drawn and its effects based on the current state
+     * @param spritesheet The spritesheet that'll draw the weapon
+     * @param position The position to draw the weapon at
+     * @param scale The scale to draw the weapon at
+     * @parm state The current state of the duck
+     */
     void drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
                     const DuckState& state);
 
 private:
-    // Draws the main sprite of each weapon.
+    // Draws the main sprite of each weapon
     void draw(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
               const DuckState& state);
 
-    // Draws the first type of effect of the weapons.
+    // Draws the first type of effect of the weapons
     void drawEffect1(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
                      const DuckState& state);
 
-    // Draws the second type of effect of the weapons.
+    // Draws the second type of effect of the weapons
     void drawEffect2(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
                      const DuckState& state);
 
-    // Draws the laser flare effect for the Laser Rifle.
+    // Draws the laser flare effect for the Laser Rifle
     void drawLaserFlare(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
                         const DuckState& state);
 
-    // Draws the plasma effect for the Pew Pew Laser.
+    // Draws the plasma effect for the Pew Pew Laser
     void drawPlasma(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
                     const DuckState& state);
 

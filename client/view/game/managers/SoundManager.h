@@ -12,25 +12,39 @@
 class SoundManager {
 
 public:
-    // Constructor.
+    // Constructor
     SoundManager();
 
-    // Destructor.
+    // Destructor
     ~SoundManager();
 
-    // Plays the sound associated with the given ItemID.
-    // also it checks if the sound for the given ItemID is already loaded in the soundMap.
-    void playSound(const ItemID id);
+    /**
+     * Plays the sound associated with the given ItemID
+     * also it checks if the sound for the given ItemID is already loaded in the soundMap.
+     * @param id: ItemID of the sound to be played
+     */
+    void playSound(ItemID id);
 
+    /**
+     * Loads the sound effect from the given path and plays it
+     * @param path: path to the sound effect
+     */
     void playEffect(const std::string& path);
 
+    /**
+     * Checks if the duck is dead and plays the sound effect
+     * @param state: DuckState of the duck
+     */
     void checkSounds(const DuckState& state);
 
 private:
-    // Plays the music in loop.
+    // Plays the music in loop
     void playMusic();
 
-    // Loads the sound associated with the given ItemID.
+    /**
+     * Loads the sound associated with the given ItemID
+     * @param id: ItemID of the sound to be loaded
+     */
     bool loadSound(ItemID id);
 
     bool firstFrameDead;
@@ -44,8 +58,5 @@ private:
             {ItemID::Sniper, Resource::get().resource("sounds/sniper.mp3")},
             {ItemID::Shotgun, Resource::get().resource("sounds/shotgun.mp3")},
             {ItemID::LaserRifle, Resource::get().resource("sounds/laser.mp3")},
-            {ItemID::PewPewLaser, Resource::get().resource("sounds/pew.mp3")}
-            //{ItemID::Grenade, "sounds/grenade.mp3"},
-            //{ItemID::Banana, "sounds/banana.mp3"},
-    };
+            {ItemID::PewPewLaser, Resource::get().resource("sounds/pew.mp3")}};
 };

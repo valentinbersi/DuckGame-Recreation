@@ -9,8 +9,13 @@ class TextureManager {
 public:
     TextureManager();
 
-    // Obtains a texture from the path... if it doesn't exist, it creates it inside the unordered
-    // map called 'textures'.
+    /**
+     * Obtains a texture from the path... if it doesn't exist, it creates it inside the unordered
+     * map called 'textures'
+     * @param path: path to the texture
+     * @param renderer: renderer to create the texture
+     * @return the texture from the path obtained from the map
+     */
     static SDL2pp::Texture& getTexture(const std::string& path, SDL2pp::Renderer& renderer);
 
 private:

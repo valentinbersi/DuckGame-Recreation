@@ -22,27 +22,37 @@ public:
     // Destructor
     ~EventHandler() = default;
 
-    // Keeps listening to KEYUP, KEYDOWN, QUIT and REZISED events of the screen.
-    // After that, calls the specific handlers for each case after scanning the key.
+    /**
+     * Keeps listening to KEYUP, KEYDOWN, QUIT and REZISED events of the screen
+     * After that, calls the specific handlers for each case after scanning the key
+     */
     void handleEvents();
 
 private:
-    // Handles 'ScreenEvents', having in mid if the game is fullscreen or not.
-    // Also, updates the window size variables after the change.
+    /**
+     * Handles 'ScreenEvents', having in mid if the game is fullscreen or not
+     * Also, updates the window size variables after the change
+     * @param event: SDL_Event to be handled
+     * @param isKeyDown: boolean that indicates if the key is being pressed or released
+     * @param scancode: SDL_Scancode of the key pressed
+     */
     void handleScreenEvents(const SDL_Event& event, bool isKeyDown, const SDL_Scancode& scancode);
 
-    // Handles the key event, sending the message to the server using a GameMessage filled with an
-    // InputAction. It works also with two players, sending the message to the server with the
-    // player number.
+    /**
+     * Handles the key event, sending the message to the server using a GameMessage filled with an InputAction
+     * It works also with two players, sending the message to the server with the player number
+     * @param scancode: SDL_Scancode of the key pressed
+     * @param isKeyDown: boolean that indicates if the key is being pressed or released
+     */
     void handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown);
 
-    bool isCheatActive(const std::vector<SDL_Scancode>& keys);
-
-
-    // Returns if the game is fullscreen or not using SDL special flags.
+    // Returns if the game is fullscreen or not using SDL special flags
     bool isFullscreen();
 
-    // Sets the game to fullscreen if not activated (or viceversa).
+    /**
+     * Sets the game to fullscreen if not activated (or viceversa)
+     * @param fullscreen: boolean that indicates if the game is fullscreen or not
+     */
     void setFullscreen(bool fullscreen);
 
     SDL2pp::Window& window;

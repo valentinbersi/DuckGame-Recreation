@@ -40,11 +40,7 @@ void WeaponSpriteManager::drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& pos
                 break;
 
             case ItemID::Grenade:
-                /* if(state.ammo > 0) draw */
-                break;
             case ItemID::Banana:
-                /* if(state.ammo > 0) draw */
-                break;
             default:
                 break;
         }
