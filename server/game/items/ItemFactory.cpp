@@ -50,6 +50,7 @@ std::unordered_map<ItemID, std::function<std::unique_ptr<Item>(u8)>> ItemFactory
         {ItemID::Armor,
          [](u8 ammo) { return std::make_unique<Item>(ARMOR_DIMENSIONS, ItemID::Armor, ammo); }}};
 
+
 std::unique_ptr<Item> ItemFactory::createItem(const ItemID id, u8 ammo, Force force) {
     const auto function = factory.find(id);
     if (function == factory.end())

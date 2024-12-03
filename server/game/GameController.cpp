@@ -190,6 +190,7 @@ void GameController::addToLevel(const std::string& nodeName,
 
 GameStatus GameController::status() const {
     GameStatus status;
+    status.backgroundID = level->getBackground();
     status.roundEnded = roundEnded;
     status.gameEnded = _gameEnded;
     status.setEnded = setEnded;

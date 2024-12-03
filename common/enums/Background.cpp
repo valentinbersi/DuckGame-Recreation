@@ -1,6 +1,10 @@
 #include "Background.h"
 
+BackgroundID::BackgroundID(): value(None) {}
+
 BackgroundID::BackgroundID(const Value value): value(value) {}
+
+BackgroundID::BackgroundID(const u8 value): value(static_cast<Value>(value)) {}
 
 BackgroundID::operator Value() const { return value; }
 

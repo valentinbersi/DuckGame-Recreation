@@ -30,6 +30,8 @@ void ServerSendProtocol::sendRoundData(bool roundEnded, bool setEnded, bool game
     sendByte(gameEnded);
 }
 
+void ServerSendProtocol::sendBackground(BackgroundID background) { sendByte(background); }
+
 void ServerSendProtocol::sendDuckData(const DuckData& duckData) {
     sendByte(static_cast<u8>(duckData.duckID));
     sendByte(duckData.direction);

@@ -28,6 +28,7 @@ Ak47::Ak47(const ItemID id, const u8 ammo, Vector2 recoil, const float reach,
         timer(new GameTimer(timeBetweenShots)) {
     timer->connect(GameTimer::Events::Timeout, eventHandler(&Ak47::onTimeOut));
     addChild("Timer", timer);
+    timer->reset();
 }
 
 void Ak47::onTimeOut() {

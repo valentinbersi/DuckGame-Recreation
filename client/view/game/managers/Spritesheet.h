@@ -3,7 +3,6 @@
 #include <string>
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <SDL2pp/SDL2pp.hh>
 
 class Spritesheet {
@@ -18,7 +17,7 @@ public:
     // width and height to 32 or 16. It ALSO sets the width and height of the clip.
     void selectSprite(int x, int y, bool feathers);
 
-    void damageEffects(double& m_x, double& m_y);
+    void damageEffects(double& m_x, double& m_y) const;
 
     void resetDamageEffects() const;
 
@@ -38,7 +37,7 @@ public:
     void drawWeapon(const SDL2pp::Rect& playerPosition, bool flip, const std::string& path) const;
 
     // ...
-    void drawEffects(const SDL2pp::Rect& playerPosition, bool flip, const std::string& path);
+    void drawEffects(const SDL2pp::Rect& playerPosition, bool flip, const std::string& path) const;
 
     //
     void drawWin(const SDL2pp::Rect& playerPosition, bool flip, bool endGame) const;

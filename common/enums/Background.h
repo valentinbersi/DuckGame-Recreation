@@ -16,8 +16,14 @@ struct BackgroundID {
         ForestDay = 4,
         ForestNight = 5,
         SnowyPeaks = 6,
-        Sunset = 7
+        Sunset = 7,
+        None = 8
     };
+
+    /**
+     * Construct a background id with the default value
+     */
+    BackgroundID();
 
     /**
      * Construct a background id with the given value
@@ -26,12 +32,16 @@ struct BackgroundID {
     // cppcheck-suppress noExplicitConstructor
     BackgroundID(Value value);
 
+    // cppcheck-suppress noExplicitConstructor
+    BackgroundID(u8 value);
+
     /**
      * Cast the background id to its value
      * @return The value of the background id
      */
     // cppcheck-suppress noExplicitConstructor
     operator Value() const;
+
 
     /**
      * Get the path in the resource folder of the given background
@@ -77,4 +87,14 @@ struct YAML::convert<BackgroundID> {
     }
 
     static Node encode(const BackgroundID& rhs) { return Node(rhs); }
+};
+
+template <>
+struct YAML::convert<BackgroundID::Value> {
+    static bool decode(const Node& node, BackgroundID::Value& rhs) {
+        rhs = static_cast<BackgroundID::Value>(node.as<int>());
+        return true;
+    }
+
+    static Node encode(const BackgroundID::Value& rhs) { return Node(rhs); }
 };

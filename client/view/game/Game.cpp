@@ -2,6 +2,19 @@
 
 #include <algorithm>
 #include <utility>
+#include <random>
+#include <exception>
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
+
+#include "DuckState.h"
+#include "EventHandler.h"
+#include "GameMessage.h"
+#include "HudManager.h"
+#include "MessageType.h"
+#include "ServerMessage.h"
 
 #define DEF_WINDOW_WIDTH 1040
 #define DEF_WINDOW_HEIGHT 680
@@ -26,6 +39,8 @@
 #define WIN_PATH "sounds/end-effect.mp3"
 #define EXPLOSION_PATH "sounds/grenade.mp3"
 
+#define RAY_LEN 17.0f
+
 using SDL2pp::NullOpt;
 using SDL2pp::Rect;
 using SDL2pp::Renderer;
@@ -41,7 +56,9 @@ const HashMap<ItemID, std::string> Game::weaponSprites = {
         {ItemID::Sniper, "weapons/Sniper.png"},
         {ItemID::Ak47, "weapons/Ak47.png"},
         {ItemID::Helmet, "weapons/HelmetBig.png"},
-        {ItemID::Armor, "weapons/ChestplateBig.png"}};
+        {ItemID::Armor, "weapons/ChestplateBig.png"},
+        {ItemID::Grenade, "weapons/Grenade.png"},
+        {ItemID::Banana, "weapons/Banana.png"}};
 
 Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         running(true),
@@ -90,8 +107,8 @@ void Game::init() {
         updateBoxes(enviromentRenderer);
         updateItemSpawns(enviromentRenderer);
         updateItems(enviromentRenderer);
-        updateEffects(enviromentRenderer);  // aca se hacer marcas de bala, explosiones, rebotes y
-                                            // cascaras de banana
+        updateEffects(enviromentRenderer);
+
 
         hudManager.check(ducks, ducksToRender, spritesMapping);
         if (transition) {
@@ -121,15 +138,13 @@ Texture Game::startBackground() {
     const std::size_t randomIndex = random.generateRandomInt();
     SDL_Surface* rawBackgroundSurface = IMG_Load(backgrounds[randomIndex].c_str());
     const Surface backgroundSurface(rawBackgroundSurface);
-    // SDL_FreeSurface(rawBackgroundSurface);
     Texture backgroundTexture(renderer, backgroundSurface);
     return backgroundTexture;
 }
 
 void Game::getSnapshot() {
     std::optional<GameStatus> snapshot = communicator.tryRecvLast();
-    if (!snapshot.has_value())
-        return;
+    if (!snapshot.has_value()) return;
 
     clearObjects();
     roundFinished = snapshot->roundEnded;
@@ -282,7 +297,7 @@ std::list<std::pair<Vector2, Vector2>> Game::calculateSegmentPositionsAndSize(
     std::list<std::pair<Vector2, Vector2>> positionsToDraw;
 
     for (auto& segment: segments) {
-        Segment2D cutSegment = segment.cut(20.0f);
+        Segment2D cutSegment = segment.cut(RAY_LEN);
         const float positionScaleX =
                 static_cast<float>(window_width) / camera.getViewRect().size().x();
         const float positionScaleY =

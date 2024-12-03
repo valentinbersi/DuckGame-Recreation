@@ -1,6 +1,8 @@
 #include "EventHandler.h"
 
 #include <utility>
+#include <memory>
+#include "SpriteManager.h"
 
 EventHandler::EventHandler(SDL2pp::Window& window, int& window_width, int& window_height,
                            bool& twoPlayersLocal, Communicator& communicator,

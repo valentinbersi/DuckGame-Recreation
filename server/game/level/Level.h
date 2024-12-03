@@ -11,9 +11,11 @@
 #include "Player.h"
 #include "SizedObjectData.h"
 #include "TerrainBlock.h"
+#include "Background.h"
 
 
 class Level final: public GameObject {
+    BackgroundID background;
     std::vector<TerrainBlock*> terrainBlocks;
     std::vector<ItemSpawner*> itemSpawners;
     std::list<Box*> boxes;
@@ -32,7 +34,13 @@ public:
     /**
      * Create a new Level object
      */
-    explicit Level(const LevelData& level, const HashMap<u16, Player*>& players);
+    Level(const LevelData& level, const HashMap<u16, Player*>& players);
+    
+    /**
+     * Get the background of the level
+     * @return The background of the level
+     */
+    BackgroundID getBackground() const;
 
     /**
      * Get the position of all the blocks in the level
@@ -57,13 +65,6 @@ public:
      * @return The positions of all the actual explosions in the level
      */
     std::list<SizedObjectData> explosionStatus() const;
-
-    /**
-     * Removes all boxes that has been destroyed
-     * @param delta The time since the last frame, not used
-     * in this case
-     */
-    void update(float delta) override;
 
     /**
      * Destroy the Level object

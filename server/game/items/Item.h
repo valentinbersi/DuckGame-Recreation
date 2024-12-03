@@ -4,7 +4,7 @@
 #include "ItemID.h"
 #include "PhysicsObject.h"
 
-class Item final: public PhysicsObject {
+class Item: public PhysicsObject {
     ItemID _id;
     u8 _ammo;  // 0 for non weapons
 
