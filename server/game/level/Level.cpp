@@ -7,17 +7,28 @@
 #include "Layer.h"
 #include "SpawnPoint.h"
 #include "TerrainBlock.h"
+#include "Explosion.h"
 
 #define eventHandler(Function, ...) \
     gameObject::EventHandler<Level, __VA_ARGS__>::create(getReference<Level>(), Function)
+
+void Level::onTreeEntered(GameObject* object) {
+    if (const auto explosion = dynamic_cast<Explosion*>(object); explosion != nullptr) {
+        explosions.push_back(explosion);
+    }
+}
 
 void Level::onTreeExited(GameObject* object) {
     if (const auto box = dynamic_cast<Box*>(object); box != nullptr) {
         boxes.remove(box);
     }
+    if (const auto explosion = dynamic_cast<Explosion*>(object); explosion != nullptr) {
+        explosions.remove(explosion);
+    }
 }
 
 Level::Level(const LevelData& level, const HashMap<u16, Player*>& players) {
+    connect(Events::TreeEntered, eventHandler(&Level::onTreeEntered, GameObject*));
     connect(Events::TreeExited, eventHandler(&Level::onTreeExited, GameObject*));
 
     addChild("Death zone", new StaticObject({static_cast<float>(level.width) / 2, -20}, Layer::Wall,
@@ -85,6 +96,13 @@ std::list<SizedObjectData> Level::boxStatus() const {
     return boxPositions;
 }
 
+std::list<SizedObjectData> Level::explosionStatus() const {
+    std::list<SizedObjectData> explosionPositions;
+    std::ranges::transform(explosions, std::back_inserter(explosionPositions),
+                           [](const Explosion* explosion) { return explosion->status(); });
+    return explosionPositions;
+}
+
 void Level::update([[maybe_unused]] float delta) {
     std::vector<Box*> boxesToDestroy;
     boxes.remove_if([&boxesToDestroy](Box* box) {
@@ -96,6 +114,16 @@ void Level::update([[maybe_unused]] float delta) {
     });
 
     for (Box* box: boxesToDestroy) removeChild(box);
+    
+    std::vector<Explosion*> explosionsToDestroy;
+    explosions.remove_if([&explosionsToDestroy](Explosion* explosion) {
+        if (explosion->isOver()) {
+            explosionsToDestroy.push_back(explosion);
+            return true;
+        }
+        return false;
+    });
+    for (Explosion* explosion: explosionsToDestroy) removeChild(explosion);
 }
 
 Level::~Level() = default;

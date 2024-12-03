@@ -62,6 +62,7 @@ void EventHandler::handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown) 
         if (cheatIt != cheats.end()) {
             auto message = std::make_unique<GameMessage>(cheatIt->second, 1);
             communicator.trysend(std::move(message));
+            keyStates.clear();
         }
     }
 }

@@ -6,10 +6,11 @@
 #include "Vector2.h"
 
 class EquippableWeapon: public EquippableItem {
-    u8 ammo_;
+
     Vector2 recoil;
 
 protected:
+    u8 ammo_;
     /**
      * Fires the weapon, this means decrementing the ammo. If the ammo is 0, it will fire the
      * NoMoreBullets event, otherwise it will fire the Fired event.

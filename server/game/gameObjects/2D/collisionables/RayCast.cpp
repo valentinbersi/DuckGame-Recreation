@@ -45,14 +45,14 @@ void RayCast::processCollisions() {
     if (collisions.empty())
         return;
 
-    fire(Events::Collision,
-         std::ranges::min(collisions,
-                          [this](const std::pair<Vector2, std::weak_ptr<CollisionObject>>& a,
-                                 const std::pair<Vector2, std::weak_ptr<CollisionObject>>& b) {
-                              return ray.start().distance(a.first) < ray.start().distance(b.first);
-                          })
-                 .second.lock()
-                 .get());
+    auto comparision = [this](const std::pair<Vector2, std::weak_ptr<CollisionObject>>& a,
+                              const std::pair<Vector2, std::weak_ptr<CollisionObject>>& b) {
+        return ray.start().distance(a.first) < ray.start().distance(b.first);
+    };
+
+    CollisionObject* closestObject = std::ranges::min(collisions, comparision).second.lock().get();
+
+    fire(Events::Collision, closestObject);
 }
 
 void RayCast::clearCollisions() { objectsToCollide.clear(); }

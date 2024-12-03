@@ -159,7 +159,7 @@ Vector2 Vector2::reflect(const Vector2& normal) const {
 Vector2 Vector2::rotated(const float angle) const {
     const float sin = std::sin(angle);
     const float cos = std::cos(angle);
-    return {_x * cos + _y * sin, _x * sin - _y * cos};
+    return {_x * cos - _y * sin, _x * sin + _y * cos};
 }
 
 void Vector2::swap() { std::swap(_x, _y); }

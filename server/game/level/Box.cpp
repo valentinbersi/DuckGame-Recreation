@@ -6,11 +6,12 @@
 #include "Item.h"
 #include "ItemFactory.h"
 #include "Layer.h"
+#include "Explosion.h"
 
 #define DIMENSIONS 2, 2
 #define ITEM 1
 #define EXPLOSION 2
-#define GENERATE_OPTIONS 0, 2
+#define GENERATE_OPTIONS 2, 2
 
 Box::Box(Vector2 position):
         PhysicsObject(std::move(position), Layer::Box,
@@ -28,9 +29,12 @@ void Box::eliminateBox() {
             parent()->addChild("Item", std::move(item));
             break;
         }
-        case EXPLOSION:
+        case (EXPLOSION): {
+            std::unique_ptr<Explosion> explosion = std::make_unique<Explosion>(globalPosition());
+            parent()->addChild("Explosion", std::move(explosion));
             break;
-
+        }
+        
         default:
             break;
     }
