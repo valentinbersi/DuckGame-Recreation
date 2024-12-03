@@ -73,6 +73,7 @@ GameStatus ClientRecvProtocol::recvGameStatus() {
     status.blockPositions = recvBlockPositions();
     status.itemSpawnerPositions = recvBlockPositions();
     status.boxPositions = recvBlockPositions();
+    status.explosionPositions = recvBlockPositions();
     return status;
 }
 

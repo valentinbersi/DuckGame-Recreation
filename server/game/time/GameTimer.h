@@ -40,6 +40,11 @@ public:
      */
     bool started() const;
 
+    /**
+     * get the time on timer Timeleft
+     */
+    float getTimeLeft() const;
+
     struct Events {
         constexpr static auto Timeout = "Timeout";
     };
