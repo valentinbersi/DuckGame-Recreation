@@ -119,7 +119,7 @@ void Player::onWeaponFired(const Vector2& recoil) {
 void Player::onWeaponNoMoreBullets() { flags.set(DuckData::Flag::Index::NoMoreBullets); }
 
 void Player::removeItem() {
-    removeChild(EQUIPPED_ITEM);
+    removeChild(item);
     item = nullptr;
 }
 
@@ -415,7 +415,7 @@ bool Player::equipHelmet(const u8 protection) {
 bool Player::isLookingUp() const { return flags.test(DuckData::Flag::Index::LookingUp); }
 
 Vector2 Player::aimingDirection() const {
-    if (isLookingUp())
+    if (isLookingUp() or flags.test(DuckData::Flag::Index::PlayingDead))
         return Vector2::UP;
 
     return _lastViewDirection == DuckData::Direction::Right ? Vector2::RIGHT : Vector2::LEFT;
