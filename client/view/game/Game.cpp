@@ -49,6 +49,7 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         setFinished(false),
         gameFinished(false),
         transition(false),
+        explosion(false),
         window_width(DEF_WINDOW_WIDTH),
         window_height(DEF_WINDOW_HEIGHT),
         communicator(communicator),
@@ -264,12 +265,14 @@ void Game::updateEffects(EnviromentRenderer& enviromentRenderer) {
     }
 
     if (!explosions.empty()) {
-        for (Rect& explosion: calculateObjectsPositionsAndSize(explosions)) {
+        for (Rect& explosion: calculateObjectsPositionsAndSize(explosions))
             enviromentRenderer.drawEnviroment(explosion,
                                               Resource::get().resource(EXPLOSION).c_str());
-        }
-        soundManager.playEffect(EXPLOSION_PATH);
-    }
+
+        if (!explosion) soundManager.playEffect(Resource::get().resource(EXPLOSION_PATH));
+        explosion = true;
+
+    } else explosion = false;
 }
 
 std::list<std::pair<Vector2, Vector2>> Game::calculateSegmentPositionsAndSize(

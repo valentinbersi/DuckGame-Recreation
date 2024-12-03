@@ -115,6 +115,7 @@ private:
     bool setFinished;
     bool gameFinished;
     bool transition;
+    bool explosion;
     int window_width;
     int window_height;
     Communicator& communicator;
