@@ -1,5 +1,7 @@
 #include "Background.h"
 
+BackgroundID::BackgroundID(): value(None) {}
+
 BackgroundID::BackgroundID(const Value value): value(value) {}
 
 BackgroundID::operator Value() const { return value; }

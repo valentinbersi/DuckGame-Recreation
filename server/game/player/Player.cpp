@@ -110,7 +110,7 @@ void Player::onCollision(const CollisionObject* object) {
 
 void Player::onWeaponFired(const Vector2& recoil) {
     _velocity.setX(0);
-    _velocity += recoil;
+    _velocity += _lastViewDirection == DuckData::Direction::Left ? recoil : -recoil;
     flags.set(DuckData::Flag::Index::IsShooting);
 }
 
