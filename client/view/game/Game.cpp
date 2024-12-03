@@ -26,6 +26,8 @@
 #define WIN_PATH "sounds/end-effect.mp3"
 #define EXPLOSION_PATH "sounds/grenade.mp3"
 
+#define RAY_LEN 17.0f
+
 using SDL2pp::NullOpt;
 using SDL2pp::Rect;
 using SDL2pp::Renderer;
@@ -280,7 +282,7 @@ std::list<std::pair<Vector2, Vector2>> Game::calculateSegmentPositionsAndSize(
     std::list<std::pair<Vector2, Vector2>> positionsToDraw;
 
     for (auto& segment: segments) {
-        Segment2D cutSegment = segment.cut(20.0f);
+        Segment2D cutSegment = segment.cut(RAY_LEN);
         const float positionScaleX =
                 static_cast<float>(window_width) / camera.getViewRect().size().x();
         const float positionScaleY =
