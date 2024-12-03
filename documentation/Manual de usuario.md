@@ -44,6 +44,32 @@ explicación detallada de los argumentos requeridos por el servidos:
 
 4. port: puerto en el que el servidor escuchará las conexiones de los clientes.
 
+## ¿Cómo se levanta el Cliente?
+
+Para ejecutar el servidor se debe correr la linea 2. indicada en la sección Ejecución. A continuación se da una
+explicación detallada de los argumentos requeridos por el servidos:
+
+1. -h (opcional): de estar presente, el servidor se limitará a mostrar la ayuda y no se ejecutará.
+
+2. -r resource_directory (opcional): directorio donde se encuentra el directorio assets/ con sus respectivos archivos de
+   resources (assets) dentro.
+   Si la flag no es pasada como argumento, el servidor buscará el directorio assets/ en /etc/DuckGame/.
+
+## ¿Cómo se levanta el Servidor?
+
+Para ejecutar el servidor se debe correr la linea 3. indicada en la sección Ejecución. A continuación se da una
+explicación detallada de los argumentos requeridos por el servidos:
+
+1. -h (opcional): de estar presente, el servidor se limitará a mostrar la ayuda y no se ejecutará.
+
+2. -c resource_directory (opcional): directorio donde se encuentra el directorio assets/ con sus respectivos archivos de
+   resources (assets) dentro.
+   Si la flag no es pasada como argumento, el servidor buscará el directorio assets/ en /etc/DuckGame/.
+
+3. hostname: puerto donde se encuentra el servidor
+
+4. port: puerto en el que el servidor escucha las conexiones de los clientes.
+
 ## Manual del servidor
 
 El directorio config debe contar con el siguiente formato:
