@@ -25,10 +25,10 @@ void Explosion::onTimeout() {
 }
 
 void Explosion::onCollision(CollisionObject* object) {
-    if (object->layers().test(Layer::Player)) {
+    if (object->layers().test(Layer::Index::Player)) {
         static_cast<Player*>(object)->damage();
     }
-    if (object->layers().test(Layer::Box)) {
+    if (object->layers().test(Layer::Index::Box)) {
         static_cast<Box*>(object)->onCollision();
     }
 }
