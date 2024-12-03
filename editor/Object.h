@@ -5,7 +5,8 @@
 #include <QMetaType>
 #include <QPixmap>
 #include <QString>
-#include <utility>
+#include <QSize>
+#include <QPointF>
 
 #include "EditorConstants.h"
 
@@ -14,7 +15,7 @@ enum ObjectType {
     DUCK,
     ARMAMENT,
     BOX,
-    UNKNOWN  // objeto invalido
+    UNKNOWN  // objeto inválido
 };
 
 struct Object {
@@ -24,52 +25,16 @@ struct Object {
     QPointF centerPos;
     QPixmap icon;
 
-    explicit Object(const ObjectType type): type(type) {
-        if (type == PLATFORM) {
-            iconPath = PLATFORM_ICON;
-            size = QSize(PLATFORM_WIDTH, PLATFORM_HEIGHT);
-        } else if (type == DUCK) {
-            iconPath = DUCK_ICON;
-            size = QSize(DUCK_WIDTH, DUCK_HEIGHT);
-        } else if (type == ARMAMENT) {
-            iconPath = ARMAMENT_ICON;
-            size = QSize(SPAWN_WIDTH, SPAWN_HEIGHT);
-        } else if (type == BOX) {
-            iconPath = BOX_ICON;
-            size = QSize(BOX_WIDTH, BOX_HEIGHT);
-        } else {
-            qWarning() << "Tipo de objeto desconocido";
-            iconPath = "";
-            size = QSize(0, 0);
-        }  // tengo que ver lo de UNKNOWN
+    explicit Object(ObjectType type);
+    Object();
 
-        QPixmap i(iconPath);
-        icon = i.scaled(PIXEL_SIZE * size.width(), PIXEL_SIZE * size.height(),
-                        Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    }
+    void setCenterPosition(QPointF pos, bool isTopLeftPos);
+    [[nodiscard]] QPointF getBoundingPos() const;
 
-    // este constructor lo agrego para que QT tome a la clase Object como un item de QT.
-    Object(): type(UNKNOWN), size(0, 0), centerPos(0, 0), icon(QPixmap()) {}
+    bool operator==(const Object& other) const;
 
-    // setea la posicion central del objeto.
-    // el parametro booleano determina si la posicion recibida es la central o la de la esquina
-    // superior izquierda si se recibe la de la esquina, se realizan los calculos para obtener la
-    // central y setearla correctamente.
-    void setCenterPosition(const QPointF pos, const bool isTopLeftPos) {
-        if (isTopLeftPos)
-            centerPos = QPointF(pos.x() + size.width() / 2.0, pos.y() + size.height() / 2.0);
-        else
-            centerPos = pos;
-    }
-
-    [[nodiscard]] QPointF getBoundingPos() const {
-        return QPointF{centerPos.x() - size.width() / 2.0, centerPos.y() - size.height() / 2.0};
-    }
-
-    bool operator==(const Object& other) const {
-        return type == other.type && iconPath == other.iconPath && size == other.size &&
-               centerPos == other.centerPos;
-    }
+    static std::string objectTypeToString(ObjectType type);
+    static ObjectType stringToObjectType(const std::string& typeStr);
 };
 
 Q_DECLARE_METATYPE(Object)

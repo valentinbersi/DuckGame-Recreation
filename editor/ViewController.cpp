@@ -181,18 +181,18 @@ void ViewController::on_actionEditMap_triggered() {
     // QString fileName = QFileDialog::getOpenFileName(this, "Select Map", "/home/", "Archivos YAML
     // (*.yaml)");
 
-    QString fileName =
-            QFileDialog::getOpenFileName(this, "Select Map", "maps/", "Archivos YAML (*.yaml)");
+    // QString fileName =
+    //         QFileDialog::getOpenFileName(this, "Select Map", "maps/", "Archivos YAML (*.yaml)");
+    //
+    // if (fileName.isEmpty()) {
+    //     QMessageBox::warning(this, "Error", "There was an error importing the map.");
+    //     return;
+    // }
 
-    if (fileName.isEmpty()) {
-        QMessageBox::warning(this, "Error", "There was an error importing the map.");
-        return;
-    }
-
-    mapData.path = fileName.toStdString();
+    // mapData.path = fileName.toStdString();
     scene->clearAll();
 
-    bool success = mapManager.importMap();
+    bool success = mapManager.importMap(this);
     if (!success)
         return;
 
