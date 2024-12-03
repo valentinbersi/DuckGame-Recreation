@@ -98,7 +98,23 @@ Se recomienda guardar los mapas en la carpeta `/etc/DuckGame/maps`, para que el 
 Esta carpeta se genera al momento de la instalación del juego. 
 El server lee por default desde esta carpeta, pero usted puede modificar esto (para mas precisión leer el apartado del manual del server)
 
-## ¿Cómo se lanza el cliente?
+### Controles del Editor:
+* Seleccionar/Deseleccionar objeto para agregar: Se selecciona en la barra lateral derecha.
+* Agregar objeto seleccionado al mapa: Click izquierdo
+* Eliminar objeto del mapa: Click derecho
+* Nuevo Mapa: `CTRL+N`
+* Guardar Mapa: `CTRL+S`
+* Cargar/Editar Mapa: `CTRL+E`
+
+## Manual de Uso del Cliente
+Una vez ejecutado el cliente (como se indica en el apartado de Instalacion) se ejecutara la aplicacion del Lobby del juego.  
+Lo primero que se vera un menú donde hay dos opciones bien claras: `Play` para avanzar a jugar y `Exit`para salir.  
+Al presionar `Play`, se mostrara una nueva pantalla, donde se debe seleccionar cuantos jugadores locales jugaran (1 o 2) y si se quiere crear o unirse a una partida.  
+Si el usuario decide crear una partida, se comunicara con el servidor y se conectara a la Lobby de la partida, donde debera iniciar la partida cuando lo desee.  
+Si quiere unirse a una partida, debera ingresar un MatchID válido (de una partida que no este iniciada) y ahi pasara a la lobby, donde esperara a que el host de la partida de inicio a la misma.  
+Si el matchID es invalido o la partida ya comenzo, se le informara al usuario para que decida como proceder.  
+Una vez que el host inicia la partida, a todos los jugadores que esten en ese momento conectados a la partida se les cerrara la aplicacion del Lobby y se abrira el juego DuckGame.  
+En el siguiente apartado se habla sobre las funcionalidades y jugabilidad del juego.  
 
 ## Dinámica del Juego
 
@@ -131,10 +147,4 @@ Cada pieza de armadura (sea un helmet o chestplate) amortiguará **1** ataque ex
 * Disparo: `SLASH`
 
 
-## Controles del Editor:
-* Seleccionar/Deseleccionar objeto para agregar: Se selecciona en la barra lateral derecha.
-* Agregar objeto seleccionado al mapa: Click izquierdo
-* Eliminar objeto del mapa: Click derecho
-* Nuevo Mapa: `CTRL+N`
-* Guardar Mapa: `CTRL+S`
-* Cargar/Editar Mapa: `CTRL+E`
+
