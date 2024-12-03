@@ -2,6 +2,19 @@
 
 #include <algorithm>
 #include <utility>
+#include <random>
+#include <exception>
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
+
+#include "DuckState.h"
+#include "EventHandler.h"
+#include "GameMessage.h"
+#include "HudManager.h"
+#include "MessageType.h"
+#include "ServerMessage.h"
 
 #define DEF_WINDOW_WIDTH 1040
 #define DEF_WINDOW_HEIGHT 680

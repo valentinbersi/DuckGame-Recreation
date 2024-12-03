@@ -1,4 +1,7 @@
 #include "Camera.h"
+#include "SpriteManager.h"
+
+#include <SDL2/SDL.h>
 
 Camera::Camera(int& windowWidth, int& windowHeight):
         windowWidth(windowWidth),

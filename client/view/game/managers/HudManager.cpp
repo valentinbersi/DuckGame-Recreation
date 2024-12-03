@@ -2,6 +2,9 @@
 
 #include <algorithm>
 #include <string>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "Resource.h"
 
@@ -46,8 +49,8 @@ void HudManager::check(
 }
 
 void HudManager::winnerShow(
-        std::list<DuckData>& ducksToRender,
-        const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
+        const std::list<DuckData>& ducksToRender,
+        const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) const {
     auto& winner = ducksToRender.front();
 
     spritesMapping.at(winner.duckID)->drawWin(gameFinished);
@@ -56,7 +59,7 @@ void HudManager::winnerShow(
     SDL_Delay(1000);
 }
 
-void HudManager::toBlackTransition(int centerX, int centerY) const {
+void HudManager::toBlackTransition(const int centerX, const int centerY) const {
     int size = 10;
 
     int maxSize = std::max(windowWidth, windowHeight);
@@ -180,7 +183,7 @@ void HudManager::finishedGame(
     transition = true;
 }
 
-std::string duckIDToString(DuckData::Id id) {
+std::string duckIDToString(const DuckData::Id id) {
     switch (id) {
         case DuckData::Id::White:
             return "White";
@@ -196,21 +199,21 @@ std::string duckIDToString(DuckData::Id id) {
 }
 
 void HudManager::showPoints(
-        std::list<DuckData>& ducks, Rect& tableRect,
+        const std::list<DuckData>& ducks, const Rect& tableRect,
         const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
     if (TTF_Init() == -1) {
         std::cerr << "Error al inicializar SDL_ttf: " << TTF_GetError() << std::endl;
         return;
     }
 
-    std::string pathToFont(Resource::get().resource("fonts/font.ttf"));
+    const std::string pathToFont(Resource::get().resource("fonts/font.ttf"));
     TTF_Font* font = TTF_OpenFont(pathToFont.c_str(), 24);
     if (!font) {
         std::cerr << "Error al cargar la fuente: " << TTF_GetError() << std::endl;
         return;
     }
 
-    SDL_Color textColor = {255, 255, 255, 255};
+    const SDL_Color textColor = {255, 255, 255, 255};
     int xOffset = 10;  // Space between ducks
 
     for (const auto& duck: ducks) {

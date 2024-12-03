@@ -1,6 +1,9 @@
 #include "SoundManager.h"
-
 #include "Resource.h"
+#include "DuckData.h"
+
+#include <SDL2/SDL.h>
+#include <SDL2pp/SDL2pp.hh>
 
 #define MUSIC_PATH "sounds/ost.ogg"
 #define DEFAULT_VOLUME 10
@@ -30,7 +33,7 @@ void SoundManager::playMusic() {
     Mix_VolumeMusic(DEFAULT_VOLUME);
 }
 
-void SoundManager::playSound(ItemID id) {
+void SoundManager::playSound(const ItemID id) {
     auto it = soundMap.find(id);
     if (it == soundMap.end())
         loadSound(id);
@@ -40,8 +43,8 @@ void SoundManager::playSound(ItemID id) {
     Mix_PlayChannel(-1, it->second, 0);
 }
 
-bool SoundManager::loadSound(ItemID id) {
-    std::string path = soundMapIDS[id];
+bool SoundManager::loadSound(const ItemID id) {
+    const std::string path = soundMapIDS[id];
     Mix_Chunk* sound = Mix_LoadWAV(path.c_str());
     if (sound == nullptr) {
         std::cerr << "Mix_LoadWAV Error: " << Mix_GetError() << std::endl;

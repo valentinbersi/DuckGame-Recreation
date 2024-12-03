@@ -1,19 +1,11 @@
 #pragma once
 
-#include <algorithm>
 #include <list>
-#include <memory>
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2pp/SDL2pp.hh>
 
 #include "Camera.h"
 #include "DuckData.h"
 #include "Force.h"
 #include "Rectangle.h"
-#include "SpriteManager.h"
-#include "Spritesheet.h"
 #include "Vector2.h"
 
 class Camera {

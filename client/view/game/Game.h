@@ -1,31 +1,18 @@
 #pragma once
 
-#include <exception>
-#include <iostream>
 #include <list>
 #include <memory>
-#include <random>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL_ttf.h>
 #include <SDL2pp/SDL2pp.hh>
 
 #include "Camera.h"
 #include "Communicator.h"
 #include "DuckData.h"
-#include "DuckState.h"
 #include "EnviromentRenderer.h"
-#include "EventHandler.h"
-#include "GameMessage.h"
 #include "GameStatus.h"
-#include "HudManager.h"
-#include "MessageType.h"
-#include "ServerMessage.h"
 #include "SoundManager.h"
 #include "SpriteManager.h"
 #include "Timer.h"

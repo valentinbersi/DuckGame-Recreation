@@ -3,13 +3,8 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
-#include <SDL2pp/SDL2pp.hh>
 
-#include "DuckData.h"
 #include "DuckState.h"
 #include "ItemID.h"
 #include "Resource.h"
@@ -25,7 +20,7 @@ public:
 
     // Plays the sound associated with the given ItemID.
     // also it checks if the sound for the given ItemID is already loaded in the soundMap.
-    void playSound(ItemID id);
+    void playSound(const ItemID id);
 
     void playEffect(const std::string& path);
 
