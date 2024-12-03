@@ -21,6 +21,7 @@ private:
     Communicator& communicator;
     GameInfo& gameInfo;
     QTimer* timer;
+    u8 playersConnected;
 
     //    std::unordered_map<DuckData::Id, QPixmap> mapDuckIcons =
     //            {{DuckData::Id::White, QPixmap(":/ducks/whiteDuck")},
