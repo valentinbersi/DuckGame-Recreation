@@ -63,9 +63,6 @@ struct Object {
     }
 
     [[nodiscard]] QPointF getBoundingPos() const {
-        qDebug() << "centerPos:" << centerPos << "topLeftPos:"
-                 << QPointF{centerPos.x() - size.width() / 2.0,
-                            centerPos.y() - size.height() / 2.0};
         return QPointF{centerPos.x() - size.width() / 2.0, centerPos.y() - size.height() / 2.0};
     }
 

@@ -35,7 +35,6 @@ ViewController::ViewController(QWidget* parent):
     ui->setupUi(this);
 
     ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
-    // scene = new LevelScene(this, objects);
     scene = new LevelScene(this, mapData.objects);
     ui->graphicsView->setScene(scene);
     onSceneResize();
@@ -61,10 +60,11 @@ ViewController::ViewController(QWidget* parent):
 void ViewController::loadBackgrounds() {
     for (int i = BackgroundID::CascadeCave; i <= BackgroundID::Sunset; i++) {
         BackgroundID background((BackgroundID::Value)i);
-        std::string backgroundPath = Resource::get().resource(background.path());
+        std::string backgroundPath = Resource::get().resource(background.pathToBackground());
         QPixmap pixmap(QString::fromStdString(backgroundPath));
         if (!pixmap.isNull()) {
-            auto* item = new QListWidgetItem(QIcon(pixmap), QString::fromStdString(backgroundPath));
+            QString fileName = QFileInfo(QString::fromStdString(backgroundPath)).completeBaseName();
+            auto* item = new QListWidgetItem(QIcon(pixmap), fileName);
             item->setData(Qt::UserRole, (BackgroundID::Value)i);
             ui->backgroundList->addItem(item);
         }
@@ -80,17 +80,23 @@ void ViewController::onBackgroundSelected(QListWidgetItem* item) {
 }
 
 void ViewController::changeBackgroundBrush() {
-    std::string backgroundPath = Resource::get().resource(mapData.backgroundID.path());
-    QPixmap pixmap(QString::fromStdString(backgroundPath));
+    std::string backgroundPath = Resource::get().resource(mapData.backgroundID.pathToBackground());
+    QPixmap backgroundPixmap(QString::fromStdString(backgroundPath));
 
-    if (pixmap.isNull()) {
+    std::string tilePath = Resource::get().resource(mapData.backgroundID.pathToTileset());
+    QPixmap platformPixmap(QString::fromStdString(tilePath));
+
+    if (backgroundPixmap.isNull() || platformPixmap.isNull()) {
         QMessageBox::warning(this, "Error", "The selected file is not a valid image.");
         return;
     }
 
-    QPixmap scaledPixmap = pixmap.scaled(ui->centralwidget->size(), Qt::KeepAspectRatioByExpanding,
+    QPixmap scaledPixmap = backgroundPixmap.scaled(ui->centralwidget->size(), Qt::KeepAspectRatioByExpanding,
                                          Qt::SmoothTransformation);
     backgroundBrush = QBrush(scaledPixmap);
+
+    platformButton->setIcon(QIcon(platformPixmap));
+    platformButton->update();
     update();
 }
 
@@ -124,6 +130,12 @@ void ViewController::setupToolBar() {
         }
     });
 }
+
+//void ViewController::changePlatformIcon(QIcon newIcon) {
+//    for (Object object : mapData.objects) {
+//
+//    }
+//}
 
 void ViewController::onSceneResize() {
     QRectF sceneRect = scene->sceneRect();

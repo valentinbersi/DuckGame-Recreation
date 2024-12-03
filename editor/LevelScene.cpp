@@ -79,10 +79,6 @@ void LevelScene::insertObjectInMap(Object& object, bool addInList) {
         objects.push_back(object);
         storedObject = &objects.back();
     } else {
-        //        auto it = std::find(objects.begin(), objects.end(), object);
-        //        if (it != objects.end()) {
-        //            storedObject = &(*it);
-        //        }
         storedObject = &object;
     }
 
