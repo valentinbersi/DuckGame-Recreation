@@ -11,7 +11,7 @@ Vector2 Segment2D::start() const { return start_; }
 Vector2 Segment2D::end() const { return end_; }
 
 std::optional<Vector2> Segment2D::intersects(const Segment2D& other) const {
-    const Vector2 d1 = end_ - other.start_;
+    const Vector2 d1 = end_ - start_;
     const Vector2 d2 = other.end_ - other.start_;
     const Vector2 delta = other.start_ - start_;
 
