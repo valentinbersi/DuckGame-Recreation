@@ -34,9 +34,11 @@
 #define WEAPON_SPAWNER "enviroment/spawner.png"
 #define BOX "enviroment/box.png"
 #define EXPLOSION "particles/Explosion.png"
+#define IMPACT "particles/Impact.png"
 
 #define WIN_PATH "sounds/end-effect.mp3"
 #define EXPLOSION_PATH "sounds/grenade.mp3"
+#define IMPACT_PATH "sounds/impact.mp3"
 
 #define RAY_LEN 17.0f
 
@@ -162,6 +164,8 @@ void Game::getSnapshot() {
                            [](ItemData& item) { return std::move(item); });
     std::ranges::transform(snapshot->explosionPositions, std::back_inserter(explosions),
                            [](SizedObjectData& explosion) { return std::move(explosion); });
+    /*std::ranges::transform(snapshot->laserBulletsPosition, std::back_inserter(impacts),
+                       [](SizedObjectData& impact) { return std::move(impact); });*/
 }
 
 void Game::filterObjectsToRender() {
@@ -278,12 +282,17 @@ void Game::updateEffects(const EnviromentRenderer& enviromentRenderer) {
             enviromentRenderer.drawEnviroment(explosion,
                                               Resource::get().resource(EXPLOSION).c_str());
 
-        if (!explosion)
-            soundManager.playEffect(Resource::get().resource(EXPLOSION_PATH));
+        if (!explosion) soundManager.playEffect(Resource::get().resource(EXPLOSION_PATH));
         explosion = true;
 
-    } else
-        explosion = false;
+    } else explosion = false;
+
+    /*if (!impacts.empty()) {
+        for (Rect& impact: calculateObjectsPositionsAndSize(impacts))
+            enviromentRenderer.drawEnviroment(impact,
+                                  Resource::get().resource(IMPACT).c_str());
+        soundManager.playEffect(Resource::get().resource(IMPACT_PATH));
+    }*/
 }
 
 std::list<std::pair<Vector2, Vector2>> Game::calculateSegmentPositionsAndSize(
