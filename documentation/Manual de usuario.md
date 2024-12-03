@@ -76,14 +76,27 @@ Una vez dentro del Editor, se veran claramente en pantalla los 4 elementos clave
 
 5) Podemos mencionar un quinto elemento que es el menu superior `Map Options`, donde se encuentran las opciones `New Map`, `Save Map`, `Edit Map` y `Clear All`
 
-![LevelEditorExplicacion.png](../../../LevelEditorExplicacion.png)
+![LevelEditorExplicacion.png](img/LevelEditorExplicacion.png)
+En esta foto se resaltan claramente los 5 elementos mencionados.
 
-Para agregar elementos al mapa, se debe clickear el elemento en la barra de herramientas y luego clickear donde se quiere agregar el elemento. Se puede clickear una vez, o sino tambien mantener presionado y arrastrar el mouse, asi se agregaran muchos elementos de forma facil y rapida.
+#### ¿como agrego elementos al mapa?
+Para agregar elementos al mapa, se debe clickear el elemento en la barra de herramientas y luego clickear donde se quiere agregar el elemento. Se puede clickear una vez, o sino tambien mantener presionado y arrastrar el mouse, asi se agregaran muchos elementos de forma facil y rapida. 
+
+#### ¿como elimino elementos del mapa?
 Para eliminar elementos, se debe presionar el click derecho del mouse sobre el elemento que se quiere eliminar, o tambien se puede mantener apretado y arrastrar el mouse.
 
+#### ¿como me muevo por el mapa?
+Para moverse por el mapa, se puede arrastrar la pantalla manteniendo presionado el click izquierdo del mouse, sin tener seleccionado ningun elemento!
+
+
+#### ¿como guardo, creo o edito un mapa?
 Una vez se tiene el mapa hecho, este se puede guardar seleccionando la opción `Save Map` el menu `Map Options` o bien presionando `CTRL+S`
 
-En este menu `Map Options` tambien se ofrecen las opciones de `New Map` para crear un nuevo mapa (o `CTRL+N`) o `Edit Map` para editar un mapa ya creado (o `CTRL+E`). Otra funcionalidad que se ofrece es la de `Clear All`, que elimina todos los elementos del mapa.
+Como ya se menciono, en el menu `Map Options` tambien se ofrecen las opciones de `New Map` para crear un nuevo mapa (o `CTRL+N`) o `Edit Map` para editar un mapa ya creado (o `CTRL+E`). Otra funcionalidad que se ofrece es la de `Clear All`, que elimina todos los elementos del mapa.
+
+Se recomienda guardar los mapas en la carpeta `/etc/DuckGame/maps`, para que el server pueda cargar los mapas y mostrarlos en el juego.
+Esta carpeta se genera al momento de la instalación del juego. 
+El server lee por default desde esta carpeta, pero usted puede modificar esto (para mas precisión leer el apartado del manual del server)
 
 ## ¿Cómo se lanza el cliente?
 
