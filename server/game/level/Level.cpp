@@ -3,11 +3,11 @@
 #include <algorithm>
 #include <list>
 
+#include "Explosion.h"
 #include "ItemSpawner.h"
 #include "Layer.h"
 #include "SpawnPoint.h"
 #include "TerrainBlock.h"
-#include "Explosion.h"
 
 #define eventHandler(Function, ...) \
     gameObject::EventHandler<Level, __VA_ARGS__>::create(getReference<Level>(), Function)
@@ -27,7 +27,8 @@ void Level::onTreeExited(GameObject* object) {
     }
 }
 
-Level::Level(const LevelData& level, const HashMap<u16, Player*>& players) {
+Level::Level(const LevelData& level, const HashMap<u16, Player*>& players):
+        background(level.background) {
     connect(Events::TreeEntered, eventHandler(&Level::onTreeEntered, GameObject*));
     connect(Events::TreeExited, eventHandler(&Level::onTreeExited, GameObject*));
 
@@ -101,29 +102,6 @@ std::list<SizedObjectData> Level::explosionStatus() const {
     std::ranges::transform(explosions, std::back_inserter(explosionPositions),
                            [](const Explosion* explosion) { return explosion->status(); });
     return explosionPositions;
-}
-
-void Level::update([[maybe_unused]] float delta) {
-    std::vector<Box*> boxesToDestroy;
-    boxes.remove_if([&boxesToDestroy](Box* box) {
-        if (box->wasDestroyed()) {
-            boxesToDestroy.push_back(box);
-            return true;
-        }
-        return false;
-    });
-
-    for (Box* box: boxesToDestroy) removeChild(box);
-    
-    std::vector<Explosion*> explosionsToDestroy;
-    explosions.remove_if([&explosionsToDestroy](Explosion* explosion) {
-        if (explosion->isOver()) {
-            explosionsToDestroy.push_back(explosion);
-            return true;
-        }
-        return false;
-    });
-    for (Explosion* explosion: explosionsToDestroy) removeChild(explosion);
 }
 
 Level::~Level() = default;

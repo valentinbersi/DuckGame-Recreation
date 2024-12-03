@@ -1,5 +1,4 @@
-#ifndef DUCKGAME_WAITINGPAGE_H
-#define DUCKGAME_WAITINGPAGE_H
+#pragma once
 
 #include <QWidget>
 
@@ -21,6 +20,7 @@ private:
     Communicator& communicator;
     GameInfo& gameInfo;
     QTimer* timer;
+    u8 playersConnected;
 
     //    std::unordered_map<DuckData::Id, QPixmap> mapDuckIcons =
     //            {{DuckData::Id::White, QPixmap(":/ducks/whiteDuck")},
@@ -39,6 +39,3 @@ public:
 signals:
     void startMatch();
 };
-
-
-#endif  // DUCKGAME_WAITINGPAGE_H

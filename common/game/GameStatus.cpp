@@ -65,8 +65,7 @@ bool GameStatus::operator==(const GameStatus& other) const {
            setEnded == other.setEnded && ducks == other.ducks &&
            itemPositions == other.itemPositions && blockPositions == other.blockPositions &&
            itemSpawnerPositions == other.itemSpawnerPositions &&
-           boxPositions == other.boxPositions &&
-           explosionPositions == other.explosionPositions;
+           boxPositions == other.boxPositions && explosionPositions == other.explosionPositions;
 }
 
 template <typename T>

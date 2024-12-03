@@ -1,6 +1,8 @@
 #include "MapManager.h"
 
 #include <QDebug>
+#include <QFileDialog>
+#include <QMessageBox>
 #include <fstream>
 #include <string>
 
@@ -17,7 +19,7 @@
 
 MapManager::MapManager(MapData& mapData): mapData(mapData) {}
 
-void MapManager::addOffset() {
+void MapManager::addOffset() const {
     int x_min = mapData.width;
     int x_max = 0;
     int y_min = mapData.height;
@@ -27,15 +29,15 @@ void MapManager::addOffset() {
     for (Object& obj: mapData.objects) {
         QPointF topLeftPos = obj.getBoundingPos();
         if (topLeftPos.x() < x_min)
-            x_min = (int)topLeftPos.x();
+            x_min = static_cast<int>(topLeftPos.x());
         if (topLeftPos.y() < y_min)
-            y_min = (int)topLeftPos.y();
+            y_min = static_cast<int>(topLeftPos.y());
         QPointF bottomRightPos(topLeftPos.x() + obj.size.width(),
                                topLeftPos.y() + obj.size.height());
         if (bottomRightPos.x() > x_max)
-            x_max = (int)bottomRightPos.x();
+            x_max = static_cast<int>(bottomRightPos.x());
         if (bottomRightPos.y() > y_max)
-            y_max = (int)bottomRightPos.y();
+            y_max = static_cast<int>(bottomRightPos.y());
     }
 
     // calculo los offsets
@@ -51,47 +53,47 @@ void MapManager::addOffset() {
     if (x_min > OFFSET_LEFT)
         offsetLeft = 0;
 
-    //    int offsetDown = OFFSET_DOWN;
-    //    if (mapData.height - y_max < OFFSET_DOWN)
-    //        offsetDown = OFFSET_DOWN - (mapData.height - y_max);
-    //
-    //    int offsetRight = OFFSET_RIGHT;
-    //    if (mapData.width - x_max < OFFSET_RIGHT)
-    //        offsetRight = OFFSET_RIGHT - (mapData.width - x_max);
-
     // ajusto el tamaño del mapa
     mapData.width = offsetLeft + x_max + OFFSET_RIGHT;
     mapData.height = offsetUp + y_max + OFFSET_DOWN;
 
     // muevo los objetos
-    QPoint offsetObject(offsetLeft, offsetUp);
+    const QPoint offsetObject(offsetLeft, offsetUp);
     for (Object& obj: mapData.objects) {
         obj.centerPos += offsetObject;
     }
 }
 
-void MapManager::exportMap() {
+bool MapManager::exportMap(QWidget* view) const {
     //    std::string path = "maps/" + mapData.name + ".yaml";
     //    std::ofstream fout(path);
+
+    QString mapFileName = "/home/" + QString::fromStdString(mapData.name) + ".yaml";
+    QString fileName =
+            QFileDialog::getSaveFileName(view, "Select Map", mapFileName, "Archivos YAML (*.yaml)");
+
+    if (fileName.isEmpty())
+        return false;
+
     addOffset();
-    mapData.path = "maps/" + mapData.name + ".yaml";
+    mapData.path = fileName.toStdString();
     std::ofstream fout(mapData.path);
     if (!fout.is_open()) {
         qWarning() << "Could not open save file";
-        return;
+        return false;
     }
 
     YAML::Node mapNode;
 
     mapNode["map_name"] = mapData.name;
-    mapNode["background"] = (int)mapData.backgroundID;
+    mapNode["background"] = (int)(mapData.backgroundID);
     mapNode["map_width"] = mapData.width;
     mapNode["map_height"] = mapData.height;
 
     YAML::Node objectsNode(YAML::NodeType::Sequence);
     for (const auto& obj: mapData.objects) {
         YAML::Node objNode;
-        objNode["type"] = objectTypeToString(obj.type);
+        objNode["type"] = Object::objectTypeToString(obj.type);
         objNode["x"] = obj.centerPos.x();
         objNode["y"] = obj.centerPos.y();
         objectsNode.push_back(objNode);
@@ -101,35 +103,29 @@ void MapManager::exportMap() {
 
     fout << mapNode;
     fout.close();
-    qDebug() << "se guardo el mapa";
+    return true;
 }
 
-std::string MapManager::objectTypeToString(ObjectType type) {
-    if (type == PLATFORM)
-        return "PLATFORM";
-    if (type == DUCK)
-        return "DUCK";
-    if (type == ARMAMENT)
-        return "ARMAMENT";
-    if (type == BOX)
-        return "BOX";
-    return "UNKNOWN";
+void MapManager::removeOffset() const {
+    // ajusto el tamaño del mapa
+    mapData.width -= (OFFSET_LEFT + OFFSET_RIGHT);
+    mapData.height -= (OFFSET_UP + OFFSET_DOWN);
+
+    // muevo los objetos
+    constexpr QPoint offsetObject(OFFSET_LEFT, OFFSET_DOWN);
+    for (Object& obj: mapData.objects) {
+        obj.centerPos -= offsetObject;
+    }
 }
 
-ObjectType MapManager::stringToObjectType(const std::string& typeStr) {
-    if (typeStr == "PLATFORM")
-        return PLATFORM;
-    if (typeStr == "DUCK")
-        return DUCK;
-    if (typeStr == "ARMAMENT")
-        return ARMAMENT;
-    if (typeStr == "BOX")
-        return BOX;
-    return UNKNOWN;
-}
+bool MapManager::importMap(QWidget* view) const {
+    QString fileName =
+            QFileDialog::getOpenFileName(view, "Select Map", "/home/", "Archivos YAML (*.yaml)");
+    if (fileName.isEmpty())
+        return false;
 
-bool MapManager::importMap() {
-    std::ifstream fin(mapData.path);
+    std::ifstream fin(fileName.toStdString());
+    // std::ifstream fin(mapData.path);
     if (!fin.is_open()) {
         qWarning() << "Could not open the file to load the map.";
         return false;
@@ -146,13 +142,12 @@ bool MapManager::importMap() {
         mapData.name = mapNode["map_name"].as<std::string>();
         mapData.width = mapNode["map_width"].as<int>();
         mapData.height = mapNode["map_height"].as<int>();
-        mapData.backgroundID =
-                (BackgroundID)((BackgroundID::Value)(mapNode["background"].as<int>()));
+        mapData.backgroundID = static_cast<BackgroundID::Value>(mapNode["background"].as<int>());
         qDebug() << "tamaño del mapa:" << mapData.width << mapData.height;
         YAML::Node objectsNode = mapNode["objects"];
         for (const auto& objNode: objectsNode) {
             auto typeStr = objNode["type"].as<std::string>();
-            Object object(stringToObjectType(typeStr));
+            Object object(Object::stringToObjectType(typeStr));
 
             object.centerPos.setX(objNode["x"].as<int>());
             object.centerPos.setY(objNode["y"].as<int>());
@@ -162,6 +157,8 @@ bool MapManager::importMap() {
     } catch (const YAML::Exception& e) {
         qWarning() << "Error reading YAML file: " << e.what();
     }
+
+    removeOffset();
 
     fin.close();
     return true;

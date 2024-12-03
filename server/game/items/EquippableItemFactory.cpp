@@ -7,12 +7,14 @@
 #include "Math.h"
 #include "ShotGun.h"
 #include "Sniper.h"
+#include "EquippableGrenade.h"
 
 
 #define INVALID_ID "Invalid ItemID"
 
 std::unordered_map<ItemID, std::function<std::unique_ptr<EquippableItem>(u8)>>
         EquippableItemFactory::factory = {
+
                 {ItemID::DuelPistol,
                  [](u8 ammo) {
                      return std::make_unique<LongPistol>(
@@ -69,7 +71,13 @@ std::unordered_map<ItemID, std::function<std::unique_ptr<EquippableItem>(u8)>>
                 {ItemID::Armor, []([[maybe_unused]] u8 ammo) {
                      return std::make_unique<EquippableArmor>(ItemID::Armor,
                                                               Config::Armor::armor());
-                 }}};
+                 }},
+                 {ItemID::Grenade,
+                 [](u8 ammo) {
+                     return std::make_unique<EquippableGrenade>(
+                             ItemID::Grenade, ammo, Config::Weapons::Grenade::explosionTime());
+                 }},
+                };
 
 std::unique_ptr<EquippableItem> EquippableItemFactory::createEquippableItem(const ItemID id,
                                                                             u8 ammo) {

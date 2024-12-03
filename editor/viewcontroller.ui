@@ -226,12 +226,11 @@ background-color: rgb(165, 29, 45);
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>Map Options</string>
     </property>
     <addaction name="actionNewMap"/>
     <addaction name="actionSaveMap"/>
     <addaction name="actionEditMap"/>
-    <addaction name="ChangeBackground"/>
     <addaction name="ClearAll"/>
    </widget>
    <addaction name="menuFile"/>

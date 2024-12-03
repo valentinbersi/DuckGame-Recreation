@@ -154,7 +154,7 @@ void Game::getSnapshot() {
     std::ranges::transform(snapshot->itemPositions, std::back_inserter(items),
                            [](ItemData& item) { return std::move(item); });
     std::ranges::transform(snapshot->explosionPositions, std::back_inserter(explosions),
-                       [](SizedObjectData& explosion) { return std::move(explosion); });
+                           [](SizedObjectData& explosion) { return std::move(explosion); });
 }
 
 void Game::filterObjectsToRender() {
@@ -271,10 +271,12 @@ void Game::updateEffects(EnviromentRenderer& enviromentRenderer) {
             enviromentRenderer.drawEnviroment(explosion,
                                               Resource::get().resource(EXPLOSION).c_str());
 
-        if (!explosion) soundManager.playEffect(Resource::get().resource(EXPLOSION_PATH));
+        if (!explosion)
+            soundManager.playEffect(Resource::get().resource(EXPLOSION_PATH));
         explosion = true;
 
-    } else explosion = false;
+    } else
+        explosion = false;
 }
 
 std::list<std::pair<Vector2, Vector2>> Game::calculateSegmentPositionsAndSize(

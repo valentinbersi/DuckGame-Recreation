@@ -3,6 +3,8 @@
 #include <string>
 #include <unordered_map>
 
+#include <yaml-cpp/yaml.h>
+
 #include "Types.h"
 
 struct BackgroundID {
@@ -14,8 +16,14 @@ struct BackgroundID {
         ForestDay = 4,
         ForestNight = 5,
         SnowyPeaks = 6,
-        Sunset = 7
+        Sunset = 7,
+        None = 8
     };
+
+    /**
+     * Construct a background id with the default value
+     */
+    BackgroundID();
 
     /**
      * Construct a background id with the given value
@@ -35,11 +43,18 @@ struct BackgroundID {
      * Get the path in the resource folder of the given background
      * @return The path to the background image
      */
-    const std::string& path() const;
+    const std::string& pathToBackground() const;
+
+    /**
+     * Get the path in the resource folder of the given tileset
+     * @return The path to the tileset image
+     */
+    const std::string& pathToTileset() const;
 
 
 private:
     const static HashMap<BackgroundID, std::string> backgrounds;
+    const static HashMap<BackgroundID, std::string> tilesets;
     friend struct std::hash<BackgroundID>;
     friend struct std::equal_to<BackgroundID>;
 
@@ -58,4 +73,24 @@ struct std::equal_to<BackgroundID> {
     bool operator()(const BackgroundID& lhs, const BackgroundID& rhs) const {
         return lhs.value == rhs.value;
     }
+};
+
+template <>
+struct YAML::convert<BackgroundID> {
+    static bool decode(const Node& node, BackgroundID& rhs) {
+        rhs = BackgroundID(node.as<BackgroundID::Value>());
+        return true;
+    }
+
+    static Node encode(const BackgroundID& rhs) { return Node(rhs); }
+};
+
+template <>
+struct YAML::convert<BackgroundID::Value> {
+    static bool decode(const Node& node, BackgroundID::Value& rhs) {
+        rhs = static_cast<BackgroundID::Value>(node.as<int>());
+        return true;
+    }
+
+    static Node encode(const BackgroundID::Value& rhs) { return Node(rhs); }
 };

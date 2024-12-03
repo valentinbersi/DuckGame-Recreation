@@ -5,3 +5,4 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build .
 ./DuckGameTests || echo "Error: Tests failed, game won't be installed." | exit 1
 sudo cmake --install .
+sudo ldconfig

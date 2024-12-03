@@ -79,10 +79,6 @@ void LevelScene::insertObjectInMap(Object& object, bool addInList) {
         objects.push_back(object);
         storedObject = &objects.back();
     } else {
-        //        auto it = std::find(objects.begin(), objects.end(), object);
-        //        if (it != objects.end()) {
-        //            storedObject = &(*it);
-        //        }
         storedObject = &object;
     }
 
@@ -106,8 +102,8 @@ void LevelScene::insertObjectInMap(Object& object, bool addInList) {
 
 void LevelScene::loadMap(int mapWidth, int mapHeight) {
     setSceneRect(0, 0, mapWidth * PIXEL_SIZE, mapHeight * PIXEL_SIZE);
-    gridWidth = mapWidth * PIXEL_SIZE;
-    gridHeight = mapHeight * PIXEL_SIZE;
+    gridWidth = PIXEL_SIZE * mapWidth;
+    gridHeight = PIXEL_SIZE * mapHeight;
     for (auto& object: objects) {
         insertObjectInMap(object, false);
     }

@@ -10,13 +10,14 @@ class MapManager {
 private:
     MapData& mapData;
 
-    std::string objectTypeToString(ObjectType type);
-    ObjectType stringToObjectType(const std::string& typeStr);
-    void addOffset();
+    void addOffset() const;
 
 public:
     explicit MapManager(MapData& mapData);
 
-    void exportMap();
-    bool importMap();
+    bool exportMap(QWidget* view) const;
+
+    void removeOffset() const;
+
+    bool importMap(QWidget* view) const;
 };

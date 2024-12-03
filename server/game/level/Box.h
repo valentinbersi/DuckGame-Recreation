@@ -6,8 +6,7 @@
 class Box: public PhysicsObject {
 private:
     RandomIntGenerator randomGenerator;
-    bool _wasDestroid;
-
+    bool wasDestroid;
     /**
      * Eliminates the box and generates a random item,
      * an explosion or nothing
@@ -28,10 +27,9 @@ public:
     void onCollision();
 
     /**
-     * Check if the box was destroyed
-     * @return true if the box was destroyed
+     * Checks if it was destroyed and eliminates the box
      */
-    bool wasDestroyed() const;
+    void update(float delta) override;
 
     /**
      * Get the position of the box and its dimensions

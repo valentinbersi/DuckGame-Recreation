@@ -39,8 +39,8 @@
 #define EQUIPPED_ITEM "EquipedItem"
 
 Player::Player(const DuckData::Id id):
-        PhysicsObject({30, 0}, Layer::Player, Layer::Wall | Layer::Box, PLAYER_DIMENSIONS,
-                      Gravity::Enabled, Vector2::ZERO, CollisionType::Slide),
+        PhysicsObject({30, 0}, Layer::Player, Layer::Wall | Layer::Box | Layer::DeathZone,
+                      PLAYER_DIMENSIONS, Gravity::Enabled, Vector2::ZERO, CollisionType::Slide),
         id(id),
         _movementDirection(DuckData::Direction::Center),
         _viewDirection(DuckData::Direction::Right),
@@ -104,13 +104,15 @@ void Player::onItemCollision(CollisionObject* itemDetected) {
 }
 
 void Player::onCollision(const CollisionObject* object) {
-    if (object->layers().test(Layer::Index::DeathZone))
-        return (void)setGlobalPosition({30, 0});
+    if (object->layers().test(Layer::Index::DeathZone)) {
+        setGravity(Gravity::Disabled);
+        return kill();
+    }
 }
 
 void Player::onWeaponFired(const Vector2& recoil) {
     _velocity.setX(0);
-    _velocity += recoil;
+    _velocity += _lastViewDirection == DuckData::Direction::Left ? recoil : -recoil;
     flags.set(DuckData::Flag::Index::IsShooting);
 }
 
@@ -360,6 +362,7 @@ void Player::reset() {
         removeItem();
     setLayers(Layer::Player);
     clearInputs(Force::Yes);
+    setGravity(Gravity::Enabled);
     _movementDirection = DuckData::Direction::Center;
     _viewDirection = DuckData::Direction::Right;
     _lastViewDirection = DuckData::Direction::Right;
@@ -385,7 +388,7 @@ void Player::setItem(ItemID id, u8 ammo, Force force) {
     if (force == Force::Yes and item)
         removeItem();
     item = EquippableItemFactory::createEquippableItem(id, ammo).release();
-    if (!(id == ItemID::Helmet || id == ItemID::Armor)) {
+    if (!(id == ItemID::Helmet || id == ItemID::Armor || id == ItemID::Grenade)) {
         item->connect(EquippableWeapon::Events::Fired,
                       eventHandler(&Player::onWeaponFired, , const Vector2&));
         item->connect(EquippableWeapon::Events::NoMoreBullets,
