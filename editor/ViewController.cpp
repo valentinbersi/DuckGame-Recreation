@@ -1,13 +1,10 @@
 #include "ViewController.h"
 
 #include <QAbstractButton>
-#include <QAction>
 #include <QDrag>
-#include <QFileDialog>
 #include <QFileInfo>
 #include <QListWidget>
 #include <QMessageBox>
-#include <QScrollBar>
 #include <QWheelEvent>
 
 #include "Background.h"
@@ -16,16 +13,6 @@
 #include "Object.h"
 #include "Resource.h"
 #include "ui_viewcontroller.h"
-
-//#define BUTTONS_STYLE R"(
-// QPushButton {
-//    background-color: rgb(229, 165, 10);
-//    border-radius: 5px;
-//}
-// QPushButton:checked {
-//    background-color: rgb(165, 29, 45);
-//})"
-
 
 ViewController::ViewController(QWidget* parent):
         QMainWindow(parent),
@@ -73,8 +60,8 @@ void ViewController::loadBackgrounds() {
             &ViewController::onBackgroundSelected);
 }
 
-void ViewController::onBackgroundSelected(QListWidgetItem* item) {
-    BackgroundID backgroundSelected((BackgroundID::Value)item->data(Qt::UserRole).toInt());
+void ViewController::onBackgroundSelected(const QListWidgetItem* item) {
+    const BackgroundID backgroundSelected(static_cast<BackgroundID::Value>(item->data(Qt::UserRole).toInt()));
     mapData.backgroundID = backgroundSelected;
     changeBackgroundBrush();
 }
@@ -119,7 +106,6 @@ void ViewController::setupToolBar() {
     for (const auto& [button, type]: buttonTypeMap) {
         button->setCheckable(true);
         button->setIconSize(QSize(64, 64));
-        // button->setStyleSheet(QString(BUTTONS_STYLE));
         connect(button, &QPushButton::clicked, this,
                 [this, type]() { scene->selectObjectType(type); });
     }

@@ -76,7 +76,7 @@ Una vez dentro del Editor, se veran claramente en pantalla los 4 elementos clave
 
 5) Podemos mencionar un quinto elemento que es el menu superior `Map Options`, donde se encuentran las opciones `New Map`, `Save Map`, `Edit Map` y `Clear All`
 
-![LevelEditorExplicacion.png](img/LevelEditorExplicacion.png)
+![LevelEditorExplicacion.png](img/LevelEditorExplicacion.png)  
 En esta foto se resaltan claramente los 5 elementos mencionados.
 
 #### ¿como agrego elementos al mapa?
