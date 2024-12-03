@@ -16,7 +16,6 @@ RayCast::RayCast(Vector2 start, const Vector2& direction, const float length,
                  const std::bitset<LayersCount> scannedLayers):
         ray(std::move(start), start + direction.normalized() * length),
         scannedLayers(scannedLayers) {
-    std::cout << "RayCast: Start " << ray.start() << " End " << ray.end() << std::endl;
     registerEvent<CollisionObject*>(Events::Collision);
 }
 

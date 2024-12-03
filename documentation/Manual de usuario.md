@@ -352,11 +352,17 @@ Cada pieza de armadura (sea un helmet o chestplate) amortiguará **1** ataque ex
 * Interactuar: `PERIOD` (or dot)           (Las tres teclas juntas, justo al lado del LSHIFT)
 * Disparo: `SLASH`
 
-## Controles del Editor:
+#### Cheats
 
-* Seleccionar/Deseleccionar objeto para agregar: Se selecciona en la barra lateral derecha.
-* Agregar objeto seleccionado al mapa: Click izquierdo
-* Eliminar objeto del mapa: Click derecho
-* Nuevo Mapa: `CTRL+N`
-* Guardar Mapa: `CTRL+S`
-* Cargar/Editar Mapa: `CTRL+E`
+* CTRL+1: Equipar AK-47
+* CTRL+2: Equipar Shotgun
+* CTRL+3: Equipar Magnum
+* CTRL+4: Equipar Cowboy Pistol
+* CTRL+5: Equipar Duel Pistol
+* CTRL+6: Equipar Sniper
+* CTRL+9: Equipar Grenade
+* CTRL+y: Finalizar ronda
+* CTRL+u: Finalizar partida
+* CTRL+i: Full ammo para el arma equipada
+* CTRL+o: Equipar casco en las manos
+* CTRL+p: Equipar armadura en las manos

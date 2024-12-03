@@ -39,8 +39,9 @@ private:
     void handleScreenEvents(const SDL_Event& event, bool isKeyDown, const SDL_Scancode& scancode);
 
     /**
-     * Handles the key event, sending the message to the server using a GameMessage filled with an InputAction
-     * It works also with two players, sending the message to the server with the player number
+     * Handles the key event, sending the message to the server using a GameMessage filled with an
+     * InputAction It works also with two players, sending the message to the server with the player
+     * number
      * @param scancode: SDL_Scancode of the key pressed
      * @param isKeyDown: boolean that indicates if the key is being pressed or released
      */
@@ -109,10 +110,7 @@ private:
             {SDL_SCANCODE_4, InputAction::COWBOYPISTOL_CHEAT},
             {SDL_SCANCODE_5, InputAction::DUELPISTOL_CHEAT},
             {SDL_SCANCODE_6, InputAction::SNIPER_CHEAT},
-            {SDL_SCANCODE_7, InputAction::LASER_RIFLE_CHEAT},
-            {SDL_SCANCODE_8, InputAction::PEWPEW_CHEAT},
             {SDL_SCANCODE_9, InputAction::GRENADE_CHEAT},
-            {SDL_SCANCODE_0, InputAction::BANANA_CHEAT},
             {SDL_SCANCODE_P, InputAction::ARMOR_CHEAT},
             {SDL_SCANCODE_O, InputAction::HELMET_CHEAT},
             {SDL_SCANCODE_I, InputAction::INFINITE_AMMO}};

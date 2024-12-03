@@ -63,7 +63,6 @@ void WaitingPage::recvServerMessage() {
         playersConnected = message.connectedPlayers;
         ui->labelPlayersConnected->setText(
                 QString("PLAYERS CONNECTED: %1 / 4").arg(playersConnected));
-        qDebug() << playersConnected;
 
         if (message.startGame == 1) {
             emit startMatch();
