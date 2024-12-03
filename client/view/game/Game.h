@@ -135,6 +135,7 @@ private:
     std::list<SizedObjectData> boxes;
     std::list<SizedObjectData> boxesToRender;
     std::list<std::list<Segment2D>> bulletPositions;
+    std::list<SizedObjectData> explosions;
     std::list<DuckData> ducks;
     std::list<DuckData> ducksToRender;
 
