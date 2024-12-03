@@ -9,42 +9,38 @@
 #include "Layer.h"
 
 #define DIMENSIONS 2, 2
-#define ITEM 1
-#define EXPLOSION 2
-#define GENERATE_OPTIONS 2, 2
+#define ITEM 7
+#define EXPLOSION 1
+#define GENERATE_OPTIONS 0, 10
 
 Box::Box(Vector2 position):
         PhysicsObject(std::move(position), Layer::Box,
                       Layer::DeathZone | Layer::Bullet | Layer::Player | Layer::Wall | Layer::Box,
                       DIMENSIONS, Gravity::Enabled, Vector2::ZERO, CollisionType::Slide),
         randomGenerator(GENERATE_OPTIONS),
-        _wasDestroid(false) {}
+        wasDestroid(false) {}
 
 void Box::eliminateBox() {
-    switch (randomGenerator()) {
-        case (ITEM): {
-            std::unique_ptr<Item> item =
-                    ItemFactory::createItem(ItemID::randomItemID(), 0, Force::Yes);
-            item->setPosition(globalPosition());
-            parent()->addChild("Item", std::move(item));
-            break;
-        }
-        case (EXPLOSION): {
-            std::unique_ptr<Explosion> explosion = std::make_unique<Explosion>(globalPosition());
-            parent()->addChild("Explosion", std::move(explosion));
-            break;
-        }
-
-        default:
-            break;
+    int randomNumber = randomGenerator();
+    if (randomNumber <= EXPLOSION) {
+        std::unique_ptr<Explosion> explosion = std::make_unique<Explosion>(globalPosition());
+        parent()->addChild("Explosion", std::move(explosion));
+    } else if (randomNumber <= ITEM) {
+        std::unique_ptr<Item> item =
+        ItemFactory::createItem(ItemID::randomItemID(), 0, Force::Yes);
+        item->setPosition(globalPosition());
+        parent()->addChild("Item", std::move(item));
     }
-    _wasDestroid = true;
+    parent()->removeChild(this);
 }
 
-bool Box::wasDestroyed() const { return _wasDestroid; }
+void Box::onCollision() { wasDestroid = true; }
 
-void Box::onCollision() { eliminateBox(); }
-
+void Box::update([[maybe_unused]]float delta) {
+    if(wasDestroid){
+        eliminateBox();
+    }
+}
 SizedObjectData Box::status() const { return {position(), DIMENSIONS}; }
 
 Box::~Box() = default;

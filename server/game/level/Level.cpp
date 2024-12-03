@@ -104,27 +104,4 @@ std::list<SizedObjectData> Level::explosionStatus() const {
     return explosionPositions;
 }
 
-void Level::update([[maybe_unused]] float delta) {
-    std::vector<Box*> boxesToDestroy;
-    boxes.remove_if([&boxesToDestroy](Box* box) {
-        if (box->wasDestroyed()) {
-            boxesToDestroy.push_back(box);
-            return true;
-        }
-        return false;
-    });
-
-    for (Box* box: boxesToDestroy) removeChild(box);
-
-    std::vector<Explosion*> explosionsToDestroy;
-    explosions.remove_if([&explosionsToDestroy](Explosion* explosion) {
-        if (explosion->isOver()) {
-            explosionsToDestroy.push_back(explosion);
-            return true;
-        }
-        return false;
-    });
-    for (const Explosion* explosion: explosionsToDestroy) removeChild(explosion);
-}
-
 Level::~Level() = default;
