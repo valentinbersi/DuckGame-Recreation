@@ -29,3 +29,5 @@ void GameTimer::reset() {
 }
 
 bool GameTimer::started() const { return _started; }
+
+float GameTimer::getTimeLeft() const { return timeLeft; }

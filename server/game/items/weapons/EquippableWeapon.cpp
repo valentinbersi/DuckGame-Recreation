@@ -16,7 +16,7 @@ bool EquippableWeapon::fire() {
 }
 
 EquippableWeapon::EquippableWeapon(const ItemID id, const u8 ammo, Vector2 recoil):
-        EquippableItem(id), ammo_(ammo), recoil(std::move(recoil)) {
+        EquippableItem(id), recoil(std::move(recoil)), ammo_(ammo) {
     registerEvent<const Vector2&>(Events::Fired);
     registerEvent(Events::NoMoreBullets);
 }

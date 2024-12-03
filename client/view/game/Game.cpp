@@ -21,6 +21,7 @@
 #define ROCK "enviroment/rock.png"
 #define WEAPON_SPAWNER "enviroment/spawner.png"
 #define BOX "enviroment/box.png"
+#define EXPLOSION "particles/Explosion.png"
 
 #define WIN_PATH "sounds/end-effect.mp3"
 #define EXPLOSION_PATH "sounds/grenade.mp3"
@@ -149,6 +150,8 @@ void Game::getSnapshot() {
                            [](SizedObjectData& box) { return std::move(box); });
     std::ranges::transform(snapshot->itemPositions, std::back_inserter(items),
                            [](ItemData& item) { return std::move(item); });
+    std::ranges::transform(snapshot->explosionPositions, std::back_inserter(explosions),
+                       [](SizedObjectData& explosion) { return std::move(explosion); });
 }
 
 void Game::filterObjectsToRender() {
@@ -345,6 +348,7 @@ void Game::clearObjects() {
     boxes.clear();
     boxesToRender.clear();
     bulletPositions.clear();
+    explosions.clear();
 }
 
 Game::~Game() {
