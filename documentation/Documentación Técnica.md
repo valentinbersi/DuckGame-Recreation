@@ -1,9 +1,5 @@
  Documentación técnica
 
-
-## Diagramas:
-
-
 ## Formato de archivos y protocolo
 
 
@@ -34,6 +30,8 @@ Si el mensaje es desde el cliente gráfico *(SDL)* se envia tal que:
 - Luego se manda otro byte literal indicando el input presionado, desde 0x0 hasta 0x1E, donde también entran los inputs correspondientes de **cheats** que maneja el cliente.
 
 - Por último se manda otro byte, 1 para indicar que el mensaje lo mando el player 1 y 2 si es del player 2.
+
+![Client-Game.png](./img/Client-Game.png)
 
 
 **Servidor a Cliente**
