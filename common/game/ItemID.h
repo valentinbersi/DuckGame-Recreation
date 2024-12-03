@@ -20,7 +20,8 @@ public:
         Sniper = 0x9,
         Helmet = 0xA,
         Armor = 0x0B,
-        NONE = 0x0C
+        BananaPeel = 0x0C,
+        NONE = 0x0D
     };
 
     ItemID() = default;
