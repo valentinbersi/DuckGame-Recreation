@@ -23,6 +23,9 @@ class ViewController: public QMainWindow {
 
 public:
     explicit ViewController(QWidget* parent = nullptr);
+
+    void showStartupInfo();
+
     ~ViewController() override;
 
 private:

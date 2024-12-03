@@ -5,6 +5,7 @@
 #include <QFileInfo>
 #include <QListWidget>
 #include <QMessageBox>
+#include <QTimer>
 #include <QWheelEvent>
 
 #include "Background.h"
@@ -39,22 +40,44 @@ ViewController::ViewController(QWidget* parent):
             &ViewController::on_actionEditMap_triggered);
 
     connect(ui->ClearAll, &QAction::triggered, scene, &LevelScene::clearAll);
-    // connect(ui->ChangeBackground, &QAction::triggered, this, &ViewController::selectBackground);
 
     connect(scene, &LevelScene::resizeView, this, &ViewController::onSceneResize);
+
+    QTimer::singleShot(0, this, &ViewController::showStartupInfo);
 }
+
+void ViewController::showStartupInfo() {
+    QString message =
+        "Welcome to the Level Editor.\n\n"
+        "Basic Controls:\n"
+        "- Select/Deselect an object to add: Use the right sidebar.\n"
+        "- Add the selected object to the map: Left click (hold and drag to add multiple objects).\n"
+        "- Remove an object from the map: Right click (hold and drag to remove multiple objects).\n\n"
+        "Keyboard Shortcuts:\n"
+        "- New Map: CTRL+N.\n"
+        "- Save Map: CTRL+S.\n"
+        "- Load/Edit Map: CTRL+E.\n\n"
+        "Important Note:\n"
+        "It is recommended to save maps in the folder: /etc/DuckGame/maps\n"
+        "so the server can load the maps and display them in the game.\n\n"
+        "Enjoy creating levels!";
+
+    QMessageBox::information(this, "Editor Instructions", message);
+}
+
+
 
 void ViewController::loadBackgrounds() {
     for (int i = BackgroundID::CascadeCave; i <= BackgroundID::Sunset; i++) {
         BackgroundID background((BackgroundID::Value)i);
         std::string backgroundPath = Resource::get().resource(background.pathToBackground());
         QPixmap pixmap(QString::fromStdString(backgroundPath));
-        if (!pixmap.isNull()) {
-            QString fileName = QFileInfo(QString::fromStdString(backgroundPath)).completeBaseName();
-            auto* item = new QListWidgetItem(QIcon(pixmap), fileName);
-            item->setData(Qt::UserRole, (BackgroundID::Value)i);
-            ui->backgroundList->addItem(item);
-        }
+        if(pixmap.isNull()) continue;
+
+        QString fileName = QFileInfo(QString::fromStdString(backgroundPath)).completeBaseName();
+        QListWidgetItem *item = new QListWidgetItem(QIcon(pixmap), fileName);
+        item->setData(Qt::UserRole, i);
+        ui->backgroundList->addItem(item);
     }
     connect(ui->backgroundList, &QListWidget::itemClicked, this,
             &ViewController::onBackgroundSelected);
@@ -164,18 +187,6 @@ void ViewController::on_actionEditMap_triggered() {
     if (!confirmAndSaveMap())
         return;
 
-    // QString fileName = QFileDialog::getOpenFileName(this, "Select Map", "/home/", "Archivos YAML
-    // (*.yaml)");
-
-    // QString fileName =
-    //         QFileDialog::getOpenFileName(this, "Select Map", "maps/", "Archivos YAML (*.yaml)");
-    //
-    // if (fileName.isEmpty()) {
-    //     QMessageBox::warning(this, "Error", "There was an error importing the map.");
-    //     return;
-    // }
-
-    // mapData.path = fileName.toStdString();
     scene->clearAll();
 
     bool success = mapManager.importMap(this);
@@ -207,4 +218,5 @@ ViewController::~ViewController() {
     delete spawnDuckButton;
     delete spawnArmamentButton;
     delete boxButton;
+    ui->backgroundList->clear();
 }
