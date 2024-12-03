@@ -64,20 +64,39 @@ valen XD
 
 
 
-## ¿Cómo se crean nuevos niveles con el editor?
-Primero que nada, se debe ejecutar el editor como se indica en el primer apartado del manual.
+## Manual de Uso del Editor de Niveles
+Primero que nada, se debe ejecutar el editor como se indica en el primer apartado de este manual.
+
 Una vez dentro del Editor, se veran claramente en pantalla los 4 elementos claves del programa:
 1) Espacio para ingresar el nombre deseado para el mapa
 2) Lista de backgrounds otorgados por el editor
 3) Barra de herramientas donde se pueden seleccionar los elementos que se pueden agregar al mapa (Plataforma/Tile, Spawn de Patos, Spawn de Armas/Armaduras y Cajas)
-4) La grilla que representa el mapa como tal
+4) La grilla que representa el mapa como tal 
 
-Para agregar elementos al mapa, se debe clickear el elemento en la barra de herramientas y luego clickear donde se quiere agregar el elemento. Se puede clickear una vez, o sino tambien mantener presionado y arrastrar el mouse, asi se agregaran muchos elementos de forma facil y rapida.
+
+5) Podemos mencionar un quinto elemento que es el menu superior `Map Options`, donde se encuentran las opciones `New Map`, `Save Map`, `Edit Map` y `Clear All`
+
+![LevelEditorExplicacion.png](img/LevelEditorExplicacion.png)
+En esta foto se resaltan claramente los 5 elementos mencionados.
+
+#### ¿como agrego elementos al mapa?
+Para agregar elementos al mapa, se debe clickear el elemento en la barra de herramientas y luego clickear donde se quiere agregar el elemento. Se puede clickear una vez, o sino tambien mantener presionado y arrastrar el mouse, asi se agregaran muchos elementos de forma facil y rapida. 
+
+#### ¿como elimino elementos del mapa?
 Para eliminar elementos, se debe presionar el click derecho del mouse sobre el elemento que se quiere eliminar, o tambien se puede mantener apretado y arrastrar el mouse.
 
+#### ¿como me muevo por el mapa?
+Para moverse por el mapa, se puede arrastrar la pantalla manteniendo presionado el click izquierdo del mouse, sin tener seleccionado ningun elemento!
+
+
+#### ¿como guardo, creo o edito un mapa?
 Una vez se tiene el mapa hecho, este se puede guardar seleccionando la opción `Save Map` el menu `Map Options` o bien presionando `CTRL+S`
 
-En este menu `Map Options` tambien se ofrecen las opciones de `New Map` para crear un nuevo mapa (o `CTRL+N`) o `Edit Map` para editar un mapa ya creado (o `CTRL+E`). Otra funcionalidad que se ofrece es la de `Clear All`, que elimina todos los elementos del mapa.
+Como ya se menciono, en el menu `Map Options` tambien se ofrecen las opciones de `New Map` para crear un nuevo mapa (o `CTRL+N`) o `Edit Map` para editar un mapa ya creado (o `CTRL+E`). Otra funcionalidad que se ofrece es la de `Clear All`, que elimina todos los elementos del mapa.
+
+Se recomienda guardar los mapas en la carpeta `/etc/DuckGame/maps`, para que el server pueda cargar los mapas y mostrarlos en el juego.
+Esta carpeta se genera al momento de la instalación del juego. 
+El server lee por default desde esta carpeta, pero usted puede modificar esto (para mas precisión leer el apartado del manual del server)
 
 ## ¿Cómo se lanza el cliente?
 

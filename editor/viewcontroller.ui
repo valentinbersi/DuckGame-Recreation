@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>ViewController</string>
+   <string>Level Editor</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
