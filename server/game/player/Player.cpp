@@ -39,8 +39,8 @@
 #define EQUIPPED_ITEM "EquipedItem"
 
 Player::Player(const DuckData::Id id):
-        PhysicsObject({30, 0}, Layer::Player, Layer::Wall | Layer::Box, PLAYER_DIMENSIONS,
-                      Gravity::Enabled, Vector2::ZERO, CollisionType::Slide),
+        PhysicsObject({30, 0}, Layer::Player, Layer::Wall | Layer::Box | Layer::DeathZone,
+                      PLAYER_DIMENSIONS, Gravity::Enabled, Vector2::ZERO, CollisionType::Slide),
         id(id),
         _movementDirection(DuckData::Direction::Center),
         _viewDirection(DuckData::Direction::Right),
@@ -104,8 +104,10 @@ void Player::onItemCollision(CollisionObject* itemDetected) {
 }
 
 void Player::onCollision(const CollisionObject* object) {
-    if (object->layers().test(Layer::Index::DeathZone))
-        return (void)setGlobalPosition({30, 0});
+    if (object->layers().test(Layer::Index::DeathZone)) {
+        setGravity(Gravity::Disabled);
+        return kill();
+    }
 }
 
 void Player::onWeaponFired(const Vector2& recoil) {
@@ -360,6 +362,7 @@ void Player::reset() {
         removeItem();
     setLayers(Layer::Player);
     clearInputs(Force::Yes);
+    setGravity(Gravity::Enabled);
     _movementDirection = DuckData::Direction::Center;
     _viewDirection = DuckData::Direction::Right;
     _lastViewDirection = DuckData::Direction::Right;
