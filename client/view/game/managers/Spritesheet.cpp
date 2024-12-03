@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Resource.h"
+#include "TextureManager.h"
 #include "SpriteManager.h"
 
 #define N_COL 5

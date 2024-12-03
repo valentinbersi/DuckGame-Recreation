@@ -23,6 +23,7 @@
 #define BOX "enviroment/box.png"
 
 #define WIN_PATH "sounds/end-effect.mp3"
+#define EXPLOSION_PATH "sounds/grenade.mp3"
 
 using SDL2pp::NullOpt;
 using SDL2pp::Rect;
@@ -259,8 +260,13 @@ void Game::updateEffects(EnviromentRenderer& enviromentRenderer) {
         enviromentRenderer.drawBullets(bulletPositions);
     }
 
-    // y aca dibujo rebotes, explosiones y cascara
-    // usando UNA lista sola de posiciones generales y filtrando usando un enum y/o map ?
+    if (!explosions.empty()) {
+        for (Rect& explosion: calculateObjectsPositionsAndSize(explosions)) {
+            enviromentRenderer.drawEnviroment(explosion,
+                                              Resource::get().resource(EXPLOSION).c_str());
+        }
+        soundManager.playEffect(EXPLOSION_PATH);
+    }
 }
 
 std::list<std::pair<Vector2, Vector2>> Game::calculateSegmentPositionsAndSize(
