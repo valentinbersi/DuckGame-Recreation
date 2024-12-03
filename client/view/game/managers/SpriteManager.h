@@ -2,14 +2,9 @@
 
 #include <memory>
 #include <string>
-#include <unordered_map>
-
-#include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "DuckData.h"
 #include "DuckState.h"
-#include "ItemID.h"
 #include "Spritesheet.h"
 #include "WeaponSpriteManager.h"
 
@@ -26,7 +21,7 @@ public:
     // Updates the sprite manager based on the current state of the duck.
     // It then draws the appropriate sprite based on whether the duck is in the air, being damaged,
     // playing dead, crouching, or moving. This is done by calling the different draw methods.
-    void update(const DuckState& state);
+    void update(const DuckState& newState);
 
     // Ddraws the main sprite using the provided column and row indices.
     //  It then checks if the duck has a chestplate, helmet, or weapon equipped and draws them
@@ -72,13 +67,13 @@ private:
 
     // Returns the base position of the sprite based on the current position of the duck.
     // Meaning... this is the position of the duck and only the duck.
-    SDL2pp::Rect calculateBasePosition();
+    SDL2pp::Rect calculateBasePosition() const;
 
     // Adjusts the position of the sprite for the feathers.
     void adjustForFeathers(SDL2pp::Rect& position) const;
 
     // Adjusts the position of the sprite for the helmet.
-    void adjustForHelmet(SDL2pp::Rect& position);
+    void adjustForHelmet(SDL2pp::Rect& position) const;
 
     // Adjusts the position of the sprite for the chestplate.
     void adjustForChestplate(SDL2pp::Rect& position);

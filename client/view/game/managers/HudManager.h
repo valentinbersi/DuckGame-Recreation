@@ -2,10 +2,6 @@
 
 #include <list>
 #include <memory>
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 #include <SDL2pp/SDL2pp.hh>
 
 #include "DuckData.h"
@@ -21,14 +17,14 @@ public:
 
 private:
     void toBlackTransition(int centerX, int centerY) const;
-    void winnerShow(std::list<DuckData>& ducksToRender,
-                    const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
+    void winnerShow(const std::list<DuckData>& ducksToRender,
+                    const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) const;
     void finishedRound() const;
     void finishedSet(std::list<DuckData>& ducks,
                      const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
     void finishedGame(std::list<DuckData>& ducks,
                       const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
-    void showPoints(std::list<DuckData>& ducks, SDL2pp::Rect& tableRect,
+    void showPoints(const std::list<DuckData>& ducks, const SDL2pp::Rect& tableRect,
                     const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping);
     void resetFlags() const;
     int& windowWidth;

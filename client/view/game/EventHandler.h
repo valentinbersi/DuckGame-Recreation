@@ -1,19 +1,15 @@
 #pragma once
 
 #include <list>
-#include <memory>
-#include <typeindex>
 #include <unordered_map>
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <SDL2pp/SDL2pp.hh>
 
 #include "Camera.h"
 #include "Communicator.h"
 #include "DuckData.h"
 #include "GameMessage.h"
-#include "SpriteManager.h"
 
 class EventHandler {
 

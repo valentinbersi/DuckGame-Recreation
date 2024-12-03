@@ -51,9 +51,10 @@ void WeaponSpriteManager::drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& pos
     }
 }
 
-void WeaponSpriteManager::draw(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
+void WeaponSpriteManager::draw(Spritesheet* spritesheet, SDL2pp::Rect& position, const float scale,
                                const DuckState& state) {
     spritesheet->selectSprite(0, 0, false);
+
     if (!state.lookingUp) {
         if (state.flipped)
             position.x -= 0.30 * scale;
@@ -73,7 +74,7 @@ void WeaponSpriteManager::draw(Spritesheet* spritesheet, SDL2pp::Rect& position,
     spritesheet->drawWeapon(position, state.flipped, path);
 }
 
-void WeaponSpriteManager::drawEffect1(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
+void WeaponSpriteManager::drawEffect1(Spritesheet* spritesheet, SDL2pp::Rect& position, const float scale,
                                       const DuckState& state) {
     if (!state.lookingUp) {
         if (state.flipped)
@@ -92,7 +93,7 @@ void WeaponSpriteManager::drawEffect1(Spritesheet* spritesheet, SDL2pp::Rect& po
     spritesheet->drawEffects(position, state.flipped, Resource::get().resource(EFFECT_PATH));
 }
 
-void WeaponSpriteManager::drawEffect2(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
+void WeaponSpriteManager::drawEffect2(Spritesheet* spritesheet, SDL2pp::Rect& position, const float scale,
                                       const DuckState& state) {
     if (!state.lookingUp) {
         if (state.flipped)
@@ -112,7 +113,7 @@ void WeaponSpriteManager::drawEffect2(Spritesheet* spritesheet, SDL2pp::Rect& po
 }
 
 void WeaponSpriteManager::drawLaserFlare(Spritesheet* spritesheet, SDL2pp::Rect& position,
-                                         float scale, const DuckState& state) {
+                                         const float scale, const DuckState& state) {
     if (!state.lookingUp) {
         if (state.flipped)
             position.x -= 1.6 * scale;
@@ -131,7 +132,7 @@ void WeaponSpriteManager::drawLaserFlare(Spritesheet* spritesheet, SDL2pp::Rect&
     spritesheet->drawEffects(position, state.flipped, Resource::get().resource(LASERFLARE_PATH));
 }
 
-void WeaponSpriteManager::drawPlasma(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
+void WeaponSpriteManager::drawPlasma(Spritesheet* spritesheet, SDL2pp::Rect& position, const float scale,
                                      const DuckState& state) {
     if (!state.lookingUp) {
         if (state.flipped)
