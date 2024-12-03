@@ -2,53 +2,80 @@
 
 #include <utility>
 
-GameStatus::GameStatus(): ServerMessage(MessageType::Game) {}  
+GameStatus::GameStatus(): ServerMessage(MessageType::Game) {}
 
 GameStatus::GameStatus(const GameStatus& other):
         ServerMessage(MessageType::Game),
+        roundEnded(other.roundEnded),
+        gameEnded(other.gameEnded),
+        setEnded(other.setEnded),
+        backgroundID(other.backgroundID),
         ducks(other.ducks),
         itemPositions(other.itemPositions),
         blockPositions(other.blockPositions),
-        itemSpawnerPositions(other.itemSpawnerPositions) {}
+        itemSpawnerPositions(other.itemSpawnerPositions),
+        boxPositions(other.boxPositions),
+        explosionPositions(other.explosionPositions) {}
 
 GameStatus& GameStatus::operator=(const GameStatus& other) {
     if (this == &other)
         return *this;
 
+    roundEnded = other.roundEnded;
+    gameEnded = other.gameEnded;
+    setEnded = other.setEnded;
+    backgroundID = other.backgroundID;
     ducks = other.ducks;
     itemPositions = other.itemPositions;
     blockPositions = other.blockPositions;
     itemSpawnerPositions = other.itemSpawnerPositions;
+    boxPositions = other.boxPositions;
+    explosionPositions = other.explosionPositions;
     return *this;
 }
 
 GameStatus::GameStatus(GameStatus&& other) noexcept:
         ServerMessage(MessageType::Game),
+        roundEnded(std::move(other.roundEnded)),
+        gameEnded(std::move(other.gameEnded)),
+        setEnded(std::move(other.setEnded)),
+        backgroundID(std::move(other.backgroundID)),
         ducks(std::move(other.ducks)),
         itemPositions(std::move(other.itemPositions)),
         blockPositions(std::move(other.blockPositions)),
-        itemSpawnerPositions(std::move(other.itemSpawnerPositions)) {}
+        itemSpawnerPositions(std::move(other.itemSpawnerPositions)),
+        boxPositions(std::move(other.boxPositions)),
+        explosionPositions(std::move(other.explosionPositions)) {}
 
 GameStatus& GameStatus::operator=(GameStatus&& other) noexcept {
     if (this == &other)
         return *this;
 
+    roundEnded = std::move(other.roundEnded);
+    gameEnded = std::move(other.gameEnded);
+    setEnded = std::move(other.setEnded);
+    backgroundID = std::move(other.backgroundID);
     ducks = std::move(other.ducks);
     itemPositions = std::move(other.itemPositions);
     blockPositions = std::move(other.blockPositions);
     itemSpawnerPositions = std::move(other.itemSpawnerPositions);
+    boxPositions = std::move(other.boxPositions);
+    explosionPositions = std::move(other.explosionPositions);
     return *this;
 }
 
 bool GameStatus::operator==(const GameStatus& other) const {
-    return ducks == other.ducks && 
-           itemPositions == other.itemPositions &&
-           blockPositions == other.blockPositions &&
-           itemSpawnerPositions == other.itemSpawnerPositions;
+    return roundEnded == other.roundEnded && gameEnded == other.gameEnded &&
+           setEnded == other.setEnded && ducks == other.ducks &&
+           itemPositions == other.itemPositions && blockPositions == other.blockPositions &&
+           itemSpawnerPositions == other.itemSpawnerPositions &&
+           boxPositions == other.boxPositions && explosionPositions == other.explosionPositions &&
+           backgroundID == other.backgroundID;
 }
 
-template<typename T>
-void GameStatus::sendList(ServerSendProtocol& serverProtocol, const std::list<T>& list, void (ServerSendProtocol::*sendFunc)(const T&)) {
+template <typename T>
+void GameStatus::sendList(ServerSendProtocol& serverProtocol, const std::list<T>& list,
+                          void (ServerSendProtocol::*sendFunc)(const T&)) {
     serverProtocol.sendLen(list.size());
     for (const auto& item: list) {
         (serverProtocol.*sendFunc)(item);
@@ -56,8 +83,12 @@ void GameStatus::sendList(ServerSendProtocol& serverProtocol, const std::list<T>
 }
 
 void GameStatus::send(ServerSendProtocol& serverProtocol) {
+    serverProtocol.sendRoundData(roundEnded, setEnded, gameEnded);
+    serverProtocol.sendBackground(backgroundID);
     sendList(serverProtocol, ducks, &ServerSendProtocol::sendDuckData);
     sendList(serverProtocol, itemPositions, &ServerSendProtocol::sendItemData);
     sendList(serverProtocol, blockPositions, &ServerSendProtocol::sendBlock);
     sendList(serverProtocol, itemSpawnerPositions, &ServerSendProtocol::sendBlock);
+    sendList(serverProtocol, boxPositions, &ServerSendProtocol::sendBlock);
+    sendList(serverProtocol, explosionPositions, &ServerSendProtocol::sendBlock);
 }

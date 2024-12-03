@@ -3,7 +3,9 @@
 MovementCommand::MovementCommand(PlayerID id, InputAction action): Command(id), action(action) {}
 
 void MovementCommand::execute(GameController& gameController) {
-
+    if (!gameController.roundInProgress()) {
+        return;
+    }
     Player& player = gameController.getPlayer(id);
     switch (action) {
         case InputAction::LEFT_PRESSED:
@@ -30,7 +32,15 @@ void MovementCommand::execute(GameController& gameController) {
         case InputAction::JUMP_RELEASED:
             return player.stopJump();
 
+        case InputAction::UP_PRESSED:
+            return player.lookUp();
+
+        case InputAction::UP_RELEASED:
+            return player.stopLookUp();
+
         default:
             return;
     }
 }
+
+MovementCommand::~MovementCommand() = default;

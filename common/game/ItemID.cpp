@@ -8,6 +8,5 @@ ItemID::ItemID(unsigned char value): _value(static_cast<Value>(value)) {}
 
 ItemID::operator Value() const { return _value; }
 
-RandomIntGenerator ItemID::randomGenerator(CowboyPistol, Magnum);
-
+RandomIntGenerator ItemID::randomGenerator(Grenade, Armor);
 ItemID ItemID::randomItemID() { return randomGenerator.generateRandomInt(); }

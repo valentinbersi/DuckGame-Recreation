@@ -15,8 +15,6 @@
 
 class GameLoop final: public Thread {
     constexpr static std::uint8_t FRAME_TIMES_AMOUNT = 2;
-
-    std::vector<LevelData>& levels;
     std::map<PlayerID, std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>>>
             clientQueuesMap{};
     BlockingQueue<std::unique_ptr<Command>> clientCommands;
@@ -46,6 +44,17 @@ class GameLoop final: public Thread {
      */
     bool shouldAddQueue(const u16 clientID);
 
+    /**
+     * Process a round of the game
+     * @param deltaTime the time since the last frame
+     */
+    void processRound(const float deltaTime);
+
+    /**
+     * loads new state of game if round is over
+     */
+    void loadNewStateIfOver();
+
 public:
     /**
      * Construct a gameloop with no players
@@ -60,15 +69,28 @@ public:
     void stop() override;
 
     /**
+     * Checks if player can join the game.
+     * @param playerCount the number of players that will play the game locally
+     * @return true if player can join the game, false otherwise.
+     */
+    bool canJoinGame(const u8 playerCount);
+
+    /**
      * Add a client queue to the list of client queues
      * @param clientID the id of the client to add
      * @param clientQueue the queue of the client to add
      */
-    void addClient(u16 clientID,
-                   std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue);
+    DuckData::Id addClient(
+            u16 clientID, std::weak_ptr<BlockingQueue<std::shared_ptr<ServerMessage>>> clientQueue);
 
     /**
      * @return the pointer to the gameloop Queue.
      */
     BlockingQueue<std::unique_ptr<Command>>* getQueue();
+
+    /**
+     * Indicates end of the transaction of joining the game.
+     * Indicates to all clients that player/s has joined
+     */
+    void JoinTransactionCompleted();
 };

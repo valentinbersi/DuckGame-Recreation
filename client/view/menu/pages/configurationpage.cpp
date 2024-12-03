@@ -1,10 +1,18 @@
 #include "configurationpage.h"
 
 #include <QButtonGroup>
+#include <QDebug>
+#include <QMessageBox>
+#include <memory>
+#include <utility>
 
 
-configurationPage::configurationPage(QWidget* parent, GameInfo& gameInfo):
-        QWidget(parent), ui(new Ui::configurationPage), gameInfo(gameInfo) {
+configurationPage::configurationPage(QWidget* parent, GameInfo& gameInfo,
+                                     Communicator& communicator):
+        QWidget(parent),
+        ui(new Ui::configurationPage),
+        gameInfo(gameInfo),
+        communicator(communicator) {
     ui->setupUi(this);
 
     CantidadPlayersGroup = new QButtonGroup(this);
@@ -12,21 +20,71 @@ configurationPage::configurationPage(QWidget* parent, GameInfo& gameInfo):
     CantidadPlayersGroup->addButton(ui->radio2Player, 2);
     ui->radio1Player->setChecked(true);
 
-    connect(ui->btnUnirse, &QPushButton::clicked, this, &configurationPage::handleJoinGame);
-    connect(ui->btnCrear, &QPushButton::clicked, this, &configurationPage::handleNewGame);
+    connect(ui->btnJoin, &QPushButton::clicked, this, &configurationPage::handlerJoinGame);
+    connect(ui->btnCreate, &QPushButton::clicked, this, &configurationPage::handlerNewGame);
     connect(ui->btnVolver, &QPushButton::clicked, this, &configurationPage::backClicked);
 }
 
+
 int configurationPage::getSelectedPlayers() const { return CantidadPlayersGroup->checkedId(); }
 
-void configurationPage::handleJoinGame() {
+void configurationPage::handlerJoinGame() {
+    if (ui->lineEditMatchID->text().isEmpty()) {
+        QMessageBox::warning(this, "A Match ID was not entered",
+                             "Please enter a Match ID before continuing.");
+        return;
+    }
     gameInfo.playersNumber = getSelectedPlayers();
-    emit joinGameClicked();
+    gameInfo.matchID = ui->lineEditMatchID->text().toUShort();
+    LobbyRequest request(LobbyRequest::JOINMATCH);
+    if (initMatchRequest(request)) {
+        gameInfo.isNewGame = false;
+        emit playMatchClicked();
+    }
 }
 
-void configurationPage::handleNewGame() {
+void configurationPage::handlerNewGame() {
     gameInfo.playersNumber = getSelectedPlayers();
-    emit newGameClicked();
+    LobbyRequest request(LobbyRequest::NEWMATCH);
+    if (initMatchRequest(request)) {
+        gameInfo.isNewGame = true;
+        emit playMatchClicked();
+    }
+}
+
+QString getColor(DuckData::Id id) {
+    switch (id) {
+        case DuckData::Id::White:
+            return {"white"};
+        case DuckData::Id::Grey:
+            return {"grey"};
+        case DuckData::Id::Orange:
+            return {"orange"};
+        case DuckData::Id::Yellow:
+            return {"yellow"};
+        case DuckData::Id::None:
+            return {"none"};
+    }
+    return {"vacio"};
+}
+
+bool configurationPage::initMatchRequest(LobbyRequest& request) {
+    auto message =
+            std::make_unique<LobbyMessage>(request, gameInfo.playersNumber, gameInfo.matchID);
+    if (communicator.trysend(std::move(message))) {
+        ReplyMessage replyMessage = communicator.blockingRecv();
+        if (replyMessage.matchID == 0) {
+            QMessageBox::warning(this, "Error", QString::fromStdString(replyMessage.error));
+            return false;
+        }
+
+        gameInfo.matchID = replyMessage.matchID;
+        gameInfo.Duck1Color = replyMessage.color1;
+        gameInfo.Duck2Color = replyMessage.color2;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 configurationPage::~configurationPage() {

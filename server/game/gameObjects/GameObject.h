@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 
+#include "Finishable.h"
 #include "Startable.h"
 #include "Subject.h"
 #include "TrackedReference.h"
@@ -23,11 +24,13 @@ class GameObject:
         public gameObject::Subject,
         public TrackedReference,
         public Updatable,
-        public Startable {
-
+        public Startable,
+        public Finishable {
     std::string name;
     GameObject* _parent;
     HashMap<std::string, GameObject*> children;
+    std::list<GameObject*> childrenToRemove;
+    bool active;
 
     /**
      * Object class handler for tree entered event.\n
@@ -53,12 +56,6 @@ class GameObject:
 
 protected:
     constexpr static auto INVALID_EVENT_TYPE = "Invalid event type";
-
-    /**
-     * A constructor for derived classes.
-     * Initializes the signals
-     */
-    explicit GameObject(GameObject* parent);
 
     /**
      * Add a child to the object
@@ -127,9 +124,24 @@ public:
     void update(float delta) override;
 
     /**
+     * Does nothing on object
+     */
+    void finish() override;
+
+    /**
      * Updates the children of the object
      */
     void updateInternal(float delta) override;
+
+    /**
+     * Starts the children of the object
+     */
+    void startInternal() override;
+
+    /**
+     * Finishes the children of the object
+     */
+    void finishInternal() override;
 
     /**
      * Add a child to the object
@@ -147,14 +159,14 @@ public:
      * @param name The name of the child to remove
      * @return A pointer to the removed child
      */
-    std::unique_ptr<GameObject> removeChild(const std::string& name);
+    GameObject* removeChild(const std::string& name);
 
     /**
      * Remove a child from the object
      * @param object The child to remove
      * @return A pointer to the removed child
      */
-    std::unique_ptr<GameObject> removeChild(const GameObject* object);
+    GameObject* removeChild(const GameObject* object);
 
     /**
      * Transfer a child from another object to this
@@ -176,7 +188,8 @@ public:
      * @return A reference to the child
      * @throws std::out_of_range If the child is not found
      */
-    GameObject* getChild(const std::string& name) const;
+    template <typename ObjectType = GameObject>
+    ObjectType* getChild(const std::string& name) const;
 
     /**
      * Check if the object has children
@@ -189,7 +202,8 @@ public:
      * @return A reference to the parent
      * @throws RootObject If the object has no parent
      */
-    GameObject* parent() const;
+    template <typename ObjectType = GameObject>
+    ObjectType* parent() const;
 
     /**
      * Check if the object is the root object
@@ -201,10 +215,35 @@ public:
      * Get the root object of the tree
      * @return A reference to the root object
      */
-    GameObject* getRoot();
+    template <typename ObjectType = GameObject>
+    ObjectType* getRoot();
 };
 
 template <typename Ret>
 Ret GameObject::applyToChild(const std::string& name, const std::function<Ret(GameObject*)>& f) {
     return f(children.at(name));
+}
+
+template <typename ObjectType>
+ObjectType* GameObject::getChild(const std::string& name) const {
+    static_assert(std::is_base_of_v<GameObject, ObjectType>,
+                  "Cannot get child of something that is not a GameObject");
+
+    return dynamic_cast<ObjectType*>(children.at(name));
+}
+
+template <typename ObjectType>
+ObjectType* GameObject::parent() const {
+    static_assert(std::is_base_of_v<GameObject, ObjectType>,
+                  "Cannot get child of something that is not a GameObject");
+
+    return dynamic_cast<ObjectType*>(_parent);
+}
+
+template <typename ObjectType>
+ObjectType* GameObject::getRoot() {
+    if (isRoot())
+        return dynamic_cast<ObjectType*>(this);
+
+    return _parent->getRoot<ObjectType>();
 }

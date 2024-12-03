@@ -11,7 +11,6 @@
 #include "LobbyMessage.h"
 #include "configurationpage.h"
 #include "mainmenu.h"
-#include "matchSetup.h"
 #include "waitingPage.h"
 
 QT_BEGIN_NAMESPACE
@@ -25,18 +24,19 @@ class GameMenu: public QMainWindow {
 
 private:
     Ui::GameMenu* ui;
-    Communicator& communicator; /** Referencia al comunicador, para comunicar el lobby con el server */
+    Communicator&
+            communicator;  /** Referencia al comunicador, para comunicar el lobby con el server */
     bool& twoPlayersLocal; /** booleano del Launcher, para que sepa cuantos jugadores hay*/
-    GameInfo gameInfo; /** Struct que guarda informacion importante para el juego */
+    GameInfo gameInfo;     /** Struct que guarda informacion importante para el juego */
 
     /** Punteros a las paginas usadas en el lobby */
     QPointer<mainMenu> menu;
     QPointer<configurationPage> config;
-    QPointer<matchSetup> join_game;
-    QPointer<matchSetup> new_game;
+    QPointer<WaitingPage> waitingPage;
 
     /**
-     * Setea los widgets de las paginas y conecta los botones y las acciones para configurar la funcionalidad del lobby.
+     * Setea los widgets de las paginas y conecta los botones y las acciones para configurar la
+     * funcionalidad del lobby.
      */
     void setPagesAndConnections();
 
@@ -54,11 +54,14 @@ private:
     void changePage(QWidget* page);
 
     /**
-     * Ambas funciones se encargan de inicializar las pantallas de carga, definiendo de que tipo es.
+     * Se encarga de inicializar las pantallas de carga, ya sea la del host o la del join.
      */
     void showWaitingPage();
-    void showJoinWaitingPage();
 
+    /**
+     * Se cierra el menu, cerrando la aplicacion de Qt correctamente.
+     */
+    void closeMenu();
 
 signals:
     void startGame();

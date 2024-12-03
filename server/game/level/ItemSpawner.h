@@ -11,10 +11,8 @@
 class ItemSpawner: public StaticObject {
 private:
     std::weak_ptr<Item> spawnedItem;
-
     GameTimer* timer;
-
-    static RandomFloatGenerator randomGenerator;
+    RandomFloatGenerator randomGenerator;
 
     /**
      * function used on eventHandler in order to

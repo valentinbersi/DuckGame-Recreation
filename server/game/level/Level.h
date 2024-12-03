@@ -3,21 +3,44 @@
 #include <list>
 #include <vector>
 
+#include "Box.h"
+#include "Explosion.h"
 #include "GameObject.h"
 #include "ItemSpawner.h"
 #include "LevelData.h"
+#include "Player.h"
 #include "SizedObjectData.h"
 #include "TerrainBlock.h"
+#include "Background.h"
+
 
 class Level final: public GameObject {
+    BackgroundID background;
     std::vector<TerrainBlock*> terrainBlocks;
-    std::vector<ItemSpawner*> itemSpawner;
+    std::vector<ItemSpawner*> itemSpawners;
+    std::list<Box*> boxes;
+    std::list<Explosion*> explosions;
+
+
+    void onTreeEntered(GameObject* object) override;
+
+    /**
+     * Event manager for tree exited event
+     * @param object The child that was removed
+     */
+    void onTreeExited(GameObject* object) override;
 
 public:
     /**
      * Create a new Level object
      */
-    explicit Level(const LevelData& level);
+    Level(const LevelData& level, const HashMap<u16, Player*>& players);
+    
+    /**
+     * Get the background of the level
+     * @return The background of the level
+     */
+    BackgroundID getBackground() const;
 
     /**
      * Get the position of all the blocks in the level
@@ -30,4 +53,21 @@ public:
      * @return The positions of all the item spawner in the level
      */
     std::list<SizedObjectData> itemSpawnerStatus() const;
+
+    /**
+     * Get the position of all the boxes in the level
+     * @return The positions of all the boxes in the level
+     */
+    std::list<SizedObjectData> boxStatus() const;
+
+    /**
+     * Get the position of all the actual explosions in the level
+     * @return The positions of all the actual explosions in the level
+     */
+    std::list<SizedObjectData> explosionStatus() const;
+
+    /**
+     * Destroy the Level object
+     */
+    ~Level() override;
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <utility>
 
 #include "CollisionObject.h"
 #include "DuckData.h"
@@ -8,24 +9,105 @@
 #include "Input.h"
 #include "PhysicsObject.h"
 
+class GameTimer;
+
 class Player final: public PhysicsObject {
-private:
-    DuckID id;
-    u8 life;
-    u16 flags;
+    DuckData::Id id;
+    DuckData::Direction _movementDirection;
+    DuckData::Direction _viewDirection;
+    DuckData::Direction _lastViewDirection;
+    std::bitset<DuckData::FlagCount> flags;
     Input input;
-    float speed;
-    EquippableWeapon* weapon;
+    EquippableItem* item;
+    bool isJumping;
+    bool interactWithItem;
+    bool actionateWeapon;
+    bool canKeepJumping;
+    GameTimer* jumpTimer;
+    u32 wonRounds;
+    u8 armorProtection;
+    u8 helmetProtection;
 
     /**
-     *
+     * Event manager for the player colliding with an item
      */
     void onItemCollision(CollisionObject* item);
-    // bool canKeepJumping;
+
+    /**
+     * Event manager for the player colliding with an object
+     */
+    void onCollision(const CollisionObject* object);
+
+    /**
+     * Event manager for the player firing a weapon
+     * @param recoil The recoil of the weapon
+     */
+    void onWeaponFired(const Vector2& recoil);
+
+    /**
+     * Event manager for the player running out of bullets
+     */
+    void onWeaponNoMoreBullets();
+
+    /*
+     * Event manager for the player's jump timer's timeouts
+     */
+    void onJumpTimerTimeout();
+
+    /**
+     * Reset the state of the player for a new frame
+     */
+    void resetState();
+
+    /**
+     * Manages the player's movement
+     */
+    void manageCrouch();
+
+    /**
+     * Manages the player's input
+     */
+    void manageInput();
+
+    /**
+     * Move the player
+     */
+    void move(float delta, float movementAcceleration);
+
+    /**
+     * Perform the actions of the player in the air
+     */
+    void performActionsInAir(float delta);
+
+    /**
+     * Perform the actions of the player in the ground
+     * @param delta  The time since the last frame
+     */
+    void performActionsInGround(float delta);
+
+    /**
+     * Move the player, make him jump and interact with the environment
+     */
+    void performActions(float delta);
+
+    /**
+     * Updates the data of the duck
+     */
+    void updateData();
 
 public:
-    explicit Player(DuckID id);
+    Player() = delete;
+    Player(const Player& other) = delete;
+    Player(Player&& other) noexcept = delete;
+    Player& operator=(const Player& other) = delete;
+    Player& operator=(Player&& other) noexcept = delete;
     ~Player() override;
+
+    /**
+     * Creates a new player with the given id
+     * @param id the id of the player
+     */
+    explicit Player(DuckData::Id id);
 
     /**
      * Does nothing
@@ -36,6 +118,43 @@ public:
      * Updates the player's position based on the input
      */
     void update(float delta) override;
+
+    /**
+     * Damages the player, if it doesn't have any protection, it kills the player
+     */
+    void damage();
+
+    /**
+     * Kills the player
+     */
+    void kill();
+
+    /**
+     * Makes the player shoot
+     */
+    void makeShoot();
+
+    /**
+     * Tell the player that it has no more bullets
+     */
+    void notMoreBullets();
+
+    /**
+     * Get the player's view direction
+     * @return the player's view direction
+     */
+    DuckData::Direction viewDirection() const;
+
+    /**
+     * Get the won rounds of the player
+     * @return  the won rounds of the player
+     */
+    u32 roundsWon() const;
+
+    /**
+     * Makes the player win a round
+     */
+    void winRound();
 
     /**
      * Returns a GameStatus loaded with the player's data
@@ -91,8 +210,82 @@ public:
     void interact();
 
     /**
-     * Clear player's inputs that are just pressed, manains
-     * input that are being pressed.
+     * Makes the player shoot
      */
-    void clearInputs();
+    void shoot();
+
+    /**
+     * Makes the player stop shooting
+     */
+    void stopShoot();
+
+    /**
+     * Makes the player look up
+     */
+    void lookUp();
+
+    /**
+     * Makes the player stop looking up
+     */
+    void stopLookUp();
+
+    /**
+     * Clear player's inputs depending on force value
+     */
+    void clearInputs(Force force = Force::No);
+
+    /**
+     * Reset the player's state to the start of a round
+     * it only mantains the amount of rounds won.
+     */
+    void reset();
+
+    /**
+     * Check if the player is dead
+     * @return true if the player is dead, false otherwise
+     */
+    bool isDead() const;
+
+    /**
+     * Equip the armor to the player
+     * @returns true if the player was equipped with the armor, false otherwise
+     */
+    bool equipArmor(u8 protection);
+
+    /**
+     * Equip the helmet to the player
+     * @returns true if the player was equipped with the armor, false otherwise
+     */
+    bool equipHelmet(u8 protection);
+
+    /**
+     * Set the player's item
+     * @param id the id of the item
+     * @param ammo the ammo of the item
+     * @param force if the item should be set even if the player has an item already
+     */
+    void setItem(ItemID id, u8 ammo, Force force = Force::No);
+
+    /**
+     * Sets ammo to the actua item of the player
+     * @param ammo the ammo to set
+     */
+    void setAmmo(u8 ammo);
+
+    /**
+     * Removes the player Item
+     */
+    void removeItem();
+
+    /**
+     * Get the protection of the player's armor
+     * @return the protection of the player's armor
+     */
+    bool isLookingUp() const;
+
+    /**
+     * Get the aiming direction of the player
+     * @return the aiming direction of the player
+     */
+    Vector2 aimingDirection() const;
 };

@@ -6,20 +6,21 @@
 
 #define NULL_SHAPE "Shape cannot be null"
 
-CollisionObject::CollisionObject(GameObject* parent, const Vector2& position,
-                                 const std::bitset<LayersCount> layers,
+CollisionObject::CollisionObject(const Vector2& position, const std::bitset<LayersCount> layers,
                                  const std::bitset<LayersCount> scannedLayers, const float width,
                                  const float height):
-        GameObject2D(parent, position),
+        GameObject2D(position),
         _layers(layers),
         _scannedLayers(scannedLayers),
-        shape(position, width, height) {}
+        shape(position, width, height) {
+    registerEvent<CollisionObject*>(Events::Collision);
+}
 
 bool CollisionObject::collidesWith(const CollisionObject& other) const {
     return shape.overlaps(other.shape);
 }
 
-std::optional<IntersectionInfo> CollisionObject::moveAndCollide(const CollisionObject& other,
+std::optional<IntersectionInfo> CollisionObject::moveAndCollide(CollisionObject& other,
                                                                 const Vector2& displacement,
                                                                 const float delta) const {
     return shape.overlaps(other.shape, displacement, delta);
@@ -32,8 +33,19 @@ void CollisionObject::updateInternal([[maybe_unused]] const float delta) {
     shape.setCenter(globalPosition());
 }
 
-GameObject2D& CollisionObject::setPosition(Vector2 position) noexcept {
-    return GameObject2D::setPosition(std::move(position));
+GameObject2D& CollisionObject::setGlobalPosition(Vector2 globalPosition,
+                                                 const Force force) noexcept {
+    GameObject2D::setGlobalPosition(std::move(globalPosition));
+    if (force == Force::Yes)
+        shape.setCenter(this->globalPosition());
+    return *this;
+}
+
+GameObject2D& CollisionObject::setPosition(Vector2 position, const Force force) noexcept {
+    GameObject2D::setPosition(std::move(position));
+    if (force == Force::Yes)
+        shape.setCenter(globalPosition());
+    return *this;
 }
 
 std::bitset<CollisionObject::LayersCount> CollisionObject::layers() const { return _layers; }

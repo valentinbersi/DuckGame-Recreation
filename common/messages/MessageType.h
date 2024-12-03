@@ -34,7 +34,24 @@ public:
         JUMP_RELEASED = 0xA,
         ACTION_RELEASED = 0xB,
         SHOOT_PRESSED = 0xC,
-        SHOOT_RELEASED = 0xD
+        SHOOT_RELEASED = 0xD,
+        NEXT_ROUND = 0xE,
+        END_ROUND_CHEAT = 0xF,
+        END_GAME_CHEAT = 0x10,
+        WEAPON_CHEAT = 0x11,  // auxiliar
+        AK47_CHEAT = 0x12,
+        SHOTGUN_CHEAT = 0x13,
+        MAGNUM_CHEAT = 0x14,
+        COWBOYPISTOL_CHEAT = 0x15,
+        DUELPISTOL_CHEAT = 0x16,
+        SNIPER_CHEAT = 0x17,
+        LASER_RIFLE_CHEAT = 0x18,
+        PEWPEW_CHEAT = 0x19,
+        GRENADE_CHEAT = 0x1A,
+        BANANA_CHEAT = 0x1B,
+        ARMOR_CHEAT = 0x1C,
+        HELMET_CHEAT = 0x1D,
+        INFINITE_AMMO = 0x1E
     };
 
     // cppcheck-suppress noExplicitConstructor
@@ -72,7 +89,12 @@ struct std::equal_to<InputAction> {
 
 class LobbyRequest {
 public:
-    enum Value : unsigned char { NEWMATCH = 0x0, JOINMATCH = 0x1, STARTMATCH = 0X2 };
+    enum Value : unsigned char {
+        NEWMATCH = 0x0,
+        JOINMATCH = 0x1,
+        CHOOSECOLOR = 0X2,
+        STARTMATCH = 0X3
+    };
 
     // cppcheck-suppress noExplicitConstructor
     LobbyRequest(Value value);  // NOLINT(runtime/explicit)

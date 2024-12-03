@@ -33,11 +33,9 @@ ListenerSocket::~ListenerSocket() {
     }
 }
 
-ListenerSocket::ListenerSocket(const cppstring servname) {
+ListenerSocket::ListenerSocket(const cppstring servname): skt(INVALID_SOCKET), closed(true) {
     Resolver resolver(nullptr, servname, true);
 
-    int skt = INVALID_SOCKET;
-    this->closed = true;
     while (resolver.has_next()) {
         const addrinfo* addr = resolver.next();
 
@@ -65,7 +63,6 @@ ListenerSocket::ListenerSocket(const cppstring servname) {
             continue;
 
         this->closed = false;
-        this->skt = skt;
         return;
     }
 

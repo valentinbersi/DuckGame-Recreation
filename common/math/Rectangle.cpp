@@ -5,7 +5,10 @@
 
 #include "IntersectionInfo.h"
 #include "Math.h"
+#include "Segment2D.h"
 
+
+class Segment2D;
 Rectangle::Rectangle(const Rectangle& other) = default;
 
 Rectangle& Rectangle::operator=(const Rectangle& other) {
@@ -74,9 +77,9 @@ bool Rectangle::overlaps(const Rectangle& rectangle) const {
            _position.y() + _size.y() > rectangle._position.y();
 }
 
-std::optional<IntersectionInfo> Rectangle::overlaps(const Rectangle& rectangle,
-                                                    const Vector2& displacement,
-                                                    const float delta) const {
+std::optional<IntersectionInfo> Rectangle::moveAndOverlap(const Rectangle& rectangle,
+                                                          const Vector2& displacement,
+                                                          const float delta) const {
     if (displacement.isZero())
         return std::nullopt;
 
@@ -89,6 +92,30 @@ std::optional<IntersectionInfo> Rectangle::overlaps(const Rectangle& rectangle,
     }
 
     return std::nullopt;
+}
+
+std::optional<IntersectionInfo> Rectangle::overlaps(Rectangle& rectangle,
+                                                    const Vector2& displacement,
+                                                    const float delta) const {
+    std::optional<IntersectionInfo> intersectionInfo =
+            moveAndOverlap(rectangle, displacement, delta);
+
+    if (not intersectionInfo)
+        return std::nullopt;
+
+    if (intersectionInfo->contactNormal.y() > 0)
+        intersectionInfo->contact[0] = &rectangle;
+
+    if (intersectionInfo->contactNormal.x() < 0)
+        intersectionInfo->contact[1] = &rectangle;
+
+    if (intersectionInfo->contactNormal.y() < 0)
+        intersectionInfo->contact[2] = &rectangle;
+
+    if (intersectionInfo->contactNormal.x() > 0)
+        intersectionInfo->contact[3] = &rectangle;
+
+    return intersectionInfo;
 }
 
 std::optional<IntersectionInfo> Rectangle::overlaps(const Ray2D& ray) const {
@@ -132,6 +159,30 @@ std::optional<IntersectionInfo> Rectangle::overlaps(const Ray2D& ray) const {
     }
 
     return info;
+}
+
+#define TOP_LEFT 0
+#define TOP_RIGHT 1
+#define BOTTOM_LEFT 2
+#define BOTTOM_RIGHT 3
+
+std::vector<Vector2> Rectangle::intersectionPointsWith(const Segment2D& ray) const {
+    const std::array corners = {_position, _position + Vector2::RIGHT * _size.x(),
+                                _position + Vector2::DOWN * _size.y(), _position + _size};
+
+    const std::array edges = {Segment2D(corners[TOP_LEFT], corners[TOP_RIGHT]),
+                              Segment2D(corners[TOP_RIGHT], corners[BOTTOM_RIGHT]),
+                              Segment2D(corners[BOTTOM_RIGHT], corners[BOTTOM_LEFT]),
+                              Segment2D(corners[BOTTOM_LEFT], corners[TOP_LEFT])};
+
+    std::vector<Vector2> intersectionPoints;
+
+    for (const Segment2D& edge: edges)
+        if (const std::optional<Vector2> intersectionPoint = edge.intersects(ray);
+            intersectionPoint)
+            intersectionPoints.push_back(std::move(*intersectionPoint));
+
+    return intersectionPoints;
 }
 
 bool Rectangle::operator==(const Rectangle& other) const {

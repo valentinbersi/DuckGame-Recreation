@@ -1,5 +1,6 @@
 #include "mainmenu.h"
 
+#include <QDebug>
 #include <QMessageBox>
 
 mainMenu::mainMenu(QWidget* parent): QWidget(parent), ui(new Ui::mainMenu) {

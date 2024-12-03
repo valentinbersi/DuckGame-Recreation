@@ -17,7 +17,7 @@ GameLauncher::GameLauncher(int argc, char* argv[], cppstring hostname, cppstring
 
 void GameLauncher::exec() {
     try {
-        app.exec();
+        QApplication::exec();
         if (startGame) {
             Game game(communicator, twoPlayersLocal);
             game.init();

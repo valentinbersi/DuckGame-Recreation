@@ -25,14 +25,13 @@ protected:
     /**
      * Construct a CollisionObject with the given parent, position, rotation, layers, scanned
      * layers, and a rectangle shape
-     * @param parent the parent Object
      * @param position the position of the CollisionObject
      * @param layers the layers that the object is in
      * @param scannedLayers the layers the object scans in search for other collisionObjects
      * @param width the width of the CollisionObject
      * @param height the height of the CollisionObject
      */
-    CollisionObject(GameObject* parent, const Vector2& position, std::bitset<LayersCount> layers,
+    CollisionObject(const Vector2& position, std::bitset<LayersCount> layers,
                     std::bitset<LayersCount> scannedLayers, float width, float height);
 
 
@@ -48,8 +47,9 @@ protected:
      * Move the CollisionObject and check for collisions with another CollisionObject
      * @param other the other CollisionObject to check collision with
      * @param displacement the displacement to move the CollisionObject
+     * @param delta the time since the last update
      */
-    std::optional<IntersectionInfo> moveAndCollide(const CollisionObject& other,
+    std::optional<IntersectionInfo> moveAndCollide(CollisionObject& other,
                                                    const Vector2& displacement, float delta) const;
 
 public:
@@ -67,11 +67,18 @@ public:
     void updateInternal(float delta) override;
 
     /**
+     * Set the global position of the object
+     * @param globalPosition  the new global position
+     * @return this CollisionObject
+     */
+    GameObject2D& setGlobalPosition(Vector2 globalPosition, Force = Force::No) noexcept override;
+
+    /**
      * Set the position of the object
      * @param position the new position
      * @return this CollisionObject
      */
-    GameObject2D& setPosition(Vector2 position) noexcept final;
+    GameObject2D& setPosition(Vector2 position, Force = Force::No) noexcept final;
 
     /**
      * Get the collision layers of the Object
@@ -150,12 +157,17 @@ public:
     /**
      * Check for collisions with other collision object and perform the collision
      * @param delta the time since the last update
+     * @return true if the object was destroyed during the collision, false otherwise
      */
-    virtual void processCollisions(float delta) = 0;
+    virtual bool processCollisions(float delta) = 0;
 
     /**
      * Get the shape of the CollisionObject
      * @return the shape of the CollisionObject
      */
     Rectangle getShape() const;
+
+    struct Events {
+        constexpr static auto Collision = "Collision";
+    };
 };

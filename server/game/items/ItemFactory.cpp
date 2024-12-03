@@ -1,5 +1,6 @@
 #include "ItemFactory.h"
 
+#include "Config.h"
 #define INVALID_ID "Invalid ItemID"
 
 #define GRENADE_DIMENSIONS 1.25, 1.375
@@ -15,30 +16,48 @@
 #define HELMET_DIMENSIONS 1.625, 1.875
 #define ARMOR_DIMENSIONS 1.5, 1.375
 
-std::unordered_map<ItemID, std::function<std::unique_ptr<Item>()>> ItemFactory::factory = {
+std::unordered_map<ItemID, std::function<std::unique_ptr<Item>(u8)>> ItemFactory::factory = {
         {ItemID::Grenade,
-         [] { return std::make_unique<Item>(GRENADE_DIMENSIONS, ItemID::Grenade); }},
-        {ItemID::Banana, [] { return std::make_unique<Item>(BANANA_DIMENSIONS, ItemID::Banana); }},
+         [](u8 ammo) { return std::make_unique<Item>(GRENADE_DIMENSIONS, ItemID::Grenade, ammo); }},
+        {ItemID::Banana,
+         [](u8 ammo) { return std::make_unique<Item>(BANANA_DIMENSIONS, ItemID::Banana, ammo); }},
         {ItemID::PewPewLaser,
-         [] { return std::make_unique<Item>(PEW_PEW_LASER_DIMENSIONS, ItemID::PewPewLaser); }},
+         [](u8 ammo) {
+             return std::make_unique<Item>(PEW_PEW_LASER_DIMENSIONS, ItemID::PewPewLaser, ammo);
+         }},
         {ItemID::LaserRifle,
-         [] { return std::make_unique<Item>(LASER_RIFLE_DIMENSIONS, ItemID::LaserRifle); }},
-        {ItemID::Ak47, [] { return std::make_unique<Item>(AK47_DIMENSIONS, ItemID::Ak47); }},
+         [](u8 ammo) {
+             return std::make_unique<Item>(LASER_RIFLE_DIMENSIONS, ItemID::LaserRifle, ammo);
+         }},
+        {ItemID::Ak47,
+         [](u8 ammo) { return std::make_unique<Item>(AK47_DIMENSIONS, ItemID::Ak47, ammo); }},
         {ItemID::DuelPistol,
-         [] { return std::make_unique<Item>(DUEL_PISTOL_DIMENSIONS, ItemID::DuelPistol); }},
+         [](u8 ammo) {
+             return std::make_unique<Item>(DUEL_PISTOL_DIMENSIONS, ItemID::DuelPistol, ammo);
+         }},
         {ItemID::CowboyPistol,
-         [] { return std::make_unique<Item>(COWBOY_PISTOL_DIMENSIONS, ItemID::CowboyPistol); }},
-        {ItemID::Magnum, [] { return std::make_unique<Item>(MAGNUM_DIMENSIONS, ItemID::Magnum); }},
+         [](u8 ammo) {
+             return std::make_unique<Item>(COWBOY_PISTOL_DIMENSIONS, ItemID::CowboyPistol, ammo);
+         }},
+        {ItemID::Magnum,
+         [](u8 ammo) { return std::make_unique<Item>(MAGNUM_DIMENSIONS, ItemID::Magnum, ammo); }},
         {ItemID::Shotgun,
-         [] { return std::make_unique<Item>(SHOTGUN_DIMENSIONS, ItemID::Shotgun); }},
-        {ItemID::Sniper, [] { return std::make_unique<Item>(SNIPER_DIMENSIONS, ItemID::Sniper); }},
-        {ItemID::Helmet, [] { return std::make_unique<Item>(HELMET_DIMENSIONS, ItemID::Helmet); }},
-        {ItemID::Armor, [] { return std::make_unique<Item>(ARMOR_DIMENSIONS, ItemID::Armor); }}};
+         [](u8 ammo) { return std::make_unique<Item>(SHOTGUN_DIMENSIONS, ItemID::Shotgun, ammo); }},
+        {ItemID::Sniper,
+         [](u8 ammo) { return std::make_unique<Item>(SNIPER_DIMENSIONS, ItemID::Sniper, ammo); }},
+        {ItemID::Helmet,
+         [](u8 ammo) { return std::make_unique<Item>(HELMET_DIMENSIONS, ItemID::Helmet, ammo); }},
+        {ItemID::Armor,
+         [](u8 ammo) { return std::make_unique<Item>(ARMOR_DIMENSIONS, ItemID::Armor, ammo); }}};
 
-std::unique_ptr<Item> ItemFactory::createItem(const ItemID id) {
+
+std::unique_ptr<Item> ItemFactory::createItem(const ItemID id, u8 ammo, Force force) {
     const auto function = factory.find(id);
     if (function == factory.end())
         throw std::invalid_argument(INVALID_ID);
 
-    return function->second();
+    if (force == Force::Yes) {
+        ammo = Config::getDefaultAmmo(id);
+    }
+    return function->second(ammo);
 }

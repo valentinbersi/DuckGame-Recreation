@@ -44,7 +44,7 @@ protected:
      * Receive a string from the socket
      * @return the string received
      */
-    std::string recv_string();
+    std::string recvString();
 
 public:
     /**

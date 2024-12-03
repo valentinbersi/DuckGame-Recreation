@@ -1,4 +1,7 @@
 #include "Camera.h"
+#include "SpriteManager.h"
+
+#include <SDL2/SDL.h>
 
 Camera::Camera(int& windowWidth, int& windowHeight):
         windowWidth(windowWidth),
@@ -6,7 +9,7 @@ Camera::Camera(int& windowWidth, int& windowHeight):
         viewRect(Vector2::ZERO, {0, 0}),
         ducksArrived(false) {}
 
-void Camera::update(std::list<DuckData>& ducks, const float deltaTime) {
+void Camera::update(const std::list<DuckData>& ducks, const float deltaTime) {
     auto [center, maxDistance, aspectRatio] = updateInfo(ducks);
     updateZoom(center, maxDistance, aspectRatio, deltaTime);
 
@@ -14,7 +17,7 @@ void Camera::update(std::list<DuckData>& ducks, const float deltaTime) {
         ducksArrived = true;
 }
 
-void Camera::forceUpdate(std::list<DuckData>& ducks) {
+void Camera::forceUpdate(const std::list<DuckData>& ducks) {
     auto [center, maxDistance, aspectRatio] = updateInfo(ducks);
     updateZoom(center, maxDistance, aspectRatio, 1, Force::Yes);
 
@@ -45,7 +48,7 @@ void Camera::updateZoom(const Vector2& center, const Vector2& maxDistance, const
     viewRect.setCenter(viewRect.center() + (center - viewRect.center()) * CAMERA_SPEED * deltaTime);
 }
 
-Camera::UpdateInfo Camera::updateInfo(std::list<DuckData>& ducks) const {
+Camera::UpdateInfo Camera::updateInfo(const std::list<DuckData>& ducks) const {
     UpdateInfo info;
     info.aspectRatio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
     info.center = centerOfDucks(ducks);
@@ -53,7 +56,7 @@ Camera::UpdateInfo Camera::updateInfo(std::list<DuckData>& ducks) const {
     return info;
 }
 
-Vector2 Camera::calculateMaxDistance(std::list<DuckData>& ducks, const float aspectRatio) {
+Vector2 Camera::calculateMaxDistance(const std::list<DuckData>& ducks, const float aspectRatio) {
     Vector2 maxDistance;
 
     for (auto it1 = ducks.begin(); it1 != ducks.end(); ++it1) {
@@ -75,11 +78,15 @@ Vector2 Camera::calculateMaxDistance(std::list<DuckData>& ducks, const float asp
 }
 
 Vector2 Camera::centerOfDucks(const std::list<DuckData>& ducks) {
-    Vector2 center;
-    for (const auto& duck: ducks) center += duck.position;
+    Vector2 center = std::accumulate(
+            ducks.begin(), ducks.end(), Vector2::ZERO,
+            [](const Vector2& sum, const DuckData& duck) { return sum + duck.position; });
+
     if (not ducks.empty())
         center /= static_cast<float>(ducks.size());
     return center;
 }
+
+void Camera::noDucksArrived() { ducksArrived = false; }
 
 Rectangle& Camera::getViewRect() { return viewRect; }

@@ -99,7 +99,7 @@ struct Math {
      * @param i The integer to convert
      * @return The converted float
      */
-    constexpr static float integerToFloat(unsigned int i);
+    constexpr static float integerToFloat(int i);
 
     /**
      * Solves a quadratic equation of the form ax^2 + bx + c = 0.
@@ -156,7 +156,7 @@ constexpr float Math::toRadians(const float angle) noexcept {
 
 constexpr u32 Math::floatToInteger(const float f) { return static_cast<u32>(f * EPSILON); }
 
-constexpr float Math::integerToFloat(const u32 i) {
+constexpr float Math::integerToFloat(const int i) {
     return static_cast<float>(i) * INVERSE_EPSILON;
 }
 

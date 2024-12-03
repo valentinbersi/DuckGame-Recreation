@@ -1,20 +1,33 @@
 #pragma once
 
+#include <list>
 #include <string>
-#include <vector>
 
+#include "MapData.h"
 #include "Object.h"
 
 class MapManager {
 private:
-    static std::string objectTypeToString(ObjectType type);
-    static ObjectType stringToObjectType(const std::string& typeStr);
+    MapData& mapData;
+
+    void addOffset() const;
+
+    void removeOffset() const;
 
 public:
-    MapManager() = default;
+    explicit MapManager(MapData& mapData);
 
-    static void exportMap(const std::vector<Object>& objects, const std::string& mapName,
-                          int mapWidth, int mapHeight);
-    static bool importMap(std::vector<Object>& objects, const std::string& mapName, int& mapWidth,
-                          int& mapHeight, std::string& background);
+    /**
+    * Se encarga de exportar el mapa en formato YAML.
+    * Toma la informacion del mapa (name, background, size y objects) y las configura en el .yaml
+    * Le da la posibilidad al usuario de elegir donde guardar el archivo
+    */
+    bool exportMap(QWidget* view) const;
+
+    /**
+    * Se encarga de importar un mapa desde el formato YAML.
+    * Toma la informacion del .yaml (name, background, size y objects) y los carga en mapData
+    * Le da la posibilidad al usuario de elegir que archivo cargar
+    */
+    bool importMap(QWidget* view) const;
 };

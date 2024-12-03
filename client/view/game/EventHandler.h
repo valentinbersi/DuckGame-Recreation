@@ -1,18 +1,15 @@
 #pragma once
 
 #include <list>
-#include <memory>
 #include <unordered_map>
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <SDL2pp/SDL2pp.hh>
 
 #include "Camera.h"
 #include "Communicator.h"
 #include "DuckData.h"
 #include "GameMessage.h"
-#include "SpriteManager.h"
 
 class EventHandler {
 
@@ -25,24 +22,38 @@ public:
     // Destructor
     ~EventHandler() = default;
 
-    // Keeps listening to KEYUP, KEYDOWN, QUIT and REZISED events of the screen.
-    // After that, calls the specific handlers for each case after scanning the key.
+    /**
+     * Keeps listening to KEYUP, KEYDOWN, QUIT and REZISED events of the screen
+     * After that, calls the specific handlers for each case after scanning the key
+     */
     void handleEvents();
 
 private:
-    // Handles 'ScreenEvents', having in mid if the game is fullscreen or not.
-    // Also, updates the window size variables after the change.
+    /**
+     * Handles 'ScreenEvents', having in mid if the game is fullscreen or not
+     * Also, updates the window size variables after the change
+     * @param event: SDL_Event to be handled
+     * @param isKeyDown: boolean that indicates if the key is being pressed or released
+     * @param scancode: SDL_Scancode of the key pressed
+     */
     void handleScreenEvents(const SDL_Event& event, bool isKeyDown, const SDL_Scancode& scancode);
 
-    // Handles the key event, sending the message to the server using a GameMessage filled with an
-    // InputAction. It works also with two players, sending the message to the server with the
-    // player number.
+    /**
+     * Handles the key event, sending the message to the server using a GameMessage filled with an
+     * InputAction It works also with two players, sending the message to the server with the player
+     * number
+     * @param scancode: SDL_Scancode of the key pressed
+     * @param isKeyDown: boolean that indicates if the key is being pressed or released
+     */
     void handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown);
 
-    // Returns if the game is fullscreen or not using SDL special flags.
+    // Returns if the game is fullscreen or not using SDL special flags
     bool isFullscreen();
 
-    // Sets the game to fullscreen if not activated (or viceversa).
+    /**
+     * Sets the game to fullscreen if not activated (or viceversa)
+     * @param fullscreen: boolean that indicates if the game is fullscreen or not
+     */
     void setFullscreen(bool fullscreen);
 
     SDL2pp::Window& window;
@@ -78,15 +89,29 @@ private:
             {SDL_SCANCODE_DOWN, InputAction::DOWN_PRESSED},
             {SDL_SCANCODE_LEFT, InputAction::LEFT_PRESSED},
             {SDL_SCANCODE_RIGHT, InputAction::RIGHT_PRESSED},
-            {SDL_SCANCODE_RCTRL, InputAction::ACTION_PRESSED},
-            {SDL_SCANCODE_RSHIFT, InputAction::JUMP_PRESSED},
-            {SDL_SCANCODE_DELETE, InputAction::SHOOT_PRESSED}};
+            {SDL_SCANCODE_PERIOD, InputAction::ACTION_PRESSED},
+            {SDL_SCANCODE_COMMA, InputAction::JUMP_PRESSED},
+            {SDL_SCANCODE_SLASH, InputAction::SHOOT_PRESSED}};
 
     std::unordered_map<SDL_Scancode, InputAction> keyMappingReleasedPlayer2 = {
             {SDL_SCANCODE_UP, InputAction::UP_RELEASED},
             {SDL_SCANCODE_DOWN, InputAction::DOWN_RELEASED},
             {SDL_SCANCODE_LEFT, InputAction::LEFT_RELEASED},
             {SDL_SCANCODE_RIGHT, InputAction::RIGHT_RELEASED},
-            {SDL_SCANCODE_RSHIFT, InputAction::JUMP_RELEASED},
-            {SDL_SCANCODE_DELETE, InputAction::SHOOT_PRESSED}};
+            {SDL_SCANCODE_COMMA, InputAction::JUMP_RELEASED},
+            {SDL_SCANCODE_SLASH, InputAction::SHOOT_RELEASED}};
+
+    std::unordered_map<SDL_Scancode, InputAction> cheats = {
+            {SDL_SCANCODE_Y, InputAction::END_ROUND_CHEAT},
+            {SDL_SCANCODE_U, InputAction::END_GAME_CHEAT},
+            {SDL_SCANCODE_1, InputAction::AK47_CHEAT},
+            {SDL_SCANCODE_2, InputAction::SHOTGUN_CHEAT},
+            {SDL_SCANCODE_3, InputAction::MAGNUM_CHEAT},
+            {SDL_SCANCODE_4, InputAction::COWBOYPISTOL_CHEAT},
+            {SDL_SCANCODE_5, InputAction::DUELPISTOL_CHEAT},
+            {SDL_SCANCODE_6, InputAction::SNIPER_CHEAT},
+            {SDL_SCANCODE_9, InputAction::GRENADE_CHEAT},
+            {SDL_SCANCODE_P, InputAction::ARMOR_CHEAT},
+            {SDL_SCANCODE_O, InputAction::HELMET_CHEAT},
+            {SDL_SCANCODE_I, InputAction::INFINITE_AMMO}};
 };

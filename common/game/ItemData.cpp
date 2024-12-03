@@ -1,6 +1,8 @@
 
 #include "ItemData.h"
 
+#include <utility>
+
 ItemData::ItemData(const ItemID& id, const Vector2& position, float width, float height):
         SizedObjectData(position, width, height), id(id) {}
 
@@ -18,8 +20,7 @@ ItemData& ItemData::operator=(const ItemData& other) {
     return *this;
 }
 
-ItemData::ItemData(ItemData&& other) noexcept:
-        SizedObjectData(std::move(other)), id(other.id) {}
+ItemData::ItemData(ItemData&& other) noexcept: SizedObjectData(std::move(other)), id(other.id) {}
 
 ItemData& ItemData::operator=(ItemData&& other) noexcept {
     if (this == &other)

@@ -7,8 +7,11 @@ class PhysicsObject: public CollisionObject {
 public:
     enum class Gravity : u8 { Enabled, Disabled };
 
+    enum class CollisionType : u8 { Stop, Slide, Bounce, Destroy };
+
 private:
     Gravity gravity;
+    CollisionType collisionType;
 
 protected:
     Vector2 _velocity;
@@ -16,17 +19,18 @@ protected:
 
     /**
      * Creates a new physics object
-     * @param parent The parent object
      * @param position The position of the object
      * @param layers The layer the object is in
      * @param scannedLayers The layer the object scans for collisions
      * @param width The width of the object
      * @param height The height of the object
      * @param gravity the gravity configuration for this object
+     * @param initialVelocity The initial velocity of the object
+     * @param collisionType the collision type of the object, if custom, a function must be provided
      */
-    PhysicsObject(GameObject* parent, const Vector2& position, std::bitset<LayersCount> layers,
+    PhysicsObject(const Vector2& position, std::bitset<LayersCount> layers,
                   std::bitset<LayersCount> scannedLayers, float width, float height,
-                  Gravity gravity);
+                  Gravity gravity, Vector2 initialVelocity, CollisionType collisionType);
 
 public:
     PhysicsObject() = delete;
@@ -46,7 +50,7 @@ public:
      * Calculate the new position of the object based on its velocity.
      * @param delta The time since the last update
      */
-    void processCollisions(float delta) final;
+    bool processCollisions(float delta) final;
 
     /**
      * Sets the gravity configuration for the object

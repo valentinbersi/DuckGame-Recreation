@@ -30,11 +30,6 @@ std::string GameObject::findAvaiableName(std::string name) const {
     throw NoMoreNamesAvailable(name);
 }
 
-GameObject::GameObject(GameObject* parent): _parent(parent) {
-    registerEvent<GameObject*>(Events::TreeEntered);
-    registerEvent<GameObject*>(Events::TreeExited);
-}
-
 #define NULL_CHILD "newChild is nullptr"
 #define CHILD_HAS_PARENT "newChild already has a parent"
 #define EMPTY_NAME "name is empty"
@@ -59,6 +54,9 @@ void GameObject::addChild(std::string name, GameObject* newChild) {
 
     children.emplace(std::move(name), newChild);
 
+    // newChild->start();
+    // newChild->startInternal();
+
     fire(Events::TreeEntered, newChild);
     for (GameObject* child: newChild->children | std::views::values)
         fire(Events::TreeEntered, child);
@@ -79,7 +77,10 @@ GameObject::NoMoreNamesAvailable::NoMoreNamesAvailable(const std::string& name):
 GameObject::ChildNotInTree::ChildNotInTree(const std::string& name):
         std::out_of_range(CHILD_NAME + name + NOT_IN_TREE) {}
 
-GameObject::GameObject(): _parent(nullptr) {}
+GameObject::GameObject(): _parent(nullptr), active(true) {
+    registerEvent<GameObject*>(Events::TreeEntered);
+    registerEvent<GameObject*>(Events::TreeExited);
+}
 
 #define NO_PARENT "Object has no parent"
 
@@ -91,10 +92,42 @@ void GameObject::start() {}
 
 void GameObject::update([[maybe_unused]] float delta) {}
 
+void GameObject::finish() {}
+
 void GameObject::updateInternal(const float delta) {
     for (GameObject* child: children | std::views::values) {
+        if (not child->active)
+            continue;
+
         child->update(delta);
         child->updateInternal(delta);
+    }
+
+    for (const GameObject* child: childrenToRemove) {
+        children.erase(child->name);
+        delete child;
+    }
+
+    childrenToRemove.clear();
+}
+
+void GameObject::startInternal() {
+    for (GameObject* child: children | std::views::values) {
+        if (not child->active)
+            continue;
+
+        child->start();
+        child->startInternal();
+    }
+}
+
+void GameObject::finishInternal() {
+    for (GameObject* child: children | std::views::values) {
+        if (not child->active)
+            continue;
+
+        child->finish();
+        child->finishInternal();
     }
 }
 
@@ -102,24 +135,22 @@ void GameObject::addChild(std::string name, std::unique_ptr<GameObject> newChild
     addChild(std::move(name), newChild.release());
 }
 
-std::unique_ptr<GameObject> GameObject::removeChild(const std::string& name) {
-    const HashMap<std::string, GameObject*>::node_type child(children.extract(name));
+GameObject* GameObject::removeChild(const std::string& name) {
+    GameObject* child = children.at(name);
 
-    if (child.empty())
-        throw ChildNotInTree(name);
+    fire(Events::TreeExited, child);
+    for (GameObject* object: child->children | std::views::values) fire(Events::TreeExited, object);
 
-    fire(Events::TreeExited, child.mapped());
-    for (GameObject* object: child.mapped()->children | std::views::values)
-        fire(Events::TreeExited, object);
-
-    child.mapped()->_parent = nullptr;
-    child.mapped()->name = "";
-    return std::unique_ptr<GameObject>(child.mapped());
+    child->_parent = nullptr;
+    // child->name = "";
+    child->finish();
+    child->finishInternal();
+    child->active = false;
+    childrenToRemove.push_back(child);
+    return child;
 }
 
-std::unique_ptr<GameObject> GameObject::removeChild(const GameObject* object) {
-    return removeChild(object->name);
-}
+GameObject* GameObject::removeChild(const GameObject* object) { return removeChild(object->name); }
 
 void GameObject::transferChild(const std::string& name, GameObject& parent) {
     addChild(name, parent.removeChild(name));
@@ -129,17 +160,6 @@ void GameObject::transferChild(const GameObject* object, GameObject& parent) {
     transferChild(object->name, parent);
 }
 
-GameObject* GameObject::getChild(const std::string& name) const { return children.at(name); }
-
 bool GameObject::isParent() const { return not children.empty(); }
 
-GameObject* GameObject::parent() const { return _parent; }
-
 bool GameObject::isRoot() const { return _parent == nullptr; }
-
-GameObject* GameObject::getRoot() {
-    if (isRoot())
-        return this;
-
-    return _parent->getRoot();
-}

@@ -1,9 +1,9 @@
-#ifndef DUCKGAME_CONFIGURATIONPAGE_H
-#define DUCKGAME_CONFIGURATIONPAGE_H
+#pragma once
 
 #include <QButtonGroup>
 #include <QWidget>
 
+#include "Communicator.h"
 #include "GameInfo.h"
 #include "LobbyMessage.h"
 #include "ui_configurationPage.h"
@@ -21,18 +21,19 @@ private:
     Ui::configurationPage* ui;
     QButtonGroup* CantidadPlayersGroup;
     GameInfo& gameInfo;
-    void handleJoinGame();
-    void handleNewGame();
+    Communicator& communicator;
+
+    void handlerJoinGame();  // ¿?
+    void handlerNewGame();   // ¿?
+
+    bool initMatchRequest(LobbyRequest& request);
 
 public:
-    configurationPage(QWidget* parent, GameInfo& gameInfo);
+    configurationPage(QWidget* parent, GameInfo& gameInfo, Communicator& communicator);
     int getSelectedPlayers() const;
     ~configurationPage() override;
 
 signals:
-    void newGameClicked();
-    void joinGameClicked();
+    void playMatchClicked();
     void backClicked();
 };
-
-#endif  // DUCKGAME_CONFIGURATIONPAGE_H

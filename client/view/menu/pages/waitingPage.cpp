@@ -11,14 +11,13 @@
 #include "ui_waitingPage.h"
 
 
-WaitingPage::WaitingPage(QWidget* parent, bool isHost, Communicator& communicator,
-                         GameInfo& gameInfo):
+WaitingPage::WaitingPage(QWidget* parent, Communicator& communicator, GameInfo& gameInfo):
         QWidget(parent),
         ui(new Ui::WaitingPage),
-        isHost(isHost),
         communicator(communicator),
         gameInfo(gameInfo),
-        timer(new QTimer(this)) {
+        timer(new QTimer(this)),
+        playersConnected(0) {
     ui->setupUi(this);
 
     ui->labelMatchID->setText(QString("MATCH ID: %1").arg(gameInfo.matchID));
@@ -26,10 +25,34 @@ WaitingPage::WaitingPage(QWidget* parent, bool isHost, Communicator& communicato
     connect(timer, &QTimer::timeout, this, &WaitingPage::recvServerMessage);
     timer->start(1000);
 
-    if (!isHost)
+    if (!gameInfo.isNewGame)
         ui->playButton->setVisible(false);
     else
         connect(ui->playButton, &QPushButton::clicked, this, &WaitingPage::requestStartGame);
+
+
+    ui->Duck1->setPixmap(QPixmap(getDuckIconPath(gameInfo.Duck1Color)));
+
+    if (gameInfo.playersNumber == 2) {
+        ui->Duck2->setPixmap(QPixmap(getDuckIconPath(gameInfo.Duck2Color)));
+    }
+}
+
+QString WaitingPage::getDuckIconPath(DuckData::Id id) {
+    switch (id) {
+        case DuckData::Id::White:
+            return ":/ducks/whiteDuck";
+        case DuckData::Id::Grey:
+            return ":/ducks/greyDuck";
+        case DuckData::Id::Orange:
+            return ":/ducks/orangeDuck";
+        case DuckData::Id::Yellow:
+            return ":/ducks/yellowDuck";
+        case DuckData::Id::None:
+            return "";
+    }
+
+    return "";
 }
 
 void WaitingPage::recvServerMessage() {
@@ -37,30 +60,32 @@ void WaitingPage::recvServerMessage() {
 
     if (replyMessageOpt.has_value()) {
         ReplyMessage message = replyMessageOpt.value();
+        playersConnected = message.connectedPlayers;
         ui->labelPlayersConnected->setText(
-                QString("PLAYERS CONNECTED: %1 / 4").arg(message.connectedPlayers));
+                QString("PLAYERS CONNECTED: %1 / 4").arg(playersConnected));
 
         if (message.startGame == 1) {
             emit startMatch();
             timer->stop();
         }
-
-        if (isHost && message.connectedPlayers == 4)
-            requestStartGame();
-
-    } else {
-        qDebug() << "replyMessage is NULL";
-    }  // esto nose si va
+    }
 }
 
 void WaitingPage::requestStartGame() {
+    if (playersConnected < 2) {
+        QMessageBox::warning(this, "Error",
+                             "You cannot start the game with only 1 player connected");
+        return;
+    }
+
     auto message = std::make_unique<LobbyMessage>(LobbyRequest::STARTMATCH, gameInfo.playersNumber,
-                                                  gameInfo.player1Name, gameInfo.player2Name,
                                                   gameInfo.matchID);
 
     communicator.trysend(std::move(message));
-    // tengo que chequear si se envio bien?
     ui->playButton->setEnabled(false);
 }
 
-WaitingPage::~WaitingPage() { delete ui; }
+WaitingPage::~WaitingPage() {
+    delete ui;
+    delete timer;
+}

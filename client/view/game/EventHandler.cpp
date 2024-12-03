@@ -1,6 +1,8 @@
 #include "EventHandler.h"
 
 #include <utility>
+#include <memory>
+#include "SpriteManager.h"
 
 EventHandler::EventHandler(SDL2pp::Window& window, int& window_width, int& window_height,
                            bool& twoPlayersLocal, Communicator& communicator,
@@ -18,7 +20,7 @@ void EventHandler::handleEvents() {
     SDL_Event event;
     bool scaleChanged = false;
     while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
+        if ((event.type == SDL_KEYDOWN and event.key.repeat == 0) || event.type == SDL_KEYUP) {
             SDL_Scancode scancode = event.key.keysym.scancode;
             bool isKeyDown = event.type == SDL_KEYDOWN;
             handleKeyEvent(scancode, isKeyDown);
@@ -54,6 +56,15 @@ void EventHandler::handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown) 
             InputAction m_key = it2->second;
             auto message = std::make_unique<GameMessage>(m_key, 2);
             communicator.trysend(std::move(message));
+        }
+    }
+
+    if (keyStates[SDL_SCANCODE_LCTRL]) {
+        auto cheatIt = cheats.find(scancode);
+        if (cheatIt != cheats.end()) {
+            auto message = std::make_unique<GameMessage>(cheatIt->second, 1);
+            communicator.trysend(std::move(message));
+            keyStates.clear();
         }
     }
 }

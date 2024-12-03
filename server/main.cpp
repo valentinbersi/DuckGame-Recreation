@@ -1,8 +1,59 @@
+#include <iostream>
+
+#include "Config.h"
 #include "Server.h"
-int main(int argc, char const* argv[]) {
-    if (argc != 2) {
-        return -1;
+
+int main(const int argc, char* argv[]) {
+    int opt;
+
+    while ((opt = getopt(argc, argv, "hc:m:")) != -1) {
+        switch (opt) {
+            case 'h':
+                std::cout << "Usage: " << argv[0]
+                          << " [-h] [-c config_directory] [-m maps_directory] port" << std::endl;
+                return EXIT_SUCCESS;
+            case 'c': {
+                std::string configPath(optarg);
+                if (configPath.back() != '/')
+                    configPath += '/';
+                Config::setConfigPath(std::move(configPath));
+            } break;
+            case 'm': {
+                std::string mapsPath(optarg);
+                if (mapsPath.back() != '/')
+                    mapsPath += '/';
+                Config::setMapsDirectory(std::move(mapsPath));
+            } break;
+            default:
+                std::cerr << "Usage: " << argv[0]
+                          << " [-h] [-c config_directory] [-m maps_directory] port" << std::endl;
+                return EXIT_FAILURE;
+        }
     }
-    Server server(argv[1]);
-    return server.run();
+
+    std::string port;
+
+    if (optind < argc) {
+        port = argv[optind];
+    } else {
+        std::cerr << "Usage: " << argv[0] << " [-h] [-c config_directory] [-m maps_directory] port"
+                  << std::endl;
+        return EXIT_FAILURE;
+    }
+
+
+    try {
+        Config::load();
+    } catch (const Config::BadConfigFile& e) {
+        std::cerr << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    try {
+        Server server(port);
+        return server.run();
+    } catch (const std::runtime_error& e) {
+        std::cerr << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
 }

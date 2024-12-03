@@ -1,8 +1,7 @@
 #include "GameTimer.h"
 
-GameTimer::GameTimer(const float timeout):
-        GameObject(nullptr), timeout(timeout), timeLeft(timeout), _started(false) {
-    registerEvent("Timeout");
+GameTimer::GameTimer(const float timeout): timeout(timeout), timeLeft(timeout), _started(false) {
+    registerEvent(Events::Timeout);
 }
 
 void GameTimer::start() { _started = true; }
@@ -12,9 +11,10 @@ void GameTimer::update(const float delta) {
         return;
 
     timeLeft -= delta;
+
     if (timeLeft <= 0) {
         _started = false;
-        fire("Timeout");
+        fire(Events::Timeout);
     }
 }
 
@@ -29,3 +29,5 @@ void GameTimer::reset() {
 }
 
 bool GameTimer::started() const { return _started; }
+
+float GameTimer::getTimeLeft() const { return timeLeft; }

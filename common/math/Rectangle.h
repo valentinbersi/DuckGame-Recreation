@@ -1,9 +1,11 @@
 #pragma once
 
 #include <optional>
+#include <vector>
 
 #include "IntersectionInfo.h"
 #include "Ray2D.h"
+#include "Segment2D.h"
 #include "Vector2.h"
 
 class Rectangle final {
@@ -37,7 +39,7 @@ public:
      * Get the position of the rectangle
      * @return the position of the rectangle
      */
-    Vector2 position() const;
+    [[nodiscard]] Vector2 position() const;
 
     /**
      * Set the position of the rectangle
@@ -50,7 +52,7 @@ public:
      * Get the size of the rectangle
      * @return the size of the rectangle
      */
-    Vector2 size() const;
+    [[nodiscard]] Vector2 size() const;
 
     /**
      * Set the size of the rectangle
@@ -63,7 +65,7 @@ public:
      * Get the center of the rectangle
      * @return the center of the rectangle
      */
-    Vector2 center() const;
+    [[nodiscard]] Vector2 center() const;
 
     /**
      * Set the center of the rectangle
@@ -89,9 +91,23 @@ public:
     /**
      * Check if this rectangle overlaps with another rectangle while moving with a certain velocity
      * @param rectangle The rectangle to check
-     * @return
+     * @param displacement The velocity of the rectangle
+     * @param delta The time passed since the last update
+     * @return The intersection info if the rectangles overlap, std::nullopt otherwise
      */
-    [[nodiscard]] std::optional<IntersectionInfo> overlaps(const Rectangle& rectangle,
+    [[nodiscard]] std::optional<IntersectionInfo> moveAndOverlap(const Rectangle& rectangle,
+                                                                 const Vector2& displacement,
+                                                                 float delta) const;
+
+    /**
+     * Check if this rectangle overlaps with another rectangle while moving with a certain velocity
+     * and resolve the overlapping
+     * @param rectangle The rectangle to check
+     * @param displacement The velocity of the rectangle
+     * @param delta The time passed since the last update
+     * @return The intersection info if the rectangles overlap, std::nullopt otherwise
+     */
+    [[nodiscard]] std::optional<IntersectionInfo> overlaps(Rectangle& rectangle,
                                                            const Vector2& displacement,
                                                            float delta) const;
 
@@ -101,6 +117,13 @@ public:
      * @return true if the segment overlaps with the rectangle, false otherwise
      */
     [[nodiscard]] std::optional<IntersectionInfo> overlaps(const Ray2D& ray) const;
+
+    /**
+     * Get the intersection points of a segment with this rectangle
+     * @param ray The segment to check
+     * @return The intersection points of the segment with the rectangle
+     */
+    [[nodiscard]] std::vector<Vector2> intersectionPointsWith(const Segment2D& ray) const;
 
     /**
      * Checks if two rectangles are equal aproximately

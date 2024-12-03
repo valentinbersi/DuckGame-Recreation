@@ -1,6 +1,4 @@
-#ifndef DUCKGAME_MAINMENU_H
-#define DUCKGAME_MAINMENU_H
-
+#pragma once
 #include <QWidget>
 
 #include "ui_mainMenu.h"
@@ -27,6 +25,3 @@ private:
     Ui::mainMenu* ui;
     void handleExit();
 };
-
-
-#endif  // DUCKGAME_MAINMENU_H

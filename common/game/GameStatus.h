@@ -3,9 +3,10 @@
 #include <list>
 
 #include "DuckData.h"
-#include "ServerMessage.h"
-#include "SizedObjectData.h"
 #include "ItemData.h"
+#include "ServerMessage.h"
+#include "Background.h"
+#include "SizedObjectData.h"
 
 /**
  * A struct with the current game status.
@@ -18,10 +19,16 @@ struct GameStatus final: ServerMessage {
     GameStatus& operator=(GameStatus&& other) noexcept;
     bool operator==(const GameStatus& other) const;
 
+    bool roundEnded;
+    bool gameEnded;
+    bool setEnded;
+    BackgroundID backgroundID; 
     std::list<DuckData> ducks;
     std::list<ItemData> itemPositions;
     std::list<SizedObjectData> blockPositions;
     std::list<SizedObjectData> itemSpawnerPositions;
+    std::list<SizedObjectData> boxPositions;
+    std::list<SizedObjectData> explosionPositions;
 
     /**
      * Send the GameStatus to the Client.
@@ -36,6 +43,7 @@ private:
      * @param list the list to send.
      * @param sendFunc the function of the serverProtocol to send the specific type of list.
      */
-    template<typename T>   
-    void sendList(ServerSendProtocol& serverProtocol, const std::list<T>& list, void (ServerSendProtocol::*sendFunc)(const T&));
+    template <typename T>
+    void sendList(ServerSendProtocol& serverProtocol, const std::list<T>& list,
+                  void (ServerSendProtocol::*sendFunc)(const T&));
 };

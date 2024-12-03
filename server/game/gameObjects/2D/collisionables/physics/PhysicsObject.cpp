@@ -9,24 +9,26 @@
 #include "GlobalPhysics.h"
 #include "Math.h"
 
-PhysicsObject::PhysicsObject(GameObject* parent, const Vector2& position,
-                             const std::bitset<LayersCount> layers,
+PhysicsObject::PhysicsObject(const Vector2& position, const std::bitset<LayersCount> layers,
                              const std::bitset<LayersCount> scannedLayers, const float width,
-                             const float height, const Gravity gravity):
-        CollisionObject(parent, position, layers, scannedLayers, width, height),
+                             const float height, const Gravity gravity, Vector2 initialVelocity,
+                             const CollisionType collisionType):
+        CollisionObject(position, layers, scannedLayers, width, height),
         gravity(gravity),
+        collisionType(collisionType),
+        _velocity(std::move(initialVelocity)),
         _onGround(false) {}
 
 PhysicsObject::~PhysicsObject() = default;
 
 void PhysicsObject::updateInternal(const float delta) {
     if (gravity == Gravity::Enabled)
-        _velocity += GlobalPhysics::gravity * delta;
+        _velocity += GlobalPhysics::get().gravity() * delta;
 
     CollisionObject::updateInternal(delta);
 }
 
-void PhysicsObject::processCollisions(const float delta) {
+bool PhysicsObject::processCollisions(const float delta) {
     _onGround = false;
     std::vector<std::pair<int, float>> collisionOrder;
 
@@ -55,20 +57,41 @@ void PhysicsObject::processCollisions(const float delta) {
         if (not objectPtr)
             continue;
 
-        const std::optional collisionInfo(moveAndCollide(*objectPtr, _velocity, delta));
+        const std::optional<IntersectionInfo> collisionInfo =
+                moveAndCollide(*objectPtr, _velocity, delta);
 
         if (not collisionInfo)
             continue;
 
-        if (collisionInfo->contactNormal.y() < 0)
+        if (collisionInfo->contact[2])
             _onGround = true;
 
-        _velocity += collisionInfo->contactNormal *
-                     Vector2(std::abs(_velocity.x()), std::abs(_velocity.y())) *
-                     (1 - collisionInfo->contactTime);
+        switch (collisionType) {
+            case CollisionType::Stop:
+                _velocity = Vector2::ZERO;
+                break;
+            case CollisionType::Slide:
+                _velocity += collisionInfo->contactNormal *
+                             Vector2(std::abs(_velocity.x()), std::abs(_velocity.y())) *
+                             (1 - collisionInfo->contactTime);
+                break;
+            case CollisionType::Bounce:
+                _velocity = _velocity.bounce(collisionInfo->contactNormal) * 0.2;
+                break;
+
+            case CollisionType::Destroy:
+                fire(Events::Collision, objectPtr.get());
+                return true;
+
+            default:
+                break;
+        }
+
+        fire(Events::Collision, objectPtr.get());
     }
 
     setPosition(position() + _velocity * delta);
+    return false;
 }
 
 void PhysicsObject::setGravity(const Gravity gravity) { this->gravity = gravity; }
