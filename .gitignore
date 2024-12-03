@@ -103,3 +103,6 @@ dependencies/
 
 # Python byte code
 *.pyc
+
+# Debug directory
+/cmake-build-debug/
