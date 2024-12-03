@@ -21,6 +21,7 @@
 #define ROCK "enviroment/rock.png"
 #define WEAPON_SPAWNER "enviroment/spawner.png"
 #define BOX "enviroment/box.png"
+#define EXPLOSION "particles/Explosion.png"
 
 #define WIN_PATH "sounds/end-effect.mp3"
 
@@ -148,6 +149,8 @@ void Game::getSnapshot() {
                            [](SizedObjectData& box) { return std::move(box); });
     std::ranges::transform(snapshot->itemPositions, std::back_inserter(items),
                            [](ItemData& item) { return std::move(item); });
+    std::ranges::transform(snapshot->explosionPositions, std::back_inserter(explosions),
+                       [](SizedObjectData& explosion) { return std::move(explosion); });
 }
 
 void Game::filterObjectsToRender() {
@@ -259,9 +262,15 @@ void Game::updateEffects(EnviromentRenderer& enviromentRenderer) {
         enviromentRenderer.drawBullets(bulletPositions);
     }
 
+    for (Rect& explosion: calculateObjectsPositionsAndSize(explosions)) {
+        enviromentRenderer.drawEnviroment(explosion,
+                                          Resource::get().resource(EXPLOSION).c_str());
+        //play sound
+    }
+}
+
     // y aca dibujo rebotes, explosiones y cascara
     // usando UNA lista sola de posiciones generales y filtrando usando un enum y/o map ?
-}
 
 std::list<std::pair<Vector2, Vector2>> Game::calculateSegmentPositionsAndSize(
         std::list<Segment2D>& segments) {
@@ -339,6 +348,7 @@ void Game::clearObjects() {
     boxes.clear();
     boxesToRender.clear();
     bulletPositions.clear();
+    explosions.clear();
 }
 
 Game::~Game() {
