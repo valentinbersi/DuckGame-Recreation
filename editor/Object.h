@@ -57,7 +57,7 @@ struct Object {
     // central y setearla correctamente.
     void setCenterPosition(QPointF pos, bool isTopLeftPos) {
         if (isTopLeftPos)
-            centerPos = QPointF(pos.x() + size.width() / 2, pos.y() + size.height() / 2);
+            centerPos = QPointF(pos.x() + size.width() / 2.0, pos.y() + size.height() / 2.0);
         else
             centerPos = pos;
     }

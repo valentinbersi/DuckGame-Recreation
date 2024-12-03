@@ -12,11 +12,11 @@ private:
 
     std::string objectTypeToString(ObjectType type);
     ObjectType stringToObjectType(const std::string& typeStr);
-    void addOffset();
+    void addOffset() const;
 
 public:
     explicit MapManager(MapData& mapData);
 
-    void exportMap();
+    bool exportMap(QWidget* view);
     bool importMap();
 };

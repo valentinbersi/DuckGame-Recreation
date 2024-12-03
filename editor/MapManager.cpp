@@ -2,6 +2,8 @@
 
 #include <QDebug>
 #include <fstream>
+#include <QFileDialog>
+#include <QMessageBox>
 #include <string>
 
 #include "yaml-cpp/yaml.h"
@@ -17,7 +19,7 @@
 
 MapManager::MapManager(MapData& mapData): mapData(mapData) {}
 
-void MapManager::addOffset() {
+void MapManager::addOffset() const {
     int x_min = mapData.width;
     int x_max = 0;
     int y_min = mapData.height;
@@ -27,15 +29,15 @@ void MapManager::addOffset() {
     for (Object& obj: mapData.objects) {
         QPointF topLeftPos = obj.getBoundingPos();
         if (topLeftPos.x() < x_min)
-            x_min = (int)topLeftPos.x();
+            x_min = static_cast<int>(topLeftPos.x());
         if (topLeftPos.y() < y_min)
-            y_min = (int)topLeftPos.y();
+            y_min = static_cast<int>(topLeftPos.y());
         QPointF bottomRightPos(topLeftPos.x() + obj.size.width(),
                                topLeftPos.y() + obj.size.height());
         if (bottomRightPos.x() > x_max)
-            x_max = (int)bottomRightPos.x();
+            x_max = static_cast<int>(bottomRightPos.x());
         if (bottomRightPos.y() > y_max)
-            y_max = (int)bottomRightPos.y();
+            y_max = static_cast<int>(bottomRightPos.y());
     }
 
     // calculo los offsets
@@ -51,14 +53,6 @@ void MapManager::addOffset() {
     if (x_min > OFFSET_LEFT)
         offsetLeft = 0;
 
-    //    int offsetDown = OFFSET_DOWN;
-    //    if (mapData.height - y_max < OFFSET_DOWN)
-    //        offsetDown = OFFSET_DOWN - (mapData.height - y_max);
-    //
-    //    int offsetRight = OFFSET_RIGHT;
-    //    if (mapData.width - x_max < OFFSET_RIGHT)
-    //        offsetRight = OFFSET_RIGHT - (mapData.width - x_max);
-
     // ajusto el tamaño del mapa
     mapData.width = offsetLeft + x_max + OFFSET_RIGHT;
     mapData.height = offsetUp + y_max + OFFSET_DOWN;
@@ -70,21 +64,28 @@ void MapManager::addOffset() {
     }
 }
 
-void MapManager::exportMap() {
+bool MapManager::exportMap(QWidget* view) {
     //    std::string path = "maps/" + mapData.name + ".yaml";
     //    std::ofstream fout(path);
+
+    QString mapFileName = QString::fromStdString(mapData.name) + ".yaml";
+    QString fileName = QFileDialog::getSaveFileName(view, "Select Map", mapFileName, "Archivos YAML (*.yaml)");
+
+    if(!fileName.isEmpty())
+        return false;
+
     addOffset();
-    mapData.path = "maps/" + mapData.name + ".yaml";
+    mapData.path = fileName.toStdString();
     std::ofstream fout(mapData.path);
     if (!fout.is_open()) {
         qWarning() << "Could not open save file";
-        return;
+        return false;
     }
 
     YAML::Node mapNode;
 
     mapNode["map_name"] = mapData.name;
-    mapNode["background"] = (int)mapData.backgroundID;
+    mapNode["background"] = static_cast<int>(mapData.backgroundID);
     mapNode["map_width"] = mapData.width;
     mapNode["map_height"] = mapData.height;
 
@@ -101,7 +102,7 @@ void MapManager::exportMap() {
 
     fout << mapNode;
     fout.close();
-    qDebug() << "se guardo el mapa";
+    return true;
 }
 
 std::string MapManager::objectTypeToString(ObjectType type) {
