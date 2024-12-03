@@ -201,9 +201,6 @@ ejecución con un código de error 1 y un mensaje indicando el archivo faltante.
 En cuanto al campo item name, este puede variar entre las siguientes opciones:
 
 - "grenade"
-- "banana"
-- "pew pew laser"
-- "laser rifle"
 - "ak-47"
 - "duel pistol"
 - "cowboy pistol"
