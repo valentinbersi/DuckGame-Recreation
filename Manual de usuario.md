@@ -108,7 +108,7 @@ Cada pieza de armadura (sea un helmet o chestplate) amortiguará **1** ataque ex
 #### Jugador 2:
 * Movimiento: Flechas de dirección (`←` `↑` `↓` `→`)
 * Salto: `COMMA`
-* Interactuar: `PERIOD`           (Las tres teclas juntas)
+* Interactuar: `PERIOD` (or dot)           (Las tres teclas juntas, justo al lado del LSHIFT)
 * Disparo: `SLASH`
 
 

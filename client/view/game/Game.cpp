@@ -114,7 +114,6 @@ void Game::init() {
                 running = false;
                 continue;
             }
-            //transition = false;
             soundManager.playEffect(Resource::get().resource(WIN_PATH));
             auto message = std::make_unique<GameMessage>(InputAction::NEXT_ROUND, 1);
             communicator.trysend(std::move(message));
