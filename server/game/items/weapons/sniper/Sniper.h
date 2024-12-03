@@ -1,12 +1,16 @@
+#pragma once
 
-#include "EquippableWeapon.h"
+#include "CollisionObject.h"
 #include "GameTimer.h"
+#include "ShootableGun.h"
 
-class Sniper final: public EquippableWeapon {
+class Sniper final: public ShootableGun {
     float reach;
     bool firing;
+    bool fireNextFrame;
     bool reloading;
     GameTimer* timer;
+    RayCast* bullet;
     RandomFloatGenerator randomDispersionGenerator;
 
     /**
@@ -14,11 +18,6 @@ class Sniper final: public EquippableWeapon {
      * pair to a timer.
      */
     void setNotReloading();
-
-    /**
-     * Generates a bullet
-     */
-    void generateBullet();
 
 public:
     Sniper() = delete;
@@ -37,6 +36,12 @@ public:
      * @param reloadTime The reload time of the weapon
      */
     Sniper(ItemID id, u8 ammo, Vector2 recoil, float reach, float dispersion, float reloadTime);
+
+    /**
+     * Actionates the weapon
+     * @param delta  The time since the last frame
+     */
+    void update(float delta) override;
 
     /**
      * Actionates the weapon

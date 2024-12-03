@@ -12,6 +12,7 @@
 #include "DuckData.h"
 #include "DuckState.h"
 #include "ItemID.h"
+#include "Resource.h"
 
 class SoundManager {
 
@@ -41,15 +42,15 @@ private:
 
     std::unordered_map<ItemID, Mix_Chunk*> soundMap;
     std::unordered_map<ItemID, std::string> soundMapIDS{
-            {ItemID::CowboyPistol, "assets/sounds/cowboyPistol.mp3"},
-            {ItemID::Magnum, "assets/sounds/heavyShot.mp3"},
-            {ItemID::DuelPistol, "assets/sounds/single-shot.mp3"},
-            {ItemID::Ak47, "assets/sounds/shotgun.mp3"},
-            {ItemID::Sniper, "assets/sounds/sniper.mp3"},
-            {ItemID::Shotgun, "assets/sounds/shotgun.mp3"},
-            {ItemID::LaserRifle, "assets/sounds/laser.mp3"},
-            {ItemID::PewPewLaser, "assets/sounds/pew.mp3"}
-            //{ItemID::Grenade, "assets/sounds/grenade.mp3"},
-            //{ItemID::Banana, "assets/sounds/banana.mp3"},
+            {ItemID::CowboyPistol, Resource::get().resource("sounds/cowboyPistol.mp3")},
+            {ItemID::Magnum, Resource::get().resource("sounds/heavyShot.mp3")},
+            {ItemID::DuelPistol, Resource::get().resource("sounds/single-shot.mp3")},
+            {ItemID::Ak47, Resource::get().resource("sounds/shotgun.mp3")},
+            {ItemID::Sniper, Resource::get().resource("sounds/sniper.mp3")},
+            {ItemID::Shotgun, Resource::get().resource("sounds/shotgun.mp3")},
+            {ItemID::LaserRifle, Resource::get().resource("sounds/laser.mp3")},
+            {ItemID::PewPewLaser, Resource::get().resource("sounds/pew.mp3")}
+            //{ItemID::Grenade, "sounds/grenade.mp3"},
+            //{ItemID::Banana, "sounds/banana.mp3"},
     };
 };

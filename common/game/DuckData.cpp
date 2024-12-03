@@ -52,6 +52,7 @@ DuckData& DuckData::operator=(const DuckData& other) {
     duckID = other.duckID;
     direction = other.direction;
     gunID = other.gunID;
+    bulletsFromGun = other.bulletsFromGun;
     extraData = other.extraData;
     roundsWon = other.roundsWon;
     return *this;
@@ -62,6 +63,7 @@ DuckData::DuckData(DuckData&& other) noexcept:
         duckID(other.duckID),
         direction(other.direction),
         gunID(other.gunID),
+        bulletsFromGun(std::move(other.bulletsFromGun)),
         extraData(other.extraData),
         roundsWon(other.roundsWon) {}
 
@@ -73,6 +75,7 @@ DuckData& DuckData::operator=(DuckData&& other) noexcept {
     duckID = other.duckID;
     direction = other.direction;
     gunID = other.gunID;
+    bulletsFromGun = std::move(other.bulletsFromGun);
     extraData = other.extraData;
     roundsWon = other.roundsWon;
     return *this;
@@ -83,15 +86,19 @@ DuckData::~DuckData() = default;
 #define DUCK_DIMENSIONS 2, 2.875f
 
 DuckData::DuckData(const Vector2& position, const Id id, const Direction direction,
-                   const ItemID gunID, const std::bitset<FlagCount> extraData, const u32 roundsWon):
+                   const ItemID gunID, const std::list<Segment2D> bulletsFromGun,
+                   const std::bitset<FlagCount> extraData, const u32 roundsWon):
         SizedObjectData(position, DUCK_DIMENSIONS),
         duckID(id),
         direction(direction),
         gunID(gunID),
+        bulletsFromGun(bulletsFromGun),
         extraData(extraData),
         roundsWon(roundsWon) {}
 
 bool DuckData::operator==(const DuckData& other) const {
     return position.isEqualAprox(other.position) && duckID == other.duckID &&
-           gunID == other.gunID && direction == other.direction && extraData == other.extraData;
+           gunID == other.gunID && bulletsFromGun == other.bulletsFromGun &&
+           direction == other.direction && extraData == other.extraData &&
+           roundsWon == other.roundsWon;
 }

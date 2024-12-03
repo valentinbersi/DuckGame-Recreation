@@ -83,11 +83,18 @@ private:
      */
     void updateItemSpawns(EnviromentRenderer& enviromentRenderer);
 
+    void updateBoxes(EnviromentRenderer& enviromentRenderer);
+
     /**
      * Updates the positions and scales of the items based on the camera view and renders
      * @param enviromentRenderer the renderer that draws the enviroment objects
      */
     void updateItems(EnviromentRenderer& enviromentRenderer);
+
+    void updateEffects(EnviromentRenderer& enviromentRenderer);
+
+    std::list<std::pair<Vector2, Vector2>> calculateSegmentPositionsAndSize(
+            std::list<Segment2D>& segments);
 
     // Receives the latest game status snapshot from the server and updates the game objects.
     void getSnapshot();
@@ -117,7 +124,7 @@ private:
     Timer timer;
     bool& twoPlayersLocal;
     Camera camera;
-    static const HashMap<ItemID, cppstring> weaponSprites;
+    static const HashMap<ItemID, std::string> weaponSprites;
 
     std::list<SizedObjectData> itemSpawns;
     std::list<SizedObjectData> itemSpawnsToRender;
@@ -125,14 +132,20 @@ private:
     std::list<ItemData> itemsToRender;
     std::list<SizedObjectData> blocks;
     std::list<SizedObjectData> blocksToRender;
+    std::list<SizedObjectData> boxes;
+    std::list<SizedObjectData> boxesToRender;
+    std::list<std::list<Segment2D>> bulletPositions;
     std::list<DuckData> ducks;
     std::list<DuckData> ducksToRender;
 
-    std::vector<std::string> backgrounds = {
-            "assets/background/forest-night.png", "assets/background/city.png",
-            "assets/background/forest-day.png",   "assets/background/snowy-peaks.png",
-            "assets/background/desert.png",       "assets/background/cascade-cave.png",
-            "assets/background/sunset.png",       "assets/background/dark-cave.png"};
+    std::vector<std::string> backgrounds = {Resource::get().resource("background/forest-night.png"),
+                                            Resource::get().resource("background/city.png"),
+                                            Resource::get().resource("background/forest-day.png"),
+                                            Resource::get().resource("background/snowy-peaks.png"),
+                                            Resource::get().resource("background/desert.png"),
+                                            Resource::get().resource("background/cascade-cave.png"),
+                                            Resource::get().resource("background/sunset.png"),
+                                            Resource::get().resource("background/dark-cave.png")};
 };
 
 template <typename SizedObject>

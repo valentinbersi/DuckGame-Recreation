@@ -19,6 +19,8 @@ class ClientRecvProtocol: public ReceiveProtocol {
 private:
     Vector2 recvVector2();
 
+    Segment2D recvSegment();
+
     Rectangle recvRectangle();
 
     std::list<DuckData> recvDuckData();

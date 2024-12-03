@@ -10,6 +10,12 @@ Vector2 ClientRecvProtocol::recvVector2() {
     return Vector2(x, y);
 }
 
+Segment2D ClientRecvProtocol::recvSegment() {
+    Vector2 start = recvVector2();
+    Vector2 end = recvVector2();
+    return Segment2D(start, end);
+}
+
 Rectangle ClientRecvProtocol::recvRectangle() {
     Vector2 position = recvVector2();
     Vector2 size = recvVector2();
@@ -22,11 +28,17 @@ std::list<DuckData> ClientRecvProtocol::recvDuckData() {
     for (u16 i(0); i < size; ++i) {
         DuckData::Id duckID = static_cast<DuckData::Id>(recvByte());
         DuckData::Direction direction = static_cast<DuckData::Direction>(recvByte());
+        std::list<Segment2D> bulletsFromGun;
         u8 gunID = static_cast<ItemID>(recvByte());
+        u16 bulletsAmount = recvShort();
+        for (u16 j(0); j < bulletsAmount; ++j) {
+            Segment2D segment = recvSegment();
+            bulletsFromGun.push_back(segment);
+        }
         u16 actions = recvShort();
         u32 roundsWon = recvInt();
         Vector2 position = recvVector2();
-        ducks.emplace_back(position, duckID, direction, gunID, actions, roundsWon);
+        ducks.emplace_back(position, duckID, direction, gunID, bulletsFromGun, actions, roundsWon);
     }
     return ducks;
 }
@@ -60,6 +72,7 @@ GameStatus ClientRecvProtocol::recvGameStatus() {
     status.itemPositions = recvItemData();
     status.blockPositions = recvBlockPositions();
     status.itemSpawnerPositions = recvBlockPositions();
+    status.boxPositions = recvBlockPositions();
     return status;
 }
 

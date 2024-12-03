@@ -22,7 +22,7 @@ ItemSpawner::ItemSpawner(Vector2 position):
 }
 
 void ItemSpawner::onTimeout() {
-    std::unique_ptr<Item> item = ItemFactory::createItem(ItemID::randomItemID());
+    std::unique_ptr<Item> item = ItemFactory::createItem(ItemID::randomItemID(), 0, Force::Yes);
 
     const float itemHalfHeight = item->getShape().size().y() / 2;
     const float spawnerHalfHeight = getShape().size().y() / 2;

@@ -14,49 +14,174 @@
    <string>ViewController</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="autoFillBackground">
     <bool>false</bool>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,7">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QHBoxLayout" name="configLayout">
       <property name="spacing">
-       <number>0</number>
+       <number>50</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMinimumSize</enum>
+      </property>
+      <property name="leftMargin">
+       <number>100</number>
+      </property>
+      <property name="topMargin">
+       <number>10</number>
+      </property>
+      <property name="rightMargin">
+       <number>100</number>
+      </property>
+      <property name="bottomMargin">
+       <number>10</number>
       </property>
       <item>
-       <widget class="QLabel" name="label">
-        <property name="styleSheet">
-         <string notr="true">    color: white;
-                                        background-color: rgb(165, 29, 45);
-                                        padding: 10px;
-                                        border-radius: 10px;
-                                        margin: 5px;</string>
+       <layout class="QVBoxLayout" name="MapNameLayout" stretch="1,2">
+        <property name="spacing">
+         <number>0</number>
         </property>
-        <property name="text">
-         <string>Map Name:</string>
-        </property>
-       </widget>
+        <item>
+         <widget class="QLabel" name="labelMapName">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: white;
+background-color: rgb(165, 29, 45);
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;</string>
+          </property>
+          <property name="text">
+           <string>MAP NAME</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEditMapName">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(165, 29, 45);
+background-color: rgb(229, 165, 10);
+border: 2px solid rgb(165, 29, 45);
+border-bottom-left-radius: 10px;
+border-bottom-right-radius: 10px;
+                                                </string>
+          </property>
+          <property name="placeholderText">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEditMapName">
-        <property name="styleSheet">
-         <string notr="true">color: rgb(165, 29, 45);
-                                        background-color: rgba(229, 165, 10, 0.95);
-                                        padding: 10px;
-                                        border-radius: 10px;
-                                        margin: 5px;
-                                        border-color: rgb(165, 29, 45);
-                                    </string>
+       <layout class="QVBoxLayout" name="BackgroundLayout" stretch="2,2">
+        <property name="spacing">
+         <number>0</number>
         </property>
-        <property name="placeholderText">
-         <string/>
-        </property>
-       </widget>
+        <item>
+         <widget class="QLabel" name="labelBackground">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: white;
+background-color: rgb(165, 29, 45);
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;</string>
+          </property>
+          <property name="text">
+           <string> SELECT BACKGROUND</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListWidget" name="backgroundList">
+          <property name="styleSheet">
+           <string notr="true">color: rgb(165, 29, 45);
+background-color: rgb(229, 165, 10);
+border: 2px solid rgb(165, 29, 45);
+border-bottom-left-radius: 10px;
+border-bottom-right-radius: 10px;
+
+QListWidget::item:selected{
+background-color: rgb(165, 29, 45);
+}
+                                              </string>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAsNeeded</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="tabKeyNavigation">
+           <bool>true</bool>
+          </property>
+          <property name="showDropIndicator" stdset="0">
+           <bool>false</bool>
+          </property>
+          <property name="dragEnabled">
+           <bool>false</bool>
+          </property>
+          <property name="dragDropMode">
+           <enum>QAbstractItemView::DragDrop</enum>
+          </property>
+          <property name="defaultDropAction">
+           <enum>Qt::CopyAction</enum>
+          </property>
+          <property name="movement">
+           <enum>QListView::Free</enum>
+          </property>
+          <property name="viewMode">
+           <enum>QListView::ListMode</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
     <item>
      <widget class="QGraphicsView" name="graphicsView">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="styleSheet">
        <string notr="true">background: transparent;</string>
       </property>
@@ -96,8 +221,8 @@
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(165, 29, 45);
-color: white;
-</string>
+                    color: white;
+                </string>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -124,14 +249,14 @@ color: white;
    <property name="styleSheet">
     <string notr="true">background-color:rgb(229, 165, 10);
 
-QPushButton {
-    background-color: rgb(229, 165, 10);
-    border-radius: 5px;
-}
+                    QPushButton {
+                    background-color: rgb(229, 165, 10);
+                    border-radius: 5px;
+                    }
 
-QPushButton:checked {
-    background-color: rgb(165, 29, 45);
-}</string>
+                    QPushButton:checked {
+                    background-color: rgb(165, 29, 45);
+                    }</string>
    </property>
    <property name="allowedAreas">
     <set>Qt::AllToolBarAreas</set>

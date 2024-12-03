@@ -3,6 +3,7 @@
 #include <list>
 #include <vector>
 
+#include "Box.h"
 #include "GameObject.h"
 #include "ItemSpawner.h"
 #include "LevelData.h"
@@ -14,6 +15,13 @@
 class Level final: public GameObject {
     std::vector<TerrainBlock*> terrainBlocks;
     std::vector<ItemSpawner*> itemSpawners;
+    std::list<Box*> boxes;
+
+    /**
+     * Event manager for tree exited event
+     * @param object The child that was removed
+     */
+    void onTreeExited(GameObject* object) override;
 
 public:
     /**
@@ -32,4 +40,23 @@ public:
      * @return The positions of all the item spawner in the level
      */
     std::list<SizedObjectData> itemSpawnerStatus() const;
+
+    /**
+     * Get the position of all the boxes in the level
+     * @return The positions of all the boxes in the level
+     */
+    std::list<SizedObjectData> boxStatus() const;
+
+
+    /**
+     * Removes all boxes that has been destroyed
+     * @param delta The time since the last frame, not used
+     * in this case
+     */
+    void update(float delta) override;
+
+    /**
+     * Destroy the Level object
+     */
+    ~Level() override;
 };

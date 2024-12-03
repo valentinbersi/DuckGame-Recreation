@@ -1,11 +1,15 @@
 #pragma once
 
-#include "EquippableWeapon.h"
+#include "ShootableGun.h"
 
-class LongPistol final: public EquippableWeapon {
+
+class CollisionObject;
+class LongPistol final: public ShootableGun {
     float reach;
     bool firing;
+    bool fireNextFrame;
     RandomFloatGenerator randomGenerator;
+    RayCast* bullet;
 
 public:
     LongPistol() = delete;
@@ -25,14 +29,18 @@ public:
     LongPistol(ItemID id, u8 ammo, Vector2 recoil, float reach, float dispersion);
 
     /**
+     * Remove the bullet shot in the previous frame
+     * @param delta The time since the last frame
+     */
+    void update(float delta) override;
+
+    /**
      * Actionates the weapon
-     * @return The recoil of the weapon
      */
     void actionate() override;
 
     /**
      * Deactionates the weapon
-     * @return The recoil of the weapon
      */
     void deactionate() override;
 

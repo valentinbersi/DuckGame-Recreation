@@ -23,7 +23,7 @@ public:
         NONE = 0x0C
     };
 
-    ItemID() = delete;
+    ItemID() = default;
 
     // cppcheck-suppress noExplicitConstructor
     ItemID(Value value);  // NOLINT(runtime/explicit)

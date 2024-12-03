@@ -11,7 +11,7 @@
 class Spritesheet {
 public:
     // Constructor.
-    Spritesheet(const char* path1, const char* path2, SDL2pp::Renderer& renderer);
+    Spritesheet(std::string path1, std::string path2, SDL2pp::Renderer& renderer);
 
     // Destructor.
     ~Spritesheet() = default;
@@ -22,27 +22,28 @@ public:
 
     void damageEffects(double& m_x, double& m_y);
 
-    void resetDamageEffects();
+    void resetDamageEffects() const;
 
     // Draws the selected sprite, using the textures that 'TextureManagers' has, depending if it's a
     // feather or not. Works with flipped sprites ;)
-    void drawSelectedSprite(SDL2pp::Rect& position, bool flip,
-                            bool feathers /*, bool isRightFeather*/);
+    void drawSelectedSprite(const SDL2pp::Rect& position, bool flip,
+                            bool feathers /*, bool isRightFeather*/) const;
 
     // Draws the chestplate of the player... and same logic of the previous method.
-    void drawChestplate(SDL2pp::Rect& playerPosition, bool flip);
+    void drawChestplate(const SDL2pp::Rect& playerPosition, bool flip) const;
 
     // Blah blah blah, same logic of the previous method.
-    void drawHelmet(SDL2pp::Rect& playerPosition, bool flip);
+    void drawHelmet(const SDL2pp::Rect& playerPosition, bool flip, bool lookingUp, bool playingDead,
+                    bool inAir) const;
 
     // Yes
-    void drawWeapon(SDL2pp::Rect& playerPosition, bool flip, const std::string& path);
+    void drawWeapon(const SDL2pp::Rect& playerPosition, bool flip, const std::string& path) const;
 
     // ...
-    void drawEffects(SDL2pp::Rect& playerPosition, bool flip, const std::string& path);
+    void drawEffects(const SDL2pp::Rect& playerPosition, bool flip, const std::string& path);
 
     //
-    void drawWin(SDL2pp::Rect& playerPosition, bool flip);
+    void drawWin(const SDL2pp::Rect& playerPosition, bool flip, bool endGame) const;
 
     // Returns the width of the clip.
     int getClipWidth() const;
@@ -57,7 +58,7 @@ public:
 private:
     SDL_Rect m_clip;
     SDL2pp::Renderer& renderer;
-    const char* pathPlayer;
-    const char* pathFeather;
+    std::string pathPlayer;
+    std::string pathFeather;
     float angle;
 };

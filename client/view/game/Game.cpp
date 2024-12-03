@@ -8,20 +8,21 @@
 
 #define WINDOW_TITLE "DuckGame"
 
-#define greySheet "assets/player/greyDuck.png"
-#define orangeSheet "assets/player/orangeDuck.png"
-#define whiteSheet "assets/player/whiteDuck.png"
-#define yellowSheet "assets/player/yellowDuck.png"
+#define greySheet "player/greyDuck.png"
+#define orangeSheet "player/orangeDuck.png"
+#define whiteSheet "player/whiteDuck.png"
+#define yellowSheet "player/yellowDuck.png"
 
-#define greyFeathers "assets/player/greyDuckFeathers.png"
-#define orangeFeathers "assets/player/orangeDuckFeathers.png"
-#define whiteFeathers "assets/player/whiteDuckFeathers.png"
-#define yellowFeathers "assets/player/yellowDuckFeathers.png"
+#define greyFeathers "player/greyDuckFeathers.png"
+#define orangeFeathers "player/orangeDuckFeathers.png"
+#define whiteFeathers "player/whiteDuckFeathers.png"
+#define yellowFeathers "player/yellowDuckFeathers.png"
 
-#define ROCK "assets/enviroment/rock.png"
-#define WEAPON_SPAWNER "assets/enviroment/spawner.png"
+#define ROCK "enviroment/rock.png"
+#define WEAPON_SPAWNER "enviroment/spawner.png"
+#define BOX "enviroment/box.png"
 
-#define WIN_PATH "assets/sounds/end-effect.mp3"
+#define WIN_PATH "sounds/end-effect.mp3"
 
 using SDL2pp::NullOpt;
 using SDL2pp::Rect;
@@ -30,13 +31,15 @@ using SDL2pp::SDL;
 using SDL2pp::Surface;
 using SDL2pp::Texture;
 
-const HashMap<ItemID, cppstring> Game::weaponSprites = {
-        {ItemID::Magnum, "assets/weapons/Magnum.png"},
-        {ItemID::CowboyPistol, "assets/weapons/CowboyPistol.png"},
-        {ItemID::DuelPistol, "assets/weapons/DuelPistol.png"},
-        {ItemID::Shotgun, "assets/weapons/Shotgun.png"},
-        {ItemID::Sniper, "assets/weapons/Sniper.png"},
-        {ItemID::Ak47, "assets/weapons/Ak47.png"}};
+const HashMap<ItemID, std::string> Game::weaponSprites = {
+        {ItemID::Magnum, "weapons/Magnum.png"},
+        {ItemID::CowboyPistol, "weapons/CowboyPistol.png"},
+        {ItemID::DuelPistol, "weapons/DuelPistol.png"},
+        {ItemID::Shotgun, "weapons/Shotgun.png"},
+        {ItemID::Sniper, "weapons/Sniper.png"},
+        {ItemID::Ak47, "weapons/Ak47.png"},
+        {ItemID::Helmet, "weapons/HelmetBig.png"},
+        {ItemID::Armor, "weapons/ChestplateBig.png"}};
 
 Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         running(true),
@@ -75,26 +78,34 @@ void Game::init() {
 
         renderer.Clear();
 
-        camera.update(ducks, deltaTime);
+        camera.update(ducksToRender, deltaTime);
         filterObjectsToRender();
 
         showBackground(backgroundTexture);
         updatePlayers(spritesMapping);
         updateBlocks(enviromentRenderer);
+        updateBoxes(enviromentRenderer);
         updateItemSpawns(enviromentRenderer);
         updateItems(enviromentRenderer);
+        updateEffects(enviromentRenderer);  // aca se hacer marcas de bala, explosiones, rebotes y
+                                            // cascaras de banana
 
         hudManager.check(ducks, ducksToRender, spritesMapping);
         if (transition) {
+            if (gameFinished) {
+                running = false;
+                continue;
+            }
             transition = false;
-            soundManager.playEffect(WIN_PATH);
+            soundManager.playEffect(Resource::get().resource(WIN_PATH));
             auto message = std::make_unique<GameMessage>(InputAction::NEXT_ROUND, 1);
             communicator.trysend(std::move(message));
+            clearObjects();
+            camera.noDucksArrived();
 
         } else {
             renderer.Present();
-        }  // the renderer is presented inside the hudManager if the round/set/game is finished. in
-           // other case...
+        }
 
         handler.handleEvents();
 
@@ -121,17 +132,20 @@ void Game::getSnapshot() {
     roundFinished = snapshot->roundEnded;
     setFinished = snapshot->setEnded;
     gameFinished = snapshot->gameEnded;
+
     std::ranges::transform(snapshot->ducks, std::back_inserter(ducks),
                            [](DuckData& duck) { return std::move(duck); });
 
     for (auto& duck: snapshot->ducks)
-        if (!duck.extraData[DuckData::Flag::Index::IsDead])
+        if (!duck.extraData.test(DuckData::Flag::Index::IsDead))
             ducksToRender.push_back(std::move(duck));
 
     std::ranges::transform(snapshot->blockPositions, std::back_inserter(blocks),
                            [](SizedObjectData& block) { return std::move(block); });
     std::ranges::transform(snapshot->itemSpawnerPositions, std::back_inserter(itemSpawns),
                            [](SizedObjectData& itemSpawner) { return std::move(itemSpawner); });
+    std::ranges::transform(snapshot->boxPositions, std::back_inserter(boxes),
+                           [](SizedObjectData& box) { return std::move(box); });
     std::ranges::transform(snapshot->itemPositions, std::back_inserter(items),
                            [](ItemData& item) { return std::move(item); });
 }
@@ -146,6 +160,10 @@ void Game::filterObjectsToRender() {
     for (SizedObjectData& itemSpawn: itemSpawns)
         if (viewRect.overlaps(itemSpawn.rectangle))
             itemSpawnsToRender.push_back(std::move(itemSpawn));
+
+    for (SizedObjectData& box: boxes)
+        if (viewRect.overlaps(box.rectangle))
+            boxesToRender.push_back(std::move(box));
 
     for (ItemData& item: items)
         if (viewRect.overlaps(item.rectangle))
@@ -191,6 +209,9 @@ void Game::updatePlayers(
 
         soundManager.checkSounds(state);
 
+        if (!duck.bulletsFromGun.empty())
+            bulletPositions.push_back(duck.bulletsFromGun);
+
         spritesMapping.at(duck.duckID)->updatePosition(screenPositionX, screenPositionY);
         spritesMapping.at(duck.duckID)->setScale(scale);
         spritesMapping.at(duck.duckID)->update(state);
@@ -199,12 +220,18 @@ void Game::updatePlayers(
 
 void Game::updateBlocks(EnviromentRenderer& enviromentRenderer) {
     for (Rect& block: calculateObjectsPositionsAndSize(blocksToRender))
-        enviromentRenderer.drawEnviroment(block, ROCK);
+        enviromentRenderer.drawEnviroment(block, Resource::get().resource(ROCK).c_str());
 }
 
 void Game::updateItemSpawns(EnviromentRenderer& enviromentRenderer) {
     for (Rect& itemSpawn: calculateObjectsPositionsAndSize(itemSpawnsToRender))
-        enviromentRenderer.drawEnviroment(itemSpawn, WEAPON_SPAWNER);
+        enviromentRenderer.drawEnviroment(itemSpawn,
+                                          Resource::get().resource(WEAPON_SPAWNER).c_str());
+}
+
+void Game::updateBoxes(EnviromentRenderer& enviromentRenderer) {
+    for (Rect& box: calculateObjectsPositionsAndSize(boxesToRender))
+        enviromentRenderer.drawEnviroment(box, Resource::get().resource(BOX).c_str());
 }
 
 void Game::updateItems(EnviromentRenderer& enviromentRenderer) {
@@ -213,10 +240,57 @@ void Game::updateItems(EnviromentRenderer& enviromentRenderer) {
     auto itemsIt = itemsToRender.begin();
 
     while (rectsIt != rectsToDraw.end() && itemsIt != itemsToRender.end()) {
-        enviromentRenderer.drawEnviroment(*rectsIt, weaponSprites.at(itemsIt->id));
+        enviromentRenderer.drawEnviroment(
+                *rectsIt, Resource::get().resource(weaponSprites.at(itemsIt->id)).c_str());
         ++rectsIt;
         ++itemsIt;
     }
+}
+
+void Game::updateEffects(EnviromentRenderer& enviromentRenderer) {
+    if (!bulletPositions.empty()) {
+        std::list<Segment2D> flattenedBulletPositions;
+        for (const auto& bulletList: bulletPositions) {
+            flattenedBulletPositions.insert(flattenedBulletPositions.end(), bulletList.begin(),
+                                            bulletList.end());
+        }
+        std::list<std::pair<Vector2, Vector2>> bulletPositions =
+                calculateSegmentPositionsAndSize(flattenedBulletPositions);
+        enviromentRenderer.drawBullets(bulletPositions);
+    }
+
+    // y aca dibujo rebotes, explosiones y cascara
+    // usando UNA lista sola de posiciones generales y filtrando usando un enum y/o map ?
+}
+
+std::list<std::pair<Vector2, Vector2>> Game::calculateSegmentPositionsAndSize(
+        std::list<Segment2D>& segments) {
+    std::list<std::pair<Vector2, Vector2>> positionsToDraw;
+
+    for (auto& segment: segments) {
+        Segment2D cutSegment = segment.cut(20.0f);
+        const float positionScaleX =
+                static_cast<float>(window_width) / camera.getViewRect().size().x();
+        const float positionScaleY =
+                static_cast<float>(window_height) / camera.getViewRect().size().y();
+
+        const float startX =
+                (cutSegment.start().x() - camera.getViewRect().center().x()) * positionScaleX +
+                static_cast<float>(window_width) / 2;
+        const float startY =
+                (cutSegment.start().y() - camera.getViewRect().center().y()) * positionScaleY +
+                static_cast<float>(window_height) / 2;
+        const float endX =
+                (cutSegment.end().x() - camera.getViewRect().center().x()) * positionScaleX +
+                static_cast<float>(window_width) / 2;
+        const float endY =
+                (cutSegment.end().y() - camera.getViewRect().center().y()) * positionScaleY +
+                static_cast<float>(window_height) / 2;
+
+        positionsToDraw.emplace_back(Vector2(startX, startY), Vector2(endX, endY));
+    }
+
+    return positionsToDraw;
 }
 
 void Game::showBackground(Texture& backgroundTexture) {
@@ -233,26 +307,38 @@ void Game::showBackground(Texture& backgroundTexture) {
 std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>> Game::createSpritesMapping() {
     std::unordered_map<DuckData::Id, std::unique_ptr<SpriteManager>> spritesMapping;
 
-    spritesMapping.emplace(DuckData::Id::White,
-                           std::make_unique<SpriteManager>(whiteSheet, whiteFeathers, renderer));
-    spritesMapping.emplace(DuckData::Id::Orange,
-                           std::make_unique<SpriteManager>(orangeSheet, orangeFeathers, renderer));
-    spritesMapping.emplace(DuckData::Id::Yellow,
-                           std::make_unique<SpriteManager>(yellowSheet, yellowFeathers, renderer));
-    spritesMapping.emplace(DuckData::Id::Grey,
-                           std::make_unique<SpriteManager>(greySheet, greyFeathers, renderer));
+    spritesMapping.emplace(
+            DuckData::Id::White,
+            std::make_unique<SpriteManager>(Resource::get().resource(whiteSheet),
+                                            Resource::get().resource(whiteFeathers), renderer));
+    spritesMapping.emplace(
+            DuckData::Id::Orange,
+            std::make_unique<SpriteManager>(Resource::get().resource(orangeSheet),
+                                            Resource::get().resource(orangeFeathers), renderer));
+    spritesMapping.emplace(
+            DuckData::Id::Yellow,
+            std::make_unique<SpriteManager>(Resource::get().resource(yellowSheet),
+                                            Resource::get().resource(yellowFeathers), renderer));
+    spritesMapping.emplace(
+            DuckData::Id::Grey,
+            std::make_unique<SpriteManager>(Resource::get().resource(greySheet),
+                                            Resource::get().resource(greyFeathers), renderer));
 
     return spritesMapping;
 }
 
 void Game::clearObjects() {
     ducks.clear();
+    ducksToRender.clear();
     blocks.clear();
     blocksToRender.clear();
     itemSpawns.clear();
     itemSpawnsToRender.clear();
     items.clear();
     itemsToRender.clear();
+    boxes.clear();
+    boxesToRender.clear();
+    bulletPositions.clear();
 }
 
 Game::~Game() {

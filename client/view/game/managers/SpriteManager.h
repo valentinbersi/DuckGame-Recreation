@@ -17,7 +17,7 @@
 class SpriteManager {
 public:
     // Constructor
-    SpriteManager(const char* path1, const char* path2,
+    SpriteManager(std::string path1, std::string path2,
                   SDL2pp::Renderer& renderer /*, int& window_width, int& window_height*/);
 
     // Destructor
@@ -33,7 +33,7 @@ public:
     //  accordingly. Finally, it draws the feathers based on whether the duck has a weapon equipped.
     void draw(int col, int row);
 
-    void drawWin();
+    void drawWin(bool endGame);
 
     // Updates the position of the duck.
     void updatePosition(float new_x, float new_y);
@@ -75,7 +75,7 @@ private:
     SDL2pp::Rect calculateBasePosition();
 
     // Adjusts the position of the sprite for the feathers.
-    void adjustForFeathers(SDL2pp::Rect& position);
+    void adjustForFeathers(SDL2pp::Rect& position) const;
 
     // Adjusts the position of the sprite for the helmet.
     void adjustForHelmet(SDL2pp::Rect& position);
@@ -84,8 +84,8 @@ private:
     void adjustForChestplate(SDL2pp::Rect& position);
 
 
-    const char* path1;
-    const char* path2;
+    std::string path1;
+    std::string path2;
     float scale;
     bool isMoving;
     bool inAir;

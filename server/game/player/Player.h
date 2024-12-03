@@ -18,13 +18,15 @@ class Player final: public PhysicsObject {
     DuckData::Direction _lastViewDirection;
     std::bitset<DuckData::FlagCount> flags;
     Input input;
-    EquippableWeapon* weapon;
+    EquippableItem* item;
     bool isJumping;
     bool interactWithItem;
     bool actionateWeapon;
     bool canKeepJumping;
     GameTimer* jumpTimer;
     u32 wonRounds;
+    u8 armorProtection;
+    u8 helmetProtection;
 
     /**
      * Event manager for the player colliding with an item
@@ -89,9 +91,14 @@ class Player final: public PhysicsObject {
     void performActions(float delta);
 
     /**
-     * Removes the player Weapon
+     * Removes the player Item
      */
-    void removeWeapon();
+    void removeItem();
+
+    /**
+     * Updates the data of the duck
+     */
+    void updateData();
 
 public:
     Player() = delete;
@@ -118,7 +125,12 @@ public:
     void update(float delta) override;
 
     /**
-     * Kill the player
+     * Damages the player, if it doesn't have any protection, it kills the player
+     */
+    void damage();
+
+    /**
+     * Kills the player
      */
     void kill();
 
@@ -234,7 +246,46 @@ public:
     void reset();
 
     /**
-     *
+     * Check if the player is dead
+     * @return true if the player is dead, false otherwise
      */
     bool isDead() const;
+
+    /**
+     * Equip the armor to the player
+     * @returns true if the player was equipped with the armor, false otherwise
+     */
+    bool equipArmor(u8 protection);
+
+    /**
+     * Equip the helmet to the player
+     * @returns true if the player was equipped with the armor, false otherwise
+     */
+    bool equipHelmet(u8 protection);
+
+    /**
+     * Set the player's item
+     * @param id the id of the item
+     * @param ammo the ammo of the item
+     * @param force if the item should be set even if the player has an item already
+     */
+    void setItem(ItemID id, u8 ammo, Force force = Force::No);
+
+    /**
+     * Sets ammo to the actua item of the player
+     * @param ammo the ammo to set
+     */
+    void setAmmo(u8 ammo);
+
+    /**
+     * Get the protection of the player's armor
+     * @return the protection of the player's armor
+     */
+    bool isLookingUp() const;
+
+    /**
+     * Get the aiming direction of the player
+     * @return the aiming direction of the player
+     */
+    Vector2 aimingDirection() const;
 };

@@ -122,6 +122,20 @@ public:
      */
     Player& getPlayer(PlayerID playerID) const;
 
+
+    /**
+     *  Gives an item to a player
+     * @param playerID the id of the player to give the item
+     * @param itemID the id of the item to give
+     */
+    void giveItemToPlayer(PlayerID playerID, ItemID itemID);
+
+    /**
+     * Gives Full Ammo to the player with the given id
+     * @param playerID the id of the player to give full ammo
+     */
+    void giveFullAmmoToPlayer(PlayerID playerID);
+
     /**
      * Get the number of players in the match
      * @return the number of players in the match
@@ -172,4 +186,14 @@ public:
      * Clears previous State and loads a new one
      */
     void loadNewState();
+
+    /**
+     * Finish the match by force
+     */
+    void endGame();
+
+    /**
+     * Finish the round by force
+     */
+    void endRound();
 };

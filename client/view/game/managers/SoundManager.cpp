@@ -1,10 +1,12 @@
 #include "SoundManager.h"
 
-#define MUSIC_PATH "assets/sounds/ost.ogg"
+#include "Resource.h"
+
+#define MUSIC_PATH "sounds/ost.ogg"
 #define DEFAULT_VOLUME 10
 
-#define CUACK "assets/sounds/cuack.mp3"
-#define NO_MORE_BULLETS "assets/sounds/noMoreBullets.mp3"
+#define CUACK "sounds/cuack.mp3"
+#define NO_MORE_BULLETS "sounds/noMoreBullets.mp3"
 
 SoundManager::SoundManager(): firstFrameDead(true) {
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 512) < 0)
@@ -22,7 +24,8 @@ SoundManager::~SoundManager() {
 }
 
 void SoundManager::playMusic() {
-    Mix_Music* music = Mix_LoadMUS(MUSIC_PATH);
+    const std::string pathToMusic(Resource::get().resource(MUSIC_PATH));
+    Mix_Music* music = Mix_LoadMUS(pathToMusic.c_str());
     Mix_PlayMusic(music, -1);
     Mix_VolumeMusic(DEFAULT_VOLUME);
 }
@@ -64,9 +67,9 @@ void SoundManager::checkSounds(const DuckState& state) {
         playSound(state.gunEquipped);
     if (state.isDead || firstFrameDead) {
         firstFrameDead = false;
-        playEffect(CUACK);
+        playEffect(Resource::get().resource(CUACK));
     }
     if (state.noMoreBullets)
-        playEffect(NO_MORE_BULLETS);
+        playEffect(Resource::get().resource(NO_MORE_BULLETS));
     // faltan sonidos de fin de ronda, fin de partida y muerte
 }

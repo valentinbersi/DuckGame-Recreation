@@ -3,8 +3,10 @@
 #include <algorithm>
 #include <string>
 
-#define SET_FINISHED "assets/hud/set.PNG"
-#define LOADING_IMAGE "assets/hud/loading.png"
+#include "Resource.h"
+
+#define SET_FINISHED "hud/set.PNG"
+#define LOADING_IMAGE "hud/loading.png"
 
 using SDL2pp::NullOpt;
 using SDL2pp::Rect;
@@ -23,36 +25,38 @@ HudManager::HudManager(int& windowWidth, int& windowHeight, Renderer& renderer, 
         setFinished(setFinished),
         gameFinished(gameFinished) {}
 
-// FALTA DIBUJAR UN + 1 CON UNA FONT AMARILLA EN LA CABEZA DEL PATO CUANDO FINALIZA LA RONDA (CUANDO
-// LA GANA)
-
-
 void HudManager::check(
-        std::list<DuckData>& ducks, std::list<DuckData> ducksToRender,
+        std::list<DuckData>& ducks, std::list<DuckData>& ducksToRender,
         const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
-    if (roundFinished) {
-        finishedRound(ducks, spritesMapping);
-        roundFinished = false;
+    if (gameFinished) {
+        winnerShow(ducksToRender, spritesMapping);
+        finishedGame(ducks, spritesMapping);
+
     } else if (setFinished) {
+        winnerShow(ducksToRender, spritesMapping);
         finishedSet(ducks, spritesMapping);
-        finishedRound(ducksToRender, spritesMapping);
-        setFinished = false;
-    } else if (gameFinished) {
-        // finishedGame();
+        finishedRound();
+
+    } else if (roundFinished) {
+        winnerShow(ducksToRender, spritesMapping);
+        finishedRound();
     }
+
+    resetFlags();
 }
 
-void HudManager::finishedRound(
+void HudManager::winnerShow(
         std::list<DuckData>& ducksToRender,
         const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
     auto& winner = ducksToRender.front();
-    spritesMapping.at(winner.duckID)->drawWin();
+
+    spritesMapping.at(winner.duckID)->drawWin(gameFinished);
     renderer.Present();
 
     SDL_Delay(1000);
+}
 
-    int centerX = windowWidth / 2;
-    int centerY = windowHeight / 2;
+void HudManager::toBlackTransition(int centerX, int centerY) const {
     int size = 10;
 
     int maxSize = std::max(windowWidth, windowHeight);
@@ -75,8 +79,15 @@ void HudManager::finishedRound(
 
     SDL_SetRenderDrawColor(renderer.Get(), 0, 0, 0, 255);
     SDL_RenderClear(renderer.Get());
+}
 
-    Texture& imageTexture = TextureManager::getTexture(LOADING_IMAGE, renderer);
+void HudManager::finishedRound() const {
+    int centerX = windowWidth / 2;
+    int centerY = windowHeight / 2;
+    toBlackTransition(centerX, centerY);
+
+    Texture& imageTexture =
+            TextureManager::getTexture(Resource::get().resource(LOADING_IMAGE), renderer);
 
     int imageWidth = imageTexture.GetWidth();
     int imageHeight = imageTexture.GetHeight();
@@ -97,7 +108,8 @@ void HudManager::finishedRound(
 void HudManager::finishedSet(
         std::list<DuckData>& ducks,
         const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
-    Texture& setTexture = TextureManager::getTexture(SET_FINISHED, renderer);
+    Texture& setTexture =
+            TextureManager::getTexture(Resource::get().resource(SET_FINISHED), renderer);
 
     int newSize = std::min(windowWidth, windowHeight) / 2;
 
@@ -133,6 +145,41 @@ void HudManager::finishedSet(
     SDL_Delay(5000);
 }
 
+void HudManager::finishedGame(
+        std::list<DuckData>& ducks,
+        const HashMap<DuckData::Id, std::unique_ptr<SpriteManager>>& spritesMapping) {
+
+    int centerX = windowWidth / 2;
+    int centerY = windowHeight / 2;
+    toBlackTransition(centerX, centerY);
+
+    // Recuadro negro
+    Rect borderRect;
+    borderRect.x = 100;
+    borderRect.y = centerY - windowHeight / 10;
+    borderRect.w = windowWidth - 200;
+    borderRect.h = windowHeight / 5 + 20;
+
+    SDL_SetRenderDrawColor(renderer.Get(), 0, 0, 0, 255);
+    SDL_RenderFillRect(renderer.Get(), &borderRect);
+
+    // Recuadro gris
+    Rect tableRect = borderRect;
+    tableRect.x += 2;
+    tableRect.y += 2;
+    tableRect.w -= 4;
+    tableRect.h -= 4;
+
+    SDL_SetRenderDrawColor(renderer.Get(), 50, 50, 50, 255);
+    SDL_RenderFillRect(renderer.Get(), &tableRect);
+
+    showPoints(ducks, tableRect, spritesMapping);
+    renderer.Present();
+    SDL_Delay(5000);
+
+    transition = true;
+}
+
 std::string duckIDToString(DuckData::Id id) {
     switch (id) {
         case DuckData::Id::White:
@@ -156,7 +203,8 @@ void HudManager::showPoints(
         return;
     }
 
-    TTF_Font* font = TTF_OpenFont("assets/fonts/font.ttf", 24);
+    std::string pathToFont(Resource::get().resource("fonts/font.ttf"));
+    TTF_Font* font = TTF_OpenFont(pathToFont.c_str(), 24);
     if (!font) {
         std::cerr << "Error al cargar la fuente: " << TTF_GetError() << std::endl;
         return;
@@ -166,7 +214,7 @@ void HudManager::showPoints(
     int xOffset = 10;  // Space between ducks
 
     for (const auto& duck: ducks) {
-        std::string scoreText = /*std::to_string(duck.score)*/ "20";
+        std::string scoreText = std::to_string(duck.roundsWon);
         SDL_Surface* textSurface = TTF_RenderText_Solid(font, scoreText.c_str(), textColor);
         if (!textSurface) {
             std::cerr << "Error al crear la superficie del texto: " << TTF_GetError() << std::endl;
@@ -209,4 +257,9 @@ void HudManager::showPoints(
 
     TTF_CloseFont(font);
     TTF_Quit();
+}
+
+void HudManager::resetFlags() const {
+    roundFinished = false;
+    setFinished = false;
 }

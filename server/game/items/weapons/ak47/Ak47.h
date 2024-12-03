@@ -1,9 +1,15 @@
-#include "EquippableWeapon.h"
+#pragma once
+
+#include "CollisionObject.h"
 #include "GameTimer.h"
-class Ak47 final: public EquippableWeapon {
+#include "ShootableGun.h"
+
+class Ak47 final: public ShootableGun {
     float reach;
     bool delay;
     u32 bulletsFired;
+    bool fireNextFrame;
+    RayCast* bullet;
     RandomFloatGenerator randomDispersionMin;
     RandomFloatGenerator randomDispersionMid;
     RandomFloatGenerator randomDispersionMax;
@@ -12,8 +18,6 @@ class Ak47 final: public EquippableWeapon {
     void onTimeOut();
 
     Vector2 generateDirection();
-
-    void generateBullet();
 
 public:
     Ak47() = delete;
@@ -28,10 +32,19 @@ public:
      * @param ammo The ammo of the weapon
      * @param recoil The recoil of the weapon
      * @param reach The reach of the weapon
-     * @param dispersion The dispersion of the weapon
+     * @param minDispersion The minimum dispersion of the weapon
+     * @param midDispersion The medium dispersion of the weapon
+     * @param maxDispersion The maximum dispersion of the weapon
+     * @param timeBetweenShots  The time between shots of the weapon
      */
     Ak47(ItemID id, u8 ammo, Vector2 recoil, float reach, float minDispersion, float midDispersion,
          float maxDispersion, float timeBetweenShots);
+
+    /**
+     * Updates the weapon
+     * @param delta The time passed since the last update
+     */
+    void update(float delta) override;
 
     /**
      * Actionates the weapon

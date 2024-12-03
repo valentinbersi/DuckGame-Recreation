@@ -4,12 +4,13 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include "Resource.h"
 #include "Spritesheet.h"
 
 #define DEFAULT_SCALE 2.5f
-#define EFFECT_PATH "assets/particles/Effect.png"
-#define LASERFLARE_PATH "assets/particles/LaserFlare.png"
-#define PLASMA_PATH "assets/particles/Plasma.png"
+#define EFFECT_PATH "particles/Effect.png"
+#define LASERFLARE_PATH "particles/LaserFlare.png"
+#define PLASMA_PATH "particles/Plasma.png"
 
 WeaponSpriteManager::WeaponSpriteManager() {}
 
@@ -88,7 +89,7 @@ void WeaponSpriteManager::drawEffect1(Spritesheet* spritesheet, SDL2pp::Rect& po
             position.x -= 1.0 * scale;
         position.y -= 1.6 * scale;
     }
-    spritesheet->drawEffects(position, state.flipped, EFFECT_PATH);
+    spritesheet->drawEffects(position, state.flipped, Resource::get().resource(EFFECT_PATH));
 }
 
 void WeaponSpriteManager::drawEffect2(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
@@ -107,7 +108,7 @@ void WeaponSpriteManager::drawEffect2(Spritesheet* spritesheet, SDL2pp::Rect& po
             position.x -= 0.8 * scale;
         position.y -= 2.0 * scale;
     }
-    spritesheet->drawEffects(position, state.flipped, EFFECT_PATH);
+    spritesheet->drawEffects(position, state.flipped, Resource::get().resource(EFFECT_PATH));
 }
 
 void WeaponSpriteManager::drawLaserFlare(Spritesheet* spritesheet, SDL2pp::Rect& position,
@@ -127,7 +128,7 @@ void WeaponSpriteManager::drawLaserFlare(Spritesheet* spritesheet, SDL2pp::Rect&
         position.y -= 1.6 * scale;
     }
 
-    spritesheet->drawEffects(position, state.flipped, LASERFLARE_PATH);
+    spritesheet->drawEffects(position, state.flipped, Resource::get().resource(LASERFLARE_PATH));
 }
 
 void WeaponSpriteManager::drawPlasma(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
@@ -146,5 +147,5 @@ void WeaponSpriteManager::drawPlasma(Spritesheet* spritesheet, SDL2pp::Rect& pos
             position.x -= 0.2 * scale;
         position.y -= 1.8 * scale;
     }
-    spritesheet->drawEffects(position, state.flipped, PLASMA_PATH);
+    spritesheet->drawEffects(position, state.flipped, Resource::get().resource(PLASMA_PATH));
 }
