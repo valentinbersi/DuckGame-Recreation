@@ -1,5 +1,4 @@
-#ifndef DUCKGAME_GAMELAUNCHER_H
-#define DUCKGAME_GAMELAUNCHER_H
+#pragma once
 
 #include "ActiveSocket.h"
 #include "Communicator.h"
@@ -23,5 +22,3 @@ public:
 private slots:
     void startedSDL();
 };
-
-#endif  // DUCKGAME_GAMELAUNCHER_H

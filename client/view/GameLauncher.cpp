@@ -1,8 +1,4 @@
 #include "GameLauncher.h"
-
-#include <QDebug>
-#include <iostream>
-
 #include "Game.h"
 
 GameLauncher::GameLauncher(int argc, char* argv[], cppstring hostname, cppstring servname):
@@ -16,14 +12,10 @@ GameLauncher::GameLauncher(int argc, char* argv[], cppstring hostname, cppstring
 }
 
 void GameLauncher::exec() {
-    try {
-        QApplication::exec();
-        if (startGame) {
-            Game game(communicator, twoPlayersLocal);
-            game.init();
-        }
-    } catch (const LibError& libError) {
-        syslog(LOG_CRIT, "%s", libError.what());
+    QApplication::exec();
+    if (startGame) {
+        Game game(communicator, twoPlayersLocal);
+        game.init();
     }
 }
 

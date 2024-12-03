@@ -1,5 +1,4 @@
 #pragma once
-#include <QWidget>
 
 #include "ui_mainMenu.h"
 
@@ -18,10 +17,16 @@ public:
     ~mainMenu() override;
 
 signals:
-    void play();
-    void exitGameRequested();
+    void play(); /** se emite al apretar el boton Play */
+    void exitGameRequested(); /** se emite al apretar el boton Exit */
 
 private:
     Ui::mainMenu* ui;
+
+    /**
+     *  Si se presiona el boton de Exit, se handlea en este metodo.
+     *  Se le pregunta al usuario si esta seguro de salir.
+     *  Si quiere salir, emite exitGameRequested() para que el QWidget principal se encargue de cerrar la aplicacion
+     */
     void handleExit();
 };

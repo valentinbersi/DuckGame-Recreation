@@ -1,6 +1,5 @@
 #include "waitingPage.h"
 
-#include <QDebug>
 #include <QMessageBox>
 #include <QTimer>
 #include <memory>
@@ -38,7 +37,7 @@ WaitingPage::WaitingPage(QWidget* parent, Communicator& communicator, GameInfo& 
     }
 }
 
-QString WaitingPage::getDuckIconPath(DuckData::Id id) {
+QString WaitingPage::getDuckIconPath(const DuckData::Id id) {
     switch (id) {
         case DuckData::Id::White:
             return ":/ducks/whiteDuck";
@@ -56,14 +55,13 @@ QString WaitingPage::getDuckIconPath(DuckData::Id id) {
 }
 
 void WaitingPage::recvServerMessage() {
-    std::optional<ReplyMessage> replyMessageOpt = communicator.tryRecvReply();
+    const std::optional<ReplyMessage> replyMessageOpt = communicator.tryRecvReply();
 
     if (replyMessageOpt.has_value()) {
-        ReplyMessage message = replyMessageOpt.value();
+        const ReplyMessage& message = replyMessageOpt.value();
         playersConnected = message.connectedPlayers;
         ui->labelPlayersConnected->setText(
                 QString("PLAYERS CONNECTED: %1 / 4").arg(playersConnected));
-        qDebug() << playersConnected;
 
         if (message.startGame == 1) {
             emit startMatch();

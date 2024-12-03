@@ -22,14 +22,22 @@ private:
     QTimer* timer;
     u8 playersConnected;
 
-    //    std::unordered_map<DuckData::Id, QPixmap> mapDuckIcons =
-    //            {{DuckData::Id::White, QPixmap(":/ducks/whiteDuck")},
-    //             {DuckData::Id::Grey, QPixmap(":/ducks/greyDuck")},
-    //             {DuckData::Id::Orange, QPixmap(":/ducks/orangeDuck")},
-    //             {DuckData::Id::Yellow, QPixmap(":/ducks/yellowDuck")}};
-
+    /**
+    * Handler que captura el evento clicked del playButton
+    * Envia mediante el comunicador un message al lobby para iniciar la partida
+    * Antes que nada, se chequea que haya al menos 2 jugadores conectados
+    */
     void requestStartGame();
+
+    /**
+     * Cada 1 segundo, cuando el timer llega al final, se handlea el timeout en este metodo.
+     * Lo que hace es recibir mensajes desde el server (mediante el comunicador),
+     * estos mensajes pueden ser informando la cantidad de jugadores conectados
+     * o de comienzo de partida. Si es de comienzo de partida se emite startMatch().
+     * Si es de jugadores conectados se actualiza el playersConnected.
+     */
     void recvServerMessage();
+
     static QString getDuckIconPath(DuckData::Id id);
 
 public:

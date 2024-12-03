@@ -1,7 +1,6 @@
 #include "configurationpage.h"
 
 #include <QButtonGroup>
-#include <QDebug>
 #include <QMessageBox>
 #include <memory>
 #include <utility>
@@ -52,22 +51,6 @@ void configurationPage::handlerNewGame() {
     }
 }
 
-QString getColor(DuckData::Id id) {
-    switch (id) {
-        case DuckData::Id::White:
-            return {"white"};
-        case DuckData::Id::Grey:
-            return {"grey"};
-        case DuckData::Id::Orange:
-            return {"orange"};
-        case DuckData::Id::Yellow:
-            return {"yellow"};
-        case DuckData::Id::None:
-            return {"none"};
-    }
-    return {"vacio"};
-}
-
 bool configurationPage::initMatchRequest(LobbyRequest& request) {
     auto message =
             std::make_unique<LobbyMessage>(request, gameInfo.playersNumber, gameInfo.matchID);
@@ -82,9 +65,9 @@ bool configurationPage::initMatchRequest(LobbyRequest& request) {
         gameInfo.Duck1Color = replyMessage.color1;
         gameInfo.Duck2Color = replyMessage.color2;
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 configurationPage::~configurationPage() {
