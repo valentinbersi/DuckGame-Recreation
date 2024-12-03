@@ -54,6 +54,7 @@ void WeaponSpriteManager::drawWeapon(Spritesheet* spritesheet, SDL2pp::Rect& pos
 void WeaponSpriteManager::draw(Spritesheet* spritesheet, SDL2pp::Rect& position, float scale,
                                const DuckState& state) {
     spritesheet->selectSprite(0, 0, false);
+
     if (!state.lookingUp) {
         if (state.flipped)
             position.x -= 0.30 * scale;
