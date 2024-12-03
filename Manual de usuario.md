@@ -60,6 +60,19 @@ SO, dependencias, versiones, pasos para compilar. ¿hay que modificar archivo co
 ## ¿Cómo se levanta el servidor?
 
 ## ¿Cómo se crean nuevos niveles con el editor?
+Primero que nada, se debe ejecutar el editor como se indica en el primer apartado del manual.
+Una vez dentro del Editor, se veran claramente en pantalla los 4 elementos claves del programa:
+1) Espacio para ingresar el nombre deseado para el mapa
+2) Lista de backgrounds otorgados por el editor
+3) Barra de herramientas donde se pueden seleccionar los elementos que se pueden agregar al mapa (Plataforma/Tile, Spawn de Patos, Spawn de Armas/Armaduras y Cajas)
+4) La grilla que representa el mapa como tal
+
+Para agregar elementos al mapa, se debe clickear el elemento en la barra de herramientas y luego clickear donde se quiere agregar el elemento. Se puede clickear una vez, o sino tambien mantener presionado y arrastrar el mouse, asi se agregaran muchos elementos de forma facil y rapida.
+Para eliminar elementos, se debe presionar el click derecho del mouse sobre el elemento que se quiere eliminar, o tambien se puede mantener apretado y arrastrar el mouse.
+
+Una vez se tiene el mapa hecho, este se puede guardar seleccionando la opción `Save Map` el menu `Map Options` o bien presionando `CTRL+S`
+
+En este menu `Map Options` tambien se ofrecen las opciones de `New Map` para crear un nuevo mapa (o `CTRL+N`) o `Edit Map` para editar un mapa ya creado (o `CTRL+E`). Otra funcionalidad que se ofrece es la de `Clear All`, que elimina todos los elementos del mapa.
 
 ## ¿Cómo se lanza el cliente?
 
