@@ -142,7 +142,7 @@ GameObject* GameObject::removeChild(const std::string& name) {
     for (GameObject* object: child->children | std::views::values) fire(Events::TreeExited, object);
 
     child->_parent = nullptr;
-    child->name = "";
+    // child->name = "";
     child->finish();
     child->finishInternal();
     child->active = false;

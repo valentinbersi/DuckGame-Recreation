@@ -50,7 +50,7 @@ void GameController::onTreeExited(GameObject* object) {
 
 void GameController::loadLevel(const LevelData& level) {
     if (this->level != nullptr)
-        removeChild("Level");
+        removeChild(this->level);
 
     this->level = new Level(level, players);
     addChild("Level", this->level);
