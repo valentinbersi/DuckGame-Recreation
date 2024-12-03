@@ -1,5 +1,4 @@
-#ifndef DUCKGAME_WAITINGPAGE_H
-#define DUCKGAME_WAITINGPAGE_H
+#pragma once
 
 #include <QWidget>
 
@@ -40,6 +39,3 @@ public:
 signals:
     void startMatch();
 };
-
-
-#endif  // DUCKGAME_WAITINGPAGE_H

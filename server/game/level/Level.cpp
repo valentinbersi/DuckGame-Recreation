@@ -3,11 +3,11 @@
 #include <algorithm>
 #include <list>
 
+#include "Explosion.h"
 #include "ItemSpawner.h"
 #include "Layer.h"
 #include "SpawnPoint.h"
 #include "TerrainBlock.h"
-#include "Explosion.h"
 
 #define eventHandler(Function, ...) \
     gameObject::EventHandler<Level, __VA_ARGS__>::create(getReference<Level>(), Function)
@@ -114,7 +114,7 @@ void Level::update([[maybe_unused]] float delta) {
     });
 
     for (Box* box: boxesToDestroy) removeChild(box);
-    
+
     std::vector<Explosion*> explosionsToDestroy;
     explosions.remove_if([&explosionsToDestroy](Explosion* explosion) {
         if (explosion->isOver()) {

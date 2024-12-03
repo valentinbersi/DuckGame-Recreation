@@ -4,9 +4,10 @@
 #include <QGraphicsPixmapItem>
 #include <QMetaType>
 #include <QPixmap>
-#include <QString>
-#include <QSize>
 #include <QPointF>
+#include <QSize>
+#include <QString>
+#include <string>
 
 #include "EditorConstants.h"
 

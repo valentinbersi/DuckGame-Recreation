@@ -91,8 +91,8 @@ void ViewController::changeBackgroundBrush() {
         return;
     }
 
-    QPixmap scaledPixmap = backgroundPixmap.scaled(ui->centralwidget->size(), Qt::KeepAspectRatioByExpanding,
-                                         Qt::SmoothTransformation);
+    QPixmap scaledPixmap = backgroundPixmap.scaled(
+            ui->centralwidget->size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
     backgroundBrush = QBrush(scaledPixmap);
 
     platformButton->setIcon(QIcon(platformPixmap));

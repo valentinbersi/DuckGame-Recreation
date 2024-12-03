@@ -3,7 +3,7 @@
 #include "GameTimer.h"
 #include "SizedObjectData.h"
 
-class Explosion : public Area {
+class Explosion: public Area {
 private:
     GameTimer* timer;
     bool explosionEnded;
@@ -31,5 +31,4 @@ public:
     SizedObjectData status() const;
 
     ~Explosion() override;
-
 };

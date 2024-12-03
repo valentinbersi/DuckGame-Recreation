@@ -1,6 +1,8 @@
 #include "Object.h"
 
-Object::Object(ObjectType type) : type(type) {
+#include <string>
+
+Object::Object(ObjectType type): type(type) {
     if (type == PLATFORM) {
         iconPath = PLATFORM_ICON;
         size = QSize(PLATFORM_WIDTH, PLATFORM_HEIGHT);
@@ -20,11 +22,11 @@ Object::Object(ObjectType type) : type(type) {
     }
 
     QPixmap i(iconPath);
-    icon = i.scaled(PIXEL_SIZE * size.width(), PIXEL_SIZE * size.height(),
-                    Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    icon = i.scaled(PIXEL_SIZE * size.width(), PIXEL_SIZE * size.height(), Qt::IgnoreAspectRatio,
+                    Qt::SmoothTransformation);
 }
 
-Object::Object() : type(UNKNOWN), size(0, 0), centerPos(0, 0), icon(QPixmap()) {}
+Object::Object(): type(UNKNOWN), size(0, 0), centerPos(0, 0), icon(QPixmap()) {}
 
 void Object::setCenterPosition(QPointF pos, bool isTopLeftPos) {
     if (isTopLeftPos)
@@ -44,18 +46,27 @@ bool Object::operator==(const Object& other) const {
 
 std::string Object::objectTypeToString(ObjectType type) {
     switch (type) {
-        case PLATFORM: return "PLATFORM";
-        case DUCK: return "DUCK";
-        case ARMAMENT: return "ARMAMENT";
-        case BOX: return "BOX";
-        default: return "UNKNOWN";
+        case PLATFORM:
+            return "PLATFORM";
+        case DUCK:
+            return "DUCK";
+        case ARMAMENT:
+            return "ARMAMENT";
+        case BOX:
+            return "BOX";
+        default:
+            return "UNKNOWN";
     }
 }
 
 ObjectType Object::stringToObjectType(const std::string& typeStr) {
-    if (typeStr == "PLATFORM") return PLATFORM;
-    if (typeStr == "DUCK") return DUCK;
-    if (typeStr == "ARMAMENT") return ARMAMENT;
-    if (typeStr == "BOX") return BOX;
+    if (typeStr == "PLATFORM")
+        return PLATFORM;
+    if (typeStr == "DUCK")
+        return DUCK;
+    if (typeStr == "ARMAMENT")
+        return ARMAMENT;
+    if (typeStr == "BOX")
+        return BOX;
     return UNKNOWN;
 }

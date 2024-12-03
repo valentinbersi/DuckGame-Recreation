@@ -17,7 +17,7 @@ WaitingPage::WaitingPage(QWidget* parent, Communicator& communicator, GameInfo& 
         communicator(communicator),
         gameInfo(gameInfo),
         timer(new QTimer(this)),
-        playersConnected(0){
+        playersConnected(0) {
     ui->setupUi(this);
 
     ui->labelMatchID->setText(QString("MATCH ID: %1").arg(gameInfo.matchID));
@@ -74,7 +74,8 @@ void WaitingPage::recvServerMessage() {
 
 void WaitingPage::requestStartGame() {
     if (playersConnected < 2) {
-        QMessageBox::warning(this, "Error", "You cannot start the game with only 1 player connected");
+        QMessageBox::warning(this, "Error",
+                             "You cannot start the game with only 1 player connected");
         return;
     }
 

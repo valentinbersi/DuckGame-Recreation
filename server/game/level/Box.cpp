@@ -3,10 +3,10 @@
 #include <memory>
 #include <utility>
 
+#include "Explosion.h"
 #include "Item.h"
 #include "ItemFactory.h"
 #include "Layer.h"
-#include "Explosion.h"
 
 #define DIMENSIONS 2, 2
 #define ITEM 1
@@ -34,7 +34,7 @@ void Box::eliminateBox() {
             parent()->addChild("Explosion", std::move(explosion));
             break;
         }
-        
+
         default:
             break;
     }

@@ -1,9 +1,9 @@
 #include "MapManager.h"
 
 #include <QDebug>
-#include <fstream>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <fstream>
 #include <string>
 
 #include "yaml-cpp/yaml.h"
@@ -69,9 +69,10 @@ bool MapManager::exportMap(QWidget* view) const {
     //    std::ofstream fout(path);
 
     QString mapFileName = "/home/" + QString::fromStdString(mapData.name) + ".yaml";
-    QString fileName = QFileDialog::getSaveFileName(view, "Select Map", mapFileName, "Archivos YAML (*.yaml)");
+    QString fileName =
+            QFileDialog::getSaveFileName(view, "Select Map", mapFileName, "Archivos YAML (*.yaml)");
 
-    if(fileName.isEmpty())
+    if (fileName.isEmpty())
         return false;
 
     addOffset();
@@ -85,7 +86,7 @@ bool MapManager::exportMap(QWidget* view) const {
     YAML::Node mapNode;
 
     mapNode["map_name"] = mapData.name;
-    mapNode["background"] = static_cast<int>(mapData.backgroundID);
+    mapNode["background"] = (int)(mapData.backgroundID);
     mapNode["map_width"] = mapData.width;
     mapNode["map_height"] = mapData.height;
 
@@ -118,12 +119,13 @@ void MapManager::removeOffset() const {
 }
 
 bool MapManager::importMap(QWidget* view) const {
-    QString fileName = QFileDialog::getOpenFileName(view, "Select Map", "/home/", "Archivos YAML (*.yaml)");
-    if(fileName.isEmpty())
+    QString fileName =
+            QFileDialog::getOpenFileName(view, "Select Map", "/home/", "Archivos YAML (*.yaml)");
+    if (fileName.isEmpty())
         return false;
 
     std::ifstream fin(fileName.toStdString());
-    //std::ifstream fin(mapData.path);
+    // std::ifstream fin(mapData.path);
     if (!fin.is_open()) {
         qWarning() << "Could not open the file to load the map.";
         return false;

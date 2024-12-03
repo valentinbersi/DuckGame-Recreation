@@ -43,6 +43,7 @@ private:
     cppstring pathToArgument;
 
     // void wheelEvent(QWheelEvent* event) override;
+
     /**
      * Handler que captura el evento de push del boton NewMap.
      * Se encarga de iniciar un nuevo mapa.

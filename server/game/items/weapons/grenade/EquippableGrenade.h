@@ -2,14 +2,14 @@
 #include "EquippableWeapon.h"
 #include "GameTimer.h"
 
-class EquippableGrenade : public EquippableWeapon {
+class EquippableGrenade: public EquippableWeapon {
 private:
     GameTimer* timer;
 
     void onTimeout();
 
 public:
-    EquippableGrenade(ItemID id, u8 ammo,float timeToExplode);
+    EquippableGrenade(ItemID id, u8 ammo, float timeToExplode);
 
     /**
      * Activates the grenade counter or throws it
