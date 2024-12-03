@@ -40,6 +40,12 @@ public:
      */
     u8 ammo() const override;
 
+    /**
+     * Set the ammo of the weapon
+     * @param ammo The ammo to set
+     */
+    void setAmmo(const u8 ammo) override;
+
     struct Events {
         constexpr static auto Fired = "Fired";
         constexpr static auto NoMoreBullets = "NoMoreBullets";

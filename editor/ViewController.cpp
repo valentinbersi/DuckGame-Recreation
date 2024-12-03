@@ -10,12 +10,12 @@
 #include <QScrollBar>
 #include <QWheelEvent>
 
+#include "Background.h"
 #include "EditorConstants.h"
 #include "MapManager.h"
 #include "Object.h"
-#include "ui_viewcontroller.h"
-#include "Background.h"
 #include "Resource.h"
+#include "ui_viewcontroller.h"
 
 //#define BUTTONS_STYLE R"(
 // QPushButton {
@@ -53,7 +53,7 @@ ViewController::ViewController(QWidget* parent):
             &ViewController::on_actionEditMap_triggered);
 
     connect(ui->ClearAll, &QAction::triggered, scene, &LevelScene::clearAll);
-    //connect(ui->ChangeBackground, &QAction::triggered, this, &ViewController::selectBackground);
+    // connect(ui->ChangeBackground, &QAction::triggered, this, &ViewController::selectBackground);
 
     connect(scene, &LevelScene::resizeView, this, &ViewController::onSceneResize);
 }
@@ -64,17 +64,16 @@ void ViewController::loadBackgrounds() {
         std::string backgroundPath = Resource::get().resource(background.path());
         QPixmap pixmap(QString::fromStdString(backgroundPath));
         if (!pixmap.isNull()) {
-            QString fileName = QFileInfo(QString::fromStdString(backgroundPath)).completeBaseName();
-
-            auto *item = new QListWidgetItem(QIcon(pixmap), fileName);
+            auto* item = new QListWidgetItem(QIcon(pixmap), QString::fromStdString(backgroundPath));
             item->setData(Qt::UserRole, (BackgroundID::Value)i);
             ui->backgroundList->addItem(item);
         }
     }
-    connect(ui->backgroundList, &QListWidget::itemClicked, this, &ViewController::onBackgroundSelected);
+    connect(ui->backgroundList, &QListWidget::itemClicked, this,
+            &ViewController::onBackgroundSelected);
 }
 
-void ViewController::onBackgroundSelected(QListWidgetItem *item) {
+void ViewController::onBackgroundSelected(QListWidgetItem* item) {
     BackgroundID backgroundSelected((BackgroundID::Value)item->data(Qt::UserRole).toInt());
     mapData.backgroundID = backgroundSelected;
     changeBackgroundBrush();
@@ -167,9 +166,11 @@ void ViewController::on_actionEditMap_triggered() {
     if (!confirmAndSaveMap())
         return;
 
-    //QString fileName = QFileDialog::getOpenFileName(this, "Select Map", "/home/", "Archivos YAML (*.yaml)");
+    // QString fileName = QFileDialog::getOpenFileName(this, "Select Map", "/home/", "Archivos YAML
+    // (*.yaml)");
 
-    QString fileName = QFileDialog::getOpenFileName(this, "Select Map", "maps/", "Archivos YAML (*.yaml)");
+    QString fileName =
+            QFileDialog::getOpenFileName(this, "Select Map", "maps/", "Archivos YAML (*.yaml)");
 
     if (fileName.isEmpty()) {
         QMessageBox::warning(this, "Error", "There was an error importing the map.");

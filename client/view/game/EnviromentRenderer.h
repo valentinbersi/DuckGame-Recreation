@@ -1,11 +1,12 @@
 #pragma once
 
+#include <list>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2pp/SDL2pp.hh>
 
 #include "TextureManager.h"
-#include <list>
 #include "Vector2.h"
 
 // class that renders all... besides ducks

@@ -7,3 +7,5 @@ ItemID EquippableItem::id() const { return id_; }
 std::list<Segment2D> EquippableItem::status() const { return std::list<Segment2D>(); }
 
 u8 EquippableItem::ammo() const { return 0; }
+
+void EquippableItem::setAmmo([[maybe_unused]] const u8 ammo) {}
