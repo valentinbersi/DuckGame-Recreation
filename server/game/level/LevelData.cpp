@@ -38,6 +38,7 @@ std::vector<LevelData> LevelData::loadLevels() {
     return levels;
 }
 
+#define BACKGROUND "background"
 #define WIDTH "map_width"
 #define HEIGHT "map_height"
 #define OBJECTS "objects"
@@ -54,6 +55,7 @@ std::optional<LevelData> LevelData::load(const std::string& path) {
     YAML::Node level = YAML::LoadFile(path);
     LevelData loadedLevel;
 
+    loadedLevel.background = level[BACKGROUND].as<BackgroundID>();
     loadedLevel.width = level[WIDTH].as<u64>();
     loadedLevel.height = level[HEIGHT].as<u64>();
 

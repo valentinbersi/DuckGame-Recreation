@@ -3,6 +3,8 @@
 #include <string>
 #include <unordered_map>
 
+#include <yaml-cpp/yaml.h>
+
 #include "Types.h"
 
 struct BackgroundID {
@@ -65,4 +67,14 @@ struct std::equal_to<BackgroundID> {
     bool operator()(const BackgroundID& lhs, const BackgroundID& rhs) const {
         return lhs.value == rhs.value;
     }
+};
+
+template <>
+struct YAML::convert<BackgroundID> {
+    static bool decode(const Node& node, BackgroundID& rhs) {
+        rhs = BackgroundID(node.as<BackgroundID::Value>());
+        return true;
+    }
+
+    static Node encode(const BackgroundID& rhs) { return Node(rhs); }
 };
