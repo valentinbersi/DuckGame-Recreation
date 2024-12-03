@@ -7,7 +7,7 @@ class Grenade : public PhysicsObject{
 private:
 
 public:
-    Grenade(ItemID id, u8 ammo,float timeToExplode);
+    Grenade(ItemID id, const Vector2 position, float timeToExplode);
 
     /**
      * Manages the desaceleration needed

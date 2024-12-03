@@ -6,6 +6,7 @@
 class Explosion : public Area {
 private:
     GameTimer* timer;
+    bool explosionEnded;
 
     /**
      * Handlers the collision with the objects, in this case
@@ -24,6 +25,8 @@ public:
      * Creates Explosion Area
      */
     Explosion(const Vector2& position);
+
+    bool isOver() const;
 
     SizedObjectData status() const;
 

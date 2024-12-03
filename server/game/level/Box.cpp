@@ -11,7 +11,7 @@
 #define DIMENSIONS 2, 2
 #define ITEM 1
 #define EXPLOSION 2
-#define GENERATE_OPTIONS 0, 2
+#define GENERATE_OPTIONS 2, 2
 
 Box::Box(Vector2 position):
         PhysicsObject(std::move(position), Layer::Box,

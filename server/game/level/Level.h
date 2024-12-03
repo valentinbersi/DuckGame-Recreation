@@ -19,6 +19,9 @@ class Level final: public GameObject {
     std::list<Box*> boxes;
     std::list<Explosion*> explosions;
 
+
+    void onTreeEntered(GameObject* object) override;
+
     /**
      * Event manager for tree exited event
      * @param object The child that was removed

@@ -11,15 +11,17 @@
 Explosion::Explosion(const Vector2& position) :
         Area(position, Layer::None, Layer::Player | Layer::Box, 
             Config::Weapons::Grenade::radius()*2, Config::Weapons::Grenade::radius()*2),
-        timer(new GameTimer(TIME_OF_EXPLOSION)) {
+        timer(new GameTimer(TIME_OF_EXPLOSION)),
+        explosionEnded(false) {
 
     this->connect(Events::Collision, eventHandler(&Explosion::onCollision, , CollisionObject*));
     timer->connect(GameTimer::Events::Timeout, eventHandler(&Explosion::onTimeout));
     addChild("Timer", timer);
+    timer->start();
 }   
 
 void Explosion::onTimeout() {
-    parent()->removeChild(this);
+    explosionEnded = true;
 }
 
 void Explosion::onCollision(CollisionObject* object) {
@@ -30,6 +32,10 @@ void Explosion::onCollision(CollisionObject* object) {
         static_cast<Box*>(object)->onCollision();
     }
 }
+
+bool Explosion::isOver() const {
+    return explosionEnded;
+}   
 
 SizedObjectData Explosion::status() const {
     return SizedObjectData(getShape());
