@@ -106,7 +106,7 @@ El server lee por default desde esta carpeta, pero usted puede modificar esto (p
 * Guardar Mapa: `CTRL+S`
 * Cargar/Editar Mapa: `CTRL+E`
 
-## Manual de Uso del Cliente
+## Manual de Uso del Lobby
 Una vez ejecutado el cliente (como se indica en el apartado de Instalacion) se ejecutara la aplicacion del Lobby del juego.  
 Lo primero que se vera un menú donde hay dos opciones bien claras: `Play` para avanzar a jugar y `Exit`para salir.  
 Al presionar `Play`, se mostrara una nueva pantalla, donde se debe seleccionar cuantos jugadores locales jugaran (1 o 2) y si se quiere crear o unirse a una partida.  
