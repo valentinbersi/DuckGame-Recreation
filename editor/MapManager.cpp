@@ -65,9 +65,6 @@ void MapManager::addOffset() const {
 }
 
 bool MapManager::exportMap(QWidget* view) const {
-    //    std::string path = "maps/" + mapData.name + ".yaml";
-    //    std::ofstream fout(path);
-
     QString mapFileName = "/home/" + QString::fromStdString(mapData.name) + ".yaml";
     QString fileName =
             QFileDialog::getSaveFileName(view, "Select Map", mapFileName, "Archivos YAML (*.yaml)");
@@ -125,7 +122,6 @@ bool MapManager::importMap(QWidget* view) const {
         return false;
 
     std::ifstream fin(fileName.toStdString());
-    // std::ifstream fin(mapData.path);
     if (!fin.is_open()) {
         qWarning() << "Could not open the file to load the map.";
         return false;
@@ -143,7 +139,6 @@ bool MapManager::importMap(QWidget* view) const {
         mapData.width = mapNode["map_width"].as<int>();
         mapData.height = mapNode["map_height"].as<int>();
         mapData.backgroundID = static_cast<BackgroundID::Value>(mapNode["background"].as<int>());
-        qDebug() << "tamaño del mapa:" << mapData.width << mapData.height;
         YAML::Node objectsNode = mapNode["objects"];
         for (const auto& objNode: objectsNode) {
             auto typeStr = objNode["type"].as<std::string>();

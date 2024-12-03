@@ -60,10 +60,10 @@ bool LevelScene::isEmptyPosition(QRectF itemRect) {
 }
 
 void LevelScene::insertObjectInMap(Object& object, bool addInList) {
-    QPointF topLeftPos = object.getBoundingPos();
-    QPointF itemPos(int(topLeftPos.x()) * PIXEL_SIZE, int(topLeftPos.y()) * PIXEL_SIZE);
-    QSizeF itemSize(object.size.width() * PIXEL_SIZE, object.size.height() * PIXEL_SIZE);
-    QRectF itemRect(itemPos, itemSize);
+    const QPointF topLeftPos = object.getBoundingPos();
+    const QPointF itemPos(int(topLeftPos.x()) * PIXEL_SIZE, int(topLeftPos.y()) * PIXEL_SIZE);
+    const QSizeF itemSize(object.size.width() * PIXEL_SIZE, object.size.height() * PIXEL_SIZE);
+    const QRectF itemRect(itemPos, itemSize);
 
     if (!isEmptyPosition(itemRect))
         return;
@@ -86,21 +86,20 @@ void LevelScene::insertObjectInMap(Object& object, bool addInList) {
     if (object.type == DUCK)
         ducksCount++;
 
-    /** ESTO CAPAZ PODRIA HACERLO APARTE */
-    QRectF objectRect(item->scenePos(),
-                      QSizeF(object.size.width() * PIXEL_SIZE, object.size.height() * PIXEL_SIZE));
-    QRectF currentRect = sceneRect();
+    const QRectF objectRect(item->scenePos(),
+                            QSizeF(object.size.width() * PIXEL_SIZE, object.size.height() * PIXEL_SIZE));
+    const QRectF currentRect = sceneRect();
 
     if (!currentRect.contains(objectRect)) {
-        QRectF expandedRect = currentRect.united(objectRect);
+        const QRectF expandedRect = currentRect.united(objectRect);
         setSceneRect(expandedRect);
-        gridWidth = (int)expandedRect.width();
-        gridHeight = (int)expandedRect.height();
+        gridWidth = static_cast<int>(expandedRect.width());
+        gridHeight = static_cast<int>(expandedRect.height());
         emit resizeView();
     }
 }
 
-void LevelScene::loadMap(int mapWidth, int mapHeight) {
+void LevelScene::loadMap(const int mapWidth, const int mapHeight) {
     setSceneRect(0, 0, mapWidth * PIXEL_SIZE, mapHeight * PIXEL_SIZE);
     gridWidth = PIXEL_SIZE * mapWidth;
     gridHeight = PIXEL_SIZE * mapHeight;
@@ -110,7 +109,7 @@ void LevelScene::loadMap(int mapWidth, int mapHeight) {
 }
 
 
-void LevelScene::addNewObject(ObjectType type, QPointF pos) {
+void LevelScene::addNewObject(const ObjectType type, const QPointF pos) {
     QPointF centerPos(std::round(pos.x() / PIXEL_SIZE), std::round(pos.y() / PIXEL_SIZE));
     if (centerPos.x() < 1 || centerPos.y() < 1)
         return;
@@ -119,8 +118,7 @@ void LevelScene::addNewObject(ObjectType type, QPointF pos) {
     newObject.setCenterPosition(centerPos, false);
     insertObjectInMap(newObject, true);
 
-    auto* itemAction = qobject_cast<QAction*>(sender());
-    if (itemAction)
+    if (auto* itemAction = qobject_cast<QAction*>(sender()))
         itemAction->setChecked(false);
 }
 
@@ -180,7 +178,6 @@ void LevelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
     if (selectedItem) {
         QPointF itemPos = selectedItem->pos();
 
-        /** Alineacion de la posicion a la grilla ¿podria tener un metodo para esto? */
         qreal alignedX = std::round(itemPos.x() / PIXEL_SIZE) * PIXEL_SIZE;
         qreal alignedY = std::round(itemPos.y() / PIXEL_SIZE) * PIXEL_SIZE;
         if (itemPos.x() < alignedX - PIXEL_SIZE / 2.0)
