@@ -6,8 +6,7 @@
 class Explosion: public Area {
 private:
     GameTimer* timer;
-    bool explosionEnded;
-
+    bool hasFinished;
     /**
      * Handlers the collision with the objects, in this case
      * with players or boxes.
@@ -26,8 +25,15 @@ public:
      */
     Explosion(const Vector2& position);
 
-    bool isOver() const;
+    /**
+     * Checks if the explosion has finished
+     */
+    void update(float delta) override;
 
+    /**
+     * Get the position of the explosion and its dimensions
+     * @return the sizedObjectData of the explosion
+     */
     SizedObjectData status() const;
 
     ~Explosion() override;

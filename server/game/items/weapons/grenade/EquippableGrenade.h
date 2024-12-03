@@ -5,7 +5,8 @@
 class EquippableGrenade: public EquippableWeapon {
 private:
     GameTimer* timer;
-
+    bool hasExploded;
+    bool Pressed;
     void onTimeout();
 
 public:
@@ -16,6 +17,11 @@ public:
      * if it wa already activated
      */
     void actionate() override;
+
+    /**
+     * Checks if the grenade has exploded
+     */
+    void update(float delta) override;
 
     /**
      *  Does nothing

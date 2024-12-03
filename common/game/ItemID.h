@@ -8,10 +8,10 @@
 class ItemID {
 public:
     enum Value : unsigned char {
-        Grenade = 0x0,
+        LaserRifle = 0x0,
         Banana = 0x1,
         PewPewLaser = 0x2,
-        LaserRifle = 0x3,
+        Grenade = 0x3,
         Ak47 = 0x4,
         DuelPistol = 0x5,
         CowboyPistol = 0x6,

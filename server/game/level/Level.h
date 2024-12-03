@@ -59,13 +59,6 @@ public:
     std::list<SizedObjectData> explosionStatus() const;
 
     /**
-     * Removes all boxes that has been destroyed
-     * @param delta The time since the last frame, not used
-     * in this case
-     */
-    void update(float delta) override;
-
-    /**
      * Destroy the Level object
      */
     ~Level() override;
