@@ -14,6 +14,7 @@
 
 
 class Level final: public GameObject {
+    BackgroundID background;
     std::vector<TerrainBlock*> terrainBlocks;
     std::vector<ItemSpawner*> itemSpawners;
     std::list<Box*> boxes;
@@ -32,7 +33,7 @@ public:
     /**
      * Create a new Level object
      */
-    explicit Level(const LevelData& level, const HashMap<u16, Player*>& players);
+    Level(const LevelData& level, const HashMap<u16, Player*>& players);
 
     /**
      * Get the position of all the blocks in the level

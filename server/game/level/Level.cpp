@@ -27,7 +27,8 @@ void Level::onTreeExited(GameObject* object) {
     }
 }
 
-Level::Level(const LevelData& level, const HashMap<u16, Player*>& players) {
+Level::Level(const LevelData& level, const HashMap<u16, Player*>& players):
+        background(level.background) {
     connect(Events::TreeEntered, eventHandler(&Level::onTreeEntered, GameObject*));
     connect(Events::TreeExited, eventHandler(&Level::onTreeExited, GameObject*));
 
@@ -123,7 +124,7 @@ void Level::update([[maybe_unused]] float delta) {
         }
         return false;
     });
-    for (Explosion* explosion: explosionsToDestroy) removeChild(explosion);
+    for (const Explosion* explosion: explosionsToDestroy) removeChild(explosion);
 }
 
 Level::~Level() = default;
