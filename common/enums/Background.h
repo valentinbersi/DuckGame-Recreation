@@ -35,11 +35,18 @@ struct BackgroundID {
      * Get the path in the resource folder of the given background
      * @return The path to the background image
      */
-    const std::string& path() const;
+    const std::string& pathToBackground() const;
+
+    /**
+     * Get the path in the resource folder of the given tileset
+     * @return The path to the tileset image
+     */
+    const std::string& pathToTileset() const;
 
 
 private:
     const static HashMap<BackgroundID, std::string> backgrounds;
+    const static HashMap<BackgroundID, std::string> tilesets;
     friend struct std::hash<BackgroundID>;
     friend struct std::equal_to<BackgroundID>;
 
