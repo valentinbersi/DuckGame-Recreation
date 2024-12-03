@@ -2,7 +2,8 @@
 
 ### Versiones y pasos para compilar el proyecto:
 
-SO, dependencias, versiones, pasos para compilar. ¿hay que modificar archivo con parámetros? hay que poner algun recurso (imagenes, sonidos) en algun lugar?
+El juego es compatible para Linux a partir de Ubuntu 20.04 (Focal Fossa) y superiores. 
+
 
 ## Instalación:
 
@@ -59,6 +60,10 @@ SO, dependencias, versiones, pasos para compilar. ¿hay que modificar archivo co
 
 ## ¿Cómo se levanta el servidor?
 
+valen XD
+
+
+
 ## ¿Cómo se crean nuevos niveles con el editor?
 Primero que nada, se debe ejecutar el editor como se indica en el primer apartado del manual.
 Una vez dentro del Editor, se veran claramente en pantalla los 4 elementos claves del programa:
@@ -96,15 +101,15 @@ Cada pieza de armadura (sea un helmet o chestplate) amortiguará **1** ataque ex
 
 #### Jugador 1:
 * Movimiento: `WASD`
-* Salto: `ESPACIO`
+* Salto: `SPACE`
 * Interactuar: `E`
 * Disparo: `G`
 
 #### Jugador 2:
 * Movimiento: Flechas de dirección (`←` `↑` `↓` `→`)
-* Salto: `RSHIFT`
-* Interactuar: `RCTRL`
-* Disparo: `DELETE` (tecla superior al enter, NO supr/del)
+* Salto: `COMMA`
+* Interactuar: `PERIOD`           (Las tres teclas juntas)
+* Disparo: `SLASH`
 
 
 ## Controles del Editor:
