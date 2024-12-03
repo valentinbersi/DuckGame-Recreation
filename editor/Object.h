@@ -24,7 +24,7 @@ struct Object {
     QPointF centerPos;
     QPixmap icon;
 
-    explicit Object(ObjectType type): type(type) {
+    explicit Object(const ObjectType type): type(type) {
         if (type == PLATFORM) {
             iconPath = PLATFORM_ICON;
             size = QSize(PLATFORM_WIDTH, PLATFORM_HEIGHT);
@@ -44,7 +44,7 @@ struct Object {
         }  // tengo que ver lo de UNKNOWN
 
         QPixmap i(iconPath);
-        icon = i.scaled(size.width() * PIXEL_SIZE, size.height() * PIXEL_SIZE,
+        icon = i.scaled(PIXEL_SIZE * size.width(), PIXEL_SIZE * size.height(),
                         Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
 
@@ -55,7 +55,7 @@ struct Object {
     // el parametro booleano determina si la posicion recibida es la central o la de la esquina
     // superior izquierda si se recibe la de la esquina, se realizan los calculos para obtener la
     // central y setearla correctamente.
-    void setCenterPosition(QPointF pos, bool isTopLeftPos) {
+    void setCenterPosition(const QPointF pos, const bool isTopLeftPos) {
         if (isTopLeftPos)
             centerPos = QPointF(pos.x() + size.width() / 2.0, pos.y() + size.height() / 2.0);
         else
