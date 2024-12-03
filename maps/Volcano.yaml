@@ -639,3 +639,15 @@ objects:
   - type: ARMAMENT
     x: 66
     y: 88
+  - type: DUCK
+    x: 48
+    y: 93
+  - type: DUCK
+    x: 98
+    y: 93
+  - type: DUCK
+    x: 92
+    y: 115
+  - type: DUCK
+    x: 54
+    y: 115

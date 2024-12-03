@@ -11,8 +11,8 @@
 
 #define PLATFORM_HEIGHT 2.0
 #define PLATFORM_WIDTH 2.0
-#define DUCK_HEIGHT 3.0
-#define DUCK_WIDTH 3.0
+#define DUCK_HEIGHT 4.0
+#define DUCK_WIDTH 4.0
 #define SPAWN_HEIGHT 5.0
 #define SPAWN_WIDTH 5.0
 #define BOX_HEIGHT 2.0

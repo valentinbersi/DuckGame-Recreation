@@ -149,8 +149,8 @@ bool MapManager::importMap(QWidget* view) const {
             auto typeStr = objNode["type"].as<std::string>();
             Object object(Object::stringToObjectType(typeStr));
 
-            object.centerPos.setX(objNode["x"].as<int>());
-            object.centerPos.setY(objNode["y"].as<int>());
+            object.centerPos.setX(objNode["x"].as<float>());
+            object.centerPos.setY(objNode["y"].as<float>());
 
             mapData.objects.push_back(object);
         }
