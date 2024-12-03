@@ -1,5 +1,13 @@
  Documentación técnica
 
+## Diagramas del Server
+
+![ServerClass.png](./img/ServerClass.svg)
+
+
+![secuencia.png](./img/secuencia.svg)
+
+
 ## Formato de archivos y protocolo
 
 
