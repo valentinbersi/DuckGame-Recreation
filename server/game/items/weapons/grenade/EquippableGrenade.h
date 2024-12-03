@@ -1,15 +1,15 @@
 #pragma once
-#include "EquippableItem.h"
+#include "EquippableWeapon.h"
 #include "GameTimer.h"
 
-class EquippableGrenade : public EquippableItem {
+class EquippableGrenade : public EquippableWeapon {
 private:
     GameTimer* timer;
 
     void onTimeout();
 
 public:
-    EquippableGrenade(ItemID id, float timeToExplode);
+    EquippableGrenade(ItemID id, u8 ammo,float timeToExplode);
 
     /**
      * Activates the grenade counter or throws it

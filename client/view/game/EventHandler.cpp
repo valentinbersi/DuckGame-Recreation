@@ -56,6 +56,14 @@ void EventHandler::handleKeyEvent(const SDL_Scancode& scancode, bool isKeyDown) 
             communicator.trysend(std::move(message));
         }
     }
+
+    if (keyStates[SDL_SCANCODE_LCTRL]) {
+        auto cheatIt = cheats.find(scancode);
+        if (cheatIt != cheats.end()) {
+            auto message = std::make_unique<GameMessage>(cheatIt->second, 1);
+            communicator.trysend(std::move(message));
+        }
+    }
 }
 
 void EventHandler::handleScreenEvents(const SDL_Event& event, bool isKeyDown,

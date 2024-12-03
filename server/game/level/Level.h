@@ -10,12 +10,14 @@
 #include "Player.h"
 #include "SizedObjectData.h"
 #include "TerrainBlock.h"
+#include "Explosion.h"
 
 
 class Level final: public GameObject {
     std::vector<TerrainBlock*> terrainBlocks;
     std::vector<ItemSpawner*> itemSpawners;
     std::list<Box*> boxes;
+    std::list<Explosion*> explosions;
 
     /**
      * Event manager for tree exited event
@@ -47,6 +49,11 @@ public:
      */
     std::list<SizedObjectData> boxStatus() const;
 
+    /**
+     * Get the position of all the actual explosions in the level
+     * @return The positions of all the actual explosions in the level
+     */
+    std::list<SizedObjectData> explosionStatus() const;
 
     /**
      * Removes all boxes that has been destroyed

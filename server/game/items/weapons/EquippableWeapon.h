@@ -6,10 +6,11 @@
 #include "Vector2.h"
 
 class EquippableWeapon: public EquippableItem {
-    u8 ammo_;
+
     Vector2 recoil;
 
 protected:
+    u8 ammo_;
     /**
      * Fires the weapon, this means decrementing the ammo. If the ammo is 0, it will fire the
      * NoMoreBullets event, otherwise it will fire the Fired event.
@@ -39,6 +40,12 @@ public:
      * @return the ammo associated
      */
     u8 ammo() const override;
+
+    /**
+     * Set the ammo of the weapon
+     * @param ammo The ammo to set
+     */
+    void setAmmo(const u8 ammo) override;
 
     struct Events {
         constexpr static auto Fired = "Fired";

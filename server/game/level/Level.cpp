@@ -7,6 +7,7 @@
 #include "Layer.h"
 #include "SpawnPoint.h"
 #include "TerrainBlock.h"
+#include "Explosion.h"
 
 #define eventHandler(Function, ...) \
     gameObject::EventHandler<Level, __VA_ARGS__>::create(getReference<Level>(), Function)
@@ -14,6 +15,9 @@
 void Level::onTreeExited(GameObject* object) {
     if (const auto box = dynamic_cast<Box*>(object); box != nullptr) {
         boxes.remove(box);
+    }
+    if (const auto explosion = dynamic_cast<Explosion*>(object); explosion != nullptr) {
+        explosions.remove(explosion);
     }
 }
 
@@ -83,6 +87,13 @@ std::list<SizedObjectData> Level::boxStatus() const {
     std::ranges::transform(boxes, std::back_inserter(boxPositions),
                            [](const Box* box) { return box->status(); });
     return boxPositions;
+}
+
+std::list<SizedObjectData> Level::explosionStatus() const {
+    std::list<SizedObjectData> explosionPositions;
+    std::ranges::transform(explosions, std::back_inserter(explosionPositions),
+                           [](const Explosion* explosion) { return explosion->status(); });
+    return explosionPositions;
 }
 
 void Level::update([[maybe_unused]] float delta) {

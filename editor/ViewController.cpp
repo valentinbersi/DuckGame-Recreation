@@ -5,13 +5,16 @@
 #include <QDrag>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QListWidget>
 #include <QMessageBox>
 #include <QScrollBar>
 #include <QWheelEvent>
 
+#include "Background.h"
 #include "EditorConstants.h"
 #include "MapManager.h"
 #include "Object.h"
+#include "Resource.h"
 #include "ui_viewcontroller.h"
 
 //#define BUTTONS_STYLE R"(
@@ -37,6 +40,7 @@ ViewController::ViewController(QWidget* parent):
     ui->graphicsView->setScene(scene);
     onSceneResize();
     setupToolBar();
+    loadBackgrounds();
 
     connect(scene, &LevelScene::requestDragModeChange, ui->graphicsView,
             &QGraphicsView::setDragMode);
@@ -49,9 +53,45 @@ ViewController::ViewController(QWidget* parent):
             &ViewController::on_actionEditMap_triggered);
 
     connect(ui->ClearAll, &QAction::triggered, scene, &LevelScene::clearAll);
-    connect(ui->ChangeBackground, &QAction::triggered, this, &ViewController::selectBackground);
+    // connect(ui->ChangeBackground, &QAction::triggered, this, &ViewController::selectBackground);
 
     connect(scene, &LevelScene::resizeView, this, &ViewController::onSceneResize);
+}
+
+void ViewController::loadBackgrounds() {
+    for (int i = BackgroundID::CascadeCave; i <= BackgroundID::Sunset; i++) {
+        BackgroundID background((BackgroundID::Value)i);
+        std::string backgroundPath = Resource::get().resource(background.path());
+        QPixmap pixmap(QString::fromStdString(backgroundPath));
+        if (!pixmap.isNull()) {
+            auto* item = new QListWidgetItem(QIcon(pixmap), QString::fromStdString(backgroundPath));
+            item->setData(Qt::UserRole, (BackgroundID::Value)i);
+            ui->backgroundList->addItem(item);
+        }
+    }
+    connect(ui->backgroundList, &QListWidget::itemClicked, this,
+            &ViewController::onBackgroundSelected);
+}
+
+void ViewController::onBackgroundSelected(QListWidgetItem* item) {
+    BackgroundID backgroundSelected((BackgroundID::Value)item->data(Qt::UserRole).toInt());
+    mapData.backgroundID = backgroundSelected;
+    changeBackgroundBrush();
+}
+
+void ViewController::changeBackgroundBrush() {
+    std::string backgroundPath = Resource::get().resource(mapData.backgroundID.path());
+    QPixmap pixmap(QString::fromStdString(backgroundPath));
+
+    if (pixmap.isNull()) {
+        QMessageBox::warning(this, "Error", "The selected file is not a valid image.");
+        return;
+    }
+
+    QPixmap scaledPixmap = pixmap.scaled(ui->centralwidget->size(), Qt::KeepAspectRatioByExpanding,
+                                         Qt::SmoothTransformation);
+    backgroundBrush = QBrush(scaledPixmap);
+    update();
 }
 
 void ViewController::setupToolBar() {
@@ -90,33 +130,6 @@ void ViewController::onSceneResize() {
     ui->graphicsView->setSceneRect(0, 0, sceneRect.width() * 4, sceneRect.height() * 4);
 }
 
-void ViewController::changeBackgroundBrush() {
-    QString _background = QString::fromStdString(mapData.backgroundPath);
-    QPixmap pixmap(_background);
-    if (pixmap.isNull()) {
-        QMessageBox::warning(this, "Error", "The selected file is not a valid image.");
-        return;
-    }
-
-    QPixmap scaledPixmap = pixmap.scaled(ui->centralwidget->size(), Qt::KeepAspectRatioByExpanding,
-                                         Qt::SmoothTransformation);
-    backgroundBrush = QBrush(scaledPixmap);
-    update();
-}
-
-void ViewController::selectBackground() {
-    QString filePath = QFileDialog::getOpenFileName(this, "Select Backgrounds",
-                                                    "assets/background/", "Images (*.png)");
-    if (filePath.isEmpty()) {
-        QMessageBox::information(this, "No Background Selected",
-                                 "Please select an image from the assets folder.");
-        return;
-    }
-
-    mapData.backgroundPath = filePath.toStdString();
-    changeBackgroundBrush();
-}
-
 void ViewController::on_actionSaveMap_triggered() {
     if (!scene->enoughDucks()) {
         QMessageBox::warning(this, "Error", "The map should have 4 duck spawns.");
@@ -149,32 +162,12 @@ void ViewController::on_actionNewMap_triggered() {
     QMessageBox::information(this, "New Map", "A new map was created!");
 }
 
-/*
-void MainWindow::wheelEvent(QWheelEvent* event) {
-    if (event->modifiers() & Qt::ControlModifier) {
-        qreal zoomFactor = 1.15;
-
-QPointF viewCenter =
-        ui->graphicsView->mapToScene(ui->graphicsView->viewport()->rect().center());
-
-if (event->angleDelta().y() > 0)
-    ui->graphicsView->scale(zoomFactor, zoomFactor);
-else
-    ui->graphicsView->scale(1 / zoomFactor, 1 / zoomFactor);
-
-QPointF newCenter = ui->graphicsView->mapFromScene(viewCenter);
-ui->graphicsView->ensureVisible(newCenter.x(), newCenter.y(), 100, 100, 1.0);
-
-event->accept();
-} else {
-    QMainWindow::wheelEvent(event);
-}
-}
-*/
-
 void ViewController::on_actionEditMap_triggered() {
     if (!confirmAndSaveMap())
         return;
+
+    // QString fileName = QFileDialog::getOpenFileName(this, "Select Map", "/home/", "Archivos YAML
+    // (*.yaml)");
 
     QString fileName =
             QFileDialog::getOpenFileName(this, "Select Map", "maps/", "Archivos YAML (*.yaml)");

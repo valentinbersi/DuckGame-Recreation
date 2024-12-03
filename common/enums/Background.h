@@ -40,7 +40,6 @@ struct BackgroundID {
 
 private:
     const static HashMap<BackgroundID, std::string> backgrounds;
-
     friend struct std::hash<BackgroundID>;
     friend struct std::equal_to<BackgroundID>;
 

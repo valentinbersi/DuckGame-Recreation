@@ -120,9 +120,14 @@ public:
     void update(float delta) override;
 
     /**
-     * Kill the player
+     * Damages the player, if it doesn't have any protection, it kills the player
      */
     void damage();
+
+    /**
+     * Kills the player
+     */
+    void kill();
 
     /**
      * Makes the player shoot
@@ -252,6 +257,20 @@ public:
      * @returns true if the player was equipped with the armor, false otherwise
      */
     bool equipHelmet(u8 protection);
+
+    /**
+     * Set the player's item
+     * @param id the id of the item
+     * @param ammo the ammo of the item
+     * @param force if the item should be set even if the player has an item already
+     */
+    void setItem(ItemID id, u8 ammo, Force force = Force::No);
+
+    /**
+     * Sets ammo to the actua item of the player
+     * @param ammo the ammo to set
+     */
+    void setAmmo(u8 ammo);
 
     /**
      * Removes the player Item

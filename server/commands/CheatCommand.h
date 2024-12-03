@@ -1,4 +1,4 @@
-
+#pragma once
 #include "Command.h"
 #include "MessageType.h"
 
@@ -18,7 +18,7 @@ public:
      * Executes the command
      * @param GameController The game controller to obtain player from.
      */
-    virtual void execute(GameController& GameController) override;
+    void execute(GameController& GameController) override;
 
     /**
      * Destroys the CheatCommand
