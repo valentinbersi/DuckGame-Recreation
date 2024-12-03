@@ -16,7 +16,8 @@ WaitingPage::WaitingPage(QWidget* parent, Communicator& communicator, GameInfo& 
         ui(new Ui::WaitingPage),
         communicator(communicator),
         gameInfo(gameInfo),
-        timer(new QTimer(this)) {
+        timer(new QTimer(this)),
+        playersConnected(0){
     ui->setupUi(this);
 
     ui->labelMatchID->setText(QString("MATCH ID: %1").arg(gameInfo.matchID));
@@ -32,10 +33,7 @@ WaitingPage::WaitingPage(QWidget* parent, Communicator& communicator, GameInfo& 
 
     ui->Duck1->setPixmap(QPixmap(getDuckIconPath(gameInfo.Duck1Color)));
 
-    if (gameInfo.playersNumber == 1) {
-        ui->Duck2->setVisible(false);
-        ui->Duck2Label->setVisible(false);
-    } else if (gameInfo.playersNumber == 2) {
+    if (gameInfo.playersNumber == 2) {
         ui->Duck2->setPixmap(QPixmap(getDuckIconPath(gameInfo.Duck2Color)));
     }
 }
@@ -62,8 +60,10 @@ void WaitingPage::recvServerMessage() {
 
     if (replyMessageOpt.has_value()) {
         ReplyMessage message = replyMessageOpt.value();
+        playersConnected = message.connectedPlayers;
         ui->labelPlayersConnected->setText(
-                QString("PLAYERS CONNECTED: %1 / 4").arg(message.connectedPlayers));
+                QString("PLAYERS CONNECTED: %1 / 4").arg(playersConnected));
+        qDebug() << playersConnected;
 
         if (message.startGame == 1) {
             emit startMatch();
@@ -73,11 +73,15 @@ void WaitingPage::recvServerMessage() {
 }
 
 void WaitingPage::requestStartGame() {
+    if (playersConnected < 2) {
+        QMessageBox::warning(this, "Error", "You cannot start the game with only 1 player connected");
+        return;
+    }
+
     auto message = std::make_unique<LobbyMessage>(LobbyRequest::STARTMATCH, gameInfo.playersNumber,
                                                   gameInfo.matchID);
 
     communicator.trysend(std::move(message));
-    // tengo que chequear si se envio bien?
     ui->playButton->setEnabled(false);
 }
 

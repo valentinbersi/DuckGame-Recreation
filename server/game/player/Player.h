@@ -91,11 +91,6 @@ class Player final: public PhysicsObject {
     void performActions(float delta);
 
     /**
-     * Removes the player Item
-     */
-    void removeItem();
-
-    /**
      * Updates the data of the duck
      */
     void updateData();
@@ -276,6 +271,11 @@ public:
      * @param ammo the ammo to set
      */
     void setAmmo(u8 ammo);
+
+    /**
+     * Removes the player Item
+     */
+    void removeItem();
 
     /**
      * Get the protection of the player's armor

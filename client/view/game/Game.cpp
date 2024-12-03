@@ -21,8 +21,10 @@
 #define ROCK "enviroment/rock.png"
 #define WEAPON_SPAWNER "enviroment/spawner.png"
 #define BOX "enviroment/box.png"
+#define EXPLOSION "particles/Explosion.png"
 
 #define WIN_PATH "sounds/end-effect.mp3"
+#define EXPLOSION_PATH "sounds/grenade.mp3"
 
 using SDL2pp::NullOpt;
 using SDL2pp::Rect;
@@ -47,6 +49,7 @@ Game::Game(Communicator& communicator, bool& twoPlayersLocal):
         setFinished(false),
         gameFinished(false),
         transition(false),
+        explosion(false),
         window_width(DEF_WINDOW_WIDTH),
         window_height(DEF_WINDOW_HEIGHT),
         communicator(communicator),
@@ -148,6 +151,8 @@ void Game::getSnapshot() {
                            [](SizedObjectData& box) { return std::move(box); });
     std::ranges::transform(snapshot->itemPositions, std::back_inserter(items),
                            [](ItemData& item) { return std::move(item); });
+    std::ranges::transform(snapshot->explosionPositions, std::back_inserter(explosions),
+                       [](SizedObjectData& explosion) { return std::move(explosion); });
 }
 
 void Game::filterObjectsToRender() {
@@ -259,8 +264,15 @@ void Game::updateEffects(EnviromentRenderer& enviromentRenderer) {
         enviromentRenderer.drawBullets(bulletPositions);
     }
 
-    // y aca dibujo rebotes, explosiones y cascara
-    // usando UNA lista sola de posiciones generales y filtrando usando un enum y/o map ?
+    if (!explosions.empty()) {
+        for (Rect& explosion: calculateObjectsPositionsAndSize(explosions))
+            enviromentRenderer.drawEnviroment(explosion,
+                                              Resource::get().resource(EXPLOSION).c_str());
+
+        if (!explosion) soundManager.playEffect(Resource::get().resource(EXPLOSION_PATH));
+        explosion = true;
+
+    } else explosion = false;
 }
 
 std::list<std::pair<Vector2, Vector2>> Game::calculateSegmentPositionsAndSize(
@@ -339,6 +351,7 @@ void Game::clearObjects() {
     boxes.clear();
     boxesToRender.clear();
     bulletPositions.clear();
+    explosions.clear();
 }
 
 Game::~Game() {
