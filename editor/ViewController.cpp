@@ -131,12 +131,6 @@ void ViewController::setupToolBar() {
     });
 }
 
-//void ViewController::changePlatformIcon(QIcon newIcon) {
-//    for (Object object : mapData.objects) {
-//
-//    }
-//}
-
 void ViewController::onSceneResize() {
     QRectF sceneRect = scene->sceneRect();
     ui->graphicsView->setSceneRect(0, 0, sceneRect.width() * 4, sceneRect.height() * 4);
@@ -148,8 +142,10 @@ void ViewController::on_actionSaveMap_triggered() {
         return;
     }
     mapData.name = ui->lineEditMapName->text().toStdString();
-    mapManager.exportMap();
-    QMessageBox::information(this, "Save Map", "The map was saved successfully!");
+    if (mapManager.exportMap(this))
+        QMessageBox::information(this, "Save Map", "The map was saved successfully!");
+    else
+        QMessageBox::information(this, "No Save Map", "The map was not saved :(");
 }
 
 bool ViewController::confirmAndSaveMap() {
@@ -158,9 +154,13 @@ bool ViewController::confirmAndSaveMap() {
                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
     if (reply == QMessageBox::Cancel) {
         return false;
-    } else if (reply == QMessageBox::Yes) {
+    }
+    if (reply == QMessageBox::Yes) {
         mapData.name = ui->lineEditMapName->text().toStdString();
-        mapManager.exportMap();
+        if (mapManager.exportMap(this))
+            QMessageBox::information(this, "Save Map", "The map was saved successfully!");
+        else
+            QMessageBox::information(this, "No Save Map", "The map was not saved :(");
     }
     return true;
 }
@@ -181,18 +181,18 @@ void ViewController::on_actionEditMap_triggered() {
     // QString fileName = QFileDialog::getOpenFileName(this, "Select Map", "/home/", "Archivos YAML
     // (*.yaml)");
 
-    QString fileName =
-            QFileDialog::getOpenFileName(this, "Select Map", "maps/", "Archivos YAML (*.yaml)");
+    // QString fileName =
+    //         QFileDialog::getOpenFileName(this, "Select Map", "maps/", "Archivos YAML (*.yaml)");
+    //
+    // if (fileName.isEmpty()) {
+    //     QMessageBox::warning(this, "Error", "There was an error importing the map.");
+    //     return;
+    // }
 
-    if (fileName.isEmpty()) {
-        QMessageBox::warning(this, "Error", "There was an error importing the map.");
-        return;
-    }
-
-    mapData.path = fileName.toStdString();
+    // mapData.path = fileName.toStdString();
     scene->clearAll();
 
-    bool success = mapManager.importMap();
+    bool success = mapManager.importMap(this);
     if (!success)
         return;
 

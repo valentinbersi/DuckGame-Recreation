@@ -1,0 +1,407 @@
+map_name: TheForest
+background: 5
+map_width: 143
+map_height: 205
+objects:
+  - type: PLATFORM
+    x: 44
+    y: 88
+  - type: PLATFORM
+    x: 44
+    y: 90
+  - type: PLATFORM
+    x: 44
+    y: 92
+  - type: PLATFORM
+    x: 44
+    y: 94
+  - type: PLATFORM
+    x: 44
+    y: 96
+  - type: PLATFORM
+    x: 44
+    y: 98
+  - type: PLATFORM
+    x: 44
+    y: 100
+  - type: PLATFORM
+    x: 42
+    y: 86
+  - type: PLATFORM
+    x: 44
+    y: 86
+  - type: PLATFORM
+    x: 46
+    y: 86
+  - type: PLATFORM
+    x: 46
+    y: 100
+  - type: PLATFORM
+    x: 48
+    y: 100
+  - type: PLATFORM
+    x: 50
+    y: 100
+  - type: PLATFORM
+    x: 44
+    y: 102
+  - type: PLATFORM
+    x: 44
+    y: 104
+  - type: PLATFORM
+    x: 44
+    y: 106
+  - type: PLATFORM
+    x: 44
+    y: 108
+  - type: PLATFORM
+    x: 44
+    y: 110
+  - type: PLATFORM
+    x: 44
+    y: 112
+  - type: PLATFORM
+    x: 46
+    y: 114
+  - type: PLATFORM
+    x: 48
+    y: 114
+  - type: PLATFORM
+    x: 50
+    y: 114
+  - type: PLATFORM
+    x: 52
+    y: 114
+  - type: PLATFORM
+    x: 54
+    y: 114
+  - type: PLATFORM
+    x: 56
+    y: 114
+  - type: PLATFORM
+    x: 58
+    y: 114
+  - type: PLATFORM
+    x: 58
+    y: 116
+  - type: PLATFORM
+    x: 58
+    y: 118
+  - type: PLATFORM
+    x: 60
+    y: 114
+  - type: PLATFORM
+    x: 58
+    y: 120
+  - type: PLATFORM
+    x: 58
+    y: 122
+  - type: PLATFORM
+    x: 58
+    y: 124
+  - type: PLATFORM
+    x: 60
+    y: 124
+  - type: PLATFORM
+    x: 62
+    y: 124
+  - type: PLATFORM
+    x: 64
+    y: 124
+  - type: PLATFORM
+    x: 66
+    y: 124
+  - type: PLATFORM
+    x: 68
+    y: 124
+  - type: PLATFORM
+    x: 70
+    y: 124
+  - type: PLATFORM
+    x: 72
+    y: 124
+  - type: PLATFORM
+    x: 74
+    y: 124
+  - type: PLATFORM
+    x: 76
+    y: 124
+  - type: PLATFORM
+    x: 78
+    y: 124
+  - type: PLATFORM
+    x: 80
+    y: 124
+  - type: PLATFORM
+    x: 82
+    y: 124
+  - type: PLATFORM
+    x: 84
+    y: 124
+  - type: PLATFORM
+    x: 86
+    y: 124
+  - type: PLATFORM
+    x: 86
+    y: 122
+  - type: PLATFORM
+    x: 86
+    y: 114
+  - type: PLATFORM
+    x: 86
+    y: 116
+  - type: PLATFORM
+    x: 86
+    y: 118
+  - type: PLATFORM
+    x: 86
+    y: 120
+  - type: PLATFORM
+    x: 84
+    y: 114
+  - type: PLATFORM
+    x: 88
+    y: 114
+  - type: PLATFORM
+    x: 44
+    y: 114
+  - type: PLATFORM
+    x: 90
+    y: 114
+  - type: PLATFORM
+    x: 92
+    y: 114
+  - type: PLATFORM
+    x: 94
+    y: 114
+  - type: PLATFORM
+    x: 96
+    y: 114
+  - type: PLATFORM
+    x: 98
+    y: 114
+  - type: PLATFORM
+    x: 100
+    y: 114
+  - type: PLATFORM
+    x: 100
+    y: 112
+  - type: PLATFORM
+    x: 100
+    y: 110
+  - type: PLATFORM
+    x: 100
+    y: 108
+  - type: PLATFORM
+    x: 100
+    y: 106
+  - type: PLATFORM
+    x: 100
+    y: 104
+  - type: PLATFORM
+    x: 100
+    y: 102
+  - type: PLATFORM
+    x: 100
+    y: 100
+  - type: PLATFORM
+    x: 98
+    y: 100
+  - type: PLATFORM
+    x: 96
+    y: 100
+  - type: PLATFORM
+    x: 94
+    y: 100
+  - type: PLATFORM
+    x: 100
+    y: 98
+  - type: PLATFORM
+    x: 100
+    y: 96
+  - type: PLATFORM
+    x: 100
+    y: 94
+  - type: PLATFORM
+    x: 100
+    y: 92
+  - type: PLATFORM
+    x: 100
+    y: 90
+  - type: PLATFORM
+    x: 100
+    y: 88
+  - type: PLATFORM
+    x: 98
+    y: 86
+  - type: PLATFORM
+    x: 100
+    y: 86
+  - type: PLATFORM
+    x: 102
+    y: 86
+  - type: PLATFORM
+    x: 72
+    y: 116
+  - type: PLATFORM
+    x: 72
+    y: 114
+  - type: PLATFORM
+    x: 72
+    y: 112
+  - type: PLATFORM
+    x: 72
+    y: 108
+  - type: PLATFORM
+    x: 72
+    y: 110
+  - type: PLATFORM
+    x: 78
+    y: 106
+  - type: PLATFORM
+    x: 76
+    y: 106
+  - type: PLATFORM
+    x: 74
+    y: 106
+  - type: PLATFORM
+    x: 72
+    y: 106
+  - type: PLATFORM
+    x: 70
+    y: 106
+  - type: PLATFORM
+    x: 68
+    y: 106
+  - type: PLATFORM
+    x: 66
+    y: 106
+  - type: PLATFORM
+    x: 76
+    y: 96
+  - type: PLATFORM
+    x: 78
+    y: 96
+  - type: PLATFORM
+    x: 80
+    y: 96
+  - type: PLATFORM
+    x: 68
+    y: 96
+  - type: PLATFORM
+    x: 66
+    y: 96
+  - type: PLATFORM
+    x: 64
+    y: 96
+  - type: PLATFORM
+    x: 67
+    y: 87
+  - type: PLATFORM
+    x: 69
+    y: 87
+  - type: PLATFORM
+    x: 71
+    y: 87
+  - type: PLATFORM
+    x: 73
+    y: 87
+  - type: PLATFORM
+    x: 75
+    y: 87
+  - type: PLATFORM
+    x: 77
+    y: 87
+  - type: ARMAMENT
+    x: 42.5
+    y: 82.5
+  - type: ARMAMENT
+    x: 75.5
+    y: 83.5
+  - type: ARMAMENT
+    x: 68.5
+    y: 83.5
+  - type: BOX
+    x: 76
+    y: 94
+  - type: BOX
+    x: 68
+    y: 94
+  - type: BOX
+    x: 69
+    y: 92
+  - type: BOX
+    x: 75
+    y: 92
+  - type: DUCK
+    x: 66.5
+    y: 103.5
+  - type: DUCK
+    x: 78
+    y: 104
+  - type: ARMAMENT
+    x: 100.5
+    y: 82.5
+  - type: BOX
+    x: 98
+    y: 98
+  - type: BOX
+    x: 96
+    y: 98
+  - type: BOX
+    x: 98
+    y: 96
+  - type: BOX
+    x: 48
+    y: 98
+  - type: BOX
+    x: 46
+    y: 98
+  - type: BOX
+    x: 46
+    y: 96
+  - type: ARMAMENT
+    x: 47.5
+    y: 110.5
+  - type: ARMAMENT
+    x: 96.5
+    y: 110.5
+  - type: BOX
+    x: 60
+    y: 122
+  - type: BOX
+    x: 62
+    y: 122
+  - type: BOX
+    x: 64
+    y: 122
+  - type: BOX
+    x: 61
+    y: 120
+  - type: BOX
+    x: 63
+    y: 120
+  - type: BOX
+    x: 84
+    y: 122
+  - type: BOX
+    x: 82
+    y: 122
+  - type: BOX
+    x: 80
+    y: 122
+  - type: BOX
+    x: 83
+    y: 120
+  - type: BOX
+    x: 81
+    y: 120
+  - type: BOX
+    x: 72
+    y: 104
+  - type: DUCK
+    x: 52
+    y: 112
+  - type: DUCK
+    x: 91
+    y: 112

@@ -102,8 +102,8 @@ void LevelScene::insertObjectInMap(Object& object, bool addInList) {
 
 void LevelScene::loadMap(int mapWidth, int mapHeight) {
     setSceneRect(0, 0, mapWidth * PIXEL_SIZE, mapHeight * PIXEL_SIZE);
-    gridWidth = mapWidth * PIXEL_SIZE;
-    gridHeight = mapHeight * PIXEL_SIZE;
+    gridWidth = PIXEL_SIZE * mapWidth;
+    gridHeight = PIXEL_SIZE * mapHeight;
     for (auto& object: objects) {
         insertObjectInMap(object, false);
     }
