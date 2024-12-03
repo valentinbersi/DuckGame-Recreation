@@ -66,6 +66,9 @@ void WaitingPage::recvServerMessage() {
 }
 
 void WaitingPage::requestStartGame() {
+    if (ui->labelPlayersConnected->text().toInt() == 1)
+        QMessageBox::warning(this, "Error", "You cannot start the game with only 1 player connected");
+
     auto message = std::make_unique<LobbyMessage>(LobbyRequest::STARTMATCH, gameInfo.playersNumber,
                                                   gameInfo.matchID);
 
