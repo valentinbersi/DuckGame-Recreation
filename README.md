@@ -1,4 +1,4 @@
-### DuckGame-Recreation
+# DuckGame-Recreation
 
 👾 Collaborative multiplayer game recreation with networking capabilities
   - Implemented game networking and real-time multiplayer functionality
